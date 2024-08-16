@@ -1,0 +1,43 @@
+{
+	"lexicon": 1,
+	"id": "blue.moji.richtext.facet",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["did", "name", "formats"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"description": "DID of the user posting the Bluemoji"
+				},
+				"name": {
+					"type": "string",
+					"description": "Name of the Bluemoji in :emoji: format"
+				},
+				"alt": { "type": "string" },
+				"adultOnly": { "type": "boolean", "default": false },
+				"labels": {
+					"type": "union",
+					"description": "Self-label values for this emoji. Effectively content warnings.",
+					"refs": ["com.atproto.label.defs#selfLabels"]
+				},
+				"formats": {
+					"type": "union",
+					"refs": ["#formats_v0"],
+					"closed": false
+				}
+			}
+		},
+		"formats_v0": {
+			"type": "object",
+			"description": "On the facet, only the CID is provided as this can be combined with the DID to create CDN URLs for non-animated blobs. For APNG and dotLottie, raw Bytes are served and require a com.atproto.repo.getRecord roundtrip on render so are marked with a boolean",
+			"properties": {
+				"png_128": { "type": "string", "format": "cid" },
+				"webp_128": { "type": "string", "format": "cid" },
+				"gif_128": { "type": "string", "format": "cid" },
+				"apng_128": { "type": "boolean", "default": false },
+				"lottie": { "type": "boolean", "default": false }
+			}
+		}
+	}
+}

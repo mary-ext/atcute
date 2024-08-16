@@ -1,0 +1,43 @@
+{
+	"lexicon": 1,
+	"id": "blue.moji.collection.defs",
+	"defs": {
+		"itemView": {
+			"type": "object",
+			"required": ["name", "assets"],
+			"properties": {
+				"name": { "type": "string" },
+				"alt": { "type": "string" },
+				"createdAt": { "type": "string", "format": "datetime" },
+				"assets": { "type": "ref", "ref": "blue.moji.collection.item#sizes" },
+				"adultOnly": { "type": "boolean", "default": false }
+			}
+		},
+		"collectionView": {
+			"type": "object",
+			"required": ["uri", "cid", "creator", "name", "indexedAt"],
+			"properties": {
+				"uri": { "type": "string", "format": "at-uri" },
+				"cid": { "type": "string", "format": "cid" },
+				"creator": { "type": "ref", "ref": "app.bsky.actor.defs#profileView" },
+				"name": { "type": "string", "maxLength": 64, "minLength": 1 },
+				"description": {
+					"type": "string",
+					"maxGraphemes": 300,
+					"maxLength": 3000
+				},
+				"descriptionFacets": {
+					"type": "array",
+					"items": { "type": "ref", "ref": "app.bsky.richtext.facet" }
+				},
+				"avatar": { "type": "string", "format": "uri" },
+				"collectionItemCount": { "type": "integer", "minimum": 0 },
+				"labels": {
+					"type": "array",
+					"items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
+				},
+				"indexedAt": { "type": "string", "format": "datetime" }
+			}
+		}
+	}
+}

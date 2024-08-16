@@ -1,0 +1,85 @@
+{
+	"lexicon": 1,
+	"id": "blue.moji.pack.defs",
+	"defs": {
+		"bluemojiPackView": {
+			"type": "object",
+			"required": ["uri", "cid", "record", "creator", "indexedAt"],
+			"properties": {
+				"uri": { "type": "string", "format": "at-uri" },
+				"cid": { "type": "string", "format": "cid" },
+				"record": { "type": "unknown" },
+				"creator": {
+					"type": "ref",
+					"ref": "app.bsky.actor.defs#profileViewBasic"
+				},
+				"items": { "type": "ref", "ref": "#listViewBasic" },
+				"listItemsSample": {
+					"type": "array",
+					"maxLength": 12,
+					"items": { "type": "ref", "ref": "#listItemView" }
+				},
+				"labels": {
+					"type": "array",
+					"items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
+				},
+				"indexedAt": { "type": "string", "format": "datetime" }
+			}
+		},
+		"listViewBasic": {
+			"type": "object",
+			"required": ["uri", "cid", "name"],
+			"properties": {
+				"uri": { "type": "string", "format": "at-uri" },
+				"cid": { "type": "string", "format": "cid" },
+				"name": { "type": "string", "maxLength": 64, "minLength": 1 },
+				"avatar": { "type": "string", "format": "uri" },
+				"listItemCount": { "type": "integer", "minimum": 0 },
+				"labels": {
+					"type": "array",
+					"items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
+				},
+				"viewer": { "type": "ref", "ref": "#listViewerState" },
+				"indexedAt": { "type": "string", "format": "datetime" }
+			}
+		},
+		"listView": {
+			"type": "object",
+			"required": ["uri", "cid", "creator", "name", "indexedAt"],
+			"properties": {
+				"uri": { "type": "string", "format": "at-uri" },
+				"cid": { "type": "string", "format": "cid" },
+				"creator": {
+					"type": "ref",
+					"ref": "app.bsky.actor.defs#profileViewBasic"
+				},
+				"name": { "type": "string", "maxLength": 64, "minLength": 1 },
+				"description": {
+					"type": "string",
+					"maxGraphemes": 300,
+					"maxLength": 3000
+				},
+				"descriptionFacets": {
+					"type": "array",
+					"items": { "type": "ref", "ref": "blue.moji.richtext.facet" }
+				},
+				"avatar": { "type": "string", "format": "uri" },
+				"listItemCount": { "type": "integer", "minimum": 0 },
+				"labels": {
+					"type": "array",
+					"items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
+				},
+				"viewer": { "type": "ref", "ref": "#listViewerState" },
+				"indexedAt": { "type": "string", "format": "datetime" }
+			}
+		},
+		"listItemView": {
+			"type": "object",
+			"required": ["uri", "subject"],
+			"properties": {
+				"uri": { "type": "string", "format": "at-uri" },
+				"subject": { "type": "ref", "ref": "blue.moji.collection#itemView" }
+			}
+		}
+	}
+}

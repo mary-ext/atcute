@@ -1,0 +1,61 @@
+{
+	"lexicon": 1,
+	"id": "blue.moji.collection.item",
+	"defs": {
+		"main": {
+			"type": "record",
+			"description": "A custom emoji",
+			"key": "any",
+			"record": {
+				"type": "object",
+				"required": ["name", "createdAt", "formats"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "Should be in the format :emoji:"
+					},
+					"alt": { "type": "string" },
+					"createdAt": { "type": "string", "format": "datetime" },
+					"formats": {
+						"type": "union",
+						"description": "Open union to allow for future formats",
+						"refs": ["#formats_v0"],
+						"closed": false
+					},
+					"adultOnly": { "type": "boolean", "default": false },
+					"labels": {
+						"type": "union",
+						"description": "Self-label values for this emoji. Effectively content warnings.",
+						"refs": ["com.atproto.label.defs#selfLabels"]
+					},
+					"copyOf": { "type": "string", "format": "at-uri" }
+				}
+			}
+		},
+		"formats_v0": {
+			"type": "object",
+			"properties": {
+				"original": {
+					"type": "blob",
+					"accept": ["image/*", "application/lottie+zip"],
+					"maxSize": 1000000
+				},
+				"png_128": { "type": "ref", "ref": "#blob_v0" },
+				"apng_128": { "type": "ref", "ref": "#bytes_v0" },
+				"gif_128": { "type": "ref", "ref": "#blob_v0" },
+				"webp_128": { "type": "ref", "ref": "#blob_v0" },
+				"lottie": { "type": "ref", "ref": "#bytes_v0" }
+			}
+		},
+		"blob_v0": {
+			"type": "blob",
+			"maxSize": 262144,
+			"description": "Limiting blobs to 256kb because there may be many on page and these get optimised by ImgProxy anyway"
+		},
+		"bytes_v0": {
+			"type": "bytes",
+			"maxLength": 65536,
+			"description": "64kb should be enough for anybody"
+		}
+	}
+}
