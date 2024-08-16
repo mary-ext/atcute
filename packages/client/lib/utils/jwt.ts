@@ -1,6 +1,8 @@
 /**
  * @module
  * JWT decoding utilities for session resumption checks.
+ * This module is exported for convenience and is no way part of public API,
+ * it can be removed at any time.
  */
 
 /**

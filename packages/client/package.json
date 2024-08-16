@@ -12,7 +12,11 @@
 	],
 	"exports": {
 		".": "./dist/index.js",
-		"./lexicons": "./dist/lexicons.js"
+		"./lexicons": "./dist/lexicons.js",
+		"./middlewares/auth": "./dist/middlewares/auth.js",
+		"./middlewares/mod": "./dist/middlewares/mod.js",
+		"./utils/did": "./dist/utils/did.js",
+		"./utils/jwt": "./dist/utils/jwt.js"
 	},
 	"scripts": {
 		"build": "tsc",

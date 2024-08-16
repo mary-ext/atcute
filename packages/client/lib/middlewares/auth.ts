@@ -1,13 +1,13 @@
-import { fetchHandler, isErrorResponse, type XRPC, XRPCError, type XRPCRequest } from '@atcute/client';
-import type {
-	At,
-	ComAtprotoServerCreateSession,
-	ComAtprotoServerRefreshSession,
-} from '@atcute/client/lexicons';
+/**
+ * @module
+ * Contains a middleware that handles authentication to a personal data server.
+ */
 
-import './lexicons.js';
+import { fetchHandler, isErrorResponse, XRPCError, type XRPC, type XRPCRequest } from '../index.js';
+import type { At, ComAtprotoServerCreateSession, ComAtprotoServerRefreshSession } from '../lexicons.js';
 
-import { decodeJwt } from './utils/jwt.js';
+import { getPdsEndpoint, type DidDocument } from '../utils/did.js';
+import { decodeJwt } from '../utils/jwt.js';
 
 /** Interface for the decoded access token, for convenience */
 export interface AtpAccessJwt {
@@ -62,7 +62,7 @@ export interface AtpSessionData {
 }
 
 /** Additional options for constructing an authentication middleware */
-export interface BskyAuthOptions {
+export interface AtpAuthOptions {
 	/** This function gets called if the session turned out to have expired during an XRPC request */
 	onExpired?: (session: AtpSessionData) => void;
 	/** This function gets called if the session has been refreshed during an XRPC request */
@@ -72,18 +72,18 @@ export interface BskyAuthOptions {
 }
 
 /** Authentication/session management middleware */
-export class BskyAuth {
+export class AtpAuth {
 	#rpc: XRPC;
 	#refreshSessionPromise?: Promise<void>;
 
-	#onExpired: BskyAuthOptions['onExpired'];
-	#onRefresh: BskyAuthOptions['onRefresh'];
-	#onSessionUpdate: BskyAuthOptions['onSessionUpdate'];
+	#onExpired: AtpAuthOptions['onExpired'];
+	#onRefresh: AtpAuthOptions['onRefresh'];
+	#onSessionUpdate: AtpAuthOptions['onSessionUpdate'];
 
 	/** Current session state */
 	session?: AtpSessionData;
 
-	constructor(rpc: XRPC, { onExpired, onRefresh, onSessionUpdate }: BskyAuthOptions = {}) {
+	constructor(rpc: XRPC, { onExpired, onRefresh, onSessionUpdate }: AtpAuthOptions = {}) {
 		this.#rpc = rpc;
 
 		this.#onRefresh = onRefresh;
@@ -188,7 +188,7 @@ export class BskyAuth {
 
 	/**
 	 * Resume a saved session
-	 * @param session Session information, taken from `BskyAuth#session` after login
+	 * @param session Session information, taken from `AtpAuth#session` after login
 	 */
 	async resume(session: AtpSessionData): Promise<AtpSessionData> {
 		const now = Date.now() / 1000 + 60 * 5;
@@ -255,107 +255,4 @@ export interface AuthLoginOptions {
 	password: string;
 	/** Two-factor authentication code */
 	code?: string;
-}
-
-/** Options for constructing a moderation middleware */
-export interface BskyModOptions {
-	/** List of moderation services to use */
-	labelers?: ModerationService[];
-}
-
-/** Moderation middleware, unstable. */
-export class BskyMod {
-	/** List of moderation services that gets forwarded as a header */
-	labelers: ModerationService[];
-
-	constructor(rpc: XRPC, { labelers = [] }: BskyModOptions = {}) {
-		this.labelers = labelers;
-
-		rpc.hook((next) => (request) => {
-			return next({
-				...request,
-				headers: {
-					...request.headers,
-					'atproto-accept-labelers': this.labelers
-						.map((labeler) => labeler.did + (labeler.redact ? `;redact` : ``))
-						.join(', '),
-				},
-			});
-		});
-	}
-}
-
-/** Interface detailing what moderator service to use and how it should be used. */
-export interface ModerationService {
-	/** Moderator service to use */
-	did: At.DID;
-	/** Whether it should apply takedowns made by this service. */
-	redact?: boolean;
-}
-
-/**
- * Retrieves AT Protocol PDS endpoint from the DID document, if available
- * @param doc DID document
- * @returns The PDS endpoint, if available
- */
-export const getPdsEndpoint = (doc: DidDocument): string | undefined => {
-	return getServiceEndpoint(doc, '#atproto_pds', 'AtprotoPersonalDataServer');
-};
-
-/**
- * Retrieve a service endpoint from the DID document, if available
- * @param doc DID document
- * @param serviceId Service ID
- * @param serviceType Service type
- * @returns The requested service endpoint, if available
- */
-export const getServiceEndpoint = (
-	doc: DidDocument,
-	serviceId: string,
-	serviceType: string,
-): string | undefined => {
-	const did = doc.id;
-
-	const didServiceId = did + serviceId;
-	const found = doc.service?.find((service) => service.id === serviceId || service.id === didServiceId);
-
-	if (!found || found.type !== serviceType || typeof found.serviceEndpoint !== 'string') {
-		return undefined;
-	}
-
-	return validateUrl(found.serviceEndpoint);
-};
-
-const validateUrl = (urlStr: string): string | undefined => {
-	let url;
-	try {
-		url = new URL(urlStr);
-	} catch {
-		return undefined;
-	}
-
-	const proto = url.protocol;
-
-	if (url.hostname && (proto === 'http:' || proto === 'https:')) {
-		return urlStr;
-	}
-};
-
-/**
- * DID document
- */
-export interface DidDocument {
-	id: string;
-	alsoKnownAs?: string[];
-	verificationMethod?: Array<{
-		id: string;
-		type: string;
-		controller: string;
-		publicKeyMultibase?: string;
-	}>;
-	service?: Array<{
-		id: string;
-		type: string;
-		serviceEndpoint: string | Record<string, unknown>;
-	}>;
 }

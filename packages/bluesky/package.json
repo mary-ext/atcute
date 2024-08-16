@@ -11,13 +11,12 @@
 		"dist/"
 	],
 	"exports": {
-		".": "./dist/index.js",
 		"./lexicons": "./dist/lexicons.js"
 	},
 	"scripts": {
 		"build": "tsc",
 		"generate": "./scripts/generate-lexicons.sh",
-		"prepublish": "pnpm run build"
+		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
 		"@atcute/client": "^1.0.0"
