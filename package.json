@@ -2,6 +2,7 @@
 	"type": "module",
 	"scripts": {
 		"pull": "node ./scripts/pull-lexicons.js",
+		"pull:whtwnd": "node ./scripts/pull-whtwnd-lexicons.js",
 		"fmt": "prettier --cache --write ."
 	},
 	"devDependencies": {

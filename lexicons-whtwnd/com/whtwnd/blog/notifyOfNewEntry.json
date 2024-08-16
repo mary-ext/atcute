@@ -1,0 +1,32 @@
+{
+	"lexicon": 1,
+	"id": "com.whtwnd.blog.notifyOfNewEntry",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Notify AppView of existence of new entry and request indexing",
+			"input": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["entryUri"],
+					"properties": {
+						"entryUri": {
+							"type": "string",
+							"format": "at-uri"
+						}
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": [],
+					"properties": {}
+				}
+			},
+			"errors": []
+		}
+	}
+}

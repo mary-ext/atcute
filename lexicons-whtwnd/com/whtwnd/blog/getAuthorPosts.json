@@ -1,0 +1,36 @@
+{
+	"lexicon": 1,
+	"id": "com.whtwnd.blog.getAuthorPosts",
+	"defs": {
+		"main": {
+			"type": "query",
+			"description": "Get blog posts associated to designated author.",
+			"parameters": {
+				"type": "params",
+				"required": ["author"],
+				"properties": {
+					"author": {
+						"type": "string",
+						"format": "did"
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["post"],
+					"properties": {
+						"post": {
+							"type": "array",
+							"items": {
+								"type": "ref",
+								"ref": "com.whtwnd.blog.defs#blogEntry"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,50 @@
+{
+	"lexicon": 1,
+	"id": "com.whtwnd.blog.getEntryMetadataByName",
+	"defs": {
+		"main": {
+			"type": "query",
+			"description": "Get AT URI by blog author and entry name. If there are multiple blog entries associated with the name, return the latest one.",
+			"parameters": {
+				"type": "params",
+				"required": ["author", "entryTitle"],
+				"properties": {
+					"author": {
+						"type": "string",
+						"format": "at-identifier"
+					},
+					"entryTitle": {
+						"type": "string"
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["entryUri"],
+					"properties": {
+						"entryUri": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"lastUpdate": {
+							"type": "string",
+							"format": "datetime"
+						},
+						"cid": {
+							"type": "string",
+							"format": "cid"
+						}
+					}
+				}
+			},
+			"errors": [
+				{
+					"name": "NotFound",
+					"description": "If the associated name isn't registered in the author's repo, this error is returned"
+				}
+			]
+		}
+	}
+}

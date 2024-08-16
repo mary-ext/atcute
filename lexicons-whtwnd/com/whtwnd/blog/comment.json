@@ -1,0 +1,25 @@
+{
+	"lexicon": 1,
+	"id": "com.whtwnd.blog.comment",
+	"defs": {
+		"main": {
+			"type": "record",
+			"description": "A declaration of a comment.",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["content", "entryUri"],
+				"properties": {
+					"content": {
+						"type": "string",
+						"maxLength": 1000
+					},
+					"entryUri": {
+						"type": "string",
+						"format": "at-uri"
+					}
+				}
+			}
+		}
+	}
+}

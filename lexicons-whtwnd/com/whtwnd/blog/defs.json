@@ -1,0 +1,63 @@
+{
+	"lexicon": 1,
+	"id": "com.whtwnd.blog.defs",
+	"defs": {
+		"blogEntry": {
+			"type": "object",
+			"required": ["content"],
+			"properties": {
+				"content": {
+					"type": "string",
+					"maxLength": 100000
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		},
+		"comment": {
+			"type": "object",
+			"required": ["content", "entryUri"],
+			"properties": {
+				"content": {
+					"type": "string",
+					"maxLength": 1000
+				},
+				"entryUri": {
+					"type": "string",
+					"format": "at-uri"
+				}
+			}
+		},
+		"ogp": {
+			"type": "object",
+			"required": ["url"],
+			"properties": {
+				"url": {
+					"type": "string",
+					"format": "uri"
+				},
+				"width": {
+					"type": "integer"
+				},
+				"height": {
+					"type": "integer"
+				}
+			}
+		},
+		"blobMetadata": {
+			"type": "object",
+			"required": ["blobref"],
+			"properties": {
+				"blobref": {
+					"type": "blob",
+					"accept": ["*/*"]
+				},
+				"name": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
