@@ -1,0 +1,99 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      '@mary/tar':
+        specifier: npm:@jsr/mary__tar@^0.2.4
+        version: '@jsr/mary__tar@0.2.4'
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
+      typescript:
+        specifier: 5.6.0-beta
+        version: 5.6.0-beta
+
+  packages/client:
+    devDependencies:
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../lex-cli
+
+  packages/lex-cli:
+    dependencies:
+      '@badrap/valita':
+        specifier: ^0.3.9
+        version: 0.3.9
+      '@externdefs/collider':
+        specifier: ^0.1.0
+        version: 0.1.0(@badrap/valita@0.3.9)
+      picocolors:
+        specifier: ^1.0.1
+        version: 1.0.1
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
+    devDependencies:
+      '@types/node':
+        specifier: ^22.3.0
+        version: 22.3.0
+
+packages:
+
+  '@badrap/valita@0.3.9':
+    resolution: {integrity: sha512-keFt5iCwI6H5lbvhg2ZJCWa1xRffdpk6/LHCaayubaRM2zhnRIIBE1d+2NEzXLSk4Fe/aklGNXVPt7hNkvBH6g==}
+    engines: {node: '>= 16'}
+
+  '@externdefs/collider@0.1.0':
+    resolution: {integrity: sha512-vmFJEKHhftREiuhhK3WIMKk6bGfm7kM9c5HeVElFCbtqajXqCfwY/GR3f1G0qYWCvbtcoBhIZ2O8ia3A2/pjkw==}
+    peerDependencies:
+      '@badrap/valita': ^0.3.9
+
+  '@jsr/mary__tar@0.2.4':
+    resolution: {integrity: sha512-jFjPcZj8DRSukPLZOt6+h74cVFdfdTMG9gzbW67YByCJTD52PEpe2sNcfCSw4mQ8hZBNgwiufCPyYL8hR9yicA==, tarball: https://npm.jsr.io/~/11/@jsr/mary__tar/0.2.4.tgz}
+
+  '@types/node@22.3.0':
+    resolution: {integrity: sha512-nrWpWVaDZuaVc5X84xJ0vNrLvomM205oQyLsRt7OHNZbSHslcWsvgFR7O7hire2ZonjLrWBbedmotmIlJDVd6g==}
+
+  picocolors@1.0.1:
+    resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
+
+  prettier@3.3.3:
+    resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
+    engines: {node: '>=14'}
+    hasBin: true
+
+  typescript@5.6.0-beta:
+    resolution: {integrity: sha512-wqVumY25SwHmCJvZPHqbWfjSyWdAqTTUM+LqaPpFccOnln54EZoPr8Ra7qJV8HMEdFYcDc+S5xro0RyvaHvIvw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  undici-types@6.18.2:
+    resolution: {integrity: sha512-5ruQbENj95yDYJNS3TvcaxPMshV7aizdv/hWYjGIKoANWKjhWNBsr2YEuYZKodQulB1b8l7ILOuDQep3afowQQ==}
+
+snapshots:
+
+  '@badrap/valita@0.3.9': {}
+
+  '@externdefs/collider@0.1.0(@badrap/valita@0.3.9)':
+    dependencies:
+      '@badrap/valita': 0.3.9
+
+  '@jsr/mary__tar@0.2.4': {}
+
+  '@types/node@22.3.0':
+    dependencies:
+      undici-types: 6.18.2
+
+  picocolors@1.0.1: {}
+
+  prettier@3.3.3: {}
+
+  typescript@5.6.0-beta: {}
+
+  undici-types@6.18.2: {}

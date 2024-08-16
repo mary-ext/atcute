@@ -1,0 +1,25 @@
+{
+	"type": "module",
+	"name": "@atcute/client",
+	"version": "1.0.0",
+	"description": "lightweight and cute API client for AT Protocol",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js",
+		"./lexicons": "./dist/lexicons.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"generate": "./scripts/generate-lexicons.sh",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"devDependencies": {
+		"@atcute/lex-cli": "workspace:^"
+	}
+}
