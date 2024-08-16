@@ -5,7 +5,7 @@
 # invalid references.
 
 pnpm exec lex-cli generate \
-	../../lexicons-bluemoji/blue.moji/collection/item.json \
-	../../lexicons-bluemoji/blue.moji/richtext/facet.json \
+	../../../lexicons-bluemoji/blue.moji/collection/item.json \
+	../../../lexicons-bluemoji/blue.moji/richtext/facet.json \
 	-o lib/lexicons.ts \
 	--description "Contains type declarations for WhiteWind lexicons"

@@ -18,31 +18,13 @@ importers:
         specifier: 5.6.0-beta
         version: 5.6.0-beta
 
-  packages/bluemoji:
-    devDependencies:
-      '@atcute/client':
-        specifier: workspace:^1.0.0
-        version: link:../client
-      '@atcute/lex-cli':
-        specifier: workspace:^
-        version: link:../lex-cli
-
-  packages/bluesky:
-    devDependencies:
-      '@atcute/client':
-        specifier: workspace:^1.0.0
-        version: link:../client
-      '@atcute/lex-cli':
-        specifier: workspace:^
-        version: link:../lex-cli
-
-  packages/client:
+  packages/core/client:
     devDependencies:
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../lex-cli
 
-  packages/lex-cli:
+  packages/core/lex-cli:
     dependencies:
       '@badrap/valita':
         specifier: ^0.3.9
@@ -61,14 +43,32 @@ importers:
         specifier: ^22.3.0
         version: 22.3.0
 
-  packages/whitewind:
+  packages/definitions/bluemoji:
     devDependencies:
       '@atcute/client':
         specifier: workspace:^1.0.0
-        version: link:../client
+        version: link:../../core/client
       '@atcute/lex-cli':
         specifier: workspace:^
-        version: link:../lex-cli
+        version: link:../../core/lex-cli
+
+  packages/definitions/bluesky:
+    devDependencies:
+      '@atcute/client':
+        specifier: workspace:^1.0.0
+        version: link:../../core/client
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../../core/lex-cli
+
+  packages/definitions/whitewind:
+    devDependencies:
+      '@atcute/client':
+        specifier: workspace:^1.0.0
+        version: link:../../core/client
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../../core/lex-cli
 
 packages:
 
