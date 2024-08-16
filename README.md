@@ -7,13 +7,13 @@ this is a monorepository composed of several packages:
 <table>
 	<thead>
 		<tr>
-			<th>Package</th>
+			<th align="left">Package</th>
 			<th>Link</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<th colspan="2">Core packages</th>
+			<th colspan="2" align="left">Core packages</th>
 		</tr>
 		<tr>
 			<td><code>client</code>: the actual client library</td>
@@ -24,7 +24,7 @@ this is a monorepository composed of several packages:
 			<td><a href="./packages/lex-cli/README.md">README</a></td>
 		</tr>
 		<tr>
-			<th colspan="2">Lexicon definitions</th>
+			<th colspan="2" align="left">Lexicon definitions</th>
 		</tr>
 		<tr>
 			<td><code>bluesky</code>: adds <code>app.bsky.*</code> definitions</td>
@@ -39,7 +39,7 @@ this is a monorepository composed of several packages:
 			<td><a href="./packages/bluemoji/README.md">README</a></td>
 		</tr>
 		<tr>
-			<th colspan="2">Utility packages</th>
+			<th colspan="2" align="left">Utility packages</th>
 		</tr>
 		<tr>
 			<td><code>tid</code>: create and parse TID identifiers</td>
@@ -54,7 +54,7 @@ this is a monorepository composed of several packages:
 			<td><a href="./packages/cbor/README.md">README</a></td>
 		</tr>
 		<tr>
-			<th colspan="2">Bluesky-related packages</th>
+			<th colspan="2" align="left">Bluesky-related packages</th>
 		</tr>
 		<tr>
 			<td><code>bluesky-richtext-builder</code>: builder for Bluesky's rich text format</td>
