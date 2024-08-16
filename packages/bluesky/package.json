@@ -1,0 +1,29 @@
+{
+	"type": "module",
+	"name": "@atcute/bluesky",
+	"version": "1.0.0",
+	"description": "Bluesky type definitions for atcute",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js",
+		"./lexicons": "./dist/lexicons.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"generate": "./scripts/generate-lexicons.sh",
+		"prepublish": "pnpm run build"
+	},
+	"peerDependencies": {
+		"@atcute/client": "^1.0.0"
+	},
+	"devDependencies": {
+		"@atcute/client": "workspace:^1.0.0",
+		"@atcute/lex-cli": "workspace:^"
+	}
+}
