@@ -54,6 +54,10 @@ this is a monorepository composed of several packages:
 			<td><a href="./packages/utilities/cbor/README.md">README</a></td>
 		</tr>
 		<tr>
+			<td><code>varint</code>: codec for Protobuf-style varint bytes</td>
+			<td><a href="./packages/utilities/varint/README.md">README</a></td>
+		</tr>
+		<tr>
 			<th colspan="2" align="left">Bluesky-related packages</th>
 		</tr>
 		<tr>

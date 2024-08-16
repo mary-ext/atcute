@@ -1,0 +1,25 @@
+{
+	"type": "module",
+	"name": "@atcute/varint",
+	"version": "1.0.0",
+	"description": "codec for Protobuf-style varint bytes",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.1.6"
+	}
+}
