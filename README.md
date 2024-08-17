@@ -27,7 +27,7 @@ this is a monorepository composed of several packages:
 			<th colspan="2" align="left">Lexicon definitions</th>
 		</tr>
 		<tr>
-			<td><code>bluesky</code>: adds <code>app.bsky.*</code> definitions</td>
+			<td><code>bluesky</code>: adds <code>app.bsky.*</code> and <code>chat.bsky.*</code> definitions</td>
 			<td><a href="./packages/definitions/bluesky/README.md">README</a></td>
 		</tr>
 		<tr>

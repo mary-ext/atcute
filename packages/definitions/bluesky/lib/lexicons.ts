@@ -2001,6 +2001,316 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	namespace ChatBskyActorDeclaration {
+		interface Record {
+			allowIncoming: 'all' | 'following' | 'none' | (string & {});
+		}
+	}
+
+	namespace ChatBskyActorDefs {
+		interface ProfileViewBasic {
+			[Brand.Type]?: 'chat.bsky.actor.defs#profileViewBasic';
+			did: At.DID;
+			handle: At.Handle;
+			associated?: AppBskyActorDefs.ProfileAssociated;
+			avatar?: string;
+			/** Set to true when the actor cannot actively participate in converations */
+			chatDisabled?: boolean;
+			/**
+			 * Maximum string length: 640 \
+			 * Maximum grapheme length: 64
+			 */
+			displayName?: string;
+			labels?: ComAtprotoLabelDefs.Label[];
+			viewer?: AppBskyActorDefs.ViewerState;
+		}
+	}
+
+	namespace ChatBskyActorDeleteAccount {
+		interface Params {}
+		type Input = undefined;
+		interface Output {}
+	}
+
+	namespace ChatBskyActorExportAccountData {
+		interface Params {}
+		type Input = undefined;
+		type Output = Uint8Array;
+	}
+
+	namespace ChatBskyConvoDefs {
+		interface ConvoView {
+			[Brand.Type]?: 'chat.bsky.convo.defs#convoView';
+			id: string;
+			members: ChatBskyActorDefs.ProfileViewBasic[];
+			muted: boolean;
+			rev: string;
+			unreadCount: number;
+			lastMessage?: Brand.Union<DeletedMessageView | MessageView>;
+		}
+		interface DeletedMessageView {
+			[Brand.Type]?: 'chat.bsky.convo.defs#deletedMessageView';
+			id: string;
+			rev: string;
+			sender: MessageViewSender;
+			sentAt: string;
+		}
+		interface LogBeginConvo {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logBeginConvo';
+			convoId: string;
+			rev: string;
+		}
+		interface LogCreateMessage {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logCreateMessage';
+			convoId: string;
+			message: Brand.Union<DeletedMessageView | MessageView>;
+			rev: string;
+		}
+		interface LogDeleteMessage {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logDeleteMessage';
+			convoId: string;
+			message: Brand.Union<DeletedMessageView | MessageView>;
+			rev: string;
+		}
+		interface LogLeaveConvo {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logLeaveConvo';
+			convoId: string;
+			rev: string;
+		}
+		interface MessageInput {
+			[Brand.Type]?: 'chat.bsky.convo.defs#messageInput';
+			/**
+			 * Maximum string length: 10000 \
+			 * Maximum grapheme length: 1000
+			 */
+			text: string;
+			embed?: Brand.Union<AppBskyEmbedRecord.Main>;
+			/** Annotations of text (mentions, URLs, hashtags, etc) */
+			facets?: AppBskyRichtextFacet.Main[];
+		}
+		interface MessageRef {
+			[Brand.Type]?: 'chat.bsky.convo.defs#messageRef';
+			convoId: string;
+			did: At.DID;
+			messageId: string;
+		}
+		interface MessageView {
+			[Brand.Type]?: 'chat.bsky.convo.defs#messageView';
+			id: string;
+			rev: string;
+			sender: MessageViewSender;
+			sentAt: string;
+			/**
+			 * Maximum string length: 10000 \
+			 * Maximum grapheme length: 1000
+			 */
+			text: string;
+			embed?: Brand.Union<AppBskyEmbedRecord.View>;
+			/** Annotations of text (mentions, URLs, hashtags, etc) */
+			facets?: AppBskyRichtextFacet.Main[];
+		}
+		interface MessageViewSender {
+			[Brand.Type]?: 'chat.bsky.convo.defs#messageViewSender';
+			did: At.DID;
+		}
+	}
+
+	namespace ChatBskyConvoDeleteMessageForSelf {
+		interface Params {}
+		interface Input {
+			convoId: string;
+			messageId: string;
+		}
+		type Output = ChatBskyConvoDefs.DeletedMessageView;
+	}
+
+	namespace ChatBskyConvoGetConvo {
+		interface Params {
+			convoId: string;
+		}
+		type Input = undefined;
+		interface Output {
+			convo: ChatBskyConvoDefs.ConvoView;
+		}
+	}
+
+	namespace ChatBskyConvoGetConvoForMembers {
+		interface Params {
+			/**
+			 * Minimum array length: 1 \
+			 * Maximum array length: 10
+			 */
+			members: At.DID[];
+		}
+		type Input = undefined;
+		interface Output {
+			convo: ChatBskyConvoDefs.ConvoView;
+		}
+	}
+
+	namespace ChatBskyConvoGetLog {
+		interface Params {
+			cursor?: string;
+		}
+		type Input = undefined;
+		interface Output {
+			logs: Brand.Union<
+				| ChatBskyConvoDefs.LogBeginConvo
+				| ChatBskyConvoDefs.LogCreateMessage
+				| ChatBskyConvoDefs.LogDeleteMessage
+				| ChatBskyConvoDefs.LogLeaveConvo
+			>[];
+			cursor?: string;
+		}
+	}
+
+	namespace ChatBskyConvoGetMessages {
+		interface Params {
+			convoId: string;
+			cursor?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			messages: Brand.Union<ChatBskyConvoDefs.DeletedMessageView | ChatBskyConvoDefs.MessageView>[];
+			cursor?: string;
+		}
+	}
+
+	namespace ChatBskyConvoLeaveConvo {
+		interface Params {}
+		interface Input {
+			convoId: string;
+		}
+		interface Output {
+			convoId: string;
+			rev: string;
+		}
+	}
+
+	namespace ChatBskyConvoListConvos {
+		interface Params {
+			cursor?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			convos: ChatBskyConvoDefs.ConvoView[];
+			cursor?: string;
+		}
+	}
+
+	namespace ChatBskyConvoMuteConvo {
+		interface Params {}
+		interface Input {
+			convoId: string;
+		}
+		interface Output {
+			convo: ChatBskyConvoDefs.ConvoView;
+		}
+	}
+
+	namespace ChatBskyConvoSendMessage {
+		interface Params {}
+		interface Input {
+			convoId: string;
+			message: ChatBskyConvoDefs.MessageInput;
+		}
+		type Output = ChatBskyConvoDefs.MessageView;
+	}
+
+	namespace ChatBskyConvoSendMessageBatch {
+		interface Params {}
+		interface Input {
+			/** Maximum array length: 100 */
+			items: BatchItem[];
+		}
+		interface Output {
+			items: ChatBskyConvoDefs.MessageView[];
+		}
+		interface BatchItem {
+			[Brand.Type]?: 'chat.bsky.convo.sendMessageBatch#batchItem';
+			convoId: string;
+			message: ChatBskyConvoDefs.MessageInput;
+		}
+	}
+
+	namespace ChatBskyConvoUnmuteConvo {
+		interface Params {}
+		interface Input {
+			convoId: string;
+		}
+		interface Output {
+			convo: ChatBskyConvoDefs.ConvoView;
+		}
+	}
+
+	namespace ChatBskyConvoUpdateRead {
+		interface Params {}
+		interface Input {
+			convoId: string;
+			messageId?: string;
+		}
+		interface Output {
+			convo: ChatBskyConvoDefs.ConvoView;
+		}
+	}
+
+	namespace ChatBskyModerationGetActorMetadata {
+		interface Params {
+			actor: At.DID;
+		}
+		type Input = undefined;
+		interface Output {
+			all: Metadata;
+			day: Metadata;
+			month: Metadata;
+		}
+		interface Metadata {
+			[Brand.Type]?: 'chat.bsky.moderation.getActorMetadata#metadata';
+			convos: number;
+			convosStarted: number;
+			messagesReceived: number;
+			messagesSent: number;
+		}
+	}
+
+	namespace ChatBskyModerationGetMessageContext {
+		interface Params {
+			messageId: string;
+			/** @default 5 */
+			after?: number;
+			/** @default 5 */
+			before?: number;
+			/** Conversation that the message is from. NOTE: this field will eventually be required. */
+			convoId?: string;
+		}
+		type Input = undefined;
+		interface Output {
+			messages: Brand.Union<ChatBskyConvoDefs.DeletedMessageView | ChatBskyConvoDefs.MessageView>[];
+		}
+	}
+
+	namespace ChatBskyModerationUpdateActorAccess {
+		interface Params {}
+		interface Input {
+			actor: At.DID;
+			allowAccess: boolean;
+			ref?: string;
+		}
+		type Output = undefined;
+	}
+
 	interface Records {
 		'app.bsky.actor.profile': AppBskyActorProfile.Record;
 		'app.bsky.feed.generator': AppBskyFeedGenerator.Record;
@@ -2015,6 +2325,7 @@ declare module '@atcute/client/lexicons' {
 		'app.bsky.graph.listitem': AppBskyGraphListitem.Record;
 		'app.bsky.graph.starterpack': AppBskyGraphStarterpack.Record;
 		'app.bsky.labeler.service': AppBskyLabelerService.Record;
+		'chat.bsky.actor.declaration': ChatBskyActorDeclaration.Record;
 	}
 
 	interface Queries {
@@ -2191,6 +2502,37 @@ declare module '@atcute/client/lexicons' {
 			params: AppBskyUnspeccedSearchPostsSkeleton.Params;
 			output: AppBskyUnspeccedSearchPostsSkeleton.Output;
 		};
+		'chat.bsky.actor.exportAccountData': {
+			output: ChatBskyActorExportAccountData.Output;
+		};
+		'chat.bsky.convo.getConvo': {
+			params: ChatBskyConvoGetConvo.Params;
+			output: ChatBskyConvoGetConvo.Output;
+		};
+		'chat.bsky.convo.getConvoForMembers': {
+			params: ChatBskyConvoGetConvoForMembers.Params;
+			output: ChatBskyConvoGetConvoForMembers.Output;
+		};
+		'chat.bsky.convo.getLog': {
+			params: ChatBskyConvoGetLog.Params;
+			output: ChatBskyConvoGetLog.Output;
+		};
+		'chat.bsky.convo.getMessages': {
+			params: ChatBskyConvoGetMessages.Params;
+			output: ChatBskyConvoGetMessages.Output;
+		};
+		'chat.bsky.convo.listConvos': {
+			params: ChatBskyConvoListConvos.Params;
+			output: ChatBskyConvoListConvos.Output;
+		};
+		'chat.bsky.moderation.getActorMetadata': {
+			params: ChatBskyModerationGetActorMetadata.Params;
+			output: ChatBskyModerationGetActorMetadata.Output;
+		};
+		'chat.bsky.moderation.getMessageContext': {
+			params: ChatBskyModerationGetMessageContext.Params;
+			output: ChatBskyModerationGetMessageContext.Output;
+		};
 	}
 
 	interface Procedures {
@@ -2227,6 +2569,40 @@ declare module '@atcute/client/lexicons' {
 		};
 		'app.bsky.notification.updateSeen': {
 			input: AppBskyNotificationUpdateSeen.Input;
+		};
+		'chat.bsky.actor.deleteAccount': {
+			output: ChatBskyActorDeleteAccount.Output;
+		};
+		'chat.bsky.convo.deleteMessageForSelf': {
+			input: ChatBskyConvoDeleteMessageForSelf.Input;
+			output: ChatBskyConvoDeleteMessageForSelf.Output;
+		};
+		'chat.bsky.convo.leaveConvo': {
+			input: ChatBskyConvoLeaveConvo.Input;
+			output: ChatBskyConvoLeaveConvo.Output;
+		};
+		'chat.bsky.convo.muteConvo': {
+			input: ChatBskyConvoMuteConvo.Input;
+			output: ChatBskyConvoMuteConvo.Output;
+		};
+		'chat.bsky.convo.sendMessage': {
+			input: ChatBskyConvoSendMessage.Input;
+			output: ChatBskyConvoSendMessage.Output;
+		};
+		'chat.bsky.convo.sendMessageBatch': {
+			input: ChatBskyConvoSendMessageBatch.Input;
+			output: ChatBskyConvoSendMessageBatch.Output;
+		};
+		'chat.bsky.convo.unmuteConvo': {
+			input: ChatBskyConvoUnmuteConvo.Input;
+			output: ChatBskyConvoUnmuteConvo.Output;
+		};
+		'chat.bsky.convo.updateRead': {
+			input: ChatBskyConvoUpdateRead.Input;
+			output: ChatBskyConvoUpdateRead.Output;
+		};
+		'chat.bsky.moderation.updateActorAccess': {
+			input: ChatBskyModerationUpdateActorAccess.Input;
 		};
 	}
 }
