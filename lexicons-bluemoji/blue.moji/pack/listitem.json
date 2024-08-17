@@ -12,7 +12,7 @@
 				"properties": {
 					"subject": {
 						"type": "ref",
-						"ref": "blue.moji.collection#itemView",
+						"ref": "blue.moji.collection.defs#itemView",
 						"description": "The emoji which is included in the pack"
 					},
 					"list": {

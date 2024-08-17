@@ -61,7 +61,7 @@
 				},
 				"descriptionFacets": {
 					"type": "array",
-					"items": { "type": "ref", "ref": "blue.moji.richtext.facet" }
+					"items": { "type": "ref", "ref": "app.bsky.richtext.facet" }
 				},
 				"avatar": { "type": "string", "format": "uri" },
 				"listItemCount": { "type": "integer", "minimum": 0 },
@@ -78,7 +78,10 @@
 			"required": ["uri", "subject"],
 			"properties": {
 				"uri": { "type": "string", "format": "at-uri" },
-				"subject": { "type": "ref", "ref": "blue.moji.collection#itemView" }
+				"subject": {
+					"type": "ref",
+					"ref": "blue.moji.collection.defs#itemView"
+				}
 			}
 		}
 	}

@@ -29,7 +29,15 @@
 					"createdAt": { "type": "string", "format": "datetime" },
 					"items": {
 						"type": "array",
-						"items": { "type": "ref", "ref": "blue.moji.collection#itemView" }
+						"items": {
+							"type": "ref",
+							"ref": "blue.moji.collection.defs#itemView"
+						}
+					},
+					"labels": {
+						"type": "union",
+						"description": "Self-label values for this emoji. Effectively content warnings.",
+						"refs": ["com.atproto.label.defs#selfLabels"]
 					}
 				}
 			}
