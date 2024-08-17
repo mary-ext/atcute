@@ -1,0 +1,29 @@
+{
+	"type": "module",
+	"name": "@atcute/cid",
+	"version": "1.0.0",
+	"description": "create and parse AT Protocol-blessed CIDv1 format",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.1.6"
+	},
+	"dependencies": {
+		"@atcute/base32": "workspace:^",
+		"@atcute/varint": "workspace:^"
+	}
+}

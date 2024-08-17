@@ -76,6 +76,19 @@ importers:
         specifier: ^1.1.6
         version: 1.1.6
 
+  packages/utilities/cid:
+    dependencies:
+      '@atcute/base32':
+        specifier: workspace:^
+        version: link:../base32
+      '@atcute/varint':
+        specifier: workspace:^
+        version: link:../varint
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.1.6
+        version: 1.1.6
+
   packages/utilities/tid:
     devDependencies:
       '@types/bun':
