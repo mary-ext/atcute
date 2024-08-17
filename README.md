@@ -58,6 +58,10 @@ this is a monorepository composed of several packages:
 			<td><a href="./packages/utilities/varint/README.md">README</a></td>
 		</tr>
 		<tr>
+			<td><code>base32</code>: codec for base32</td>
+			<td><a href="./packages/utilities/base32/README.md">README</a></td>
+		</tr>
+		<tr>
 			<th colspan="2" align="left">Bluesky-related packages</th>
 		</tr>
 		<tr>

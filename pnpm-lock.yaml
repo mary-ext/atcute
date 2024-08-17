@@ -70,6 +70,12 @@ importers:
         specifier: workspace:^
         version: link:../../core/lex-cli
 
+  packages/utilities/base32:
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.1.6
+        version: 1.1.6
+
   packages/utilities/tid:
     devDependencies:
       '@types/bun':
