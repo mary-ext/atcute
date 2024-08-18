@@ -2,3 +2,4 @@ packages:
   - packages/core/*
   - packages/definitions/*
   - packages/utilities/*
+  - packages/bluesky/*
