@@ -1,0 +1,32 @@
+{
+	"type": "module",
+	"name": "@atcute/cbor",
+	"version": "1.0.0",
+	"description": "DAG-CBOR codec that deals in AT Protocol's HTTP wire format",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"devDependencies": {
+		"@ipld/dag-cbor": "^9.2.1",
+		"@types/bun": "^1.1.6",
+		"mitata": "^0.1.11"
+	},
+	"dependencies": {
+		"@atcute/base32": "workspace:^",
+		"@atcute/cid": "workspace:^",
+		"fp16": "^0.3.0"
+	}
+}

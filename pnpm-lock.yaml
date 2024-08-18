@@ -76,6 +76,28 @@ importers:
         specifier: ^1.1.6
         version: 1.1.6
 
+  packages/utilities/cbor:
+    dependencies:
+      '@atcute/base32':
+        specifier: workspace:^
+        version: link:../base32
+      '@atcute/cid':
+        specifier: workspace:^
+        version: link:../cid
+      fp16:
+        specifier: ^0.3.0
+        version: 0.3.0
+    devDependencies:
+      '@ipld/dag-cbor':
+        specifier: ^9.2.1
+        version: 9.2.1
+      '@types/bun':
+        specifier: ^1.1.6
+        version: 1.1.6
+      mitata:
+        specifier: ^0.1.11
+        version: 0.1.11
+
   packages/utilities/cid:
     dependencies:
       '@atcute/base32':
@@ -112,6 +134,10 @@ packages:
     peerDependencies:
       '@badrap/valita': ^0.3.9
 
+  '@ipld/dag-cbor@9.2.1':
+    resolution: {integrity: sha512-nyY48yE7r3dnJVlxrdaimrbloh4RokQaNRdI//btfTkcTEZbpmSrbYcBQ4VKTf8ZxXAOUJy4VsRpkJo+y9RTnA==}
+    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
+
   '@jsr/mary__tar@0.2.4':
     resolution: {integrity: sha512-jFjPcZj8DRSukPLZOt6+h74cVFdfdTMG9gzbW67YByCJTD52PEpe2sNcfCSw4mQ8hZBNgwiufCPyYL8hR9yicA==, tarball: https://npm.jsr.io/~/11/@jsr/mary__tar/0.2.4.tgz}
 
@@ -129,6 +155,19 @@ packages:
 
   bun-types@1.1.17:
     resolution: {integrity: sha512-Z4+OplcSd/YZq7ZsrfD00DKJeCwuNY96a1IDJyR73+cTBaFIS7SC6LhpY/W3AMEXO9iYq5NJ58WAwnwL1p5vKg==}
+
+  cborg@4.2.3:
+    resolution: {integrity: sha512-XBFbEJ6WMfn9L7woc2t+EzOxF8vGqddoopKBbrhIvZBt2WIUgSlT8xLmM6Aq1xv8eWt4yOSjwxWjYeuHU3CpJA==}
+    hasBin: true
+
+  fp16@0.3.0:
+    resolution: {integrity: sha512-Iw6hLaH345EETQGU56NiAcJ173IraDRdJrVy+0fBMPdkZhzKNN/k3eqXFyNmnyx2/jnIzF2nr0mHh5nHrQBMEQ==}
+
+  mitata@0.1.11:
+    resolution: {integrity: sha512-cs6FiWcnRxn7atVumm8wA8R70XCDmMXgVgb/qWUSjr5dwuIBr7zC+22mbGYPlbyFixlIOjuP//A0e72Q1ZoGDw==}
+
+  multiformats@13.2.2:
+    resolution: {integrity: sha512-RWI+nyf0q64vyOxL8LbKtjJMki0sogRL/8axvklNtiTM0iFCVtHwME9w6+0P1/v4dQvsIg8A45oT3ka1t/M/+A==}
 
   picocolors@1.0.1:
     resolution: {integrity: sha512-anP1Z8qwhkbmu7MFP5iTt+wQKXgwzf7zTyGlcdzabySa9vd0Xt392U0rVmz9poOaBj0uHJKyyo9/upk0HrEQew==}
@@ -157,6 +196,11 @@ snapshots:
     dependencies:
       '@badrap/valita': 0.3.9
 
+  '@ipld/dag-cbor@9.2.1':
+    dependencies:
+      cborg: 4.2.3
+      multiformats: 13.2.2
+
   '@jsr/mary__tar@0.2.4': {}
 
   '@types/bun@1.1.6':
@@ -179,6 +223,14 @@ snapshots:
     dependencies:
       '@types/node': 20.12.14
       '@types/ws': 8.5.12
+
+  cborg@4.2.3: {}
+
+  fp16@0.3.0: {}
+
+  mitata@0.1.11: {}
+
+  multiformats@13.2.2: {}
 
   picocolors@1.0.1: {}
 
