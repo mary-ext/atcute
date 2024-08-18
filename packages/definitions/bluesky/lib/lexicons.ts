@@ -725,7 +725,7 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
-	/** Get a list of posts liked by an actor. Does not require auth. */
+	/** Get a list of posts liked by an actor. Requires auth, actor must be the requesting account. */
 	namespace AppBskyFeedGetActorLikes {
 		interface Params {
 			actor: string;
