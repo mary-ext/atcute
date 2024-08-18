@@ -57,7 +57,7 @@ this is a monorepository composed of several packages:
 			<td><code>bluesky-richtext-builder</code>: builder for Bluesky's rich text format</td>
 		</tr>
 		<tr>
-			<td><code>bluesky-threading</code>: send multiple Bluesky posts in one write</td>
+			<td><code>bluesky-threading</code>: create Bluesky threads containing multiple posts with one write</td>
 		</tr>
 	</tbody>
 </table>

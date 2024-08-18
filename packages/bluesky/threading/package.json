@@ -1,0 +1,37 @@
+{
+	"type": "module",
+	"name": "@atcute/bluesky-threading",
+	"version": "1.0.0",
+	"description": "create Bluesky threads containing multiple posts with one write",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"peerDependencies": {
+		"@atcute/bluesky": "^1.0.0",
+		"@atcute/client": "^1.0.0"
+	},
+	"dependencies": {
+		"@atcute/cbor": "workspace:^",
+		"@atcute/cid": "workspace:^",
+		"@atcute/tid": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/bluesky": "workspace:^",
+		"@atcute/bluesky-richtext-builder": "workspace:^",
+		"@atcute/client": "workspace:^",
+		"@types/bun": "^1.1.6"
+	}
+}

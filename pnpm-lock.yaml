@@ -30,6 +30,31 @@ importers:
         specifier: ^1.1.6
         version: 1.1.6
 
+  packages/bluesky/threading:
+    dependencies:
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../../utilities/cbor
+      '@atcute/cid':
+        specifier: workspace:^
+        version: link:../../utilities/cid
+      '@atcute/tid':
+        specifier: workspace:^
+        version: link:../../utilities/tid
+    devDependencies:
+      '@atcute/bluesky':
+        specifier: workspace:^
+        version: link:../../definitions/bluesky
+      '@atcute/bluesky-richtext-builder':
+        specifier: workspace:^
+        version: link:../richtext-builder
+      '@atcute/client':
+        specifier: workspace:^
+        version: link:../../core/client
+      '@types/bun':
+        specifier: ^1.1.6
+        version: 1.1.6
+
   packages/core/client:
     devDependencies:
       '@atcute/lex-cli':
@@ -61,7 +86,7 @@ importers:
         specifier: workspace:^
         version: link:../bluesky
       '@atcute/client':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^
         version: link:../../core/client
       '@atcute/lex-cli':
         specifier: workspace:^
