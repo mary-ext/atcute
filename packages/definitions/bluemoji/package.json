@@ -19,10 +19,12 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
+		"@atcute/bluesky": "^1.0.0",
 		"@atcute/client": "^1.0.0"
 	},
 	"devDependencies": {
-		"@atcute/client": "workspace:^1.0.0",
+		"@atcute/bluesky": "workspace:^",
+		"@atcute/client": "workspace:^",
 		"@atcute/lex-cli": "workspace:^"
 	}
 }

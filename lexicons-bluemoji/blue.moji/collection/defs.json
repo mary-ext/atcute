@@ -9,7 +9,10 @@
 				"name": { "type": "string" },
 				"alt": { "type": "string" },
 				"createdAt": { "type": "string", "format": "datetime" },
-				"assets": { "type": "ref", "ref": "blue.moji.collection.item#sizes" },
+				"assets": {
+					"type": "ref",
+					"ref": "blue.moji.collection.item#formats_v0"
+				},
 				"adultOnly": { "type": "boolean", "default": false }
 			}
 		},

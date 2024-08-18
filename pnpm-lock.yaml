@@ -57,6 +57,9 @@ importers:
 
   packages/definitions/bluemoji:
     devDependencies:
+      '@atcute/bluesky':
+        specifier: workspace:^
+        version: link:../bluesky
       '@atcute/client':
         specifier: workspace:^1.0.0
         version: link:../../core/client

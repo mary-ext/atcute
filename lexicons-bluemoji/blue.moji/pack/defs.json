@@ -39,7 +39,6 @@
 					"type": "array",
 					"items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
 				},
-				"viewer": { "type": "ref", "ref": "#listViewerState" },
 				"indexedAt": { "type": "string", "format": "datetime" }
 			}
 		},
@@ -69,7 +68,6 @@
 					"type": "array",
 					"items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
 				},
-				"viewer": { "type": "ref", "ref": "#listViewerState" },
 				"indexedAt": { "type": "string", "format": "datetime" }
 			}
 		},
