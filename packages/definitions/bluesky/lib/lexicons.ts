@@ -453,6 +453,7 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.embed.record#view';
 			record: Brand.Union<
 				| ViewBlocked
+				| ViewDetached
 				| ViewNotFound
 				| ViewRecord
 				| AppBskyFeedDefs.GeneratorView
@@ -465,6 +466,11 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.embed.record#viewBlocked';
 			author: AppBskyFeedDefs.BlockedAuthor;
 			blocked: boolean;
+			uri: At.Uri;
+		}
+		interface ViewDetached {
+			[Brand.Type]?: 'app.bsky.embed.record#viewDetached';
+			detached: boolean;
 			uri: At.Uri;
 		}
 		interface ViewNotFound {
@@ -607,6 +613,7 @@ declare module '@atcute/client/lexicons' {
 			>;
 			labels?: ComAtprotoLabelDefs.Label[];
 			likeCount?: number;
+			quoteCount?: number;
 			replyCount?: number;
 			repostCount?: number;
 			threadgate?: ThreadgateView;
@@ -656,6 +663,7 @@ declare module '@atcute/client/lexicons' {
 		/** Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests. */
 		interface ViewerState {
 			[Brand.Type]?: 'app.bsky.feed.defs#viewerState';
+			embeddingDisabled?: boolean;
 			like?: At.Uri;
 			replyDisabled?: boolean;
 			repost?: At.Uri;
@@ -952,6 +960,30 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	/** Get a list of quotes for a given post. */
+	namespace AppBskyFeedGetQuotes {
+		interface Params {
+			/** Reference (AT-URI) of post record */
+			uri: At.Uri;
+			/** If supplied, filters to quotes of specific version (by CID) of the post record. */
+			cid?: At.CID;
+			cursor?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			posts: AppBskyFeedDefs.PostView[];
+			uri: At.Uri;
+			cid?: At.CID;
+			cursor?: string;
+		}
+	}
+
 	/** Get a list of reposts for a given post. */
 	namespace AppBskyFeedGetRepostedBy {
 		interface Params {
@@ -1089,6 +1121,25 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	namespace AppBskyFeedPostgate {
+		interface Record {
+			createdAt: string;
+			/** Reference (AT-URI) to the post record. */
+			post: At.Uri;
+			/**
+			 * List of AT-URIs embedding this post that the author has detached from. \
+			 * Maximum array length: 50
+			 */
+			detachedEmbeddingUris?: At.Uri[];
+			/** Maximum array length: 5 */
+			embeddingRules?: Brand.Union<DisableRule>[];
+		}
+		/** Disables embedding of this post. */
+		interface DisableRule {
+			[Brand.Type]?: 'app.bsky.feed.postgate#disableRule';
+		}
+	}
+
 	namespace AppBskyFeedRepost {
 		interface Record {
 			createdAt: string;
@@ -1163,6 +1214,11 @@ declare module '@atcute/client/lexicons' {
 			post: At.Uri;
 			/** Maximum array length: 5 */
 			allow?: Brand.Union<FollowingRule | ListRule | MentionRule>[];
+			/**
+			 * List of hidden reply URIs. \
+			 * Maximum array length: 50
+			 */
+			hiddenReplies?: At.Uri[];
 		}
 		/** Allow replies from actors you follow. */
 		interface FollowingRule {
@@ -2316,6 +2372,7 @@ declare module '@atcute/client/lexicons' {
 		'app.bsky.feed.generator': AppBskyFeedGenerator.Record;
 		'app.bsky.feed.like': AppBskyFeedLike.Record;
 		'app.bsky.feed.post': AppBskyFeedPost.Record;
+		'app.bsky.feed.postgate': AppBskyFeedPostgate.Record;
 		'app.bsky.feed.repost': AppBskyFeedRepost.Record;
 		'app.bsky.feed.threadgate': AppBskyFeedThreadgate.Record;
 		'app.bsky.graph.block': AppBskyGraphBlock.Record;
@@ -2398,6 +2455,10 @@ declare module '@atcute/client/lexicons' {
 		'app.bsky.feed.getPostThread': {
 			params: AppBskyFeedGetPostThread.Params;
 			output: AppBskyFeedGetPostThread.Output;
+		};
+		'app.bsky.feed.getQuotes': {
+			params: AppBskyFeedGetQuotes.Params;
+			output: AppBskyFeedGetQuotes.Output;
 		};
 		'app.bsky.feed.getRepostedBy': {
 			params: AppBskyFeedGetRepostedBy.Params;
