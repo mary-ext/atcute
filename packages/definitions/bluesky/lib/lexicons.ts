@@ -494,6 +494,7 @@ declare module '@atcute/client/lexicons' {
 			>[];
 			labels?: ComAtprotoLabelDefs.Label[];
 			likeCount?: number;
+			quoteCount?: number;
 			replyCount?: number;
 			repostCount?: number;
 		}
@@ -954,6 +955,7 @@ declare module '@atcute/client/lexicons' {
 			thread: Brand.Union<
 				AppBskyFeedDefs.BlockedPost | AppBskyFeedDefs.NotFoundPost | AppBskyFeedDefs.ThreadViewPost
 			>;
+			threadgate?: AppBskyFeedDefs.ThreadgateView;
 		}
 		interface Errors {
 			NotFound: {};
