@@ -15,8 +15,8 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       typescript:
-        specifier: 5.6.0-beta
-        version: 5.6.0-beta
+        specifier: 5.6.1-rc
+        version: 5.6.1-rc
 
   packages/bluesky/richtext-builder:
     devDependencies:
@@ -217,8 +217,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  typescript@5.6.0-beta:
-    resolution: {integrity: sha512-wqVumY25SwHmCJvZPHqbWfjSyWdAqTTUM+LqaPpFccOnln54EZoPr8Ra7qJV8HMEdFYcDc+S5xro0RyvaHvIvw==}
+  typescript@5.6.1-rc:
+    resolution: {integrity: sha512-E3b2+1zEFu84jB0YQi9BORDjz9+jGbwwy1Zi3G0LUNw7a7cePUrHMRNy8aPh53nXpkFGVHSxIZo5vKTfYaFiBQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -276,7 +276,7 @@ snapshots:
 
   prettier@3.3.3: {}
 
-  typescript@5.6.0-beta: {}
+  typescript@5.6.1-rc: {}
 
   undici-types@5.26.5: {}
 
