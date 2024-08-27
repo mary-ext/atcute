@@ -28,7 +28,8 @@
 						"description": "Self-label values for this emoji. Effectively content warnings.",
 						"refs": ["com.atproto.label.defs#selfLabels"]
 					},
-					"copyOf": { "type": "string", "format": "at-uri" }
+					"copyOf": { "type": "string", "format": "at-uri" },
+					"fallbackText": { "type": "string", "maxLength": 1, "default": "◌" }
 				}
 			}
 		},
@@ -56,6 +57,20 @@
 			"type": "bytes",
 			"maxLength": 65536,
 			"description": "64kb should be enough for anybody"
+		},
+		"itemView": {
+			"type": "object",
+			"required": ["name", "formats"],
+			"properties": {
+				"name": { "type": "string" },
+				"alt": { "type": "string" },
+				"createdAt": { "type": "string", "format": "datetime" },
+				"formats": {
+					"type": "ref",
+					"ref": "#formats_v0"
+				},
+				"adultOnly": { "type": "boolean", "default": false }
+			}
 		}
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"lexicon": 1,
-	"id": "blue.moji.pack.record",
+	"id": "blue.moji.packs.pack",
 	"defs": {
 		"main": {
 			"type": "record",
@@ -8,7 +8,7 @@
 			"key": "tid",
 			"record": {
 				"type": "object",
-				"required": ["name", "createdAt", "items"],
+				"required": ["name", "createdAt"],
 				"properties": {
 					"name": { "type": "string", "maxLength": 64, "minLength": 1 },
 					"description": {
@@ -27,13 +27,6 @@
 					},
 					"adultOnly": { "type": "boolean", "default": false },
 					"createdAt": { "type": "string", "format": "datetime" },
-					"items": {
-						"type": "array",
-						"items": {
-							"type": "ref",
-							"ref": "blue.moji.collection.defs#itemView"
-						}
-					},
 					"labels": {
 						"type": "union",
 						"description": "Self-label values for this emoji. Effectively content warnings.",

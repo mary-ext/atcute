@@ -2,20 +2,6 @@
 	"lexicon": 1,
 	"id": "blue.moji.collection.defs",
 	"defs": {
-		"itemView": {
-			"type": "object",
-			"required": ["name", "assets"],
-			"properties": {
-				"name": { "type": "string" },
-				"alt": { "type": "string" },
-				"createdAt": { "type": "string", "format": "datetime" },
-				"assets": {
-					"type": "ref",
-					"ref": "blue.moji.collection.item#formats_v0"
-				},
-				"adultOnly": { "type": "boolean", "default": false }
-			}
-		},
 		"collectionView": {
 			"type": "object",
 			"required": ["uri", "cid", "creator", "name", "indexedAt"],

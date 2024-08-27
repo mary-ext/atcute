@@ -33,14 +33,20 @@ declare module '@atcute/client/lexicons' {
 			descriptionFacets?: AppBskyRichtextFacet.Main[];
 			labels?: ComAtprotoLabelDefs.Label[];
 		}
-		interface ItemView {
-			[Brand.Type]?: 'blue.moji.collection.defs#itemView';
-			assets: BlueMojiCollectionItem.Formats_v0;
+	}
+
+	/** Get a single emoji from a repository. Requires auth. */
+	namespace BlueMojiCollectionGetItem {
+		interface Params {
+			/** The Bluemoji alias/rkey. */
 			name: string;
-			/** @default false */
-			adultOnly?: boolean;
-			alt?: string;
-			createdAt?: string;
+			/** The handle or DID of the repo. */
+			repo: string;
+		}
+		type Input = undefined;
+		interface Output {
+			item: BlueMojiCollectionItem.ItemView;
+			uri: At.Uri;
 		}
 	}
 
@@ -55,6 +61,11 @@ declare module '@atcute/client/lexicons' {
 			adultOnly?: boolean;
 			alt?: string;
 			copyOf?: At.Uri;
+			/**
+			 * Maximum string length: 1
+			 * @default "◌"
+			 */
+			fallbackText?: string;
 			/** Self-label values for this emoji. Effectively content warnings. */
 			labels?: Brand.Union<ComAtprotoLabelDefs.SelfLabels>;
 		}
@@ -71,30 +82,96 @@ declare module '@atcute/client/lexicons' {
 			png_128?: Blob_v0;
 			webp_128?: Blob_v0;
 		}
+		interface ItemView {
+			[Brand.Type]?: 'blue.moji.collection.item#itemView';
+			formats: Formats_v0;
+			name: string;
+			/** @default false */
+			adultOnly?: boolean;
+			alt?: string;
+			createdAt?: string;
+		}
 	}
 
-	namespace BlueMojiPackDefs {
-		interface BluemojiPackView {
-			[Brand.Type]?: 'blue.moji.pack.defs#bluemojiPackView';
-			cid: At.CID;
-			creator: AppBskyActorDefs.ProfileViewBasic;
-			indexedAt: string;
-			record: unknown;
-			uri: At.Uri;
-			items?: ListViewBasic;
-			labels?: ComAtprotoLabelDefs.Label[];
-			/** Maximum array length: 12 */
-			listItemsSample?: ListItemView[];
+	/** List a range of Bluemoji in a repository, matching a specific collection. Requires auth. */
+	namespace BlueMojiCollectionListCollection {
+		interface Params {
+			cursor?: string;
+			/**
+			 * The number of records to return. \
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+			/** Flag to reverse the order of the returned records. */
+			reverse?: boolean;
 		}
-		interface ListItemView {
-			[Brand.Type]?: 'blue.moji.pack.defs#listItemView';
-			subject: BlueMojiCollectionDefs.ItemView;
+		type Input = undefined;
+		interface Output {
+			items: BlueMojiCollectionItem.ItemView[];
+			cursor?: string;
+		}
+		interface ItemView {
+			[Brand.Type]?: 'blue.moji.collection.listCollection#itemView';
+			record: BlueMojiCollectionItem.ItemView;
 			uri: At.Uri;
 		}
-		interface ListView {
-			[Brand.Type]?: 'blue.moji.pack.defs#listView';
+	}
+
+	/** Write a Bluemoji record, creating or updating it as needed. Requires auth, implemented by AppView. */
+	namespace BlueMojiCollectionPutItem {
+		interface Params {}
+		interface Input {
+			item: BlueMojiCollectionItem.ItemView;
+			/** The handle or DID of the repo (aka, current account). */
+			repo: string;
+			/**
+			 * Can be set to 'false' to skip Lexicon schema validation of record data.
+			 * @default true
+			 */
+			validate?: boolean;
+		}
+		interface Output {
+			uri: At.Uri;
+		}
+		interface Errors {}
+	}
+
+	/** Copy a single emoji from another repo. Requires auth. */
+	namespace BlueMojiCollectionSaveToCollection {
+		interface Params {}
+		interface Input {
+			/**
+			 * The source Bluemoji name/rkey. \
+			 * Maximum string length: 15
+			 */
+			name: string;
+			/** The handle or DID of the repo to copy from. */
+			source: string;
+			/** The alias to save the Bluemoji to in the current logged-in user's repo. */
+			renameTo?: string;
+		}
+		interface Output {
+			item: BlueMojiCollectionItem.ItemView;
+			uri: At.Uri;
+		}
+		interface Errors {
+			EmojiNotFound: {};
+			DestinationExists: {};
+		}
+	}
+
+	namespace BlueMojiPacksDefs {
+		interface PackItemView {
+			[Brand.Type]?: 'blue.moji.packs.defs#packItemView';
+			subject: BlueMojiCollectionItem.ItemView;
+			uri: At.Uri;
+		}
+		interface PackView {
+			[Brand.Type]?: 'blue.moji.packs.defs#packView';
 			cid: At.CID;
-			creator: AppBskyActorDefs.ProfileViewBasic;
+			creator: AppBskyActorDefs.ProfileView;
 			indexedAt: string;
 			/**
 			 * Minimum string length: 1 \
@@ -111,10 +188,11 @@ declare module '@atcute/client/lexicons' {
 			descriptionFacets?: AppBskyRichtextFacet.Main[];
 			labels?: ComAtprotoLabelDefs.Label[];
 			/** Minimum: 0 */
-			listItemCount?: number;
+			packItemCount?: number;
+			viewer?: PackViewerState;
 		}
-		interface ListViewBasic {
-			[Brand.Type]?: 'blue.moji.pack.defs#listViewBasic';
+		interface PackViewBasic {
+			[Brand.Type]?: 'blue.moji.packs.defs#packViewBasic';
 			cid: At.CID;
 			/**
 			 * Minimum string length: 1 \
@@ -123,39 +201,79 @@ declare module '@atcute/client/lexicons' {
 			name: string;
 			uri: At.Uri;
 			avatar?: string;
+			/**
+			 * Maximum string length: 3000 \
+			 * Maximum grapheme length: 300
+			 */
+			description?: string;
+			descriptionFacets?: BlueMojiRichtextFacet.Main[];
 			indexedAt?: string;
-			labels?: ComAtprotoLabelDefs.Label[];
 			/** Minimum: 0 */
-			listItemCount?: number;
+			itemCount?: number;
+			labels?: ComAtprotoLabelDefs.Label[];
+			viewer?: PackViewerState;
+		}
+		interface PackViewerState {
+			[Brand.Type]?: 'blue.moji.packs.defs#packViewerState';
+			savedToCollection?: boolean;
 		}
 	}
 
-	/** Gets a view of a Bluemoji pack */
-	namespace BlueMojiPackGetPack {
+	/** Get a list of Bluemoji packs created by the actor. */
+	namespace BlueMojiPacksGetActorPacks {
 		interface Params {
-			/** Reference (AT-URI) of the Bluemoji pack record */
-			bluemojiPack: At.Uri;
+			actor: string;
+			cursor?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
 		}
 		type Input = undefined;
 		interface Output {
-			bluemojiPack: BlueMojiPackDefs.BluemojiPackView;
+			packs: BlueMojiPacksDefs.PackViewBasic[];
+			cursor?: string;
 		}
 	}
 
-	namespace BlueMojiPackListitem {
-		interface Record {
-			createdAt: string;
-			/** Reference (AT-URI) to the pack record (blue.moji.pack) */
-			list: At.Uri;
-			/** The emoji which is included in the pack */
-			subject: BlueMojiCollectionDefs.ItemView;
+	/** Gets a 'view' (with additional context) of a specified pack. */
+	namespace BlueMojiPacksGetPack {
+		interface Params {
+			/** Reference (AT-URI) of the pack record to hydrate. */
+			pack: At.Uri;
+			cursor?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			items: BlueMojiPacksDefs.PackItemView[];
+			pack: BlueMojiPacksDefs.PackView;
+			cursor?: string;
 		}
 	}
 
-	namespace BlueMojiPackRecord {
+	/** Get views for a list of Bluemoji packs. */
+	namespace BlueMojiPacksGetPacks {
+		interface Params {
+			/** Maximum array length: 25 */
+			uris: At.Uri[];
+		}
+		type Input = undefined;
+		interface Output {
+			packs: BlueMojiPacksDefs.PackViewBasic[];
+		}
+	}
+
+	namespace BlueMojiPacksPack {
 		interface Record {
 			createdAt: string;
-			items: BlueMojiCollectionDefs.ItemView[];
 			/**
 			 * Minimum string length: 1 \
 			 * Maximum string length: 64
@@ -172,6 +290,16 @@ declare module '@atcute/client/lexicons' {
 			icon?: At.Blob;
 			/** Self-label values for this emoji. Effectively content warnings. */
 			labels?: Brand.Union<ComAtprotoLabelDefs.SelfLabels>;
+		}
+	}
+
+	namespace BlueMojiPacksPackitem {
+		interface Record {
+			createdAt: string;
+			/** Reference (AT-URI) to the pack record (blue.moji.packs.pack). */
+			pack: At.Uri;
+			/** Reference (AT-URI) to the Bluemoji item record (blue.moji.collection.item). */
+			subject: At.Uri;
 		}
 	}
 
@@ -204,16 +332,41 @@ declare module '@atcute/client/lexicons' {
 
 	interface Records {
 		'blue.moji.collection.item': BlueMojiCollectionItem.Record;
-		'blue.moji.pack.listitem': BlueMojiPackListitem.Record;
-		'blue.moji.pack.record': BlueMojiPackRecord.Record;
+		'blue.moji.packs.pack': BlueMojiPacksPack.Record;
+		'blue.moji.packs.packitem': BlueMojiPacksPackitem.Record;
 	}
 
 	interface Queries {
-		'blue.moji.pack.getPack': {
-			params: BlueMojiPackGetPack.Params;
-			output: BlueMojiPackGetPack.Output;
+		'blue.moji.collection.getItem': {
+			params: BlueMojiCollectionGetItem.Params;
+			output: BlueMojiCollectionGetItem.Output;
+		};
+		'blue.moji.collection.listCollection': {
+			params: BlueMojiCollectionListCollection.Params;
+			output: BlueMojiCollectionListCollection.Output;
+		};
+		'blue.moji.packs.getActorPacks': {
+			params: BlueMojiPacksGetActorPacks.Params;
+			output: BlueMojiPacksGetActorPacks.Output;
+		};
+		'blue.moji.packs.getPack': {
+			params: BlueMojiPacksGetPack.Params;
+			output: BlueMojiPacksGetPack.Output;
+		};
+		'blue.moji.packs.getPacks': {
+			params: BlueMojiPacksGetPacks.Params;
+			output: BlueMojiPacksGetPacks.Output;
 		};
 	}
 
-	interface Procedures {}
+	interface Procedures {
+		'blue.moji.collection.putItem': {
+			input: BlueMojiCollectionPutItem.Input;
+			output: BlueMojiCollectionPutItem.Output;
+		};
+		'blue.moji.collection.saveToCollection': {
+			input: BlueMojiCollectionSaveToCollection.Input;
+			output: BlueMojiCollectionSaveToCollection.Output;
+		};
+	}
 }

@@ -1,0 +1,52 @@
+{
+	"lexicon": 1,
+	"id": "blue.moji.collection.listCollection",
+	"defs": {
+		"main": {
+			"type": "query",
+			"description": "List a range of Bluemoji in a repository, matching a specific collection. Requires auth.",
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 100,
+						"default": 50,
+						"description": "The number of records to return."
+					},
+					"cursor": { "type": "string" },
+					"reverse": {
+						"type": "boolean",
+						"description": "Flag to reverse the order of the returned records."
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["items"],
+					"properties": {
+						"cursor": { "type": "string" },
+						"items": {
+							"type": "array",
+							"items": {
+								"type": "ref",
+								"ref": "blue.moji.collection.item#itemView"
+							}
+						}
+					}
+				}
+			}
+		},
+		"itemView": {
+			"type": "object",
+			"required": ["uri", "record"],
+			"properties": {
+				"uri": { "type": "string", "format": "at-uri" },
+				"record": { "type": "ref", "ref": "blue.moji.collection.item#itemView" }
+			}
+		}
+	}
+}

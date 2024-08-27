@@ -1,0 +1,39 @@
+{
+	"lexicon": 1,
+	"id": "blue.moji.collection.getItem",
+	"defs": {
+		"main": {
+			"type": "query",
+			"description": "Get a single emoji from a repository. Requires auth.",
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "name"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "at-identifier",
+						"description": "The handle or DID of the repo."
+					},
+					"name": {
+						"type": "string",
+						"description": "The Bluemoji alias/rkey."
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["uri", "item"],
+					"properties": {
+						"uri": { "type": "string", "format": "at-uri" },
+						"item": {
+							"type": "ref",
+							"ref": "blue.moji.collection.item#itemView"
+						}
+					}
+				}
+			}
+		}
+	}
+}

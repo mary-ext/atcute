@@ -1,0 +1,44 @@
+{
+	"lexicon": 1,
+	"id": "blue.moji.collection.putItem",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Write a Bluemoji record, creating or updating it as needed. Requires auth, implemented by AppView.",
+			"input": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["repo", "item"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "at-identifier",
+							"description": "The handle or DID of the repo (aka, current account)."
+						},
+						"validate": {
+							"type": "boolean",
+							"default": true,
+							"description": "Can be set to 'false' to skip Lexicon schema validation of record data."
+						},
+						"item": {
+							"type": "ref",
+							"ref": "blue.moji.collection.item#itemView"
+						}
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["uri"],
+					"properties": {
+						"uri": { "type": "string", "format": "at-uri" }
+					}
+				}
+			},
+			"errors": []
+		}
+	}
+}

@@ -12,7 +12,7 @@ async function main() {
 	let sha;
 	{
 		console.log(`retrieving latest commit`);
-		const response = await fetch(`https://api.github.com/repos/${repo}/commits?path=lexicons/`);
+		const response = await fetch(`https://api.github.com/repos/${repo}/commits?path=schema/`);
 
 		if (!response.ok) {
 			console.log(`  response error ${response.status}`);
