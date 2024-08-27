@@ -20,10 +20,13 @@
 	},
 	"scripts": {
 		"build": "tsc",
+		"test": "vitest run",
 		"generate": "./scripts/generate-lexicons.sh",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@atcute/lex-cli": "workspace:^"
+		"@atcute/internal-dev-env": "workspace:^",
+		"@atcute/lex-cli": "workspace:^",
+		"vitest": "^2.0.5"
 	}
 }

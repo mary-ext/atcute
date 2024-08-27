@@ -3,3 +3,4 @@ packages:
   - packages/definitions/*
   - packages/utilities/*
   - packages/bluesky/*
+  - packages/internal/*
