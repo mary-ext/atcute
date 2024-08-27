@@ -135,9 +135,8 @@ export class CredentialManager implements FetchHandlerObject {
 
 		// Return initial response if:
 		// - refreshSession returns expired
-		// - Request has been aborted
 		// - Body stream has been consumed
-		if (!this.session || init.signal?.aborted || init.body instanceof ReadableStream) {
+		if (!this.session || init.body instanceof ReadableStream) {
 			return initialResponse;
 		}
 
