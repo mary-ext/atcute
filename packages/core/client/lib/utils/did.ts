@@ -1,6 +1,8 @@
 /**
  * @module
- * DID document-related functionalities
+ * DID document-related functionalities.
+ * This module is exported for convenience and is no way part of public API,
+ * it can be removed at any time.
  */
 
 /**
