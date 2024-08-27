@@ -1,4 +1,4 @@
-/** Actual fetch handler, `url` is expected to only be pathname + search params */
+/** Fetch handler function */
 export type FetchHandler = (pathname: string, init: RequestInit) => Promise<Response>;
 
 /** Fetch handler in an object */
