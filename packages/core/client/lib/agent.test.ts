@@ -2,15 +2,16 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 
 import { TestNetwork } from '@atcute/internal-dev-env';
 
-import { XRPC, XRPCError } from './index.js';
-import { AtpAuth, type AtpSessionData } from './middlewares/auth.js';
+import { CredentialManager, type AtpSessionData } from './credential-manager.js';
+import { simpleFetchHandler } from './fetch-handler.js';
+import { XRPC, XRPCError } from './rpc.js';
 
 let network: TestNetwork;
 
 beforeAll(async () => {
 	network = await TestNetwork.create({});
 
-	const rpc = new XRPC({ service: network.pds.url });
+	const rpc = new XRPC({ handler: simpleFetchHandler({ service: network.pds.url }) });
 	await createAccount(rpc, 'user1.test');
 });
 
@@ -18,12 +19,8 @@ afterAll(async () => {
 	await network.close();
 });
 
-afterEach(() => {
-	vi.restoreAllMocks();
-});
-
 it('can connect to a PDS', async () => {
-	const rpc = new XRPC({ service: network.pds.url });
+	const rpc = new XRPC({ handler: simpleFetchHandler({ service: network.pds.url }) });
 
 	const { data } = await rpc.get('com.atproto.server.describeServer', {});
 
@@ -39,35 +36,36 @@ it('can connect to a PDS', async () => {
 	});
 });
 
-describe('AtpAuth', () => {
+describe('CredentialManager', () => {
 	it('can login', async () => {
 		const onSessionUpdate = vi.fn();
 
-		const rpc = new XRPC({ service: network.pds.url });
-		const auth = new AtpAuth(rpc, { onSessionUpdate: onSessionUpdate });
+		const manager = new CredentialManager({ service: network.pds.url, onSessionUpdate });
+		const rpc = new XRPC({ handler: manager });
 
 		await expect(rpc.get('com.atproto.server.getSession', {})).rejects.toThrow();
 		expect(onSessionUpdate).not.toHaveBeenCalled();
-		expect(auth.session).toBe(undefined);
+		expect(manager.session).toBe(undefined);
 
-		await auth.login({ identifier: 'user1.test', password: 'password' });
+		await manager.login({ identifier: 'user1.test', password: 'password' });
 
 		await expect(rpc.get('com.atproto.server.getSession', {})).resolves.not.toBe(undefined);
 		expect(onSessionUpdate).toHaveBeenCalledOnce();
-		expect(auth.session).not.toBe(undefined);
+		expect(manager.session).not.toBe(undefined);
 	});
 
 	it('can refresh for new tokens', async () => {
-		const fetch = vi.spyOn(globalThis, 'fetch');
+		const fetch = vi.fn(globalThis.fetch);
 		const onRefresh = vi.fn();
 
-		const rpc = new XRPC({ service: network.pds.url });
-		const auth = new AtpAuth(rpc, { onRefresh: onRefresh });
+		const manager = new CredentialManager({ service: network.pds.url, fetch, onRefresh });
+		const rpc = new XRPC({ handler: manager });
 
-		await auth.login({ identifier: 'user1.test', password: 'password' });
+		await manager.login({ identifier: 'user1.test', password: 'password' });
+
 		expect(onRefresh).not.toHaveBeenCalled();
 
-		const originalJwt = auth.session!.accessJwt;
+		const originalJwt = manager.session!.accessJwt;
 
 		// Refreshing now would return the same token due to matching timestamp,
 		// wait for 1 second.
@@ -76,14 +74,14 @@ describe('AtpAuth', () => {
 		fetch.mockResolvedValueOnce(
 			new Response(JSON.stringify({ error: 'ExpiredToken' }), {
 				status: 400,
-				headers: { 'Content-Type': 'application/json' },
+				headers: { 'content-type': 'application/json' },
 			}),
 		);
 
 		await rpc.get('com.atproto.server.getSession', {});
 		expect(onRefresh).toHaveBeenCalledOnce();
 
-		const refreshedJwt = auth.session!.accessJwt;
+		const refreshedJwt = manager.session!.accessJwt;
 
 		expect(refreshedJwt).not.toBe(originalJwt);
 	});
@@ -91,15 +89,15 @@ describe('AtpAuth', () => {
 	it('dedupes token refreshes', async () => {
 		const originalFetch = globalThis.fetch;
 
-		const fetch = vi.spyOn(globalThis, 'fetch');
+		const fetch = vi.fn(globalThis.fetch);
 		const onRefresh = vi.fn();
 
-		const rpc = new XRPC({ service: network.pds.url });
-		const auth = new AtpAuth(rpc, { onRefresh: onRefresh });
+		const manager = new CredentialManager({ service: network.pds.url, fetch, onRefresh });
+		const rpc = new XRPC({ handler: manager });
 
-		await auth.login({ identifier: 'user1.test', password: 'password' });
+		await manager.login({ identifier: 'user1.test', password: 'password' });
 
-		const originalJwt = auth.session!.accessJwt;
+		const originalJwt = manager.session!.accessJwt;
 
 		// Refreshing now would return the same token due to matching timestamp,
 		// wait for 1 second.
@@ -118,7 +116,7 @@ describe('AtpAuth', () => {
 					return Promise.resolve(
 						new Response(JSON.stringify({ error: 'ExpiredToken' }), {
 							status: 400,
-							headers: { 'Content-Type': 'application/json' },
+							headers: { 'content-type': 'application/json' },
 						}),
 					);
 				}
@@ -143,7 +141,7 @@ describe('AtpAuth', () => {
 
 		expect(onRefresh).toHaveBeenCalledOnce();
 
-		const refreshedJwt = auth.session!.accessJwt;
+		const refreshedJwt = manager.session!.accessJwt;
 
 		expect(refreshedJwt).not.toBe(originalJwt);
 	});
@@ -151,15 +149,15 @@ describe('AtpAuth', () => {
 	it('does not mutate session if refresh fails', async () => {
 		const originalFetch = globalThis.fetch;
 
-		const fetch = vi.spyOn(globalThis, 'fetch');
+		const fetch = vi.fn(globalThis.fetch);
 		const onRefresh = vi.fn();
 
-		const rpc = new XRPC({ service: network.pds.url });
-		const auth = new AtpAuth(rpc, { onRefresh: onRefresh });
+		const manager = new CredentialManager({ service: network.pds.url, fetch, onRefresh });
+		const rpc = new XRPC({ handler: manager });
 
-		await auth.login({ identifier: 'user1.test', password: 'password' });
+		await manager.login({ identifier: 'user1.test', password: 'password' });
 
-		const originalJwt = auth.session!.accessJwt;
+		const originalJwt = manager.session!.accessJwt;
 
 		// Refreshing now would return the same token due to matching timestamp,
 		// wait for 1 second.
@@ -173,7 +171,7 @@ describe('AtpAuth', () => {
 					return Promise.resolve(
 						new Response(JSON.stringify({ error: 'ExpiredToken' }), {
 							status: 400,
-							headers: { 'Content-Type': 'application/json' },
+							headers: { 'content-type': 'application/json' },
 						}),
 					);
 				}
@@ -198,8 +196,8 @@ describe('AtpAuth', () => {
 			},
 		);
 
-		expect(auth.session).not.toBe(undefined);
-		expect(auth.session!.accessJwt).toBe(originalJwt);
+		expect(manager.session).not.toBe(undefined);
+		expect(manager.session!.accessJwt).toBe(originalJwt);
 
 		expect(onRefresh).not.toHaveBeenCalled();
 	});
@@ -208,25 +206,22 @@ describe('AtpAuth', () => {
 		let session: AtpSessionData;
 
 		{
-			const rpc = new XRPC({ service: network.pds.url });
-			const auth = new AtpAuth(rpc, {});
+			const manager = new CredentialManager({ service: network.pds.url });
 
-			await auth.login({ identifier: 'user1.test', password: 'password' });
+			await manager.login({ identifier: 'user1.test', password: 'password' });
+			expect(manager.session).not.toBe(undefined);
 
-			expect(auth.session).not.toBe(undefined);
-			session = auth.session!;
+			session = manager.session!;
 		}
 
-		const fetch = vi.spyOn(globalThis, 'fetch');
+		const fetch = vi.fn(globalThis.fetch);
 		expect(fetch).not.toHaveBeenCalled();
 
 		{
-			const rpc = new XRPC({ service: network.pds.url });
-			const auth = new AtpAuth(rpc, {});
+			const manager = new CredentialManager({ service: network.pds.url, fetch });
 
-			await auth.resume(session);
-
-			expect(auth.session).not.toBe(undefined);
+			await manager.resume(session);
+			expect(manager.session).not.toBe(undefined);
 		}
 
 		expect(fetch).toHaveBeenCalledOnce();

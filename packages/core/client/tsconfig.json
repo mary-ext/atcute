@@ -13,6 +13,7 @@
 		"noImplicitOverride": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
+		"useDefineForClassFields": false,
 		"noFallthroughCasesInSwitch": true,
 		"module": "NodeNext",
 		"sourceMap": true,
