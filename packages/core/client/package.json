@@ -19,7 +19,7 @@
 		"./utils/jwt": "./dist/utils/jwt.js"
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc --project tsconfig.build.json",
 		"test": "vitest run",
 		"generate": "./scripts/generate-lexicons.sh",
 		"prepublish": "rm -rf dist; pnpm run build"
