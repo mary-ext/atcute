@@ -19,7 +19,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
-		"@atcute/client": "^1.0.0"
+		"@atcute/client": "^1.0.0 || ^2.0.0"
 	},
 	"devDependencies": {
 		"@atcute/client": "workspace:^1.0.0",
