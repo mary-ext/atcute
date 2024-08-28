@@ -347,7 +347,7 @@ export async function createThread(
 
 		const post = data.posts[0];
 		if (!post) {
-			throw new XRPCError(400, { kind: 'NotFound', message: `Post not found: ${uri}` });
+			throw new XRPCError(400, { kind: 'NotFound', description: `Post not found: ${uri}` });
 		}
 
 		return post;
