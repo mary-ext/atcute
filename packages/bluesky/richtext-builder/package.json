@@ -21,7 +21,7 @@
 	},
 	"peerDependencies": {
 		"@atcute/bluesky": "^1.0.0",
-		"@atcute/client": "^1.0.0"
+		"@atcute/client": "^1.0.0 || ^2.0.0"
 	},
 	"devDependencies": {
 		"@atcute/bluesky": "workspace:^",
