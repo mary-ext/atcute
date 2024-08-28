@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/whitewind",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "WhiteWind type definitions for atcute",
 	"license": "MIT",
 	"repository": {
