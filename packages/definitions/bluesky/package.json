@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/bluesky",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Bluesky type definitions for atcute",
 	"license": "MIT",
 	"repository": {
