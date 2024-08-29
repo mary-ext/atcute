@@ -1,7 +1,5 @@
 import { getFloat16 } from 'fp16';
 
-import * as CID from '@atcute/cid';
-
 import { toBytes, type Bytes } from './bytes.js';
 import { toCIDLink, type CIDLink } from './cid-link.js';
 
@@ -106,9 +104,8 @@ const readBytes = (state: State, length: number): Bytes => {
 const readCid = (state: State, length: number): CIDLink => {
 	// CID bytes are prefixed with 0x00 for historical reasons, apparently.
 	const slice = state.b.subarray(state.p + 1, (state.p += length));
-	const parsed = CID.decode(slice);
 
-	return toCIDLink(parsed);
+	return toCIDLink(slice);
 };
 
 const readValue = (state: State): any => {
