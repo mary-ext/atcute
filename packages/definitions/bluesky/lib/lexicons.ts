@@ -380,6 +380,17 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	namespace AppBskyEmbedDefs {
+		/** width:height represents an aspect ratio. It may be approximate, and may not correspond to absolute dimensions in any given unit. */
+		interface AspectRatio {
+			[Brand.Type]?: 'app.bsky.embed.defs#aspectRatio';
+			/** Minimum: 1 */
+			height: number;
+			/** Minimum: 1 */
+			width: number;
+		}
+	}
+
 	namespace AppBskyEmbedExternal {
 		/** A representation of some externally linked content (eg, a URL and 'card'), embedded in a Bluesky record (eg, a post). */
 		interface Main {
@@ -412,20 +423,12 @@ declare module '@atcute/client/lexicons' {
 			/** Maximum array length: 4 */
 			images: Image[];
 		}
-		/** width:height represents an aspect ratio. It may be approximate, and may not correspond to absolute dimensions in any given unit. */
-		interface AspectRatio {
-			[Brand.Type]?: 'app.bsky.embed.images#aspectRatio';
-			/** Minimum: 1 */
-			height: number;
-			/** Minimum: 1 */
-			width: number;
-		}
 		interface Image {
 			[Brand.Type]?: 'app.bsky.embed.images#image';
 			/** Alt text description of the image, for accessibility. */
 			alt: string;
 			image: At.Blob;
-			aspectRatio?: AspectRatio;
+			aspectRatio?: AppBskyEmbedDefs.AspectRatio;
 		}
 		interface View {
 			[Brand.Type]?: 'app.bsky.embed.images#view';
@@ -440,7 +443,7 @@ declare module '@atcute/client/lexicons' {
 			fullsize: string;
 			/** Fully-qualified URL where a thumbnail of the image can be fetched. For example, CDN location provided by the App View. */
 			thumb: string;
-			aspectRatio?: AspectRatio;
+			aspectRatio?: AppBskyEmbedDefs.AspectRatio;
 		}
 	}
 
@@ -491,6 +494,7 @@ declare module '@atcute/client/lexicons' {
 				| AppBskyEmbedImages.View
 				| AppBskyEmbedRecord.View
 				| AppBskyEmbedRecordWithMedia.View
+				| AppBskyEmbedVideo.View
 			>[];
 			labels?: ComAtprotoLabelDefs.Label[];
 			likeCount?: number;
@@ -503,13 +507,46 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyEmbedRecordWithMedia {
 		interface Main {
 			[Brand.Type]?: 'app.bsky.embed.recordWithMedia';
-			media: Brand.Union<AppBskyEmbedExternal.Main | AppBskyEmbedImages.Main>;
+			media: Brand.Union<AppBskyEmbedExternal.Main | AppBskyEmbedImages.Main | AppBskyEmbedVideo.Main>;
 			record: AppBskyEmbedRecord.Main;
 		}
 		interface View {
 			[Brand.Type]?: 'app.bsky.embed.recordWithMedia#view';
-			media: Brand.Union<AppBskyEmbedExternal.View | AppBskyEmbedImages.View>;
+			media: Brand.Union<AppBskyEmbedExternal.View | AppBskyEmbedImages.View | AppBskyEmbedVideo.View>;
 			record: AppBskyEmbedRecord.View;
+		}
+	}
+
+	namespace AppBskyEmbedVideo {
+		interface Main {
+			[Brand.Type]?: 'app.bsky.embed.video';
+			video: At.Blob;
+			/**
+			 * Alt text description of the video, for accessibility. \
+			 * Maximum string length: 10000 \
+			 * Maximum grapheme length: 1000
+			 */
+			alt?: string;
+			aspectRatio?: AppBskyEmbedDefs.AspectRatio;
+			/** Maximum array length: 20 */
+			captions?: Caption[];
+		}
+		interface Caption {
+			[Brand.Type]?: 'app.bsky.embed.video#caption';
+			file: At.Blob;
+			lang: string;
+		}
+		interface View {
+			[Brand.Type]?: 'app.bsky.embed.video#view';
+			cid: At.CID;
+			playlist: string;
+			/**
+			 * Maximum string length: 10000 \
+			 * Maximum grapheme length: 1000
+			 */
+			alt?: string;
+			aspectRatio?: AppBskyEmbedDefs.AspectRatio;
+			thumbnail?: string;
 		}
 	}
 
@@ -611,6 +648,7 @@ declare module '@atcute/client/lexicons' {
 				| AppBskyEmbedImages.View
 				| AppBskyEmbedRecord.View
 				| AppBskyEmbedRecordWithMedia.View
+				| AppBskyEmbedVideo.View
 			>;
 			labels?: ComAtprotoLabelDefs.Label[];
 			likeCount?: number;
@@ -1070,6 +1108,7 @@ declare module '@atcute/client/lexicons' {
 				| AppBskyEmbedImages.Main
 				| AppBskyEmbedRecord.Main
 				| AppBskyEmbedRecordWithMedia.Main
+				| AppBskyEmbedVideo.Main
 			>;
 			/**
 			 * DEPRECATED: replaced by app.bsky.richtext.facet.
@@ -2059,6 +2098,58 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	namespace AppBskyVideoDefs {
+		interface JobStatus {
+			[Brand.Type]?: 'app.bsky.video.defs#jobStatus';
+			did: At.DID;
+			jobId: string;
+			/** The state of the video processing job. All values not listed as a known value indicate that the job is in process. */
+			state: 'JOB_STATE_COMPLETED' | 'JOB_STATE_FAILED' | (string & {});
+			blob?: At.Blob;
+			error?: string;
+			message?: string;
+			/**
+			 * Progress within the current processing state. \
+			 * Minimum: 0 \
+			 * Maximum: 100
+			 */
+			progress?: number;
+		}
+	}
+
+	/** Get status details for a video processing job. */
+	namespace AppBskyVideoGetJobStatus {
+		interface Params {
+			jobId: string;
+		}
+		type Input = undefined;
+		interface Output {
+			jobStatus: AppBskyVideoDefs.JobStatus;
+		}
+	}
+
+	/** Get video upload limits for the authenticated user. */
+	namespace AppBskyVideoGetUploadLimits {
+		interface Params {}
+		type Input = undefined;
+		interface Output {
+			canUpload: boolean;
+			error?: string;
+			message?: string;
+			remainingDailyBytes?: number;
+			remainingDailyVideos?: number;
+		}
+	}
+
+	/** Upload a video to be processed then stored on the PDS. */
+	namespace AppBskyVideoUploadVideo {
+		interface Params {}
+		type Input = Blob | ArrayBufferView;
+		interface Output {
+			jobStatus: AppBskyVideoDefs.JobStatus;
+		}
+	}
+
 	namespace ChatBskyActorDeclaration {
 		interface Record {
 			allowIncoming: 'all' | 'following' | 'none' | (string & {});
@@ -2565,6 +2656,13 @@ declare module '@atcute/client/lexicons' {
 			params: AppBskyUnspeccedSearchPostsSkeleton.Params;
 			output: AppBskyUnspeccedSearchPostsSkeleton.Output;
 		};
+		'app.bsky.video.getJobStatus': {
+			params: AppBskyVideoGetJobStatus.Params;
+			output: AppBskyVideoGetJobStatus.Output;
+		};
+		'app.bsky.video.getUploadLimits': {
+			output: AppBskyVideoGetUploadLimits.Output;
+		};
 		'chat.bsky.actor.exportAccountData': {
 			output: ChatBskyActorExportAccountData.Output;
 		};
@@ -2632,6 +2730,10 @@ declare module '@atcute/client/lexicons' {
 		};
 		'app.bsky.notification.updateSeen': {
 			input: AppBskyNotificationUpdateSeen.Input;
+		};
+		'app.bsky.video.uploadVideo': {
+			input: AppBskyVideoUploadVideo.Input;
+			output: AppBskyVideoUploadVideo.Output;
 		};
 		'chat.bsky.actor.deleteAccount': {
 			output: ChatBskyActorDeleteAccount.Output;
