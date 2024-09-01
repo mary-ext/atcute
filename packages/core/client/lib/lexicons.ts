@@ -526,13 +526,13 @@ export declare namespace ComAtprotoRepoApplyWrites {
 		writes: Brand.Union<Create | Delete | Update>[];
 		/** If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations. */
 		swapCommit?: At.CID;
-		/**
-		 * Can be set to 'false' to skip Lexicon schema validation of record data, for all operations.
-		 * @default true
-		 */
+		/** Can be set to 'false' to skip Lexicon schema validation of record data across all operations, 'true' to require it, or leave unset to validate only for known Lexicons. */
 		validate?: boolean;
 	}
-	type Output = undefined;
+	interface Output {
+		commit?: ComAtprotoRepoDefs.CommitMeta;
+		results?: Brand.Union<CreateResult | DeleteResult | UpdateResult>[];
+	}
 	interface Errors {
 		InvalidSwap: {};
 	}
@@ -544,11 +544,20 @@ export declare namespace ComAtprotoRepoApplyWrites {
 		/** Maximum string length: 15 */
 		rkey?: string;
 	}
+	interface CreateResult {
+		[Brand.Type]?: 'com.atproto.repo.applyWrites#createResult';
+		cid: At.CID;
+		uri: At.Uri;
+		validationStatus?: 'unknown' | 'valid' | (string & {});
+	}
 	/** Operation which deletes an existing record. */
 	interface Delete {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#delete';
 		collection: string;
 		rkey: string;
+	}
+	interface DeleteResult {
+		[Brand.Type]?: 'com.atproto.repo.applyWrites#deleteResult';
 	}
 	/** Operation which updates an existing record. */
 	interface Update {
@@ -556,6 +565,12 @@ export declare namespace ComAtprotoRepoApplyWrites {
 		collection: string;
 		rkey: string;
 		value: unknown;
+	}
+	interface UpdateResult {
+		[Brand.Type]?: 'com.atproto.repo.applyWrites#updateResult';
+		cid: At.CID;
+		uri: At.Uri;
+		validationStatus?: 'unknown' | 'valid' | (string & {});
 	}
 }
 
@@ -576,18 +591,25 @@ export declare namespace ComAtprotoRepoCreateRecord {
 		rkey?: string;
 		/** Compare and swap with the previous commit by CID. */
 		swapCommit?: At.CID;
-		/**
-		 * Can be set to 'false' to skip Lexicon schema validation of record data.
-		 * @default true
-		 */
+		/** Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons. */
 		validate?: boolean;
 	}
 	interface Output {
 		cid: At.CID;
 		uri: At.Uri;
+		commit?: ComAtprotoRepoDefs.CommitMeta;
+		validationStatus?: 'unknown' | 'valid' | (string & {});
 	}
 	interface Errors {
 		InvalidSwap: {};
+	}
+}
+
+export declare namespace ComAtprotoRepoDefs {
+	interface CommitMeta {
+		[Brand.Type]?: 'com.atproto.repo.defs#commitMeta';
+		cid: At.CID;
+		rev: string;
 	}
 }
 
@@ -606,7 +628,9 @@ export declare namespace ComAtprotoRepoDeleteRecord {
 		/** Compare and swap with the previous record by CID. */
 		swapRecord?: At.CID;
 	}
-	type Output = undefined;
+	interface Output {
+		commit?: ComAtprotoRepoDefs.CommitMeta;
+	}
 	interface Errors {
 		InvalidSwap: {};
 	}
@@ -741,15 +765,14 @@ export declare namespace ComAtprotoRepoPutRecord {
 		swapCommit?: At.CID;
 		/** Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation */
 		swapRecord?: At.CID | null;
-		/**
-		 * Can be set to 'false' to skip Lexicon schema validation of record data.
-		 * @default true
-		 */
+		/** Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons. */
 		validate?: boolean;
 	}
 	interface Output {
 		cid: At.CID;
 		uri: At.Uri;
+		commit?: ComAtprotoRepoDefs.CommitMeta;
+		validationStatus?: 'unknown' | 'valid' | (string & {});
 	}
 	interface Errors {
 		InvalidSwap: {};
@@ -1727,6 +1750,7 @@ export declare interface Procedures {
 	};
 	'com.atproto.repo.applyWrites': {
 		input: ComAtprotoRepoApplyWrites.Input;
+		output: ComAtprotoRepoApplyWrites.Output;
 	};
 	'com.atproto.repo.createRecord': {
 		input: ComAtprotoRepoCreateRecord.Input;
@@ -1734,6 +1758,7 @@ export declare interface Procedures {
 	};
 	'com.atproto.repo.deleteRecord': {
 		input: ComAtprotoRepoDeleteRecord.Input;
+		output: ComAtprotoRepoDeleteRecord.Output;
 	};
 	'com.atproto.repo.importRepo': {
 		input: ComAtprotoRepoImportRepo.Input;
