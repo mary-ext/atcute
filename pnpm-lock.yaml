@@ -110,6 +110,18 @@ importers:
         specifier: workspace:^
         version: link:../../core/lex-cli
 
+  packages/definitions/ozone:
+    devDependencies:
+      '@atcute/bluesky':
+        specifier: workspace:^
+        version: link:../bluesky
+      '@atcute/client':
+        specifier: workspace:^
+        version: link:../../core/client
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../../core/lex-cli
+
   packages/definitions/whitewind:
     devDependencies:
       '@atcute/client':

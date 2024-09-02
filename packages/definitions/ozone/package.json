@@ -1,0 +1,30 @@
+{
+	"type": "module",
+	"name": "@atcute/ozone",
+	"version": "1.0.4",
+	"description": "Ozone type definitions for atcute",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		"./lexicons": "./dist/lexicons.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"generate": "./scripts/generate-lexicons.sh",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"peerDependencies": {
+		"@atcute/bluesky": "^1.0.0",
+		"@atcute/client": "^1.0.0 || ^2.0.0"
+	},
+	"devDependencies": {
+		"@atcute/bluesky": "workspace:^",
+		"@atcute/client": "workspace:^",
+		"@atcute/lex-cli": "workspace:^"
+	}
+}
