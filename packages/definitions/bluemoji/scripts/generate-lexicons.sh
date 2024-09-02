@@ -7,5 +7,5 @@
 pnpm exec lex-cli generate \
 	../../../lexicons-bluemoji/blue.moji/**/*.json \
 	-o lib/lexicons.ts \
-	--description "Contains type declarations for WhiteWind lexicons" \
+	--description "Contains type declarations for Bluemoji lexicons" \
 	--banner "import '@atcute/bluesky/lexicons';"
