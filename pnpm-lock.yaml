@@ -104,7 +104,7 @@ importers:
   packages/definitions/bluesky:
     devDependencies:
       '@atcute/client':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^
         version: link:../../core/client
       '@atcute/lex-cli':
         specifier: workspace:^
@@ -113,7 +113,7 @@ importers:
   packages/definitions/whitewind:
     devDependencies:
       '@atcute/client':
-        specifier: workspace:^1.0.0
+        specifier: workspace:^
         version: link:../../core/client
       '@atcute/lex-cli':
         specifier: workspace:^
