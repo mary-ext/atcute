@@ -3,7 +3,7 @@
 
 /**
  * @module
- * Contains type declarations for WhiteWind lexicons
+ * Contains type declarations for Bluemoji lexicons
  */
 
 import '@atcute/client/lexicons';
