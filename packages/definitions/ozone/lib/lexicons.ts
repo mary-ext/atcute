@@ -22,8 +22,13 @@ declare module '@atcute/client/lexicons' {
 			subject: string;
 			/** DID of the user who is creating the template. */
 			createdBy?: At.DID;
+			/** Message language. */
+			lang?: string;
 		}
 		type Output = ToolsOzoneCommunicationDefs.TemplateView;
+		interface Errors {
+			DuplicateTemplateName: {};
+		}
 	}
 
 	namespace ToolsOzoneCommunicationDefs {
@@ -39,6 +44,8 @@ declare module '@atcute/client/lexicons' {
 			/** Name of the template. */
 			name: string;
 			updatedAt: string;
+			/** Message language. */
+			lang?: string;
 			/** Content of the template, can contain markdown and variable placeholders. */
 			subject?: string;
 		}
@@ -71,6 +78,8 @@ declare module '@atcute/client/lexicons' {
 			/** Content of the template, markdown supported, can contain variable placeholders. */
 			contentMarkdown?: string;
 			disabled?: boolean;
+			/** Message language. */
+			lang?: string;
 			/** Name of the template. */
 			name?: string;
 			/** Subject of the message, used in emails. */
@@ -79,6 +88,9 @@ declare module '@atcute/client/lexicons' {
 			updatedBy?: At.DID;
 		}
 		type Output = ToolsOzoneCommunicationDefs.TemplateView;
+		interface Errors {
+			DuplicateTemplateName: {};
+		}
 	}
 
 	namespace ToolsOzoneModerationDefs {
@@ -374,6 +386,7 @@ declare module '@atcute/client/lexicons' {
 				| ToolsOzoneModerationDefs.ModEventMute
 				| ToolsOzoneModerationDefs.ModEventMuteReporter
 				| ToolsOzoneModerationDefs.ModEventReport
+				| ToolsOzoneModerationDefs.ModEventResolveAppeal
 				| ToolsOzoneModerationDefs.ModEventReverseTakedown
 				| ToolsOzoneModerationDefs.ModEventTag
 				| ToolsOzoneModerationDefs.ModEventTakedown
