@@ -10,7 +10,9 @@ import '@atcute/client/lexicons';
 
 declare module '@atcute/client/lexicons' {
 	namespace ComWhtwndBlogComment {
+		/** A declaration of a comment. */
 		interface Record {
+			$type: 'com.whtwnd.blog.comment';
 			/** Maximum string length: 1000 */
 			content: string;
 			entryUri: At.Uri;
@@ -44,7 +46,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace ComWhtwndBlogEntry {
+		/** A declaration of a post. */
 		interface Record {
+			$type: 'com.whtwnd.blog.entry';
 			/** Maximum string length: 100000 */
 			content: string;
 			blobs?: ComWhtwndBlogDefs.BlobMetadata[];

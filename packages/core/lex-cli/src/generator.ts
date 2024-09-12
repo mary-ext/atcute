@@ -392,11 +392,47 @@ declare module "@atcute/client/lexicons" {`;
 				chunk += writeJsdoc(descs.concat(descriptions));
 				chunk += `type ${typeName} = (${value})[];`;
 			} else if (type === 'record') {
-				const { value, descriptions } = resolveType(nsid, def.record);
+				const obj = def.record;
 
-				chunk += writeJsdoc(descriptions);
-				chunk += `interface Record`;
-				chunk += value;
+				const required = obj.required;
+				const nullable = obj.nullable;
+				const properties = obj.properties;
+
+				const propKeys = Object.keys(properties).sort((a, b) => {
+					const aIsOptional = !required || !required.includes(a);
+					const bIsOptional = !required || !required.includes(b);
+
+					if (aIsOptional === bIsOptional) {
+						return sortName(a, b);
+					}
+
+					return +aIsOptional - +bIsOptional;
+				});
+
+				const descs = [];
+
+				if (def.description) {
+					descs.push(def.description);
+
+					if (def.description.toLowerCase().startsWith('deprecated')) {
+						descs.push(`@deprecated`);
+					}
+				}
+
+				chunk += writeJsdoc(descs);
+				chunk += `interface Record {`;
+				chunk += `$type: '${nsid}';`;
+
+				for (const prop of propKeys) {
+					const isOptional = !required || !required.includes(prop);
+					const isNullable = nullable !== undefined && nullable.includes(prop);
+					const { value, descriptions } = resolveType(`${nsid}/${prop}`, properties[prop]);
+
+					chunk += writeJsdoc(descriptions);
+					chunk += `${prop}${isOptional ? `?` : ``}:${value}${isNullable ? `| null` : ``};`;
+				}
+
+				chunk += '}';
 
 				records += `\n'${nsid}': ${tsNamespace}.Record;`;
 			} else if (type === 'query' || type === 'procedure') {

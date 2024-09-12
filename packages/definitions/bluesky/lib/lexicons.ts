@@ -300,7 +300,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyActorProfile {
+		/** A declaration of a Bluesky account profile. */
 		interface Record {
+			$type: 'app.bsky.actor.profile';
 			/** Small image to be displayed next to posts from account. AKA, 'profile picture' */
 			avatar?: At.Blob;
 			/** Larger horizontal image to display behind profile view. */
@@ -731,7 +733,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyFeedGenerator {
+		/** Record declaring of the existence of a feed generator, and containing metadata about it. The record can exist in any repository. */
 		interface Record {
+			$type: 'app.bsky.feed.generator';
 			createdAt: string;
 			did: At.DID;
 			/**
@@ -1087,14 +1091,18 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyFeedLike {
+		/** Record declaring a 'like' of a piece of subject content. */
 		interface Record {
+			$type: 'app.bsky.feed.like';
 			createdAt: string;
 			subject: ComAtprotoRepoStrongRef.Main;
 		}
 	}
 
 	namespace AppBskyFeedPost {
+		/** Record containing a Bluesky post. */
 		interface Record {
+			$type: 'app.bsky.feed.post';
 			/** Client-declared timestamp when this post was originally created. */
 			createdAt: string;
 			/**
@@ -1163,7 +1171,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyFeedPostgate {
+		/** Record defining interaction rules for a post. The record key (rkey) of the postgate record must match the record key of the post, and that record must be in the same repository. */
 		interface Record {
+			$type: 'app.bsky.feed.postgate';
 			createdAt: string;
 			/** Reference (AT-URI) to the post record. */
 			post: At.Uri;
@@ -1182,7 +1192,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyFeedRepost {
+		/** Record representing a 'repost' of an existing Bluesky post. */
 		interface Record {
+			$type: 'app.bsky.feed.repost';
 			createdAt: string;
 			subject: ComAtprotoRepoStrongRef.Main;
 		}
@@ -1249,7 +1261,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyFeedThreadgate {
+		/** Record defining interaction gating rules for a thread (aka, reply controls). The record key (rkey) of the threadgate record must match the record key of the thread's root post, and that record must be in the same repository.. */
 		interface Record {
+			$type: 'app.bsky.feed.threadgate';
 			createdAt: string;
 			/** Reference (AT-URI) to the post record. */
 			post: At.Uri;
@@ -1277,7 +1291,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyGraphBlock {
+		/** Record declaring a 'block' relationship against another account. NOTE: blocks are public in Bluesky; see blog posts for details. */
 		interface Record {
+			$type: 'app.bsky.graph.block';
 			createdAt: string;
 			/** DID of the account to be blocked. */
 			subject: At.DID;
@@ -1395,7 +1411,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyGraphFollow {
+		/** Record declaring a social 'follow' relationship of another account. Duplicate follows will be ignored by the AppView. */
 		interface Record {
+			$type: 'app.bsky.graph.follow';
 			createdAt: string;
 			subject: At.DID;
 		}
@@ -1650,7 +1668,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyGraphList {
+		/** Record representing a list of accounts (actors). Scope includes both moderation-oriented lists and curration-oriented lists. */
 		interface Record {
+			$type: 'app.bsky.graph.list';
 			createdAt: string;
 			/**
 			 * Display name for list; can not be empty. \
@@ -1672,7 +1692,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyGraphListblock {
+		/** Record representing a block relationship against an entire an entire list of accounts (actors). */
 		interface Record {
+			$type: 'app.bsky.graph.listblock';
 			createdAt: string;
 			/** Reference (AT-URI) to the mod list record. */
 			subject: At.Uri;
@@ -1680,7 +1702,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyGraphListitem {
+		/** Record representing an account's inclusion on a specific list. The AppView will ignore duplicate listitem records. */
 		interface Record {
+			$type: 'app.bsky.graph.listitem';
 			createdAt: string;
 			/** Reference (AT-URI) to the list record (app.bsky.graph.list). */
 			list: At.Uri;
@@ -1717,7 +1741,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyGraphStarterpack {
+		/** Record defining a starter pack of actors and feeds for new users. */
 		interface Record {
+			$type: 'app.bsky.graph.starterpack';
 			createdAt: string;
 			/** Reference (AT-URI) to the list record. */
 			list: At.Uri;
@@ -1821,7 +1847,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyLabelerService {
+		/** A declaration of the existence of labeler service. */
 		interface Record {
+			$type: 'app.bsky.labeler.service';
 			createdAt: string;
 			policies: AppBskyLabelerDefs.LabelerPolicies;
 			labels?: Brand.Union<ComAtprotoLabelDefs.SelfLabels>;
@@ -2151,7 +2179,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace ChatBskyActorDeclaration {
+		/** A declaration of a Bluesky chat account. */
 		interface Record {
+			$type: 'chat.bsky.actor.declaration';
 			allowIncoming: 'all' | 'following' | 'none' | (string & {});
 		}
 	}

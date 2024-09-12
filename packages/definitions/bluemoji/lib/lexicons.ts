@@ -51,7 +51,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace BlueMojiCollectionItem {
+		/** A custom emoji */
 		interface Record {
+			$type: 'blue.moji.collection.item';
 			createdAt: string;
 			/** Open union to allow for future formats */
 			formats: Brand.Union<Formats_v0>;
@@ -272,7 +274,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace BlueMojiPacksPack {
+		/** A shareable Bluemoji pack */
 		interface Record {
+			$type: 'blue.moji.packs.pack';
 			createdAt: string;
 			/**
 			 * Minimum string length: 1 \
@@ -294,7 +298,9 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace BlueMojiPacksPackitem {
+		/** Record representing a Bluemoji's inclusion in a specific pack. The AppView will ignore duplicate item records. */
 		interface Record {
+			$type: 'blue.moji.packs.packitem';
 			createdAt: string;
 			/** Reference (AT-URI) to the pack record (blue.moji.packs.pack). */
 			pack: At.Uri;
