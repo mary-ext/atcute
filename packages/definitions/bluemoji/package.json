@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/bluemoji",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Bluemoji type definitions for atcute",
 	"license": "MIT",
 	"repository": {
