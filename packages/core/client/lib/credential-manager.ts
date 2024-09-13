@@ -115,12 +115,12 @@ export class CredentialManager implements FetchHandlerObject {
 		const request = new Request(url, init);
 
 		if (!this.session || request.headers.has('authorization')) {
-			return this.fetch(request);
+			return (0, this.fetch)(request);
 		}
 
 		request.headers.set('authorization', `Bearer ${this.session.accessJwt}`);
 
-		const initialResponse = await this.fetch(request);
+		const initialResponse = await (0, this.fetch)(request);
 		const isExpired = await isExpiredTokenResponse(initialResponse);
 
 		if (!isExpired) {
@@ -142,7 +142,7 @@ export class CredentialManager implements FetchHandlerObject {
 
 		request.headers.set('authorization', `Bearer ${this.session.accessJwt}`);
 
-		return await this.fetch(request);
+		return await (0, this.fetch)(request);
 	}
 
 	#refreshSession() {
