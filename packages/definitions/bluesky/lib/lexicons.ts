@@ -26,6 +26,11 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.actor.defs#bskyAppStatePref';
 			activeProgressGuide?: BskyAppProgressGuide;
 			/**
+			 * Storage for NUXs the user has encountered. \
+			 * Maximum array length: 100
+			 */
+			nuxs?: AppBskyActorDefs.Nux[];
+			/**
 			 * An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user. \
 			 * Maximum array length: 1000 \
 			 * Maximum string length: 100
@@ -120,6 +125,22 @@ declare module '@atcute/client/lexicons' {
 		 * Maximum grapheme length: 64
 		 */
 		type MutedWordTarget = 'content' | 'tag' | (string & {});
+		/** A new user experiences (NUX) storage object */
+		interface Nux {
+			[Brand.Type]?: 'app.bsky.actor.defs#nux';
+			/** @default false */
+			completed: boolean;
+			/** Maximum string length: 100 */
+			id: string;
+			/**
+			 * Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters. \
+			 * Maximum string length: 3000 \
+			 * Maximum grapheme length: 300
+			 */
+			data?: string;
+			/** The date and time at which the NUX will expire and should be considered completed. */
+			expiresAt?: string;
+		}
 		interface PersonalDetailsPref {
 			[Brand.Type]?: 'app.bsky.actor.defs#personalDetailsPref';
 			/** The birth date of account owner. */
@@ -1664,6 +1685,11 @@ declare module '@atcute/client/lexicons' {
 		type Input = undefined;
 		interface Output {
 			suggestions: AppBskyActorDefs.ProfileView[];
+			/**
+			 * If true, response has fallen-back to generic results, and is not scoped using relativeToDid
+			 * @default false
+			 */
+			isFallback?: boolean;
 		}
 	}
 
@@ -2026,6 +2052,8 @@ declare module '@atcute/client/lexicons' {
 		interface Output {
 			actors: AppBskyUnspeccedDefs.SkeletonSearchActor[];
 			cursor?: string;
+			/** DID of the account these suggestions are relative to. If this is returned undefined, suggestions are based on the viewer. */
+			relativeToDid?: At.DID;
 		}
 	}
 
