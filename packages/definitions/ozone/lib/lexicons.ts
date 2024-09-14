@@ -200,6 +200,8 @@ declare module '@atcute/client/lexicons' {
 		/** Take down a subject permanently or temporarily */
 		interface ModEventTakedown {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#modEventTakedown';
+			/** If true, all other reports on content authored by this account will be resolved (acknowledged). */
+			acknowledgeAccountSubjects?: boolean;
 			comment?: string;
 			/** Indicates how long the takedown should be in effect before automatically expiring. */
 			durationInHours?: number;
@@ -495,6 +497,8 @@ declare module '@atcute/client/lexicons' {
 			cursor?: string;
 			excludeTags?: string[];
 			ignoreSubjects?: string[];
+			/** All subjects belonging to the account specified in the 'subject' param will be returned. */
+			includeAllUserRecords?: boolean;
 			/** By default, we don't include muted subjects in the results. Set this to true to include them. */
 			includeMuted?: boolean;
 			/** Get all subject statuses that were reviewed by a specific moderator */
@@ -521,6 +525,7 @@ declare module '@atcute/client/lexicons' {
 			sortDirection?: 'asc' | 'desc';
 			/** @default "lastReportedAt" */
 			sortField?: 'lastReviewedAt' | 'lastReportedAt';
+			/** The subject to get the status for. */
 			subject?: string;
 			tags?: string[];
 			/** Get subjects that were taken down */
