@@ -55,10 +55,10 @@ program.register(
 				});
 			} catch (err) {
 				if (err instanceof Error) {
-					console.error(pc.bold(`${pc.red(`error: `)}: ${err.message}`));
+					console.error(pc.bold(`${pc.red(`error:`)} ${err.message}`));
 
 					if (err.cause instanceof Error) {
-						console.error(`  ${pc.gray(`caused by:`)}: ${err.cause.message}`);
+						console.error(`  ${pc.gray(`caused by:`)} ${err.cause.message}`);
 					}
 				} else {
 					console.error(pc.bold(pc.red(`unknown error occured:`)));
