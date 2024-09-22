@@ -308,7 +308,7 @@ declare module "@atcute/client/lexicons" {`;
 
 		try {
 			const jsonString = await readFile(filename, 'utf8');
-			document = documentSchema.parse(JSON.parse(jsonString));
+			document = documentSchema.parse(JSON.parse(jsonString), { mode: 'passthrough' });
 		} catch (err) {
 			throw new Error(`failed to read ${filename}`, { cause: err });
 		}
