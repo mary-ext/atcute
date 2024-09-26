@@ -5,12 +5,9 @@ let lastTimestamp: number = 0;
  * so that posts sent at the same time from different accounts don't end up
  * colliding with each other potentially causing them to not be shown.
  */
-export function getNow(): number {
+export function getNow(threadSize: number): number {
 	let timestamp = Math.max(Date.now(), lastTimestamp);
-	if (timestamp === lastTimestamp) {
-		// 30 ms apart seems reasonable, the expectation is <=25 posts per thread.
-		timestamp += 30;
-	}
+	lastTimestamp = timestamp + threadSize;
 
-	return (lastTimestamp = timestamp);
+	return timestamp;
 }

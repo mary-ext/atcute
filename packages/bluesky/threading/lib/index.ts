@@ -70,7 +70,7 @@ export async function createThread(
 
 	const writes: Brand.Union<ComAtprotoRepoApplyWrites.Create>[] = [];
 
-	const now = thread.createdAt !== undefined ? new Date(thread.createdAt) : new Date(getNow());
+	const now = thread.createdAt !== undefined ? new Date(thread.createdAt) : new Date(getNow(posts.length));
 	assert(!Number.isNaN(now.getTime()), `provided createdAt value is invalid`);
 
 	let reply: AppBskyFeedPost.ReplyRef | undefined;
