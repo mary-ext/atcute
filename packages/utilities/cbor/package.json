@@ -21,8 +21,8 @@
 	},
 	"devDependencies": {
 		"@ipld/dag-cbor": "^9.2.1",
-		"@types/bun": "^1.1.6",
-		"mitata": "^0.1.11"
+		"@types/bun": "^1.1.10",
+		"mitata": "^0.1.14"
 	},
 	"dependencies": {
 		"@atcute/base32": "workspace:^",
