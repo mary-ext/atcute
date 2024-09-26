@@ -162,6 +162,7 @@ export async function createThread(
 		// If this is the first post, and we have a threadgate set, create one now.
 		if (idx === 0 && threadgate) {
 			const threadgateRecord: AppBskyFeedThreadgate.Record = {
+				$type: 'app.bsky.feed.threadgate',
 				createdAt: now.toISOString(),
 				post: uri,
 				allow: resolveThreadgate(threadgate),
