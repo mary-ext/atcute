@@ -231,6 +231,7 @@ declare module '@atcute/client/lexicons' {
 			indexedAt?: string;
 			joinedViaStarterPack?: AppBskyGraphDefs.StarterPackViewBasic;
 			labels?: ComAtprotoLabelDefs.Label[];
+			pinnedPost?: ComAtprotoRepoStrongRef.Main;
 			postsCount?: number;
 			viewer?: ViewerState;
 		}
@@ -343,6 +344,7 @@ declare module '@atcute/client/lexicons' {
 			joinedViaStarterPack?: ComAtprotoRepoStrongRef.Main;
 			/** Self-label values, specific to the Bluesky application, on the overall account. */
 			labels?: Brand.Union<ComAtprotoLabelDefs.SelfLabels>;
+			pinnedPost?: ComAtprotoRepoStrongRef.Main;
 		}
 	}
 
@@ -597,7 +599,7 @@ declare module '@atcute/client/lexicons' {
 			 * Maximum string length: 2000
 			 */
 			feedContext?: string;
-			reason?: Brand.Union<ReasonRepost>;
+			reason?: Brand.Union<ReasonPin | ReasonRepost>;
 			reply?: ReplyRef;
 		}
 		interface GeneratorView {
@@ -681,6 +683,9 @@ declare module '@atcute/client/lexicons' {
 			threadgate?: ThreadgateView;
 			viewer?: ViewerState;
 		}
+		interface ReasonPin {
+			[Brand.Type]?: 'app.bsky.feed.defs#reasonPin';
+		}
 		interface ReasonRepost {
 			[Brand.Type]?: 'app.bsky.feed.defs#reasonRepost';
 			by: AppBskyActorDefs.ProfileViewBasic;
@@ -703,7 +708,10 @@ declare module '@atcute/client/lexicons' {
 			 * Maximum string length: 2000
 			 */
 			feedContext?: string;
-			reason?: Brand.Union<SkeletonReasonRepost>;
+			reason?: Brand.Union<SkeletonReasonPin | SkeletonReasonRepost>;
+		}
+		interface SkeletonReasonPin {
+			[Brand.Type]?: 'app.bsky.feed.defs#skeletonReasonPin';
 		}
 		interface SkeletonReasonRepost {
 			[Brand.Type]?: 'app.bsky.feed.defs#skeletonReasonRepost';
@@ -727,6 +735,7 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.feed.defs#viewerState';
 			embeddingDisabled?: boolean;
 			like?: At.Uri;
+			pinned?: boolean;
 			replyDisabled?: boolean;
 			repost?: At.Uri;
 			threadMuted?: boolean;
@@ -835,6 +844,8 @@ declare module '@atcute/client/lexicons' {
 				| 'posts_with_media'
 				| 'posts_with_replies'
 				| (string & {});
+			/** @default false */
+			includePins?: boolean;
 			/**
 			 * Minimum: 1 \
 			 * Maximum: 100
@@ -1282,7 +1293,7 @@ declare module '@atcute/client/lexicons' {
 	}
 
 	namespace AppBskyFeedThreadgate {
-		/** Record defining interaction gating rules for a thread (aka, reply controls). The record key (rkey) of the threadgate record must match the record key of the thread's root post, and that record must be in the same repository.. */
+		/** Record defining interaction gating rules for a thread (aka, reply controls). The record key (rkey) of the threadgate record must match the record key of the thread's root post, and that record must be in the same repository. */
 		interface Record {
 			$type: 'app.bsky.feed.threadgate';
 			createdAt: string;
