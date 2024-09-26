@@ -37,17 +37,10 @@ export const now = (): string => {
 	// while `performance.timeOrigin + performance.now()` could be used here, they
 	// seem to have cross-browser differences, not sure on that yet.
 
-	// deno-lint-ignore prefer-const
-	let id = Math.floor(Math.random() * 1023);
 	let timestamp = Math.max(Date.now() * 1_000, lastTimestamp);
+	lastTimestamp = timestamp + 1;
 
-	if (timestamp === lastTimestamp) {
-		timestamp += 1;
-	}
-
-	lastTimestamp = timestamp;
-
-	return createRaw(timestamp, id);
+	return createRaw(timestamp, Math.floor(Math.random() * 1023));
 };
 
 /**
