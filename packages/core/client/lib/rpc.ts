@@ -3,39 +3,6 @@ import type { At, Procedures, Queries } from './lexicons.js';
 import { buildFetchHandler, type FetchHandler, type FetchHandlerObject } from './fetch-handler.js';
 import { mergeHeaders } from './utils/http.js';
 
-/** Possible response status from an XRPC service, status <100 is used for the library itself. */
-const enum ResponseType {
-	/** Unknown error from the library */
-	Unknown = 1,
-	/** The server returned an invalid response */
-	InvalidResponse = 2,
-
-	/** Successful response from the service */
-	Success = 200,
-	/** Request was considered invalid by the service */
-	InvalidRequest = 400,
-	/** Service requires an authentication token */
-	AuthRequired = 401,
-	/** Request is forbidden by the service */
-	Forbidden = 403,
-	/** Not a XRPC service */
-	XRPCNotSupported = 404,
-	/** Payload is considered too large by the service */
-	PayloadTooLarge = 413,
-	/** Ratelimit was exceeded */
-	RateLimitExceeded = 429,
-	/** Internal server error */
-	InternalServerError = 500,
-	/** Method hasn't been implemented */
-	MethodNotImplemented = 501,
-	/** Failure by an upstream service */
-	UpstreamFailure = 502,
-	/** Not enough resources */
-	NotEnoughResouces = 503,
-	/** Timeout from upstream service */
-	UpstreamTimeout = 504,
-}
-
 export type HeadersObject = Record<string, string>;
 
 /** Response from XRPC service */
@@ -188,7 +155,7 @@ export class XRPC {
 		try {
 			ret = await (promise || response.arrayBuffer().then((buffer) => new Uint8Array(buffer)));
 		} catch (err) {
-			throw new XRPCError(ResponseType.InvalidResponse, {
+			throw new XRPCError(2, {
 				cause: err,
 				kind: 'InvalidResponse',
 				description: `Failed to parse response body`,
@@ -196,7 +163,7 @@ export class XRPC {
 			});
 		}
 
-		if (responseStatus === ResponseType.Success) {
+		if (responseStatus === 200) {
 			return {
 				data: ret,
 				headers: responseHeaders,
