@@ -1,6 +1,14 @@
 import type { XRPC } from '@atcute/client';
 import type { AppBskyEmbedRecord, AppBskyFeedDefs, AppBskyRichtextFacet, At } from '@atcute/client/lexicons';
 
+/** Interface containing aspect ratio of the media */
+export interface MediaAspectRatio {
+	/** Media width */
+	width: number;
+	/** Media height */
+	height: number;
+}
+
 /** An embed that links to an external page */
 export interface PostExternalEmbed {
 	type: 'external';
@@ -39,12 +47,7 @@ export interface ComposedImage {
 	 * Aspect ratio of the image, supplying this is recommended as clients makes
 	 * use of it to properly display images.
 	 */
-	aspectRatio?: {
-		/** Height of the image */
-		height: number;
-		/** Width of the image */
-		width: number;
-	};
+	aspectRatio?: MediaAspectRatio;
 }
 
 /** An embed that displays images */
@@ -56,8 +59,34 @@ export interface PostImageEmbed {
 	labels?: string[];
 }
 
+/** An embed that displays a video */
+export interface PostVideoEmbed {
+	type: 'video';
+	/**
+	 * The video data, accepts either a Web Blob instance or a blob returned from
+	 * the `com.atproto.repo.uploadBlob` procedure. Supplying the former requires
+	 * you to also supply an authenticated RPC instance for it to be able to make
+	 * procedure calls.
+	 */
+	blob: Blob | At.Blob;
+	/**
+	 * Alternative text for this video, helps describe video for low-vision users
+	 * and provide context for everyone.
+	 */
+	alt?: string;
+	/**
+	 * Aspect ratio of the video, supplying this is recommended as clients makes
+	 * use of it to properly display the video.
+	 */
+	aspectRatio?: MediaAspectRatio;
+	/**
+	 * Labels to describe this video embed
+	 */
+	labels?: string[];
+}
+
 /** Union type of media embeds */
-export type PostMediaEmbed = PostExternalEmbed | PostImageEmbed;
+export type PostMediaEmbed = PostExternalEmbed | PostImageEmbed | PostVideoEmbed;
 
 /** An embed that displays a feed card */
 export interface PostFeedEmbed {

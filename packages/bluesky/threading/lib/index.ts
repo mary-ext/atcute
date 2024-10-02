@@ -5,6 +5,7 @@ import type {
 	AppBskyEmbedExternal,
 	AppBskyEmbedImages,
 	AppBskyEmbedRecord,
+	AppBskyEmbedVideo,
 	AppBskyFeedDefs,
 	AppBskyFeedPost,
 	AppBskyFeedThreadgate,
@@ -217,7 +218,7 @@ export async function createThread(
 
 		async function resolveMediaEmbed(
 			embed: PostMediaEmbed,
-		): Promise<Brand.Union<AppBskyEmbedExternal.Main | AppBskyEmbedImages.Main>> {
+		): Promise<Brand.Union<AppBskyEmbedExternal.Main | AppBskyEmbedImages.Main | AppBskyEmbedVideo.Main>> {
 			const type = embed.type;
 
 			if (type === 'external') {
@@ -269,6 +270,26 @@ export async function createThread(
 				return {
 					$type: 'app.bsky.embed.images',
 					images: images,
+				};
+			}
+
+			if (type === 'video') {
+				const aspectRatio = embed.aspectRatio;
+				const rawBlob = embed.blob;
+				let blob: At.Blob<any> | undefined;
+
+				if (rawBlob instanceof Blob) {
+					assertXrpc(rpc, `PostVideoEmbed.blob`);
+					blob = await uploadBlob(rawBlob);
+				} else {
+					blob = rawBlob;
+				}
+
+				return {
+					$type: 'app.bsky.embed.video',
+					video: blob,
+					alt: embed.alt ?? '',
+					aspectRatio: aspectRatio ? { width: aspectRatio.width, height: aspectRatio.height } : undefined,
 				};
 			}
 
