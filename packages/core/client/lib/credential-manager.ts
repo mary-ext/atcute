@@ -112,15 +112,15 @@ export class CredentialManager implements FetchHandlerObject {
 		await this.#refreshSessionPromise;
 
 		const url = new URL(pathname, this.dispatchUrl);
-		const request = new Request(url, init);
+		const headers = new Headers(init.headers);
 
-		if (!this.session || request.headers.has('authorization')) {
-			return (0, this.fetch)(request);
+		if (!this.session || headers.has('authorization')) {
+			return (0, this.fetch)(url, init);
 		}
 
-		request.headers.set('authorization', `Bearer ${this.session.accessJwt}`);
+		headers.set('authorization', `Bearer ${this.session.accessJwt}`);
 
-		const initialResponse = await (0, this.fetch)(request);
+		const initialResponse = await (0, this.fetch)(url, { ...init, headers });
 		const isExpired = await isExpiredTokenResponse(initialResponse);
 
 		if (!isExpired) {
@@ -140,9 +140,9 @@ export class CredentialManager implements FetchHandlerObject {
 			return initialResponse;
 		}
 
-		request.headers.set('authorization', `Bearer ${this.session.accessJwt}`);
+		headers.set('authorization', `Bearer ${this.session.accessJwt}`);
 
-		return await (0, this.fetch)(request);
+		return await (0, this.fetch)(url, { ...init, headers });
 	}
 
 	#refreshSession() {
