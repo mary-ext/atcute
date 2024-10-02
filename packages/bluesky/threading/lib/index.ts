@@ -138,11 +138,7 @@ export async function createThread(
 		// Now form the record
 		const content = post.content;
 
-		const record: AppBskyFeedPost.Record & { $type: string } = {
-			// IMPORTANT: $type has to exist, CID is calculated with the `$type` field
-			// present and will produce the wrong CID if you omit it.
-			// `createRecord` and `applyWrites` currently lets you omit this and it'll
-			// add it for you, but we want to avoid that here.
+		const record: AppBskyFeedPost.Record = {
 			$type: 'app.bsky.feed.post',
 			createdAt: now.toISOString(),
 			text: content.text,
