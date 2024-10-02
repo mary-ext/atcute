@@ -110,17 +110,11 @@ export interface PostStarterpackEmbed {
 /** Union type of "record" embeds */
 export type PostRecordEmbed = PostFeedEmbed | PostListEmbed | PostQuoteEmbed | PostStarterpackEmbed;
 
-/** An embed that displays a media and a "record" embed */
-export interface PostRecordWithMediaEmbed {
-	type: 'recordWithMedia';
-	/** The "record" embed */
-	record: PostRecordEmbed;
-	/** The media embed */
-	media: PostMediaEmbed;
+/** Embed in a post, can contain media and links to other records */
+export interface PostEmbed {
+	media?: PostMediaEmbed;
+	record?: PostRecordEmbed;
 }
-
-/** Union type of embeds that can be assigned to a post */
-export type PostEmbed = PostMediaEmbed | PostRecordEmbed | PostRecordWithMediaEmbed;
 
 /** The post being composed */
 export interface ComposedPost {

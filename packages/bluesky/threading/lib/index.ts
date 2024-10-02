@@ -198,19 +198,22 @@ export async function createThread(
 
 	return writes;
 
-	async function resolveEmbed(root: PostEmbed): Promise<AppBskyFeedPost.Record['embed']> {
-		const type = root.type;
-		if (type === 'recordWithMedia') {
+	async function resolveEmbed(embed: PostEmbed): Promise<AppBskyFeedPost.Record['embed'] | undefined> {
+		const { media, record } = embed;
+
+		if (media && record) {
 			return {
 				$type: 'app.bsky.embed.recordWithMedia',
-				record: await resolveRecordEmbed(root.record),
-				media: await resolveMediaEmbed(root.media),
+				media: await resolveMediaEmbed(media),
+				record: await resolveRecordEmbed(record),
 			};
-		} else if (type === 'image' || type === 'external') {
-			return await resolveMediaEmbed(root);
-		} else {
-			return await resolveRecordEmbed(root);
+		} else if (media) {
+			return resolveMediaEmbed(media);
+		} else if (record) {
+			return resolveRecordEmbed(record);
 		}
+
+		return;
 
 		async function resolveMediaEmbed(
 			embed: PostMediaEmbed,
@@ -373,11 +376,13 @@ function resolveThreadgate(gate: ComposedThreadgate): AppBskyFeedThreadgate.Reco
 }
 
 function getEmbedLabels(embed: PostEmbed | undefined): string[] | undefined {
-	if (embed !== undefined) {
-		const type = embed.type;
+	const media = embed?.media;
+
+	if (media !== undefined) {
+		const type = media.type;
 
 		if (type === 'image' || type === 'external') {
-			return embed.labels;
+			return media.labels;
 		}
 	}
 }
