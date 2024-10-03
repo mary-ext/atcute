@@ -94,12 +94,14 @@ export const refSchema = v.object({
 
 export type RefSchema = v.Infer<typeof refSchema>;
 
-export const refUnionSchema = v.object({
-	type: v.literal('union'),
-	description: v.string().optional(),
-	refs: v.array(v.string()),
-	closed: v.boolean().default(false),
-});
+export const refUnionSchema = v
+	.object({
+		type: v.literal('union'),
+		description: v.string().optional(),
+		refs: v.array(v.string()),
+		closed: v.boolean().default(false),
+	})
+	.assert((v) => !v.closed || v.refs.length > 0, `A closed union can't have empty refs list`);
 
 export type RefUnionSchema = v.Infer<typeof refUnionSchema>;
 
