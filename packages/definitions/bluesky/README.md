@@ -1,9 +1,69 @@
 # @atcute/bluesky
 
-[Bluesky](https://bsky.app) type definitions for `@atcute/client`, a lightweight and cute API client for AT Protocol.
+[Bluesky](https://bsky.app) type definitions for `@atcute/client`, a lightweight and cute API client
+for AT Protocol.
 
-import the lexicons module to start using it.
+## usage
+
+either add the `@atcute/bluesky/lexicons` in the `types` section of `tsconfig.json` or import it in
+your source code.
+
+```jsonc
+// tsconfig.json
+{
+	"compilerOptions": {
+		"types": ["@atcute/bluesky/lexicons"],
+	},
+}
+```
 
 ```ts
+// env.d.ts
+/// <reference types="@atcute/bluesky/lexicons" />
+```
+
+```ts
+// index.ts
 import '@atcute/bluesky/lexicons';
+```
+
+newly added lexicons should be available in `@atcute/client/lexicons`
+
+```ts
+import type { AppBskyFeedPost, AppBskyRichtextFacet, Brand } from '@atcute/client/lexicons';
+
+type Facet = AppBskyRichtextFacet.Main;
+type MentionFeature = Brand.Union<AppBskyRichtextFacet.Mention>;
+
+const mention: MentionFeature = {
+	$type: 'app.bsky.richtext.facet#mention',
+	did: 'did:plc:z72i7hdynmk6r22z27h6tvur',
+};
+
+const facet: Facet = {
+	index: {
+		byteStart: 6,
+		byteEnd: 15,
+	},
+	features: [mention],
+};
+
+const record: AppBskyFeedPost.Record = {
+	$type: 'app.bsky.feed.post',
+	text: `hello @bsky.app!`,
+	facets: [facet],
+};
+```
+
+```ts
+const rpc = new XRPC({ handle: simpleFetchHandler({ service: 'https://api.bsky.app' }) });
+
+const { data } = await rpc.get('app.bsky.actor.getProfile', {
+	params: {
+		actor: 'did:plc:z72i7hdynmk6r22z27h6tvur',
+	},
+});
+
+data;
+// -> { handle: 'bsky.app', displayName: 'Bluesky', ... }
 ```
