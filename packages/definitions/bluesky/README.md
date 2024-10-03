@@ -52,6 +52,7 @@ const record: AppBskyFeedPost.Record = {
 	$type: 'app.bsky.feed.post',
 	text: `hello @bsky.app!`,
 	facets: [facet],
+	createdAt: new Date().toISOString(),
 };
 ```
 
