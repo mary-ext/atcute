@@ -2,7 +2,8 @@
 
 🦋 lightweight and 🌸 cute API client for AT Protocol.
 
-this is a monorepository composed of several packages:
+this is a monorepository composed of many packages, you might be looking for
+[the API client](./packages/core/client/README.md) package.
 
 <table>
 	<thead>
