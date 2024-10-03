@@ -27,7 +27,7 @@ your source code.
 import '@atcute/bluesky/lexicons';
 ```
 
-newly added lexicons should be available in `@atcute/client/lexicons`
+newly added lexicons are augmented to `@atcute/client/lexicons` module
 
 ```ts
 import type { AppBskyFeedPost, AppBskyRichtextFacet, Brand } from '@atcute/client/lexicons';
