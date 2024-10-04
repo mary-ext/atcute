@@ -2,6 +2,12 @@
 
 DAG-CBOR codec that deals in AT Protocol's HTTP wire format.
 
+- Only JSON types are recognized and nothing else (sorta), this means:
+  - No `Map` objects, it will always be plain objects with string keys
+  - No `undefined` values, it will be skipped or will throw an error
+- No tagged value support other than CID, which gets converted to a cid-link interface
+- Same goes for byte arrays, gets converted to a byte interface
+
 ```ts
 import { encode } from '@atcute/cbor';
 
