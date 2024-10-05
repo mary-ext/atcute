@@ -15,11 +15,13 @@ export function* iterateAtpCar(buf: Uint8Array): Generator<RepoEntry> {
 	const { roots, iterate } = fromUint8Array(new Uint8Array(buf));
 	assert(roots.length === 1, `expected only 1 root in the car archive; got=${roots.length}`);
 
+	// Collect all archive entries into a mapping of CID string -> actual bytes
 	const blockmap: BlockMap = new Map();
 	for (const entry of iterate()) {
 		blockmap.set(CID.format(entry.cid), entry.bytes);
 	}
 
+	// Read the head, then walk through the MST tree from there.
 	const commit = readObject(blockmap, roots[0]) as Commit;
 	for (const { key, cid } of walkEntries(blockmap, commit.data)) {
 		const [collection, rkey] = key.split('/');
