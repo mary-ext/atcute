@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/cid",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "create and parse AT Protocol-blessed CIDv1 format",
 	"license": "MIT",
 	"repository": {
