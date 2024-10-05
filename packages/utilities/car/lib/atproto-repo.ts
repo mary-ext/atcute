@@ -25,9 +25,14 @@ export function* iterateAtpCar(buf: Uint8Array): Generator<RepoEntry> {
 	const commit = readObject(blockmap, roots[0]) as Commit;
 	for (const { key, cid } of walkEntries(blockmap, commit.data)) {
 		const [collection, rkey] = key.split('/');
-		const record = readObject(blockmap, cid);
 
-		yield { collection, rkey, record };
+		yield {
+			collection,
+			rkey,
+			get record() {
+				return readObject(blockmap, cid);
+			},
+		};
 	}
 }
 
