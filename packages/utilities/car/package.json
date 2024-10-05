@@ -1,0 +1,30 @@
+{
+	"type": "module",
+	"name": "@atcute/car",
+	"version": "1.0.0",
+	"description": "read AT Protocol's CAR (content-addressable archive) repositories",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.1.10"
+	},
+	"dependencies": {
+		"@atcute/cbor": "workspace:^",
+		"@atcute/cid": "workspace:^",
+		"@atcute/varint": "workspace:^"
+	}
+}

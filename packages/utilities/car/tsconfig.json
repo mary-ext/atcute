@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"types": ["bun"],
+		"outDir": "dist/",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "ESNext",
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+		"strict": true,
+		"noImplicitOverride": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"module": "NodeNext",
+		"sourceMap": true,
+		"declaration": true,
+	},
+	"include": ["lib"],
+}

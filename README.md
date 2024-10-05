@@ -43,6 +43,9 @@ this is a monorepository composed of many packages, you might be looking for
 			<td><code>tid</code>: create and parse TID identifiers</td>
 		</tr>
 		<tr>
+			<td><code>car</code>: read AT Protocol's CAR (content-addressable archive) repositories</td>
+		</tr>
+		<tr>
 			<td><code>cid</code>: create and parse the blessed CIDv1 format</td>
 		</tr>
 		<tr>
