@@ -117,7 +117,7 @@ export const decodeFirst = (bytes: Uint8Array): [cid: CID, remainder: Uint8Array
 		version: 1,
 		code: specs.codec,
 		digest: digest,
-		bytes: encodeCID(1, specs.codec, digest.bytes),
+		bytes: bytes.subarray(0, specs.size),
 	};
 
 	return [cid, bytes.subarray(specs.size)];
