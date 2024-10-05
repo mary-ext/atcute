@@ -1,6 +1,6 @@
 # @atcute/varint
 
-codec for Protobuf-style varint bytes
+Protobuf-style varint codec library.
 
 ```ts
 import { encode } from '@atcute/varint';

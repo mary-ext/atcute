@@ -5,7 +5,7 @@ lightweight and cute API client for AT Protocol.
 - **small**, the bare minimum is ~1 kB gzipped with the full package at ~2.4 kB gzipped.
 - **no validations**, type definitions match actual HTTP responses.
 
-the api client only ships with base AT Protocol lexicons and endpoints, along with an
+the API client only ships with base AT Protocol lexicons and endpoints, along with an
 authentication middleware for signing in to a PDS. for manipulating Bluesky records and making
 requests to it, see the `@atcute/bluesky` package.
 

@@ -1,6 +1,6 @@
 # @atcute/base32
 
-codec for base32
+base32 codec library
 
 ```ts
 import { encode } from '@atcute/base32';

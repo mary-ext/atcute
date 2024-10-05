@@ -16,7 +16,7 @@ you might be looking for [the API client](./packages/core/client/README.md).
 			<th colspan="2" align="left">Core packages</th>
 		</tr>
 		<tr>
-			<td><code>client</code>: the actual client library</td>
+			<td><code>client</code>: API client library</td>
 		</tr>
 		<tr>
 			<td><code>lex-cli</code>: CLI tool to generate type definitions for the API client</td>
@@ -46,22 +46,22 @@ you might be looking for [the API client](./packages/core/client/README.md).
 			<td><code>car</code>: read AT Protocol's CAR (content-addressable archive) repositories</td>
 		</tr>
 		<tr>
-			<td><code>cid</code>: create and parse the blessed CIDv1 format</td>
+			<td><code>cid</code>: CIDv1 codec</td>
 		</tr>
 		<tr>
-			<td><code>cbor</code>: DAG-CBOR codec that deals in AT Protocol's HTTP wire format</td>
+			<td><code>cbor</code>: DAG-CBOR codec</td>
 		</tr>
 		<tr>
-			<td><code>varint</code>: codec for Protobuf-style varint bytes</td>
+			<td><code>varint</code>: Protobuf-style varint codec</td>
 		</tr>
 		<tr>
-			<td><code>base32</code>: codec for base32</td>
+			<td><code>base32</code>: base32 codec</td>
 		</tr>
 		<tr>
 			<th colspan="2" align="left">Bluesky-related packages</th>
 		</tr>
 		<tr>
-			<td><code>bluesky-richtext-builder</code>: builder for Bluesky's rich text format</td>
+			<td><code>bluesky-richtext-builder</code>: builder pattern for Bluesky's rich text format</td>
 		</tr>
 		<tr>
 			<td><code>bluesky-threading</code>: create Bluesky threads containing multiple posts with one write</td>

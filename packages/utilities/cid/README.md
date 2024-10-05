@@ -1,6 +1,6 @@
 # @atcute/cid
 
-create and parse AT Protocol-blessed CIDv1 format
+CIDv1 codec library.
 
 ```ts
 const parsed = parse('bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee');

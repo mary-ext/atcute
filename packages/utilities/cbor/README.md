@@ -1,8 +1,8 @@
 # @atcute/cbor
 
-DAG-CBOR codec that deals in AT Protocol's HTTP wire format.
+DAG-CBOR codec library, focused on dealing with AT Protocol's HTTP wire format.
 
-- Only JSON types are recognized and nothing else (sorta), this means:
+- Only JSON types are recognized and almost nothing else, this means:
   - No `Map` objects, it will always be plain objects with string keys
   - No `undefined` values, it will be skipped or will throw an error
 - No tagged value support other than CID, which gets converted to a cid-link interface
