@@ -1,9 +1,9 @@
 # atcute
 
-🦋 lightweight and 🌸 cute API client for AT Protocol.
+an ecosystem of lightweight TypeScript packages for AT Protocol, the protocol
+powering Bluesky.
 
-this is a monorepository composed of many packages, you might be looking for
-[the API client](./packages/core/client/README.md) package.
+you might be looking for [the API client](./packages/core/client/README.md).
 
 <table>
 	<thead>
