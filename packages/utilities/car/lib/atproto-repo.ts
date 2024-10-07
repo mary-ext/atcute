@@ -5,10 +5,17 @@ import { fromUint8Array } from './reader.js';
 
 const decoder = new TextDecoder();
 
-export interface RepoEntry {
-	collection: string;
-	rkey: string;
-	record: unknown;
+export class RepoEntry {
+	constructor(
+		public readonly collection: string,
+		public readonly rkey: string,
+		public readonly cid: CBOR.CIDLink,
+		private blockmap: BlockMap,
+	) {}
+
+	get record(): unknown {
+		return readObject(this.blockmap, this.cid);
+	}
 }
 
 export function* iterateAtpCar(buf: Uint8Array): Generator<RepoEntry> {
@@ -26,13 +33,7 @@ export function* iterateAtpCar(buf: Uint8Array): Generator<RepoEntry> {
 	for (const { key, cid } of walkEntries(blockmap, commit.data)) {
 		const [collection, rkey] = key.split('/');
 
-		yield {
-			collection,
-			rkey,
-			get record() {
-				return readObject(blockmap, cid);
-			},
-		};
+		yield new RepoEntry(collection, rkey, cid, blockmap);
 	}
 }
 
