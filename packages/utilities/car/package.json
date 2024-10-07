@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/car",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "read AT Protocol's CAR (content-addressable archive) repositories",
 	"license": "MIT",
 	"repository": {
