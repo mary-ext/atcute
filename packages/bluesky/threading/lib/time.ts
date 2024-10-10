@@ -7,7 +7,7 @@ let lastTimestamp: number = 0;
  */
 export function getNow(threadSize: number): number {
 	let timestamp = Math.max(Date.now(), lastTimestamp);
-	lastTimestamp = timestamp + threadSize;
+	lastTimestamp = timestamp + 2 + threadSize;
 
 	return timestamp;
 }
