@@ -1,7 +1,6 @@
 # atcute
 
-an ecosystem of lightweight TypeScript packages for AT Protocol, the protocol
-powering Bluesky.
+an ecosystem of lightweight TypeScript packages for AT Protocol, the protocol powering Bluesky.
 
 you might be looking for [the API client](./packages/core/client/README.md).
 

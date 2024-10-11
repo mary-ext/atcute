@@ -12,6 +12,13 @@
 			"options": {
 				"parser": "jsonc"
 			}
+		},
+		{
+			"files": ["*.md"],
+			"options": {
+				"printWidth": 100,
+				"proseWrap": "always"
+			}
 		}
 	]
 }
