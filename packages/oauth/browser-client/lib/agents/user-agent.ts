@@ -16,7 +16,7 @@ export class OAuthUserAgent implements FetchHandlerObject {
 		this.#fetch = createDPoPFetch(CLIENT_ID, session.dpopKey, false);
 	}
 
-	get did(): At.DID {
+	get sub(): At.DID {
 		return this.session.info.sub;
 	}
 
