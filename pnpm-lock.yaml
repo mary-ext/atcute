@@ -155,6 +155,19 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0
 
+  packages/oauth/browser-client:
+    dependencies:
+      '@atcute/client':
+        specifier: workspace:^
+        version: link:../../core/client
+      nanoid:
+        specifier: ^5.0.7
+        version: 5.0.7
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.1.10
+        version: 1.1.10
+
   packages/utilities/base32:
     devDependencies:
       '@types/bun':
@@ -1783,6 +1796,11 @@ packages:
   nanoid@3.3.7:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  nanoid@5.0.7:
+    resolution: {integrity: sha512-oLxFY2gd2IqnjcYyOXD8XGCftpGtZP2AbHbOkthDkvRywH5ayNtPVy9YlOPcHckXzbLTCHpkb7FB+yuxKV13pQ==}
+    engines: {node: ^18 || >=20}
     hasBin: true
 
   napi-build-utils@1.0.2:
@@ -4665,6 +4683,8 @@ snapshots:
   multiformats@9.9.0: {}
 
   nanoid@3.3.7: {}
+
+  nanoid@5.0.7: {}
 
   napi-build-utils@1.0.2: {}
 

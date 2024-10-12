@@ -36,6 +36,12 @@ you might be looking for [the API client](./packages/core/client/README.md).
 			<td><code>whitewind</code>: adds <code>com.whtwnd.*</code> definitions</td>
 		</tr>
 		<tr>
+			<th colspan="2" align="left">OAuth packages</th>
+		</tr>
+		<tr>
+			<td><code>oauth-browser-client</code>: minimal OAuth browser client implementation</td>
+		</tr>
+		<tr>
 			<th colspan="2" align="left">Utility packages</th>
 		</tr>
 		<tr>

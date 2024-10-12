@@ -1,0 +1,29 @@
+{
+	"type": "module",
+	"name": "@atcute/oauth-browser-client",
+	"version": "1.0.0",
+	"description": "minimal OAuth browser client implementation for AT Protocol",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/client": "workspace:^",
+		"nanoid": "^5.0.7"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.1.10"
+	}
+}
