@@ -9,6 +9,6 @@
 	"devDependencies": {
 		"@mary/tar": "npm:@jsr/mary__tar@^0.2.4",
 		"prettier": "^3.3.3",
-		"typescript": "5.6.1-rc"
+		"typescript": "5.7.0-beta"
 	}
 }
