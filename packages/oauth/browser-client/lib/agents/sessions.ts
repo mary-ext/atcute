@@ -54,18 +54,13 @@ export const getSession = async (sub: At.DID, options?: SessionGetOptions): Prom
 	promise = navigator.locks.request(lockKey, async (): PendingItem<Session> => {
 		const storedSession = database.sessions.get(sub);
 
-		console.log(storedSession, allowStored);
-
 		if (storedSession && allowStored(storedSession)) {
-			console.log('true');
 			// Use the stored value as return value for the current execution
 			// flow. Notify other concurrent execution flows (that should be
 			// "stuck" in the loop before until this promise resolves) that we got
 			// a value, but that it came from the store (isFresh = false).
 			return { isFresh: false, value: storedSession };
 		}
-
-		console.log('false');
 
 		const newSession = await refreshToken(sub, storedSession);
 
