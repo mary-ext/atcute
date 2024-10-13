@@ -82,35 +82,43 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 			window.addEventListener('storage', listener, { signal });
 		}
 
-		locks.request(`${storageKey}:cleanup`, { ifAvailable: true }, async (lock) => {
-			if (!lock || signal.aborted) {
-				return;
-			}
-
-			await new Promise((resolve) => setTimeout(resolve, 10_000));
-			if (signal.aborted) {
-				return;
-			}
-
-			let now = Date.now();
-			let changed = false;
-
-			read();
-
-			for (const key in store) {
-				const item = store[key];
-				const expiresAt = item.expiresAt;
-
-				if (expiresAt !== null && now > expiresAt) {
-					changed = true;
-					delete store[key];
+		{
+			const cleanup = async (lock: Lock | true | null) => {
+				if (!lock || signal.aborted) {
+					return;
 				}
-			}
 
-			if (changed) {
-				persist();
+				await new Promise((resolve) => setTimeout(resolve, 10_000));
+				if (signal.aborted) {
+					return;
+				}
+
+				let now = Date.now();
+				let changed = false;
+
+				read();
+
+				for (const key in store) {
+					const item = store[key];
+					const expiresAt = item.expiresAt;
+
+					if (expiresAt !== null && now > expiresAt) {
+						changed = true;
+						delete store[key];
+					}
+				}
+
+				if (changed) {
+					persist();
+				}
+			};
+
+			if (locks) {
+				locks.request(`${storageKey}:cleanup`, { ifAvailable: true }, cleanup);
+			} else {
+				cleanup(true);
 			}
-		});
+		}
 
 		return {
 			get(key) {

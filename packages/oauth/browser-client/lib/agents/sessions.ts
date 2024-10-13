@@ -3,6 +3,7 @@ import type { At } from '@atcute/client/lexicons';
 import { database } from '../environment.js';
 import { OAuthResponseError, TokenRefreshError } from '../errors.js';
 import type { Session } from '../types/token.js';
+import { locks } from '../utils/runtime.js';
 
 import { OAuthServerAgent } from './server-agent.js';
 
@@ -47,11 +48,7 @@ export const getSession = async (sub: At.DID, options?: SessionGetOptions): Prom
 		options?.signal?.throwIfAborted();
 	}
 
-	const lockKey = `atcute-oauth:${sub}`;
-
-	let promise: PendingItem<Session>;
-
-	promise = navigator.locks.request(lockKey, async (): PendingItem<Session> => {
+	const run = async (): PendingItem<Session> => {
 		const storedSession = database.sessions.get(sub);
 
 		if (storedSession && allowStored(storedSession)) {
@@ -66,7 +63,15 @@ export const getSession = async (sub: At.DID, options?: SessionGetOptions): Prom
 
 		await storeSession(sub, newSession);
 		return { isFresh: true, value: newSession };
-	});
+	};
+
+	let promise: PendingItem<Session>;
+
+	if (locks) {
+		promise = locks.request(`atcute-oauth:${sub}`, run);
+	} else {
+		promise = run();
+	}
 
 	promise = promise.finally(() => pending.delete(sub));
 
