@@ -426,6 +426,20 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	/** Get details about some records. */
+	namespace ToolsOzoneModerationGetRecords {
+		interface Params {
+			/** Maximum array length: 100 */
+			uris: At.Uri[];
+		}
+		type Input = undefined;
+		interface Output {
+			records: Brand.Union<
+				ToolsOzoneModerationDefs.RecordViewDetail | ToolsOzoneModerationDefs.RecordViewNotFound
+			>[];
+		}
+	}
+
 	/** Get details about a repository. */
 	namespace ToolsOzoneModerationGetRepo {
 		interface Params {
@@ -435,6 +449,20 @@ declare module '@atcute/client/lexicons' {
 		type Output = ToolsOzoneModerationDefs.RepoViewDetail;
 		interface Errors {
 			RepoNotFound: {};
+		}
+	}
+
+	/** Get details about some repositories. */
+	namespace ToolsOzoneModerationGetRepos {
+		interface Params {
+			/** Maximum array length: 100 */
+			dids: At.DID[];
+		}
+		type Input = undefined;
+		interface Output {
+			repos: Brand.Union<
+				ToolsOzoneModerationDefs.RepoViewDetail | ToolsOzoneModerationDefs.RepoViewNotFound
+			>[];
 		}
 	}
 
@@ -587,6 +615,203 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	/** Add values to a specific set. Attempting to add values to a set that does not exist will result in an error. */
+	namespace ToolsOzoneSetAddValues {
+		interface Params {}
+		interface Input {
+			/** Name of the set to add values to */
+			name: string;
+			/**
+			 * Array of string values to add to the set \
+			 * Minimum array length: 1 \
+			 * Maximum array length: 1000
+			 */
+			values: string[];
+		}
+		type Output = undefined;
+	}
+
+	namespace ToolsOzoneSetDefs {
+		interface Set {
+			[Brand.Type]?: 'tools.ozone.set.defs#set';
+			/**
+			 * Minimum string length: 3 \
+			 * Maximum string length: 128
+			 */
+			name: string;
+			/**
+			 * Maximum string length: 10240 \
+			 * Maximum grapheme length: 1024
+			 */
+			description?: string;
+		}
+		interface SetView {
+			[Brand.Type]?: 'tools.ozone.set.defs#setView';
+			createdAt: string;
+			/**
+			 * Minimum string length: 3 \
+			 * Maximum string length: 128
+			 */
+			name: string;
+			setSize: number;
+			updatedAt: string;
+			/**
+			 * Maximum string length: 10240 \
+			 * Maximum grapheme length: 1024
+			 */
+			description?: string;
+		}
+	}
+
+	/** Delete an entire set. Attempting to delete a set that does not exist will result in an error. */
+	namespace ToolsOzoneSetDeleteSet {
+		interface Params {}
+		interface Input {
+			/** Name of the set to delete */
+			name: string;
+		}
+		interface Output {}
+		interface Errors {
+			SetNotFound: {};
+		}
+	}
+
+	/** Delete values from a specific set. Attempting to delete values that are not in the set will not result in an error */
+	namespace ToolsOzoneSetDeleteValues {
+		interface Params {}
+		interface Input {
+			/** Name of the set to delete values from */
+			name: string;
+			/**
+			 * Array of string values to delete from the set \
+			 * Minimum array length: 1
+			 */
+			values: string[];
+		}
+		type Output = undefined;
+		interface Errors {
+			SetNotFound: {};
+		}
+	}
+
+	/** Get a specific set and its values */
+	namespace ToolsOzoneSetGetValues {
+		interface Params {
+			name: string;
+			cursor?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 1000
+			 * @default 100
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			set: ToolsOzoneSetDefs.SetView;
+			values: string[];
+			cursor?: string;
+		}
+		interface Errors {
+			SetNotFound: {};
+		}
+	}
+
+	/** Query available sets */
+	namespace ToolsOzoneSetQuerySets {
+		interface Params {
+			cursor?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+			namePrefix?: string;
+			/** @default "name" */
+			sortBy?: 'name' | 'createdAt' | 'updatedAt';
+			/**
+			 * Defaults to ascending order of name field.
+			 * @default "asc"
+			 */
+			sortDirection?: 'asc' | 'desc';
+		}
+		type Input = undefined;
+		interface Output {
+			sets: ToolsOzoneSetDefs.SetView[];
+			cursor?: string;
+		}
+	}
+
+	/** Create or update set metadata */
+	namespace ToolsOzoneSetUpsertSet {
+		interface Params {}
+		type Input = ToolsOzoneSetDefs.Set;
+		type Output = ToolsOzoneSetDefs.SetView;
+	}
+
+	namespace ToolsOzoneSignatureDefs {
+		interface SigDetail {
+			[Brand.Type]?: 'tools.ozone.signature.defs#sigDetail';
+			property: string;
+			value: string;
+		}
+	}
+
+	/** Find all correlated threat signatures between 2 or more accounts. */
+	namespace ToolsOzoneSignatureFindCorrelation {
+		interface Params {
+			dids: At.DID[];
+		}
+		type Input = undefined;
+		interface Output {
+			details: ToolsOzoneSignatureDefs.SigDetail[];
+		}
+	}
+
+	/** Get accounts that share some matching threat signatures with the root account. */
+	namespace ToolsOzoneSignatureFindRelatedAccounts {
+		interface Params {
+			did: At.DID;
+			cursor?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			accounts: RelatedAccount[];
+			cursor?: string;
+		}
+		interface RelatedAccount {
+			[Brand.Type]?: 'tools.ozone.signature.findRelatedAccounts#relatedAccount';
+			account: ComAtprotoAdminDefs.AccountView;
+			similarities?: ToolsOzoneSignatureDefs.SigDetail[];
+		}
+	}
+
+	/** Search for accounts that match one or more threat signature values. */
+	namespace ToolsOzoneSignatureSearchAccounts {
+		interface Params {
+			values: string[];
+			cursor?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			accounts: ComAtprotoAdminDefs.AccountView[];
+			cursor?: string;
+		}
+	}
+
 	/** Add a member to the ozone team. Requires admin role. */
 	namespace ToolsOzoneTeamAddMember {
 		interface Params {}
@@ -683,9 +908,17 @@ declare module '@atcute/client/lexicons' {
 			params: ToolsOzoneModerationGetRecord.Params;
 			output: ToolsOzoneModerationGetRecord.Output;
 		};
+		'tools.ozone.moderation.getRecords': {
+			params: ToolsOzoneModerationGetRecords.Params;
+			output: ToolsOzoneModerationGetRecords.Output;
+		};
 		'tools.ozone.moderation.getRepo': {
 			params: ToolsOzoneModerationGetRepo.Params;
 			output: ToolsOzoneModerationGetRepo.Output;
+		};
+		'tools.ozone.moderation.getRepos': {
+			params: ToolsOzoneModerationGetRepos.Params;
+			output: ToolsOzoneModerationGetRepos.Output;
 		};
 		'tools.ozone.moderation.queryEvents': {
 			params: ToolsOzoneModerationQueryEvents.Params;
@@ -701,6 +934,26 @@ declare module '@atcute/client/lexicons' {
 		};
 		'tools.ozone.server.getConfig': {
 			output: ToolsOzoneServerGetConfig.Output;
+		};
+		'tools.ozone.set.getValues': {
+			params: ToolsOzoneSetGetValues.Params;
+			output: ToolsOzoneSetGetValues.Output;
+		};
+		'tools.ozone.set.querySets': {
+			params: ToolsOzoneSetQuerySets.Params;
+			output: ToolsOzoneSetQuerySets.Output;
+		};
+		'tools.ozone.signature.findCorrelation': {
+			params: ToolsOzoneSignatureFindCorrelation.Params;
+			output: ToolsOzoneSignatureFindCorrelation.Output;
+		};
+		'tools.ozone.signature.findRelatedAccounts': {
+			params: ToolsOzoneSignatureFindRelatedAccounts.Params;
+			output: ToolsOzoneSignatureFindRelatedAccounts.Output;
+		};
+		'tools.ozone.signature.searchAccounts': {
+			params: ToolsOzoneSignatureSearchAccounts.Params;
+			output: ToolsOzoneSignatureSearchAccounts.Output;
 		};
 		'tools.ozone.team.listMembers': {
 			params: ToolsOzoneTeamListMembers.Params;
@@ -723,6 +976,20 @@ declare module '@atcute/client/lexicons' {
 		'tools.ozone.moderation.emitEvent': {
 			input: ToolsOzoneModerationEmitEvent.Input;
 			output: ToolsOzoneModerationEmitEvent.Output;
+		};
+		'tools.ozone.set.addValues': {
+			input: ToolsOzoneSetAddValues.Input;
+		};
+		'tools.ozone.set.deleteSet': {
+			input: ToolsOzoneSetDeleteSet.Input;
+			output: ToolsOzoneSetDeleteSet.Output;
+		};
+		'tools.ozone.set.deleteValues': {
+			input: ToolsOzoneSetDeleteValues.Input;
+		};
+		'tools.ozone.set.upsertSet': {
+			input: ToolsOzoneSetUpsertSet.Input;
+			output: ToolsOzoneSetUpsertSet.Output;
 		};
 		'tools.ozone.team.addMember': {
 			input: ToolsOzoneTeamAddMember.Input;

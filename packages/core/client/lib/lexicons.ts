@@ -673,6 +673,9 @@ export declare namespace ComAtprotoRepoGetRecord {
 		value: unknown;
 		cid?: At.CID;
 	}
+	interface Errors {
+		RecordNotFound: {};
+	}
 }
 
 /** Import a repo in the form of a CAR file. Requires Content-Length HTTP header to be set. */
