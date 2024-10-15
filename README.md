@@ -66,7 +66,7 @@ you might be looking for [the API client](./packages/core/client/README.md).
 			<th colspan="2" align="left">Bluesky-related packages</th>
 		</tr>
 		<tr>
-			<td><code>bluesky-richtext-builder</code>: builder pattern for Bluesky's rich text format</td>
+			<td><code>bluesky-richtext-builder</code>: builder pattern for Bluesky's rich text facets</td>
 		</tr>
 		<tr>
 			<td><code>bluesky-richtext-parser</code>: parse Bluesky's (extended) rich text syntax</td>

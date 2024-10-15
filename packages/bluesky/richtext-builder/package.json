@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@atcute/bluesky-richtext-builder",
 	"version": "1.0.1",
-	"description": "builder pattern for Bluesky's rich text format",
+	"description": "builder pattern for Bluesky's rich text facets",
 	"license": "MIT",
 	"repository": {
 		"url": "https://codeberg.org/mary-ext/atcute"

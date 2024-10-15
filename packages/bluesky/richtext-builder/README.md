@@ -1,6 +1,6 @@
 # @atcute/bluesky-richtext-builder
 
-builder pattern for Bluesky's rich text format
+builder pattern for Bluesky's rich text facets.
 
 ```ts
 import RichtextBuilder from '@atcute/bluesky-richtext-builder';
