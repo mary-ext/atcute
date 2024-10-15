@@ -94,6 +94,14 @@ it('mentions', () => {
 		},
 	]);
 
+	expect(tokenize('@@bsky.app')).toEqual([
+		{
+			raw: '@@bsky.app',
+			text: '@@bsky.app',
+			type: 'text',
+		},
+	]);
+
 	expect(tokenize('hello @bsky.app@')).toEqual([
 		{
 			type: 'text',
