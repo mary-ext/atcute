@@ -72,6 +72,9 @@ you might be looking for [the API client](./packages/core/client/README.md).
 			<td><code>bluesky-richtext-parser</code>: parse Bluesky's (extended) rich text syntax</td>
 		</tr>
 		<tr>
+			<td><code>bluesky-richtext-segmenter</code>: segments Bluesky's rich text facets into tokens</td>
+		</tr>
+		<tr>
 			<td><code>bluesky-threading</code>: create Bluesky threads containing multiple posts with one write</td>
 		</tr>
 	</tbody>

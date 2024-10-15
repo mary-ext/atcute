@@ -36,6 +36,18 @@ importers:
         specifier: ^1.1.10
         version: 1.1.10
 
+  packages/bluesky/richtext-segmenter:
+    devDependencies:
+      '@atcute/bluesky':
+        specifier: workspace:^
+        version: link:../../definitions/bluesky
+      '@atcute/client':
+        specifier: workspace:^
+        version: link:../../core/client
+      '@types/bun':
+        specifier: ^1.1.10
+        version: 1.1.10
+
   packages/bluesky/threading:
     dependencies:
       '@atcute/cbor':

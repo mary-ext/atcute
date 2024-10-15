@@ -1,0 +1,31 @@
+{
+	"type": "module",
+	"name": "@atcute/bluesky-richtext-segmenter",
+	"version": "1.0.0",
+	"description": "segments Bluesky's rich text facets into tokens",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"peerDependencies": {
+		"@atcute/bluesky": "^1.0.0",
+		"@atcute/client": "^1.0.0 || ^2.0.0"
+	},
+	"devDependencies": {
+		"@atcute/bluesky": "workspace:^",
+		"@atcute/client": "workspace:^",
+		"@types/bun": "^1.1.10"
+	}
+}
