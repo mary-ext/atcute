@@ -1,0 +1,25 @@
+{
+	"type": "module",
+	"name": "@atcute/bluesky-richtext-parser",
+	"version": "1.0.0",
+	"description": "parse Bluesky's (extended) rich text syntax",
+	"license": "MIT",
+	"repository": {
+		"url": "https://codeberg.org/mary-ext/atcute"
+	},
+	"files": [
+		"dist/"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.1.10"
+	}
+}

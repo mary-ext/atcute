@@ -30,6 +30,12 @@ importers:
         specifier: ^1.1.10
         version: 1.1.10
 
+  packages/bluesky/richtext-parser:
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.1.10
+        version: 1.1.10
+
   packages/bluesky/threading:
     dependencies:
       '@atcute/cbor':
