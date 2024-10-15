@@ -424,6 +424,37 @@ it('links', () => {
 			url: 'https://google.com',
 		},
 	]);
+
+	expect(tokenize('[abc[def](example.com)')).toEqual([
+		{
+			type: 'text',
+			raw: '[abc',
+			text: '[abc',
+		},
+		{
+			type: 'link',
+			raw: '[def](example.com)',
+			text: 'def',
+			url: 'example.com',
+		},
+	]);
+
+	expect(tokenize('[abc]def](example.com)')).toEqual([
+		{
+			type: 'text',
+			raw: '[abc]def](example.com)',
+			text: '[abc]def](example.com)',
+		},
+	]);
+
+	expect(tokenize('[abc[]def](example.com)')).toEqual([
+		{
+			type: 'link',
+			raw: '[abc[]def](example.com)',
+			text: 'abc[]def',
+			url: 'example.com',
+		},
+	]);
 });
 
 it('emotes', () => {
