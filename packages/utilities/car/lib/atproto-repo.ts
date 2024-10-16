@@ -1,7 +1,7 @@
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 
-import { fromUint8Array } from './reader.js';
+import { readCar } from './reader.js';
 
 const decoder = new TextDecoder();
 
@@ -19,7 +19,7 @@ export class RepoEntry {
 }
 
 export function* iterateAtpRepo(buf: Uint8Array): Generator<RepoEntry> {
-	const { roots, iterate } = fromUint8Array(new Uint8Array(buf));
+	const { roots, iterate } = readCar(new Uint8Array(buf));
 	assert(roots.length === 1, `expected only 1 root in the car archive; got=${roots.length}`);
 
 	// Collect all archive entries into a mapping of CID string -> actual bytes
