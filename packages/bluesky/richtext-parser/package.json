@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/bluesky-richtext-parser",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "parse Bluesky's (extended) rich text syntax",
 	"license": "MIT",
 	"repository": {
