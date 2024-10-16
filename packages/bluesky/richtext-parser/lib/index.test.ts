@@ -152,6 +152,24 @@ it('mentions', () => {
 		},
 	]);
 
+	expect(tokenize('(@bsky.app)')).toEqual([
+		{
+			type: 'text',
+			raw: '(',
+			text: '(',
+		},
+		{
+			type: 'mention',
+			raw: '@bsky.app',
+			handle: 'bsky.app',
+		},
+		{
+			type: 'text',
+			raw: ')',
+			text: ')',
+		},
+	]);
+
 	expect(tokenize('@bsky.app hello')).toEqual([
 		{
 			type: 'mention',
