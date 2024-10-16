@@ -525,4 +525,19 @@ it('emotes', () => {
 			name: 'bar',
 		},
 	]);
+
+	expect(tokenize(':::')).toEqual([
+		{
+			type: 'text',
+			raw: ':::',
+			text: ':::',
+		},
+	]);
+	expect(tokenize('::::')).toEqual([
+		{
+			type: 'text',
+			raw: '::::',
+			text: '::::',
+		},
+	]);
 });

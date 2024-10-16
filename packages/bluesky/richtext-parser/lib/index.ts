@@ -206,6 +206,7 @@ export const tokenize = (src: string): Token[] => {
 			if (lastToken && lastToken.type === 'text') {
 				lastToken.raw += token.raw;
 				lastToken.text += token.text;
+				token = lastToken;
 			} else {
 				tokens.push(token);
 			}
