@@ -1,6 +1,6 @@
 import { expect, it } from 'bun:test';
 
-import { iterateAtpCar } from './index.js';
+import { iterateAtpRepo } from './index.js';
 
 it('decodes atproto car files', () => {
 	const buf = Buffer.from(
@@ -27,7 +27,7 @@ it('decodes atproto car files', () => {
 	);
 
 	// @ts-expect-error: node.js buffer it no likey
-	const result = Array.from(iterateAtpCar(buf), (entry) => ({
+	const result = Array.from(iterateAtpRepo(buf), (entry) => ({
 		collection: entry.collection,
 		rkey: entry.rkey,
 		record: entry.record,

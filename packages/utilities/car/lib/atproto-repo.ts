@@ -18,7 +18,7 @@ export class RepoEntry {
 	}
 }
 
-export function* iterateAtpCar(buf: Uint8Array): Generator<RepoEntry> {
+export function* iterateAtpRepo(buf: Uint8Array): Generator<RepoEntry> {
 	const { roots, iterate } = fromUint8Array(new Uint8Array(buf));
 	assert(roots.length === 1, `expected only 1 root in the car archive; got=${roots.length}`);
 
@@ -36,6 +36,9 @@ export function* iterateAtpCar(buf: Uint8Array): Generator<RepoEntry> {
 		yield new RepoEntry(collection, rkey, cid, blockmap);
 	}
 }
+
+/** @deprecated Use `iterateAtpRepo` instead */
+export const iterateAtpCar = iterateAtpRepo;
 
 function readObject(map: BlockMap, link: CBOR.CIDLink): unknown {
 	const cid = link.$link;
