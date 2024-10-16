@@ -27,7 +27,11 @@ it('decodes atproto car files', () => {
 	);
 
 	// @ts-expect-error: node.js buffer it no likey
-	const result = Array.from(iterateAtpCar(buf));
+	const result = Array.from(iterateAtpCar(buf), (entry) => ({
+		collection: entry.collection,
+		rkey: entry.rkey,
+		record: entry.record,
+	}));
 
 	expect(result).toEqual([
 		{
