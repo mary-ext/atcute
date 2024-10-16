@@ -46,6 +46,7 @@ it('encodes and decodes into the same value', () => {
 	const decoded = decode(encoded);
 
 	expect(decoded).toEqual(object);
+	expect(decoded.link.$link).toEqual('bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee');
 	expect('empty' in decoded).toBe(false);
 });
 

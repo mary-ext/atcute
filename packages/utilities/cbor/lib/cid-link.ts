@@ -1,4 +1,5 @@
-import { type CID, format, parse, decode } from '@atcute/cid';
+import * as base32 from '@atcute/base32';
+import { type CID, decode, parse } from '@atcute/cid';
 
 export interface CIDLink {
 	$link: string;
@@ -12,7 +13,7 @@ export class CIDLinkWrapper implements CIDLink {
 	}
 
 	get $link(): string {
-		return format(decode(this.$bytes));
+		return 'b' + base32.encode(this.$bytes);
 	}
 
 	toJSON(): CIDLink {
