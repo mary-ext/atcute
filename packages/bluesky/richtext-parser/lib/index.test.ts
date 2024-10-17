@@ -10,6 +10,14 @@ it('plain', () => {
 			text: 'hello world',
 		},
 	]);
+
+	expect(tokenize('\n')).toEqual([
+		{
+			type: 'text',
+			raw: '\n',
+			text: '\n',
+		},
+	]);
 });
 
 it('escapes', () => {
@@ -443,6 +451,23 @@ it('autolinks', () => {
 			type: 'autolink',
 			raw: 'https://example.com/',
 			url: 'https://example.com/',
+		},
+	]);
+
+	expect(
+		tokenize(
+			'https://github.com/mary-ext/atproto-scraping/commit/\ncaaa495ae654ef8a98f223f3cecfe2ca261d6b4f',
+		),
+	).toEqual([
+		{
+			type: 'autolink',
+			raw: 'https://github.com/mary-ext/atproto-scraping/commit/',
+			url: 'https://github.com/mary-ext/atproto-scraping/commit/',
+		},
+		{
+			type: 'text',
+			raw: '\ncaaa495ae654ef8a98f223f3cecfe2ca261d6b4f',
+			text: '\ncaaa495ae654ef8a98f223f3cecfe2ca261d6b4f',
 		},
 	]);
 });
