@@ -221,6 +221,24 @@ it('mentions', () => {
 			type: 'mention',
 		},
 	]);
+
+	expect(tokenize('@abc.com @bca.com')).toEqual([
+		{
+			type: 'mention',
+			raw: '@abc.com',
+			handle: 'abc.com',
+		},
+		{
+			type: 'text',
+			raw: ' ',
+			text: ' ',
+		},
+		{
+			type: 'mention',
+			raw: '@bca.com',
+			handle: 'bca.com',
+		},
+	]);
 });
 
 it('topics', () => {
@@ -360,6 +378,24 @@ it('topics', () => {
 			name: 'cool',
 			raw: '#cool',
 			type: 'topic',
+		},
+	]);
+
+	expect(tokenize('#abc #def')).toEqual([
+		{
+			type: 'topic',
+			raw: '#abc',
+			name: 'abc',
+		},
+		{
+			type: 'text',
+			raw: ' ',
+			text: ' ',
+		},
+		{
+			type: 'topic',
+			raw: '#def',
+			name: 'def',
 		},
 	]);
 });
