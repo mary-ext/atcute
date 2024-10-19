@@ -31,8 +31,7 @@ by default, the API client only ships with the base AT Protocol (`com.atproto.*`
 endpoints , along with a middleware for doing a (legacy) authentication with a PDS. you can extend
 these with optional definition packages:
 
-- [`@atcute/bluemoji`](../../definitions/bluemoji/README.md): adds `blue.moji.*` definitions
-- [`@atcute/bluesky`](../../definitions/bluesky/README.md): adds `app.bsky.*` and `chat.bsky.*`
-  definitions
-- [`@atcute/ozone`](../../definitions/ozone/README.md): adds `tools.ozone.*` definitions
-- [`@atcute/whitewind`](../../definitions/whitewind/README.md): adds `com.whtwnd.*` definitions
+- [`@atcute/bluemoji`](../../definitions/bluemoji): adds `blue.moji.*` definitions
+- [`@atcute/bluesky`](../../definitions/bluesky): adds `app.bsky.*` and `chat.bsky.*` definitions
+- [`@atcute/ozone`](../../definitions/ozone): adds `tools.ozone.*` definitions
+- [`@atcute/whitewind`](../../definitions/whitewind): adds `com.whtwnd.*` definitions
