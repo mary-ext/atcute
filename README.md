@@ -10,7 +10,8 @@ featuring:
 - Bluesky-specific utility packages like [a rich text builder][bluesky-richtext-builder] and [a post
   threader][bluesky-threading]
 
-you might be interested in the [API client][client]
+looking for more? check out [skyware][skyware], an additional collection of packages, built on top
+of atcute.
 
 [bluemoji]: ./packages/definitions/bluemoji
 [bluesky-richtext-builder]: ./packages/bluesky/richtext-builder
@@ -18,6 +19,7 @@ you might be interested in the [API client][client]
 [client]: ./packages/core/client
 [oauth-browser-client]: ./packages/oauth/browser-client
 [whitewind]: ./packages/definitions/whitewind
+[skyware]: https://skyware.js.org/
 
 ---
 
