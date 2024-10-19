@@ -1,81 +1,47 @@
 # atcute
 
-an ecosystem of lightweight TypeScript packages for AT Protocol, the protocol powering Bluesky.
+a collection of lightweight TypeScript packages for AT Protocol, the protocol powering Bluesky,
+featuring:
 
-you might be looking for [the API client](./packages/core/client/README.md).
+- an [API client][client-readme] for making typed HTTP requests, with support for lexicons like
+  [WhiteWind][whitewind-readme] or [Bluemoji][bluemoji-readme].
+- an [OAuth client for SPA applications][oauth-browser-client-readme] for authentication use-cases.
+- utility packages for various data formats, including CIDv1, DAG-CBOR, CAR and TID record keys.
+- Bluesky-specific utility packages like [a rich text builder][bluesky-richtext-builder-readme] and
+  [a post threader][bluesky-threading-readme]
 
-<table>
-	<thead>
-		<tr>
-			<th align="left">Package</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<th colspan="2" align="left">Core packages</th>
-		</tr>
-		<tr>
-			<td><code>client</code>: API client library</td>
-		</tr>
-		<tr>
-			<td><code>lex-cli</code>: CLI tool to generate type definitions for the API client</td>
-		</tr>
-		<tr>
-			<th colspan="2" align="left">Lexicon definitions</th>
-		</tr>
-		<tr>
-			<td><code>bluemoji</code>: adds <code>blue.moji.*</code> definitions</td>
-		</tr>
-		<tr>
-			<td><code>bluesky</code>: adds <code>app.bsky.*</code> and <code>chat.bsky.*</code> definitions</td>
-		</tr>
-		<tr>
-			<td><code>ozone</code>: adds <code>tools.ozone.*</code> definitions</td>
-		</tr>
-		<tr>
-			<td><code>whitewind</code>: adds <code>com.whtwnd.*</code> definitions</td>
-		</tr>
-		<tr>
-			<th colspan="2" align="left">OAuth packages</th>
-		</tr>
-		<tr>
-			<td><code>oauth-browser-client</code>: minimal OAuth browser client implementation</td>
-		</tr>
-		<tr>
-			<th colspan="2" align="left">Utility packages</th>
-		</tr>
-		<tr>
-			<td><code>tid</code>: create and parse TID identifiers</td>
-		</tr>
-		<tr>
-			<td><code>car</code>: read AT Protocol's CAR (content-addressable archive) repositories</td>
-		</tr>
-		<tr>
-			<td><code>cid</code>: CIDv1 codec</td>
-		</tr>
-		<tr>
-			<td><code>cbor</code>: DAG-CBOR codec</td>
-		</tr>
-		<tr>
-			<td><code>varint</code>: Protobuf-style varint codec</td>
-		</tr>
-		<tr>
-			<td><code>base32</code>: base32 codec</td>
-		</tr>
-		<tr>
-			<th colspan="2" align="left">Bluesky-related packages</th>
-		</tr>
-		<tr>
-			<td><code>bluesky-richtext-builder</code>: builder pattern for Bluesky's rich text facets</td>
-		</tr>
-		<tr>
-			<td><code>bluesky-richtext-parser</code>: parse Bluesky's (extended) rich text syntax</td>
-		</tr>
-		<tr>
-			<td><code>bluesky-richtext-segmenter</code>: segments Bluesky's rich text facets into tokens</td>
-		</tr>
-		<tr>
-			<td><code>bluesky-threading</code>: create Bluesky threads containing multiple posts with one write</td>
-		</tr>
-	</tbody>
-</table>
+you might be interested in the [API client][client-readme].
+
+[bluemoji-readme]: ./packages/definitions/bluemoji/README.md
+[bluesky-richtext-builder-readme]: ./packages/bluesky/richtext-builder/README.md
+[bluesky-threading-readme]: ./packages/bluesky/threading/README.md
+[client-readme]: ./packages/core/client/README.md
+[oauth-browser-client-readme]: ./packages/oauth/browser-client/README.md
+[whitewind-readme]: ./packages/definitions/whitewind/README.md
+
+---
+
+| Packages                                                                                                                         |
+| -------------------------------------------------------------------------------------------------------------------------------- |
+| **Core packages**                                                                                                                |
+| [`client`](./packages/core/client/README.md): API client library                                                                 |
+| [`lex-cli`](./packages/core/lex-cli/README.md): CLI tool to generate type definitions for the API client                         |
+| **OAuth packages**                                                                                                               |
+| [`oauth-browser-client`](./packages/oauth/browser-client/README.md): minimal OAuth browser client implementation                 |
+| **Lexicon defintiions**                                                                                                          |
+| [`bluemoji`](./packages/definitions/bluemoji/README.md): adds `blue.moji.*` definitions                                          |
+| [`bluesky`](./packages/definitions/bluesky/README.md): adds `app.bsky.*` and `chat.bsky.*` definitions                           |
+| [`ozone`](./packages/definitions/ozone/README.md): adds `tools.ozone.*` definitions                                              |
+| [`whitewind`](./packages/definitions/whitewind/README.md): adds `com.whtwnd.*` definitions                                       |
+| **Utility packages**                                                                                                             |
+| [`tid`](./packages/utilities/tid/README.md): create and parse TID identifiers                                                    |
+| [`car`](./packages/utilities/car/README.md): read AT Protocol's CAR (content-addressable archive) repositories                   |
+| [`cid`](./packages/utilities/cid/README.md): CIDv1 codec                                                                         |
+| [`cbor`](./packages/utilities/cbor/README.md): DAG-CBOR codec                                                                    |
+| [`varint`](./packages/utilities/varint/README.md): Protobuf-style varint codec                                                   |
+| [`base32`](./packages/utilities/base32/README.md): base32 codec                                                                  |
+| **Bluesky-specific packages**                                                                                                    |
+| [`bluesky-richtext-builder`](./packages/bluesky/richtext-builder/README.md): builder pattern for Bluesky's rich text facets      |
+| [`bluesky-richtext-parser`](./packages/bluesky/richtext-parser/README.md): parse Bluesky's (extended) rich text syntax           |
+| [`bluesky-richtext-segmenter`](./packages/bluesky/richtext-segmenter/README.md): segments Bluesky's rich text facets into tokens |
+| [`bluesky-threading`](./packages/bluesky/threading/README.md): create Bluesky threads containing multiple posts with one write   |
