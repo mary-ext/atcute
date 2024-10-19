@@ -3,11 +3,8 @@
 lightweight and cute API client for AT Protocol.
 
 - **small**, the bare minimum is ~1 kB gzipped with the full package at ~2.4 kB gzipped.
-- **no validations**, type definitions match actual HTTP responses.
-
-the API client only ships with base AT Protocol lexicons and endpoints, along with an authentication
-middleware for signing in to a PDS. for manipulating Bluesky records and making requests to it, see
-the `@atcute/bluesky` package.
+- **no runtime validation**, type definitions match actual HTTP responses, the server is assumed to
+  be trusted in returning valid responses.
 
 ```ts
 import { XRPC, CredentialManager } from '@atcute/client';
@@ -29,3 +26,13 @@ const { data } = await rpc.get('com.atproto.identity.resolveHandle', {
 console.log(data.did);
 // -> did:plc:ragtjsm2j2vknwkz3zp4oxrd
 ```
+
+by default, the API client only ships with the base AT Protocol (`com.atproto.*`) lexicons and
+endpoints , along with a middleware for doing a (legacy) authentication with a PDS. you can extend
+these with optional definition packages:
+
+- [`@atcute/bluemoji`](../../definitions/bluemoji/README.md): adds `blue.moji.*` definitions
+- [`@atcute/bluesky`](../../definitions/bluesky/README.md): adds `app.bsky.*` and `chat.bsky.*`
+  definitions
+- [`@atcute/ozone`](../../definitions/ozone/README.md): adds `tools.ozone.*` definitions
+- [`@atcute/whitewind`](../../definitions/whitewind/README.md): adds `com.whtwnd.*` definitions
