@@ -34,7 +34,7 @@ you might be interested in the [API client][client]
 | [`ozone`](./packages/definitions/ozone): adds `tools.ozone.*` lexicons                                                 |
 | [`whitewind`](./packages/definitions/whitewind): adds `com.whtwnd.*` lexicons                                          |
 | **Utility packages**                                                                                                   |
-| [`tid`](./packages/utilities/tid): TID record key identifiers                                                          |
+| [`tid`](./packages/utilities/tid): TID record key codec                                                                |
 | [`car`](./packages/utilities/car): CAR/repository decoder                                                              |
 | [`cid`](./packages/utilities/cid): CIDv1 codec                                                                         |
 | [`cbor`](./packages/utilities/cbor): DAG-CBOR codec                                                                    |
