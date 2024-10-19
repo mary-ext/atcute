@@ -1,5 +1,3 @@
-import { getFloat16 } from 'fp16';
-
 import { toBytes, type Bytes } from './bytes.js';
 import { toCIDLink, type CIDLink } from './cid-link.js';
 
