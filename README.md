@@ -4,13 +4,13 @@ a collection of lightweight TypeScript packages for AT Protocol, the protocol po
 featuring:
 
 - an [API client][client-readme] for making typed HTTP requests, with support for lexicons like
-  [WhiteWind][whitewind-readme] or [Bluemoji][bluemoji-readme].
-- an [OAuth client for SPA applications][oauth-browser-client-readme] for authentication use-cases.
-- utility packages for various data formats, including CIDv1, DAG-CBOR, CAR and TID record keys.
+  [WhiteWind][whitewind-readme] or [Bluemoji][bluemoji-readme]
+- an [OAuth client for SPA applications][oauth-browser-client-readme] for authentication use-cases
+- utility packages for various data formats, including CIDv1, DAG-CBOR, CAR and TID record keys
 - Bluesky-specific utility packages like [a rich text builder][bluesky-richtext-builder-readme] and
   [a post threader][bluesky-threading-readme]
 
-you might be interested in the [API client][client-readme].
+you might be interested in the [API client][client-readme]
 
 [bluemoji-readme]: ./packages/definitions/bluemoji/README.md
 [bluesky-richtext-builder-readme]: ./packages/bluesky/richtext-builder/README.md
