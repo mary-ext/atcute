@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/cbor",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "DAG-CBOR codec that deals in AT Protocol's HTTP wire format",
 	"license": "MIT",
 	"repository": {
