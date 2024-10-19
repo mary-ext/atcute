@@ -28,11 +28,11 @@ you might be interested in the [API client][client-readme]
 | [`lex-cli`](./packages/core/lex-cli/README.md): CLI tool to generate type definitions for the API client                         |
 | **OAuth packages**                                                                                                               |
 | [`oauth-browser-client`](./packages/oauth/browser-client/README.md): minimal OAuth browser client implementation                 |
-| **Lexicon defintiions**                                                                                                          |
-| [`bluemoji`](./packages/definitions/bluemoji/README.md): adds `blue.moji.*` definitions                                          |
-| [`bluesky`](./packages/definitions/bluesky/README.md): adds `app.bsky.*` and `chat.bsky.*` definitions                           |
-| [`ozone`](./packages/definitions/ozone/README.md): adds `tools.ozone.*` definitions                                              |
-| [`whitewind`](./packages/definitions/whitewind/README.md): adds `com.whtwnd.*` definitions                                       |
+| **Lexicon definitions**                                                                                                          |
+| [`bluemoji`](./packages/definitions/bluemoji/README.md): adds `blue.moji.*` lexicons                                             |
+| [`bluesky`](./packages/definitions/bluesky/README.md): adds `app.bsky.*` and `chat.bsky.*` lexicons                              |
+| [`ozone`](./packages/definitions/ozone/README.md): adds `tools.ozone.*` lexicons                                                 |
+| [`whitewind`](./packages/definitions/whitewind/README.md): adds `com.whtwnd.*` lexicons                                          |
 | **Utility packages**                                                                                                             |
 | [`tid`](./packages/utilities/tid/README.md): create and parse TID identifiers                                                    |
 | [`car`](./packages/utilities/car/README.md): read AT Protocol's CAR (content-addressable archive) repositories                   |
