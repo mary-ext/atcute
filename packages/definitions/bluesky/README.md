@@ -5,8 +5,8 @@ for AT Protocol.
 
 ## usage
 
-either add the `@atcute/bluesky/lexicons` in the `types` section of `tsconfig.json` or import it in
-your source code.
+you'd need to import `@atcute/bluesky/lexicons` into your project, either by adding it into the
+`types` field in `tsconfig.json` or by importing it on your source code.
 
 ```jsonc
 // tsconfig.json
