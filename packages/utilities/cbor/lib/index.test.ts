@@ -17,6 +17,9 @@ it('encodes and decodes into the same value', () => {
 		wrong: false,
 		empty: undefined,
 		blank: null,
+		minInteger: Number.MIN_SAFE_INTEGER,
+		maxInteger: Number.MAX_SAFE_INTEGER,
+		float: 3.14,
 		nested: {
 			hello: 'world',
 		},
@@ -99,6 +102,27 @@ it('decodes buffer containing two cbor objects', () => {
 
 	const values = decodeCborMultiple(buffer, 2);
 	expect(values).toEqual([{ foo: true }, { bar: false }]);
+});
+
+it('throws on unexpected number values', () => {
+	expect(() => encode(Infinity)).toThrow();
+	expect(() => encode(-Infinity)).toThrow();
+	expect(() => encode(NaN)).toThrow();
+	expect(() => encode(Number.MAX_SAFE_INTEGER + 1)).toThrow();
+	expect(() => encode(Number.MIN_SAFE_INTEGER - 1)).toThrow();
+});
+
+it('throws on undefined values', () => {
+	expect(() => encode(undefined)).toThrow();
+});
+
+it('throws on unexpected cid-link and bytes values', () => {
+	expect(() => encode({ $link: 123 })).toThrow();
+	expect(() => encode({ $bytes: 123 })).toThrow();
+});
+
+it('throws on non-plain objects', () => {
+	expect(() => encode(new Map([[1, 2]]))).toThrow();
 });
 
 function decodeCborMultiple(bytes: Uint8Array, expected: number): unknown[] {

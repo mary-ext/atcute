@@ -1,5 +1,3 @@
-import { getFloat16Precision, getFloat32Precision, Precision, setFloat16 } from 'fp16';
-
 import { BytesWrapper, fromBytes, type Bytes } from './bytes.js';
 import { CIDLinkWrapper, fromCIDLink, type CIDLink } from './cid-link.js';
 
@@ -39,20 +37,6 @@ const getInfo = (arg: number): number => {
 	} else {
 		return 27;
 	}
-};
-
-const writeFloat16 = (state: State, val: number): void => {
-	resizeIfNeeded(state, 2);
-
-	setFloat16(state.v, state.p, val);
-	state.p += 2;
-};
-
-const writeFloat32 = (state: State, val: number): void => {
-	resizeIfNeeded(state, 4);
-
-	state.v.setFloat32(state.p, val);
-	state.p += 4;
 };
 
 const writeFloat64 = (state: State, val: number): void => {
@@ -116,16 +100,8 @@ const writeInteger = (state: State, val: number): void => {
 };
 
 const writeFloat = (state: State, val: number): void => {
-	if (getFloat16Precision(val) === Precision.Exact) {
-		writeUint8(state, 0xe0 | 25);
-		writeFloat16(state, val);
-	} else if (getFloat32Precision(val) === Precision.Exact) {
-		writeUint8(state, 0x0e | 26);
-		writeFloat32(state, val);
-	} else {
-		writeUint8(state, 0xe0 | 27);
-		writeFloat64(state, val);
-	}
+	writeUint8(state, 0xe0 | 27);
+	writeFloat64(state, val);
 };
 
 const writeNumber = (state: State, val: number): void => {
@@ -133,15 +109,11 @@ const writeNumber = (state: State, val: number): void => {
 		throw new RangeError(`NaN values not supported`);
 	}
 
-	if (val === Infinity || val === -Infinity) {
-		throw new RangeError(`Infinity values not supported`);
+	if (val < Number.MIN_SAFE_INTEGER || val > Number.MAX_SAFE_INTEGER) {
+		throw new RangeError(`Number is outside safe integer range`);
 	}
 
-	if (Object.is(val, 0)) {
-		writeInteger(state, val);
-	} else if (Object.is(val, -0)) {
-		writeFloat(state, val);
-	} else if (Math.floor(val) === val && Number.MIN_SAFE_INTEGER <= val && val <= Number.MAX_SAFE_INTEGER) {
+	if (Number.isInteger(val)) {
 		writeInteger(state, val);
 	} else {
 		writeFloat(state, val);
@@ -231,6 +203,8 @@ const writeValue = (state: State, val: any): void => {
 				writeCid(state, val);
 				return;
 			}
+
+			throw new TypeError(`unexpected cid-link value`);
 		}
 
 		if ('$bytes' in val) {
@@ -238,6 +212,8 @@ const writeValue = (state: State, val: any): void => {
 				writeBytes(state, val);
 				return;
 			}
+
+			throw new TypeError(`unexpected bytes value`);
 		}
 
 		if (isPlainObject(val)) {

@@ -26,7 +26,6 @@
 	},
 	"dependencies": {
 		"@atcute/base32": "workspace:^",
-		"@atcute/cid": "workspace:^",
-		"fp16": "^0.3.0"
+		"@atcute/cid": "workspace:^"
 	}
 }

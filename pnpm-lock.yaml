@@ -216,9 +216,6 @@ importers:
       '@atcute/cid':
         specifier: workspace:^
         version: link:../cid
-      fp16:
-        specifier: ^0.3.0
-        version: 0.3.0
     devDependencies:
       '@ipld/dag-cbor':
         specifier: ^9.2.1
@@ -1547,9 +1544,6 @@ packages:
   forwarded@0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
-
-  fp16@0.3.0:
-    resolution: {integrity: sha512-Iw6hLaH345EETQGU56NiAcJ173IraDRdJrVy+0fBMPdkZhzKNN/k3eqXFyNmnyx2/jnIzF2nr0mHh5nHrQBMEQ==}
 
   fresh@0.5.2:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
@@ -4443,8 +4437,6 @@ snapshots:
       mime-types: 2.1.35
 
   forwarded@0.2.0: {}
-
-  fp16@0.3.0: {}
 
   fresh@0.5.2: {}
 

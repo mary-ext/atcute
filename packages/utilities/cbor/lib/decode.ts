@@ -40,20 +40,6 @@ const readArgument = (state: State, info: number): [val: number, uint64: bigint 
 	throw new Error(`invalid argument encoding; got ${info}`);
 };
 
-const readFloat16 = (state: State): number => {
-	const value = getFloat16(state.v, state.p);
-
-	state.p += 2;
-	return value;
-};
-
-const readFloat32 = (state: State): number => {
-	const value = state.v.getFloat32(state.p);
-
-	state.p += 4;
-	return value;
-};
-
 const readFloat64 = (state: State): number => {
 	const value = state.v.getFloat64(state.p);
 
@@ -203,12 +189,6 @@ const readValue = (state: State): any => {
 				return true;
 			case 22:
 				return null;
-			case 23:
-				return undefined;
-			case 25:
-				return readFloat16(state);
-			case 26:
-				return readFloat32(state);
 			case 27:
 				return readFloat64(state);
 		}
