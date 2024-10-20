@@ -32,6 +32,6 @@
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/bluesky-richtext-builder": "workspace:^",
 		"@atcute/client": "workspace:^",
-		"@types/bun": "^1.1.10"
+		"@types/bun": "^1.1.11"
 	}
 }

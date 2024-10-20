@@ -24,6 +24,6 @@
 		"nanoid": "^5.0.7"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.1.10"
+		"@types/bun": "^1.1.11"
 	}
 }

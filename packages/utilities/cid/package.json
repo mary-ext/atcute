@@ -20,7 +20,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.1.10"
+		"@types/bun": "^1.1.11"
 	},
 	"dependencies": {
 		"@atcute/base32": "workspace:^",
