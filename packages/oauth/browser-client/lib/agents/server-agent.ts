@@ -98,20 +98,21 @@ export class OAuthServerAgent {
 	}
 
 	#processTokenResponse(res: OAuthTokenResponse): TokenInfo {
-		const sub = res.sub;
-		const scope = res.scope;
-		if (!sub) {
+		if (!res.sub) {
 			throw new TypeError(`missing sub field in token response`);
 		}
-		if (!scope) {
+		if (!res.scope) {
 			throw new TypeError(`missing scope field in token response`);
+		}
+		if (res.token_type !== 'DPoP') {
+			throw new TypeError(`token response returned a non-dpop token`);
 		}
 
 		return {
-			scope: scope,
+			scope: res.scope,
 			refresh: res.refresh_token,
 			access: res.access_token,
-			type: res.token_type ?? 'Bearer',
+			type: res.token_type,
 			expires_at: typeof res.expires_in === 'number' ? Date.now() + res.expires_in * 1_000 : undefined,
 		};
 	}
