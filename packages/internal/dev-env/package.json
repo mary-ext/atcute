@@ -5,8 +5,8 @@
 	"version": "1.0.0",
 	"dependencies": {
 		"@atproto/crypto": "^0.4.1",
-		"@atproto/identity": "^0.4.1",
-		"@atproto/pds": "^0.4.59",
+		"@atproto/identity": "^0.4.2",
+		"@atproto/pds": "^0.4.65",
 		"@did-plc/server": "^0.0.1",
 		"axios": "^1.7.7",
 		"get-port": "^7.1.0",
