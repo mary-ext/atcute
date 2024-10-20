@@ -157,3 +157,106 @@ try {
 	deleteStoredSession(did);
 }
 ```
+
+## additional guide
+
+### configuring your Vite project
+
+you might want to configure the server options in your Vite config so you'll never end up visiting
+your app in `localhost`, which is specifically forbidden by AT Protocol's OAuth, let's change it so
+it'll always use `127.0.0.1`:
+
+```ts
+/// vite.config.ts
+import { defineConfig } from 'vite';
+
+const SERVER_HOST = '127.0.0.1';
+const SERVER_PORT = 12520;
+
+export default defineConfig({
+	server: {
+		host: SERVER_HOST,
+		port: SERVER_PORT,
+	},
+});
+```
+
+additionally, to make it easier to develop locally and deploy to production, you should consider
+adding a plugin that'll inject the necessary values for you through environment variables:
+
+```ts
+/// vite.config.ts
+import metadata from './public/oauth/client-metadata.json' with { type: 'json' };
+
+export default defineConfig({
+	// ...
+
+	plugins: [
+		// injects OAuth-related environment variables
+		{
+			config(_conf, { command }) {
+				if (command === 'build') {
+					process.env.VITE_OAUTH_CLIENT_ID = metadata.client_id;
+					process.env.VITE_OAUTH_REDIRECT_URI = metadata.redirect_uris[0];
+				} else {
+					const redirectUri = (() => {
+						const url = new URL(metadata.redirect_uris[0]);
+						return `http://${SERVER_HOST}:${SERVER_PORT}${url.pathname}`;
+					})();
+
+					const clientId =
+						`http://localhost` +
+						`?redirect_uri=${encodeURIComponent(redirectUri)}` +
+						`&scope=${encodeURIComponent(metadata.scope)}`;
+
+					process.env.VITE_DEV_SERVER_PORT = '' + SERVER_PORT;
+					process.env.VITE_OAUTH_CLIENT_ID = clientId;
+					process.env.VITE_OAUTH_REDIRECT_URI = redirectUri;
+				}
+
+				process.env.VITE_CLIENT_URI = metadata.client_uri;
+				process.env.VITE_OAUTH_SCOPE = metadata.scope;
+			},
+		},
+	],
+});
+```
+
+we'll augment the type declarations to get type-checking on it:
+
+```ts
+/// src/vite-env.d.ts
+
+interface ImportMetaEnv {
+	readonly VITE_DEV_SERVER_PORT?: string;
+	readonly VITE_CLIENT_URI: string;
+	readonly VITE_OAUTH_CLIENT_ID: string;
+	readonly VITE_OAUTH_REDIRECT_URI: string;
+	readonly VITE_OAUTH_SCOPE: string;
+}
+
+interface ImportMeta {
+	readonly env: ImportMetaEnv;
+}
+```
+
+et voilà! you can now use this to configure the client.
+
+```ts
+configureOAuth({
+	metadata: {
+		client_id: import.meta.env.VITE_OAUTH_CLIENT_ID,
+		redirect_uri: import.meta.env.VITE_OAUTH_REDIRECT_URI,
+	},
+});
+
+// ... later during sign-in process
+const authUrl = await createAuthorizationUrl({
+	metadata: metadata,
+	identity: identity,
+	scope: import.meta.env.VITE_OAUTH_SCOPE,
+});
+```
+
+adjust the code here as necessary, the plugin adds more environment variables than what is actually
+needed, you can remove them if you don't think you'd need it.
