@@ -3,36 +3,26 @@ import { toCIDLink, type CIDLink } from './cid-link.js';
 
 const utf8d = new TextDecoder();
 
-const MAX_SAFE_INTEGER = BigInt(Number.MAX_SAFE_INTEGER);
-const MIN_SAFE_INTEGER = BigInt(Number.MIN_SAFE_INTEGER);
-
 interface State {
 	b: Uint8Array;
 	v: DataView;
 	p: number;
 }
 
-const readArgument = (state: State, info: number): [val: number, uint64: bigint | undefined] => {
+const readArgument = (state: State, info: number): number => {
 	if (info < 24) {
-		return [info, undefined];
+		return info;
 	}
 
 	switch (info) {
-		case 24: {
-			return [readUint8(state), undefined];
-		}
-		case 25: {
-			return [readUint16(state), undefined];
-		}
-		case 26: {
-			return [readUint32(state), undefined];
-		}
-		case 27: {
-			const uint64 = readUint64(state);
-			const value = MAX_SAFE_INTEGER < uint64 ? Infinity : Number(uint64);
-
-			return [value, uint64];
-		}
+		case 24:
+			return readUint8(state);
+		case 25:
+			return readUint16(state);
+		case 26:
+			return readUint32(state);
+		case 27:
+			return readUint64(state);
 	}
 
 	throw new Error(`invalid argument encoding; got ${info}`);
@@ -66,8 +56,16 @@ const readUint32 = (state: State): number => {
 	return value;
 };
 
-const readUint64 = (state: State): bigint => {
-	const value = state.v.getBigUint64(state.p);
+const readUint64 = (state: State): number => {
+	const hi = state.v.getUint32(state.p);
+	const lo = state.v.getUint32(state.p + 4);
+
+	if (hi > 0x1fffff) {
+		throw new RangeError(`can't decode integers beyond safe integer range`);
+	}
+
+	// prettier-ignore
+	const value = (hi * (2 ** 32)) + lo;
 
 	state.p += 8;
 	return value;
@@ -99,41 +97,30 @@ const readValue = (state: State): any => {
 	const info = prelude & 0x1f;
 
 	if (type === 0) {
-		const [val, uint64] = readArgument(state, info);
-
-		if (uint64 !== undefined && MAX_SAFE_INTEGER < uint64) {
-			throw new RangeError(`can't decode integers greater than 2^53-1`);
-		}
-
-		return val;
+		const value = readArgument(state, info);
+		return value;
 	}
 
 	if (type === 1) {
-		const [val, uint64] = readArgument(state, info);
-
-		if (uint64 !== undefined && -1n - uint64 < MIN_SAFE_INTEGER) {
-			throw new RangeError(`can't decode integers less than -2^53-1`);
-		}
-
-		return -1 - val;
+		const value = readArgument(state, info);
+		return -1 - value;
 	}
 
 	if (type === 2) {
-		const [len] = readArgument(state, info);
-
+		const len = readArgument(state, info);
 		return readBytes(state, len);
 	}
 
 	if (type === 3) {
-		const [len] = readArgument(state, info);
+		const len = readArgument(state, info);
 
 		return readString(state, len);
 	}
 
 	if (type === 4) {
-		const [len] = readArgument(state, info);
-
+		const len = readArgument(state, info);
 		const array = new Array(len);
+
 		for (let idx = 0; idx < len; idx++) {
 			array[idx] = readValue(state);
 		}
@@ -142,8 +129,7 @@ const readValue = (state: State): any => {
 	}
 
 	if (type === 5) {
-		const [len] = readArgument(state, info);
-
+		const len = readArgument(state, info);
 		const object: Record<string, unknown> = {};
 
 		for (let idx = 0; idx < len; idx++) {
@@ -159,7 +145,7 @@ const readValue = (state: State): any => {
 	}
 
 	if (type === 6) {
-		const [tag] = readArgument(state, info);
+		const tag = readArgument(state, info);
 
 		if (tag === 42) {
 			const prelude = readUint8(state);
@@ -171,7 +157,7 @@ const readValue = (state: State): any => {
 				throw new TypeError(`expected cid tag to have bytes value; got ${type}`);
 			}
 
-			const [len] = readArgument(state, info);
+			const len = readArgument(state, info);
 
 			return readCid(state, len);
 		}

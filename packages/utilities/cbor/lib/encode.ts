@@ -68,9 +68,13 @@ const writeUint32 = (state: State, val: number): void => {
 };
 
 const writeUint64 = (state: State, val: number): void => {
+	const hi = (val / 2 ** 32) | 0;
+	const lo = val >>> 0;
+
 	resizeIfNeeded(state, 8);
 
-	state.v.setBigUint64(state.p, BigInt(val));
+	state.v.setUint32(state.p, hi);
+	state.v.setUint32(state.p + 4, lo);
 	state.p += 8;
 };
 
@@ -109,8 +113,8 @@ const writeNumber = (state: State, val: number): void => {
 		throw new RangeError(`NaN values not supported`);
 	}
 
-	if (val < Number.MIN_SAFE_INTEGER || val > Number.MAX_SAFE_INTEGER) {
-		throw new RangeError(`Number is outside safe integer range`);
+	if (val > Number.MAX_SAFE_INTEGER || val < Number.MIN_SAFE_INTEGER) {
+		throw new RangeError(`can't encode numbers beyond safe integer range`);
 	}
 
 	if (Number.isInteger(val)) {
