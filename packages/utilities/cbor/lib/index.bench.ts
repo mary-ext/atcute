@@ -1,10 +1,10 @@
-import { bench, group, run } from 'mitata';
+import { bench, run, summary } from 'mitata';
 
 import * as ipld from '@ipld/dag-cbor';
 import * as atcute from './index.js';
 
-group('encode', () => {
-	bench('@ipld/dag-cbor', () => {
+summary(() => {
+	bench('@ipld/dag-cbor encode', () => {
 		const record = {
 			$type: 'app.bsky.feed.post',
 			createdAt: '2024-08-18T03:18:24.000Z',
@@ -15,7 +15,7 @@ group('encode', () => {
 		ipld.encode(record);
 	});
 
-	bench('@atcute/cbor', () => {
+	bench('@atcute/cbor encode', () => {
 		const record = {
 			$type: 'app.bsky.feed.post',
 			createdAt: '2024-08-18T03:18:24.000Z',
@@ -27,8 +27,8 @@ group('encode', () => {
 	});
 });
 
-group('decode', () => {
-	bench('@ipld/dag-cbor', () => {
+summary(() => {
+	bench('@ipld/dag-cbor decode', () => {
 		const u8 = new Uint8Array([
 			164, 100, 116, 101, 120, 116, 108, 104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 33, 101, 36,
 			116, 121, 112, 101, 114, 97, 112, 112, 46, 98, 115, 107, 121, 46, 102, 101, 101, 100, 46, 112, 111, 115,
@@ -39,7 +39,7 @@ group('decode', () => {
 		ipld.decode(u8);
 	});
 
-	bench('@atcute/cbor', () => {
+	bench('@atcute/cbor decode', () => {
 		const u8 = new Uint8Array([
 			164, 100, 116, 101, 120, 116, 108, 104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100, 33, 101, 36,
 			116, 121, 112, 101, 114, 97, 112, 112, 46, 98, 115, 107, 121, 46, 102, 101, 101, 100, 46, 112, 111, 115,
