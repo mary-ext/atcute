@@ -33,26 +33,32 @@ export const segmentize = (
 	const advanceCursor = (startUtf16: number, endUtf8: number): number => {
 		let curs = startUtf16;
 
-		// SIMD-like batch processing for ASCII sections
-		while (utf8Cursor + 8 <= endUtf8 && curs + 8 <= utf16Length) {
-			const char1 = text.charCodeAt(curs);
-			const char2 = text.charCodeAt(curs + 1);
-			const char3 = text.charCodeAt(curs + 2);
-			const char4 = text.charCodeAt(curs + 3);
-			const char5 = text.charCodeAt(curs + 4);
-			const char6 = text.charCodeAt(curs + 5);
-			const char7 = text.charCodeAt(curs + 6);
-			const char8 = text.charCodeAt(curs + 7);
+		// Check if we should use multi-byte path
+		const firstChar = text.charCodeAt(curs);
+		const isMultiByte = firstChar >= 0x80;
 
-			// Fast ASCII check using bitwise OR
-			if (
-				(char1 | char2 | char3 | char4 | char5 | char6 | char7 | char8) < 0x80
-			) {
-				curs += 8;
-				utf8Cursor += 8;
-				continue;
+		if (!isMultiByte) {
+			// SIMD-like batch processing for ASCII sections
+			while (utf8Cursor + 8 <= endUtf8 && curs + 8 <= utf16Length) {
+				const char1 = text.charCodeAt(curs);
+				const char2 = text.charCodeAt(curs + 1);
+				const char3 = text.charCodeAt(curs + 2);
+				const char4 = text.charCodeAt(curs + 3);
+				const char5 = text.charCodeAt(curs + 4);
+				const char6 = text.charCodeAt(curs + 5);
+				const char7 = text.charCodeAt(curs + 6);
+				const char8 = text.charCodeAt(curs + 7);
+
+				// Fast ASCII check using bitwise OR
+				if (
+					(char1 | char2 | char3 | char4 | char5 | char6 | char7 | char8) < 0x80
+				) {
+					curs += 8;
+					utf8Cursor += 8;
+					continue;
+				}
+				break;
 			}
-			break;
 		}
 
 		// Process remaining characters individually
@@ -66,18 +72,15 @@ export const segmentize = (
 				continue;
 			}
 
-			// Get full code point for non-ASCII
-			const cp = text.codePointAt(curs)!;
-
-			// UTF-16 advance
-			curs += cp >= 0xD800 && cp <= 0xDBFF ? 2 : 1;
-
-			// UTF-8 calculation
-			if (cp < 0x800) {
+			// Multi-byte path - unified handling
+			if (code < 0x800) {
+				curs++;
 				utf8Cursor += 2;
-			} else if (cp < 0x10000) {
+			} else if (code < 0xD800 || code > 0xDBFF) {
+				curs++;
 				utf8Cursor += 3;
 			} else {
+				curs += 2;
 				utf8Cursor += 4;
 			}
 		}
