@@ -119,7 +119,7 @@ export const refUnionSchema = v
 		type: v.literal('union'),
 		description: v.string().optional(),
 		refs: v.array(v.string()),
-		closed: v.boolean().default(false),
+		closed: v.boolean().optional(() => false),
 	})
 	.assert((v) => !v.closed || v.refs.length > 0, `A closed union can't have empty refs list`);
 
@@ -177,8 +177,8 @@ export const objectSchema = v
 	.object({
 		type: v.literal('object'),
 		description: v.string().optional(),
-		required: v.array(v.string()).default<string[]>([]),
-		nullable: v.array(v.string()).default<string[]>([]),
+		required: v.array(v.string()).optional(() => []),
+		nullable: v.array(v.string()).optional(() => []),
 		properties: v.record(v.union(refVariantSchema, ipldTypeSchema, arraySchema, blobSchema, primitiveSchema)),
 	})
 	.chain(refineRequiredProperties);
@@ -189,7 +189,7 @@ export const xrpcParametersSchema = v
 	.object({
 		type: v.literal('params'),
 		description: v.string().optional(),
-		required: v.array(v.string()).default<string[]>([]),
+		required: v.array(v.string()).optional(() => []),
 		properties: v.record(v.union(primitiveSchema, primitiveArraySchema)),
 	})
 	.chain(refineRequiredProperties);
