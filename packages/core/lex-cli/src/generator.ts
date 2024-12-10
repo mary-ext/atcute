@@ -15,7 +15,7 @@ const toUpper = (s: string) => {
 	return (toUpperCache[s] ??= s[0].toUpperCase() + s.slice(1));
 };
 const toNamespace = (s: string) => {
-	return (toNamespaceCache[s] ??= s.replace(/^\w|\.\w/g, (m) => m[m.length === 1 ? 0 : 1].toUpperCase()));
+	return (toNamespaceCache[s] ??= s.replace(/^\w|[\.\-]\w/g, (m) => m[m.length === 1 ? 0 : 1].toUpperCase()));
 };
 
 const sortName: (a: string, b: string) => number = (() => {
