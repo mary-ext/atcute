@@ -234,6 +234,35 @@ describe('CredentialManager', () => {
 			expect(request.url).includes('/xrpc/com.atproto.server.getSession');
 		}
 	});
+
+	it('throws InvalidResponse when response cannot be parsed', async () => {
+		const fetch = vi.fn(globalThis.fetch);
+
+		const manager = new CredentialManager({ service: network.pds.url, fetch });
+		const rpc = new XRPC({ handler: manager });
+
+		await manager.login({ identifier: 'user1.test', password: 'password' });
+
+		await sleep(1_000);
+
+		fetch.mockResolvedValueOnce(
+			new Response('{invalid json}', {
+				status: 400,
+				headers: { 'content-type': 'application/json' },
+			}),
+		);
+
+		try {
+			await rpc.get('com.atproto.server.getSession', {});
+			expect.fail(`getSession call should not succeed`);
+		} catch (err) {
+			if (!(err instanceof XRPCError)) {
+				expect.fail(`No errors other than XRPC error should be thrown`);
+			}
+
+			expect(err.kind).toBe('InvalidResponse');
+		}
+	});
 });
 
 const createAccount = async (rpc: XRPC, handle: string) => {
