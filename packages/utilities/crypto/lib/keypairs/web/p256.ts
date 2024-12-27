@@ -10,7 +10,7 @@ import {
 	isSignatureNormalized,
 	normalizeSignature,
 } from '../../utils.js';
-import { mutableCompressPoint } from '../../utils.js';
+import { compressPoint } from '../../utils.js';
 
 const ECDSA_ALG: EcdsaParams & EcKeyImportParams = { name: 'ECDSA', namedCurve: 'P-256', hash: 'sha256' };
 
@@ -59,7 +59,7 @@ export class P256PublicKey implements PublicKey {
 		// WebCrypto spits out the uncompressed EC point: https://www.w3.org/TR/WebCryptoAPI/#ecdsa-operations:~:text=using%20the%20uncompressed%20format
 		// We need to compress it according to the ATProto Cryptography specification.
 		// https://atproto.com/specs/cryptography#public-key-encoding, 1st point.
-		return mutableCompressPoint(new Uint8Array(buffer));
+		return compressPoint(new Uint8Array(buffer));
 	}
 
 	async did(): Promise<`did:key:${string}`> {

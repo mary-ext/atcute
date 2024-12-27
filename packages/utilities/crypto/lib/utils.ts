@@ -84,10 +84,9 @@ export const normalizeSignature = (sig: Uint8Array, curveOrder: bigint) => {
 	return sig;
 };
 
-export const mutableCompressPoint = (coords: Uint8Array): Uint8Array => {
+export const compressPoint = (coords: Uint8Array): Uint8Array => {
 	// Reference: [1] SEC 1, ver. 2.0, §2.3.3 Elliptic-Curve-Point-to-Octet-String Conversion -- https://www.secg.org/sec1-v2.pdf
-	// This function MUTATES the input buffer and returns a new view of the original buffer.
-	// The original buffer SHOULD be discarded.
+	// This function creates a copy of the point, unless it is already compressed.
 
 	// 1. Check if the point is already compressed.
 	//    IF it is, then return the point as-is.
@@ -100,11 +99,17 @@ export const mutableCompressPoint = (coords: Uint8Array): Uint8Array => {
 	const maxIdx = coords.length - 1;
 	const n = maxIdx >> 1;
 
-	// 3. Compress the point, according to [1] Action 2.
-	coords[0] = 2 + (coords[maxIdx] & 1); // [1] Action 2.3.
+	// 3. Create a copy of the point.
+	//    Compressed point is N + 1 bytes (c.f. [1] Action 2.1.).
+	//    It so happens the 1st byte here is garbage, and the following n bytes are X already.
+	//    Note: slice does make a full copy. https://tc39.es/ecma262/#sec-%typedarray%.prototype.slice
+	const compressed = coords.slice(0, n + 1);
 
-	// 4. Return the subarray (faster, no re-alloc) of only N + 1 bytes (c.f. [1] Action 2.1.).
-	return coords.subarray(0, n + 1);
+	// 4. Compress the Y coordinate, according to [1] Action 2.
+	compressed[0] = 2 + (coords[maxIdx] & 1); // [1] Action 2.3.
+
+	// Done. Return the compressed point.
+	return compressed;
 };
 
 export const deriveEcPublicKeyFromPrivateKey = async (
