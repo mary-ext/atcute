@@ -10,27 +10,27 @@ export const SECP256K1_PRIVATE_PREFIX = Uint8Array.from([0x81, 0x26]);
 
 function toJsonWebKey(publicKey: Uint8Array, privateKey?: Uint8Array): JsonWebKey {
 	// Reference: [1] RFC 7517 JSON Web Key -- https://datatracker.ietf.org/doc/html/rfc7517
-	//            [2] RFC 7518 JSON Web Algorithms, §6.2. Parameters for Elliptic Curve Keys -- https://datatracker.ietf.org/doc/html/rfc7518#section-6.2
-	//            [3] RFC 8812 [...] JOSE Registrations for WebAuthn Algorithms, §3. Using secp256k1 with JOSE and COSE -- https://datatracker.ietf.org/doc/html/rfc8812#section-3.1
-	//            [4] RFC 9053 CBOR Object Signing and Encryption (COSE): Initial Algorithms, §7.1.1. Double Coordinate Curves -- https://datatracker.ietf.org/doc/html/rfc9053#section-7.1.1
+	//            [2] RFC 7518 JSON Web Algorithms, § 6.2. Parameters for Elliptic Curve Keys -- https://datatracker.ietf.org/doc/html/rfc7518#section-6.2
+	//            [3] RFC 8812 [...] JOSE Registrations for WebAuthn Algorithms, § 3. Using secp256k1 with JOSE and COSE -- https://datatracker.ietf.org/doc/html/rfc8812#section-3.1
+	//            [4] RFC 9053 CBOR Object Signing and Encryption (COSE): Initial Algorithms, § 7.1.1. Double Coordinate Curves -- https://datatracker.ietf.org/doc/html/rfc9053#section-7.1.1
 
 	// Decompress point so we can encode both x and y.
 	// Could just make it a bool, but it's not recommended [4] and poorly supported.
 	const point = ProjectivePoint.fromHex(publicKey).toRawBytes(false)
 
 	const key = {
-		kty: 'EC', // [2]; [3] §3.1.
-		crv: 'secp256k1', // [2] §6.2.1.1.; [3] §3.1.
-		alg: 'ES256K', // [1] §4.4.; [3] §3.2.
-		x: toBase64Url(point.subarray(1, 33)), // [2] §6.2.1.2.
-		y: toBase64Url(point.subarray(33, 65)), // [2] §6.2.1.3.
-		key_ops: ['verify', 'sign'] // [1] §4.3.
+		kty: 'EC', // [2]; [3] § 3.1.
+		crv: 'secp256k1', // [2] § 6.2.1.1.; [3] § 3.1.
+		alg: 'ES256K', // [1] § 4.4.; [3] § 3.2.
+		x: toBase64Url(point.subarray(1, 33)), // [2] § 6.2.1.2.
+		y: toBase64Url(point.subarray(33, 65)), // [2] § 6.2.1.3.
+		key_ops: ['verify', 'sign'] // [1] § 4.3.
 	}
 
 	if (privateKey) {
 		// Private parameters
 		Object.assign(key, {
-			d: toBase64Url(privateKey), // [2] §6.2.2.1.
+			d: toBase64Url(privateKey), // [2] § 6.2.2.1.
 		})
 	}
 

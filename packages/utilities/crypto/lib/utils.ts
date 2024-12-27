@@ -66,7 +66,7 @@ export const isSignatureNormalized = (sig: Uint8Array, curveOrder: bigint): bool
 
 export const normalizeSignature = (sig: Uint8Array, curveOrder: bigint) => {
 	// Reference: [1] Bitcoin BIP 0146 -- https://github.com/bitcoin/bips/blob/665712c/bip-0146.mediawiki#low_s
-	//            [2] SEC 1, ver. 2.0, §4.1.3 Signing Operation -- https://www.secg.org/sec1-v2.pdf
+	//            [2] SEC 1, ver. 2.0, § 4.1.3 Signing Operation -- https://www.secg.org/sec1-v2.pdf
 
 	// 1. Retrieve the s value of the (r, s) pair.
 	const s = getSignatureS(sig);
@@ -85,7 +85,7 @@ export const normalizeSignature = (sig: Uint8Array, curveOrder: bigint) => {
 };
 
 export const compressPoint = (coords: Uint8Array): Uint8Array => {
-	// Reference: [1] SEC 1, ver. 2.0, §2.3.3 Elliptic-Curve-Point-to-Octet-String Conversion -- https://www.secg.org/sec1-v2.pdf
+	// Reference: [1] SEC 1, ver. 2.0, § 2.3.3 Elliptic-Curve-Point-to-Octet-String Conversion -- https://www.secg.org/sec1-v2.pdf
 	// This function creates a copy of the point. If it is already compressed, a TypeError will be thrown.
 
 	// 1. Check if the point is already compressed.
@@ -130,11 +130,11 @@ export const deriveEcPublicKeyFromPrivateKey = async (
 	const jwk = await crypto.subtle.exportKey('jwk', privateKey);
 
 	// 2. Drop private key material.
-	//    Reference: RFC 7518 JSON Web Algorithms, §6.2.2. Parameters for Elliptic Curve Private Keys -- https://datatracker.ietf.org/doc/html/rfc7518#section-6.2.2
+	//    Reference: RFC 7518 JSON Web Algorithms, § 6.2.2. Parameters for Elliptic Curve Private Keys -- https://datatracker.ietf.org/doc/html/rfc7518#section-6.2.2
 	delete jwk.d;
 
 	// 3. Update allowed key operations
-	//    Reference: RFC 7517 JSON Web Key, §4.3. "key_ops" (Key Operations) Parameter
+	//    Reference: RFC 7517 JSON Web Key, § 4.3. "key_ops" (Key Operations) Parameter
 	jwk.key_ops = usages;
 
 	// 4. Import back the key.
