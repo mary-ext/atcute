@@ -9,9 +9,9 @@ import { toSha256 } from '../../utils.js';
 
 it('can create a new keypair and reimport it', async () => {
 	const keypair = await createP256Keypair();
-	const privateKeyBytes = await keypair.export('bytes');
+	const privateKeyBytes = await keypair.exportPrivateKey('raw');
 
-	const imported = await P256PrivateKey.fromBytes(privateKeyBytes);
+	const imported = await P256PrivateKey.fromRawBytes(privateKeyBytes);
 
 	expect(await imported.did()).toBe(await keypair.did());
 });
@@ -24,7 +24,7 @@ it('produces valid signatures', async () => {
 
 	const hash = await toSha256(data);
 
-	const isValidSigNoble = p256.verify(sig, hash, await keypair.bytes());
+	const isValidSigNoble = p256.verify(sig, hash, await keypair.exportPublicKey('raw'));
 	const isValidSigSelf = await keypair.verify(sig, data);
 
 	expect(isValidSigNoble).toBe(true);
@@ -46,10 +46,10 @@ it('detects ill keypairs', async () => {
 
 it('detects ill raw keypairs', async () => {
 	const key = await createP256Keypair();
-	const publicKey = await key.bytes();
-	const privateKey = await key.export('bytes');
+	const publicKey = await key.exportPublicKey('raw');
+	const privateKey = await key.exportPrivateKey('raw');
 
-	expect(P256PrivateKey.fromBytes(privateKey, publicKey)).rejects.toThrowError(TypeError);
+	expect(P256PrivateKey.fromRawBytes(privateKey, publicKey)).rejects.toThrowError(TypeError);
 });
 
 describe('interop tests', () => {
@@ -66,7 +66,7 @@ describe('interop tests', () => {
 		const parsed = parseDidKey(payload.didKey);
 		expect(parsed.type).toBe('p256');
 
-		const keypair = await P256PublicKey.fromBytes(parsed.publicKey);
+		const keypair = await P256PublicKey.fromRawBytes(parsed.publicKey);
 		const isValidSig = await keypair.verify(sigBytes, messageBytes);
 
 		expect(isValidSig).toBe(true);
@@ -85,7 +85,7 @@ describe('interop tests', () => {
 		const parsed = parseDidKey(payload.didKey);
 		expect(parsed.type).toBe('p256');
 
-		const keypair = await P256PublicKey.fromBytes(parsed.publicKey);
+		const keypair = await P256PublicKey.fromRawBytes(parsed.publicKey);
 		const isValidSig = await keypair.verify(sigBytes, messageBytes);
 
 		expect(isValidSig).toBe(false);
@@ -104,7 +104,7 @@ describe('interop tests', () => {
 		const parsed = parseDidKey(payload.didKey);
 		expect(parsed.type).toBe('p256');
 
-		const keypair = await P256PublicKey.fromBytes(parsed.publicKey);
+		const keypair = await P256PublicKey.fromRawBytes(parsed.publicKey);
 		const isValidSig = await keypair.verify(sigBytes, messageBytes, { allowMalleableSig: true });
 
 		expect(isValidSig).toBe(true);
@@ -123,7 +123,7 @@ describe('interop tests', () => {
 		const parsed = parseDidKey(payload.didKey);
 		expect(parsed.type).toBe('p256');
 
-		const keypair = await P256PublicKey.fromBytes(parsed.publicKey);
+		const keypair = await P256PublicKey.fromRawBytes(parsed.publicKey);
 		const isValidSig = await keypair.verify(sigBytes, messageBytes);
 
 		expect(isValidSig).toBe(false);
@@ -139,7 +139,7 @@ describe('interop tests', () => {
 
 		for (const { privateKeyBytesBase58, publicDidKey } of inputs) {
 			const privateKeyBytes = fromBase58Btc(privateKeyBytesBase58);
-			const keypair = await P256PrivateKey.fromBytes(privateKeyBytes);
+			const keypair = await P256PrivateKey.fromRawBytes(privateKeyBytes);
 
 			expect<string>(await keypair.did()).toBe(publicDidKey);
 		}

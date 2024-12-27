@@ -12,7 +12,7 @@ import {
 } from '../../utils.js';
 import { compressPoint } from '../../utils.js';
 
-const ECDSA_ALG: EcdsaParams & EcKeyImportParams = { name: 'ECDSA', namedCurve: 'P-256', hash: 'sha256' };
+const ECDSA_ALG: EcdsaParams & EcKeyImportParams = { name: 'ECDSA', namedCurve: 'P-256', hash: 'sha256' } as const;
 
 // NIST SP 800-186, § 3.2.1.3. P-256 -- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186.pdf
 const P256_CURVE_ORDER = BigInt('0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551');
@@ -53,19 +53,9 @@ export class P256PublicKey implements PublicKey {
 		this._publicKey = publicKey;
 	}
 
-	async bytes(): Promise<Uint8Array> {
-		const buffer = await crypto.subtle.exportKey('raw', this._publicKey);
-
-		// WebCrypto spits out the uncompressed EC point: https://www.w3.org/TR/WebCryptoAPI/#ecdsa-operations:~:text=using%20the%20uncompressed%20format
-		// We need to compress it according to the ATProto Cryptography specification.
-		// https://atproto.com/specs/cryptography#public-key-encoding, 1st point.
-		return compressPoint(new Uint8Array(buffer));
-	}
-
 	async did(): Promise<`did:key:${string}`> {
-		const pubkey = await this.bytes();
-		const encoded = toBase58Btc(concatBuffers([P256_PUBLIC_PREFIX, pubkey]));
-		return `did:key:z${encoded}`;
+		const multikey = await this.exportPublicKey('multikey');
+		return `did:key:${multikey}`;
 	}
 
 	async verify(sig: Uint8Array, data: Uint8Array, options?: VerifyOptions): Promise<boolean> {
@@ -82,7 +72,39 @@ export class P256PublicKey implements PublicKey {
 		return await crypto.subtle.verify(ECDSA_ALG, this._publicKey, sig, data);
 	}
 
-	static async fromBytes(publicKeyBytes: Uint8Array): Promise<P256PublicKey> {
+	exportPublicKey(format: 'raw'): Promise<Uint8Array>;
+	exportPublicKey(format: 'rawHex'): Promise<string>;
+	exportPublicKey(format: 'multikey'): Promise<string>;
+	exportPublicKey(format: 'jwk'): Promise<JsonWebKey>;
+	async exportPublicKey(format: 'raw' | 'rawHex' | 'multikey' | 'jwk'): Promise<Uint8Array | string | JsonWebKey> {
+		if (format === 'jwk') {
+			return await crypto.subtle.exportKey('jwk', this._publicKey);
+		}
+
+		const buffer = await crypto.subtle.exportKey('raw', this._publicKey);
+
+		// WebCrypto spits out the uncompressed EC point: https://www.w3.org/TR/WebCryptoAPI/#ecdsa-operations:~:text=using%20the%20uncompressed%20format
+		// We need to compress it according to the ATProto Cryptography specification.
+		// https://atproto.com/specs/cryptography#public-key-encoding, 1st point.
+		const rawPublicKey = compressPoint(new Uint8Array(buffer));
+
+		switch (format) {
+			case 'raw': {
+				return rawPublicKey
+			}
+			case 'rawHex': {
+				return toBase16(rawPublicKey)
+			}
+			case 'multikey': {
+				const encoded = toBase58Btc(concatBuffers([P256_PUBLIC_PREFIX, rawPublicKey]));
+				return `z${encoded}`;
+			}
+		}
+
+		checkUnreachable(format, `unknown "${format}" export format`);
+	}
+
+	static async fromRawBytes(publicKeyBytes: Uint8Array): Promise<P256PublicKey> {
 		const publicKey = await crypto.subtle.importKey('raw', publicKeyBytes, ECDSA_ALG, true, ['verify']);
 		return new P256PublicKey(publicKey);
 	}
@@ -111,7 +133,7 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 		return normalizeSignature(new Uint8Array(sig), P256_CURVE_ORDER);
 	}
 
-	static override async fromBytes(
+	static override async fromRawBytes(
 		privateKeyBytes: Uint8Array,
 		publicKeyBytes?: Uint8Array,
 	): Promise<P256PrivateKey> {
@@ -154,28 +176,38 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 }
 
 export class P256PrivateKeyExportable extends P256PrivateKey implements PrivateKeyExportable {
-	async export(type: 'hex' | 'multikey'): Promise<string>;
-	async export(type: 'bytes'): Promise<Uint8Array>;
-	async export(type: 'bytes' | 'hex' | 'multikey'): Promise<string | Uint8Array> {
-		const privateKeyBuffer = await crypto.subtle.exportKey('pkcs8', this._privateKey);
-		const privateKey = new Uint8Array(
-			privateKeyBuffer.slice(PKCS8_PRIVATE_KEY_PREFIX.length + 1, PKCS8_PRIVATE_KEY_PREFIX.length + 33),
+	exportPrivateKey(format: 'raw'): Promise<Uint8Array>;
+	exportPrivateKey(format: 'rawHex'): Promise<string>;
+	exportPrivateKey(format: 'multikey'): Promise<string>;
+	exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
+	async exportPrivateKey(format: 'raw' | 'rawHex' | 'multikey' | 'jwk'): Promise<Uint8Array | string | JsonWebKey> {
+		if (format === 'jwk') {
+			return await crypto.subtle.exportKey('jwk', this._privateKey);
+		}
+
+		const pkcs8PrivateKeyPrefixOffset = PKCS8_PRIVATE_KEY_PREFIX.length + 1
+		const buffer = await crypto.subtle.exportKey('pkcs8', this._privateKey);
+		const rawPrivateKey = new Uint8Array(
+			buffer.slice(
+				pkcs8PrivateKeyPrefixOffset,
+				pkcs8PrivateKeyPrefixOffset + 32
+			),
 		);
 
-		switch (type) {
-			case 'bytes': {
-				return privateKey;
+		switch (format) {
+			case 'raw': {
+				return rawPrivateKey
 			}
-			case 'hex': {
-				return toBase16(privateKey);
+			case 'rawHex': {
+				return toBase16(rawPrivateKey)
 			}
 			case 'multikey': {
-				const encoded = toBase58Btc(concatBuffers([P256_PRIVATE_PREFIX, privateKey]));
+				const encoded = toBase58Btc(concatBuffers([P256_PRIVATE_PREFIX, rawPrivateKey]));
 				return `z${encoded}`;
 			}
 		}
 
-		checkUnreachable(type, `unknown "${type}" export type`);
+		checkUnreachable(format, `unknown "${format}" export format`);
 	}
 
 	static async createKeypair(): Promise<P256PrivateKeyExportable> {

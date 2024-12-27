@@ -9,7 +9,7 @@ import { toSha256 } from '../../utils.js';
 
 it('can create a new keypair and reimport it', async () => {
 	const keypair = createSecp256k1Keypair();
-	const privateKeyBytes = await keypair.export('bytes');
+	const privateKeyBytes = await keypair.exportPrivateKey('raw');
 
 	const imported = new Secp256k1PrivateKey(privateKeyBytes);
 
@@ -24,7 +24,7 @@ it('produces valid signatures', async () => {
 
 	const hash = await toSha256(data);
 
-	const isValidSigNoble = secp256k1.verify(sig, hash, await keypair.bytes());
+	const isValidSigNoble = secp256k1.verify(sig, hash, await keypair.exportPublicKey('raw'));
 	const isValidSigSelf = await keypair.verify(sig, data);
 
 	expect(isValidSigNoble).toBe(true);
