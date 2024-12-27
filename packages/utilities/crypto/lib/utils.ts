@@ -89,9 +89,8 @@ export const compressPoint = (coords: Uint8Array): Uint8Array => {
 	// This function creates a copy of the point, unless it is already compressed.
 
 	// 1. Check if the point is already compressed.
-	//    IF it is, then return the point as-is.
 	//    Value 0x04 comes from [1] Action 3.3.
-	if (coords[0] !== 0x04) return coords;
+	checkType(coords[0] === 0x04, 'unexpected compressed point');
 
 	// 2. Recover the value of N.
 	//    Given that coords is "0x04 || X || Y" ([1] Action 3.3.), N is equal to `(len(coords) - 1) / 2`.
