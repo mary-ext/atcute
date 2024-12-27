@@ -1,8 +1,8 @@
 import { toBase16, toBase58Btc } from '@atcute/multibase';
-import { secp256k1 } from '@noble/curves/secp256k1';
+import { signAsync, verify, getPublicKey, utils } from '@noble/secp256k1';
 
-import type { PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.js';
-import { checkUnreachable, concatBuffers, toSha256 } from '../utils.js';
+import type { PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../../types.web.js';
+import { concatBuffers, toSha256, checkUnreachable } from '../../utils.js';
 
 // Reference: https://atproto.com/specs/cryptography#public-key-encoding
 export const SECP256K1_PUBLIC_PREFIX = Uint8Array.from([0xe7, 0x01]);
@@ -18,23 +18,26 @@ export class Secp256k1PublicKey implements PublicKey {
 		this._publicKey = publicKey;
 	}
 
-	bytes(): Uint8Array {
-		return this._publicKey;
+	bytes(): Promise<Uint8Array> {
+		return Promise.resolve(this._publicKey);
 	}
 
-	did(): `did:key:${string}` {
+	did(): Promise<`did:key:${string}`> {
 		const encoded = toBase58Btc(concatBuffers([SECP256K1_PUBLIC_PREFIX, this._publicKey]));
-		return `did:key:z${encoded}`;
+		return Promise.resolve<`did:key:${string}`>(`did:key:z${encoded}`);
 	}
 
 	async verify(sig: Uint8Array, data: Uint8Array, options?: VerifyOptions): Promise<boolean> {
+		if (sig.length !== 64) {
+			// Invalid signature: must be exactly 64 bits
+			// @noble/secp256k1 throws in this case, so we handle it gracefully here instead
+			return false;
+		}
+
 		const allowMalleable = options?.allowMalleableSig ?? false;
 		const hashed = await toSha256(data);
 
-		return secp256k1.verify(sig, hashed, this._publicKey, {
-			lowS: !allowMalleable,
-			format: 'compact',
-		});
+		return verify(sig, hashed, this._publicKey, { lowS: !allowMalleable });
 	}
 }
 
@@ -43,7 +46,7 @@ export class Secp256k1PrivateKey extends Secp256k1PublicKey implements PrivateKe
 	protected _privateKey: Uint8Array;
 
 	constructor(privateKey: Uint8Array) {
-		const publicKey = secp256k1.getPublicKey(privateKey);
+		const publicKey = getPublicKey(privateKey);
 
 		super(publicKey);
 		this._privateKey = privateKey;
@@ -51,7 +54,7 @@ export class Secp256k1PrivateKey extends Secp256k1PublicKey implements PrivateKe
 
 	async sign(data: Uint8Array): Promise<Uint8Array> {
 		const hashed = await toSha256(data);
-		const sig = secp256k1.sign(hashed, this._privateKey, { lowS: true });
+		const sig = await signAsync(hashed, this._privateKey, { lowS: true });
 
 		// return raw 64 byte sig not DER-encoded
 		return sig.toCompactRawBytes();
@@ -59,21 +62,21 @@ export class Secp256k1PrivateKey extends Secp256k1PublicKey implements PrivateKe
 }
 
 export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey implements PrivateKeyExportable {
-	export(type: 'hex' | 'multikey'): string;
-	export(type: 'bytes'): Uint8Array;
-	export(type: 'bytes' | 'hex' | 'multikey'): string | Uint8Array {
+	export(type: 'hex' | 'multikey'): Promise<string>;
+	export(type: 'bytes'): Promise<Uint8Array>;
+	export(type: 'bytes' | 'hex' | 'multikey'): Promise<string | Uint8Array> {
 		const privateKey = this._privateKey;
 
 		switch (type) {
 			case 'bytes': {
-				return privateKey;
+				return Promise.resolve(privateKey);
 			}
 			case 'hex': {
-				return toBase16(privateKey);
+				return Promise.resolve(toBase16(privateKey));
 			}
 			case 'multikey': {
 				const encoded = toBase58Btc(concatBuffers([SECP256K1_PRIVATE_PREFIX, privateKey]));
-				return `z${encoded}`;
+				return Promise.resolve(`z${encoded}`);
 			}
 		}
 
@@ -82,6 +85,6 @@ export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey implement
 }
 
 export const createSecp256k1Keypair = (): Secp256k1PrivateKeyExportable => {
-	const privateKey = secp256k1.utils.randomPrivateKey();
+	const privateKey = utils.randomPrivateKey();
 	return new Secp256k1PrivateKeyExportable(privateKey);
 };

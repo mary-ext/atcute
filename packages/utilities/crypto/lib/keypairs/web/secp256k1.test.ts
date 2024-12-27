@@ -2,16 +2,18 @@ import { describe, expect, it } from 'bun:test';
 
 import { fromBase16, fromBase64 } from '@atcute/multibase';
 
-import { parseDidKey } from '../multibase.js';
+import { parseDidKey } from '../../multibase.js';
 import { createSecp256k1Keypair, Secp256k1PrivateKey, Secp256k1PublicKey } from './secp256k1.js';
+import { secp256k1 } from '@noble/curves/secp256k1';
+import { toSha256 } from '../../utils.js';
 
-it('can create a new keypair and reimport it', () => {
+it('can create a new keypair and reimport it', async () => {
 	const keypair = createSecp256k1Keypair();
-	const privateKeyBytes = keypair.export('bytes');
+	const privateKeyBytes = await keypair.export('bytes');
 
 	const imported = new Secp256k1PrivateKey(privateKeyBytes);
 
-	expect(imported.did()).toBe(keypair.did());
+	expect(await imported.did()).toBe(await keypair.did());
 });
 
 it('produces valid signatures', async () => {
@@ -20,13 +22,17 @@ it('produces valid signatures', async () => {
 	const data = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]);
 	const sig = await keypair.sign(data);
 
-	const isValidSig = await keypair.verify(sig, data);
+	const hash = await toSha256(data);
 
-	expect(isValidSig).toBe(true);
+	const isValidSigNoble = secp256k1.verify(sig, hash, await keypair.bytes());
+	const isValidSigSelf = await keypair.verify(sig, data);
+
+	expect(isValidSigNoble).toBe(true);
+	expect(isValidSigSelf).toBe(true);
 });
 
 describe('interop tests', () => {
-	it('handles low-S signature', async () => {
+	it('handles valid low-S signature', async () => {
 		const payload = {
 			message: `oWVoZWxsb2V3b3JsZA`,
 			sig: `5WpdIuEUUfVUYaozsi8G0B3cWO09cgZbIIwg1t2YKdUn/FEznOndsz/qgiYb89zwxYCbB71f7yQK5Lr7NasfoA`,
@@ -149,7 +155,7 @@ describe('interop tests', () => {
 			const privateKeyBytes = fromBase16(privateKeyBytesHex);
 			const keypair = new Secp256k1PrivateKey(privateKeyBytes);
 
-			expect<string>(keypair.did()).toBe(publicDidKey);
+			expect<string>(await keypair.did()).toBe(publicDidKey);
 		}
 	});
 });

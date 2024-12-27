@@ -2,8 +2,9 @@ import { toBase16, toBase58Btc } from '@atcute/multibase';
 import { p256 } from '@noble/curves/p256';
 
 import type { PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.js';
-import { concatBuffers, toSha256 } from '../utils.js';
+import { checkUnreachable, concatBuffers, toSha256 } from '../utils.js';
 
+// Reference: https://atproto.com/specs/cryptography#public-key-encoding
 export const P256_PUBLIC_PREFIX = Uint8Array.from([0x80, 0x24]);
 export const P256_PRIVATE_PREFIX = Uint8Array.from([0x86, 0x26]);
 
@@ -32,7 +33,7 @@ export class P256PublicKey implements PublicKey {
 
 		return p256.verify(sig, hashed, this._publicKey, {
 			lowS: !allowMalleable,
-			format: !allowMalleable ? 'compact' : undefined,
+			format: 'compact',
 		});
 	}
 }
@@ -76,7 +77,7 @@ export class P256PrivateKeyExportable extends P256PrivateKey implements PrivateK
 			}
 		}
 
-		throw new Error(`unknown "${type}" export type`);
+		checkUnreachable(type, `unknown "${type}" export type`);
 	}
 }
 

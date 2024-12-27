@@ -2,27 +2,54 @@ import { describe, expect, it } from 'bun:test';
 
 import { fromBase58Btc, fromBase64 } from '@atcute/multibase';
 
-import { parseDidKey } from '../multibase.js';
+import { parseDidKey } from '../../multibase.js';
 import { createP256Keypair, P256PrivateKey, P256PublicKey } from './p256.js';
+import { p256 } from '@noble/curves/p256';
+import { toSha256 } from '../../utils.js';
 
-it('can create a new keypair and reimport it', () => {
-	const keypair = createP256Keypair();
-	const privateKeyBytes = keypair.export('bytes');
+it('can create a new keypair and reimport it', async () => {
+	const keypair = await createP256Keypair();
+	const privateKeyBytes = await keypair.export('bytes');
 
-	const imported = new P256PrivateKey(privateKeyBytes);
+	const imported = await P256PrivateKey.fromBytes(privateKeyBytes);
 
-	expect(imported.did()).toBe(keypair.did());
+	expect(await imported.did()).toBe(await keypair.did());
 });
 
 it('produces valid signatures', async () => {
-	const keypair = createP256Keypair();
+	const keypair = await createP256Keypair();
 
 	const data = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]);
 	const sig = await keypair.sign(data);
 
-	const isValidSig = await keypair.verify(sig, data);
+	const hash = await toSha256(data);
 
-	expect(isValidSig).toBe(true);
+	const isValidSigNoble = p256.verify(sig, hash, await keypair.bytes());
+	const isValidSigSelf = await keypair.verify(sig, data);
+
+	expect(isValidSigNoble).toBe(true);
+	expect(isValidSigSelf).toBe(true);
+});
+
+it('detects ill keypairs', async () => {
+	const { publicKey } = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, [
+		'sign',
+		'verify',
+	]);
+	const { privateKey } = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, [
+		'sign',
+		'verify',
+	]);
+
+	expect(P256PrivateKey.fromKey(privateKey, publicKey)).rejects.toThrowError(TypeError);
+});
+
+it('detects ill raw keypairs', async () => {
+	const key = await createP256Keypair();
+	const publicKey = await key.bytes();
+	const privateKey = await key.export('bytes');
+
+	expect(P256PrivateKey.fromBytes(privateKey, publicKey)).rejects.toThrowError(TypeError);
 });
 
 describe('interop tests', () => {
@@ -39,7 +66,7 @@ describe('interop tests', () => {
 		const parsed = parseDidKey(payload.didKey);
 		expect(parsed.type).toBe('p256');
 
-		const keypair = new P256PublicKey(parsed.publicKey);
+		const keypair = await P256PublicKey.fromBytes(parsed.publicKey);
 		const isValidSig = await keypair.verify(sigBytes, messageBytes);
 
 		expect(isValidSig).toBe(true);
@@ -58,7 +85,7 @@ describe('interop tests', () => {
 		const parsed = parseDidKey(payload.didKey);
 		expect(parsed.type).toBe('p256');
 
-		const keypair = new P256PublicKey(parsed.publicKey);
+		const keypair = await P256PublicKey.fromBytes(parsed.publicKey);
 		const isValidSig = await keypair.verify(sigBytes, messageBytes);
 
 		expect(isValidSig).toBe(false);
@@ -77,7 +104,7 @@ describe('interop tests', () => {
 		const parsed = parseDidKey(payload.didKey);
 		expect(parsed.type).toBe('p256');
 
-		const keypair = new P256PublicKey(parsed.publicKey);
+		const keypair = await P256PublicKey.fromBytes(parsed.publicKey);
 		const isValidSig = await keypair.verify(sigBytes, messageBytes, { allowMalleableSig: true });
 
 		expect(isValidSig).toBe(true);
@@ -96,7 +123,7 @@ describe('interop tests', () => {
 		const parsed = parseDidKey(payload.didKey);
 		expect(parsed.type).toBe('p256');
 
-		const keypair = new P256PublicKey(parsed.publicKey);
+		const keypair = await P256PublicKey.fromBytes(parsed.publicKey);
 		const isValidSig = await keypair.verify(sigBytes, messageBytes);
 
 		expect(isValidSig).toBe(false);
@@ -112,9 +139,9 @@ describe('interop tests', () => {
 
 		for (const { privateKeyBytesBase58, publicDidKey } of inputs) {
 			const privateKeyBytes = fromBase58Btc(privateKeyBytesBase58);
-			const keypair = new P256PrivateKey(privateKeyBytes);
+			const keypair = await P256PrivateKey.fromBytes(privateKeyBytes);
 
-			expect<string>(keypair.did()).toBe(publicDidKey);
+			expect<string>(await keypair.did()).toBe(publicDidKey);
 		}
 	});
 });
