@@ -1,0 +1,25 @@
+{
+	"private": true,
+	"type": "module",
+	"name": "pkg-size-report",
+	"version": "1.0.1",
+	"description": "cli tool to compute and analyze package sizes",
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/internal/pkg-size-report"
+	},
+	"bin": "./cli.mjs",
+	"scripts": {
+		"build": "tsc"
+	},
+	"dependencies": {
+		"esbuild": "^0.24.2",
+		"js-yaml": "^4.1.0",
+		"picocolors": "^1.1.1"
+	},
+	"devDependencies": {
+		"@types/js-yaml": "^4.0.9",
+		"@types/node": "^22.10.2"
+	}
+}
