@@ -1,13 +1,19 @@
 {
+	"private": true,
 	"type": "module",
 	"scripts": {
 		"pull": "node ./scripts/pull-lexicons.js",
 		"pull:bluemoji": "node ./scripts/pull-bluemoji-lexicons.js",
 		"pull:whtwnd": "node ./scripts/pull-whtwnd-lexicons.js",
+		"pkg-size": "node ./scripts/pkg-size.js",
 		"fmt": "prettier --cache --write ."
 	},
 	"devDependencies": {
 		"@mary/tar": "npm:@jsr/mary__tar@^0.2.4",
+		"esbuild": "^0.24.2",
+		"js-yaml": "^4.1.0",
+		"mitata": "^1.0.23",
+		"picocolors": "^1.1.1",
 		"prettier": "^3.4.2",
 		"typescript": "5.7.2"
 	}

@@ -30,8 +30,7 @@
 	},
 	"devDependencies": {
 		"@ipld/dag-cbor": "^9.2.2",
-		"@types/bun": "^1.1.14",
-		"mitata": "^1.0.23"
+		"@types/bun": "^1.1.14"
 	},
 	"dependencies": {
 		"@atcute/cid": "workspace:^",

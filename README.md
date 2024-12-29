@@ -67,3 +67,29 @@ pnpm run -r build
 pnpm run pull
 pnpm run -r generate
 ```
+
+### checking package sizes
+
+to observe the size of packages (both install size and bundled size), there is a `pkg-size` script
+doing just that. you can also save the package sizes at a given time and inspect the impact of
+changes to the final bundle size. the script uses `esbuild` to produce a minified bundle to get the
+size of each entrypoint.
+
+```sh
+# See the size of packages.
+# If package sizes were saved previously, will also show the diff.
+pnpm run pkg-size
+
+# Save esbuild metafiles and package size information.
+pnpm run pkg-size --save
+
+# Save just esbuild metafiles.
+pnpm run pkg-size --save-meta
+
+# Show only the packages whose size have changed.
+pnpm run pkg-size --compare
+
+# Keep the result bundle produced by esbuild.
+# Will be left in /tmp/[...]--[pkgname]--[random]
+pnpm run pkg-size --keep-builds
+```

@@ -30,7 +30,6 @@
 	"devDependencies": {
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/client": "workspace:^",
-		"@types/bun": "^1.1.14",
-		"mitata": "^1.0.23"
+		"@types/bun": "^1.1.14"
 	}
 }
