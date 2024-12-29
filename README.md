@@ -75,6 +75,14 @@ tool doing just that. you can also save the package sizes at a given time and in
 changes to the final bundle size. the tool uses `esbuild` to produce a minified bundle to get the
 size of each entrypoint.
 
+<!-- prettier-ignore-start -->
+<!-- Otherwise it wrecks the gfm alertbox ugh -->
+
+> [!WARNING]
+> run `pnpm run -r build` before running the command. otherwise, the command **may not run**, or **give bad measurements**.
+
+<!-- prettier-ignore-end -->
+
 ```sh
 # See the size of packages.
 # If package sizes were saved previously, will also show the diff.
