@@ -1,5 +1,5 @@
 import { P256PublicKey } from './keypairs/p256.js';
-import { Secp256k1PublicKey } from './keypairs/secp256k1.js';
+import { Secp256k1PublicKey } from '#keypairs/secp256k1';
 
 import { parseDidKey, type FoundPublicKey } from './multibase.js';
 import type { VerifyOptions } from './types.js';

@@ -19,6 +19,8 @@
 		"sourceMap": true,
 		"declaration": true,
 		"stripInternal": true,
+		"rootDir": "lib",
+		"customConditions": ["--atcute-develop"]
 	},
 	"include": ["lib"],
 }

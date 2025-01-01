@@ -25,6 +25,15 @@
 	"exports": {
 		".": "./dist/index.js"
 	},
+	"imports": {
+		"#keypairs/secp256k1": {
+			"--atcute-develop-node": "./lib/keypairs/secp256k1.node.ts",
+			"--atcute-develop": "./lib/keypairs/secp256k1.ts",
+			"bun": "./dist/keypairs/secp256k1.js",
+			"node": "./dist/keypairs/secp256k1.node.js",
+			"default": "./dist/keypairs/secp256k1.js"
+		}
+	},
 	"sideEffects": false,
 	"scripts": {
 		"build": "tsc --project tsconfig.build.json",

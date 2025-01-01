@@ -24,7 +24,7 @@ const ECDSA_ALG: EcdsaParams & EcKeyImportParams = {
 } as const;
 
 // NIST SP 800-186, § 3.2.1.3. P-256 -- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186.pdf
-const P256_CURVE_ORDER = BigInt('0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551');
+const P256_CURVE_ORDER = 0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551n;
 
 // This is a hack, to convert a raw private key to a PKCS#8 wrapped key.
 // Reference: [1] RFC 5958 Asymmetric Key Packages, § 2. Asymmetric Key Package CMS Content Type https://datatracker.ietf.org/doc/html/rfc5958#section-2

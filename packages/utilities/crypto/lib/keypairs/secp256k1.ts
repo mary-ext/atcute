@@ -40,12 +40,11 @@ const toJsonWebKey = (publicKey: Uint8Array, privateKey?: Uint8Array): JsonWebKe
 export class Secp256k1PublicKey implements PublicKey {
 	readonly type = 'secp256k1';
 
-	/** @internal */
-	protected _publicKey: Uint8Array;
+	readonly #publicKey: Uint8Array;
 
 	/** @internal */
 	protected constructor(publicKey: Uint8Array) {
-		this._publicKey = publicKey;
+		this.#publicKey = publicKey;
 	}
 
 	static async importRaw(publicKeyBytes: Uint8Array): Promise<Secp256k1PublicKey> {
@@ -62,7 +61,7 @@ export class Secp256k1PublicKey implements PublicKey {
 		const allowMalleable = options?.allowMalleableSig ?? false;
 		const hashed = await toSha256(data);
 
-		return verify(sig, hashed, this._publicKey, { lowS: !allowMalleable });
+		return verify(sig, hashed, this.#publicKey, { lowS: !allowMalleable });
 	}
 
 	exportPublicKey(format: 'did'): Promise<DidKeyString>;
@@ -73,7 +72,7 @@ export class Secp256k1PublicKey implements PublicKey {
 	async exportPublicKey(
 		format: 'did' | 'jwk' | 'multikey' | 'raw' | 'rawHex',
 	): Promise<DidKeyString | JsonWebKey | Uint8Array | string> {
-		const publicKeyBytes = this._publicKey;
+		const publicKeyBytes = this.#publicKey;
 
 		if (format === 'jwk') {
 			return toJsonWebKey(publicKeyBytes);
@@ -99,13 +98,12 @@ export class Secp256k1PublicKey implements PublicKey {
 }
 
 export class Secp256k1PrivateKey extends Secp256k1PublicKey implements PrivateKey {
-	/** @internal */
-	protected _privateKey: Uint8Array;
+	readonly #privateKey: Uint8Array;
 
 	/** @internal */
 	protected constructor(privateKeyBytes: Uint8Array, publicKeyBytes: Uint8Array) {
 		super(publicKeyBytes);
-		this._privateKey = privateKeyBytes;
+		this.#privateKey = privateKeyBytes;
 	}
 
 	static override async importRaw(
@@ -123,47 +121,54 @@ export class Secp256k1PrivateKey extends Secp256k1PublicKey implements PrivateKe
 
 	async sign(data: Uint8Array): Promise<Uint8Array> {
 		const hashed = await toSha256(data);
-		const sig = await signAsync(hashed, this._privateKey, { lowS: true });
+		const sig = await signAsync(hashed, this.#privateKey, { lowS: true });
 
 		// return raw 64 byte sig not DER-encoded
 		return sig.toCompactRawBytes();
 	}
-}
 
-export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey implements PrivateKeyExportable {
-	static async createKeypair(): Promise<Secp256k1PrivateKeyExportable> {
+	static async createKeypair(): Promise<Secp256k1PrivateKey.Exportable> {
 		const privateKeyBytes = utils.randomPrivateKey();
 		const publicKeyBytes = getPublicKey(privateKeyBytes);
 
-		return new Secp256k1PrivateKeyExportable(privateKeyBytes, publicKeyBytes);
+		return new this.#Exportable(privateKeyBytes, publicKeyBytes);
 	}
 
-	exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
-	exportPrivateKey(format: 'multikey'): Promise<string>;
-	exportPrivateKey(format: 'raw'): Promise<Uint8Array>;
-	exportPrivateKey(format: 'rawHex'): Promise<string>;
-	async exportPrivateKey(
-		format: 'raw' | 'rawHex' | 'multikey' | 'jwk',
-	): Promise<Uint8Array | string | JsonWebKey> {
-		const privateKeyBytes = this._privateKey;
-		const publicKeyBytes = this._publicKey;
+	static #Exportable = class extends Secp256k1PrivateKey implements PrivateKeyExportable {
+		exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
+		exportPrivateKey(format: 'multikey'): Promise<string>;
+		exportPrivateKey(format: 'raw'): Promise<Uint8Array>;
+		exportPrivateKey(format: 'rawHex'): Promise<string>;
+		async exportPrivateKey(
+			format: 'raw' | 'rawHex' | 'multikey' | 'jwk',
+		): Promise<Uint8Array | string | JsonWebKey> {
+			const privateKeyBytes = this.#privateKey;
+			const publicKeyBytes = await this.exportPublicKey('raw');
 
-		if (format === 'jwk') {
-			return toJsonWebKey(publicKeyBytes, privateKeyBytes);
+			if (format === 'jwk') {
+				return toJsonWebKey(publicKeyBytes, privateKeyBytes);
+			}
+
+			switch (format) {
+				case 'multikey': {
+					return toMultikey(SECP256K1_PRIVATE_PREFIX, privateKeyBytes);
+				}
+				case 'raw': {
+					return privateKeyBytes;
+				}
+				case 'rawHex': {
+					return toBase16(privateKeyBytes);
+				}
+			}
+
+			assertUnreachable(format, `unknown "${format}" export format`);
 		}
-
-		switch (format) {
-			case 'multikey': {
-				return toMultikey(SECP256K1_PRIVATE_PREFIX, privateKeyBytes);
-			}
-			case 'raw': {
-				return privateKeyBytes;
-			}
-			case 'rawHex': {
-				return toBase16(privateKeyBytes);
-			}
-		}
-
-		assertUnreachable(format, `unknown "${format}" export format`);
-	}
+	};
 }
+
+namespace Secp256k1PrivateKey {
+	export interface Exportable extends PrivateKeyExportable {}
+}
+
+/** @deprecated */
+export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey {}
