@@ -1,35 +1,11 @@
 import { toBase58Btc } from '@atcute/multibase';
+import { concat } from '@atcute/uint8array';
 
 import type { PrivateKey } from './types.js';
 
 export const toSha256 = async (input: Uint8Array): Promise<Uint8Array> => {
 	const digest = await crypto.subtle.digest('SHA-256', input);
 	return new Uint8Array(digest);
-};
-
-export const concatBuffers = (bufs: Uint8Array[]): Uint8Array => {
-	let length = 0;
-	let offset = 0;
-
-	let il = bufs.length;
-	let i: number;
-
-	for (i = 0; i < il; i++) {
-		const buf = bufs[i];
-
-		length += buf.length;
-	}
-
-	const bytes = new Uint8Array(length);
-
-	for (i = 0; i < il; i++) {
-		const buf = bufs[i];
-
-		bytes.set(buf, offset);
-		offset += buf.length;
-	}
-
-	return bytes;
 };
 
 // -- Cryptographic commons --
@@ -167,7 +143,7 @@ export const checkKeypairRelationship = async (keypair: PrivateKey): Promise<voi
 };
 
 export const toMultikey = (prefix: Uint8Array, keyBytes: Uint8Array): string => {
-	const encoded = toBase58Btc(concatBuffers([prefix, keyBytes]));
+	const encoded = toBase58Btc(concat([prefix, keyBytes]));
 	return `z${encoded}`;
 };
 

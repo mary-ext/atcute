@@ -273,6 +273,9 @@ importers:
       '@atcute/multibase':
         specifier: workspace:^
         version: link:../multibase
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../uint8array
       '@noble/secp256k1':
         specifier: ^2.1.0
         version: 2.1.0

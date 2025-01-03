@@ -1,4 +1,5 @@
 import { toBase16 } from '@atcute/multibase';
+import { concat } from '@atcute/uint8array';
 
 import type { DidKeyString, PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.js';
 import {
@@ -6,7 +7,6 @@ import {
 	assertUnreachable,
 	checkKeypairRelationship,
 	compressPoint,
-	concatBuffers,
 	deriveEcPublicKeyFromPrivateKey,
 	isSignatureNormalized,
 	normalizeSignature,
@@ -140,7 +140,7 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 		privateKeyBytes: Uint8Array,
 		publicKeyBytes?: Uint8Array,
 	): Promise<P256PrivateKey> {
-		const pkcs8 = concatBuffers([PKCS8_PRIVATE_KEY_PREFIX, privateKeyBytes]);
+		const pkcs8 = concat([PKCS8_PRIVATE_KEY_PREFIX, privateKeyBytes]);
 
 		const privateKey = await crypto.subtle.importKey('pkcs8', pkcs8, ECDSA_ALG, !publicKeyBytes, ['sign']);
 		const publicKey = publicKeyBytes
