@@ -9,10 +9,20 @@ const CHUNK_SIZE = 1024;
 interface State {
 	c: Uint8Array[];
 	b: Uint8Array;
-	v: DataView;
 	p: number;
 	l: number;
 }
+
+const _abs = Math.abs;
+const _floor = Math.floor;
+const _log2 = Math.log2;
+const _max = Math.max;
+
+const _isInteger = Number.isInteger;
+const _isNaN = Number.isNaN;
+
+const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
+const MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER;
 
 const resizeIfNeeded = (state: State, needed: number): void => {
 	const buf = state.b;
@@ -22,8 +32,7 @@ const resizeIfNeeded = (state: State, needed: number): void => {
 		state.c.push(buf.subarray(0, pos));
 		state.l += pos;
 
-		state.b = allocUnsafe(Math.max(CHUNK_SIZE, needed));
-		state.v = new DataView(state.b.buffer);
+		state.b = allocUnsafe(_max(CHUNK_SIZE, needed));
 		state.p = 0;
 	}
 };
@@ -33,8 +42,27 @@ const getTypeInfoLength = (arg: number): number => {
 };
 
 const writeFloat64 = (state: State, val: number): void => {
-	state.v.setFloat64(state.p, val);
-	state.p += 8;
+	let pos = state.p;
+	const buf = state.b;
+
+	const sign = val < 0 ? 1 : 0;
+	val = _abs(val);
+
+	const exp = _floor(_log2(val));
+	let frac = val / 2 ** exp - 1;
+
+	const biasedExp = exp + 1023;
+
+	buf[pos++] = (sign << 7) | (biasedExp >>> 4);
+	buf[pos++] = ((biasedExp & 0xf) << 4) | ((frac * 16) >>> 0);
+
+	frac *= 16;
+	for (let i = 0; i < 6; i++) {
+		frac = (frac % 1) * 256;
+		buf[pos++] = frac >>> 0;
+	}
+
+	state.p = pos;
 };
 
 const writeUint8 = (state: State, val: number): void => {
@@ -42,22 +70,48 @@ const writeUint8 = (state: State, val: number): void => {
 };
 
 const writeUint16 = (state: State, val: number): void => {
-	state.v.setUint16(state.p, val);
-	state.p += 2;
+	let pos = state.p;
+
+	const buf = state.b;
+
+	buf[pos++] = val >>> 8;
+	buf[pos++] = val & 0xff;
+
+	state.p = pos;
 };
 
 const writeUint32 = (state: State, val: number): void => {
-	state.v.setUint32(state.p, val);
-	state.p += 4;
+	let pos = state.p;
+
+	const buf = state.b;
+
+	buf[pos++] = val >>> 24;
+	buf[pos++] = (val >>> 16) & 0xff;
+	buf[pos++] = (val >>> 8) & 0xff;
+	buf[pos++] = val & 0xff;
+
+	state.p = pos;
 };
 
 const writeUint64 = (state: State, val: number): void => {
+	let pos = state.p;
+
+	const buf = state.b;
+
 	const hi = (val / 2 ** 32) | 0;
 	const lo = val >>> 0;
 
-	state.v.setUint32(state.p, hi);
-	state.v.setUint32(state.p + 4, lo);
-	state.p += 8;
+	buf[pos++] = hi >>> 24;
+	buf[pos++] = (hi >>> 16) & 0xff;
+	buf[pos++] = (hi >>> 8) & 0xff;
+	buf[pos++] = hi & 0xff;
+
+	buf[pos++] = lo >>> 24;
+	buf[pos++] = (lo >>> 16) & 0xff;
+	buf[pos++] = (lo >>> 8) & 0xff;
+	buf[pos++] = lo & 0xff;
+
+	state.p = pos;
 };
 
 const writeTypeAndArgument = (state: State, type: number, arg: number): void => {
@@ -96,12 +150,6 @@ const writeFloat = (state: State, val: number): void => {
 	writeUint8(state, 0xe0 | 27);
 	writeFloat64(state, val);
 };
-
-const _isNaN = Number.isNaN;
-const _isInteger = Number.isInteger;
-
-const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
-const MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER;
 
 const writeNumber = (state: State, val: number): void => {
 	if (_isNaN(val)) {
@@ -258,7 +306,6 @@ const createState = (): State => {
 	return {
 		c: [],
 		b: buf,
-		v: new DataView(buf.buffer),
 		p: 0,
 		l: 0,
 	};
