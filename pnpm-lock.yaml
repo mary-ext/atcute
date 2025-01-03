@@ -320,6 +320,10 @@ importers:
         version: 1.1.14
 
   packages/utilities/multibase:
+    dependencies:
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../uint8array
     devDependencies:
       '@types/bun':
         specifier: ^1.1.14

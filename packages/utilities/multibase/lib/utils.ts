@@ -1,3 +1,5 @@
+import { allocUnsafe } from '@atcute/uint8array';
+
 export const createRfc4648Encode = (alphabet: string, bitsPerChar: number, pad: boolean) => {
 	return (bytes: Uint8Array): string => {
 		const mask = (1 << bitsPerChar) - 1;
@@ -48,7 +50,7 @@ export const createRfc4648Decode = (alphabet: string, bitsPerChar: number, pad: 
 		}
 
 		// Allocate the output:
-		const bytes = new Uint8Array(((end * bitsPerChar) / 8) | 0);
+		const bytes = allocUnsafe(((end * bitsPerChar) / 8) | 0);
 
 		// Parse the data:
 		let bits = 0; // Number of bits currently in the buffer
@@ -107,7 +109,7 @@ export const createBtcBaseEncode = (alphabet: string) => {
 
 		// Allocate enough space in big-endian base58 representation.
 		const size = ((pend - pbegin) * iFACTOR + 1) >>> 0;
-		const b58 = new Uint8Array(size);
+		const b58 = allocUnsafe(size);
 
 		// Process the bytes.
 		while (pbegin !== pend) {
@@ -150,7 +152,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 		throw new RangeError(`alphabet too long`);
 	}
 
-	const BASE_MAP = new Uint8Array(256).fill(255);
+	const BASE_MAP = allocUnsafe(256).fill(255);
 	for (let i = 0; i < alphabet.length; i++) {
 		const xc = alphabet.charCodeAt(i);
 
@@ -167,7 +169,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 
 	return (source: string): Uint8Array => {
 		if (source.length === 0) {
-			return new Uint8Array(0);
+			return allocUnsafe(0);
 		}
 
 		// Skip and count leading '1's.
@@ -182,7 +184,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 
 		// Allocate enough space in big-endian base256 representation.
 		const size = ((source.length - psz) * FACTOR + 1) >>> 0; // log(58) / log(256), rounded up.
-		const b256 = new Uint8Array(size);
+		const b256 = allocUnsafe(size);
 
 		// Process the characters.
 		while (psz < source.length) {
@@ -213,7 +215,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 			it4++;
 		}
 
-		const vch = new Uint8Array(zeroes + (size - it4));
+		const vch = allocUnsafe(zeroes + (size - it4));
 
 		let j = zeroes;
 		while (it4 !== size) {

@@ -25,5 +25,8 @@
 	},
 	"devDependencies": {
 		"@types/bun": "^1.1.14"
+	},
+	"dependencies": {
+		"@atcute/uint8array": "workspace:^"
 	}
 }
