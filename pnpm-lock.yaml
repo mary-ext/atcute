@@ -18,8 +18,8 @@ importers:
         specifier: ^0.0.7
         version: 0.0.7
       mitata:
-        specifier: ^1.0.23
-        version: 1.0.23
+        specifier: ^1.0.25
+        version: 1.0.25
       pkg-size-report:
         specifier: workspace:^
         version: link:packages/internal/pkg-size-report
@@ -238,6 +238,9 @@ importers:
       '@atcute/multibase':
         specifier: workspace:^
         version: link:../multibase
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../uint8array
     devDependencies:
       '@ipld/dag-cbor':
         specifier: ^9.2.2
@@ -2159,8 +2162,8 @@ packages:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
-  mitata@1.0.23:
-    resolution: {integrity: sha512-G2t4HG01WGOceXNSq72IARFURXQh/9lNDdnxIfGHGHO31LTrpHuzRrZwoRqMgvgnF4uo0Cjo6SNMP8XGSbttCg==}
+  mitata@1.0.25:
+    resolution: {integrity: sha512-0v5qZtVW5vwj9FDvYfraR31BMDcRLkhSFWPTLaxx/Z3/EvScfVtAAWtMI2ArIbBcwh7P86dXh0lQWKiXQPlwYA==}
 
   mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
@@ -5230,7 +5233,7 @@ snapshots:
 
   minipass@7.1.2: {}
 
-  mitata@1.0.23: {}
+  mitata@1.0.25: {}
 
   mkdirp-classic@0.5.3: {}
 

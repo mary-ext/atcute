@@ -10,7 +10,7 @@
 	"devDependencies": {
 		"@mary/tar": "npm:@jsr/mary__tar@^0.2.4",
 		"@mitata/counters": "^0.0.7",
-		"mitata": "^1.0.23",
+		"mitata": "^1.0.25",
 		"pkg-size-report": "workspace:^",
 		"prettier": "^3.4.2",
 		"typescript": "5.7.2"

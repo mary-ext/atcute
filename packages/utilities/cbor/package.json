@@ -24,7 +24,7 @@
 	},
 	"sideEffects": false,
 	"scripts": {
-		"build": "tsc --project tsconfig.build.json",
+		"build": "rm -rf dist; tsc --project tsconfig.build.json",
 		"test": "bun test --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
@@ -35,6 +35,7 @@
 	},
 	"dependencies": {
 		"@atcute/cid": "workspace:^",
-		"@atcute/multibase": "workspace:^"
+		"@atcute/multibase": "workspace:^",
+		"@atcute/uint8array": "workspace:^"
 	}
 }

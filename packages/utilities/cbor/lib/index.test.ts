@@ -1,12 +1,64 @@
-import { expect, it } from 'bun:test';
+import { expect, it, describe } from 'bun:test';
 
 import * as CID from '@atcute/cid';
 import { toBase16 } from '@atcute/multibase';
 
 import { decode, decodeFirst, encode, toBytes, toCidLink } from './index.js';
+import { getOrderedObjectKeys } from './encode.js';
 
 const utf8e = new TextEncoder();
 // const utf8d = new TextDecoder();
+
+const referenceKeySorter = (obj: Record<string, unknown>): string[] => {
+	return Object.keys(obj)
+		.filter((key) => obj[key] !== undefined)
+		.sort((a, b) => a.length - b.length || (a < b ? -1 : 1));
+}
+
+describe('key sorting', () => {
+	it('sorts key appropriately', () => {
+		const object = {
+			key: 'value',
+			link: toCidLink(CID.fromString('bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee')),
+			bytes: toBytes(utf8e.encode('lorem ipsum sit dolor amet')),
+			answer: 42,
+			correct: true,
+			wrong: false,
+			empty: undefined,
+			blank: null,
+			minInteger: Number.MIN_SAFE_INTEGER,
+			maxInteger: Number.MAX_SAFE_INTEGER,
+			float: 3.14,
+			nested: {
+				hello: 'world',
+			},
+			bee: [
+				`According to all known laws of aviation, there is no way that a bee should be able to fly.`,
+				`Its wings are too small to get its fat little body off the ground.`,
+				`The bee, of course, flies anyway.`,
+				`Because bees don't care what humans think is impossible.`,
+
+				`Ladies and gentlemen of the jury, my grandmother was a simple woman.`,
+				`Born on a farm, she believed it was man's divine right to benefit from the county of nature God put before us.`,
+				`If we were to live the topsy-turvy world Mr. Benson imagines, just think of what if would mean?`,
+				`Maybe I would have to negotiate with the silkworm for the elastic in my britches!`,
+				`Talking bee!`,
+				`How do we know this isn't some sort of holographic motion-picture-capture hollywood wizardry?`,
+				`They could be using laser beams! Robotics! Ventriloquism! Cloning! For all we know he could be on steroids!`,
+
+				`Ladies and gentlemen of the jury, there's no trickery here. I'm just an ordinary bee.`,
+				`And as a bee, honey's pretty important to me. It's important to all bees.`,
+				`We invented it, we make it, and we protect it with our lives.`,
+				`Unfortunately, there are some people in this room who think they can take whatever they want from us, 'cause we're the little guys!`,
+				`And what I'm hoping is that after this is all over, you'll see how by taking our honey, you're not only taking away everything we have, but everything we are!`,
+			],
+		};
+
+		const expected = referenceKeySorter(object)
+		const actual = getOrderedObjectKeys(object)
+		expect(actual).toEqual(expected)
+	})
+});
 
 it('encodes primitives', () => {
 	expect(toBase16(encode('hello world!'))).toMatchInlineSnapshot(`"6c68656c6c6f20776f726c6421"`);

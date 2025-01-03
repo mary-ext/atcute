@@ -37,10 +37,7 @@ const readFloat64 = (state: State): number => {
 };
 
 const readUint8 = (state: State): number => {
-	const value = state.v.getUint8(state.p);
-
-	state.p += 1;
-	return value;
+	return state.b[state.p++];
 };
 
 const readUint16 = (state: State): number => {
@@ -84,6 +81,11 @@ const readBytes = (state: State, length: number): Bytes => {
 	return toBytes(slice);
 };
 
+const readTypeInfo = (state: State): [number, number] => {
+	const prelude = readUint8(state);
+	return [prelude >> 5, prelude & 0x1f];
+};
+
 const readCid = (state: State, length: number): CidLink => {
 	// CID bytes are prefixed with 0x00 for historical reasons, apparently.
 	const slice = state.b.subarray(state.p + 1, (state.p += length));
@@ -96,89 +98,77 @@ const readValue = (state: State): any => {
 
 	const type = prelude >> 5;
 	const info = prelude & 0x1f;
+	const arg = type < 7 ? readArgument(state, info) : 0;
 
-	if (type === 0) {
-		const value = readArgument(state, info);
-		return value;
-	}
-
-	if (type === 1) {
-		const value = readArgument(state, info);
-		return -1 - value;
-	}
-
-	if (type === 2) {
-		const len = readArgument(state, info);
-		return readBytes(state, len);
-	}
-
-	if (type === 3) {
-		const len = readArgument(state, info);
-
-		return readString(state, len);
-	}
-
-	if (type === 4) {
-		const len = readArgument(state, info);
-		const array = new Array(len);
-
-		for (let idx = 0; idx < len; idx++) {
-			array[idx] = readValue(state);
+	switch (type) {
+		case 0: {
+			return arg;
 		}
+		case 1: {
+			return -1 - arg;
+		}
+		case 2: {
+			return readBytes(state, arg);
+		}
+		case 3: {
+			return readString(state, arg);
+		}
+		case 4: {
+			const array = new Array(arg);
 
-		return array;
-	}
-
-	if (type === 5) {
-		const len = readArgument(state, info);
-		const object: Record<string, unknown> = {};
-
-		for (let idx = 0; idx < len; idx++) {
-			const key = readValue(state);
-			if (typeof key !== 'string') {
-				throw new TypeError(`expected map to only have string keys; got ${typeof key}`);
+			for (let idx = 0; idx < arg; idx++) {
+				array[idx] = readValue(state);
 			}
 
-			object[key] = readValue(state);
+			return array;
 		}
+		case 5: {
+			const object: Record<string, unknown> = {};
 
-		return object;
-	}
+			for (let idx = 0; idx < arg; idx++) {
+				const [type, info] = readTypeInfo(state);
+				if (type !== 3) {
+					throw new TypeError(`expected map to only have string keys; got type ${type}`);
+				}
 
-	if (type === 6) {
-		const tag = readArgument(state, info);
+				const len = readArgument(state, info);
+				const key = readString(state, len);
 
-		if (tag === 42) {
-			const prelude = readUint8(state);
+				if (key === '__proto__')
+					// Guard against prototype pollution. CWE-1321
+					Object.defineProperty(object, key, { enumerable: true, configurable: true, writable: true });
 
-			const type = prelude >> 5;
-			const info = prelude & 0x1f;
-
-			if (type !== 2) {
-				throw new TypeError(`expected cid tag to have bytes value; got ${type}`);
+				object[key] = readValue(state);
 			}
 
-			const len = readArgument(state, info);
-
-			return readCid(state, len);
+			return object;
 		}
+		case 6: {
+			if (arg === 42) {
+				const [type, info] = readTypeInfo(state);
+				if (type !== 2) {
+					throw new TypeError(`expected cid-link to be type 2 (bytes); got type ${type}`);
+				}
 
-		throw new TypeError(`unsupported tag; got ${tag}`);
-	}
+				const len = readArgument(state, info);
+				return readCid(state, len);
+			}
 
-	if (type === 7) {
-		switch (info) {
-			case 20:
-				return false;
-			case 21:
-				return true;
-			case 22:
-				return null;
-			case 27:
-				return readFloat64(state);
+			throw new TypeError(`unsupported tag; got ${arg}`);
 		}
+		case 7: {
+			switch (info) {
+				case 20:
+				case 21:
+					return info === 21;
+				case 22:
+					return null;
+				case 27:
+					return readFloat64(state);
+			}
 
-		throw new Error(`invalid simple value; got ${info}`);
+			throw new Error(`invalid simple value; got ${info}`);
+		}
 	}
 
 	throw new TypeError(`invalid type; got ${type}`);
