@@ -257,6 +257,9 @@ importers:
       '@atcute/multibase':
         specifier: workspace:^
         version: link:../multibase
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../uint8array
       '@atcute/varint':
         specifier: workspace:^
         version: link:../varint

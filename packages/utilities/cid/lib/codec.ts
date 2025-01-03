@@ -1,4 +1,5 @@
 import { fromBase32, toBase32 } from '@atcute/multibase';
+import { allocUnsafe } from '@atcute/uint8array';
 import * as varint from '@atcute/varint';
 
 export const CID_VERSION = 1;
@@ -34,7 +35,7 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 	const digestSize = digest.length;
 	const digestLebSize = varint.encodingLength(digestSize);
 
-	const bytes = new Uint8Array(3 + digestLebSize + digestSize);
+	const bytes = allocUnsafe(3 + digestLebSize + digestSize);
 
 	bytes[0] = CID_VERSION;
 	bytes[1] = codec;
@@ -139,7 +140,8 @@ export const fromBinary = (input: Uint8Array): Cid => {
 };
 
 export const toBinary = (cid: Cid): Uint8Array => {
-	const bytes = new Uint8Array(1 + cid.bytes.length);
+	const bytes = allocUnsafe(1 + cid.bytes.length);
+	bytes[0] = 0;
 	bytes.set(cid.bytes, 1);
 
 	return bytes;
