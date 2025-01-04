@@ -1,8 +1,7 @@
 import { CidLinkWrapper, type CidLink } from '@atcute/cid';
+import { decodeUtf8From } from '@atcute/uint8array';
 
 import { toBytes, type Bytes } from './bytes.js';
-
-const utf8d = new TextDecoder();
 
 interface State {
 	b: Uint8Array;
@@ -70,9 +69,10 @@ const readUint64 = (state: State): number => {
 };
 
 const readString = (state: State, length: number): string => {
-	const slice = state.b.subarray(state.p, (state.p += length));
+	const string = decodeUtf8From(state.b, state.p, length);
+	state.p += length;
 
-	return utf8d.decode(slice);
+	return string;
 };
 
 const readBytes = (state: State, length: number): Bytes => {
