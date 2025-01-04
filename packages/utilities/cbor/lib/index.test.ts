@@ -88,7 +88,8 @@ it('encodes and decodes into the same value', () => {
 		blank: null,
 		minInteger: Number.MIN_SAFE_INTEGER,
 		maxInteger: Number.MAX_SAFE_INTEGER,
-		float: 3.14,
+		pi: 3.141592653589793,
+		float: 1.2345678901234567,
 		nested: {
 			hello: 'world',
 		},
