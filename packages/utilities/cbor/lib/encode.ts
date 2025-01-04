@@ -42,7 +42,9 @@ const getTypeInfoLength = (arg: number): number => {
 };
 
 const writeFloat64 = (state: State, val: number): void => {
+	// DataView seems to be faster for float64, too lazy though
 	let pos = state.p;
+
 	const buf = state.b;
 
 	const sign = val < 0 ? 1 : 0;
@@ -93,7 +95,7 @@ const writeUint32 = (state: State, val: number): void => {
 	state.p = pos;
 };
 
-const writeUint64 = (state: State, val: number): void => {
+const writeUint53 = (state: State, val: number): void => {
 	let pos = state.p;
 
 	const buf = state.b;
@@ -128,7 +130,7 @@ const writeTypeAndArgument = (state: State, type: number, arg: number): void => 
 		writeUint32(state, arg);
 	} else {
 		writeUint8(state, (type << 5) | 27);
-		writeUint64(state, arg);
+		writeUint53(state, arg);
 	}
 };
 

@@ -13,7 +13,7 @@ const referenceKeySorter = (obj: Record<string, unknown>): string[] => {
 	return Object.keys(obj)
 		.filter((key) => obj[key] !== undefined)
 		.sort((a, b) => a.length - b.length || (a < b ? -1 : 1));
-}
+};
 
 describe('key sorting', () => {
 	it('sorts key appropriately', () => {
@@ -54,10 +54,10 @@ describe('key sorting', () => {
 			],
 		};
 
-		const expected = referenceKeySorter(object)
-		const actual = getOrderedObjectKeys(object)
-		expect(actual).toEqual(expected)
-	})
+		const expected = referenceKeySorter(object);
+		const actual = getOrderedObjectKeys(object);
+		expect(actual).toEqual(expected);
+	});
 });
 
 it('encodes primitives', () => {
@@ -86,10 +86,12 @@ it('encodes and decodes into the same value', () => {
 		wrong: false,
 		empty: undefined,
 		blank: null,
+		b16: 262,
+		b32: 65542,
 		minInteger: Number.MIN_SAFE_INTEGER,
 		maxInteger: Number.MAX_SAFE_INTEGER,
 		pi: 3.141592653589793,
-		float: 1.2345678901234567,
+		npi: -3.141592653589793,
 		nested: {
 			hello: 'world',
 		},
