@@ -317,6 +317,9 @@ importers:
       '@atcute/multibase':
         specifier: workspace:^
         version: link:../multibase
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../uint8array
       '@badrap/valita':
         specifier: ^0.4.2
         version: 0.4.2

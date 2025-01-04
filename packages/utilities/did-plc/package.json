@@ -36,6 +36,7 @@
 		"@atcute/cid": "workspace:^",
 		"@atcute/crypto": "workspace:^",
 		"@atcute/multibase": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
 		"@badrap/valita": "^0.4.2"
 	}
 }

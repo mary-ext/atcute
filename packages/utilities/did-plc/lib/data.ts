@@ -1,7 +1,8 @@
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
-import { toSha256, verifySigWithDidKey } from '@atcute/crypto';
+import { verifySigWithDidKey } from '@atcute/crypto';
 import { fromBase64Url, toBase32 } from '@atcute/multibase';
+import { toSha256 } from '@atcute/uint8array';
 
 import * as err from './errors.js';
 import * as t from './types.js';
