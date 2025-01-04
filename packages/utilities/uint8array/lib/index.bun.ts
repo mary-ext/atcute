@@ -1,12 +1,16 @@
 import { allocUnsafe as _allocUnsafe, concatArrayBuffers as _concat } from 'bun';
 
 import { Buffer as NodeBuffer } from 'node:buffer';
-import { timingSafeEqual as _timingSafeEqual } from 'node:crypto';
+import { hash as _hash, timingSafeEqual as _timingSafeEqual } from 'node:crypto';
 
 const _compare = /*#__PURE__*/ NodeBuffer.prototype.compare;
 const _equals = /*#__PURE__*/ NodeBuffer.prototype.equals;
 const _utf8Slice = /*#__PURE__*/ NodeBuffer.prototype.utf8Slice;
 const _utf8Write = /*#__PURE__*/ NodeBuffer.prototype.utf8Write;
+
+const toUint8Array = (buffer: NodeBuffer) => {
+	return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+};
 
 export const alloc = (size: number): Uint8Array => {
 	return new Uint8Array(size);
@@ -43,4 +47,8 @@ export const decodeUtf8From = (
 	length: number = from.length,
 ): string => {
 	return _utf8Slice.call(from, offset, offset + length);
+};
+
+export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array> => {
+	return toUint8Array(_hash('SHA-256', buffer, 'buffer'));
 };

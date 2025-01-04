@@ -1,5 +1,5 @@
 import { Buffer as NodeBuffer } from 'node:buffer';
-import { timingSafeEqual as _timingSafeEqual } from 'node:crypto';
+import { hash as _hash, timingSafeEqual as _timingSafeEqual } from 'node:crypto';
 
 const _alloc = /*#__PURE__*/ NodeBuffer.alloc;
 const _allocUnsafe = /*#__PURE__*/ NodeBuffer.allocUnsafe;
@@ -48,4 +48,8 @@ export const decodeUtf8From = (
 	length: number = from.length,
 ): string => {
 	return _utf8Slice.call(from, offset, offset + length);
+};
+
+export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array> => {
+	return toUint8Array(_hash('SHA-256', buffer, 'buffer'));
 };

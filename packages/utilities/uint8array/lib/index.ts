@@ -1,3 +1,8 @@
+const textEncoder = new TextEncoder();
+const textDecoder = new TextDecoder();
+
+const subtle = /*#__PURE__*/ crypto.subtle;
+
 /**
  * creates an Uint8Array of the requested size, with the contents zeroed
  */
@@ -106,9 +111,6 @@ export const concat = (arrays: Uint8Array[], size?: number): Uint8Array => {
 	return buffer;
 };
 
-const textEncoder = new TextEncoder();
-const textDecoder = new TextDecoder();
-
 /**
  * encodes a UTF-8 string into the buffer
  */
@@ -145,4 +147,11 @@ export const decodeUtf8From = (from: Uint8Array, offset?: number, length?: numbe
 	const result = textDecoder.decode(buffer);
 
 	return result;
+};
+
+/**
+ * get a SHA-256 digest of this buffer
+ */
+export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array> => {
+	return new Uint8Array(await subtle.digest('SHA-256', buffer));
 };
