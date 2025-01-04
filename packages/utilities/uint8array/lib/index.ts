@@ -1,7 +1,7 @@
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 
-const subtle = /*#__PURE__*/ crypto.subtle;
+const subtle = crypto.subtle;
 
 /**
  * creates an Uint8Array of the requested size, with the contents zeroed
