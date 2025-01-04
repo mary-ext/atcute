@@ -1,8 +1,9 @@
 import { toBase16, toBase64Url } from '@atcute/multibase';
+import { toSha256 } from '@atcute/uint8array';
 import { getPublicKey, ProjectivePoint, signAsync, utils, verify } from '@noble/secp256k1';
 
 import type { DidKeyString, PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.js';
-import { assertUnreachable, checkKeypairRelationship, toMultikey, toSha256 } from '../utils.js';
+import { assertUnreachable, checkKeypairRelationship, toMultikey } from '../utils.js';
 
 // Reference: https://atproto.com/specs/cryptography#public-key-encoding
 export const SECP256K1_PUBLIC_PREFIX = Uint8Array.from([0xe7, 0x01]);

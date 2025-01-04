@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
 import { fromBase16, fromBase64 } from '@atcute/multibase';
+import { toSha256 } from '@atcute/uint8array';
 import { secp256k1 } from '@noble/curves/secp256k1';
 
 import { parseDidKey } from '../multibase.js';
-import { toSha256 } from '../utils.js';
 
 import { Secp256k1PrivateKey, Secp256k1PrivateKeyExportable, Secp256k1PublicKey } from './secp256k1-node.js';
 

@@ -3,11 +3,6 @@ import { concat } from '@atcute/uint8array';
 
 import type { PrivateKey } from './types.js';
 
-export const toSha256 = async (input: Uint8Array): Promise<Uint8Array> => {
-	const digest = await crypto.subtle.digest('SHA-256', input);
-	return new Uint8Array(digest);
-};
-
 // -- Cryptographic commons --
 
 const getSignatureS = (sig: Uint8Array): bigint => {
