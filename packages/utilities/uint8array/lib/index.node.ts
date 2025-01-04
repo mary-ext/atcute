@@ -51,5 +51,5 @@ export const decodeUtf8From = (
 };
 
 export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array> => {
-	return toUint8Array(_hash('SHA-256', buffer, 'buffer'));
+	return toUint8Array(_hash('sha256', buffer, 'buffer'));
 };
