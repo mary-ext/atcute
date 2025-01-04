@@ -11,7 +11,7 @@ interface PackageJsonData {
 	relpath: string;
 	name: string;
 	private: boolean;
-	exports: Record<string, string> | null; // let's pretend the export map doesn't exist for now shall we :)
+	exports: Record<string, string | { default: string }> | null;
 }
 
 const PNPM_LOCKFILE = new URL('pnpm-lock.yaml', WORKSPACE_ROOT);
@@ -56,8 +56,13 @@ export function computePackageSizeInformation(
 	for (const entry in pkg.exports) {
 		if (!Object.hasOwn(pkg.exports, entry)) continue;
 
+		let res = pkg.exports[entry];
+		if (typeof res !== 'string') {
+			res = res.default;
+		}
+
 		const entryQualifier = pkg.name + entry.slice(1);
-		const entryFile = new URL(pkg.exports[entry], pkg.folder);
+		const entryFile = new URL(res, pkg.folder);
 
 		const data = computeBundleInformation(entryFile, entryQualifier, keepBuilds);
 		pkgSizeInformation.entries.push({
