@@ -16,6 +16,7 @@
 	],
 	"exports": {
 		".": {
+			"bun": "./dist/index.bun.js",
 			"node": "./dist/index.node.js",
 			"default": "./dist/index.js"
 		}
