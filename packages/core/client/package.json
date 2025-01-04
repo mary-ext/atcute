@@ -23,7 +23,7 @@
 	},
 	"scripts": {
 		"build": "tsc --project tsconfig.build.json",
-		"test": "vitest run",
+		"test": "vitest run --coverage",
 		"generate": "./scripts/generate-lexicons.sh",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
