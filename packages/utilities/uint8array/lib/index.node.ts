@@ -29,7 +29,17 @@ export const concat = (arrays: Uint8Array[], size?: number): Uint8Array => {
 	return toUint8Array(Buffer.concat(arrays, size));
 };
 
-const _utf8Write = NodeBuffer.prototype.utf8Write;
+const _utf8Write = /*#__PURE__*/ NodeBuffer.prototype.utf8Write;
+const _utf8Slice = /*#__PURE__*/ NodeBuffer.prototype.utf8Slice;
+
 export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, length?: number): number => {
 	return _utf8Write.call(to, str, offset, length);
+};
+
+export const decodeUtf8From = (
+	from: Uint8Array,
+	offset: number = 0,
+	length: number = from.length,
+): string => {
+	return _utf8Slice.call(from, offset, offset + length);
 };
