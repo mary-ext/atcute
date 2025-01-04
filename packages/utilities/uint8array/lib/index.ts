@@ -12,11 +12,9 @@ export const alloc = (size: number): Uint8Array => {
 
 /**
  * creates an Uint8Array of the requested size, where the contents may not be
- * zeroed out. Only use if you're certain that the contents will be overwritten
+ * zeroed out. only use if you're certain that the contents will be overwritten
  */
-export const allocUnsafe = (size: number): Uint8Array => {
-	return new Uint8Array(size);
-};
+export const allocUnsafe = alloc;
 
 /**
  * compares two Uint8Array buffers
