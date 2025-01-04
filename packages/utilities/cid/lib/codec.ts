@@ -1,5 +1,5 @@
 import { fromBase32, toBase32 } from '@atcute/multibase';
-import { allocUnsafe } from '@atcute/uint8array';
+import { allocUnsafe, toSha256 } from '@atcute/uint8array';
 import * as varint from '@atcute/varint';
 
 export const CID_VERSION = 1;
@@ -30,7 +30,7 @@ export interface Cid {
 }
 
 export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid> => {
-	const digest = new Uint8Array(await crypto.subtle.digest('sha-256', data));
+	const digest = await toSha256(data);
 
 	const digestSize = digest.length;
 	const digestLebSize = varint.encodingLength(digestSize);
