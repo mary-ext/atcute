@@ -15,14 +15,18 @@ const readArgument = (state: State, info: number): number => {
 	}
 
 	switch (info) {
-		case 24:
+		case 24: {
 			return readUint8(state);
-		case 25:
+		}
+		case 25: {
 			return readUint16(state);
-		case 26:
+		}
+		case 26: {
 			return readUint32(state);
-		case 27:
+		}
+		case 27: {
 			return readUint53(state);
+		}
 	}
 
 	throw new Error(`invalid argument encoding; got ${info}`);
@@ -168,12 +172,15 @@ const readValue = (state: State): any => {
 		case 7: {
 			switch (info) {
 				case 20:
-				case 21:
+				case 21: {
 					return info === 21;
-				case 22:
+				}
+				case 22: {
 					return null;
-				case 27:
+				}
+				case 27: {
 					return readFloat64(state);
+				}
 			}
 
 			throw new Error(`invalid simple value; got ${info}`);
