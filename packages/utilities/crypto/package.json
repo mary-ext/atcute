@@ -40,7 +40,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@noble/curves": "^1.7.0",
+		"@noble/curves": "^1.8.0",
 		"@types/bun": "^1.1.14",
 		"@vitest/coverage-v8": "^2.1.8",
 		"vitest": "^2.1.8"
@@ -48,6 +48,6 @@
 	"dependencies": {
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"@noble/secp256k1": "^2.1.0"
+		"@noble/secp256k1": "^2.2.2"
 	}
 }
