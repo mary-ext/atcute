@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/uint8array",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "uint8array utilities",
 	"license": "MIT",
 	"repository": {
