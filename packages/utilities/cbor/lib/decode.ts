@@ -5,6 +5,7 @@ import { toBytes, type Bytes } from './bytes.js';
 
 interface State {
 	b: Uint8Array;
+	v: DataView;
 	p: number;
 }
 
@@ -28,20 +29,10 @@ const readArgument = (state: State, info: number): number => {
 };
 
 const readFloat64 = (state: State): number => {
-	// DataView seems to be faster for float64, too lazy though
-	let pos = state.p;
+	const value = state.v.getFloat64(state.p);
 
-	const buf = state.b;
-
-	const hi = ((buf[pos++] << 24) | (buf[pos++] << 16) | (buf[pos++] << 8) | buf[pos++]) >>> 0;
-	const lo = ((buf[pos++] << 24) | (buf[pos++] << 16) | (buf[pos++] << 8) | buf[pos++]) >>> 0;
-
-	const sign = hi >>> 31 ? -1 : 1;
-	const exponent = ((hi >>> 20) & 0x7ff) - 1023;
-	const mantissa = (hi & 0xfffff) * 2 ** -20 + lo * 2 ** -52;
-
-	state.p = pos;
-	return sign * (1 + mantissa) * 2 ** exponent;
+	state.p += 8;
+	return value;
 };
 
 const readUint8 = (state: State): number => {
@@ -195,6 +186,7 @@ const readValue = (state: State): any => {
 export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array] => {
 	const state: State = {
 		b: buf,
+		v: new DataView(buf.buffer, buf.byteOffset, buf.byteLength),
 		p: 0,
 	};
 

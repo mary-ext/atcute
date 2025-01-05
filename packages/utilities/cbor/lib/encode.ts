@@ -9,13 +9,11 @@ const CHUNK_SIZE = 1024;
 interface State {
 	c: Uint8Array[];
 	b: Uint8Array;
+	v: DataView;
 	p: number;
 	l: number;
 }
 
-const _abs = Math.abs;
-const _floor = Math.floor;
-const _log2 = Math.log2;
 const _max = Math.max;
 
 const _isInteger = Number.isInteger;
@@ -32,7 +30,7 @@ const resizeIfNeeded = (state: State, needed: number): void => {
 		state.c.push(buf.subarray(0, pos));
 		state.l += pos;
 
-		state.b = allocUnsafe(_max(CHUNK_SIZE, needed));
+		state.v = new DataView((state.b = allocUnsafe(_max(CHUNK_SIZE, needed))).buffer);
 		state.p = 0;
 	}
 };
@@ -42,29 +40,8 @@ const getTypeInfoLength = (arg: number): number => {
 };
 
 const writeFloat64 = (state: State, val: number): void => {
-	// DataView seems to be faster for float64, too lazy though
-	let pos = state.p;
-
-	const buf = state.b;
-
-	const sign = val < 0 ? 1 : 0;
-	val = _abs(val);
-
-	const exp = _floor(_log2(val));
-	let frac = val / 2 ** exp - 1;
-
-	const biasedExp = exp + 1023;
-
-	buf[pos++] = (sign << 7) | (biasedExp >>> 4);
-	buf[pos++] = ((biasedExp & 0xf) << 4) | ((frac * 16) >>> 0);
-
-	frac *= 16;
-	for (let i = 0; i < 6; i++) {
-		frac = (frac % 1) * 256;
-		buf[pos++] = frac >>> 0;
-	}
-
-	state.p = pos;
+	state.v.setFloat64(state.p, val);
+	state.p += 8;
 };
 
 const writeUint8 = (state: State, val: number): void => {
@@ -308,6 +285,7 @@ const createState = (): State => {
 	return {
 		c: [],
 		b: buf,
+		v: new DataView(buf.buffer),
 		p: 0,
 		l: 0,
 	};
