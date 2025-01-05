@@ -16,9 +16,7 @@ export const alloc = (size: number): Uint8Array => {
 	return new Uint8Array(size);
 };
 
-export const allocUnsafe = (size: number): Uint8Array => {
-	return _allocUnsafe(size);
-};
+export const allocUnsafe: (size: number) => Uint8Array = _allocUnsafe;
 
 export const compare = (a: Uint8Array, b: Uint8Array): number => {
 	return _compare.call(a, b);
