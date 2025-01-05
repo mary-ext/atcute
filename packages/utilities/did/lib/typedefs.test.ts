@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'bun:test';
+import { describe, expect, it } from 'bun:test';
 
-import { didDocument } from './types.js';
+import { didDocument } from './typedefs.js';
 
 describe('didDocument', () => {
 	it('parses a did:plc document', () => {
