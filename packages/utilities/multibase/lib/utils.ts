@@ -1,4 +1,4 @@
-import { allocUnsafe } from '@atcute/uint8array';
+import { alloc, allocUnsafe } from '@atcute/uint8array';
 
 export const createRfc4648Encode = (alphabet: string, bitsPerChar: number, pad: boolean) => {
 	return (bytes: Uint8Array): string => {
@@ -109,7 +109,7 @@ export const createBtcBaseEncode = (alphabet: string) => {
 
 		// Allocate enough space in big-endian base58 representation.
 		const size = ((pend - pbegin) * iFACTOR + 1) >>> 0;
-		const b58 = allocUnsafe(size);
+		const b58 = alloc(size);
 
 		// Process the bytes.
 		while (pbegin !== pend) {
@@ -184,7 +184,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 
 		// Allocate enough space in big-endian base256 representation.
 		const size = ((source.length - psz) * FACTOR + 1) >>> 0; // log(58) / log(256), rounded up.
-		const b256 = allocUnsafe(size);
+		const b256 = alloc(size);
 
 		// Process the characters.
 		while (psz < source.length) {
