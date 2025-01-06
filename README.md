@@ -6,9 +6,14 @@ featuring:
 - an [API client][client] for making typed HTTP requests, with support for lexicons like
   [WhiteWind][whitewind] or [Bluemoji][bluemoji]
 - an [OAuth client for SPA applications][oauth-browser-client] for authentication use-cases
-- utility packages for various data formats, including CIDv1, DAG-CBOR, CAR and TID record keys
-- Bluesky-specific utility packages like [a rich text builder][bluesky-richtext-builder] and [a post
-  threader][bluesky-threading]
+- a grab bag of utility packages:
+  - codec libraries for [DASL][dasl] data formats, a strict subset of IPLD specifications, like
+    CIDv1, DAG-CBOR and CAR, but tailored specifically for atproto
+  - codec for atproto's timestamp identifiers
+  - cryptography library for signing and verification of signatures in atproto
+  - schema validators for DID documents, and verification of did:plc operations
+  - Bluesky-specific helpers like [a rich text builder][bluesky-richtext-builder] and [a post thread
+    builder][bluesky-threading]
 
 looking for more? check out [skyware][skyware], an additional collection of packages, built on top
 of atcute.
@@ -19,6 +24,8 @@ of atcute.
 [client]: ./packages/core/client
 [oauth-browser-client]: ./packages/oauth/browser-client
 [whitewind]: ./packages/definitions/whitewind
+[dasl]: https://dasl.ing/
+[ipld]: https://ipld.io/
 [skyware]: https://skyware.js.org/
 
 ---
