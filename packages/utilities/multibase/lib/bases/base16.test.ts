@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { expect, it } from 'bun:test';
 
 import { fromBase16 as _fromBase16Node, toBase16 as _toBase16Node } from './base16-node.js';
 import { _fromBase16Native, _fromBase16Polyfill, _toBase16Native, _toBase16Polyfill } from './base16-web.js';
@@ -29,44 +29,18 @@ const inputs = [
 	},
 ];
 
-describe('polyfill', () => {
-	it('can encode', () => {
-		for (const { buffer, encoded } of inputs) {
-			expect(_toBase16Polyfill(buffer)).toEqual(encoded);
-		}
-	});
-
-	it('can decode', () => {
-		for (const { buffer, encoded } of inputs) {
-			expect(_fromBase16Polyfill(encoded)).toEqual(buffer);
-		}
-	});
+it('can encode', () => {
+	for (const { buffer, encoded } of inputs) {
+		expect(_toBase16Polyfill(buffer)).toEqual(encoded);
+		expect(_toBase16Node(buffer)).toEqual(encoded);
+		expect(_toBase16Native(buffer)).toEqual(encoded);
+	}
 });
 
-describe('node', () => {
-	it('can encode', () => {
-		for (const { buffer, encoded } of inputs) {
-			expect(_toBase16Node(buffer)).toEqual(encoded);
-		}
-	});
-
-	it('can decode', () => {
-		for (const { buffer, encoded } of inputs) {
-			expect(_fromBase16Node(encoded)).toEqual(buffer);
-		}
-	});
-});
-
-describe('native', () => {
-	it('can encode', () => {
-		for (const { buffer, encoded } of inputs) {
-			expect(_toBase16Native(buffer)).toEqual(encoded);
-		}
-	});
-
-	it('can decode', () => {
-		for (const { buffer, encoded } of inputs) {
-			expect(_fromBase16Native(encoded)).toEqual(buffer);
-		}
-	});
+it('can decode', () => {
+	for (const { buffer, encoded } of inputs) {
+		expect(_fromBase16Polyfill(encoded)).toEqual(buffer);
+		expect(_fromBase16Node(encoded)).toEqual(buffer);
+		expect(_fromBase16Native(encoded)).toEqual(buffer);
+	}
 });
