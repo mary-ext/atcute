@@ -19,6 +19,9 @@
 		"sourceMap": true,
 		"declaration": true,
 		"stripInternal": true,
+		"paths": {
+			"#bases/base16": ["./lib/bases/base16-web.ts"],
+		},
 	},
 	"include": ["lib"],
 }

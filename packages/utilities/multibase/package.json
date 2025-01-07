@@ -17,6 +17,13 @@
 	"exports": {
 		".": "./dist/index.js"
 	},
+	"imports": {
+		"#bases/base16": {
+			"bun": "./dist/bases/base16.web.js",
+			"node": "./dist/bases/base16.node.js",
+			"default": "./dist/bases/base16.web.js"
+		}
+	},
 	"sideEffects": false,
 	"scripts": {
 		"build": "tsc --project tsconfig.build.json",

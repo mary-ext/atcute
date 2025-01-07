@@ -1,62 +1,72 @@
 import { describe, expect, it } from 'bun:test';
 
-import { _fromBase16Native, _fromBase16Polyfill, _toBase16Native, _toBase16Polyfill } from './base16.js';
+import { fromBase16 as _fromBase16Node, toBase16 as _toBase16Node } from './base16-node.js';
+import { _fromBase16Native, _fromBase16Polyfill, _toBase16Native, _toBase16Polyfill } from './base16-web.js';
 
 const inputs = [
 	{
-		text: `Decentralize everything!!`,
+		buffer: Uint8Array.from([
+			68, 101, 99, 101, 110, 116, 114, 97, 108, 105, 122, 101, 32, 101, 118, 101, 114, 121, 116, 104, 105,
+			110, 103, 33, 33,
+		]),
 		encoded: `446563656e7472616c697a652065766572797468696e672121`,
 	},
 	{
-		text: `yes mani !`,
+		buffer: Uint8Array.from([121, 101, 115, 32, 109, 97, 110, 105, 32, 33]),
 		encoded: `796573206d616e692021`,
 	},
 	{
-		text: `hello world`,
+		buffer: Uint8Array.from([104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]),
 		encoded: `68656c6c6f20776f726c64`,
 	},
 	{
-		text: `\x00yes mani !`,
+		buffer: Uint8Array.from([0, 121, 101, 115, 32, 109, 97, 110, 105, 32, 33]),
 		encoded: `00796573206d616e692021`,
 	},
 	{
-		text: `\x00\x00yes mani !`,
+		buffer: Uint8Array.from([0, 0, 121, 101, 115, 32, 109, 97, 110, 105, 32, 33]),
 		encoded: `0000796573206d616e692021`,
 	},
 ];
 
 describe('polyfill', () => {
 	it('can encode', () => {
-		const encoder = new TextEncoder();
-
-		for (const { text, encoded } of inputs) {
-			expect(_toBase16Polyfill(encoder.encode(text))).toBe(encoded);
+		for (const { buffer, encoded } of inputs) {
+			expect(_toBase16Polyfill(buffer)).toEqual(encoded);
 		}
 	});
 
 	it('can decode', () => {
-		const decoder = new TextDecoder();
+		for (const { buffer, encoded } of inputs) {
+			expect(_fromBase16Polyfill(encoded)).toEqual(buffer);
+		}
+	});
+});
 
-		for (const { text, encoded } of inputs) {
-			expect(decoder.decode(_fromBase16Polyfill(encoded))).toBe(text);
+describe('node', () => {
+	it('can encode', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(_toBase16Node(buffer)).toEqual(encoded);
+		}
+	});
+
+	it('can decode', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(_fromBase16Node(encoded)).toEqual(buffer);
 		}
 	});
 });
 
 describe('native', () => {
 	it('can encode', () => {
-		const encoder = new TextEncoder();
-
-		for (const { text, encoded } of inputs) {
-			expect(_toBase16Native(encoder.encode(text))).toBe(encoded);
+		for (const { buffer, encoded } of inputs) {
+			expect(_toBase16Native(buffer)).toEqual(encoded);
 		}
 	});
 
 	it('can decode', () => {
-		const decoder = new TextDecoder();
-
-		for (const { text, encoded } of inputs) {
-			expect(decoder.decode(_fromBase16Native(encoded))).toBe(text);
+		for (const { buffer, encoded } of inputs) {
+			expect(_fromBase16Native(encoded)).toEqual(buffer);
 		}
 	});
 });
