@@ -19,14 +19,14 @@
 	},
 	"imports": {
 		"#bases/base16": {
-			"bun": "./dist/bases/base16.web.js",
-			"node": "./dist/bases/base16.node.js",
-			"default": "./dist/bases/base16.web.js"
+			"bun": "./dist/bases/base16-web.js",
+			"node": "./dist/bases/base16-node.js",
+			"default": "./dist/bases/base16-web.js"
 		},
 		"#bases/base64": {
-			"bun": "./dist/bases/base64.web.js",
-			"node": "./dist/bases/base64.node.js",
-			"default": "./dist/bases/base64.web.js"
+			"bun": "./dist/bases/base64-web.js",
+			"node": "./dist/bases/base64-node.js",
+			"default": "./dist/bases/base64-web.js"
 		}
 	},
 	"sideEffects": false,
