@@ -4,39 +4,38 @@ import { fromBase58Btc, toBase58Btc } from './base58.js';
 
 const inputs = [
 	{
-		text: `Decentralize everything!!`,
+		buffer: Uint8Array.from([
+			68, 101, 99, 101, 110, 116, 114, 97, 108, 105, 122, 101, 32, 101, 118, 101, 114, 121, 116, 104, 105,
+			110, 103, 33, 33,
+		]),
 		encoded: `UXE7GvtEk8XTXs1GF8HSGbVA9FCX9SEBPe`,
 	},
 	{
-		text: `yes mani !`,
+		buffer: Uint8Array.from([121, 101, 115, 32, 109, 97, 110, 105, 32, 33]),
 		encoded: `7paNL19xttacUY`,
 	},
 	{
-		text: `hello world`,
+		buffer: Uint8Array.from([104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]),
 		encoded: `StV1DL6CwTryKyV`,
 	},
 	{
-		text: `\x00yes mani !`,
+		buffer: Uint8Array.from([0, 121, 101, 115, 32, 109, 97, 110, 105, 32, 33]),
 		encoded: `17paNL19xttacUY`,
 	},
 	{
-		text: `\x00\x00yes mani !`,
+		buffer: Uint8Array.from([0, 0, 121, 101, 115, 32, 109, 97, 110, 105, 32, 33]),
 		encoded: `117paNL19xttacUY`,
 	},
 ];
 
 it('can encode', () => {
-	const encoder = new TextEncoder();
-
-	for (const { text, encoded } of inputs) {
-		expect(toBase58Btc(encoder.encode(text))).toBe(encoded);
+	for (const { buffer, encoded } of inputs) {
+		expect(toBase58Btc(buffer)).toEqual(encoded);
 	}
 });
 
 it('can decode', () => {
-	const decoder = new TextDecoder();
-
-	for (const { text, encoded } of inputs) {
-		expect(decoder.decode(fromBase58Btc(encoded))).toBe(text);
+	for (const { buffer, encoded } of inputs) {
+		expect(fromBase58Btc(encoded)).toEqual(buffer);
 	}
 });
