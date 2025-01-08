@@ -1,4 +1,4 @@
-import { expect, it } from 'bun:test';
+import { expect, it, mock } from 'bun:test';
 
 import { fromBase16 as _fromBase16Node, toBase16 as _toBase16Node } from './base16-node.js';
 import { _fromBase16Native, _fromBase16Polyfill, _toBase16Native, _toBase16Polyfill } from './base16-web.js';
@@ -28,6 +28,14 @@ const inputs = [
 		encoded: `0000796573206d616e692021`,
 	},
 ];
+
+mock.module('@atcute/uint8array', () => {
+	return {
+		allocUnsafe: (size: number): Uint8Array => {
+			return crypto.getRandomValues(new Uint8Array(size));
+		},
+	};
+});
 
 it('can encode', () => {
 	for (const { buffer, encoded } of inputs) {

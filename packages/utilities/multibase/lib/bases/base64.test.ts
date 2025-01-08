@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it, mock } from 'bun:test';
 
 import {
 	fromBase64 as _fromBase64Node,
@@ -38,6 +38,14 @@ const inputs = [
 		base64urlpad: 'Pz8_Pw==',
 	},
 ];
+
+mock.module('@atcute/uint8array', () => {
+	return {
+		allocUnsafe: (size: number): Uint8Array => {
+			return crypto.getRandomValues(new Uint8Array(size));
+		},
+	};
+});
 
 it('can encode', () => {
 	for (const input of inputs) {
