@@ -86,12 +86,14 @@ summary(() => {
 
 	// bench('ref: JSON.stringify', function* () {
 	// 	yield {
-	// 		[0]() { return getObject() },
+	// 		[0]() {
+	// 			return getObject();
+	// 		},
 	// 		bench(record: object) {
 	// 			return do_not_optimize(JSON.stringify(record));
-	// 		}
-	// 	}
-	// })
+	// 		},
+	// 	};
+	// });
 });
 
 summary(() => {
@@ -131,12 +133,14 @@ summary(() => {
 
 	// bench('ref: JSON.parse', function* () {
 	// 	yield {
-	// 		[0]() { return JSON.stringify(getObject()) },
+	// 		[0]() {
+	// 			return JSON.stringify(getObject());
+	// 		},
 	// 		bench(json: string) {
 	// 			return do_not_optimize(JSON.parse(json));
-	// 		}
-	// 	}
-	// })
+	// 		},
+	// 	};
+	// });
 });
 
 await run();
