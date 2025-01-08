@@ -3,9 +3,12 @@ version = "1.1.42"
 backend = "core:bun"
 
 [tools.node]
-version = "22.12.0"
+version = "22.13.0"
 backend = "core:node"
 
+[tools.node.checksums]
+"node-v22.13.0-linux-x64.tar.gz" = "sha256:9a33e89093a0d946c54781dcb3ccab4ccf7538a7135286528ca41ca055e9b38f"
+
 [tools.pnpm]
-version = "9.15.2"
+version = "9.15.3"
 backend = "asdf:pnpm"
