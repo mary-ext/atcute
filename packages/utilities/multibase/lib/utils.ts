@@ -215,6 +215,10 @@ export const createBtcBaseDecode = (alphabet: string) => {
 			it4++;
 		}
 
+		if (it4 === zeroes) {
+			return b256;
+		}
+
 		const vch = allocUnsafe(zeroes + (size - it4));
 		vch.fill(0, 0, zeroes);
 		vch.set(b256.subarray(it4), zeroes);
