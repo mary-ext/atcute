@@ -22,6 +22,20 @@ export const isAtprotoDidWeb = (input: string): input is Did<'web'> => {
 };
 
 /**
+ * normalize a did:web identifier
+ */
+export const normalizeDidWeb = (did: Did<'web'>): Did<'web'> => {
+	const [hostname, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
+
+	let normalized = `did:web:${encodeURIComponent(hostname.toLowerCase())}`;
+	if (paths.length > 0) {
+		normalized += `:${paths.join(':')}`;
+	}
+
+	return normalized as Did<'web'>;
+};
+
+/**
  * converts did:web identifier into the DID document's URL
  */
 export const didWebToDocumentUrl = (did: Did<'web'>): URL => {
