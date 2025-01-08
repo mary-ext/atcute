@@ -1,9 +1,9 @@
 import type { Did } from '../types.js';
 
 export const DID_WEB_RE =
-	/^did:web:([a-zA-Z0-9-]+(?:(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,}))?)?((?::[a-zA-Z0-9%.-]+)+)?$/;
+	/^did:web:([a-zA-Z0-9%\-]+(?:(?:\.[a-zA-Z0-9%\-]+)*(?:\.[a-zA-Z]{2,}))?)?((?::[a-zA-Z0-9\-%.]+)+)?$/;
 
-export const ATPROTO_DID_WEB_RE = /^did:web:([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,}))$/;
+export const ATPROTO_DID_WEB_RE = /^did:web:([a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*(?:\.[a-zA-Z]{2,}))$/;
 
 /**
  * checks if input is a did:web identifier, note that you should probably use
@@ -25,10 +25,10 @@ export const isAtprotoDidWeb = (input: string): input is Did<'web'> => {
  * converts did:web identifier into the DID document's URL
  */
 export const didWebToDocumentUrl = (did: Did<'web'>): URL => {
-	const [hostname, ...paths] = did.slice(8).split(':');
+	const [hostname, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
 
 	const protocol = hostname === 'localhost' ? 'http:' : 'https:';
-	let pathname = '/' + paths.map(decodeURIComponent).join('/');
+	let pathname = '/' + paths.join('/');
 
 	if (pathname === '/') {
 		pathname = `/.well-known/did.json`;
