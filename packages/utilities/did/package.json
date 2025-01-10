@@ -28,7 +28,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.1.14"
+		"@types/bun": "^1.1.16"
 	},
 	"dependencies": {
 		"@badrap/valita": "^0.4.2"

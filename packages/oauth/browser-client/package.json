@@ -27,6 +27,6 @@
 		"@atcute/client": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.1.14"
+		"@types/bun": "^1.1.16"
 	}
 }
