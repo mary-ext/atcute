@@ -1,5 +1,8 @@
 # @atcute/did-plc
 
+> [!NOTE]  
+> not yet published.
+
 lightweight did:plc utilities library, currently only provides type definitions and basic
 validations around the audit log.
 
