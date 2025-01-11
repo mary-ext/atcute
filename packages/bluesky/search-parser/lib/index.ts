@@ -1,7 +1,3 @@
-const WHITESPACE_RE = /^\s+/;
-const QUOTED_RE = /^".*?(?:"(?=\s)|(?=$))/;
-const WORD_RE = /^.+?(?:".*?(?:".*?|$))?(?=\s|$)/;
-
 interface WordToken {
 	type: 'word';
 	value: string;
@@ -19,51 +15,53 @@ interface QuotedToken {
 
 export type Token = WordToken | WhitespaceToken | QuotedToken;
 
-const tokenizeWhitespace = (src: string): WhitespaceToken | undefined => {
-	const match = WHITESPACE_RE.exec(src);
-	if (match) {
-		return {
-			type: 'whitespace',
-			value: match[0],
-		};
-	}
-};
+const fieldsfunc = (str: string, fn: (rune: number) => boolean): string[] => {
+	const slices: string[] = [];
 
-const tokenizeQuoted = (src: string): QuotedToken | undefined => {
-	const match = QUOTED_RE.exec(src);
-	if (match) {
-		return {
-			type: 'quoted',
-			value: match[0],
-		};
-	}
-};
+	let start = 0;
+	let prev = false;
 
-const tokenizeWord = (src: string): WordToken | undefined => {
-	const match = WORD_RE.exec(src);
-	if (match) {
-		return {
-			type: 'word',
-			value: match[0],
-		};
-	}
-};
+	for (let idx = 0, len = str.length; idx <= len; idx++) {
+		const next: boolean = idx < len ? fn(str.charCodeAt(idx)) : !prev;
 
-export const tokenize = (src: string): Token[] => {
-	const tokens: Token[] = [];
-	let token: Token | undefined;
-
-	while (src) {
-		if ((token = tokenizeWhitespace(src) || tokenizeQuoted(src) || tokenizeWord(src))) {
-			src = src.slice(token.value.length);
-			tokens.push(token);
+		if (idx === 0) {
+			prev = next;
 			continue;
 		}
 
-		if (src) {
-			throw new Error('Infinite loop encountered');
+		if (next !== prev) {
+			slices.push(str.slice(start, idx));
+			start = idx;
+			prev = next;
 		}
 	}
 
-	return tokens;
+	return slices;
+};
+
+export const tokenize = (query: string): Token[] => {
+	// https://github.com/bluesky-social/indigo/blob/421e4da5307f4fcba51f25b5c5982c8b9841f7f6/search/parse_query.go#L15-L21
+	let quoted = false;
+
+	const slices = fieldsfunc(query, (rune) => {
+		if (rune === 34) {
+			quoted = !quoted;
+		}
+
+		return rune === 32 && !quoted;
+	});
+
+	return slices.map((str): Token => {
+		const code = str.charCodeAt(0);
+
+		if (code === 34) {
+			return { type: 'quoted', value: str };
+		}
+
+		if (code === 32) {
+			return { type: 'whitespace', value: str };
+		}
+
+		return { type: 'word', value: str };
+	});
 };

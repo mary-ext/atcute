@@ -51,9 +51,7 @@ it('tokenizes search queries', () => {
 	expect(tokenize(`foo """"123"""345"" quz`)).toEqual([
 		{ type: 'word', value: 'foo' },
 		{ type: 'whitespace', value: ' ' },
-		{ type: 'quoted', value: '""""123"""345""' },
-		{ type: 'whitespace', value: ' ' },
-		{ type: 'word', value: 'quz' },
+		{ type: 'quoted', value: '""""123"""345"" quz' },
 	]);
 
 	expect(tokenize(` foo "hello world `)).toEqual([
@@ -69,5 +67,15 @@ it('tokenizes search queries', () => {
 
 	expect(tokenize(`""foo"""bar`)).toEqual([{ type: 'quoted', value: `""foo"""bar` }]);
 
-	expect(tokenize(`""foo bar"""bar buzz`)).toEqual([{ type: 'quoted', value: `""foo bar"""bar buzz` }]);
+	expect(tokenize(`""foo bar"""bar buzz`)).toEqual([
+		{ type: 'quoted', value: '""foo' },
+		{ type: 'whitespace', value: ' ' },
+		{ type: 'word', value: 'bar"""bar buzz' },
+	]);
+
+	expect(tokenize(`from:"asd"qwe"zxc asd`)).toEqual([{ type: 'word', value: 'from:"asd"qwe"zxc asd' }]);
+
+	expect(tokenize(`"      ""  qwe`)).toEqual([{ type: 'quoted', value: '"      ""  qwe' }]);
+
+	expect(tokenize(`foo"      ""  qwe`)).toEqual([{ type: 'word', value: 'foo"      ""  qwe' }]);
 });
