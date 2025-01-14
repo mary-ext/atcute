@@ -3,29 +3,13 @@
 parse Bluesky's search syntax
 
 ```ts
-const result = tokenize(`hello @bsky.app! check out my [website](https://example.com)`);
+const result = tokenize(`from:me hello "foo bar"`);
 
 expect(result).toEqual([
-	{
-		type: 'text',
-		raw: 'hello ',
-		text: 'hello ',
-	},
-	{
-		type: 'mention',
-		raw: '@bsky.app',
-		handle: 'bsky.app',
-	},
-	{
-		type: 'text',
-		raw: '! check out my ',
-		text: '! check out my ',
-	},
-	{
-		type: 'link',
-		raw: '[website](https://example.com)',
-		text: 'website',
-		url: 'https://example.com',
-	},
+	{ type: 'word', value: 'from:me' },
+	{ type: 'whitespace', value: ' ' },
+	{ type: 'word', value: 'hello' },
+	{ type: 'whitespace', value: ' ' },
+	{ type: 'quoted', value: '"foo bar"' },
 ]);
 ```
