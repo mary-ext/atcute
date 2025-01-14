@@ -15,53 +15,51 @@ interface QuotedToken {
 
 export type Token = WordToken | WhitespaceToken | QuotedToken;
 
-const fieldsfunc = (str: string, fn: (rune: number) => boolean): string[] => {
-	const slices: string[] = [];
+export const tokenize = (query: string): Token[] => {
+	const tokens: Token[] = [];
 
 	let start = 0;
-	let prev = false;
+	let quoted = false;
+	let code: number;
 
-	for (let idx = 0, len = str.length; idx <= len; idx++) {
-		const next: boolean = idx < len ? fn(str.charCodeAt(idx)) : !prev;
+	for (let i = 0, len = query.length; i <= len; i++) {
+		code = query.charCodeAt(i);
 
-		if (idx === 0) {
-			prev = next;
+		if (i === len || (code === 32 && !quoted)) {
+			if (start < i) {
+				const substring = query.slice(start, i);
+
+				if (substring.charCodeAt(0) === 34) {
+					tokens.push({ type: 'quoted', value: substring });
+				} else {
+					tokens.push({ type: 'word', value: substring });
+				}
+			}
+
+			if (i < len && code === 32 && !quoted) {
+				let j = i;
+
+				for (; j < len; j++) {
+					if (query.charCodeAt(j) !== 32) {
+						break;
+					}
+				}
+
+				tokens.push({ type: 'whitespace', value: query.slice(i, j) });
+
+				start = j;
+				i = j - 1;
+			} else {
+				start = i + 1;
+			}
+
 			continue;
 		}
 
-		if (next !== prev) {
-			slices.push(str.slice(start, idx));
-			start = idx;
-			prev = next;
+		if (code === 34) {
+			quoted = !quoted;
 		}
 	}
 
-	return slices;
-};
-
-export const tokenize = (query: string): Token[] => {
-	// https://github.com/bluesky-social/indigo/blob/421e4da5307f4fcba51f25b5c5982c8b9841f7f6/search/parse_query.go#L15-L21
-	let quoted = false;
-
-	const slices = fieldsfunc(query, (rune) => {
-		if (rune === 34) {
-			quoted = !quoted;
-		}
-
-		return rune === 32 && !quoted;
-	});
-
-	return slices.map((str): Token => {
-		const code = str.charCodeAt(0);
-
-		if (code === 34) {
-			return { type: 'quoted', value: str };
-		}
-
-		if (code === 32) {
-			return { type: 'whitespace', value: str };
-		}
-
-		return { type: 'word', value: str };
-	});
+	return tokens;
 };
