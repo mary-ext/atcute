@@ -1,9 +1,9 @@
 [tools.bun]
-version = "1.1.43"
+version = "1.1.45"
 backend = "core:bun"
 
 [tools.bun.checksums]
-"bun-linux-x64-baseline.zip" = "sha256:eb1636239d2c42882026adc5df0843f3a9264cf1f290ec735f945b42c5f1a17f"
+"bun-linux-x64-baseline.zip" = "sha256:f30892ee5f0e66ab72db5d1e8dc0aa8e4a666cdbd55c3ef3010ab8bdac1c7697"
 
 [tools.node]
 version = "22.13.0"
@@ -13,5 +13,5 @@ backend = "core:node"
 "node-v22.13.0-linux-x64.tar.gz" = "sha256:9a33e89093a0d946c54781dcb3ccab4ccf7538a7135286528ca41ca055e9b38f"
 
 [tools.pnpm]
-version = "9.15.3"
+version = "10.0.0"
 backend = "asdf:pnpm"
