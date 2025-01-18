@@ -318,6 +318,8 @@ declare module '@atcute/client/lexicons' {
 		interface Output {
 			actors: AppBskyActorDefs.ProfileView[];
 			cursor?: string;
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
+			recId?: number;
 		}
 	}
 
@@ -591,6 +593,8 @@ declare module '@atcute/client/lexicons' {
 		type ClickthroughEmbed = 'app.bsky.feed.defs#clickthroughEmbed';
 		type ClickthroughItem = 'app.bsky.feed.defs#clickthroughItem';
 		type ClickthroughReposter = 'app.bsky.feed.defs#clickthroughReposter';
+		type ContentModeUnspecified = 'app.bsky.feed.defs#contentModeUnspecified';
+		type ContentModeVideo = 'app.bsky.feed.defs#contentModeVideo';
 		interface FeedViewPost {
 			[Brand.Type]?: 'app.bsky.feed.defs#feedViewPost';
 			post: PostView;
@@ -612,6 +616,10 @@ declare module '@atcute/client/lexicons' {
 			uri: At.Uri;
 			acceptsInteractions?: boolean;
 			avatar?: string;
+			contentMode?:
+				| 'app.bsky.feed.defs#contentModeUnspecified'
+				| 'app.bsky.feed.defs#contentModeVideo'
+				| (string & {});
 			/**
 			 * Maximum string length: 3000 \
 			 * Maximum grapheme length: 300
@@ -776,6 +784,10 @@ declare module '@atcute/client/lexicons' {
 			/** Declaration that a feed accepts feedback interactions from a client through app.bsky.feed.sendInteractions */
 			acceptsInteractions?: boolean;
 			avatar?: At.Blob;
+			contentMode?:
+				| 'app.bsky.feed.defs#contentModeUnspecified'
+				| 'app.bsky.feed.defs#contentModeVideo'
+				| (string & {});
 			/**
 			 * Maximum string length: 3000 \
 			 * Maximum grapheme length: 300
@@ -1701,6 +1713,8 @@ declare module '@atcute/client/lexicons' {
 			 * @default false
 			 */
 			isFallback?: boolean;
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
+			recId?: number;
 		}
 	}
 
@@ -2108,6 +2122,8 @@ declare module '@atcute/client/lexicons' {
 		interface Output {
 			actors: AppBskyUnspeccedDefs.SkeletonSearchActor[];
 			cursor?: string;
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
+			recId?: number;
 			/** DID of the account these suggestions are relative to. If this is returned undefined, suggestions are based on the viewer. */
 			relativeToDid?: At.DID;
 		}

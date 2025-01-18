@@ -476,6 +476,15 @@ export declare namespace ComAtprotoLabelSubscribeLabels {
 	}
 }
 
+export declare namespace ComAtprotoLexiconSchema {
+	/** Representation of Lexicon schemas themselves, when published as atproto records. Note that the schema language is not defined in Lexicon; this meta schema currently only includes a single version field ('lexicon'). See the atproto specifications for description of the other expected top-level fields ('id', 'defs', etc). */
+	interface Record {
+		$type: 'com.atproto.lexicon.schema';
+		/** Indicates the 'version' of the Lexicon language. Must be '1' for the current atproto/Lexicon schema system. */
+		lexicon: number;
+	}
+}
+
 /** Submit a moderation report regarding an atproto account or record. Implemented by moderation services (with PDS proxying), and requires auth. */
 export declare namespace ComAtprotoModerationCreateReport {
 	interface Params {}
@@ -1604,7 +1613,9 @@ export declare namespace ComAtprotoTempRequestPhoneVerification {
 	type Output = undefined;
 }
 
-export declare interface Records {}
+export declare interface Records {
+	'com.atproto.lexicon.schema': ComAtprotoLexiconSchema.Record;
+}
 
 export declare interface Queries {
 	'com.atproto.admin.getAccountInfo': {

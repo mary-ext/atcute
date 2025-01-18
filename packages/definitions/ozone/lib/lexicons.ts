@@ -241,6 +241,11 @@ declare module '@atcute/client/lexicons' {
 			comment?: string;
 			/** Indicates how long the takedown should be in effect before automatically expiring. */
 			durationInHours?: number;
+			/**
+			 * Names/Keywords of the policies that drove the decision. \
+			 * Maximum array length: 5
+			 */
+			policies?: string[];
 		}
 		/** Unmute action on a subject */
 		interface ModEventUnmute {
@@ -562,6 +567,8 @@ declare module '@atcute/client/lexicons' {
 			 * @default 50
 			 */
 			limit?: number;
+			/** If specified, only events where the action policies match any of the given policies are returned */
+			policies?: string[];
 			/** If specified, only events where all of these labels were removed are returned */
 			removedLabels?: string[];
 			/** If specified, only events where all of these tags were removed are returned */
@@ -649,8 +656,8 @@ declare module '@atcute/client/lexicons' {
 			/** If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored. */
 			subjectType?: 'account' | 'record' | (string & {});
 			/**
-			 * Items in this array are applied with OR filters. To apply AND filter, put all tags in the same string and separate using && characters \
-			 * Maximum string length: 25
+			 * Maximum array length: 25 \
+			 * Items in this array are applied with OR filters. To apply AND filter, put all tags in the same string and separate using && characters
 			 */
 			tags?: string[];
 			/** Get subjects that were taken down */
