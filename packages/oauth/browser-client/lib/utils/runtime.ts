@@ -54,9 +54,16 @@ export const generatePKCE = async (): Promise<{ verifier: string; challenge: str
 	};
 };
 
-export const generateJti = (time: number): string => {
-	const random = crypto.getRandomValues(new BigUint64Array(1));
-	const id = (BigInt(Math.floor(time * 1_000)) << 64n) | random[0];
+let lastTimestamp = 0;
+let randomString: string | undefined;
+export const generateJti = (): string => {
+	if (randomString === undefined) {
+		const random = crypto.getRandomValues(new BigUint64Array(1));
+		randomString = random[0].toString(36);
+	}
 
-	return id.toString(36);
+	const timestamp = Math.max(Date.now() * 1_000, lastTimestamp);
+	lastTimestamp = timestamp + 1;
+
+	return `${timestamp.toString(36)}:${randomString}`;
 };

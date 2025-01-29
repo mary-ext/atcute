@@ -28,13 +28,10 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 		nonce: string | undefined,
 		ath: string | undefined,
 	) => {
-		// Microsecond precision and somewhat monotonic, when the browser allows for it
-		const now = performance.timeOrigin + performance.now();
-
 		const payload = {
 			iss: issuer,
-			iat: Math.floor(now / 1_000),
-			jti: generateJti(now),
+			iat: Math.floor(Date.now() / 1_000),
+			jti: generateJti(),
 			htm: method,
 			htu: url,
 			nonce: nonce,
