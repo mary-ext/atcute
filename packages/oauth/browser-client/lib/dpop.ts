@@ -75,6 +75,8 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 		const { method, url } = request;
 		const { origin } = new URL(url);
 
+		// Wait for an existing promise to resolve, before proceeding with request,
+		// elaborated in the next comment.
 		let deferred = pending.get(origin);
 		if (deferred) {
 			await deferred.promise;
@@ -83,6 +85,9 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 
 		let initNonce = nonces.get(origin);
 		if (initNonce === undefined) {
+			// We have a missing nonce! Let's have everyone else wait so we don't end
+			// up with multiple failing requests.
+
 			pending.set(origin, (deferred = Promise.withResolvers()));
 		}
 
@@ -125,6 +130,7 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 
 			return await fetch(nextRequest);
 		} finally {
+			// Now everyone can have their turn.
 			if (deferred) {
 				pending.delete(origin);
 				deferred.resolve();
