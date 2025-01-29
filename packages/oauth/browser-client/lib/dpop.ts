@@ -76,14 +76,16 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 		const { method, url } = request;
 		const { origin } = new URL(url);
 
-		// Wait for an existing promise to resolve, before proceeding with request,
-		// elaborated in the next comment.
+		// See if we have a pending promise for this origin, we'll await before
+		// proceeding with this request, next comment describes what the promise
+		// is meant to be.
 		let deferred = pending.get(origin);
 		if (deferred) {
 			await deferred.promise;
 			deferred = undefined;
 		}
 
+		// Get our persisted nonce value for this origin
 		let initNonce: string | undefined;
 		try {
 			initNonce = nonces.get(origin);
@@ -143,6 +145,8 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 			}
 		}
 
+		// We got here because we were asked to retry the request (due to missing
+		// nonce value in the first request), let's do just that.
 		{
 			const nextProof = await sign(method, url, nextNonce, ath);
 			const nextRequest = new Request(input, init);
