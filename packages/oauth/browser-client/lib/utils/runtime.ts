@@ -56,7 +56,7 @@ export const generatePKCE = async (): Promise<{ verifier: string; challenge: str
 
 export const generateJti = (time: number): string => {
 	const random = crypto.getRandomValues(new BigUint64Array(1));
-	const id = (BigInt(time * 1_000) << 64n) | random[0];
+	const id = (BigInt(Math.floor(time * 1_000)) << 64n) | random[0];
 
 	return id.toString(36);
 };
