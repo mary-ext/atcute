@@ -98,13 +98,14 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 			pending.set(origin, (deferred = Promise.withResolvers()));
 		}
 
+		let nextNonce: string | null;
 		try {
 			const initProof = await sign(method, url, initNonce, ath);
 			request.headers.set('dpop', initProof);
 
 			const initResponse = await fetch(request);
 
-			const nextNonce = initResponse.headers.get('dpop-nonce');
+			nextNonce = initResponse.headers.get('dpop-nonce');
 			if (nextNonce === null || nextNonce === initNonce) {
 				// No nonce was returned or it is the same as the one we sent. No need to
 				// update the nonce store, or retry the request.
@@ -134,18 +135,20 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 
 				return initResponse;
 			}
-
-			const nextProof = await sign(method, url, nextNonce, ath);
-			const nextRequest = new Request(input, init);
-			nextRequest.headers.set('dpop', nextProof);
-
-			return await fetch(nextRequest);
 		} finally {
 			// Now everyone can have their turn.
 			if (deferred) {
 				pending.delete(origin);
 				deferred.resolve();
 			}
+		}
+
+		{
+			const nextProof = await sign(method, url, nextNonce, ath);
+			const nextRequest = new Request(input, init);
+			nextRequest.headers.set('dpop', nextProof);
+
+			return await fetch(nextRequest);
 		}
 	};
 };
