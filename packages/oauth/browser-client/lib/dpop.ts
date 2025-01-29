@@ -83,7 +83,13 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 			deferred = undefined;
 		}
 
-		let initNonce = nonces.get(origin);
+		let initNonce: string | undefined;
+		try {
+			initNonce = nonces.get(origin);
+		} catch {
+			// Ignore read errors, we'll just act like we're missing a nonce.
+		}
+
 		if (initNonce === undefined) {
 			// We have a missing nonce! Let's have everyone else wait so we don't end
 			// up with multiple failing requests.
@@ -106,7 +112,11 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 			}
 
 			// Store the fresh nonce for future requests
+			try {
 			nonces.set(origin, nextNonce);
+			} catch {
+				// Ignore write errors
+			}
 
 			const shouldRetry = await isUseDpopNonceError(initResponse, isAuthServer);
 			if (!shouldRetry) {
