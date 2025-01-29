@@ -178,8 +178,8 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 
 			return token.expires_at ?? null;
 		}),
-		states: createStore('states', (_item) => Date.now() + 10 * 60 * 1_000),
-		dpopNonces: createStore('dpopNonces', (_item) => Date.now() + 10 * 60 * 1_000),
+		states: createStore('states', (_item) => Date.now() + 10 * 60 * 1_000), // 10 minutes
+		dpopNonces: createStore('dpopNonces', (_item) => Date.now() + 3 * 60 * 1_000), // 3 minutes
 		inflightDpop: new Map<string, PromiseWithResolvers<void>>(),
 	};
 };
