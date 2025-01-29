@@ -60,6 +60,8 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 
 export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?: boolean): typeof fetch => {
 	const nonces = database.dpopNonces;
+	const pending = database.inflightDpop;
+
 	const sign = createDPoPSignage(issuer, dpopKey);
 
 	return async (input, init) => {
@@ -73,52 +75,61 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 		const { method, url } = request;
 		const { origin } = new URL(url);
 
-		let initNonce: string | undefined;
-		try {
-			initNonce = nonces.get(origin);
-		} catch {
-			// Ignore get errors, we will just not send a nonce
+		let deferred = pending.get(origin);
+		if (deferred) {
+			await deferred.promise;
+			deferred = undefined;
 		}
 
-		const initProof = await sign(method, url, initNonce, ath);
-		request.headers.set('dpop', initProof);
-
-		const initResponse = await fetch(request);
-
-		const nextNonce = initResponse.headers.get('dpop-nonce');
-		if (!nextNonce || nextNonce === initNonce) {
-			// No nonce was returned or it is the same as the one we sent. No need to
-			// update the nonce store, or retry the request.
-			return initResponse;
+		let initNonce = nonces.get(origin);
+		if (initNonce === undefined) {
+			pending.set(origin, (deferred = Promise.withResolvers()));
 		}
 
-		// Store the fresh nonce for future requests
 		try {
+			const initProof = await sign(method, url, initNonce, ath);
+			request.headers.set('dpop', initProof);
+
+			const initResponse = await fetch(request);
+
+			const nextNonce = initResponse.headers.get('dpop-nonce');
+			if (nextNonce === null || nextNonce === initNonce) {
+				// No nonce was returned or it is the same as the one we sent. No need to
+				// update the nonce store, or retry the request.
+
+				return initResponse;
+			}
+
+			// Store the fresh nonce for future requests
 			nonces.set(origin, nextNonce);
-		} catch {
-			// Ignore set errors
+
+			const shouldRetry = await isUseDpopNonceError(initResponse, isAuthServer);
+			if (!shouldRetry) {
+				// Not a "use_dpop_nonce" error, so there is no need to retry
+
+				return initResponse;
+			}
+
+			if (input === request || init?.body instanceof ReadableStream) {
+				// If the input stream was already consumed, we cannot retry the request. A
+				// solution would be to clone() the request but that would bufferize the
+				// entire stream in memory which can lead to memory starvation. Instead, we
+				// will return the original response and let the calling code handle retries.
+
+				return initResponse;
+			}
+
+			const nextProof = await sign(method, url, nextNonce, ath);
+			const nextRequest = new Request(input, init);
+			nextRequest.headers.set('dpop', nextProof);
+
+			return await fetch(nextRequest);
+		} finally {
+			if (deferred) {
+				pending.delete(origin);
+				deferred.resolve();
+			}
 		}
-
-		const shouldRetry = await isUseDpopNonceError(initResponse, isAuthServer);
-		if (!shouldRetry) {
-			// Not a "use_dpop_nonce" error, so there is no need to retry
-			return initResponse;
-		}
-
-		// If the input stream was already consumed, we cannot retry the request. A
-		// solution would be to clone() the request but that would bufferize the
-		// entire stream in memory which can lead to memory starvation. Instead, we
-		// will return the original response and let the calling code handle retries.
-
-		if (input === request || init?.body instanceof ReadableStream) {
-			return initResponse;
-		}
-
-		const nextProof = await sign(method, url, nextNonce, ath);
-		const nextRequest = new Request(input, init);
-		nextRequest.headers.set('dpop', nextProof);
-
-		return await fetch(nextRequest);
 	};
 };
 

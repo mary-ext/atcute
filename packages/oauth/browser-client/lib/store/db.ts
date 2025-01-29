@@ -180,5 +180,6 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 		}),
 		states: createStore('states', (_item) => Date.now() + 10 * 60 * 1_000),
 		dpopNonces: createStore('dpopNonces', (_item) => Date.now() + 10 * 60 * 1_000),
+		inflightDpop: new Map<string, PromiseWithResolvers<void>>(),
 	};
 };
