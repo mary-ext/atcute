@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/oauth-browser-client",
-	"version": "1.0.11",
+	"version": "1.0.12",
 	"description": "minimal OAuth browser client implementation for AT Protocol",
 	"license": "MIT",
 	"repository": {
