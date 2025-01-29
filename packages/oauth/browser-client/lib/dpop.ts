@@ -1,7 +1,7 @@
 import { database } from './environment.js';
 import type { DPoPKey } from './types/dpop.js';
 import { extractContentType } from './utils/response.js';
-import { encoder, fromBase64Url, generateTimestamp, toBase64Url, toSha256 } from './utils/runtime.js';
+import { encoder, fromBase64Url, generateJti, toBase64Url, toSha256 } from './utils/runtime.js';
 
 const ES256_ALG = { name: 'ECDSA', namedCurve: 'P-256' } as const;
 
@@ -28,12 +28,13 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 		nonce: string | undefined,
 		ath: string | undefined,
 	) => {
-		const now = (Date.now() / 1_000) | 0;
+		// Microsecond precision and somewhat monotonic, when the browser allows for it
+		const now = performance.timeOrigin + performance.now();
 
 		const payload = {
 			iss: issuer,
-			iat: now,
-			jti: generateTimestamp(),
+			iat: Math.floor(now / 1_000),
+			jti: generateJti(now),
 			htm: method,
 			htu: url,
 			nonce: nonce,
@@ -113,7 +114,7 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 
 			// Store the fresh nonce for future requests
 			try {
-			nonces.set(origin, nextNonce);
+				nonces.set(origin, nextNonce);
 			} catch {
 				// Ignore write errors
 			}
