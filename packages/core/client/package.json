@@ -30,7 +30,7 @@
 	"devDependencies": {
 		"@atcute/internal-dev-env": "workspace:^",
 		"@atcute/lex-cli": "workspace:^",
-		"@vitest/coverage-v8": "^2.1.8",
-		"vitest": "^2.1.8"
+		"@vitest/coverage-v8": "^3.0.4",
+		"vitest": "^3.0.4"
 	}
 }
