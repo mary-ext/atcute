@@ -1,5 +1,6 @@
 import { expect, it } from 'bun:test';
 
+import { fromCidLink, toString } from '@atcute/cid';
 import { fromBase64 } from '@atcute/multibase';
 
 import { iterateAtpRepo } from './atproto-repo.js';
@@ -30,6 +31,7 @@ it('decodes atproto car files', () => {
 	const result = Array.from(iterateAtpRepo(buf), (entry) => ({
 		collection: entry.collection,
 		rkey: entry.rkey,
+		cid: toString(fromCidLink(entry.cid)),
 		record: entry.record,
 	}));
 
@@ -37,6 +39,7 @@ it('decodes atproto car files', () => {
 		{
 			collection: 'app.bsky.actor.profile',
 			rkey: 'self',
+			cid: 'bafyreihkdpfd6d36zlpbsxmfatgenl37kl6j73l7l27h6xqh2zoyffrk5i',
 			record: {
 				$type: 'app.bsky.actor.profile',
 				createdAt: '2024-02-24T12:15:41.219Z',
@@ -47,6 +50,7 @@ it('decodes atproto car files', () => {
 		{
 			collection: 'app.bsky.feed.post',
 			rkey: '3km5ymk4hhk2z',
+			cid: 'bafyreihd7ict3u3s64lxak2yfa7gtzazmbeizxukbddkdw2w63id3g6enq',
 			record: {
 				$type: 'app.bsky.feed.post',
 				createdAt: '2024-02-24T12:16:20.637Z',
