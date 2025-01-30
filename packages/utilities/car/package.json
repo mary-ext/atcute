@@ -29,6 +29,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
+		"@atcute/multibase": "workspace:^",
 		"@types/bun": "^1.2.1"
 	},
 	"dependencies": {

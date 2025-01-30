@@ -1,9 +1,11 @@
 import { expect, it } from 'bun:test';
 
+import { fromBase64 } from '@atcute/multibase';
+
 import { iterateAtpRepo } from './atproto-repo.js';
 
 it('decodes atproto car files', () => {
-	const buf = Buffer.from(
+	const buf = fromBase64(
 		'OqJlcm9vdHOB2CpYJQABcRIgkD8I0DL+GsJ3OKREpf9k73yHguuSEYzEiXPGueoJg8FndmVy' +
 			'c2lvbgGPAQFxEiDqG8o/D37K3hldhQTMRq9/Uvyf7X9evn9eB9ZdgpYq6qRlJHR5cGV2YXBw' +
 			'LmJza3kuYWN0b3IucHJvZmlsZWljcmVhdGVkQXR4GDIwMjQtMDItMjRUMTI6MTU6NDEuMjE5' +
@@ -22,11 +24,9 @@ it('decodes atproto car files', () => {
 			'ZWVkLnBvc3RlbGFuZ3OBYmVuZmZhY2V0c4GjZSR0eXBld2FwcC5ic2t5LnJpY2h0ZXh0LmZh' +
 			'Y2V0ZWluZGV4omdieXRlRW5kFWlieXRlU3RhcnQKaGZlYXR1cmVzgaJjZGlkeCBkaWQ6cGxj' +
 			'OmlhNzZrdm5uZGp1dGdlZGdneDJpYnJlbWUkdHlwZXgfYXBwLmJza3kucmljaHRleHQuZmFj' +
-			'ZXQjbWVudGlvbmljcmVhdGVkQXR4GDIwMjQtMDItMjRUMTI6MTY6MjAuNjM3Wg==',
-		'base64',
+			'ZXQjbWVudGlvbmljcmVhdGVkQXR4GDIwMjQtMDItMjRUMTI6MTY6MjAuNjM3Wg',
 	);
 
-	// @ts-expect-error: node.js buffer it no likey
 	const result = Array.from(iterateAtpRepo(buf), (entry) => ({
 		collection: entry.collection,
 		rkey: entry.rkey,
