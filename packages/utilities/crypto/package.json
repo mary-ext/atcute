@@ -41,7 +41,7 @@
 	},
 	"devDependencies": {
 		"@noble/curves": "^1.8.0",
-		"@types/bun": "^1.1.16",
+		"@types/bun": "^1.2.1",
 		"@vitest/coverage-v8": "^2.1.8",
 		"vitest": "^2.1.8"
 	},

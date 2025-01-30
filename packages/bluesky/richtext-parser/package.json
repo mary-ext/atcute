@@ -24,6 +24,6 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.1.16"
+		"@types/bun": "^1.2.1"
 	}
 }
