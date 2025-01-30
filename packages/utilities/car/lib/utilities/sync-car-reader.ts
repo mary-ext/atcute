@@ -2,7 +2,7 @@ import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 import * as varint from '@atcute/varint';
 
-import type { SyncByteReader } from './byte-reader.js';
+import type { SyncByteReader } from './sync-byte-reader.js';
 
 interface CarV1Header {
 	version: 1;
