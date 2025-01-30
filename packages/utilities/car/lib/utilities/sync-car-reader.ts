@@ -2,21 +2,8 @@ import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 import * as varint from '@atcute/varint';
 
+import { isCarV1Header, type CarV1Header } from './car.js';
 import type { SyncByteReader } from './sync-byte-reader.js';
-
-interface CarV1Header {
-	version: 1;
-	roots: CID.CidLink[];
-}
-
-const isCarV1Header = (value: unknown): value is CarV1Header => {
-	if (value === null || typeof value !== 'object') {
-		return false;
-	}
-
-	const { version, roots } = value as CarV1Header;
-	return version === 1 && Array.isArray(roots) && roots.every((root) => root instanceof CBOR.CidLinkWrapper);
-};
 
 const readVarint = (reader: SyncByteReader, size: number): number => {
 	const buf = reader.upto(size);
