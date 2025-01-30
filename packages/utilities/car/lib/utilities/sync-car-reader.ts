@@ -93,7 +93,7 @@ const readBlockHeader = (reader: SyncByteReader): { cid: CID.Cid; blockSize: num
 	size += reader.pos - start;
 
 	const cid = readCid(reader);
-	const blockSize = size - Number(reader.pos - start);
+	const blockSize = size - (reader.pos - start);
 
 	return { cid, blockSize };
 };
