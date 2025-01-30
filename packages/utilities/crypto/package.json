@@ -40,7 +40,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@noble/curves": "^1.8.0",
+		"@noble/curves": "^1.8.1",
 		"@types/bun": "^1.2.1",
 		"@vitest/coverage-v8": "^3.0.4",
 		"vitest": "^3.0.4"
