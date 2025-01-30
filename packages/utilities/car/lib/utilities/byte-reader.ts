@@ -14,6 +14,10 @@ export const createUint8Reader = (buf: Uint8Array): SyncByteReader => {
 		},
 
 		seek(size) {
+			if (size > buf.length - pos) {
+				throw new RangeError('unexpected end of data');
+			}
+
 			pos += size;
 		},
 		upto(size) {
