@@ -5,8 +5,9 @@ import { toBytes, type Bytes } from './bytes.js';
 
 interface State {
 	b: Uint8Array;
-	v: DataView;
+	v: DataView | undefined;
 	p: number;
+	length: number;
 }
 
 const readArgument = (state: State, info: number): number => {
@@ -33,6 +34,9 @@ const readArgument = (state: State, info: number): number => {
 };
 
 const readFloat64 = (state: State): number => {
+	if (!state.v) {
+		state.v = new DataView(state.b.buffer, state.b.byteOffset, state.b.byteLength);
+	}
 	const value = state.v.getFloat64(state.p);
 
 	state.p += 8;
@@ -106,7 +110,84 @@ const readCid = (state: State, length: number): CidLink => {
 	return new CidLinkWrapper(slice);
 };
 
+type ContainerState = {
+	array: boolean;
+	container: object | any[];
+	length: number;
+	index: number;
+};
+
 const readValue = (state: State): any => {
+	let containers: ContainerState[] | undefined;
+
+	while (true) {
+		// if we're in the process of reading a container, a key for the next entry is needed
+		let key: any;
+
+		let cont = containers?.[containers.length - 1];
+		if (cont) {
+			if (cont.array) {
+				// for arrays, the key is the index, no reading needed
+				key = cont.index;
+			} else {
+				// for objects, we need to read the key
+				key = readValueCore(state);
+				if (typeof key !== 'string') {
+					throw new TypeError(`Expected object key to be a string; got ${typeof key}`);
+				}
+			}
+		}
+
+		state.length = 0;
+		let result = readValueCore(state);
+
+		if (state.length) {
+			// if this is a start of a new and non-empty container, push its metadata on the stack
+
+			const newCont: ContainerState = {
+				array: Array.isArray(result),
+				container: result as object | any[],
+				length: state.length,
+				index: 0
+			};
+
+			if (!containers) containers = [newCont];
+			else containers.push(newCont);
+		}
+
+		if (!containers) {
+			// plain value, no containers
+			return result;
+		} else if (!cont) {
+			// root-level container, go read it
+			continue;
+		}
+
+		// assign the value to the container
+		(cont.container as any)[key] = result;
+		cont.index++;
+
+		if (containers[containers.length - 1] !== cont) {
+			// new container on the stack, read it
+			continue;
+		}
+
+		// for the last entry in the container, pop it
+		// and keep popping until incomplete container found
+		// or until we're back at the root level
+		while (cont.index === cont.length) {
+			if (containers.length === 1) {
+				// root container completed
+				return cont.container;
+			} else {
+				containers?.pop();
+				cont = containers[containers.length - 1] as ContainerState;
+			}
+		}
+	}
+};
+
+const readValueCore = (state: State): number | string | Bytes | CidLink | boolean | null | [] | object => {
 	const prelude = readUint8(state);
 
 	const type = prelude >> 5;
@@ -127,34 +208,12 @@ const readValue = (state: State): any => {
 			return readString(state, arg);
 		}
 		case 4: {
-			const array = new Array(arg);
-
-			for (let idx = 0; idx < arg; idx++) {
-				array[idx] = readValue(state);
-			}
-
-			return array;
+			state.length = arg;
+			return new Array(arg);
 		}
 		case 5: {
-			const object: Record<string, unknown> = {};
-
-			for (let idx = 0; idx < arg; idx++) {
-				const [type, info] = readTypeInfo(state);
-				if (type !== 3) {
-					throw new TypeError(`expected map to only have string keys; got type ${type}`);
-				}
-
-				const len = readArgument(state, info);
-				const key = readString(state, len);
-
-				if (key === '__proto__')
-					// Guard against prototype pollution. CWE-1321
-					Object.defineProperty(object, key, { enumerable: true, configurable: true, writable: true });
-
-				object[key] = readValue(state);
-			}
-
-			return object;
+			state.length = arg;
+			return {};
 		}
 		case 6: {
 			if (arg === 42) {
@@ -193,8 +252,9 @@ const readValue = (state: State): any => {
 export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array] => {
 	const state: State = {
 		b: buf,
-		v: new DataView(buf.buffer, buf.byteOffset, buf.byteLength),
+		v: undefined,
 		p: 0,
+		length: 0,
 	};
 
 	const value = readValue(state);
