@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@atcute/did",
 	"version": "1.0.0",
-	"description": "lightweight did utilities library",
+	"description": "syntax, type definitions and schemas for DIDs and DID documents",
 	"keywords": [
 		"atproto",
 		"did"
