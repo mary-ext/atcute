@@ -10,9 +10,13 @@ import { isSignedOperationValid, normalizeOp } from '../utils.js';
 
 export const validateIndexedEntry = async (
 	did: t.DidPlcString,
-	history: t.IndexedEntry[],
+	history: t.IndexedEntryWithSigner[],
 	proposed: t.IndexedEntry,
-): Promise<{ prev: string | null; ops: t.IndexedEntry[]; nullified: t.IndexedEntry[] }> => {
+): Promise<{
+	prev: string | null;
+	ops: t.IndexedEntryWithSigner[];
+	nullified: t.IndexedEntryWithSigner[];
+}> => {
 	if (history.length === 0) {
 		if (proposed.operation.type === 'plc_tombstone') {
 			throw new err.ImproperOperationError(proposed, `expected genesis op to not be tombstone`);
@@ -38,16 +42,26 @@ export const validateIndexedEntry = async (
 		}
 
 		// Check if signature is valid
+		let allowedSigners: t.DidKeyString[];
+		let signedBy: t.DidKeyString;
+
 		{
 			const { rotationKeys } = normalizeOp(proposed.operation);
+			const ok = await isSignedOperationValid(rotationKeys, proposed.operation);
 
-			const ok = isSignedOperationValid(rotationKeys, proposed.operation);
 			if (!ok) {
 				throw new err.InvalidSignatureError(proposed);
 			}
+
+			allowedSigners = rotationKeys;
+			signedBy = ok;
 		}
 
-		return { nullified: [], prev: null, ops: [proposed] };
+		return {
+			nullified: [],
+			prev: null,
+			ops: [{ ...proposed, allowedSigners, signedBy }],
+		};
 	}
 
 	// Grab the previous reference
@@ -88,12 +102,17 @@ export const validateIndexedEntry = async (
 
 	// We're not nullifying, check if the signature is valid and move on
 	if (!firstNullified) {
-		const ok = await isSignedOperationValid(lastOpNormalized.rotationKeys, proposed.operation);
-		if (!ok) {
+		const allowedSigners = lastOpNormalized.rotationKeys;
+		const signedBy = await isSignedOperationValid(allowedSigners, proposed.operation);
+		if (!signedBy) {
 			throw new err.InvalidSignatureError(proposed);
 		}
 
-		return { nullified: [], prev: proposedPrev, ops: [...history, proposed] };
+		return {
+			nullified: [],
+			prev: proposedPrev,
+			ops: [...history, { ...proposed, allowedSigners, signedBy }],
+		};
 	}
 
 	// The indexed log should say that all of the nullified has `nullified: true`
@@ -116,24 +135,30 @@ export const validateIndexedEntry = async (
 
 	// Check if the dispute is valid
 	{
-		const disputedSigner = await isSignedOperationValid(
-			lastOpNormalized.rotationKeys,
-			firstNullified.operation,
-		);
-		if (!disputedSigner) {
-			throw new err.InvalidSignatureError(firstNullified);
+		let allowedSigners: t.DidKeyString[];
+		let signedBy: t.DidKeyString;
+
+		{
+			const disputedSigner = firstNullified.signedBy;
+
+			const indexOfSigner = lastOpNormalized.rotationKeys.indexOf(disputedSigner);
+			const morePowerfulKeys = lastOpNormalized.rotationKeys.slice(0, indexOfSigner);
+
+			const ok = await isSignedOperationValid(morePowerfulKeys, proposed.operation);
+			if (!ok) {
+				throw new err.InvalidSignatureError(proposed);
+			}
+
+			allowedSigners = morePowerfulKeys;
+			signedBy = ok;
 		}
 
-		const indexOfSigner = lastOpNormalized.rotationKeys.indexOf(disputedSigner);
-		const morePowerfulKeys = lastOpNormalized.rotationKeys.slice(0, indexOfSigner);
-
-		const ok = await isSignedOperationValid(morePowerfulKeys, proposed.operation);
-		if (!ok) {
-			throw new err.InvalidSignatureError(proposed);
-		}
+		return {
+			nullified: nullified,
+			prev: proposedPrev,
+			ops: [...alteredHistory, { ...proposed, allowedSigners, signedBy }],
+		};
 	}
-
-	return { nullified: nullified, prev: proposedPrev, ops: [...alteredHistory, proposed] };
 };
 
 /**
@@ -142,9 +167,9 @@ export const validateIndexedEntry = async (
 export const validateIndexedEntryLog = async (
 	did: t.DidPlcString,
 	ops: t.IndexedEntryLog,
-): Promise<{ canonical: t.IndexedEntry[]; nullified: t.IndexedEntry[] }> => {
-	let nullified: t.IndexedEntry[] = [];
-	let canonical: t.IndexedEntry[] = [];
+): Promise<{ canonical: t.IndexedEntryWithSigner[]; nullified: t.IndexedEntryWithSigner[] }> => {
+	let nullified: t.IndexedEntryWithSigner[] = [];
+	let canonical: t.IndexedEntryWithSigner[] = [];
 
 	for (const operation of ops) {
 		const result = await validateIndexedEntry(did, canonical, operation);

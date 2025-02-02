@@ -58,6 +58,13 @@ export interface IndexedEntry<T extends CompatibleOperationOrTombstone = Compati
 	createdAt: string;
 }
 
+export interface IndexedEntryWithSigner<
+	T extends CompatibleOperationOrTombstone = CompatibleOperationOrTombstone,
+> extends IndexedEntry<T> {
+	allowedSigners: DidKeyString[];
+	signedBy: DidKeyString;
+}
+
 export type IndexedEntryLog = [
 	genesis: IndexedEntry<CompatibleOperation>,
 	...IndexedEntry<OperationOrTombstone>[],
