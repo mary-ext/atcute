@@ -106,101 +106,180 @@ const readCid = (state: State, length: number): CidLink => {
 	return new CidLinkWrapper(slice);
 };
 
-const readValue = (state: State): any => {
-	const prelude = readUint8(state);
+const enum ContainerType {
+	MAP,
+	ARRAY,
+}
 
-	const type = prelude >> 5;
-	const info = prelude & 0x1f;
-	const arg = type < 7 ? readArgument(state, info) : 0;
-
-	switch (type) {
-		case 0: {
-			return arg;
-		}
-		case 1: {
-			return -1 - arg;
-		}
-		case 2: {
-			return readBytes(state, arg);
-		}
-		case 3: {
-			return readString(state, arg);
-		}
-		case 4: {
-			const array = new Array(arg);
-
-			for (let idx = 0; idx < arg; idx++) {
-				array[idx] = readValue(state);
-			}
-
-			return array;
-		}
-		case 5: {
-			const object: Record<string, unknown> = {};
-
-			for (let idx = 0; idx < arg; idx++) {
-				const [type, info] = readTypeInfo(state);
-				if (type !== 3) {
-					throw new TypeError(`expected map to only have string keys; got type ${type}`);
-				}
-
-				const len = readArgument(state, info);
-				const key = readString(state, len);
-
-				if (key === '__proto__')
-					// Guard against prototype pollution. CWE-1321
-					Object.defineProperty(object, key, { enumerable: true, configurable: true, writable: true });
-
-				object[key] = readValue(state);
-			}
-
-			return object;
-		}
-		case 6: {
-			if (arg === 42) {
-				const [type, info] = readTypeInfo(state);
-				if (type !== 2) {
-					throw new TypeError(`expected cid-link to be type 2 (bytes); got type ${type}`);
-				}
-
-				const len = readArgument(state, info);
-				return readCid(state, len);
-			}
-
-			throw new TypeError(`unsupported tag; got ${arg}`);
-		}
-		case 7: {
-			switch (info) {
-				case 20:
-				case 21: {
-					return info === 21;
-				}
-				case 22: {
-					return null;
-				}
-				case 27: {
-					return readFloat64(state);
-				}
-			}
-
-			throw new Error(`invalid simple value; got ${info}`);
-		}
-	}
-
-	throw new TypeError(`invalid type; got ${type}`);
-};
+type Container =
+	| {
+			t: ContainerType.MAP;
+			c: Record<string, unknown>;
+			k: string | null;
+			r: number;
+			n: Container | null;
+	  }
+	| {
+			t: ContainerType.ARRAY;
+			c: any[];
+			k: null;
+			r: number;
+			n: Container | null;
+	  };
 
 export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array] => {
+	const len = buf.length;
+
 	const state: State = {
 		b: buf,
 		v: new DataView(buf.buffer, buf.byteOffset, buf.byteLength),
 		p: 0,
 	};
 
-	const value = readValue(state);
-	const remainder = buf.subarray(state.p);
+	let stack: Container | null = null;
+	let result: any;
 
-	return [value, remainder];
+	jump: while (state.p < len) {
+		const prelude = readUint8(state);
+
+		const type = prelude >> 5;
+		const info = prelude & 0x1f;
+		const arg = type < 7 ? readArgument(state, info) : 0;
+
+		let value: any;
+
+		switch (type) {
+			case 0: {
+				value = arg;
+				break;
+			}
+			case 1: {
+				value = -1 - arg;
+				break;
+			}
+			case 2: {
+				value = readBytes(state, arg);
+				break;
+			}
+			case 3: {
+				value = readString(state, arg);
+				break;
+			}
+			case 4: {
+				const arr = new Array(arg);
+				value = arr;
+
+				if (arg > 0) {
+					stack = { t: ContainerType.ARRAY, c: arr, k: null, r: arg, n: stack };
+					continue jump;
+				}
+
+				break;
+			}
+			case 5: {
+				const obj: Record<string, unknown> = {};
+				value = obj;
+
+				if (arg > 0) {
+					// `arg * 2` because we're reading both keys and values
+					stack = { t: ContainerType.MAP, c: obj, k: null, r: arg * 2, n: stack };
+					continue jump;
+				}
+
+				break;
+			}
+			case 6: {
+				switch (arg) {
+					case 42: {
+						const [type, info] = readTypeInfo(state);
+						if (type !== 2) {
+							throw new TypeError(`expected cid-link to be type 2 (bytes); got type ${type}`);
+						}
+
+						const len = readArgument(state, info);
+						value = readCid(state, len);
+
+						break;
+					}
+					default: {
+						throw new TypeError(`unsupported tag; got ${arg}`);
+					}
+				}
+
+				break;
+			}
+			case 7: {
+				switch (info) {
+					case 20:
+					case 21: {
+						value = info === 21;
+						break;
+					}
+					case 22: {
+						value = null;
+						break;
+					}
+					case 27: {
+						value = readFloat64(state);
+						break;
+					}
+					default: {
+						throw new Error(`invalid simple value; got ${info}`);
+					}
+				}
+
+				break;
+			}
+			default: {
+				throw new TypeError(`invalid type; got ${type}`);
+			}
+		}
+
+		while (stack !== null) {
+			const node = stack;
+
+			switch (node.t) {
+				case ContainerType.ARRAY: {
+					const index = node.c.length - node.r;
+					node.c[index] = value;
+
+					break;
+				}
+				case ContainerType.MAP: {
+					if (node.k === null) {
+						if (typeof value !== 'string') {
+							throw new TypeError(`expected map to only have string keys; got ${type}`);
+						}
+
+						node.k = value;
+					} else if (node.k !== '__proto__') {
+						node.c[node.k] = value;
+						node.k = null;
+					} else {
+						// Guard against prototype pollution. CWE-1321
+						Object.defineProperty(node.c, node.k, { enumerable: true, configurable: true, writable: true });
+						node.k = null;
+					}
+
+					break;
+				}
+			}
+
+			if (--node.r !== 0) {
+				// We still have more values to decode, continue
+				continue jump;
+			}
+
+			// Unwrap the stack
+			value = node.c;
+			stack = node.n;
+		}
+
+		result = value;
+		break;
+	}
+
+	return [result, buf.subarray(state.p)];
 };
 
 export const decode = (buf: Uint8Array): any => {
