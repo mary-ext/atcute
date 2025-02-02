@@ -3,6 +3,7 @@ import * as CID from '@atcute/cid';
 import { toBase32 } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
+import { RECOVERY_WINDOW } from '../constants.js';
 import * as err from '../errors.js';
 import * as t from '../types.js';
 import { isSignedOperationValid, normalizeOp } from '../utils.js';
@@ -106,11 +107,6 @@ export const validateIndexedEntry = async (
 
 	// Check if operation within the recovery window
 	{
-		const SECOND = 1e3;
-		const MINUTE = 60 * SECOND;
-		const HOUR = 60 * MINUTE;
-
-		const RECOVERY_WINDOW = 72 * HOUR;
 		const lapsed = new Date(proposed.createdAt).getTime() - new Date(firstNullified.createdAt).getTime();
 
 		if (lapsed > RECOVERY_WINDOW) {
