@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'bun:test';
 
-import { validateIndexedEntryLog } from './data.js';
+import { processIndexedEntryLog } from './data.js';
 import { indexedEntryLog } from './typedefs.js';
 
-describe('validateIndexedEntryLog()', () => {
+describe('processIndexedEntryLog()', () => {
 	it('validates an operation log', async () => {
 		const log = indexedEntryLog.parse([
 			{
@@ -82,7 +82,7 @@ describe('validateIndexedEntryLog()', () => {
 			},
 		]);
 
-		await validateIndexedEntryLog('did:plc:oky5czdrnfjpqslsw2a5iclo', log);
+		await processIndexedEntryLog('did:plc:oky5czdrnfjpqslsw2a5iclo', log);
 		expect().pass();
 	});
 
@@ -234,7 +234,7 @@ describe('validateIndexedEntryLog()', () => {
 			},
 		]);
 
-		const result = await validateIndexedEntryLog('did:plc:pkmfz5soq2swsvbhvjekb36g', log);
+		const result = await processIndexedEntryLog('did:plc:pkmfz5soq2swsvbhvjekb36g', log);
 
 		const cids = {
 			canonical: result.canonical.map((op) => op.cid),

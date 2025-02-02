@@ -8,16 +8,19 @@ import * as err from './errors.js';
 import * as t from './types.js';
 import { isSignedOperationValid, normalizeOp } from './utils.js';
 
-export const validateIndexedEntry = async (
+/**
+ * Process an indexed entry by validating it and integrating it into the canonical log.
+ */
+export const processIndexedEntry = async (
 	did: t.DidPlcString,
-	history: t.IndexedEntryWithSigner[],
+	canonical: t.IndexedEntryWithSigner[],
 	proposed: t.IndexedEntry,
 ): Promise<{
 	prev: string | null;
 	ops: t.IndexedEntryWithSigner[];
 	nullified: t.IndexedEntryWithSigner[];
 }> => {
-	if (history.length === 0) {
+	if (canonical.length === 0) {
 		if (proposed.operation.type === 'plc_tombstone') {
 			throw new err.ImproperOperationError(proposed, `expected genesis op to not be tombstone`);
 		}
@@ -58,8 +61,8 @@ export const validateIndexedEntry = async (
 		}
 
 		return {
-			nullified: [],
 			prev: null,
+			nullified: [],
 			ops: [{ ...proposed, allowedSigners, signedBy }],
 		};
 	}
@@ -70,7 +73,7 @@ export const validateIndexedEntry = async (
 		throw new err.ImproperOperationError(proposed, `expected prev op`);
 	}
 
-	const indexOfPrev = history.findIndex((op) => op.cid === proposedPrev);
+	const indexOfPrev = canonical.findIndex((op) => op.cid === proposedPrev);
 	if (indexOfPrev === -1) {
 		throw new err.ImproperOperationError(proposed, `prev op not in history`);
 	}
@@ -85,9 +88,9 @@ export const validateIndexedEntry = async (
 	}
 
 	// Get the proposed canonical history
-	const alteredHistory = history.slice(0, indexOfPrev + 1);
+	const alteredHistory = canonical.slice(0, indexOfPrev + 1);
 
-	const nullified = history.slice(indexOfPrev + 1);
+	const nullified = canonical.slice(indexOfPrev + 1);
 	const lastOp = alteredHistory.at(-1);
 
 	if (!lastOp) {
@@ -109,20 +112,20 @@ export const validateIndexedEntry = async (
 		}
 
 		return {
-			nullified: [],
 			prev: proposedPrev,
-			ops: [...history, { ...proposed, allowedSigners, signedBy }],
+			nullified: [],
+			ops: [...canonical, { ...proposed, allowedSigners, signedBy }],
 		};
 	}
 
 	// The indexed log should say that all of the nullified has `nullified: true`
-	for (let idx = 0, len = nullified.length; idx < len; idx++) {
-		const op = nullified[idx];
+	// for (let idx = 0, len = nullified.length; idx < len; idx++) {
+	// 	const op = nullified[idx];
 
-		if (!op.nullified) {
-			throw new err.ImproperOperationError(op, `expected nullified prop to be true`);
-		}
-	}
+	// 	if (!op.nullified) {
+	// 		throw new err.ImproperOperationError(op, `expected nullified prop to be true`);
+	// 	}
+	// }
 
 	// Check if operation within the recovery window
 	{
@@ -154,17 +157,17 @@ export const validateIndexedEntry = async (
 		}
 
 		return {
-			nullified: nullified,
 			prev: proposedPrev,
+			nullified: nullified,
 			ops: [...alteredHistory, { ...proposed, allowedSigners, signedBy }],
 		};
 	}
 };
 
 /**
- * Validate the logs returned from `/<did_identifier>/log/audit`
+ * Process an indexed entry log by sequentially processing each operation.
  */
-export const validateIndexedEntryLog = async (
+export const processIndexedEntryLog = async (
 	did: t.DidPlcString,
 	ops: t.IndexedEntryLog,
 ): Promise<{ canonical: t.IndexedEntryWithSigner[]; nullified: t.IndexedEntryWithSigner[] }> => {
@@ -172,7 +175,7 @@ export const validateIndexedEntryLog = async (
 	let canonical: t.IndexedEntryWithSigner[] = [];
 
 	for (const operation of ops) {
-		const result = await validateIndexedEntry(did, canonical, operation);
+		const result = await processIndexedEntry(did, canonical, operation);
 		canonical = result.ops;
 
 		if (result.nullified.length > 0) {
@@ -181,4 +184,32 @@ export const validateIndexedEntryLog = async (
 	}
 
 	return { canonical, nullified };
+};
+
+/**
+ * Check whether an operation's recovery period is still active
+ */
+export const isWithinRecoveryWindow = (op: t.IndexedEntry, now = Date.now()): boolean => {
+	const lapsed = now - new Date(op.createdAt).getTime();
+	return lapsed <= RECOVERY_WINDOW;
+};
+
+/**
+ * Check if a given key is allowed to dispute an operation
+ */
+export const isAuthorizedForRecovery = (
+	prev: t.IndexedEntryWithSigner<t.CompatibleOperation>,
+	disputed: t.IndexedEntryWithSigner,
+	key: t.DidKeyString,
+): boolean => {
+	const { rotationKeys } = normalizeOp(prev.operation);
+
+	const disputedSigner = disputed.signedBy;
+	const disputedIndex = rotationKeys.indexOf(disputedSigner);
+	if (disputedIndex === -1) {
+		return false;
+	}
+
+	const didKeyIndex = rotationKeys.indexOf(key);
+	return didKeyIndex !== -1 && didKeyIndex < disputedIndex;
 };
