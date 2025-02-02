@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 
-import { validateIndexedEntryLog } from './indexed.js';
-import { indexedEntryLog } from '../typedefs.js';
+import { validateIndexedEntryLog } from './data.js';
+import { indexedEntryLog } from './typedefs.js';
 
 describe('validateIndexedEntryLog()', () => {
 	it('validates an operation log', async () => {

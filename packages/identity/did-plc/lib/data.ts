@@ -3,10 +3,10 @@ import * as CID from '@atcute/cid';
 import { toBase32 } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
-import { RECOVERY_WINDOW } from '../constants.js';
-import * as err from '../errors.js';
-import * as t from '../types.js';
-import { isSignedOperationValid, normalizeOp } from '../utils.js';
+import { RECOVERY_WINDOW } from './constants.js';
+import * as err from './errors.js';
+import * as t from './types.js';
+import { isSignedOperationValid, normalizeOp } from './utils.js';
 
 export const validateIndexedEntry = async (
 	did: t.DidPlcString,
