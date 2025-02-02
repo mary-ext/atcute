@@ -13,8 +13,17 @@ export class RepoEntry {
 		private blockmap: BlockMap,
 	) {}
 
+	get bytes(): Uint8Array {
+		const cid = this.cid.$link;
+
+		const bytes = this.blockmap.get(cid);
+		assert(bytes != null, `cid not found in blockmap; cid=${cid}`);
+
+		return bytes;
+	}
+
 	get record(): unknown {
-		return readObject(this.blockmap, this.cid);
+		return CBOR.decode(this.bytes);
 	}
 }
 
