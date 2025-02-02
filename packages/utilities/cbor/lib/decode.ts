@@ -253,12 +253,13 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 						}
 
 						node.k = value;
-					} else if (node.k !== '__proto__') {
-						node.c[node.k] = value;
-						node.k = null;
 					} else {
-						// Guard against prototype pollution. CWE-1321
-						Object.defineProperty(node.c, node.k, { enumerable: true, configurable: true, writable: true });
+						if (node.k === '__proto__') {
+							// Guard against prototype pollution. CWE-1321
+							Object.defineProperty(node.c, node.k, { enumerable: true, configurable: true, writable: true });
+						}
+
+						node.c[node.k] = value;
 						node.k = null;
 					}
 
