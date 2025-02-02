@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/car",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"description": "lightweight DASL CAR and atproto repository decoder for AT Protocol.",
 	"keywords": [
 		"atproto",
