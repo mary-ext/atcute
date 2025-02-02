@@ -38,7 +38,7 @@ of atcute.
 | **OAuth packages**                                                                                                     |
 | [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth browser client implementation                 |
 | **Identity packages** _(work in progress)_                                                                             |
-| [`did-plc`](./packages/identity/did-plc): did:plc operation validations                                                |
+| [`did-plc`](./packages/identity/did-plc): validations, type definitions and schemas for did:plc operations             |
 | `did-resolver`: DID document resolution                                                                                |
 | [`did`](./packages/identity/did): syntax, type definitions and schemas for DIDs and DID documents                      |
 | `handle-resolver-node`: node.js dns handle resolution                                                                  |

@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@atcute/did-plc",
 	"version": "1.0.0",
-	"description": "lightweight did:plc utilities library",
+	"description": "validations, type definitions and schemas for did:plc operations",
 	"keywords": [
 		"atproto",
 		"did",

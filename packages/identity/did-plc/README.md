@@ -3,8 +3,7 @@
 > [!NOTE]  
 > not yet published.
 
-lightweight did:plc utilities library, currently only provides type definitions and basic
-validations around the audit log.
+validations, type definitions and schemas for did:plc operations
 
 ```ts
 import { defs, validateIndexedOperationLog } from '@atcute/did-plc';
