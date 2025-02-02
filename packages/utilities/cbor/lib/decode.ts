@@ -5,7 +5,7 @@ import { toBytes, type Bytes } from './bytes.js';
 
 interface State {
 	b: Uint8Array;
-	v: DataView;
+	v: DataView | null;
 	p: number;
 }
 
@@ -33,7 +33,8 @@ const readArgument = (state: State, info: number): number => {
 };
 
 const readFloat64 = (state: State): number => {
-	const value = state.v.getFloat64(state.p);
+	const view = (state.v ??= new DataView(state.b.buffer, state.b.byteOffset, state.b.byteLength));
+	const value = view.getFloat64(state.p);
 
 	state.p += 8;
 	return value;
@@ -132,7 +133,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 
 	const state: State = {
 		b: buf,
-		v: new DataView(buf.buffer, buf.byteOffset, buf.byteLength),
+		v: null,
 		p: 0,
 	};
 
