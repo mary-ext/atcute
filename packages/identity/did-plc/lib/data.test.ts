@@ -87,7 +87,7 @@ describe('validateIndexedEntryLog()', () => {
 	});
 
 	it('validates an operation log containing a nullified op', async () => {
-		const log = IndexedEntryLog.parse([
+		const log = indexedEntryLog.parse([
 			{
 				did: 'did:plc:pkmfz5soq2swsvbhvjekb36g',
 				operation: {
