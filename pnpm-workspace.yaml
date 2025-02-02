@@ -2,6 +2,7 @@ packages:
   - packages/bluesky/*
   - packages/core/*
   - packages/definitions/*
+  - packages/identity/*
   - packages/internal/*
   - packages/oauth/*
   - packages/services/*

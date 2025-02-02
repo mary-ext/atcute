@@ -167,6 +167,41 @@ importers:
         specifier: workspace:^
         version: link:../../core/lex-cli
 
+  packages/identity/did:
+    dependencies:
+      '@badrap/valita':
+        specifier: ^0.4.2
+        version: 0.4.2
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.2.1
+        version: 1.2.1
+
+  packages/identity/did-plc:
+    dependencies:
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../../utilities/cbor
+      '@atcute/cid':
+        specifier: workspace:^
+        version: link:../../utilities/cid
+      '@atcute/crypto':
+        specifier: workspace:^
+        version: link:../../utilities/crypto
+      '@atcute/multibase':
+        specifier: workspace:^
+        version: link:../../utilities/multibase
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../../utilities/uint8array
+      '@badrap/valita':
+        specifier: ^0.4.2
+        version: 0.4.2
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.2.1
+        version: 1.2.1
+
   packages/internal/dev-env:
     dependencies:
       '@atproto/crypto':
@@ -301,41 +336,6 @@ importers:
       vitest:
         specifier: ^3.0.4
         version: 3.0.4(@types/node@22.12.0)
-
-  packages/utilities/did:
-    dependencies:
-      '@badrap/valita':
-        specifier: ^0.4.2
-        version: 0.4.2
-    devDependencies:
-      '@types/bun':
-        specifier: ^1.2.1
-        version: 1.2.1
-
-  packages/utilities/did-plc:
-    dependencies:
-      '@atcute/cbor':
-        specifier: workspace:^
-        version: link:../cbor
-      '@atcute/cid':
-        specifier: workspace:^
-        version: link:../cid
-      '@atcute/crypto':
-        specifier: workspace:^
-        version: link:../crypto
-      '@atcute/multibase':
-        specifier: workspace:^
-        version: link:../multibase
-      '@atcute/uint8array':
-        specifier: workspace:^
-        version: link:../uint8array
-      '@badrap/valita':
-        specifier: ^0.4.2
-        version: 0.4.2
-    devDependencies:
-      '@types/bun':
-        specifier: ^1.2.1
-        version: 1.2.1
 
   packages/utilities/multibase:
     dependencies:

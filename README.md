@@ -37,6 +37,12 @@ of atcute.
 | [`lex-cli`](./packages/core/lex-cli): CLI tool to generate type definitions for the API client                         |
 | **OAuth packages**                                                                                                     |
 | [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth browser client implementation                 |
+| **Identity packages** _(work in progress)_                                                                             |
+| [`did-plc`](./packages/identity/did-plc): did:plc operation validations                                                |
+| `did-resolver`: did document resolution                                                                                |
+| [`did`](./packages/identity/did): did syntax and document type definitions                                             |
+| `handle-resolver-node`: node.js dns handle resolution                                                                  |
+| `handle-resolver-web`: web-friendly handle resolution                                                                  |
 | **Lexicon definitions**                                                                                                |
 | [`bluemoji`](./packages/definitions/bluemoji): adds `blue.moji.*` lexicons                                             |
 | [`bluesky`](./packages/definitions/bluesky): adds `app.bsky.*` and `chat.bsky.*` lexicons                              |
@@ -47,8 +53,6 @@ of atcute.
 | [`cbor`](./packages/utilities/cbor): DASL dCBOR42 codec                                                                |
 | [`cid`](./packages/utilities/cid): DASL CID codec                                                                      |
 | [`crypto`](./packages/utilities/crypto): cryptographic utilities                                                       |
-| [`did`](./packages/utilities/did): did utilities                                                                       |
-| [`did-plc`](./packages/utilities/did-plc): did:plc utilities                                                           |
 | [`multibase`](./packages/utilities/multibase): multibase utilities                                                     |
 | [`tid`](./packages/utilities/tid): atproto timestamp identifier codec                                                  |
 | [`varint`](./packages/utilities/varint): protobuf-style LEB128 varint codec                                            |
