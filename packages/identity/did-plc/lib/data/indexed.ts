@@ -4,9 +4,9 @@ import { verifySigWithDidKey } from '@atcute/crypto';
 import { fromBase64Url, toBase32 } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
-import * as err from './errors.js';
-import * as t from './types.js';
-import { normalizeOp } from './utils.js';
+import * as err from '../errors.js';
+import * as t from '../types.js';
+import { normalizeOp } from '../utils.js';
 
 export const isSignedOperationValid = async (
 	allowedKeys: t.DidKeyString[],

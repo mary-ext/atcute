@@ -16,6 +16,7 @@ export type {
 	UnsignedTombstone,
 } from './types.js';
 
-export * from './data.js';
+export * from './data/indexed.js';
+
 export * from './errors.js';
 export * from './utils.js';
