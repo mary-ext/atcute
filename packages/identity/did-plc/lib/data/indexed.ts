@@ -1,32 +1,11 @@
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
-import { verifySigWithDidKey } from '@atcute/crypto';
-import { fromBase64Url, toBase32 } from '@atcute/multibase';
+import { toBase32 } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
 import * as err from '../errors.js';
 import * as t from '../types.js';
-import { normalizeOp } from '../utils.js';
-
-export const isSignedOperationValid = async (
-	allowedKeys: t.DidKeyString[],
-	op: t.CompatibleOperationOrTombstone,
-): Promise<t.DidKeyString | null> => {
-	const { sig, ...unsignedOp } = op;
-
-	const sigBytes = fromBase64Url(sig);
-	const opBytes = CBOR.encode(unsignedOp);
-
-	for (const key of allowedKeys) {
-		const ok = await verifySigWithDidKey(key, sigBytes, opBytes);
-
-		if (ok) {
-			return key;
-		}
-	}
-
-	return null;
-};
+import { isSignedOperationValid, normalizeOp } from '../utils.js';
 
 export const validateIndexedEntry = async (
 	did: t.DidPlcString,

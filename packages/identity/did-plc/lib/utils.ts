@@ -1,3 +1,7 @@
+import * as CBOR from '@atcute/cbor';
+import { verifySigWithDidKey } from '@atcute/crypto';
+import { fromBase64Url } from '@atcute/multibase';
+
 import * as t from './types.js';
 
 export const wrapHttpPrefix = (str: string): string => {
@@ -39,4 +43,24 @@ export const normalizeOp = (op: t.CompatibleOperation): t.Operation => {
 	}
 
 	return op;
+};
+
+export const isSignedOperationValid = async (
+	allowedKeys: t.DidKeyString[],
+	op: t.CompatibleOperationOrTombstone,
+): Promise<t.DidKeyString | null> => {
+	const { sig, ...unsignedOp } = op;
+
+	const sigBytes = fromBase64Url(sig);
+	const opBytes = CBOR.encode(unsignedOp);
+
+	for (const key of allowedKeys) {
+		const ok = await verifySigWithDidKey(key, sigBytes, opBytes);
+
+		if (ok) {
+			return key;
+		}
+	}
+
+	return null;
 };
