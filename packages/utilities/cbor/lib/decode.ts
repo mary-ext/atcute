@@ -138,7 +138,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 	};
 
 	let stack: Container | null = null;
-	let result: any;
+	let value: any;
 
 	jump: while (state.p < len) {
 		const prelude = readUint8(state);
@@ -146,8 +146,6 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 		const type = prelude >> 5;
 		const info = prelude & 0x1f;
 		const arg = type < 7 ? readArgument(state, info) : 0;
-
-		let value: any;
 
 		switch (type) {
 			case 0: {
@@ -237,51 +235,52 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 		}
 
 		while (stack !== null) {
-			const node = stack;
-
-			switch (node.t) {
+			switch (stack.t) {
 				case ContainerType.ARRAY: {
-					const index = node.c.length - node.r;
-					node.c[index] = value;
+					const arr = stack.c;
+					const index = arr.length - stack.r;
 
+					arr[index] = value;
 					break;
 				}
 				case ContainerType.MAP: {
-					if (node.k === null) {
+					const obj = stack.c;
+					const key = stack.k;
+
+					if (key === null) {
 						if (typeof value !== 'string') {
 							throw new TypeError(`expected map to only have string keys; got ${type}`);
 						}
 
-						node.k = value;
+						stack.k = value;
 					} else {
-						if (node.k === '__proto__') {
+						if (key === '__proto__') {
 							// Guard against prototype pollution. CWE-1321
-							Object.defineProperty(node.c, node.k, { enumerable: true, configurable: true, writable: true });
+							Object.defineProperty(obj, key, { enumerable: true, configurable: true, writable: true });
 						}
 
-						node.c[node.k] = value;
-						node.k = null;
+						obj[key] = value;
+						stack.k = null;
 					}
 
 					break;
 				}
 			}
 
-			if (--node.r !== 0) {
+			if (--stack.r !== 0) {
 				// We still have more values to decode, continue
 				continue jump;
 			}
 
 			// Unwrap the stack
-			value = node.c;
-			stack = node.n;
+			value = stack.c;
+			stack = stack.n;
 		}
 
-		result = value;
 		break;
 	}
 
-	return [result, buf.subarray(state.p)];
+	return [value, buf.subarray(state.p)];
 };
 
 export const decode = (buf: Uint8Array): any => {
