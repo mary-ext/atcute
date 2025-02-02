@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'bun:test';
 
-import { validateIndexedOperationLog } from './indexed.js';
-import { indexedOperationLog } from '../types.js';
+import { validateIndexedEntryLog } from './indexed.js';
+import { indexedEntryLog } from '../typedefs.js';
 
-describe('validateIndexedOperationLog()', () => {
+describe('validateIndexedEntryLog()', () => {
 	it('validates an operation log', async () => {
-		const log = indexedOperationLog.parse([
+		const log = indexedEntryLog.parse([
 			{
 				did: 'did:plc:oky5czdrnfjpqslsw2a5iclo',
 				operation: {
@@ -82,12 +82,12 @@ describe('validateIndexedOperationLog()', () => {
 			},
 		]);
 
-		await validateIndexedOperationLog('did:plc:oky5czdrnfjpqslsw2a5iclo', log);
+		await validateIndexedEntryLog('did:plc:oky5czdrnfjpqslsw2a5iclo', log);
 		expect().pass();
 	});
 
 	it('validates an operation log containing a nullified op', async () => {
-		const log = indexedOperationLog.parse([
+		const log = IndexedEntryLog.parse([
 			{
 				did: 'did:plc:pkmfz5soq2swsvbhvjekb36g',
 				operation: {
@@ -234,7 +234,7 @@ describe('validateIndexedOperationLog()', () => {
 			},
 		]);
 
-		const result = await validateIndexedOperationLog('did:plc:pkmfz5soq2swsvbhvjekb36g', log);
+		const result = await validateIndexedEntryLog('did:plc:pkmfz5soq2swsvbhvjekb36g', log);
 
 		const cids = {
 			canonical: result.canonical.map((op) => op.cid),

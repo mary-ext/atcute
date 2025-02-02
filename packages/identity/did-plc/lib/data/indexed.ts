@@ -28,11 +28,11 @@ export const isSignedOperationValid = async (
 	return null;
 };
 
-export const validateIndexedOperation = async (
+export const validateIndexedEntry = async (
 	did: t.DidPlcString,
-	history: t.IndexedOperation[],
-	proposed: t.IndexedOperation,
-): Promise<{ prev: string | null; ops: t.IndexedOperation[]; nullified: t.IndexedOperation[] }> => {
+	history: t.IndexedEntry[],
+	proposed: t.IndexedEntry,
+): Promise<{ prev: string | null; ops: t.IndexedEntry[]; nullified: t.IndexedEntry[] }> => {
 	if (history.length === 0) {
 		if (proposed.operation.type === 'plc_tombstone') {
 			throw new err.ImproperOperationError(proposed, `expected genesis op to not be tombstone`);
@@ -132,7 +132,7 @@ export const validateIndexedOperation = async (
 		const HOUR = 60 * MINUTE;
 
 		const RECOVERY_WINDOW = 72 * HOUR;
-		const lapsed = proposed.createdAt.getTime() - firstNullified.createdAt.getTime();
+		const lapsed = new Date(proposed.createdAt).getTime() - new Date(firstNullified.createdAt).getTime();
 
 		if (lapsed > RECOVERY_WINDOW) {
 			throw new err.LateRecoveryError(proposed, lapsed);
@@ -164,15 +164,15 @@ export const validateIndexedOperation = async (
 /**
  * Validate the logs returned from `/<did_identifier>/log/audit`
  */
-export const validateIndexedOperationLog = async (
+export const validateIndexedEntryLog = async (
 	did: t.DidPlcString,
-	ops: t.IndexedOperationLog,
-): Promise<{ canonical: t.IndexedOperation[]; nullified: t.IndexedOperation[] }> => {
-	let nullified: t.IndexedOperation[] = [];
-	let canonical: t.IndexedOperation[] = [];
+	ops: t.IndexedEntryLog,
+): Promise<{ canonical: t.IndexedEntry[]; nullified: t.IndexedEntry[] }> => {
+	let nullified: t.IndexedEntry[] = [];
+	let canonical: t.IndexedEntry[] = [];
 
 	for (const operation of ops) {
-		const result = await validateIndexedOperation(did, canonical, operation);
+		const result = await validateIndexedEntry(did, canonical, operation);
 		canonical = result.ops;
 
 		if (result.nullified.length > 0) {
