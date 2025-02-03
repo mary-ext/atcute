@@ -3,4 +3,4 @@
 > [!NOTE]  
 > not yet published.
 
-syntax, type definitions and schemas for DIDs and DID documents.
+syntax, type definitions and schemas for atproto DIDs and DID documents.
