@@ -11,7 +11,7 @@
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
-		"directory": "packages/utilities/did-plc"
+		"directory": "packages/identity/did-plc"
 	},
 	"files": [
 		"dist/",

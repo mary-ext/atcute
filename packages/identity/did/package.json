@@ -10,7 +10,7 @@
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
-		"directory": "packages/utilities/did"
+		"directory": "packages/identity/did"
 	},
 	"files": [
 		"dist/",
