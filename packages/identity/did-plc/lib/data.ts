@@ -3,7 +3,7 @@ import * as CID from '@atcute/cid';
 import { toBase32 } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
-import { RECOVERY_WINDOW } from './constants.js';
+import { DISPUTE_WINDOW } from './constants.js';
 import * as err from './errors.js';
 import * as t from './types.js';
 import { isSignedOperationValid, normalizeOp } from './utils.js';
@@ -131,7 +131,7 @@ export const processIndexedEntry = async (
 	{
 		const lapsed = new Date(proposed.createdAt).getTime() - new Date(firstNullified.createdAt).getTime();
 
-		if (lapsed > RECOVERY_WINDOW) {
+		if (lapsed > DISPUTE_WINDOW) {
 			throw new err.LateRecoveryError(proposed, lapsed);
 		}
 	}
@@ -187,22 +187,22 @@ export const processIndexedEntryLog = async (
 };
 
 /**
- * Check whether an operation's recovery period is still active
+ * Check whether an operation can still be disputed
  */
-export const isWithinRecoveryWindow = (op: t.IndexedEntry, now = Date.now()): boolean => {
-	const lapsed = now - new Date(op.createdAt).getTime();
-	return lapsed <= RECOVERY_WINDOW;
+export const isDisputePeriodActive = (disputed: t.IndexedEntry, now = Date.now()): boolean => {
+	const lapsed = now - new Date(disputed.createdAt).getTime();
+	return lapsed <= DISPUTE_WINDOW;
 };
 
 /**
- * Check if a given key is allowed to dispute an operation
+ * Check if a key is authorized to dispute an operation
  */
-export const isAuthorizedForRecovery = (
-	prev: t.IndexedEntryWithSigner<t.CompatibleOperation>,
+export const isAuthorizedForDispute = (
+	base: t.IndexedEntryWithSigner<t.CompatibleOperation>,
 	disputed: t.IndexedEntryWithSigner,
 	key: t.DidKeyString,
 ): boolean => {
-	const { rotationKeys } = normalizeOp(prev.operation);
+	const { rotationKeys } = normalizeOp(base.operation);
 
 	const disputedSigner = disputed.signedBy;
 	const disputedIndex = rotationKeys.indexOf(disputedSigner);
@@ -212,4 +212,34 @@ export const isAuthorizedForRecovery = (
 
 	const didKeyIndex = rotationKeys.indexOf(key);
 	return didKeyIndex !== -1 && didKeyIndex < disputedIndex;
+};
+
+export interface DisputeCandidate {
+	base: t.IndexedEntryWithSigner<t.CompatibleOperation>;
+	disputed: t.IndexedEntryWithSigner;
+}
+
+/**
+ * Finds operations that can be disputed by a given key
+ */
+export const getDisputeCandidates = (canonical: t.IndexedEntryWithSigner[], key: t.DidKeyString) => {
+	const candidates: DisputeCandidate[] = [];
+	const now = Date.now();
+
+	for (let idx = 1, len = canonical.length; idx < len; idx++) {
+		const base = canonical[idx - 1] as t.IndexedEntryWithSigner<t.CompatibleOperation>;
+		const disputed = canonical[idx];
+
+		// Only consider if it's still within the recovery window.
+		if (!isDisputePeriodActive(disputed, now)) {
+			continue;
+		}
+
+		// Check if the provided key is allowed to dispute this operation.
+		if (isAuthorizedForDispute(base, disputed, key)) {
+			candidates.push({ base, disputed });
+		}
+	}
+
+	return candidates;
 };
