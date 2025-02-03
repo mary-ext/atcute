@@ -107,24 +107,29 @@ const readCid = (state: State, length: number): CidLink => {
 	return new CidLinkWrapper(slice);
 };
 
-const enum ContainerType {
-	MAP,
-	ARRAY,
-}
-
 type Container =
 	| {
-			t: ContainerType.MAP;
+			/** map type */
+			t: 0;
+			/** container value */
 			c: Record<string, unknown>;
+			/** held key (as we decode the value) */
 			k: string | null;
+			/** remaining elements (key + value) */
 			r: number;
+			/** next container in stack */
 			n: Container | null;
 	  }
 	| {
-			t: ContainerType.ARRAY;
+			/** array type */
+			t: 1;
+			/** container value */
 			c: any[];
+			/** held key (not used) */
 			k: null;
+			/** remaining elements (values) */
 			r: number;
+			/** next container in stack */
 			n: Container | null;
 	  };
 
@@ -169,7 +174,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 				value = arr;
 
 				if (arg > 0) {
-					stack = { t: ContainerType.ARRAY, c: arr, k: null, r: arg, n: stack };
+					stack = { t: 1, c: arr, k: null, r: arg, n: stack };
 					continue jump;
 				}
 
@@ -181,7 +186,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 
 				if (arg > 0) {
 					// `arg * 2` because we're reading both keys and values
-					stack = { t: ContainerType.MAP, c: obj, k: null, r: arg * 2, n: stack };
+					stack = { t: 0, c: obj, k: null, r: arg * 2, n: stack };
 					continue jump;
 				}
 
@@ -236,14 +241,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 
 		while (stack !== null) {
 			switch (stack.t) {
-				case ContainerType.ARRAY: {
-					const arr = stack.c;
-					const index = arr.length - stack.r;
-
-					arr[index] = value;
-					break;
-				}
-				case ContainerType.MAP: {
+				case 0: {
 					const obj = stack.c;
 					const key = stack.k;
 
@@ -263,6 +261,13 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 						stack.k = null;
 					}
 
+					break;
+				}
+				case 1: {
+					const arr = stack.c;
+					const index = arr.length - stack.r;
+
+					arr[index] = value;
 					break;
 				}
 			}
