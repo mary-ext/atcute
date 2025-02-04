@@ -1,4 +1,4 @@
-import { isAtprotoWebDid, isWebDid, webDidToDocumentUrl, type Did, type DidDocument } from '@atcute/identity';
+import { webDidToDocumentUrl, type Did, type DidDocument } from '@atcute/identity';
 
 import * as err from '../../errors.js';
 import type { DidResolver, ResolveDidOptions } from '../../types.js';
@@ -16,10 +16,6 @@ export class WebDidResolver implements DidResolver<'web'> {
 	}
 
 	async resolve(did: Did<'web'>, options?: ResolveDidOptions): Promise<DidDocument> {
-		if (!isWebDid(did)) {
-			throw new err.ImproperDidError(did);
-		}
-
 		const url = webDidToDocumentUrl(did);
 
 		const response = await (0, this.#fetch)(url, {
@@ -43,11 +39,10 @@ export class AtprotoWebDidResolver implements DidResolver<'web'> {
 	}
 
 	async resolve(did: Did<'web'>, options?: ResolveDidOptions): Promise<DidDocument> {
-		if (!isAtprotoWebDid(did)) {
+		const url = webDidToDocumentUrl(did);
+		if (url.hostname === 'localhost' || url.pathname !== '/.well-known/did.json') {
 			throw new err.ImproperDidError(did);
 		}
-
-		const url = webDidToDocumentUrl(did);
 
 		const response = await (0, this.#fetch)(url, {
 			signal: options?.signal,

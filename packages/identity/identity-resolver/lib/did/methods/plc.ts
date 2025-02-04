@@ -1,6 +1,5 @@
-import { isPlcDid, type Did, type DidDocument } from '@atcute/identity';
+import { type Did, type DidDocument } from '@atcute/identity';
 
-import * as err from '../../errors.js';
 import type { DidResolver, ResolveDidOptions } from '../../types.js';
 import { fetchDocHandler } from '../../utils.js';
 
@@ -19,10 +18,6 @@ export class PlcDidResolver implements DidResolver<'plc'> {
 	}
 
 	async resolve(did: Did<'plc'>, options?: ResolveDidOptions): Promise<DidDocument> {
-		if (!isPlcDid(did)) {
-			throw new err.ImproperDidError(did);
-		}
-
 		const url = new URL(`/${encodeURIComponent(did)}`, this.#apiUrl);
 
 		const response = await (0, this.#fetch)(url, {
