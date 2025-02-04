@@ -1,8 +1,8 @@
 import { isAtprotoWebDid, isWebDid, webDidToDocumentUrl, type Did, type DidDocument } from '@atcute/identity';
 
-import * as err from '../errors.js';
-import type { DidResolver, ResolveDidOptions } from '../types.js';
-import { fetchDocHandler } from '../utils.js';
+import * as err from '../../errors.js';
+import type { DidResolver, ResolveDidOptions } from '../../types.js';
+import { fetchDocHandler } from '../../utils.js';
 
 export interface WebDidResolverOptions {
 	fetch?: typeof fetch;

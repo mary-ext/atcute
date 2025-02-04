@@ -1,7 +1,7 @@
 import { extractDidMethod, type Did, type DidDocument } from '@atcute/identity';
 
-import * as err from './errors.js';
-import type { DidResolver, ResolveDidOptions } from './types.js';
+import * as err from '../errors.js';
+import type { DidResolver, ResolveDidOptions } from '../types.js';
 
 export interface CompositeDidResolverOptions<M extends string> {
 	methods: Record<M, DidResolver<M>>;
