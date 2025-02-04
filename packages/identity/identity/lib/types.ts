@@ -1,3 +1,5 @@
+export type Handle = `${string}.${string}`;
+
 export type Did<TMethod extends string = string> = `did:${TMethod}:${string}`;
 
 export interface VerificationMethod {
