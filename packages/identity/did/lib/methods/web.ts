@@ -3,7 +3,8 @@ import type { Did } from '../types.js';
 export const DID_WEB_RE =
 	/^did:web:([a-zA-Z0-9%\-]+(?:(?:\.[a-zA-Z0-9%\-]+)*(?:\.[a-zA-Z]{2,}))?)?((?::[a-zA-Z0-9\-%.]+)+)?$/;
 
-export const ATPROTO_DID_WEB_RE = /^did:web:([a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*(?:\.[a-zA-Z]{2,}))$/;
+export const ATPROTO_DID_WEB_RE =
+	/^did:web:([a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*(?:\.[a-zA-Z]{2,})|localhost(?:%3[aA]\d+)?)$/;
 
 /**
  * checks if input is a did:web identifier, note that you should probably use
