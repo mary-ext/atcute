@@ -28,7 +28,8 @@ export const parseResponseAsJson =
 		const text = await readResponseAsString(response, maxSize);
 
 		try {
-			return JSON.parse(text);
+			const json = JSON.parse(text);
+			return { response, json };
 		} catch (error) {
 			throw new err.ImproperJsonResponseError(`response json invalid`, { cause: error });
 		}
