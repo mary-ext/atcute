@@ -18,3 +18,12 @@ export const isDid = (input: string): input is Did => {
 export const isAtprotoDid = (input: string): input is Did<'plc' | 'web'> => {
 	return isDidPlc(input) || isAtprotoDidWeb(input);
 };
+
+/**
+ * returns the DID's method
+ */
+export const extractDidMethod = <M extends string>(did: Did<M>): M => {
+	const isep = did.indexOf(':', 4);
+	const method = did.slice(4, isep);
+	return method as M;
+};
