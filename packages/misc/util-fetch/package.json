@@ -1,0 +1,36 @@
+{
+	"type": "module",
+	"name": "@atcute/util-fetch",
+	"version": "1.0.0",
+	"description": "atproto DID to DID document resolution",
+	"keywords": [
+		"atproto",
+		"did"
+	],
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/misc/util-fetch"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.2.1"
+	},
+	"dependencies": {
+		"@badrap/valita": "^0.4.2"
+	}
+}

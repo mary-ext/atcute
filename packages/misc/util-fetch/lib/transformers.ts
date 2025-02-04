@@ -1,0 +1,90 @@
+import * as v from '@badrap/valita';
+
+import * as err from './errors.js';
+import { SizeLimitStream } from './streams/size-limit.js';
+
+export type ParsedJsonResponse<T = unknown> = {
+	response: Response;
+	json: T;
+};
+
+export const isResponseOk = async (response: Response): Promise<Response> => {
+	if (response.ok) {
+		return response;
+	}
+
+	if (response.body) {
+		await response.body.cancel();
+	}
+
+	throw new err.FailedResponseError(response.status, `got http ${response.status}`);
+};
+
+export const parseResponseAsJson =
+	(typeRegex: RegExp, maxSize: number) =>
+	async (response: Response): Promise<ParsedJsonResponse> => {
+		assertContentType(response, typeRegex);
+
+		const text = await readResponseAsString(response, maxSize);
+
+		try {
+			return JSON.parse(text);
+		} catch (error) {
+			throw new err.ImproperJsonResponseError(`response json invalid`, { cause: error });
+		}
+	};
+
+export const validateJsonWith =
+	<T>(schema: v.Type<T>) =>
+	async (parsed: ParsedJsonResponse): Promise<ParsedJsonResponse<T>> => {
+		const json = schema.parse(parsed.json);
+		return { response: parsed.response, json };
+	};
+
+const assertContentType = async (response: Response, typeRegex: RegExp): Promise<void> => {
+	const type = response.headers.get('content-type')?.split(';', 1)[0].trim();
+
+	if (type === undefined) {
+		if (response.body) {
+			await response.body.cancel();
+		}
+
+		throw new err.ImproperContentTypeError(null, `missing response content-type`);
+	}
+
+	if (!typeRegex.test(type)) {
+		if (response.body) {
+			await response.body.cancel();
+		}
+
+		throw new err.ImproperContentTypeError(type, `unexpected response content-type`);
+	}
+};
+
+const readResponseAsString = async (response: Response, maxSize: number): Promise<string> => {
+	const rawSize = response.headers.get('content-length');
+	if (rawSize !== null) {
+		const size = Number(rawSize);
+
+		if (!Number.isSafeInteger(size) || size <= 0) {
+			response.body?.cancel();
+			throw new err.ImproperContentLengthError(maxSize, null, `invalid response content-length`);
+		}
+
+		if (size > maxSize) {
+			response.body?.cancel();
+			throw new err.ImproperContentLengthError(maxSize, size, `response content-length too large`);
+		}
+	}
+
+	const stream = response
+		.body!.pipeThrough(new SizeLimitStream(maxSize))
+		.pipeThrough(new TextDecoderStream());
+
+	let text = '';
+	for await (const chunk of stream) {
+		text += chunk;
+	}
+
+	return text;
+};

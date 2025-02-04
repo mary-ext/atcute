@@ -4,6 +4,7 @@ packages:
   - packages/definitions/*
   - packages/identity/*
   - packages/internal/*
+  - packages/misc/*
   - packages/oauth/*
   - packages/services/*
   - packages/utilities/*
