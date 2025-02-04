@@ -7,7 +7,10 @@ export class PlcError extends Error {
 export class ImproperOperationError extends PlcError {
 	override name = 'ImproperOperationError';
 
-	constructor(operation: t.IndexedEntry, reason: string) {
+	constructor(
+		public operation: t.IndexedEntry,
+		public reason: string,
+	) {
 		super(`improper operation; cid=${operation.cid}; reason=${reason}`);
 	}
 }
@@ -15,7 +18,7 @@ export class ImproperOperationError extends PlcError {
 export class InvalidSignatureError extends PlcError {
 	override name = 'InvalidSignatureError';
 
-	constructor(operation: t.IndexedEntry) {
+	constructor(public operation: t.IndexedEntry) {
 		super(`invalid signature; cid=${operation.cid}`);
 	}
 }
@@ -23,7 +26,10 @@ export class InvalidSignatureError extends PlcError {
 export class InvalidHashError extends PlcError {
 	override name = 'InvalidHashError';
 
-	constructor(operation: t.IndexedEntry, expected: string) {
+	constructor(
+		public operation: t.IndexedEntry,
+		public expected: string,
+	) {
 		super(`invalid hash; expected=${expected}; got=${operation.cid}`);
 	}
 }
@@ -31,7 +37,10 @@ export class InvalidHashError extends PlcError {
 export class GenesisHashError extends PlcError {
 	override name = 'GenesisHashError';
 
-	constructor(operation: t.IndexedEntry, did: t.DidPlcString) {
+	constructor(
+		public operation: t.IndexedEntry,
+		public did: t.DidPlcString,
+	) {
 		super(`mismatching genesis hash; did=${did}; cid=${operation.cid}`);
 	}
 }
@@ -39,7 +48,10 @@ export class GenesisHashError extends PlcError {
 export class LateDisputeError extends PlcError {
 	override name = 'LateDisputeError';
 
-	constructor(operation: t.IndexedEntry, lapsed: number) {
+	constructor(
+		public operation: t.IndexedEntry,
+		public lapsed: number,
+	) {
 		super(`dispute occured outside of permitted window; cid=${operation.cid}; lapsed=${lapsed}`);
 	}
 }
