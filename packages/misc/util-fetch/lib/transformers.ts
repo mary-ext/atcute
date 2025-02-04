@@ -3,6 +3,11 @@ import * as v from '@badrap/valita';
 import * as err from './errors.js';
 import { SizeLimitStream } from './streams/size-limit.js';
 
+export type TextResponse = {
+	response: Response;
+	text: string;
+};
+
 export type ParsedJsonResponse<T = unknown> = {
 	response: Response;
 	json: T;
@@ -20,12 +25,19 @@ export const isResponseOk = async (response: Response): Promise<Response> => {
 	throw new err.FailedResponseError(response.status, `got http ${response.status}`);
 };
 
+export const readResponseAsText =
+	(maxSize: number) =>
+	async (response: Response): Promise<TextResponse> => {
+		const text = await readResponse(response, maxSize);
+		return { response, text };
+	};
+
 export const parseResponseAsJson =
 	(typeRegex: RegExp, maxSize: number) =>
 	async (response: Response): Promise<ParsedJsonResponse> => {
 		assertContentType(response, typeRegex);
 
-		const text = await readResponseAsString(response, maxSize);
+		const text = await readResponse(response, maxSize);
 
 		try {
 			const json = JSON.parse(text);
@@ -62,7 +74,7 @@ const assertContentType = async (response: Response, typeRegex: RegExp): Promise
 	}
 };
 
-const readResponseAsString = async (response: Response, maxSize: number): Promise<string> => {
+const readResponse = async (response: Response, maxSize: number): Promise<string> => {
 	const rawSize = response.headers.get('content-length');
 	if (rawSize !== null) {
 		const size = Number(rawSize);
