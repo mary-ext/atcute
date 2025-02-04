@@ -9,7 +9,7 @@ export const DID_RE = /^did:([a-z]+):([a-zA-Z0-9._:%\-]*[a-zA-Z0-9._\-])$/;
  * checks if it's a DID identifier
  */
 export const isDid = (input: string): input is Did => {
-	return input.length >= 7 && DID_RE.test(input);
+	return input.length >= 7 && input.length <= 2048 && DID_RE.test(input);
 };
 
 /**
