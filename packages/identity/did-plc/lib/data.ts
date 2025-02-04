@@ -132,7 +132,7 @@ export const processIndexedEntry = async (
 		const lapsed = new Date(proposed.createdAt).getTime() - new Date(firstNullified.createdAt).getTime();
 
 		if (lapsed > DISPUTE_WINDOW) {
-			throw new err.LateRecoveryError(proposed, lapsed);
+			throw new err.LateDisputeError(proposed, lapsed);
 		}
 	}
 
