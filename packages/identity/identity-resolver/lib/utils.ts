@@ -1,4 +1,4 @@
-import { defs } from '@atcute/did';
+import { defs } from '@atcute/identity';
 import { isResponseOk, parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
 export const fetchDocHandler = pipe(

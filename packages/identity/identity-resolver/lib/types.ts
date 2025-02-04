@@ -1,4 +1,4 @@
-import type { Did, DidDocument } from '@atcute/did';
+import type { Did, DidDocument } from '@atcute/identity';
 
 export interface ResolveDidOptions {
 	signal?: AbortSignal;

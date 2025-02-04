@@ -1,4 +1,4 @@
-import { isPlcDid, type Did, type DidDocument } from '@atcute/did';
+import { isPlcDid, type Did, type DidDocument } from '@atcute/identity';
 
 import * as err from '../errors.js';
 import type { DidResolver, ResolveDidOptions } from '../types.js';

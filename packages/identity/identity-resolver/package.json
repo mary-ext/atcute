@@ -1,8 +1,8 @@
 {
 	"type": "module",
-	"name": "@atcute/did",
+	"name": "@atcute/identity-resolver",
 	"version": "1.0.0",
-	"description": "syntax, type definitions and schemas for atproto DIDs and DID documents",
+	"description": "atproto handle and DID document resolution",
 	"keywords": [
 		"atproto",
 		"did"
@@ -10,7 +10,7 @@
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
-		"directory": "packages/identity/did"
+		"directory": "packages/identity/identity-resolver"
 	},
 	"files": [
 		"dist/",
@@ -31,6 +31,8 @@
 		"@types/bun": "^1.2.1"
 	},
 	"dependencies": {
+		"@atcute/identity": "workspace:^",
+		"@atcute/util-fetch": "workspace:^",
 		"@badrap/valita": "^0.4.2"
 	}
 }

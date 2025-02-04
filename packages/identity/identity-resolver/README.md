@@ -1,9 +1,9 @@
-# @atcute/did-resolver
+# @atcute/identity-resolver
 
 > [!NOTE]  
 > not yet published.
 
-atproto DID document resolution
+atproto handle and DID document resolution
 
 ```ts
 const resolver = new CompositeDidResolver({

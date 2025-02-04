@@ -167,16 +167,6 @@ importers:
         specifier: workspace:^
         version: link:../../core/lex-cli
 
-  packages/identity/did:
-    dependencies:
-      '@badrap/valita':
-        specifier: ^0.4.2
-        version: 0.4.2
-    devDependencies:
-      '@types/bun':
-        specifier: ^1.2.1
-        version: 1.2.1
-
   packages/identity/did-plc:
     dependencies:
       '@atcute/cbor':
@@ -202,11 +192,21 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1
 
-  packages/identity/did-resolver:
+  packages/identity/identity:
     dependencies:
-      '@atcute/did':
+      '@badrap/valita':
+        specifier: ^0.4.2
+        version: 0.4.2
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.2.1
+        version: 1.2.1
+
+  packages/identity/identity-resolver:
+    dependencies:
+      '@atcute/identity':
         specifier: workspace:^
-        version: link:../did
+        version: link:../identity
       '@atcute/util-fetch':
         specifier: workspace:^
         version: link:../../misc/util-fetch

@@ -1,4 +1,4 @@
-import type { Did } from '@atcute/did';
+import type { Did } from '@atcute/identity';
 
 export class DidResolutionError extends Error {
 	override name = 'DidResolutionError';
