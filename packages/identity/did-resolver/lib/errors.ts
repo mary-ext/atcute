@@ -11,3 +11,11 @@ export class UnsupportedDidMethodError extends DidResolutionError {
 		super(`unsupported did method; did=${did}`);
 	}
 }
+
+export class ImproperDidError extends DidResolutionError {
+	override name = 'ImproperDidError';
+
+	constructor(public did: Did) {
+		super(`improper did; did=${did}`);
+	}
+}
