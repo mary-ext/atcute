@@ -1,9 +1,9 @@
 import type { Did } from '../types.js';
 
-export const DID_WEB_RE =
+export const WEB_DID_RE =
 	/^did:web:([a-zA-Z0-9%\-]+(?:(?:\.[a-zA-Z0-9%\-]+)*(?:\.[a-zA-Z]{2,}))?)?((?::[a-zA-Z0-9\-%.]+)+)?$/;
 
-export const ATPROTO_DID_WEB_RE =
+export const ATPROTO_WEB_DID_RE =
 	/^did:web:([a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*(?:\.[a-zA-Z]{2,})|localhost(?:%3[aA]\d+)?)$/;
 
 /**
@@ -11,21 +11,21 @@ export const ATPROTO_DID_WEB_RE =
  * `isAtprotoDidWeb` for atproto-related cases as atproto only supports a subset
  * of the did:web specification (namely, no custom paths)
  */
-export const isDidWeb = (input: string): input is Did<'web'> => {
-	return input.length >= 9 && DID_WEB_RE.test(input);
+export const isWebDid = (input: string): input is Did<'web'> => {
+	return input.length >= 9 && WEB_DID_RE.test(input);
 };
 
 /**
  * checks if input is a did:web identifier that is supported by atproto
  */
-export const isAtprotoDidWeb = (input: string): input is Did<'web'> => {
-	return input.length >= 12 && ATPROTO_DID_WEB_RE.test(input);
+export const isAtprotoWebDid = (input: string): input is Did<'web'> => {
+	return input.length >= 12 && ATPROTO_WEB_DID_RE.test(input);
 };
 
 /**
  * normalize a did:web identifier
  */
-export const normalizeDidWeb = (did: Did<'web'>): Did<'web'> => {
+export const normalizeWebDid = (did: Did<'web'>): Did<'web'> => {
 	const [hostname, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
 
 	let normalized = `did:web:${encodeURIComponent(hostname.toLowerCase())}`;
@@ -39,7 +39,7 @@ export const normalizeDidWeb = (did: Did<'web'>): Did<'web'> => {
 /**
  * converts did:web identifier into the DID document's URL
  */
-export const didWebToDocumentUrl = (did: Did<'web'>): URL => {
+export const webDidToDocumentUrl = (did: Did<'web'>): URL => {
 	const [hostname, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
 
 	let pathname = '/' + paths.join('/');

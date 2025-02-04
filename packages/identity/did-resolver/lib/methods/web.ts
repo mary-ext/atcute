@@ -1,4 +1,4 @@
-import { didWebToDocumentUrl, type Did, type DidDocument } from '@atcute/did';
+import { webDidToDocumentUrl, type Did, type DidDocument } from '@atcute/did';
 
 import type { DidResolver, ResolveDidOptions } from '../types.js';
 import { fetchDocHandler } from '../utils.js';
@@ -15,7 +15,7 @@ export class WebDidResolver implements DidResolver<'web'> {
 	}
 
 	async resolve(did: Did<'web'>, options?: ResolveDidOptions): Promise<DidDocument> {
-		const url = didWebToDocumentUrl(did);
+		const url = webDidToDocumentUrl(did);
 
 		const response = await (0, this.#fetch)(url, {
 			signal: options?.signal,

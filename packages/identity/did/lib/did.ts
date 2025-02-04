@@ -1,7 +1,7 @@
 import type { Did } from './types.js';
 
-import { isDidPlc } from './methods/plc.js';
-import { isAtprotoDidWeb } from './methods/web.js';
+import { isPlcDid } from './methods/plc.js';
+import { isAtprotoWebDid } from './methods/web.js';
 
 export const DID_RE = /^did:([a-z]+):([a-zA-Z0-9._:%\-]*[a-zA-Z0-9._\-])$/;
 
@@ -16,7 +16,7 @@ export const isDid = (input: string): input is Did => {
  * checks if it's a DID identifier that is supported by atproto
  */
 export const isAtprotoDid = (input: string): input is Did<'plc' | 'web'> => {
-	return isDidPlc(input) || isAtprotoDidWeb(input);
+	return isPlcDid(input) || isAtprotoWebDid(input);
 };
 
 /**
