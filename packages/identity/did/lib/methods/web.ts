@@ -41,14 +41,17 @@ export const normalizeDidWeb = (did: Did<'web'>): Did<'web'> => {
 export const didWebToDocumentUrl = (did: Did<'web'>): URL => {
 	const [hostname, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
 
-	const protocol = hostname === 'localhost' ? 'http:' : 'https:';
 	let pathname = '/' + paths.join('/');
-
 	if (pathname === '/') {
 		pathname = `/.well-known/did.json`;
 	} else {
 		pathname += `/did.json`;
 	}
 
-	return new URL(`${protocol}//${hostname}${pathname}`);
+	const url = new URL(`https://${hostname}${pathname}`);
+	if (url.hostname === 'localhost') {
+		url.protocol = 'http:';
+	}
+
+	return url;
 };
