@@ -1,9 +1,16 @@
+[tools."aqua:pnpm/pnpm"]
+version = "10.2.0"
+backend = "aqua:pnpm/pnpm"
+
+[tools."aqua:pnpm/pnpm".checksums]
+pnpm-linux-x64 = "sha256:38ab95d36b8ae79609e2b899ddf9e792cd00b6ca13a62789608aa45b4bf4a9d1"
+
 [tools.bun]
-version = "1.2.0"
+version = "1.2.2"
 backend = "core:bun"
 
 [tools.bun.checksums]
-"bun-linux-x64-baseline.zip" = "sha256:2fbea28583ac58bbcc81e635ce3529d2dc3d37c463b88b6b194133fec9e03bee"
+"bun-linux-x64-baseline.zip" = "sha256:cad7756a6ee16f3432a328f8023fc5cd431106822eacfa6d6d3afbad6fdc24db"
 
 [tools.node]
 version = "22.13.1"
@@ -11,7 +18,3 @@ backend = "core:node"
 
 [tools.node.checksums]
 "node-v22.13.1-linux-x64.tar.gz" = "sha256:666148b9fe0c7e1301cc1b029e33a45e9e4a893f68d2d2bb1cc88a931a88a004"
-
-[tools.pnpm]
-version = "10.0.0"
-backend = "asdf:pnpm"
