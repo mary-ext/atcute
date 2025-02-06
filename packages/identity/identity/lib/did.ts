@@ -3,7 +3,7 @@ import type { Did } from './types.js';
 import { isPlcDid } from './methods/plc.js';
 import { isAtprotoWebDid } from './methods/web.js';
 
-export const DID_RE = /^did:([a-z]+):([a-zA-Z0-9._:%\-]*[a-zA-Z0-9._\-])$/;
+export const DID_RE = /^(?=.{7,2048}$)did:([a-z]+):([a-zA-Z0-9._:%\-]*[a-zA-Z0-9._\-])$/;
 
 /**
  * checks if it's a DID identifier
