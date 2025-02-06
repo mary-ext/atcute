@@ -1,7 +1,7 @@
 import { type Did, type DidDocument } from '@atcute/identity';
 
 import type { DidResolver, ResolveDidOptions } from '../../types.js';
-import { fetchDocHandler } from '../../utils.js';
+import { fetchDocHandler } from '../utils.js';
 
 export interface PlcDidResolverOptions {
 	apiUrl?: string;

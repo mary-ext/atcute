@@ -2,7 +2,7 @@ import { webDidToDocumentUrl, type Did, type DidDocument } from '@atcute/identit
 
 import * as err from '../../errors.js';
 import type { DidResolver, ResolveDidOptions } from '../../types.js';
-import { fetchDocHandler } from '../../utils.js';
+import { fetchDocHandler } from '../utils.js';
 
 export interface WebDidResolverOptions {
 	fetch?: typeof fetch;
