@@ -4,7 +4,7 @@ import * as err from '../errors.js';
 import type { DidResolver, ResolveDidOptions } from '../types.js';
 
 export interface CompositeDidResolverOptions<M extends string> {
-	methods: Record<M, DidResolver<M>>;
+	methods: { [K in M]: DidResolver<K> };
 }
 
 export class CompositeDidResolver<M extends string> implements DidResolver<M> {
