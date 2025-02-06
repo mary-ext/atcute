@@ -40,8 +40,8 @@ of atcute.
 | **Identity packages** _(work in progress)_                                                                             |
 | [`did-plc`](./packages/identity/did-plc): validations, type definitions and schemas for did:plc operations             |
 | [`identity`](./packages/identity/identity): syntax, type definitions and schemas for handles, DIDs and DID documents   |
-| [`identity-resolver`]('./packages/identity/identity-resolver): DID document resolution                                 |
-| `identity-resolver-node`: node.js dns handle resolution                                                                |
+| [`identity-resolver`]('./packages/identity/identity-resolver): handle and DID document resolution                      |
+| `identity-resolver-node`: `node:dns`-powered handle resolution                                                         |
 | **Lexicon definitions**                                                                                                |
 | [`bluemoji`](./packages/definitions/bluemoji): adds `blue.moji.*` lexicons                                             |
 | [`bluesky`](./packages/definitions/bluesky): adds `app.bsky.*` and `chat.bsky.*` lexicons                              |
