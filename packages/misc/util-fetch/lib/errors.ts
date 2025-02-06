@@ -36,8 +36,8 @@ export class ImproperContentLengthError extends FetchResponseError {
 	}
 }
 
-export class ImproperJsonResponseError extends FetchResponseError {
-	override name = 'ImproperJsonResponse';
+export class ImproperResponseError extends FetchResponseError {
+	override name = 'ImproperResponseError';
 
 	constructor(reason: string, options?: ErrorOptions) {
 		super(reason, options);

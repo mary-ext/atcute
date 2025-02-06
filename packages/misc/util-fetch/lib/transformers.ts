@@ -43,7 +43,7 @@ export const parseResponseAsJson =
 			const json = JSON.parse(text);
 			return { response, json };
 		} catch (error) {
-			throw new err.ImproperJsonResponseError(`response json invalid`, { cause: error });
+			throw new err.ImproperResponseError(`unexpected json data`, { cause: error });
 		}
 	};
 
