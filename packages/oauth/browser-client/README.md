@@ -377,7 +377,7 @@ const resolveHandleViaDoH = async (handle: string): Promise<At.DID> => {
 		// ensure there is no other entry starting with "did="
 		for (let j = i + 1; j < answers.length; j++) {
 			if (answers[j].startsWith(PREFIX)) {
-				break;
+				throw new ResolverError(`handle returned multiple did values`);
 			}
 		}
 
