@@ -20,6 +20,13 @@ const answer = v.object({
 	data: v.string(),
 });
 
+const authority = v.object({
+	name: v.string(),
+	type: uint32,
+	TTL: uint32,
+	data: v.string(),
+});
+
 const result = v.object({
 	/** DNS response code */
 	Status: uint32,
@@ -37,6 +44,8 @@ const result = v.object({
 	Question: v.tuple([question]),
 	/** Answers */
 	Answer: v.array(answer).optional(() => []),
+	/** Authority */
+	Authority: v.array(authority).optional(),
 	/** Comment from the DNS server */
 	Comment: v.string().optional(),
 });
