@@ -20,6 +20,25 @@ export class ImproperDidError extends DidDocumentResolutionError {
 		super(`improper did; did=${did}`);
 	}
 }
+
+export class DocumentNotFoundError extends DidDocumentResolutionError {
+	override name = 'DocumentNotFoundError';
+
+	constructor(public did: Did) {
+		super(`did document not found; did=${did}`);
+	}
+}
+
+export class FailedDocumentResolutionError extends DidDocumentResolutionError {
+	override name = 'FailedDocumentResolutionError';
+
+	constructor(
+		public did: Did,
+		options?: ErrorOptions,
+	) {
+		super(`failed to resolve did document; did=${did}`, options);
+	}
+}
 // #endregion
 
 // #region Handle resolution errors

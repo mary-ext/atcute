@@ -1,4 +1,5 @@
 import { webDidToDocumentUrl, type Did, type DidDocument } from '@atcute/identity';
+import { FailedResponseError } from '@atcute/util-fetch';
 
 import * as err from '../../errors.js';
 import type { DidResolver, ResolveDidOptions } from '../../types.js';
@@ -16,16 +17,28 @@ export class WebDidResolver implements DidResolver<'web'> {
 	}
 
 	async resolve(did: Did<'web'>, options?: ResolveDidOptions): Promise<DidDocument> {
-		const url = webDidToDocumentUrl(did);
+		let json: DidDocument;
 
-		const response = await (0, this.#fetch)(url, {
-			signal: options?.signal,
-			cache: options?.noCache ? 'no-cache' : 'default',
-			redirect: 'error',
-			headers: { accept: 'application/did+ld+json,application/json' },
-		});
+		try {
+			const url = webDidToDocumentUrl(did);
 
-		const { json } = await fetchDocHandler(response);
+			const response = await (0, this.#fetch)(url, {
+				signal: options?.signal,
+				cache: options?.noCache ? 'no-cache' : 'default',
+				redirect: 'error',
+				headers: { accept: 'application/did+ld+json,application/json' },
+			});
+
+			const handled = await fetchDocHandler(response);
+
+			json = handled.json;
+		} catch (cause) {
+			if (cause instanceof FailedResponseError && cause.status === 404) {
+				throw new err.DocumentNotFoundError(did);
+			}
+
+			throw new err.FailedDocumentResolutionError(did, { cause });
+		}
 
 		return json;
 	}
@@ -44,14 +57,26 @@ export class AtprotoWebDidResolver implements DidResolver<'web'> {
 			throw new err.ImproperDidError(did);
 		}
 
-		const response = await (0, this.#fetch)(url, {
-			signal: options?.signal,
-			cache: options?.noCache ? 'no-cache' : 'default',
-			redirect: 'error',
-			headers: { accept: 'application/did+ld+json,application/json' },
-		});
+		let json: DidDocument;
 
-		const { json } = await fetchDocHandler(response);
+		try {
+			const response = await (0, this.#fetch)(url, {
+				signal: options?.signal,
+				cache: options?.noCache ? 'no-cache' : 'default',
+				redirect: 'error',
+				headers: { accept: 'application/did+ld+json,application/json' },
+			});
+
+			const handled = await fetchDocHandler(response);
+
+			json = handled.json;
+		} catch (cause) {
+			if (cause instanceof FailedResponseError && cause.status === 404) {
+				throw new err.DocumentNotFoundError(did);
+			}
+
+			throw new err.FailedDocumentResolutionError(did, { cause });
+		}
 
 		return json;
 	}
