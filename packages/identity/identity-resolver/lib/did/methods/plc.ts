@@ -2,24 +2,27 @@ import { type Did, type DidDocument } from '@atcute/identity';
 import { FailedResponseError } from '@atcute/util-fetch';
 
 import * as err from '../../errors.js';
-import type { DidResolver, ResolveDidOptions } from '../../types.js';
+import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../../types.js';
 import { fetchDocHandler } from '../utils.js';
 
-export interface PlcDidResolverOptions {
+export interface PlcDidDocumentResolverOptions {
 	apiUrl?: string;
 	fetch?: typeof fetch;
 }
 
-export class PlcDidResolver implements DidResolver<'plc'> {
+export class PlcDidDocumentResolver implements DidDocumentResolver<'plc'> {
 	readonly apiUrl: string;
 	#fetch: typeof fetch;
 
-	constructor({ apiUrl = 'https://plc.directory', fetch: fetchThis = fetch }: PlcDidResolverOptions = {}) {
+	constructor({
+		apiUrl = 'https://plc.directory',
+		fetch: fetchThis = fetch,
+	}: PlcDidDocumentResolverOptions = {}) {
 		this.apiUrl = apiUrl;
 		this.#fetch = fetchThis;
 	}
 
-	async resolve(did: Did<'plc'>, options?: ResolveDidOptions): Promise<DidDocument> {
+	async resolve(did: Did<'plc'>, options?: ResolveDidDocumentOptions): Promise<DidDocument> {
 		let json: DidDocument;
 
 		try {

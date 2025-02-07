@@ -2,21 +2,21 @@ import { webDidToDocumentUrl, type Did, type DidDocument } from '@atcute/identit
 import { FailedResponseError } from '@atcute/util-fetch';
 
 import * as err from '../../errors.js';
-import type { DidResolver, ResolveDidOptions } from '../../types.js';
+import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../../types.js';
 import { fetchDocHandler } from '../utils.js';
 
-export interface WebDidResolverOptions {
+export interface WebDidDocumentResolverOptions {
 	fetch?: typeof fetch;
 }
 
-export class WebDidResolver implements DidResolver<'web'> {
+export class WebDidDocumentResolver implements DidDocumentResolver<'web'> {
 	#fetch: typeof fetch;
 
-	constructor({ fetch: fetchThis = fetch }: WebDidResolverOptions = {}) {
+	constructor({ fetch: fetchThis = fetch }: WebDidDocumentResolverOptions = {}) {
 		this.#fetch = fetchThis;
 	}
 
-	async resolve(did: Did<'web'>, options?: ResolveDidOptions): Promise<DidDocument> {
+	async resolve(did: Did<'web'>, options?: ResolveDidDocumentOptions): Promise<DidDocument> {
 		let json: DidDocument;
 
 		try {
@@ -44,14 +44,14 @@ export class WebDidResolver implements DidResolver<'web'> {
 	}
 }
 
-export class AtprotoWebDidResolver implements DidResolver<'web'> {
+export class AtprotoWebDidDocumentResolver implements DidDocumentResolver<'web'> {
 	#fetch: typeof fetch;
 
-	constructor({ fetch: fetchThis = fetch }: WebDidResolverOptions = {}) {
+	constructor({ fetch: fetchThis = fetch }: WebDidDocumentResolverOptions = {}) {
 		this.#fetch = fetchThis;
 	}
 
-	async resolve(did: Did<'web'>, options?: ResolveDidOptions): Promise<DidDocument> {
+	async resolve(did: Did<'web'>, options?: ResolveDidDocumentOptions): Promise<DidDocument> {
 		const url = webDidToDocumentUrl(did);
 		if (url.hostname === 'localhost' || url.pathname !== '/.well-known/did.json') {
 			throw new err.ImproperDidError(did);

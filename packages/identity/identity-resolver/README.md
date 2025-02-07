@@ -37,14 +37,14 @@ try {
 	}
 }
 
-// did doc resolution
-const didResolver = new CompositeDidResolver({
+// DID document resolution
+const docResolver = new CompositeDidDocumentResolver({
 	methods: {
-		plc: new PlcDidResolver(),
-		web: new WebDidResolver(),
+		plc: new PlcDidDocumentResolver(),
+		web: new WebDidDocumentResolver(),
 	},
 });
 
-const doc = await didResolver.resolve('did:plc:z72i7hdynmk6r22z27h6tvur');
+const doc = await docResolver.resolve('did:plc:z72i7hdynmk6r22z27h6tvur');
 //    ^? { '@context': [...], id: 'did:plc:z72i7hdynmk6r22z27h6tvur', ... }
 ```

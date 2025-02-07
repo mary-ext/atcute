@@ -1,20 +1,20 @@
 import { extractDidMethod, type Did, type DidDocument } from '@atcute/identity';
 
 import * as err from '../errors.js';
-import type { DidResolver, ResolveDidOptions } from '../types.js';
+import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../types.js';
 
-export interface CompositeDidResolverOptions<M extends string> {
-	methods: { [K in M]: DidResolver<K> };
+export interface CompositeDidDocumentResolverOptions<M extends string> {
+	methods: { [K in M]: DidDocumentResolver<K> };
 }
 
-export class CompositeDidResolver<M extends string> implements DidResolver<M> {
-	#methods: Map<string, DidResolver<M>>;
+export class CompositeDidDocumentResolver<M extends string> implements DidDocumentResolver<M> {
+	#methods: Map<string, DidDocumentResolver<M>>;
 
-	constructor({ methods }: CompositeDidResolverOptions<M>) {
+	constructor({ methods }: CompositeDidDocumentResolverOptions<M>) {
 		this.#methods = new Map(Object.entries(methods));
 	}
 
-	async resolve(did: Did<M>, options?: ResolveDidOptions): Promise<DidDocument> {
+	async resolve(did: Did<M>, options?: ResolveDidDocumentOptions): Promise<DidDocument> {
 		const method = extractDidMethod(did);
 
 		const resolver = this.#methods.get(method);
