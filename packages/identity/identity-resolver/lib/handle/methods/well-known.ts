@@ -37,12 +37,12 @@ export class WellKnownHandleResolver implements HandleResolver {
 				throw new err.DidNotFoundError(handle);
 			}
 
-			throw new err.FailedDidResolutionError(handle, { cause });
+			throw new err.FailedHandleResolutionError(handle, { cause });
 		}
 
 		const did = text.split('\n')[0]!.trim();
 		if (!isAtprotoDid(did)) {
-			throw new err.InvalidResolvedDidError(handle, did);
+			throw new err.InvalidResolvedHandleError(handle, did);
 		}
 
 		return did;

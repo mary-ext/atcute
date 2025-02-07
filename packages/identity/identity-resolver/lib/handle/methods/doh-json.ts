@@ -84,7 +84,7 @@ export class DohJsonHandleResolver implements HandleResolver {
 
 			json = handled.json;
 		} catch (cause) {
-			throw new err.FailedDidResolutionError(handle, { cause });
+			throw new err.FailedHandleResolutionError(handle, { cause });
 		}
 
 		const status = json.Status;
@@ -95,7 +95,7 @@ export class DohJsonHandleResolver implements HandleResolver {
 				throw new err.DidNotFoundError(handle);
 			}
 
-			throw new err.FailedDidResolutionError(handle, {
+			throw new err.FailedHandleResolutionError(handle, {
 				cause: new TypeError(`dns returned ${status}`),
 			});
 		}
@@ -111,13 +111,13 @@ export class DohJsonHandleResolver implements HandleResolver {
 			for (let j = i + 1; j < il; j++) {
 				const data = extractTxtData(answers[j].data);
 				if (data.startsWith(PREFIX)) {
-					throw new err.DuplicateResolvedDidError(handle);
+					throw new err.AmbiguousHandleError(handle);
 				}
 			}
 
 			const did = data.slice(PREFIX.length);
 			if (!isAtprotoDid(did)) {
-				throw new err.InvalidResolvedDidError(handle, did);
+				throw new err.InvalidResolvedHandleError(handle, did);
 			}
 
 			return did;

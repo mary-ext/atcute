@@ -57,7 +57,7 @@ export class XrpcHandleResolver implements HandleResolver {
 				throw new err.DidNotFoundError(handle);
 			}
 
-			throw new err.FailedDidResolutionError(handle, { cause });
+			throw new err.FailedHandleResolutionError(handle, { cause });
 		}
 
 		return json.did;

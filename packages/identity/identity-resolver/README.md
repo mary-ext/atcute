@@ -22,13 +22,13 @@ try {
 	if (err instanceof DidNotFoundError) {
 		// handle returned no did
 	}
-	if (err instanceof InvalidResolvedDidError) {
+	if (err instanceof InvalidResolvedHandleError) {
 		// handle returned a did, but isn't a valid atproto did
 	}
-	if (err instanceof DuplicateResolvedDidError) {
+	if (err instanceof AmbiguousHandleError) {
 		// handle returned multiple did values (duplicate dns entries)
 	}
-	if (err instanceof FailedDidResolutionError) {
+	if (err instanceof FailedHandleResolutionError) {
 		// handle resolution had thrown something unexpected (fetch error)
 	}
 

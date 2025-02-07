@@ -47,15 +47,15 @@ export class HandleResolutionError extends Error {
 }
 
 export class DidNotFoundError extends HandleResolutionError {
-	override name = 'MissingDidError';
+	override name = 'DidNotFoundError';
 
 	constructor(public handle: string) {
 		super(`handle returned no did; handle=${handle}`);
 	}
 }
 
-export class FailedDidResolutionError extends HandleResolutionError {
-	override name = 'FailedDidResolutionError';
+export class FailedHandleResolutionError extends HandleResolutionError {
+	override name = 'FailedHandleResolutionError';
 
 	constructor(
 		public handle: string,
@@ -65,8 +65,8 @@ export class FailedDidResolutionError extends HandleResolutionError {
 	}
 }
 
-export class InvalidResolvedDidError extends HandleResolutionError {
-	override name = 'InvalidResolvedDidError';
+export class InvalidResolvedHandleError extends HandleResolutionError {
+	override name = 'InvalidResolvedHandleError';
 
 	constructor(
 		public handle: string,
@@ -76,7 +76,7 @@ export class InvalidResolvedDidError extends HandleResolutionError {
 	}
 }
 
-export class DuplicateResolvedDidError extends HandleResolutionError {
+export class AmbiguousHandleError extends HandleResolutionError {
 	override name = 'DuplicateResolvedDidError';
 
 	constructor(handle: string) {
