@@ -45,6 +45,25 @@ const docResolver = new CompositeDidDocumentResolver({
 	},
 });
 
-const doc = await docResolver.resolve('did:plc:z72i7hdynmk6r22z27h6tvur');
-//    ^? { '@context': [...], id: 'did:plc:z72i7hdynmk6r22z27h6tvur', ... }
+try {
+	const doc = await docResolver.resolve('did:plc:z72i7hdynmk6r22z27h6tvur');
+	//    ^? { '@context': [...], id: 'did:plc:z72i7hdynmk6r22z27h6tvur', ... }
+} catch (err) {
+	if (err instanceof DocumentNotFoundError) {
+		// did returned no document
+	}
+	if (err instanceof UnsupportedDidMethodError) {
+		// resolver doesn't support did method (composite resolver)
+	}
+	if (err instanceof ImproperDidError) {
+		// resolver considers did as invalid (atproto did:web)
+	}
+	if (err instanceof FailedDocumentResolutionError) {
+		// document resolution had thrown something unexpected (fetch error)
+	}
+
+	if (err instanceof HandleResolutionError) {
+		// the errors above extend this class, so you can do a catch-all.
+	}
+}
 ```
