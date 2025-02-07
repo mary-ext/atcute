@@ -37,6 +37,8 @@ const result = v.object({
 	Question: v.tuple([question]),
 	/** Answers */
 	Answer: v.array(answer),
+	/** Comment from the DNS server */
+	Comment: v.string().optional(),
 });
 
 const extractTxtData = (input: string) => {
