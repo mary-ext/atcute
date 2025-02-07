@@ -1,4 +1,4 @@
-import type { Did } from './types.js';
+import type { AtprotoDid, Did } from './types.js';
 
 import { isPlcDid } from './methods/plc.js';
 import { isAtprotoWebDid } from './methods/web.js';
@@ -15,7 +15,7 @@ export const isDid = (input: string): input is Did => {
 /**
  * checks if it's a DID identifier that is supported by atproto
  */
-export const isAtprotoDid = (input: string): input is Did<'plc' | 'web'> => {
+export const isAtprotoDid = (input: string): input is AtprotoDid => {
 	return isPlcDid(input) || isAtprotoWebDid(input);
 };
 

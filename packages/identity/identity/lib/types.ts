@@ -2,6 +2,8 @@ export type Handle = `${string}.${string}`;
 
 export type Did<TMethod extends string = string> = `did:${TMethod}:${string}`;
 
+export type AtprotoDid = Did<'plc' | 'web'>;
+
 export interface VerificationMethod {
 	id: string;
 	type: string;
