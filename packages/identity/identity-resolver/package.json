@@ -27,12 +27,15 @@
 		"test": "bun test --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
-	"devDependencies": {
-		"@types/bun": "^1.2.1"
+	"peerDependencies": {
+		"@atcute/identity": "^1.0.0"
 	},
 	"dependencies": {
-		"@atcute/identity": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
 		"@badrap/valita": "^0.4.2"
+	},
+	"devDependencies": {
+		"@atcute/identity": "workspace:^",
+		"@types/bun": "^1.2.1"
 	}
 }
