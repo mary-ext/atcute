@@ -1,5 +1,6 @@
 import type { Did } from '@atcute/identity';
 
+// #region DID document resolution errors
 export class DidResolutionError extends Error {
 	override name = 'DidResolutionError';
 }
@@ -19,7 +20,9 @@ export class ImproperDidError extends DidResolutionError {
 		super(`improper did; did=${did}`);
 	}
 }
+// #endregion
 
+// #region Handle resolution errors
 export class HandleResolutionError extends Error {
 	override name = 'HandleResolutionError';
 }
@@ -61,3 +64,4 @@ export class DuplicateResolvedDidError extends HandleResolutionError {
 		super(`handle returned multiple did values; handle=${handle}`);
 	}
 }
+// #endregion
