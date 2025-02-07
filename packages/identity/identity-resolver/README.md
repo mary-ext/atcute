@@ -26,7 +26,7 @@ try {
 		// handle returned a did, but isn't a valid atproto did
 	}
 	if (err instanceof AmbiguousHandleError) {
-		// handle returned multiple did values (duplicate dns entries)
+		// handle returned multiple did values
 	}
 	if (err instanceof FailedHandleResolutionError) {
 		// handle resolution had thrown something unexpected (fetch error)

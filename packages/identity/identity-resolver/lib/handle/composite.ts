@@ -1,8 +1,9 @@
 import type { AtprotoDid, Handle } from '@atcute/identity';
 
+import * as err from '../errors.js';
 import type { HandleResolver, ResolveHandleOptions } from '../types.js';
 
-export type CompositeStrategy = 'http-first' | 'dns-first' | 'race';
+export type CompositeStrategy = 'http-first' | 'dns-first' | 'race' | 'both';
 
 export interface CompositeHandleResolverOptions {
 	/** controls how the resolution is done, defaults to 'race' */
@@ -69,6 +70,18 @@ export class CompositeHandleResolver implements HandleResolver {
 				}
 
 				return dnsPromise;
+			}
+			case 'both': {
+				const [dnsResponse, httpResponse] = await Promise.allSettled([dnsPromise, httpPromise]);
+
+				const dnsDid = dnsResponse.status === 'fulfilled' ? dnsResponse.value : undefined;
+				const httpDid = httpResponse.status === 'fulfilled' ? httpResponse.value : undefined;
+
+				if (dnsDid && httpDid && dnsDid !== httpDid) {
+					throw new err.AmbiguousHandleError(handle);
+				}
+
+				return dnsDid || httpDid || dnsPromise;
 			}
 		}
 	}
