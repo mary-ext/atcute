@@ -54,6 +54,8 @@ export class CompositeHandleResolver implements HandleResolver {
 				});
 			}
 			case 'dns-first': {
+				httpPromise.catch(noop);
+
 				const resolved = await dnsPromise.catch(noopPromise);
 				if (resolved) {
 					controller.abort();
@@ -63,6 +65,8 @@ export class CompositeHandleResolver implements HandleResolver {
 				return httpPromise;
 			}
 			case 'http-first': {
+				dnsPromise.catch(noop);
+
 				const resolved = await httpPromise.catch(noopPromise);
 				if (resolved) {
 					controller.abort();
