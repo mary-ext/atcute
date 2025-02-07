@@ -77,7 +77,7 @@ export class InvalidResolvedHandleError extends HandleResolutionError {
 }
 
 export class AmbiguousHandleError extends HandleResolutionError {
-	override name = 'DuplicateResolvedDidError';
+	override name = 'AmbiguousHandleError';
 
 	constructor(handle: string) {
 		super(`handle returned multiple did values; handle=${handle}`);
