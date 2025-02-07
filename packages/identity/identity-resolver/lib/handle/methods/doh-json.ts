@@ -36,7 +36,7 @@ const result = v.object({
 	/** Requested records */
 	Question: v.tuple([question]),
 	/** Answers */
-	Answer: v.array(answer),
+	Answer: v.array(answer).optional(() => []),
 	/** Comment from the DNS server */
 	Comment: v.string().optional(),
 });
