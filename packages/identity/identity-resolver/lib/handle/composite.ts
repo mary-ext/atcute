@@ -1,4 +1,4 @@
-import type { Did, Handle } from '@atcute/identity';
+import type { AtprotoDid, Handle } from '@atcute/identity';
 
 import type { HandleResolver, ResolveHandleOptions } from '../types.js';
 
@@ -20,7 +20,7 @@ export class CompositeHandleResolver implements HandleResolver {
 		this.strategy = strategy;
 	}
 
-	async resolve(handle: Handle, options?: ResolveHandleOptions): Promise<Did> {
+	async resolve(handle: Handle, options?: ResolveHandleOptions): Promise<AtprotoDid> {
 		const { http, dns } = this.#methods;
 
 		const parentSignal = options?.signal;

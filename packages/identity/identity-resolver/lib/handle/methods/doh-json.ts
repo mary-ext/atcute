@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { isAtprotoDid, type Did, type Handle } from '@atcute/identity';
+import { isAtprotoDid, type AtprotoDid, type Handle } from '@atcute/identity';
 import { isResponseOk, parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
 import * as err from '../../errors.js';
@@ -66,7 +66,7 @@ export class DohJsonHandleResolver implements HandleResolver {
 		this.#fetch = fetchThis;
 	}
 
-	async resolve(handle: Handle, options?: ResolveHandleOptions): Promise<Did> {
+	async resolve(handle: Handle, options?: ResolveHandleOptions): Promise<AtprotoDid> {
 		let json: v.Infer<typeof result>;
 
 		try {

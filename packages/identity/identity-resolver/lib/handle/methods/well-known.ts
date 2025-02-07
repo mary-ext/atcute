@@ -1,4 +1,4 @@
-import { isAtprotoDid, type Did, type Handle } from '@atcute/identity';
+import { isAtprotoDid, type AtprotoDid, type Handle } from '@atcute/identity';
 import { FailedResponseError, isResponseOk, pipe, readResponseAsText } from '@atcute/util-fetch';
 
 import * as err from '../../errors.js';
@@ -17,7 +17,7 @@ export class WellKnownHandleResolver implements HandleResolver {
 		this.#fetch = fetchThis;
 	}
 
-	async resolve(handle: Handle, options?: ResolveHandleOptions): Promise<Did> {
+	async resolve(handle: Handle, options?: ResolveHandleOptions): Promise<AtprotoDid> {
 		let text: string;
 
 		try {

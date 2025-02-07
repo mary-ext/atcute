@@ -1,4 +1,4 @@
-import type { Did, DidDocument, Handle } from '@atcute/identity';
+import type { AtprotoDid, Did, DidDocument, Handle } from '@atcute/identity';
 
 export interface ResolveDidOptions {
 	signal?: AbortSignal;
@@ -15,5 +15,5 @@ export interface ResolveHandleOptions {
 }
 
 export interface HandleResolver {
-	resolve(handle: Handle, options?: ResolveHandleOptions): Promise<Did>;
+	resolve(handle: Handle, options?: ResolveHandleOptions): Promise<AtprotoDid>;
 }

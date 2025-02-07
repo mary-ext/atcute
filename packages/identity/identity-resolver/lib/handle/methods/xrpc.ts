@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { isAtprotoDid, type Did, type Handle } from '@atcute/identity';
+import { isAtprotoDid, type AtprotoDid, type Handle } from '@atcute/identity';
 import {
 	FailedResponseError,
 	isResponseOk,
@@ -36,7 +36,7 @@ export class XrpcHandleResolver implements HandleResolver {
 		this.#fetch = fetchThis;
 	}
 
-	async resolve(handle: Handle, options?: ResolveHandleOptions): Promise<Did> {
+	async resolve(handle: Handle, options?: ResolveHandleOptions): Promise<AtprotoDid> {
 		let json: v.Infer<typeof response>;
 
 		try {
