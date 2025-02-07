@@ -54,7 +54,7 @@ export class XrpcHandleResolver implements HandleResolver {
 			json = handled.json;
 		} catch (cause) {
 			if (cause instanceof FailedResponseError && cause.status === 400) {
-				throw new err.MissingDidError(handle);
+				throw new err.DidNotFoundError(handle);
 			}
 
 			throw new err.FailedDidResolutionError(handle, { cause });

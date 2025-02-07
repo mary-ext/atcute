@@ -1,11 +1,11 @@
 import type { Did } from '@atcute/identity';
 
 // #region DID document resolution errors
-export class DidResolutionError extends Error {
+export class DidDocumentResolutionError extends Error {
 	override name = 'DidResolutionError';
 }
 
-export class UnsupportedDidMethodError extends DidResolutionError {
+export class UnsupportedDidMethodError extends DidDocumentResolutionError {
 	override name = 'UnsupportedDidMethodError';
 
 	constructor(public did: Did) {
@@ -13,7 +13,7 @@ export class UnsupportedDidMethodError extends DidResolutionError {
 	}
 }
 
-export class ImproperDidError extends DidResolutionError {
+export class ImproperDidError extends DidDocumentResolutionError {
 	override name = 'ImproperDidError';
 
 	constructor(public did: Did) {
@@ -27,7 +27,7 @@ export class HandleResolutionError extends Error {
 	override name = 'HandleResolutionError';
 }
 
-export class MissingDidError extends HandleResolutionError {
+export class DidNotFoundError extends HandleResolutionError {
 	override name = 'MissingDidError';
 
 	constructor(public handle: string) {

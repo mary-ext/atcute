@@ -19,17 +19,17 @@ try {
 	const handle = await didResolver.resolve('bsky.app');
 	//    ^? 'did:plc:z72i7hdynmk6r22z27h6tvur'
 } catch (err) {
-	if (err instanceof MissingDidError) {
+	if (err instanceof DidNotFoundError) {
 		// handle returned no did
-	}
-	if (err instanceof FailedDidResolutionError) {
-		// handle resolution had thrown something unexpected
 	}
 	if (err instanceof InvalidResolvedDidError) {
 		// handle returned a did, but isn't a valid atproto did
 	}
 	if (err instanceof DuplicateResolvedDidError) {
 		// handle returned multiple did values (duplicate dns entries)
+	}
+	if (err instanceof FailedDidResolutionError) {
+		// handle resolution had thrown something unexpected (fetch error)
 	}
 
 	if (err instanceof HandleResolutionError) {

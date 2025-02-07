@@ -92,7 +92,7 @@ export class DohJsonHandleResolver implements HandleResolver {
 
 		if (status !== 0 /* NOERROR */) {
 			if (status === 3 /* NXDOMAIN */) {
-				throw new err.MissingDidError(handle);
+				throw new err.DidNotFoundError(handle);
 			}
 
 			throw new err.FailedDidResolutionError(handle, {
@@ -124,6 +124,6 @@ export class DohJsonHandleResolver implements HandleResolver {
 		}
 
 		// theoretically this shouldn't happen, it should've returned NXDOMAIN
-		throw new err.MissingDidError(handle);
+		throw new err.DidNotFoundError(handle);
 	}
 }

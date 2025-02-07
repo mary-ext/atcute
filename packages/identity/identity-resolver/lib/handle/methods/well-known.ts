@@ -34,7 +34,7 @@ export class WellKnownHandleResolver implements HandleResolver {
 			text = handled.text;
 		} catch (cause) {
 			if (cause instanceof FailedResponseError && cause.status === 404) {
-				throw new err.MissingDidError(handle);
+				throw new err.DidNotFoundError(handle);
 			}
 
 			throw new err.FailedDidResolutionError(handle, { cause });
