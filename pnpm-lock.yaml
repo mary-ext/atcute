@@ -218,6 +218,18 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1
 
+  packages/identity/identity-resolver-node:
+    devDependencies:
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../identity
+      '@atcute/identity-resolver':
+        specifier: workspace:^
+        version: link:../identity-resolver
+      '@types/bun':
+        specifier: ^1.2.1
+        version: 1.2.1
+
   packages/internal/dev-env:
     dependencies:
       '@atproto/crypto':

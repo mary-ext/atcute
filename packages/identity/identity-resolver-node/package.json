@@ -1,0 +1,39 @@
+{
+	"type": "module",
+	"name": "@atcute/identity-resolver-node",
+	"version": "1.0.0",
+	"description": "additional atproto identity resolvers for Node.js",
+	"keywords": [
+		"atproto",
+		"did"
+	],
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/identity/identity-resolver-node"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"peerDependencies": {
+		"@atcute/identity": "^1.0.0",
+		"@atcute/identity-resolver": "^1.0.0"
+	},
+	"devDependencies": {
+		"@atcute/identity": "workspace:^",
+		"@atcute/identity-resolver": "workspace:^",
+		"@types/bun": "^1.2.1"
+	}
+}
