@@ -17,7 +17,9 @@ const answer = v.object({
 	name: v.string(),
 	type: v.literal(16), // TXT
 	TTL: uint32,
-	data: v.string(),
+	data: v.string().chain((input) => {
+		return v.ok(input.replace(/^"|"$/g, '').replace(/\\"/g, '"'));
+	}),
 });
 
 const authority = v.object({
@@ -49,10 +51,6 @@ const result = v.object({
 	/** Comment from the DNS server */
 	Comment: v.string().optional(),
 });
-
-const extractTxtData = (input: string) => {
-	return input.replace(/^"|"$/g, '').replace(/\\"/g, '"');
-};
 
 const SUBDOMAIN = '_atproto';
 const PREFIX = 'did=';
@@ -113,14 +111,14 @@ export class DohJsonHandleResolver implements HandleResolver {
 
 		for (let i = 0, il = answers.length; i < il; i++) {
 			const answer = answers[i];
-			const data = extractTxtData(answer.data);
+			const data = answer.data;
 
 			if (!data.startsWith(PREFIX)) {
 				continue;
 			}
 
 			for (let j = i + 1; j < il; j++) {
-				const data = extractTxtData(answers[j].data);
+				const data = answers[j].data;
 				if (data.startsWith(PREFIX)) {
 					throw new err.AmbiguousHandleError(handle);
 				}
