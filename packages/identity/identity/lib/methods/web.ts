@@ -26,9 +26,9 @@ export const isAtprotoWebDid = (input: string): input is Did<'web'> => {
  * normalize a did:web identifier
  */
 export const normalizeWebDid = (did: Did<'web'>): Did<'web'> => {
-	const [hostname, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
+	const [host, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
 
-	let normalized = `did:web:${encodeURIComponent(hostname.toLowerCase())}`;
+	let normalized = `did:web:${encodeURIComponent(host.toLowerCase())}`;
 	if (paths.length > 0) {
 		normalized += `:${paths.join(':')}`;
 	}
@@ -40,7 +40,7 @@ export const normalizeWebDid = (did: Did<'web'>): Did<'web'> => {
  * converts did:web identifier into the DID document's URL
  */
 export const webDidToDocumentUrl = (did: Did<'web'>): URL => {
-	const [hostname, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
+	const [host, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
 
 	let pathname = '/' + paths.join('/');
 	if (pathname === '/') {
@@ -49,7 +49,7 @@ export const webDidToDocumentUrl = (did: Did<'web'>): URL => {
 		pathname += `/did.json`;
 	}
 
-	const url = new URL(`https://${hostname}${pathname}`);
+	const url = new URL(`https://${host}${pathname}`);
 	if (url.hostname === 'localhost') {
 		url.protocol = 'http:';
 	}
