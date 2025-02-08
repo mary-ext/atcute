@@ -58,7 +58,7 @@ const PREFIX = 'did=';
 const fetchDohJsonHandler = pipe(
 	isResponseOk,
 	parseResponseAsJson(/^application\/(dns-)?json$/, 16 * 1024),
-	validateJsonWith(result),
+	validateJsonWith(result, { mode: 'passthrough' }),
 );
 
 export interface DohJsonHandleResolverOptions {

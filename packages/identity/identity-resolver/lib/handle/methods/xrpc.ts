@@ -19,7 +19,7 @@ const response = v.object({
 const fetchXrpcHandler = pipe(
 	isResponseOk,
 	parseResponseAsJson(/^application\/json$/, 4 * 1024),
-	validateJsonWith(response),
+	validateJsonWith(response, { mode: 'passthrough' }),
 );
 
 export interface XrpcHandleResolverOptions {
