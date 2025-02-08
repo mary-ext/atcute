@@ -16,7 +16,7 @@ const handleResolver = new CompositeHandleResolver({
 });
 
 try {
-	const handle = await didResolver.resolve('bsky.app');
+	const handle = await handleResolver.resolve('bsky.app');
 	//    ^? 'did:plc:z72i7hdynmk6r22z27h6tvur'
 } catch (err) {
 	if (err instanceof DidNotFoundError) {
