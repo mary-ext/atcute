@@ -47,10 +47,12 @@ export const parseResponseAsJson =
 		}
 	};
 
+type ParseOptions = NonNullable<Parameters<v.Type['parse']>[1]>;
+
 export const validateJsonWith =
-	<T>(schema: v.Type<T>) =>
+	<T>(schema: v.Type<T>, options?: ParseOptions) =>
 	async (parsed: ParsedJsonResponse): Promise<ParsedJsonResponse<T>> => {
-		const json = schema.parse(parsed.json);
+		const json = schema.parse(parsed.json, options);
 		return { response: parsed.response, json };
 	};
 
