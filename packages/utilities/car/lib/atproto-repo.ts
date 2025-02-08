@@ -92,6 +92,30 @@ function assert(condition: boolean, message: string): asserts condition {
 
 export type BlockMap = Map<string, Uint8Array>;
 
+const isCidLink = (value: unknown): value is CID.CidLink => {
+	if (value instanceof CID.CidLinkWrapper) {
+		return true;
+	}
+
+	if (value === null || typeof value !== 'object') {
+		return false;
+	}
+
+	return '$link' in value && typeof value.$link === 'string';
+};
+
+const isBytes = (value: unknown): value is CBOR.Bytes => {
+	if (value instanceof CBOR.BytesWrapper) {
+		return true;
+	}
+
+	if (value === null || typeof value !== 'object') {
+		return false;
+	}
+
+	return '$bytes' in value && typeof value.$bytes === 'string';
+};
+
 export interface Commit {
 	version: 3;
 	did: string;
@@ -111,10 +135,10 @@ export const isCommit = (value: unknown): value is Commit => {
 	return (
 		obj.version === 3 &&
 		typeof obj.did === 'string' &&
-		obj.data instanceof CID.CidLinkWrapper &&
+		isCidLink(obj.data) &&
 		typeof obj.rev === 'string' &&
-		(obj.prev === null || obj.prev instanceof CID.CidLinkWrapper) &&
-		obj.sig instanceof CBOR.BytesWrapper
+		(obj.prev === null || isCidLink(obj.prev)) &&
+		isBytes(obj.sig)
 	);
 };
 
@@ -137,10 +161,7 @@ export const isTreeEntry = (value: unknown): value is TreeEntry => {
 	const obj = value as Record<string, unknown>;
 
 	return (
-		typeof obj.p === 'number' &&
-		obj.k instanceof CBOR.BytesWrapper &&
-		obj.v instanceof CID.CidLinkWrapper &&
-		(obj.t === null || obj.t instanceof CID.CidLinkWrapper)
+		typeof obj.p === 'number' && isBytes(obj.k) && isCidLink(obj.v) && (obj.t === null || isCidLink(obj.t))
 	);
 };
 
@@ -158,11 +179,7 @@ export const isMstNode = (value: unknown): value is MstNode => {
 
 	const obj = value as Record<string, unknown>;
 
-	return (
-		(obj.l === null || obj.l instanceof CID.CidLinkWrapper) &&
-		Array.isArray(obj.e) &&
-		obj.e.every(isTreeEntry)
-	);
+	return (obj.l === null || isCidLink(obj.l)) && Array.isArray(obj.e) && obj.e.every(isTreeEntry);
 };
 
 export interface NodeEntry {
