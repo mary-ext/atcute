@@ -38,33 +38,34 @@ export function* iterateAtpRepo(buf: Uint8Array): Generator<RepoEntry> {
 	}
 
 	// Read the head, then walk through the MST tree from there.
-	const commit = readObject(blockmap, roots[0]) as Commit;
-	for (const { key, cid } of walkEntries(blockmap, commit.data)) {
+	const commit = readObject(blockmap, roots[0], isCommit);
+	for (const { key, cid } of walkMstEntries(blockmap, commit.data)) {
 		const [collection, rkey] = key.split('/');
 
 		yield new RepoEntry(collection, rkey, cid, blockmap);
 	}
 }
 
-function readObject(map: BlockMap, link: CID.CidLink): unknown {
+function readObject<T>(map: BlockMap, link: CID.CidLink, validate: (value: unknown) => value is T): T {
 	const cid = link.$link;
 
 	const bytes = map.get(cid);
 	assert(bytes != null, `cid not found in blockmap; cid=${cid}`);
 
 	const data = CBOR.decode(bytes);
+	assert(validate(data), `validation failed for cid=${cid}`);
 
 	return data;
 }
 
-function* walkEntries(map: BlockMap, pointer: CID.CidLink): Generator<NodeEntry> {
-	const data = readObject(map, pointer) as MstNode;
+export function* walkMstEntries(map: BlockMap, pointer: CID.CidLink): Generator<NodeEntry> {
+	const data = readObject(map, pointer, isMstNode);
 	const entries = data.e;
 
 	let lastKey = '';
 
 	if (data.l !== null) {
-		yield* walkEntries(map, data.l);
+		yield* walkMstEntries(map, data.l);
 	}
 
 	for (let i = 0, il = entries.length; i < il; i++) {
@@ -78,7 +79,7 @@ function* walkEntries(map: BlockMap, pointer: CID.CidLink): Generator<NodeEntry>
 		yield { key: key, cid: entry.v };
 
 		if (entry.t !== null) {
-			yield* walkEntries(map, entry.t);
+			yield* walkMstEntries(map, entry.t);
 		}
 	}
 }
@@ -89,9 +90,9 @@ function assert(condition: boolean, message: string): asserts condition {
 	}
 }
 
-type BlockMap = Map<string, Uint8Array>;
+export type BlockMap = Map<string, Uint8Array>;
 
-interface Commit {
+export interface Commit {
 	version: 3;
 	did: string;
 	data: CID.CidLink;
@@ -100,7 +101,24 @@ interface Commit {
 	sig: CBOR.Bytes;
 }
 
-interface TreeEntry {
+export const isCommit = (value: unknown): value is Commit => {
+	if (value === null || typeof value !== 'object') {
+		return false;
+	}
+
+	const obj = value as Record<string, unknown>;
+
+	return (
+		obj.version === 3 &&
+		typeof obj.did === 'string' &&
+		obj.data instanceof CID.CidLinkWrapper &&
+		typeof obj.rev === 'string' &&
+		(obj.prev === null || obj.prev instanceof CID.CidLinkWrapper) &&
+		obj.sig instanceof CBOR.BytesWrapper
+	);
+};
+
+export interface TreeEntry {
 	/** count of bytes shared with previous TreeEntry in this Node (if any) */
 	p: number;
 	/** remainder of key for this TreeEntry, after "prefixlen" have been removed */
@@ -111,14 +129,43 @@ interface TreeEntry {
 	t: CID.CidLink | null;
 }
 
-interface MstNode {
+export const isTreeEntry = (value: unknown): value is TreeEntry => {
+	if (value === null || typeof value !== 'object') {
+		return false;
+	}
+
+	const obj = value as Record<string, unknown>;
+
+	return (
+		typeof obj.p === 'number' &&
+		obj.k instanceof CBOR.BytesWrapper &&
+		obj.v instanceof CID.CidLinkWrapper &&
+		(obj.t === null || obj.t instanceof CID.CidLinkWrapper)
+	);
+};
+
+export interface MstNode {
 	/** link to sub-tree Node on a lower level and with all keys sorting before keys at this node */
 	l: CID.CidLink | null;
 	/** ordered list of TreeEntry objects */
 	e: TreeEntry[];
 }
 
-interface NodeEntry {
+export const isMstNode = (value: unknown): value is MstNode => {
+	if (value === null || typeof value !== 'object') {
+		return false;
+	}
+
+	const obj = value as Record<string, unknown>;
+
+	return (
+		(obj.l === null || obj.l instanceof CID.CidLinkWrapper) &&
+		Array.isArray(obj.e) &&
+		obj.e.every(isTreeEntry)
+	);
+};
+
+export interface NodeEntry {
 	key: string;
 	cid: CID.CidLink;
 }
