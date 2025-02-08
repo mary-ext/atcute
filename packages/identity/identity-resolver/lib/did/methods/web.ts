@@ -55,7 +55,7 @@ export class AtprotoWebDidDocumentResolver implements DidDocumentResolver<'web'>
 		const [host, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
 		const url = new URL(`https://${host}/.well-known/did.json`);
 
-		if (url.hostname === 'localhost' || paths.length > 0) {
+		if (paths.length > 0) {
 			throw new err.ImproperDidError(did);
 		}
 
