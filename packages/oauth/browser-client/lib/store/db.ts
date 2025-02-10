@@ -195,6 +195,9 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 			return token.expires_at ?? null;
 		}),
 		states: createStore('states', (_item) => Date.now() + 10 * 60 * 1_000), // 10 minutes
+
+		// The reference PDS have nonces that expire after 3 minutes, while other
+		// implementations can have varying expiration times.
 		dpopNonces: createStore('dpopNonces', (_item) => Date.now() + 24 * 60 * 60 * 1_000), // 24 hours
 		inflightDpop: new Map<string, PromiseWithResolvers<void>>(),
 	};

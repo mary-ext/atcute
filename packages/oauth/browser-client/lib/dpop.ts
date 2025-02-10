@@ -90,10 +90,6 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 
 			initNonce = nonce;
 
-			// The reference PDS have nonces that expire after 3 minutes, while other
-			// implementations can have varying expiration times, this is why we
-			// can't just have the store configured with a short TTL.
-			//
 			// The problem with DPoP nonces is that we don't have insight as to when
 			// they'll expire, either we have a nonce value or we don't.
 			//
@@ -105,6 +101,9 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 			// had a nonce value, or we never had one to begin with, we'll let this
 			// request through and defer everyone else until we get a possibly fresh
 			// nonce value.
+			//
+			// 3 minutes being the DPoP nonce expiration time set by the reference PDS
+			// implementation.
 			expiredOrMissing = lapsed > 3 * 60 * 1_000;
 		} catch {
 			// Ignore read errors, we'll just act like we're missing a nonce.
