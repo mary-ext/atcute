@@ -84,16 +84,34 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 
 		// Get our persisted nonce value for this origin
 		let initNonce: string | undefined;
+		let expiredOrMissing = false;
 		try {
-			initNonce = nonces.get(origin);
+			const [nonce, lapsed] = nonces.getWithLapsed(origin);
+
+			initNonce = nonce;
+
+			// The reference PDS have nonces that expire after 3 minutes, while other
+			// implementations can have varying expiration times, this is why we
+			// can't just have the store configured with a short TTL.
+			//
+			// The problem with DPoP nonces is that we don't have insight as to when
+			// they'll expire, either we have a nonce value or we don't.
+			//
+			// Which is very unfortunate, if the client makes multiple requests at the
+			// same time, there's a chance that all of them will fail due to the nonce
+			// value having expired.
+			//
+			// To make this less painful, if it's been over 3 minutes since we last
+			// had a nonce value, or we never had one to begin with, we'll let this
+			// request through and defer everyone else until we get a possibly fresh
+			// nonce value.
+			expiredOrMissing = lapsed > 3 * 60 * 1_000;
 		} catch {
 			// Ignore read errors, we'll just act like we're missing a nonce.
 		}
 
-		if (initNonce === undefined) {
-			// We have a missing nonce! Let's have everyone else wait so we don't end
-			// up with multiple failing requests.
-
+		if (expiredOrMissing) {
+			// Defer everyone else until this request finishes.
 			pending.set(origin, (deferred = Promise.withResolvers()));
 		}
 

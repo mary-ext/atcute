@@ -139,6 +139,22 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 
 				return item.value;
 			},
+			getWithLapsed(key) {
+				read();
+
+				const item: SchemaItem<Schema[N]['value']> = store[key];
+				const now = Date.now();
+				if (!item) {
+					return [undefined, Infinity];
+				}
+
+				const expiresAt = item.expiresAt;
+				if (expiresAt !== null && now > expiresAt) {
+					return [undefined, now - expiresAt];
+				}
+
+				return [item.value, 0];
+			},
 			set(key, value) {
 				read();
 
@@ -179,7 +195,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 			return token.expires_at ?? null;
 		}),
 		states: createStore('states', (_item) => Date.now() + 10 * 60 * 1_000), // 10 minutes
-		dpopNonces: createStore('dpopNonces', (_item) => Date.now() + 3 * 60 * 1_000), // 3 minutes
+		dpopNonces: createStore('dpopNonces', (_item) => Date.now() + 24 * 60 * 60 * 1_000), // 24 hours
 		inflightDpop: new Map<string, PromiseWithResolvers<void>>(),
 	};
 };
