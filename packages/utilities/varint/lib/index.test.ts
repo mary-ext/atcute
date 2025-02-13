@@ -1,4 +1,4 @@
-import { it, expect, describe } from 'bun:test';
+import { it, expect, describe } from 'vitest';
 
 import { decode, encode, encodingLength } from './index.js';
 
