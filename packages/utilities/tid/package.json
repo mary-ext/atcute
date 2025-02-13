@@ -24,10 +24,10 @@
 	"sideEffects": false,
 	"scripts": {
 		"build": "tsc --project tsconfig.build.json",
-		"test": "bun test --coverage",
+		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.2.1"
+		"vitest": "^3.0.4"
 	}
 }

@@ -1,6 +1,10 @@
-import { describe, it, expect, setSystemTime } from 'bun:test';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 import * as TID from './index.js';
+
+afterEach(() => {
+	vi.useRealTimers();
+});
 
 describe('create', () => {
 	it('creates a valid TID', () => {
@@ -25,15 +29,14 @@ describe('create', () => {
 
 describe('now', () => {
 	it('creates a TID based on system time', () => {
-		setSystemTime(new Date('2024-08-16T14:58:10.161Z'));
+		vi.useFakeTimers();
+		vi.setSystemTime(new Date('2024-08-16T14:58:10.161Z'));
 
 		const tid1 = TID.now();
-		expect(tid1).toStartWith('3kztss2uifc');
+		expect(tid1).toMatch(/^3kztss2uifc/);
 
 		const tid2 = TID.now();
-		expect(tid2).toStartWith('3kztss2uifd');
-
-		setSystemTime();
+		expect(tid2).toMatch(/^3kztss2uifd/);
 	});
 });
 
