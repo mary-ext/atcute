@@ -146,6 +146,25 @@ declare module '@atcute/client/lexicons' {
 			/** The birth date of account owner. */
 			birthDate?: string;
 		}
+		/** Default post interaction settings for the account. These values should be applied as default values when creating new posts. These refs should mirror the threadgate and postgate records exactly. */
+		interface PostInteractionSettingsPref {
+			[Brand.Type]?: 'app.bsky.actor.defs#postInteractionSettingsPref';
+			/**
+			 * Matches postgate record. List of rules defining who can embed this users posts. If value is an empty array or is undefined, no particular rules apply and anyone can embed. \
+			 * Maximum array length: 5
+			 */
+			postgateEmbeddingRules?: Brand.Union<AppBskyFeedPostgate.DisableRule>[];
+			/**
+			 * Matches threadgate record. List of rules defining who can reply to this users posts. If value is an empty array, no one can reply. If value is undefined, anyone can reply. \
+			 * Maximum array length: 5
+			 */
+			threadgateAllowRules?: Brand.Union<
+				| AppBskyFeedThreadgate.FollowerRule
+				| AppBskyFeedThreadgate.FollowingRule
+				| AppBskyFeedThreadgate.ListRule
+				| AppBskyFeedThreadgate.MentionRule
+			>[];
+		}
 		type Preferences = Brand.Union<
 			| AdultContentPref
 			| BskyAppStatePref
@@ -156,6 +175,7 @@ declare module '@atcute/client/lexicons' {
 			| LabelersPref
 			| MutedWordsPref
 			| PersonalDetailsPref
+			| PostInteractionSettingsPref
 			| SavedFeedsPref
 			| SavedFeedsPrefV2
 			| ThreadViewPref
@@ -725,6 +745,11 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.feed.defs#skeletonReasonRepost';
 			repost: At.Uri;
 		}
+		/** Metadata about this post within the context of the thread it is in. */
+		interface ThreadContext {
+			[Brand.Type]?: 'app.bsky.feed.defs#threadContext';
+			rootAuthorLike?: At.Uri;
+		}
 		interface ThreadgateView {
 			[Brand.Type]?: 'app.bsky.feed.defs#threadgateView';
 			cid?: At.CID;
@@ -737,6 +762,7 @@ declare module '@atcute/client/lexicons' {
 			post: PostView;
 			parent?: Brand.Union<BlockedPost | NotFoundPost | ThreadViewPost>;
 			replies?: Brand.Union<BlockedPost | NotFoundPost | ThreadViewPost>[];
+			threadContext?: ThreadContext;
 		}
 		/** Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests. */
 		interface ViewerState {
@@ -855,6 +881,7 @@ declare module '@atcute/client/lexicons' {
 				| 'posts_no_replies'
 				| 'posts_with_media'
 				| 'posts_with_replies'
+				| 'posts_with_video'
 				| (string & {});
 			/** @default false */
 			includePins?: boolean;
@@ -1226,7 +1253,10 @@ declare module '@atcute/client/lexicons' {
 			 * Maximum array length: 50
 			 */
 			detachedEmbeddingUris?: At.Uri[];
-			/** Maximum array length: 5 */
+			/**
+			 * List of rules defining who can embed this post. If value is an empty array or is undefined, no particular rules apply and anyone can embed. \
+			 * Maximum array length: 5
+			 */
 			embeddingRules?: Brand.Union<DisableRule>[];
 		}
 		/** Disables embedding of this post. */
@@ -1311,13 +1341,20 @@ declare module '@atcute/client/lexicons' {
 			createdAt: string;
 			/** Reference (AT-URI) to the post record. */
 			post: At.Uri;
-			/** Maximum array length: 5 */
-			allow?: Brand.Union<FollowingRule | ListRule | MentionRule>[];
+			/**
+			 * List of rules defining who can reply to this post. If value is an empty array, no one can reply. If value is undefined, anyone can reply. \
+			 * Maximum array length: 5
+			 */
+			allow?: Brand.Union<FollowerRule | FollowingRule | ListRule | MentionRule>[];
 			/**
 			 * List of hidden reply URIs. \
 			 * Maximum array length: 50
 			 */
 			hiddenReplies?: At.Uri[];
+		}
+		/** Allow replies from actors who follow you. */
+		interface FollowerRule {
+			[Brand.Type]?: 'app.bsky.feed.threadgate#followerRule';
 		}
 		/** Allow replies from actors you follow. */
 		interface FollowingRule {

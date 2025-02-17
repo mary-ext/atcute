@@ -119,6 +119,20 @@ declare module '@atcute/client/lexicons' {
 			reactivatedAt?: string;
 			updatedAt?: string;
 		}
+		/** Statistics about a particular account subject */
+		interface AccountStats {
+			[Brand.Type]?: 'tools.ozone.moderation.defs#accountStats';
+			/** Total number of appeals against a moderation action on the account */
+			appealCount?: number;
+			/** Number of times the account was escalated */
+			escalateCount?: number;
+			/** Total number of reports on the account */
+			reportCount?: number;
+			/** Number of times the account was suspended */
+			suspendCount?: number;
+			/** Number of times the account was taken down */
+			takedownCount?: number;
+		}
 		interface BlobView {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#blobView';
 			cid: At.CID;
@@ -188,6 +202,8 @@ declare module '@atcute/client/lexicons' {
 			createLabelVals: string[];
 			negateLabelVals: string[];
 			comment?: string;
+			/** Indicates how long the label will remain on the subject. Only applies on labels that are being added. */
+			durationInHours?: number;
 		}
 		/** Mute incoming reports on a subject */
 		interface ModEventMute {
@@ -202,6 +218,16 @@ declare module '@atcute/client/lexicons' {
 			comment?: string;
 			/** Indicates how long the account should remain muted. Falsy value here means a permanent mute. */
 			durationInHours?: number;
+		}
+		/** Set priority score of the subject. Higher score means higher priority. */
+		interface ModEventPriorityScore {
+			[Brand.Type]?: 'tools.ozone.moderation.defs#modEventPriorityScore';
+			/**
+			 * Minimum: 0 \
+			 * Maximum: 100
+			 */
+			score: number;
+			comment?: string;
 		}
 		/** Report a subject */
 		interface ModEventReport {
@@ -274,6 +300,7 @@ declare module '@atcute/client/lexicons' {
 				| ModEventLabel
 				| ModEventMute
 				| ModEventMuteReporter
+				| ModEventPriorityScore
 				| ModEventReport
 				| ModEventResolveAppeal
 				| ModEventReverseTakedown
@@ -306,6 +333,7 @@ declare module '@atcute/client/lexicons' {
 				| ModEventLabel
 				| ModEventMute
 				| ModEventMuteReporter
+				| ModEventPriorityScore
 				| ModEventReport
 				| ModEventResolveAppeal
 				| ModEventReverseTakedown
@@ -334,6 +362,26 @@ declare module '@atcute/client/lexicons' {
 			deletedAt?: string;
 			updatedAt?: string;
 		}
+		/** Statistics about a set of record subject items */
+		interface RecordsStats {
+			[Brand.Type]?: 'tools.ozone.moderation.defs#recordsStats';
+			/** Number of items that were appealed at least once */
+			appealedCount?: number;
+			/** Number of items that were escalated at least once */
+			escalatedCount?: number;
+			/** Number of item currently in "reviewOpen" or "reviewEscalated" state */
+			pendingCount?: number;
+			/** Number of item currently in "reviewNone" or "reviewClosed" state */
+			processedCount?: number;
+			/** Number of items that were reported at least once */
+			reportedCount?: number;
+			/** Total number of item in the set */
+			subjectCount?: number;
+			/** Number of item currently taken down */
+			takendownCount?: number;
+			/** Cumulative sum of the number of reports on the items in the set */
+			totalReports?: number;
+		}
 		interface RecordView {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#recordView';
 			blobCids: At.CID[];
@@ -358,6 +406,26 @@ declare module '@atcute/client/lexicons' {
 		interface RecordViewNotFound {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#recordViewNotFound';
 			uri: At.Uri;
+		}
+		interface ReporterStats {
+			[Brand.Type]?: 'tools.ozone.moderation.defs#reporterStats';
+			/** The total number of reports made by the user on accounts. */
+			accountReportCount: number;
+			did: At.DID;
+			/** The total number of accounts labeled as a result of the user's reports. */
+			labeledAccountCount: number;
+			/** The total number of records labeled as a result of the user's reports. */
+			labeledRecordCount: number;
+			/** The total number of reports made by the user on records. */
+			recordReportCount: number;
+			/** The total number of accounts reported by the user. */
+			reportedAccountCount: number;
+			/** The total number of records reported by the user. */
+			reportedRecordCount: number;
+			/** The total number of accounts taken down as a result of the user's reports. */
+			takendownAccountCount: number;
+			/** The total number of records taken down as a result of the user's reports. */
+			takendownRecordCount: number;
 		}
 		interface RepoView {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#repoView';
@@ -413,6 +481,8 @@ declare module '@atcute/client/lexicons' {
 			subject: Brand.Union<ComAtprotoAdminDefs.RepoRef | ComAtprotoRepoStrongRef.Main>;
 			/** Timestamp referencing when the last update was made to the moderation status of the subject */
 			updatedAt: string;
+			/** Statistics related to the account subject */
+			accountStats?: AccountStats;
 			/** True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators. */
 			appealed?: boolean;
 			/** Sticky comment on the subject. */
@@ -425,6 +495,14 @@ declare module '@atcute/client/lexicons' {
 			lastReviewedBy?: At.DID;
 			muteReportingUntil?: string;
 			muteUntil?: string;
+			/**
+			 * Numeric value representing the level of priority. Higher score means higher priority. \
+			 * Minimum: 0 \
+			 * Maximum: 100
+			 */
+			priorityScore?: number;
+			/** Statistics related to the record subjects authored by the subject's account */
+			recordsStats?: RecordsStats;
 			subjectBlobCids?: At.CID[];
 			subjectRepoHandle?: string;
 			suspendUntil?: string;
@@ -454,6 +532,7 @@ declare module '@atcute/client/lexicons' {
 				| ToolsOzoneModerationDefs.ModEventLabel
 				| ToolsOzoneModerationDefs.ModEventMute
 				| ToolsOzoneModerationDefs.ModEventMuteReporter
+				| ToolsOzoneModerationDefs.ModEventPriorityScore
 				| ToolsOzoneModerationDefs.ModEventReport
 				| ToolsOzoneModerationDefs.ModEventResolveAppeal
 				| ToolsOzoneModerationDefs.ModEventReverseTakedown
@@ -517,6 +596,18 @@ declare module '@atcute/client/lexicons' {
 		type Output = ToolsOzoneModerationDefs.RepoViewDetail;
 		interface Errors {
 			RepoNotFound: {};
+		}
+	}
+
+	/** Get reporter stats for a list of users. */
+	namespace ToolsOzoneModerationGetReporterStats {
+		interface Params {
+			/** Maximum array length: 100 */
+			dids: At.DID[];
+		}
+		type Input = undefined;
+		interface Output {
+			stats: ToolsOzoneModerationDefs.ReporterStats[];
 		}
 	}
 
@@ -629,6 +720,18 @@ declare module '@atcute/client/lexicons' {
 			 * @default 50
 			 */
 			limit?: number;
+			/** If specified, only subjects that belong to an account that has at least this many suspensions will be returned. */
+			minAccountSuspendCount?: number;
+			/**
+			 * If specified, only subjects that have priority score value above the given value will be returned. \
+			 * Minimum: 0 \
+			 * Maximum: 100
+			 */
+			minPriorityScore?: number;
+			/** If specified, only subjects that belong to an account that has at least this many reported records will be returned. */
+			minReportedRecordsCount?: number;
+			/** If specified, only subjects that belong to an account that has at least this many taken down records will be returned. */
+			minTakendownRecordsCount?: number;
 			/** When set to true, only muted subjects and reporters will be returned. */
 			onlyMuted?: boolean;
 			/** Number of queues being used by moderators. Subjects will be split among all queues. */
@@ -650,7 +753,12 @@ declare module '@atcute/client/lexicons' {
 			/** @default "desc" */
 			sortDirection?: 'asc' | 'desc';
 			/** @default "lastReportedAt" */
-			sortField?: 'lastReviewedAt' | 'lastReportedAt';
+			sortField?:
+				| 'lastReviewedAt'
+				| 'lastReportedAt'
+				| 'reportedRecordsCount'
+				| 'takendownRecordsCount'
+				| 'priorityScore';
 			/** The subject to get the status for. */
 			subject?: string;
 			/** If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored. */
@@ -1104,6 +1212,10 @@ declare module '@atcute/client/lexicons' {
 		'tools.ozone.moderation.getRepo': {
 			params: ToolsOzoneModerationGetRepo.Params;
 			output: ToolsOzoneModerationGetRepo.Output;
+		};
+		'tools.ozone.moderation.getReporterStats': {
+			params: ToolsOzoneModerationGetReporterStats.Params;
+			output: ToolsOzoneModerationGetReporterStats.Output;
 		};
 		'tools.ozone.moderation.getRepos': {
 			params: ToolsOzoneModerationGetRepos.Params;
