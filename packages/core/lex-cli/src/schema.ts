@@ -56,9 +56,10 @@ export const stringSchema = v
 	.chain((obj) => {
 		const format = obj.format;
 		if (format !== undefined && format !== 'uri') {
-			if (obj.maxLength !== undefined) {
-				return v.err(`${format} format can't be used with maxLength`);
-			}
+			// `com.atproto.repo.applyWrites#create` has `maxLength` for compatibility reasons
+			// if (obj.maxLength !== undefined) {
+			// 	return v.err(`${format} format can't be used with maxLength`);
+			// }
 			if (obj.minLength !== undefined) {
 				return v.err(`${format} format can't be used with minLength`);
 			}
