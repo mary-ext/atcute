@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/ozone",
-	"version": "1.0.10",
+	"version": "1.0.11",
 	"description": "Ozone type definitions for atcute",
 	"license": "MIT",
 	"repository": {
