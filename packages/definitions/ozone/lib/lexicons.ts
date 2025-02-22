@@ -527,6 +527,7 @@ declare module '@atcute/client/lexicons' {
 				| ToolsOzoneModerationDefs.IdentityEvent
 				| ToolsOzoneModerationDefs.ModEventAcknowledge
 				| ToolsOzoneModerationDefs.ModEventComment
+				| ToolsOzoneModerationDefs.ModEventDivert
 				| ToolsOzoneModerationDefs.ModEventEmail
 				| ToolsOzoneModerationDefs.ModEventEscalate
 				| ToolsOzoneModerationDefs.ModEventLabel
@@ -1159,12 +1160,14 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneTeamListMembers {
 		interface Params {
 			cursor?: string;
+			disabled?: boolean;
 			/**
 			 * Minimum: 1 \
 			 * Maximum: 100
 			 * @default 50
 			 */
 			limit?: number;
+			roles?: string[];
 		}
 		type Input = undefined;
 		interface Output {

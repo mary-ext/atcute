@@ -2401,6 +2401,17 @@ declare module '@atcute/client/lexicons' {
 		type Output = Uint8Array;
 	}
 
+	namespace ChatBskyConvoAcceptConvo {
+		interface Params {}
+		interface Input {
+			convoId: string;
+		}
+		interface Output {
+			/** Rev when the convo was accepted. If not present, the convo was already accepted. */
+			rev?: string;
+		}
+	}
+
 	namespace ChatBskyConvoDefs {
 		interface ConvoView {
 			[Brand.Type]?: 'chat.bsky.convo.defs#convoView';
@@ -2410,7 +2421,7 @@ declare module '@atcute/client/lexicons' {
 			rev: string;
 			unreadCount: number;
 			lastMessage?: Brand.Union<DeletedMessageView | MessageView>;
-			opened?: boolean;
+			status?: 'accepted' | 'request' | (string & {});
 		}
 		interface DeletedMessageView {
 			[Brand.Type]?: 'chat.bsky.convo.defs#deletedMessageView';
@@ -2418,6 +2429,11 @@ declare module '@atcute/client/lexicons' {
 			rev: string;
 			sender: MessageViewSender;
 			sentAt: string;
+		}
+		interface LogAcceptConvo {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logAcceptConvo';
+			convoId: string;
+			rev: string;
 		}
 		interface LogBeginConvo {
 			[Brand.Type]?: 'chat.bsky.convo.defs#logBeginConvo';
@@ -2438,6 +2454,22 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface LogLeaveConvo {
 			[Brand.Type]?: 'chat.bsky.convo.defs#logLeaveConvo';
+			convoId: string;
+			rev: string;
+		}
+		interface LogMuteConvo {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logMuteConvo';
+			convoId: string;
+			rev: string;
+		}
+		interface LogReadMessage {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logReadMessage';
+			convoId: string;
+			message: Brand.Union<DeletedMessageView | MessageView>;
+			rev: string;
+		}
+		interface LogUnmuteConvo {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logUnmuteConvo';
 			convoId: string;
 			rev: string;
 		}
@@ -2498,6 +2530,22 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	/** Get whether the requester and the other members can chat. If an existing convo is found for these members, it is returned. */
+	namespace ChatBskyConvoGetConvoAvailability {
+		interface Params {
+			/**
+			 * Minimum array length: 1 \
+			 * Maximum array length: 10
+			 */
+			members: At.DID[];
+		}
+		type Input = undefined;
+		interface Output {
+			canChat: boolean;
+			convo?: ChatBskyConvoDefs.ConvoView;
+		}
+	}
+
 	namespace ChatBskyConvoGetConvoForMembers {
 		interface Params {
 			/**
@@ -2519,6 +2567,7 @@ declare module '@atcute/client/lexicons' {
 		type Input = undefined;
 		interface Output {
 			logs: Brand.Union<
+				| ChatBskyConvoDefs.LogAcceptConvo
 				| ChatBskyConvoDefs.LogBeginConvo
 				| ChatBskyConvoDefs.LogCreateMessage
 				| ChatBskyConvoDefs.LogDeleteMessage
@@ -2566,6 +2615,8 @@ declare module '@atcute/client/lexicons' {
 			 * @default 50
 			 */
 			limit?: number;
+			readState?: 'unread' | (string & {});
+			status?: 'accepted' | 'request' | (string & {});
 		}
 		type Input = undefined;
 		interface Output {
@@ -2900,6 +2951,10 @@ declare module '@atcute/client/lexicons' {
 			params: ChatBskyConvoGetConvo.Params;
 			output: ChatBskyConvoGetConvo.Output;
 		};
+		'chat.bsky.convo.getConvoAvailability': {
+			params: ChatBskyConvoGetConvoAvailability.Params;
+			output: ChatBskyConvoGetConvoAvailability.Output;
+		};
 		'chat.bsky.convo.getConvoForMembers': {
 			params: ChatBskyConvoGetConvoForMembers.Params;
 			output: ChatBskyConvoGetConvoForMembers.Output;
@@ -2967,6 +3022,10 @@ declare module '@atcute/client/lexicons' {
 		};
 		'chat.bsky.actor.deleteAccount': {
 			output: ChatBskyActorDeleteAccount.Output;
+		};
+		'chat.bsky.convo.acceptConvo': {
+			input: ChatBskyConvoAcceptConvo.Input;
+			output: ChatBskyConvoAcceptConvo.Output;
 		};
 		'chat.bsky.convo.deleteMessageForSelf': {
 			input: ChatBskyConvoDeleteMessageForSelf.Input;

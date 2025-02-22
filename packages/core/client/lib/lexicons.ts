@@ -556,7 +556,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#create';
 		collection: string;
 		value: unknown;
-		/** Maximum string length: 512 */
+		/** NOTE: maxLength is redundant with record-key format. Keeping it temporarily to ensure backwards compatibility. */
 		rkey?: string;
 	}
 	interface CreateResult {
@@ -599,10 +599,7 @@ export declare namespace ComAtprotoRepoCreateRecord {
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
 		repo: string;
-		/**
-		 * The Record Key. \
-		 * Maximum string length: 512
-		 */
+		/** The Record Key. */
 		rkey?: string;
 		/** Compare and swap with the previous commit by CID. */
 		swapCommit?: At.CID;
@@ -774,10 +771,7 @@ export declare namespace ComAtprotoRepoPutRecord {
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
 		repo: string;
-		/**
-		 * The Record Key. \
-		 * Maximum string length: 512
-		 */
+		/** The Record Key. */
 		rkey: string;
 		/** Compare and swap with the previous commit by CID. */
 		swapCommit?: At.CID;
@@ -1376,7 +1370,14 @@ export declare namespace ComAtprotoSyncGetRepoStatus {
 		/** Optional field, the current rev of the repo, if active=true */
 		rev?: string;
 		/** If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted. */
-		status?: 'deactivated' | 'suspended' | 'takendown' | (string & {});
+		status?:
+			| 'deactivated'
+			| 'deleted'
+			| 'desynchronized'
+			| 'suspended'
+			| 'takendown'
+			| 'throttled'
+			| (string & {});
 	}
 	interface Errors {
 		RepoNotFound: {};
@@ -1435,7 +1436,38 @@ export declare namespace ComAtprotoSyncListRepos {
 		rev: string;
 		active?: boolean;
 		/** If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted. */
-		status?: 'deactivated' | 'suspended' | 'takendown' | (string & {});
+		status?:
+			| 'deactivated'
+			| 'deleted'
+			| 'desynchronized'
+			| 'suspended'
+			| 'takendown'
+			| 'throttled'
+			| (string & {});
+	}
+}
+
+/** Enumerates all the DIDs which have records with the given collection NSID. */
+export declare namespace ComAtprotoSyncListReposByCollection {
+	interface Params {
+		collection: string;
+		cursor?: string;
+		/**
+		 * Maximum size of response set. Recommend setting a large maximum (1000+) when enumerating large DID lists. \
+		 * Minimum: 1 \
+		 * Maximum: 2000
+		 * @default 500
+		 */
+		limit?: number;
+	}
+	type Input = undefined;
+	interface Output {
+		repos: Repo[];
+		cursor?: string;
+	}
+	interface Repo {
+		[Brand.Type]?: 'com.atproto.sync.listReposByCollection#repo';
+		did: At.DID;
 	}
 }
 
@@ -1469,14 +1501,24 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		seq: number;
 		time: string;
 		/** If active=false, this optional field indicates a reason for why the account is not active. */
-		status?: 'deactivated' | 'deleted' | 'suspended' | 'takendown' | (string & {});
+		status?:
+			| 'deactivated'
+			| 'deleted'
+			| 'desynchronized'
+			| 'suspended'
+			| 'takendown'
+			| 'throttled'
+			| (string & {});
 	}
 	/** Represents an update of repository state. Note that empty commits are allowed, which include no repo data changes, but an update to rev and signature. */
 	interface Commit {
 		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#commit';
-		/** List of new blobs (by CID) referenced by records in this commit. */
+		/**
+		 * DEPRECATED -- will soon always be empty. List of new blobs (by CID) referenced by records in this commit.
+		 * @deprecated
+		 */
 		blobs: At.CIDLink[];
-		/** CAR file containing relevant blocks, as a diff since the previous repo state. */
+		/** CAR file containing relevant blocks, as a diff since the previous repo state. The commit must be included as a block, and the commit block CID must be the first entry in the CAR header 'roots' list. */
 		blocks: At.Bytes;
 		/** Repo commit object CID. */
 		commit: At.CIDLink;
@@ -1490,7 +1532,7 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		 * @deprecated
 		 */
 		rebase: boolean;
-		/** The repo this event comes from. */
+		/** The repo this event comes from. Note that all other message types name this field 'did'. */
 		repo: At.DID;
 		/** The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event. */
 		rev: string;
@@ -1500,13 +1542,13 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		since: string | null;
 		/** Timestamp of when this message was originally broadcast. */
 		time: string;
-		/** Indicates that this commit contained too many ops, or data size was too large. Consumers will need to make a separate request to get missing data. */
-		tooBig: boolean;
 		/**
-		 * DEPRECATED -- unused. WARNING -- nullable and optional; stick with optional to ensure golang interoperability.
+		 * DEPRECATED -- replaced by #sync event and data limits. Indicates that this commit contained too many ops, or data size was too large. Consumers will need to make a separate request to get missing data.
 		 * @deprecated
 		 */
-		prev?: At.CIDLink | null;
+		tooBig: boolean;
+		/** The root CID of the MST tree for the previous commit from this repo (indicated by the 'since' revision field in this message). Corresponds to the 'data' field in the repo commit object. NOTE: this field is effectively required for the 'inductive' version of firehose. */
+		prevData?: At.CIDLink;
 	}
 	/**
 	 * DEPRECATED -- Use #identity event instead
@@ -1551,6 +1593,22 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		/** For creates and updates, the new record CID. For deletions, null. */
 		cid: At.CIDLink | null;
 		path: string;
+		/** For updates and deletes, the previous record CID (required for inductive firehose). For creations, field should not be defined. */
+		prev?: At.CIDLink;
+	}
+	/** Updates the repo to a new state, without necessarily including that state on the firehose. Used to recover from broken commit streams, data loss incidents, or in situations where upstream host does not know recent state of the repository. */
+	interface Sync {
+		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#sync';
+		/** CAR file containing the commit, as a block. The CAR header must include the commit block CID as the first 'root'. */
+		blocks: At.Bytes;
+		/** The account this repo event corresponds to. Must match that in the commit object. */
+		did: At.DID;
+		/** The rev of the commit. This value must match that in the commit object. */
+		rev: string;
+		/** The stream sequence number of this message. */
+		seq: number;
+		/** Timestamp of when this message was originally broadcast. */
+		time: string;
 	}
 	/**
 	 * DEPRECATED -- Use #account event instead
@@ -1724,6 +1782,10 @@ export declare interface Queries {
 	'com.atproto.sync.listRepos': {
 		params: ComAtprotoSyncListRepos.Params;
 		output: ComAtprotoSyncListRepos.Output;
+	};
+	'com.atproto.sync.listReposByCollection': {
+		params: ComAtprotoSyncListReposByCollection.Params;
+		output: ComAtprotoSyncListReposByCollection.Output;
 	};
 	'com.atproto.temp.checkSignupQueue': {
 		output: ComAtprotoTempCheckSignupQueue.Output;
