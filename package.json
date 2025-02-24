@@ -8,6 +8,7 @@
 		"fmt": "prettier --cache --write ."
 	},
 	"devDependencies": {
+		"@changesets/cli": "^2.28.1",
 		"@mary/tar": "npm:@jsr/mary__tar@^0.2.4",
 		"@mitata/counters": "^0.0.8",
 		"mitata": "^1.0.33",
