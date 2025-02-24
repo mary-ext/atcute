@@ -170,10 +170,10 @@ declare module '@atcute/client/lexicons' {
 			acknowledgeAccountSubjects?: boolean;
 			comment?: string;
 		}
-		/** Add a comment to a subject */
+		/** Add a comment to a subject. An empty comment will clear any previously set sticky comment. */
 		interface ModEventComment {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#modEventComment';
-			comment: string;
+			comment?: string;
 			/** Make the comment persistent on the subject */
 			sticky?: boolean;
 		}

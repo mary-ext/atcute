@@ -2670,6 +2670,17 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	namespace ChatBskyConvoUpdateAllRead {
+		interface Params {}
+		interface Input {
+			status?: 'accepted' | 'request' | (string & {});
+		}
+		interface Output {
+			/** The count of updated convos. */
+			updatedCount: number;
+		}
+	}
+
 	namespace ChatBskyConvoUpdateRead {
 		interface Params {}
 		interface Input {
@@ -3050,6 +3061,10 @@ declare module '@atcute/client/lexicons' {
 		'chat.bsky.convo.unmuteConvo': {
 			input: ChatBskyConvoUnmuteConvo.Input;
 			output: ChatBskyConvoUnmuteConvo.Output;
+		};
+		'chat.bsky.convo.updateAllRead': {
+			input: ChatBskyConvoUpdateAllRead.Input;
+			output: ChatBskyConvoUpdateAllRead.Output;
 		};
 		'chat.bsky.convo.updateRead': {
 			input: ChatBskyConvoUpdateRead.Input;
