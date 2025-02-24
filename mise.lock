@@ -1,9 +1,9 @@
 [tools.bun]
-version = "1.2.2"
+version = "1.2.3"
 backend = "core:bun"
 
 [tools.bun.checksums]
-"bun-linux-x64-baseline.zip" = "sha256:cad7756a6ee16f3432a328f8023fc5cd431106822eacfa6d6d3afbad6fdc24db"
+"bun-linux-x64-baseline.zip" = "sha256:89e9a95d11956e14fb232ba78c97f152ce088a55a592a3c6675e66cc250dc8b4"
 
 [tools.node]
 version = "22.14.0"
