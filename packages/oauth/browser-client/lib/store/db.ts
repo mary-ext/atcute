@@ -13,6 +13,7 @@ export interface OAuthDatabaseOptions {
 interface SchemaItem<T> {
 	value: T;
 	expiresAt: number | null;
+	updatedAt?: number;
 }
 
 interface Schema {
@@ -58,6 +59,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 	const createStore = <N extends keyof Schema>(
 		subname: N,
 		expiresAt: (item: Schema[N]['value']) => null | number,
+		persistUpdatedAt = false,
 	): SimpleStore<Schema[N]['key'], Schema[N]['value']> => {
 		let store: any;
 
@@ -148,9 +150,12 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 					return [undefined, Infinity];
 				}
 
-				const expiresAt = item.expiresAt;
-				if (expiresAt !== null && now > expiresAt) {
-					return [undefined, now - expiresAt];
+				const updatedAt = item.updatedAt;
+				if (updatedAt === undefined) {
+					return [item.value, Infinity];
+				}
+				if (now > updatedAt) {
+					return [undefined, now - updatedAt];
 				}
 
 				return [item.value, 0];
@@ -159,8 +164,9 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 				read();
 
 				const item: SchemaItem<Schema[N]['value']> = {
-					expiresAt: expiresAt(value),
 					value: value,
+					expiresAt: expiresAt(value),
+					updatedAt: persistUpdatedAt ? Date.now() : undefined,
 				};
 
 				store[key] = item;
@@ -198,7 +204,8 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 
 		// The reference PDS have nonces that expire after 3 minutes, while other
 		// implementations can have varying expiration times.
-		dpopNonces: createStore('dpopNonces', (_item) => Date.now() + 24 * 60 * 60 * 1_000), // 24 hours
+		// Stored for 24 hours.
+		dpopNonces: createStore('dpopNonces', (_item) => Date.now() + 24 * 60 * 60 * 1_000, true),
 		inflightDpop: new Map<string, PromiseWithResolvers<void>>(),
 	};
 };
