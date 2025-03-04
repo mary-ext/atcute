@@ -31,14 +31,10 @@ export function* iterateAtpRepo(buf: Uint8Array): Generator<RepoEntry> {
 	const { roots, iterate } = readCar(buf);
 	assert(roots.length === 1, `expected only 1 root in the car archive; got=${roots.length}`);
 
-	// Collect all archive entries into a mapping of CID string -> actual bytes
-	const blockmap: BlockMap = new Map();
-	for (const entry of iterate()) {
-		blockmap.set(CID.toString(entry.cid), entry.bytes);
-	}
+	const blockmap = collectBlock(iterate());
+	assert(blockmap.size > 0, `expected at least 1 block in the archive; got=${blockmap.size}`);
 
-	// Read the head, then walk through the MST tree from there.
-	const commit = readObject(blockmap, roots[0], isCommit);
+	const commit = readBlock(blockmap, roots[0], isCommit);
 	for (const { key, cid } of walkMstEntries(blockmap, commit.data)) {
 		const [collection, rkey] = key.split('/');
 
@@ -46,7 +42,28 @@ export function* iterateAtpRepo(buf: Uint8Array): Generator<RepoEntry> {
 	}
 }
 
-function readObject<T>(map: BlockMap, link: CID.CidLink, validate: (value: unknown) => value is T): T {
+/**
+ * collects entries from a CAR archive into a mapping of CID string -> actual bytes
+ * @param iterator a generator that yields objects with a `cid` and `bytes` property
+ * @returns a mapping of CID string -> actual bytes
+ */
+export function collectBlock(iterator: Generator<{ cid: CID.Cid; bytes: Uint8Array }>): BlockMap {
+	const blockmap: BlockMap = new Map();
+	for (const { cid, bytes } of iterator) {
+		blockmap.set(CID.toString(cid), bytes);
+	}
+
+	return blockmap;
+}
+
+/**
+ * reads a block from the blockmap and validates it against the provided validation function
+ * @param map a mapping of CID string -> actual bytes
+ * @param link a CID link to read
+ * @param validate a validation function to validate the decoded data
+ * @returns the decoded and validated data
+ */
+export function readBlock<T>(map: BlockMap, link: CID.CidLink, validate: (value: unknown) => value is T): T {
 	const cid = link.$link;
 
 	const bytes = map.get(cid);
@@ -58,8 +75,20 @@ function readObject<T>(map: BlockMap, link: CID.CidLink, validate: (value: unkno
 	return data;
 }
 
+/** node entry object */
+export interface NodeEntry {
+	key: string;
+	cid: CID.CidLink;
+}
+
+/**
+ * walks the entries of a Merkle Sorted Tree (MST) in a depth-first manner
+ * @param map a mapping of CID string -> actual bytes
+ * @param pointer a CID link to the root of the MST
+ * @returns a generator that yields the entries of the MST
+ */
 export function* walkMstEntries(map: BlockMap, pointer: CID.CidLink): Generator<NodeEntry> {
-	const data = readObject(map, pointer, isMstNode);
+	const data = readBlock(map, pointer, isMstNode);
 	const entries = data.e;
 
 	let lastKey = '';
@@ -116,6 +145,7 @@ const isBytes = (value: unknown): value is CBOR.Bytes => {
 	return '$bytes' in value && typeof value.$bytes === 'string';
 };
 
+/** commit object */
 export interface Commit {
 	version: 3;
 	did: string;
@@ -125,6 +155,11 @@ export interface Commit {
 	sig: CBOR.Bytes;
 }
 
+/**
+ * checks if a value is a valid commit object
+ * @param value the value to check
+ * @returns true if the value is a valid commit object, false otherwise
+ */
 export const isCommit = (value: unknown): value is Commit => {
 	if (value === null || typeof value !== 'object') {
 		return false;
@@ -142,6 +177,7 @@ export const isCommit = (value: unknown): value is Commit => {
 	);
 };
 
+/** mst tree entry object */
 export interface TreeEntry {
 	/** count of bytes shared with previous TreeEntry in this Node (if any) */
 	p: number;
@@ -153,6 +189,11 @@ export interface TreeEntry {
 	t: CID.CidLink | null;
 }
 
+/**
+ * checks if a value is a valid mst tree entry object
+ * @param value the value to check
+ * @returns true if the value is a valid mst tree entry object, false otherwise
+ */
 export const isTreeEntry = (value: unknown): value is TreeEntry => {
 	if (value === null || typeof value !== 'object') {
 		return false;
@@ -165,6 +206,7 @@ export const isTreeEntry = (value: unknown): value is TreeEntry => {
 	);
 };
 
+/** mst node object */
 export interface MstNode {
 	/** link to sub-tree Node on a lower level and with all keys sorting before keys at this node */
 	l: CID.CidLink | null;
@@ -172,6 +214,11 @@ export interface MstNode {
 	e: TreeEntry[];
 }
 
+/**
+ * checks if a value is a valid mst node object
+ * @param value the value to check
+ * @returns true if the value is a valid mst node object, false otherwise
+ */
 export const isMstNode = (value: unknown): value is MstNode => {
 	if (value === null || typeof value !== 'object') {
 		return false;
@@ -181,8 +228,3 @@ export const isMstNode = (value: unknown): value is MstNode => {
 
 	return (obj.l === null || isCidLink(obj.l)) && Array.isArray(obj.e) && obj.e.every(isTreeEntry);
 };
-
-export interface NodeEntry {
-	key: string;
-	cid: CID.CidLink;
-}
