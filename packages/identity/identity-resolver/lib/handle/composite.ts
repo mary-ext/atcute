@@ -13,7 +13,7 @@ export interface CompositeHandleResolverOptions {
 }
 
 export class CompositeHandleResolver implements HandleResolver {
-	#methods: Record<string, HandleResolver>;
+	#methods: Record<'http' | 'dns', HandleResolver>;
 	strategy: CompositeStrategy;
 
 	constructor({ methods, strategy = 'race' }: CompositeHandleResolverOptions) {
@@ -56,7 +56,7 @@ export class CompositeHandleResolver implements HandleResolver {
 			case 'dns-first': {
 				httpPromise.catch(noop);
 
-				const resolved = await dnsPromise.catch(noopPromise);
+				const resolved = await dnsPromise.catch(noop);
 				if (resolved) {
 					controller.abort();
 					return resolved;
@@ -67,7 +67,7 @@ export class CompositeHandleResolver implements HandleResolver {
 			case 'http-first': {
 				dnsPromise.catch(noop);
 
-				const resolved = await httpPromise.catch(noopPromise);
+				const resolved = await httpPromise.catch(noop);
 				if (resolved) {
 					controller.abort();
 					return resolved;
@@ -92,4 +92,3 @@ export class CompositeHandleResolver implements HandleResolver {
 }
 
 const noop = () => {};
-const noopPromise = () => new Promise<never>(noop);
