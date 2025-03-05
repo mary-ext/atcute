@@ -154,11 +154,8 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 				if (updatedAt === undefined) {
 					return [item.value, Infinity];
 				}
-				if (now > updatedAt) {
-					return [undefined, now - updatedAt];
-				}
 
-				return [item.value, 0];
+				return [item.value, now - updatedAt];
 			},
 			set(key, value) {
 				read();
