@@ -23,6 +23,11 @@ export class PlcDidDocumentResolver implements DidDocumentResolver<'plc'> {
 	}
 
 	async resolve(did: Did<'plc'>, options?: ResolveDidDocumentOptions): Promise<DidDocument> {
+		// quick sanity check
+		if (!did.startsWith('did:plc:')) {
+			throw new err.UnsupportedDidMethodError(did);
+		}
+
 		let json: DidDocument;
 
 		try {

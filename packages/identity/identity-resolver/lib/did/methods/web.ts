@@ -17,6 +17,11 @@ export class WebDidDocumentResolver implements DidDocumentResolver<'web'> {
 	}
 
 	async resolve(did: Did<'web'>, options?: ResolveDidDocumentOptions): Promise<DidDocument> {
+		// quick sanity check
+		if (!did.startsWith('did:web:')) {
+			throw new err.UnsupportedDidMethodError(did);
+		}
+
 		let json: DidDocument;
 
 		try {
@@ -52,6 +57,11 @@ export class AtprotoWebDidDocumentResolver implements DidDocumentResolver<'web'>
 	}
 
 	async resolve(did: Did<'web'>, options?: ResolveDidDocumentOptions): Promise<DidDocument> {
+		// quick sanity check
+		if (!did.startsWith('did:web:')) {
+			throw new err.UnsupportedDidMethodError(did);
+		}
+
 		const [host, ...paths] = did.slice(8).split(':').map(decodeURIComponent);
 		const url = new URL(`https://${host}/.well-known/did.json`);
 
