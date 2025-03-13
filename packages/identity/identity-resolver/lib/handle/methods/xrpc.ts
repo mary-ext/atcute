@@ -43,7 +43,7 @@ export class XrpcHandleResolver implements HandleResolver {
 			const url = new URL(`/xrpc/com.atproto.identity.resolveHandle`, this.serviceUrl);
 			url.searchParams.set('handle', handle);
 
-			const response = await this.#fetch(url, {
+			const response = await (0, this.#fetch)(url, {
 				signal: options?.signal,
 				cache: options?.noCache ? 'no-cache' : 'default',
 				headers: { accept: 'application/json' },
