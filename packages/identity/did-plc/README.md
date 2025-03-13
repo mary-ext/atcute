@@ -1,8 +1,5 @@
 # @atcute/did-plc
 
-> [!NOTE]  
-> not yet published.
-
 validations, type definitions and schemas for did:plc operations
 
 ```ts
