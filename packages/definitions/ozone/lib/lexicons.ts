@@ -1167,6 +1167,7 @@ declare module '@atcute/client/lexicons' {
 			 * @default 50
 			 */
 			limit?: number;
+			q?: string;
 			roles?: string[];
 		}
 		type Input = undefined;

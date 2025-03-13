@@ -277,6 +277,17 @@ export declare namespace ComAtprotoAdminUpdateSubjectStatus {
 	}
 }
 
+export declare namespace ComAtprotoIdentityDefs {
+	interface IdentityInfo {
+		[Brand.Type]?: 'com.atproto.identity.defs#identityInfo';
+		did: At.DID;
+		/** The complete DID document for the identity. */
+		didDoc: unknown;
+		/** The validated handle of the account; or 'handle.invalid' if the handle did not bi-directionally match the DID document. */
+		handle: At.Handle;
+	}
+}
+
 /** Describe the credentials that should be included in the DID doc of an account that is migrating to this service. */
 export declare namespace ComAtprotoIdentityGetRecommendedDidCredentials {
 	interface Params {}
@@ -290,6 +301,20 @@ export declare namespace ComAtprotoIdentityGetRecommendedDidCredentials {
 	}
 }
 
+/** Request that the server re-resolve an identity (DID and handle). The server may ignore this request, or require authentication, depending on the role, implementation, and policy of the server. */
+export declare namespace ComAtprotoIdentityRefreshIdentity {
+	interface Params {}
+	interface Input {
+		identifier: string;
+	}
+	type Output = ComAtprotoIdentityDefs.IdentityInfo;
+	interface Errors {
+		HandleNotFound: {};
+		DidNotFound: {};
+		DidDeactivated: {};
+	}
+}
+
 /** Request an email with a code to in order to request a signed PLC operation. Requires Auth. */
 export declare namespace ComAtprotoIdentityRequestPlcOperationSignature {
 	interface Params {}
@@ -297,7 +322,24 @@ export declare namespace ComAtprotoIdentityRequestPlcOperationSignature {
 	type Output = undefined;
 }
 
-/** Resolves a handle (domain name) to a DID. */
+/** Resolves DID to DID document. Does not bi-directionally verify handle. */
+export declare namespace ComAtprotoIdentityResolveDid {
+	interface Params {
+		/** DID to resolve. */
+		did: At.DID;
+	}
+	type Input = undefined;
+	interface Output {
+		/** The complete DID document for the identity. */
+		didDoc: unknown;
+	}
+	interface Errors {
+		DidNotFound: {};
+		DidDeactivated: {};
+	}
+}
+
+/** Resolves an atproto handle (hostname) to a DID. Does not necessarily bi-directionally verify against the the DID document. */
 export declare namespace ComAtprotoIdentityResolveHandle {
 	interface Params {
 		/** The handle to resolve. */
@@ -306,6 +348,24 @@ export declare namespace ComAtprotoIdentityResolveHandle {
 	type Input = undefined;
 	interface Output {
 		did: At.DID;
+	}
+	interface Errors {
+		HandleNotFound: {};
+	}
+}
+
+/** Resolves an identity (DID or Handle) to a full identity (DID document and verified handle). */
+export declare namespace ComAtprotoIdentityResolveIdentity {
+	interface Params {
+		/** Handle or DID to resolve. */
+		identifier: string;
+	}
+	type Input = undefined;
+	type Output = ComAtprotoIdentityDefs.IdentityInfo;
+	interface Errors {
+		HandleNotFound: {};
+		DidNotFound: {};
+		DidDeactivated: {};
 	}
 }
 
@@ -530,6 +590,8 @@ export declare namespace ComAtprotoModerationDefs {
 		| 'com.atproto.moderation.defs#reasonViolation'
 		| (string & {});
 	type ReasonViolation = 'com.atproto.moderation.defs#reasonViolation';
+	/** Tag describing a type of subject that might be reported. */
+	type SubjectType = 'account' | 'chat' | 'record' | (string & {});
 }
 
 /** Apply a batch transaction of repository creates, updates, and deletes. Requires auth, implemented by PDS. */
@@ -737,16 +799,6 @@ export declare namespace ComAtprotoRepoListRecords {
 		limit?: number;
 		/** Flag to reverse the order of the returned records. */
 		reverse?: boolean;
-		/**
-		 * DEPRECATED: The highest sort-ordered rkey to stop at (exclusive)
-		 * @deprecated
-		 */
-		rkeyEnd?: string;
-		/**
-		 * DEPRECATED: The lowest sort-ordered rkey to start from (exclusive)
-		 * @deprecated
-		 */
-		rkeyStart?: string;
 	}
 	type Input = undefined;
 	interface Output {
@@ -1322,11 +1374,6 @@ export declare namespace ComAtprotoSyncGetRecord {
 		did: At.DID;
 		/** Record Key */
 		rkey: string;
-		/**
-		 * DEPRECATED: referenced a repo commit by CID, and retrieved record as of that commit
-		 * @deprecated
-		 */
-		commit?: At.CID;
 	}
 	type Input = undefined;
 	type Output = Uint8Array;
@@ -1471,7 +1518,7 @@ export declare namespace ComAtprotoSyncListReposByCollection {
 	}
 }
 
-/** Notify a crawling service of a recent update, and that crawling should resume. Intended use is after a gap between repo stream events caused the crawling service to disconnect. Does not require auth; implemented by Relay. */
+/** Notify a crawling service of a recent update, and that crawling should resume. Intended use is after a gap between repo stream events caused the crawling service to disconnect. Does not require auth; implemented by Relay. DEPRECATED: just use com.atproto.sync.requestCrawl */
 export declare namespace ComAtprotoSyncNotifyOfUpdate {
 	interface Params {}
 	interface Input {
@@ -1550,17 +1597,6 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		/** The root CID of the MST tree for the previous commit from this repo (indicated by the 'since' revision field in this message). Corresponds to the 'data' field in the repo commit object. NOTE: this field is effectively required for the 'inductive' version of firehose. */
 		prevData?: At.CIDLink;
 	}
-	/**
-	 * DEPRECATED -- Use #identity event instead
-	 * @deprecated
-	 */
-	interface Handle {
-		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#handle';
-		did: At.DID;
-		handle: At.Handle;
-		seq: number;
-		time: string;
-	}
 	/** Represents a change to an account's identity. Could be an updated handle, signing key, or pds hosting endpoint. Serves as a prod to all downstream services to refresh their identity cache. */
 	interface Identity {
 		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#identity';
@@ -1574,17 +1610,6 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#info';
 		name: 'OutdatedCursor' | (string & {});
 		message?: string;
-	}
-	/**
-	 * DEPRECATED -- Use #account event instead
-	 * @deprecated
-	 */
-	interface Migrate {
-		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#migrate';
-		did: At.DID;
-		migrateTo: string | null;
-		seq: number;
-		time: string;
 	}
 	/** A repo operation, ie a mutation of a single record. */
 	interface RepoOp {
@@ -1608,16 +1633,6 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		/** The stream sequence number of this message. */
 		seq: number;
 		/** Timestamp of when this message was originally broadcast. */
-		time: string;
-	}
-	/**
-	 * DEPRECATED -- Use #account event instead
-	 * @deprecated
-	 */
-	interface Tombstone {
-		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#tombstone';
-		did: At.DID;
-		seq: number;
 		time: string;
 	}
 }
@@ -1699,9 +1714,17 @@ export declare interface Queries {
 	'com.atproto.identity.getRecommendedDidCredentials': {
 		output: ComAtprotoIdentityGetRecommendedDidCredentials.Output;
 	};
+	'com.atproto.identity.resolveDid': {
+		params: ComAtprotoIdentityResolveDid.Params;
+		output: ComAtprotoIdentityResolveDid.Output;
+	};
 	'com.atproto.identity.resolveHandle': {
 		params: ComAtprotoIdentityResolveHandle.Params;
 		output: ComAtprotoIdentityResolveHandle.Output;
+	};
+	'com.atproto.identity.resolveIdentity': {
+		params: ComAtprotoIdentityResolveIdentity.Params;
+		output: ComAtprotoIdentityResolveIdentity.Output;
 	};
 	'com.atproto.label.queryLabels': {
 		params: ComAtprotoLabelQueryLabels.Params;
@@ -1825,6 +1848,10 @@ export declare interface Procedures {
 	'com.atproto.admin.updateSubjectStatus': {
 		input: ComAtprotoAdminUpdateSubjectStatus.Input;
 		output: ComAtprotoAdminUpdateSubjectStatus.Output;
+	};
+	'com.atproto.identity.refreshIdentity': {
+		input: ComAtprotoIdentityRefreshIdentity.Input;
+		output: ComAtprotoIdentityRefreshIdentity.Output;
 	};
 	'com.atproto.identity.requestPlcOperationSignature': {};
 	'com.atproto.identity.signPlcOperation': {

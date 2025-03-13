@@ -567,6 +567,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyEmbedVideo {
 		interface Main {
 			[Brand.Type]?: 'app.bsky.embed.video';
+			/** The mp4 video file. May be up to 100mb, formerly limited to 50mb. */
 			video: At.Blob;
 			/**
 			 * Alt text description of the video, for accessibility. \
@@ -1933,6 +1934,12 @@ declare module '@atcute/client/lexicons' {
 			labels?: ComAtprotoLabelDefs.Label[];
 			/** Minimum: 0 */
 			likeCount?: number;
+			/** The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed. */
+			reasonTypes?: ComAtprotoModerationDefs.ReasonType[];
+			/** Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type. */
+			subjectCollections?: string[];
+			/** The set of subject types (account, record, etc) this service accepts reports on. */
+			subjectTypes?: ComAtprotoModerationDefs.SubjectType[];
 			viewer?: LabelerViewerState;
 		}
 		interface LabelerViewerState {
@@ -1961,6 +1968,12 @@ declare module '@atcute/client/lexicons' {
 			createdAt: string;
 			policies: AppBskyLabelerDefs.LabelerPolicies;
 			labels?: Brand.Union<ComAtprotoLabelDefs.SelfLabels>;
+			/** The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed. */
+			reasonTypes?: ComAtprotoModerationDefs.ReasonType[];
+			/** Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type. */
+			subjectCollections?: string[];
+			/** The set of subject types (account, record, etc) this service accepts reports on. */
+			subjectTypes?: ComAtprotoModerationDefs.SubjectType[];
 		}
 	}
 
