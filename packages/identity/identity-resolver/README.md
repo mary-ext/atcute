@@ -1,8 +1,5 @@
 # @atcute/identity-resolver
 
-> [!NOTE]  
-> not yet published.
-
 atproto handle and DID document resolution
 
 ```ts
