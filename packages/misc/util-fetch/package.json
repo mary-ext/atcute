@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@atcute/util-fetch",
 	"version": "1.0.0",
-	"description": "atproto DID to DID document resolution",
+	"description": "internal fetch utilities",
 	"keywords": [
 		"atproto",
 		"did"
