@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/identity-resolver-node",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "additional atproto identity resolvers for Node.js",
 	"keywords": [
 		"atproto",
@@ -28,8 +28,8 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
-		"@atcute/identity": "^1.0.0",
-		"@atcute/identity-resolver": "^1.0.0"
+		"@atcute/identity": "^0.1.0",
+		"@atcute/identity-resolver": "^0.1.0"
 	},
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",

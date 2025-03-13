@@ -1,8 +1,5 @@
 # @atcute/identity-resolver-node
 
-> [!NOTE]  
-> not yet published.
-
 additional atproto identity resolvers for Node.js
 
 ```ts
