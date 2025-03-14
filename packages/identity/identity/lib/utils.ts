@@ -17,13 +17,16 @@ export const isAtprotoServiceEndpoint = (input: string): boolean => {
 	);
 };
 
-export const getAtprotoVerificationMaterial = (doc: t.DidDocument): VerificationMaterial | undefined => {
+export const getVerificationMaterial = (
+	doc: t.DidDocument,
+	id: `#${string}`,
+): VerificationMaterial | undefined => {
 	const verificationMethods = doc.verificationMethod;
 	if (!verificationMethods) {
 		return;
 	}
 
-	const expectedId = `${doc.id}#atproto`;
+	const expectedId = `${doc.id}${id}`;
 
 	for (let idx = 0, len = verificationMethods.length; idx < len; idx++) {
 		const { id, type, publicKeyMultibase } = verificationMethods[idx];
@@ -38,6 +41,16 @@ export const getAtprotoVerificationMaterial = (doc: t.DidDocument): Verification
 
 		return { type, publicKeyMultibase };
 	}
+};
+
+export const getAtprotoVerificationMaterial = (doc: t.DidDocument): VerificationMaterial | undefined => {
+	return getVerificationMaterial(doc, '#atproto');
+};
+
+export const getAtprotoLabelerVerificationMaterial = (
+	doc: t.DidDocument,
+): VerificationMaterial | undefined => {
+	return getVerificationMaterial(doc, '#atproto_label');
 };
 
 export const getAtprotoServiceEndpoint = (
