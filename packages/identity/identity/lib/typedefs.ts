@@ -94,7 +94,7 @@ export const didDocument: v.Type<t.DidDocument> = v
 					const methodId = method.id;
 
 					for (let j = 0; j < i; j++) {
-						if (methodId === input[i].id) {
+						if (methodId === input[j].id) {
 							return v.err({
 								message: `duplicate "${methodId}" verification method`,
 								path: [i, 'id'],
