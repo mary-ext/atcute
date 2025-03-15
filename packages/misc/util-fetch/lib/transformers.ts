@@ -97,9 +97,33 @@ const readResponse = async (response: Response, maxSize: number): Promise<string
 		.pipeThrough(new TextDecoderStream());
 
 	let text = '';
-	for await (const chunk of stream) {
+	for await (const chunk of createStreamIterator(stream)) {
 		text += chunk;
 	}
 
 	return text;
 };
+
+const createStreamIterator: <T>(stream: ReadableStream<T>) => AsyncIterableIterator<T> =
+	Symbol.asyncIterator in ReadableStream.prototype
+		? (stream) => stream[Symbol.asyncIterator]()
+		: (stream) => {
+				const reader = stream.getReader();
+
+				return {
+					[Symbol.asyncIterator]() {
+						return this;
+					},
+					next() {
+						return reader.read() as Promise<IteratorResult<any>>;
+					},
+					async return() {
+						await reader.cancel();
+						return { done: true, value: undefined };
+					},
+					async throw(error: unknown) {
+						await reader.cancel(error);
+						return { done: true, value: undefined };
+					},
+				};
+			};
