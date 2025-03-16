@@ -20,7 +20,8 @@
 		"!lib/**/*.test.ts"
 	],
 	"exports": {
-		".": "./dist/index.js"
+		".": "./dist/index.js",
+		"./bytes": "./dist/bytes.js"
 	},
 	"sideEffects": false,
 	"scripts": {
