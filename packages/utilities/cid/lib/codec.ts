@@ -1,6 +1,5 @@
 import { fromBase32, toBase32 } from '@atcute/multibase';
 import { allocUnsafe, toSha256 } from '@atcute/uint8array';
-import * as varint from '@atcute/varint';
 
 export const CID_VERSION = 1;
 export const HASH_SHA256 = 0x12;
@@ -29,20 +28,23 @@ export interface Cid {
 	bytes: Uint8Array;
 }
 
+// a SHA-256 CIDv1 is always going to be 36 bytes, that's 4 bytes for the
+// header, and 32 bytes for the digest itself.
+
 export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid> => {
 	const digest = await toSha256(data);
+	if (digest.length !== 32) {
+		throw new RangeError(`invalid digest length`);
+	}
 
-	const digestSize = digest.length;
-	const digestLebSize = varint.encodingLength(digestSize);
-
-	const bytes = allocUnsafe(3 + digestLebSize + digestSize);
+	const bytes = allocUnsafe(4 + 32);
 
 	bytes[0] = CID_VERSION;
 	bytes[1] = codec;
 	bytes[2] = HASH_SHA256;
+	bytes[3] = 32;
 
-	varint.encode(digestSize, bytes, 3);
-	bytes.set(digest, 3 + digestLebSize);
+	bytes.set(digest, 4);
 
 	const cid: Cid = {
 		version: CID_VERSION,
@@ -60,13 +62,14 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8Array] => {
 	const length = bytes.length;
 
-	if (length < 5) {
+	if (length < 36) {
 		throw new RangeError(`cid too short`);
 	}
 
 	const version = bytes[0];
 	const codec = bytes[1];
-	const digestCodec = bytes[2];
+	const digestType = bytes[2];
+	const digestSize = bytes[3];
 
 	if (version !== CID_VERSION) {
 		throw new RangeError(`incorrect cid version (got v${version})`);
@@ -76,30 +79,25 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 		throw new RangeError(`incorrect cid codec (got 0x${codec.toString(16)})`);
 	}
 
-	if (digestCodec !== HASH_SHA256) {
-		throw new RangeError(`incorrect cid hash type (got 0x${digestCodec.toString(16)})`);
+	if (digestType !== HASH_SHA256) {
+		throw new RangeError(`incorrect cid hash type (got 0x${digestType.toString(16)})`);
 	}
 
-	const [digestSize, digestLebSize] = varint.decode(bytes, 3);
-	const digestOffset = 3 + digestLebSize;
-
-	if (length - digestOffset < digestSize) {
-		throw new RangeError(`digest too short (expected ${digestSize} bytes; got ${length - digestOffset})`);
+	if (digestSize !== 32) {
+		throw new RangeError(`incorrect cid digest size (got ${digestSize})`);
 	}
-
-	const remainder = bytes.subarray(digestOffset + digestSize);
 
 	const cid: Cid = {
 		version: CID_VERSION,
 		codec: codec,
 		digest: {
-			codec: digestCodec,
-			contents: bytes.subarray(digestOffset, digestOffset + digestSize),
+			codec: digestType,
+			contents: bytes.subarray(4, 36),
 		},
-		bytes: bytes.subarray(0, digestOffset + digestSize),
+		bytes: bytes.subarray(0, 36),
 	};
 
-	return [cid, remainder];
+	return [cid, bytes.subarray(36)];
 };
 
 export const decode = (bytes: Uint8Array): Cid => {

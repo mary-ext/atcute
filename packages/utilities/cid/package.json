@@ -34,7 +34,6 @@
 	},
 	"dependencies": {
 		"@atcute/multibase": "workspace:^",
-		"@atcute/uint8array": "workspace:^",
-		"@atcute/varint": "workspace:^"
+		"@atcute/uint8array": "workspace:^"
 	}
 }
