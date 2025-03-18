@@ -21,7 +21,7 @@ export const createUint8Reader = (buf: Uint8Array): SyncByteReader => {
 			pos += size;
 		},
 		upto(size) {
-			return buf.subarray(pos, pos + Math.min(size, buf.length - pos));
+			return buf.subarray(pos, pos + size);
 		},
 		exactly(size, seek) {
 			if (size > buf.length - pos) {
