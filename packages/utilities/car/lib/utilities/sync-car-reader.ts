@@ -33,11 +33,13 @@ const readHeader = (reader: SyncByteReader): CarV1Header => {
 };
 
 const readCid = (reader: SyncByteReader): CID.Cid => {
-	const head = reader.upto(3 + 4);
+	const bytes = reader.exactly(4 + 32, true);
+	const digest = bytes.subarray(4, 36);
 
-	const version = head[0];
-	const codec = head[1];
-	const digestCodec = head[2];
+	const version = bytes[0];
+	const codec = bytes[1];
+	const digestType = bytes[2];
+	const digestSize = bytes[3];
 
 	if (version !== CID.CID_VERSION) {
 		throw new RangeError(`incorrect cid version (got v${version})`);
@@ -47,20 +49,19 @@ const readCid = (reader: SyncByteReader): CID.Cid => {
 		throw new RangeError(`incorrect cid codec (got 0x${codec.toString(16)})`);
 	}
 
-	if (digestCodec !== CID.HASH_SHA256) {
-		throw new RangeError(`incorrect cid hash type (got 0x${digestCodec.toString(16)})`);
+	if (digestType !== CID.HASH_SHA256) {
+		throw new RangeError(`incorrect cid hash type (got 0x${digestType.toString(16)})`);
 	}
 
-	const [digestSize, digestLebSize] = varint.decode(head, 3);
-
-	const bytes = reader.exactly(3 + digestLebSize + digestSize, true);
-	const digest = bytes.subarray(3 + digestLebSize);
+	if (digestSize !== 32) {
+		throw new RangeError(`incorrect cid digest size (got ${digestSize})`);
+	}
 
 	const cid: CID.Cid = {
 		version: version,
 		codec: codec,
 		digest: {
-			codec: digestCodec,
+			codec: digestType,
 			contents: digest,
 		},
 		bytes: bytes,
