@@ -51,7 +51,7 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 		codec: codec,
 		digest: {
 			codec: HASH_SHA256,
-			contents: digest,
+			contents: bytes.subarray(4, 36),
 		},
 		bytes: bytes,
 	};
