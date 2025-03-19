@@ -70,33 +70,49 @@ const readCid = (reader: SyncByteReader): CID.Cid => {
 	return cid;
 };
 
-const readBlockHeader = (reader: SyncByteReader): { cid: CID.Cid; blockSize: number } => {
-	const start = reader.pos;
+export interface CarEntry {
+	/** CID of the block */
+	cid: CID.Cid;
+	/** Block data */
+	bytes: Uint8Array;
 
-	let size = readVarint(reader, 8);
-	if (size === 0) {
-		throw new Error(`invalid car section; length=0`);
-	}
+	/** Start position of the entry in the stream */
+	entryStart: number;
+	/** Size of the entry in the stream */
+	entrySize: number;
 
-	size += reader.pos - start;
-
-	const cid = readCid(reader);
-	const blockSize = size - (reader.pos - start);
-
-	return { cid, blockSize };
-};
+	/** Start position of the CID in the stream */
+	cidStart: number;
+	/** Start position of the block in the stream */
+	bytesStart: number;
+}
 
 export const createCarReader = (reader: SyncByteReader) => {
 	const { roots } = readHeader(reader);
 
 	return {
 		roots,
-		*iterate(): Generator<{ cid: CID.Cid; bytes: Uint8Array }> {
-			while (reader.upto(8).length > 0) {
-				const { cid, blockSize } = readBlockHeader(reader);
+		*iterate(): Generator<CarEntry> {
+			while (reader.upto(4 + 32).length > 0) {
+				const entryStart = reader.pos;
+				const entrySize = readVarint(reader, 8);
+
+				const cidStart = reader.pos;
+				const cid = readCid(reader);
+
+				const bytesStart = reader.pos;
+				const blockSize = entrySize - (bytesStart - entryStart);
 				const bytes = reader.exactly(blockSize, true);
 
-				yield { cid, bytes };
+				yield {
+					cid,
+					bytes,
+
+					entryStart,
+					entrySize,
+					cidStart,
+					bytesStart,
+				};
 			}
 		},
 	};
