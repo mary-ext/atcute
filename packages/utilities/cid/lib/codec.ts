@@ -59,10 +59,27 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 	return cid;
 };
 
+export const createEmpty = (codec: 0x55 | 0x71): Cid => {
+	const bytes = Uint8Array.from([CID_VERSION, codec, HASH_SHA256, 0]);
+	const digest = bytes.subarray(4);
+
+	const cid: Cid = {
+		version: CID_VERSION,
+		codec: codec,
+		digest: {
+			codec: HASH_SHA256,
+			contents: digest,
+		},
+		bytes: bytes,
+	};
+
+	return cid;
+};
+
 export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8Array] => {
 	const length = bytes.length;
 
-	if (length < 36) {
+	if (length < 4) {
 		throw new RangeError(`cid too short`);
 	}
 
@@ -83,8 +100,12 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 		throw new RangeError(`incorrect cid digest codec (got 0x${digestType.toString(16)})`);
 	}
 
-	if (digestSize !== 32) {
+	if (digestSize !== 32 && digestSize !== 0) {
 		throw new RangeError(`incorrect cid digest size (got ${digestSize})`);
+	}
+
+	if (length < 4 + digestSize) {
+		throw new RangeError(`cid too short`);
 	}
 
 	const cid: Cid = {
@@ -92,12 +113,12 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 		codec: codec,
 		digest: {
 			codec: digestType,
-			contents: bytes.subarray(4, 36),
+			contents: bytes.subarray(4, 4 + digestSize),
 		},
-		bytes: bytes.subarray(0, 36),
+		bytes: bytes.subarray(0, 4 + digestSize),
 	};
 
-	return [cid, bytes.subarray(36)];
+	return [cid, bytes.subarray(4 + digestSize)];
 };
 
 export const decode = (bytes: Uint8Array): Cid => {
@@ -115,8 +136,9 @@ export const fromString = (input: string): Cid => {
 		throw new SyntaxError(`not a multibase base32 string`);
 	}
 
+	// 4 bytes in base32 = 7 characters + 1 character for the prefix
 	// 36 bytes in base32 = 58 characters + 1 character for the prefix
-	if (input.length !== 59) {
+	if (input.length !== 59 && input.length !== 8) {
 		throw new RangeError(`cid too short`);
 	}
 
@@ -130,8 +152,9 @@ export const toString = (cid: Cid): string => {
 };
 
 export const fromBinary = (input: Uint8Array): Cid => {
+	// 4 bytes + 1 byte for the 0x00 prefix
 	// 36 bytes + 1 byte for the 0x00 prefix
-	if (input.length !== 37) {
+	if (input.length !== 37 && input.length !== 5) {
 		throw new RangeError(`cid bytes too short`);
 	}
 
