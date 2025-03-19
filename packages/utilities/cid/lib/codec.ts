@@ -80,7 +80,7 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 	}
 
 	if (digestType !== HASH_SHA256) {
-		throw new RangeError(`incorrect cid hash type (got 0x${digestType.toString(16)})`);
+		throw new RangeError(`incorrect cid digest codec (got 0x${digestType.toString(16)})`);
 	}
 
 	if (digestSize !== 32) {
@@ -115,6 +115,11 @@ export const fromString = (input: string): Cid => {
 		throw new SyntaxError(`not a multibase base32 string`);
 	}
 
+	// 36 bytes in base32 = 58 characters + 1 character for the prefix
+	if (input.length !== 59) {
+		throw new RangeError(`cid too short`);
+	}
+
 	const bytes = fromBase32(input.slice(1));
 	return decode(bytes);
 };
@@ -125,7 +130,8 @@ export const toString = (cid: Cid): string => {
 };
 
 export const fromBinary = (input: Uint8Array): Cid => {
-	if (input.length < 2) {
+	// 36 bytes + 1 byte for the 0x00 prefix
+	if (input.length !== 37) {
 		throw new RangeError(`cid bytes too short`);
 	}
 
