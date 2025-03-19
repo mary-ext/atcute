@@ -1,27 +1,45 @@
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 
-import { readCar } from './reader.js';
+import { readCar, type CarEntry } from './reader.js';
 
 const decoder = new TextDecoder();
 
+export type BlockMap = Map<string, CarEntry>;
+
 export class RepoEntry {
 	constructor(
+		/** The collection this record belongs to */
 		public readonly collection: string,
+		/** Record key */
 		public readonly rkey: string,
+		/** CID of this record */
 		public readonly cid: CID.CidLink,
 		private blockmap: BlockMap,
 	) {}
 
-	get bytes(): Uint8Array {
+	/**
+	 * returns the associated CarEntry for this record
+	 */
+	get carEntry(): CarEntry {
 		const cid = this.cid.$link;
 
-		const bytes = this.blockmap.get(cid);
-		assert(bytes != null, `cid not found in blockmap; cid=${cid}`);
+		const entry = this.blockmap.get(cid);
+		assert(entry != null, `cid not found in blockmap; cid=${cid}`);
 
-		return bytes;
+		return entry;
 	}
 
+	/**
+	 * returns the raw contents of this record
+	 */
+	get bytes(): Uint8Array {
+		return this.carEntry.bytes;
+	}
+
+	/**
+	 * returns the decoded contents of this record
+	 */
 	get record(): unknown {
 		return CBOR.decode(this.bytes);
 	}
@@ -47,10 +65,10 @@ export function* iterateAtpRepo(buf: Uint8Array): Generator<RepoEntry> {
  * @param iterator a generator that yields objects with a `cid` and `bytes` property
  * @returns a mapping of CID string -> actual bytes
  */
-export function collectBlock(iterator: Generator<{ cid: CID.Cid; bytes: Uint8Array }>): BlockMap {
+export function collectBlock(iterator: Generator<CarEntry>): BlockMap {
 	const blockmap: BlockMap = new Map();
-	for (const { cid, bytes } of iterator) {
-		blockmap.set(CID.toString(cid), bytes);
+	for (const entry of iterator) {
+		blockmap.set(CID.toString(entry.cid), entry);
 	}
 
 	return blockmap;
@@ -66,10 +84,10 @@ export function collectBlock(iterator: Generator<{ cid: CID.Cid; bytes: Uint8Arr
 export function readBlock<T>(map: BlockMap, link: CID.CidLink, validate: (value: unknown) => value is T): T {
 	const cid = link.$link;
 
-	const bytes = map.get(cid);
-	assert(bytes != null, `cid not found in blockmap; cid=${cid}`);
+	const entry = map.get(cid);
+	assert(entry != null, `cid not found in blockmap; cid=${cid}`);
 
-	const data = CBOR.decode(bytes);
+	const data = CBOR.decode(entry.bytes);
 	assert(validate(data), `validation failed for cid=${cid}`);
 
 	return data;
@@ -118,8 +136,6 @@ function assert(condition: boolean, message: string): asserts condition {
 		throw new Error(message);
 	}
 }
-
-export type BlockMap = Map<string, Uint8Array>;
 
 const isCidLink = (value: unknown): value is CID.CidLink => {
 	if (value instanceof CID.CidLinkWrapper) {
