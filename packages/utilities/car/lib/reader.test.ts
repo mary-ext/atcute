@@ -41,30 +41,60 @@ it('reads car files', () => {
 			bytes: fromBase64(
 				'pGUkdHlwZXZhcHAuYnNreS5hY3Rvci5wcm9maWxlaWNyZWF0ZWRBdHgYMjAyNC0wMi0yNFQxMjoxNTo0MS4yMTlaa2Rlc2NyaXB0aW9ub3Rlc3RpbmcgYWNjb3VudGtkaXNwbGF5TmFtZWA',
 			),
+			entryEnd: 204,
+			entryStart: 59,
+			cidEnd: 97,
+			cidStart: 61,
+			bytesEnd: 204,
+			bytesStart: 97,
 		},
 		{
 			cid: fromString('bafyreieqh4enamx6dlbhoofeiss76zhppsdyf24scggmjclty246ucmdye'),
 			bytes: fromBase64(
 				'pmNkaWR4IGRpZDpwbGM6c3JjcW91Mm03dXF1b2d5ZDV4azRiNXk1Y3Jldm0zbDVxNWZqZW50YzJkY3NpZ1hA3llhDuf71ekpp21Ky0bvVoVqiJBygDRhTop98ahXOH4LbmM5GxVxSQzEFNOpwVsYnLfBUPCmrPTK9nwwIfvr1WRkYXRh2CpYJQABcRIgdom5KY96+HHU2oPb9oqSHvH8co1BToAo2W7WJ34cidhkcHJldvZndmVyc2lvbgM',
 			),
+			entryEnd: 430,
+			entryStart: 204,
+			cidEnd: 242,
+			cidStart: 206,
+			bytesEnd: 430,
+			bytesStart: 242,
 		},
 		{
 			cid: fromString('bafyreidwrg4std327by5jwud3p3iveq66h6hfdkbj2acrwlo2ytx4hej3a'),
 			bytes: fromBase64(
 				'omFlgaRha1gbYXBwLmJza3kuYWN0b3IucHJvZmlsZS9zZWxmYXAAYXTYKlglAAFxEiBvSJJSaF/w/fee+UmoLV84FDwZRC7ppJX484MghY0rM2F22CpYJQABcRIg6hvKPw9+yt4ZXYUEzEavf1L8n+1/Xr5/XgfWXYKWKuphbPY',
 			),
+			entryEnd: 596,
+			entryStart: 430,
+			cidEnd: 468,
+			cidStart: 432,
+			bytesEnd: 596,
+			bytesStart: 468,
 		},
 		{
 			cid: fromString('bafyreidpjcjfe2c76d67phxzjguc2xzycq6bsrbo5gsjl6htqmqildjlgm'),
 			bytes: fromBase64(
 				'omFlgaRha1ggYXBwLmJza3kuZmVlZC5wb3N0LzNrbTV5bWs0aGhrMnphcABhdPZhdtgqWCUAAXESIOP6BT3TcvcXcCtYKD5p5BlgSIzeigjGodtW9tA9m8RsYWz2',
 			),
+			entryEnd: 727,
+			entryStart: 596,
+			cidEnd: 634,
+			cidStart: 598,
+			bytesEnd: 727,
+			bytesStart: 634,
 		},
 		{
 			cid: fromString('bafyreihd7ict3u3s64lxak2yfa7gtzazmbeizxukbddkdw2w63id3g6enq'),
 			bytes: fromBase64(
 				'pWR0ZXh0dWJlZXAgYm9vcCBAbWFyeS5teS5pZGUkdHlwZXJhcHAuYnNreS5mZWVkLnBvc3RlbGFuZ3OBYmVuZmZhY2V0c4GjZSR0eXBld2FwcC5ic2t5LnJpY2h0ZXh0LmZhY2V0ZWluZGV4omdieXRlRW5kFWlieXRlU3RhcnQKaGZlYXR1cmVzgaJjZGlkeCBkaWQ6cGxjOmlhNzZrdm5uZGp1dGdlZGdneDJpYnJlbWUkdHlwZXgfYXBwLmJza3kucmljaHRleHQuZmFjZXQjbWVudGlvbmljcmVhdGVkQXR4GDIwMjQtMDItMjRUMTI6MTY6MjAuNjM3Wg',
 			),
+			entryEnd: 1018,
+			entryStart: 727,
+			cidEnd: 765,
+			cidStart: 729,
+			bytesEnd: 1018,
+			bytesStart: 765,
 		},
 	]);
 });

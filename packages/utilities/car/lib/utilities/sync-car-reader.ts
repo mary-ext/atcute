@@ -71,20 +71,17 @@ const readCid = (reader: SyncByteReader): CID.Cid => {
 };
 
 export interface CarEntry {
-	/** CID of the block */
 	cid: CID.Cid;
-	/** Block data */
 	bytes: Uint8Array;
 
-	/** Start position of the entry in the stream */
 	entryStart: number;
-	/** Size of the entry in the stream */
-	entrySize: number;
+	entryEnd: number;
 
-	/** Start position of the CID in the stream */
 	cidStart: number;
-	/** Start position of the block in the stream */
+	cidEnd: number;
+
 	bytesStart: number;
+	bytesEnd: number;
 }
 
 export const createCarReader = (reader: SyncByteReader) => {
@@ -93,7 +90,7 @@ export const createCarReader = (reader: SyncByteReader) => {
 	return {
 		roots,
 		*iterate(): Generator<CarEntry> {
-			while (reader.upto(4 + 32).length > 0) {
+			while (reader.upto(8 + 36).length > 0) {
 				const entryStart = reader.pos;
 				const entrySize = readVarint(reader, 8);
 
@@ -101,17 +98,23 @@ export const createCarReader = (reader: SyncByteReader) => {
 				const cid = readCid(reader);
 
 				const bytesStart = reader.pos;
-				const blockSize = entrySize - (bytesStart - entryStart);
-				const bytes = reader.exactly(blockSize, true);
+				const bytesSize = entrySize - (bytesStart - cidStart);
+				const bytes = reader.exactly(bytesSize, true);
+
+				const cidEnd = bytesStart;
+				const bytesEnd = reader.pos;
+				const entryEnd = bytesEnd;
 
 				yield {
 					cid,
 					bytes,
 
 					entryStart,
-					entrySize,
+					entryEnd,
 					cidStart,
+					cidEnd,
 					bytesStart,
+					bytesEnd,
 				};
 			}
 		},
