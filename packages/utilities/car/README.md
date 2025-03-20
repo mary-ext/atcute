@@ -7,7 +7,7 @@ library for AT Protocol.
 
 ```ts
 // read through a CAR archive
-const { roots, iterate } = readCar(buf);
+const { header, iterate } = readCar(buf);
 
 for (const { cid, bytes } of iterate()) {
 	// ...
