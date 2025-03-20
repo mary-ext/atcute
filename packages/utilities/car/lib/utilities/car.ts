@@ -14,3 +14,25 @@ export const isCarV1Header = (value: unknown): value is CarV1Header => {
 	const { version, roots } = value as CarV1Header;
 	return version === 1 && Array.isArray(roots) && roots.every((root) => root instanceof CBOR.CidLinkWrapper);
 };
+
+export interface CarHeader {
+	headerStart: number;
+	headerEnd: number;
+
+	data: CarV1Header;
+	dataStart: number;
+	dataEnd: number;
+}
+
+export interface CarEntry {
+	entryStart: number;
+	entryEnd: number;
+
+	cid: CID.Cid;
+	cidStart: number;
+	cidEnd: number;
+
+	bytes: Uint8Array;
+	bytesStart: number;
+	bytesEnd: number;
+}

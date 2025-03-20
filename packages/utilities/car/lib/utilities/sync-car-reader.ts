@@ -2,8 +2,13 @@ import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 import * as varint from '@atcute/varint';
 
-import { isCarV1Header, type CarV1Header } from './car.js';
+import { isCarV1Header, type CarEntry, type CarHeader } from './car.js';
 import type { SyncByteReader } from './sync-byte-reader.js';
+
+export interface SyncCarReader {
+	header: CarHeader;
+	iterate(): Generator<CarEntry>;
+}
 
 const readVarint = (reader: SyncByteReader, size: number): number => {
 	const buf = reader.upto(size);
@@ -17,19 +22,25 @@ const readVarint = (reader: SyncByteReader, size: number): number => {
 	return int;
 };
 
-const readHeader = (reader: SyncByteReader): CarV1Header => {
+const readHeader = (reader: SyncByteReader): CarHeader => {
+	const headerStart = reader.pos;
 	const length = readVarint(reader, 8);
 	if (length === 0) {
 		throw new RangeError(`invalid car header; length=0`);
 	}
 
+	const dataStart = reader.pos;
 	const rawHeader = reader.exactly(length, true);
-	const header = CBOR.decode(rawHeader);
-	if (!isCarV1Header(header)) {
+
+	const data = CBOR.decode(rawHeader);
+	if (!isCarV1Header(data)) {
 		throw new TypeError(`expected a car v1 archive`);
 	}
 
-	return header;
+	const dataEnd = reader.pos;
+	const headerEnd = dataEnd;
+
+	return { data, headerStart, headerEnd, dataStart, dataEnd };
 };
 
 const readCid = (reader: SyncByteReader): CID.Cid => {
@@ -70,26 +81,12 @@ const readCid = (reader: SyncByteReader): CID.Cid => {
 	return cid;
 };
 
-export interface CarEntry {
-	cid: CID.Cid;
-	bytes: Uint8Array;
-
-	entryStart: number;
-	entryEnd: number;
-
-	cidStart: number;
-	cidEnd: number;
-
-	bytesStart: number;
-	bytesEnd: number;
-}
-
-export const createCarReader = (reader: SyncByteReader) => {
-	const { roots } = readHeader(reader);
+export const createCarReader = (reader: SyncByteReader): SyncCarReader => {
+	const header = readHeader(reader);
 
 	return {
-		roots,
-		*iterate(): Generator<CarEntry> {
+		header,
+		*iterate() {
 			while (reader.upto(8 + 36).length > 0) {
 				const entryStart = reader.pos;
 				const entrySize = readVarint(reader, 8);

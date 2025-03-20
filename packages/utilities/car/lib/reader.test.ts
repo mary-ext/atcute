@@ -28,12 +28,19 @@ it('reads car files', () => {
 			'ZXQjbWVudGlvbmljcmVhdGVkQXR4GDIwMjQtMDItMjRUMTI6MTY6MjAuNjM3Wg',
 	);
 
-	const { roots, iterate } = readCar(buf);
+	const { header, iterate } = readCar(buf);
 	const blocks = Array.from(iterate());
 
-	expect(roots).toEqual([
-		toCidLink(fromString('bafyreieqh4enamx6dlbhoofeiss76zhppsdyf24scggmjclty246ucmdye')),
-	]);
+	expect(header).toEqual({
+		data: {
+			version: 1,
+			roots: [toCidLink(fromString('bafyreieqh4enamx6dlbhoofeiss76zhppsdyf24scggmjclty246ucmdye'))],
+		},
+		dataEnd: 59,
+		dataStart: 1,
+		headerEnd: 59,
+		headerStart: 0,
+	});
 
 	expect(blocks).toEqual([
 		{
