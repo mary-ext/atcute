@@ -5,8 +5,17 @@ export interface VerificationMaterial {
 	publicKeyMultibase: string;
 }
 
+const isUrlParseSupported = 'parse' in URL;
+
 export const isAtprotoServiceEndpoint = (input: string): boolean => {
-	const url = URL.parse(input);
+	let url: URL | null = null;
+	if (isUrlParseSupported) {
+		url = URL.parse(input);
+	} else {
+		try {
+			url = new URL(input);
+		} catch {}
+	}
 
 	return (
 		url !== null &&
