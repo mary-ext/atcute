@@ -60,7 +60,7 @@ const readCid = (reader: SyncByteReader): CID.Cid => {
 	}
 
 	if (digestType !== CID.HASH_SHA256) {
-		throw new RangeError(`incorrect cid hash type (got 0x${digestType.toString(16)})`);
+		throw new RangeError(`incorrect cid digest type (got 0x${digestType.toString(16)})`);
 	}
 
 	if (digestSize !== 32 && digestSize !== 0) {
