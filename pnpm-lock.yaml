@@ -291,6 +291,12 @@ importers:
       '@atcute/client':
         specifier: workspace:^
         version: link:../../core/client
+      '@atcute/multibase':
+        specifier: workspace:^
+        version: link:../../utilities/multibase
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../../utilities/uint8array
     devDependencies:
       '@types/bun':
         specifier: ^1.2.1
@@ -345,9 +351,6 @@ importers:
       '@atcute/uint8array':
         specifier: workspace:^
         version: link:../uint8array
-      '@atcute/varint':
-        specifier: workspace:^
-        version: link:../varint
     devDependencies:
       '@types/bun':
         specifier: ^1.2.1

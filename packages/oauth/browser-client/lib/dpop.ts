@@ -1,7 +1,9 @@
+import { fromBase64Url, toBase64Url } from '@atcute/multibase';
+
 import { database } from './environment.js';
 import type { DPoPKey } from './types/dpop.js';
 import { extractContentType } from './utils/response.js';
-import { encoder, fromBase64Url, generateJti, toBase64Url, toSha256 } from './utils/runtime.js';
+import { encoder, generateJti, stringToSha256 } from './utils/runtime.js';
 
 const ES256_ALG = { name: 'ECDSA', namedCurve: 'P-256' } as const;
 
@@ -67,7 +69,7 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 
 		const authorizationHeader = request.headers.get('authorization');
 		const ath = authorizationHeader?.startsWith('DPoP ')
-			? await toSha256(authorizationHeader.slice(5))
+			? await stringToSha256(authorizationHeader.slice(5))
 			: undefined;
 
 		const { method, url } = request;
