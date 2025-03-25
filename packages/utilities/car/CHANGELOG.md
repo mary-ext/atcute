@@ -1,5 +1,11 @@
 # @atcute/car
 
+## 3.0.1
+
+### Patch Changes
+
+- ec3f93f: incorrect error description for digest type
+
 ## 3.0.0
 
 ### Major Changes

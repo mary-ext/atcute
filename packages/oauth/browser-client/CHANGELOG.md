@@ -1,5 +1,11 @@
 # @atcute/oauth-browser-client
 
+## 1.0.16
+
+### Patch Changes
+
+- e6d7ec5: use browser-native base64 serialization when possible
+
 ## 1.0.15
 
 ### Patch Changes

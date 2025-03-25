@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/identity",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "syntax, type definitions and schemas for atproto handles, DIDs and DID documents",
 	"keywords": [
 		"atproto",
