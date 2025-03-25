@@ -1,17 +1,17 @@
 [tools.bun]
-version = "1.2.4"
+version = "1.2.5"
 backend = "core:bun"
 
 [tools.bun.checksums]
-"bun-linux-x64-baseline.zip" = "sha256:e03eb2559a61af0cfb7acf3e59272d55613ef14078f156f7b22512456caa0f8b"
+"bun-linux-x64-baseline.zip" = "sha256:0e61e7932b0b63b7416028da4be8479562e16b880b3a8e07b6ed457d6d0322e3"
 
 [tools.node]
 version = "22.14.0"
 backend = "core:node"
 
 [tools.pnpm]
-version = "10.5.2"
+version = "10.6.5"
 backend = "aqua:pnpm/pnpm"
 
 [tools.pnpm.checksums]
-pnpm-linux-x64 = "sha256:3c2fa7a4cf696a4a9303e348e9752c4d2d28aeb396396e5684d1e3869f68aece"
+pnpm-linux-x64 = "sha256:75a7f1c70d3ce7ff7f6f0a0815010246ff14142418f66126a2c2be83a65f284d"
