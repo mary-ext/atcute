@@ -2425,6 +2425,29 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	/** Adds an emoji reaction to a message. Requires authentication. It is idempotent, so multiple calls from the same user with the same emoji result in a single reaction. */
+	namespace ChatBskyConvoAddReaction {
+		interface Params {}
+		interface Input {
+			convoId: string;
+			messageId: string;
+			/**
+			 * Minimum string length: 1 \
+			 * Maximum string length: 32 \
+			 * Maximum grapheme length: 1
+			 */
+			value: string;
+		}
+		interface Output {
+			message: ChatBskyConvoDefs.MessageView;
+		}
+		interface Errors {
+			ReactionMessageDeleted: {};
+			ReactionLimitReached: {};
+			ReactionInvalidValue: {};
+		}
+	}
+
 	namespace ChatBskyConvoDefs {
 		interface ConvoView {
 			[Brand.Type]?: 'chat.bsky.convo.defs#convoView';
@@ -2433,7 +2456,7 @@ declare module '@atcute/client/lexicons' {
 			muted: boolean;
 			rev: string;
 			unreadCount: number;
-			lastMessage?: Brand.Union<DeletedMessageView | MessageView>;
+			lastMessage?: Brand.Union<DeletedMessageView | MessageAndReactionView | MessageView>;
 			status?: 'accepted' | 'request' | (string & {});
 		}
 		interface DeletedMessageView {
@@ -2446,6 +2469,13 @@ declare module '@atcute/client/lexicons' {
 		interface LogAcceptConvo {
 			[Brand.Type]?: 'chat.bsky.convo.defs#logAcceptConvo';
 			convoId: string;
+			rev: string;
+		}
+		interface LogAddReaction {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logAddReaction';
+			convoId: string;
+			message: Brand.Union<DeletedMessageView | MessageView>;
+			reaction: ReactionView;
 			rev: string;
 		}
 		interface LogBeginConvo {
@@ -2481,10 +2511,22 @@ declare module '@atcute/client/lexicons' {
 			message: Brand.Union<DeletedMessageView | MessageView>;
 			rev: string;
 		}
+		interface LogRemoveReaction {
+			[Brand.Type]?: 'chat.bsky.convo.defs#logRemoveReaction';
+			convoId: string;
+			message: Brand.Union<DeletedMessageView | MessageView>;
+			reaction: ReactionView;
+			rev: string;
+		}
 		interface LogUnmuteConvo {
 			[Brand.Type]?: 'chat.bsky.convo.defs#logUnmuteConvo';
 			convoId: string;
 			rev: string;
+		}
+		interface MessageAndReactionView {
+			[Brand.Type]?: 'chat.bsky.convo.defs#messageAndReactionView';
+			message: MessageView;
+			reaction: ReactionView;
 		}
 		interface MessageInput {
 			[Brand.Type]?: 'chat.bsky.convo.defs#messageInput';
@@ -2517,9 +2559,20 @@ declare module '@atcute/client/lexicons' {
 			embed?: Brand.Union<AppBskyEmbedRecord.View>;
 			/** Annotations of text (mentions, URLs, hashtags, etc) */
 			facets?: AppBskyRichtextFacet.Main[];
+			reactions?: ReactionView[];
 		}
 		interface MessageViewSender {
 			[Brand.Type]?: 'chat.bsky.convo.defs#messageViewSender';
+			did: At.DID;
+		}
+		interface ReactionView {
+			[Brand.Type]?: 'chat.bsky.convo.defs#reactionView';
+			createdAt: string;
+			sender: ReactionViewSender;
+			value: string;
+		}
+		interface ReactionViewSender {
+			[Brand.Type]?: 'chat.bsky.convo.defs#reactionViewSender';
 			did: At.DID;
 		}
 	}
@@ -2581,10 +2634,15 @@ declare module '@atcute/client/lexicons' {
 		interface Output {
 			logs: Brand.Union<
 				| ChatBskyConvoDefs.LogAcceptConvo
+				| ChatBskyConvoDefs.LogAddReaction
 				| ChatBskyConvoDefs.LogBeginConvo
 				| ChatBskyConvoDefs.LogCreateMessage
 				| ChatBskyConvoDefs.LogDeleteMessage
 				| ChatBskyConvoDefs.LogLeaveConvo
+				| ChatBskyConvoDefs.LogMuteConvo
+				| ChatBskyConvoDefs.LogReadMessage
+				| ChatBskyConvoDefs.LogRemoveReaction
+				| ChatBskyConvoDefs.LogUnmuteConvo
 			>[];
 			cursor?: string;
 		}
@@ -2645,6 +2703,28 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface Output {
 			convo: ChatBskyConvoDefs.ConvoView;
+		}
+	}
+
+	/** Removes an emoji reaction from a message. Requires authentication. It is idempotent, so multiple calls from the same user with the same emoji result in that reaction not being present, even if it already wasn't. */
+	namespace ChatBskyConvoRemoveReaction {
+		interface Params {}
+		interface Input {
+			convoId: string;
+			messageId: string;
+			/**
+			 * Minimum string length: 1 \
+			 * Maximum string length: 32 \
+			 * Maximum grapheme length: 1
+			 */
+			value: string;
+		}
+		interface Output {
+			message: ChatBskyConvoDefs.MessageView;
+		}
+		interface Errors {
+			ReactionMessageDeleted: {};
+			ReactionInvalidValue: {};
 		}
 	}
 
@@ -3051,6 +3131,10 @@ declare module '@atcute/client/lexicons' {
 			input: ChatBskyConvoAcceptConvo.Input;
 			output: ChatBskyConvoAcceptConvo.Output;
 		};
+		'chat.bsky.convo.addReaction': {
+			input: ChatBskyConvoAddReaction.Input;
+			output: ChatBskyConvoAddReaction.Output;
+		};
 		'chat.bsky.convo.deleteMessageForSelf': {
 			input: ChatBskyConvoDeleteMessageForSelf.Input;
 			output: ChatBskyConvoDeleteMessageForSelf.Output;
@@ -3062,6 +3146,10 @@ declare module '@atcute/client/lexicons' {
 		'chat.bsky.convo.muteConvo': {
 			input: ChatBskyConvoMuteConvo.Input;
 			output: ChatBskyConvoMuteConvo.Output;
+		};
+		'chat.bsky.convo.removeReaction': {
+			input: ChatBskyConvoRemoveReaction.Input;
+			output: ChatBskyConvoRemoveReaction.Output;
 		};
 		'chat.bsky.convo.sendMessage': {
 			input: ChatBskyConvoSendMessage.Input;
