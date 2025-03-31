@@ -1,6 +1,11 @@
 # @atcute/multibase
 
-multibase utilities, only supports a limited set of codecs.
+provides various base codecs used in atproto ecosystem
+
+- base16
+- base32
+- base58
+- base64 (including base64url and padded variants)
 
 ```ts
 import { toBase32 } from '@atcute/multibase';
