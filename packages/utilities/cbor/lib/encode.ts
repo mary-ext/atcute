@@ -9,7 +9,7 @@ const CHUNK_SIZE = 1024;
 interface State {
 	c: Uint8Array[];
 	b: Uint8Array;
-	v: DataView;
+	v: DataView | null;
 	p: number;
 	l: number;
 }
@@ -30,7 +30,8 @@ const resizeIfNeeded = (state: State, needed: number): void => {
 		state.c.push(buf.subarray(0, pos));
 		state.l += pos;
 
-		state.v = new DataView((state.b = allocUnsafe(_max(CHUNK_SIZE, needed))).buffer);
+		state.b = allocUnsafe(_max(CHUNK_SIZE, needed));
+		state.v = null;
 		state.p = 0;
 	}
 };
@@ -40,7 +41,10 @@ const getTypeInfoLength = (arg: number): number => {
 };
 
 const writeFloat64 = (state: State, val: number): void => {
-	state.v.setFloat64(state.p, val);
+	const buf = state.b;
+	const view = (state.v ??= new DataView(buf.buffer, buf.byteOffset, buf.byteLength));
+
+	view.setFloat64(state.p, val);
 	state.p += 8;
 };
 
@@ -280,12 +284,10 @@ const writeValue = (state: State, val: any): void => {
 };
 
 const createState = (): State => {
-	const buf = allocUnsafe(CHUNK_SIZE);
-
 	return {
 		c: [],
-		b: buf,
-		v: new DataView(buf.buffer),
+		b: allocUnsafe(CHUNK_SIZE),
+		v: null,
 		p: 0,
 		l: 0,
 	};
