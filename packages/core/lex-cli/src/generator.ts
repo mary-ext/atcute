@@ -130,7 +130,7 @@ const resolveType = (
 					break;
 				}
 				case 'at-uri': {
-					val = 'At.Uri';
+					val = 'At.AtUri';
 					break;
 				}
 				case 'uri': {
@@ -285,6 +285,9 @@ export declare namespace At {
 
 	/** Record key */
 	type RecordKey = string;
+
+	/** AT-URI string */
+	type AtUri = \`at://\${AtIdentifier}\` | \`at://\${AtIdentifier}/\${NSID}\` | \`at://\${AtIdentifier}/\${NSID}/\${RecordKey}\`;
 
 	/** URI string */
 	type Uri = \`\${string}:\${string}\`;

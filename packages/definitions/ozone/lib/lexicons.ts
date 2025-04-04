@@ -389,7 +389,7 @@ declare module '@atcute/client/lexicons' {
 			indexedAt: string;
 			moderation: Moderation;
 			repo: RepoView;
-			uri: At.Uri;
+			uri: At.AtUri;
 			value: unknown;
 		}
 		interface RecordViewDetail {
@@ -399,13 +399,13 @@ declare module '@atcute/client/lexicons' {
 			indexedAt: string;
 			moderation: ModerationDetail;
 			repo: RepoView;
-			uri: At.Uri;
+			uri: At.AtUri;
 			value: unknown;
 			labels?: ComAtprotoLabelDefs.Label[];
 		}
 		interface RecordViewNotFound {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#recordViewNotFound';
-			uri: At.Uri;
+			uri: At.AtUri;
 		}
 		interface ReporterStats {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#reporterStats';
@@ -564,7 +564,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get details about a record. */
 	namespace ToolsOzoneModerationGetRecord {
 		interface Params {
-			uri: At.Uri;
+			uri: At.AtUri;
 			cid?: At.CID;
 		}
 		type Input = undefined;
@@ -578,7 +578,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneModerationGetRecords {
 		interface Params {
 			/** Maximum array length: 100 */
-			uris: At.Uri[];
+			uris: At.AtUri[];
 		}
 		type Input = undefined;
 		interface Output {
