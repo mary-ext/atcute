@@ -43,6 +43,9 @@ export declare namespace At {
 	/** Record key */
 	type RecordKey = string;
 
+	/** Timestamp identifier */
+	type TID = string;
+
 	/** AT-URI string */
 	type AtUri =
 		| `at://${AtIdentifier}`
@@ -698,7 +701,7 @@ export declare namespace ComAtprotoRepoDefs {
 	interface CommitMeta {
 		[Brand.Type]?: 'com.atproto.repo.defs#commitMeta';
 		cid: At.CID;
-		rev: string;
+		rev: At.TID;
 	}
 }
 
@@ -1371,7 +1374,7 @@ export declare namespace ComAtprotoSyncGetLatestCommit {
 	type Input = undefined;
 	interface Output {
 		cid: At.CID;
-		rev: string;
+		rev: At.TID;
 	}
 	interface Errors {
 		RepoNotFound: {};
@@ -1407,7 +1410,7 @@ export declare namespace ComAtprotoSyncGetRepo {
 		/** The DID of the repo. */
 		did: At.DID;
 		/** The revision ('rev') of the repo to create a diff from. */
-		since?: string;
+		since?: At.TID;
 	}
 	type Input = undefined;
 	type Output = Uint8Array;
@@ -1430,7 +1433,7 @@ export declare namespace ComAtprotoSyncGetRepoStatus {
 		active: boolean;
 		did: At.DID;
 		/** Optional field, the current rev of the repo, if active=true */
-		rev?: string;
+		rev?: At.TID;
 		/** If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted. */
 		status?:
 			| 'deactivated'
@@ -1459,7 +1462,7 @@ export declare namespace ComAtprotoSyncListBlobs {
 		 */
 		limit?: number;
 		/** Optional revision of the repo to list blobs since. */
-		since?: string;
+		since?: At.TID;
 	}
 	type Input = undefined;
 	interface Output {
@@ -1495,7 +1498,7 @@ export declare namespace ComAtprotoSyncListRepos {
 		did: At.DID;
 		/** Current repo commit CID */
 		head: At.CID;
-		rev: string;
+		rev: At.TID;
 		active?: boolean;
 		/** If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted. */
 		status?:
@@ -1597,11 +1600,11 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		/** The repo this event comes from. Note that all other message types name this field 'did'. */
 		repo: At.DID;
 		/** The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event. */
-		rev: string;
+		rev: At.TID;
 		/** The stream sequence number of this message. */
 		seq: number;
 		/** The rev of the last emitted commit from this repo (if any). */
-		since: string | null;
+		since: At.TID | null;
 		/** Timestamp of when this message was originally broadcast. */
 		time: string;
 		/**
