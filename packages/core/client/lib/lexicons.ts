@@ -35,7 +35,7 @@ export declare namespace At {
 	type Handle = `${string}.${string}`;
 
 	/** URI string */
-	type Uri = string;
+	type Uri = `${string}:${string}`;
 
 	/** Object containing a CID string */
 	interface CIDLink {
