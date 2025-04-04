@@ -5,11 +5,6 @@ const HAS_UINT8_BASE64_SUPPORT = 'fromBase64' in Uint8Array;
 const BASE64_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 const BASE64URL_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
 
-// seems to be faster if we just check for the specific characters that are forbidden yet
-// allowed by fromBase64.
-const WS_RE = /[\s]/;
-const WS_PAD_RE = /[\s=]/;
-
 // #region base64
 /** @internal */
 export const _fromBase64Polyfill = /*#__PURE__*/ createRfc4648Decode(BASE64_CHARSET, 6, false);
@@ -18,10 +13,6 @@ export const _toBase64Polyfill = /*#__PURE__*/ createRfc4648Encode(BASE64_CHARSE
 
 /** @internal */
 export const _fromBase64Native = (str: string): Uint8Array => {
-	if (str.length % 4 === 1 || WS_PAD_RE.test(str)) {
-		throw new SyntaxError(`invalid base64 string`);
-	}
-
 	return Uint8Array.fromBase64(str, { alphabet: 'base64', lastChunkHandling: 'loose' });
 };
 
@@ -43,10 +34,6 @@ export const _toBase64PadPolyfill = /*#__PURE__*/ createRfc4648Encode(BASE64_CHA
 
 /** @internal */
 export const _fromBase64PadNative = (str: string): Uint8Array => {
-	if (str.length % 4 !== 0 || WS_RE.test(str)) {
-		throw new SyntaxError(`invalid base64 string`);
-	}
-
 	return Uint8Array.fromBase64(str, { alphabet: 'base64', lastChunkHandling: 'strict' });
 };
 
@@ -68,10 +55,6 @@ export const _toBase64UrlPolyfill = /*#__PURE__*/ createRfc4648Encode(BASE64URL_
 
 /** @internal */
 export const _fromBase64UrlNative = (str: string): Uint8Array => {
-	if (str.length % 4 === 1 || WS_PAD_RE.test(str)) {
-		throw new SyntaxError(`invalid base64 string`);
-	}
-
 	return Uint8Array.fromBase64(str, { alphabet: 'base64url', lastChunkHandling: 'loose' });
 };
 
@@ -93,10 +76,6 @@ export const _toBase64UrlPadPolyfill = /*#__PURE__*/ createRfc4648Encode(BASE64U
 
 /** @internal */
 export const _fromBase64UrlPadNative = (str: string): Uint8Array => {
-	if (str.length % 4 !== 0 || WS_RE.test(str)) {
-		throw new SyntaxError(`invalid base64 string`);
-	}
-
 	return Uint8Array.fromBase64(str, { alphabet: 'base64url', lastChunkHandling: 'strict' });
 };
 
