@@ -25,19 +25,19 @@ export declare namespace Brand {
 
 /** Base AT Protocol schema types */
 export declare namespace At {
-	/** CID string */
+	/** CID digest */
 	type CID = string;
 
-	/** DID of a user */
+	/** Decentralized identifier */
 	type DID<Method extends string = string> = `did:${Method}:${string}`;
 
-	/** User handle */
+	/** Account handle */
 	type Handle = `${string}.${string}`;
 
-	/** AT identifier */
+	/** Either a DID or a handle */
 	type AtIdentifier = DID | Handle;
 
-	/** NSID string */
+	/** Namespace ID */
 	type NSID = `${string}.${string}.${string}`;
 
 	/** Record key */
