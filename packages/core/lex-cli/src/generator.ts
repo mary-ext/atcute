@@ -252,7 +252,7 @@ export declare namespace At {
 	type DID<Method extends string = string> = \`did:\${Method}:\${string}\`;
 
 	/** User handle */
-	type Handle = string;
+	type Handle = \`\${string}.\${string}\`;
 
 	/** URI string */
 	type Uri = string;
