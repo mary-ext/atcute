@@ -29,7 +29,7 @@ export declare namespace At {
 	type CID = string;
 
 	/** DID of a user */
-	type DID = `did:${string}`;
+	type DID<Method extends string = string> = `did:${Method}:${string}`;
 
 	/** User handle */
 	type Handle = string;
