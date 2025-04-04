@@ -22,7 +22,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			name: string;
 			uri: At.Uri;
-			avatar?: string;
+			avatar?: At.Uri;
 			/** Minimum: 0 */
 			collectionItemCount?: number;
 			/**
@@ -181,7 +181,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			name: string;
 			uri: At.Uri;
-			avatar?: string;
+			avatar?: At.Uri;
 			/**
 			 * Maximum string length: 3000 \
 			 * Maximum grapheme length: 300
@@ -202,7 +202,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			name: string;
 			uri: At.Uri;
-			avatar?: string;
+			avatar?: At.Uri;
 			/**
 			 * Maximum string length: 3000 \
 			 * Maximum grapheme length: 300

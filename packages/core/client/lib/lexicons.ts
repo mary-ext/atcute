@@ -414,7 +414,7 @@ export declare namespace ComAtprotoLabelDefs {
 		/** DID of the actor who created this label. */
 		src: At.DID;
 		/** AT URI of the record, repository (account), or other resource that this label applies to. */
-		uri: string;
+		uri: At.Uri;
 		/**
 		 * The short string name of the value or type of this label. \
 		 * Maximum string length: 128
@@ -1096,8 +1096,8 @@ export declare namespace ComAtprotoServerDescribeServer {
 	}
 	interface Links {
 		[Brand.Type]?: 'com.atproto.server.describeServer#links';
-		privacyPolicy?: string;
-		termsOfService?: string;
+		privacyPolicy?: At.Uri;
+		termsOfService?: At.Uri;
 	}
 }
 

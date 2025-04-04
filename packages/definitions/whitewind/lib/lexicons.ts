@@ -29,7 +29,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface Ogp {
 			[Brand.Type]?: 'com.whtwnd.blog.defs#ogp';
-			url: string;
+			url: At.Uri;
 			height?: number;
 			width?: number;
 		}

@@ -148,7 +148,7 @@ declare module '@atcute/client/lexicons' {
 			timestamp: string;
 			comment?: string;
 			handle?: At.Handle;
-			pdsHost?: string;
+			pdsHost?: At.Uri;
 			tombstone?: boolean;
 		}
 		interface ImageDetails {
@@ -671,7 +671,7 @@ declare module '@atcute/client/lexicons' {
 			 * @default "desc"
 			 */
 			sortDirection?: 'asc' | 'desc';
-			subject?: string;
+			subject?: At.Uri;
 			/** If specified, only events where the subject is of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored. */
 			subjectType?: 'account' | 'record' | (string & {});
 			/** The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned. */
@@ -708,7 +708,7 @@ declare module '@atcute/client/lexicons' {
 			hostingUpdatedAfter?: string;
 			/** Search subjects where the associated record/account was updated before a given timestamp */
 			hostingUpdatedBefore?: string;
-			ignoreSubjects?: string[];
+			ignoreSubjects?: At.Uri[];
 			/** All subjects, or subjects from given 'collections' param, belonging to the account specified in the 'subject' param will be returned. */
 			includeAllUserRecords?: boolean;
 			/** By default, we don't include muted subjects in the results. Set this to true to include them. */
@@ -761,7 +761,7 @@ declare module '@atcute/client/lexicons' {
 				| 'takendownRecordsCount'
 				| 'priorityScore';
 			/** The subject to get the status for. */
-			subject?: string;
+			subject?: At.Uri;
 			/** If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored. */
 			subjectType?: 'account' | 'record' | (string & {});
 			/**
@@ -816,7 +816,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface ServiceConfig {
 			[Brand.Type]?: 'tools.ozone.server.getConfig#serviceConfig';
-			url?: string;
+			url?: At.Uri;
 		}
 		interface ViewerConfig {
 			[Brand.Type]?: 'tools.ozone.server.getConfig#viewerConfig';

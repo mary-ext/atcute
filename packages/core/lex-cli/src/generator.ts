@@ -121,11 +121,14 @@ const resolveType = (
 					val = 'At.Uri';
 					break;
 				}
+				case 'uri': {
+					val = 'At.Uri';
+					break;
+				}
 				case 'at-identifier':
 				case 'datetime':
 				case 'language':
-				case 'nsid':
-				case 'uri': {
+				case 'nsid': {
 					// deliberately ignored
 					val = 'string';
 					break;

@@ -197,7 +197,7 @@ declare module '@atcute/client/lexicons' {
 			did: At.DID;
 			handle: At.Handle;
 			associated?: ProfileAssociated;
-			avatar?: string;
+			avatar?: At.Uri;
 			createdAt?: string;
 			/**
 			 * Maximum string length: 2560 \
@@ -218,7 +218,7 @@ declare module '@atcute/client/lexicons' {
 			did: At.DID;
 			handle: At.Handle;
 			associated?: ProfileAssociated;
-			avatar?: string;
+			avatar?: At.Uri;
 			createdAt?: string;
 			/**
 			 * Maximum string length: 640 \
@@ -233,8 +233,8 @@ declare module '@atcute/client/lexicons' {
 			did: At.DID;
 			handle: At.Handle;
 			associated?: ProfileAssociated;
-			avatar?: string;
-			banner?: string;
+			avatar?: At.Uri;
+			banner?: At.Uri;
 			createdAt?: string;
 			/**
 			 * Maximum string length: 2560 \
@@ -448,7 +448,7 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.embed.external#external';
 			description: string;
 			title: string;
-			uri: string;
+			uri: At.Uri;
 			thumb?: At.Blob;
 		}
 		interface View {
@@ -459,8 +459,8 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.embed.external#viewExternal';
 			description: string;
 			title: string;
-			uri: string;
-			thumb?: string;
+			uri: At.Uri;
+			thumb?: At.Uri;
 		}
 	}
 
@@ -487,9 +487,9 @@ declare module '@atcute/client/lexicons' {
 			/** Alt text description of the image, for accessibility. */
 			alt: string;
 			/** Fully-qualified URL where a large version of the image can be fetched. May or may not be the exact original blob. For example, CDN location provided by the App View. */
-			fullsize: string;
+			fullsize: At.Uri;
 			/** Fully-qualified URL where a thumbnail of the image can be fetched. For example, CDN location provided by the App View. */
-			thumb: string;
+			thumb: At.Uri;
 			aspectRatio?: AppBskyEmbedDefs.AspectRatio;
 		}
 	}
@@ -587,14 +587,14 @@ declare module '@atcute/client/lexicons' {
 		interface View {
 			[Brand.Type]?: 'app.bsky.embed.video#view';
 			cid: At.CID;
-			playlist: string;
+			playlist: At.Uri;
 			/**
 			 * Maximum string length: 10000 \
 			 * Maximum grapheme length: 1000
 			 */
 			alt?: string;
 			aspectRatio?: AppBskyEmbedDefs.AspectRatio;
-			thumbnail?: string;
+			thumbnail?: At.Uri;
 		}
 	}
 
@@ -636,7 +636,7 @@ declare module '@atcute/client/lexicons' {
 			indexedAt: string;
 			uri: At.Uri;
 			acceptsInteractions?: boolean;
-			avatar?: string;
+			avatar?: At.Uri;
 			contentMode?:
 				| 'app.bsky.feed.defs#contentModeUnspecified'
 				| 'app.bsky.feed.defs#contentModeVideo'
@@ -1312,7 +1312,7 @@ declare module '@atcute/client/lexicons' {
 			/** Filter results for posts before the indicated datetime (not inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYY-MM-DD). */
 			until?: string;
 			/** Filter to posts with links (facet links or embeds) pointing to this URL. Server may apply URL normalization or fuzzy matching. */
-			url?: string;
+			url?: At.Uri;
 		}
 		type Input = undefined;
 		interface Output {
@@ -1406,7 +1406,7 @@ declare module '@atcute/client/lexicons' {
 			name: string;
 			purpose: ListPurpose;
 			uri: At.Uri;
-			avatar?: string;
+			avatar?: At.Uri;
 			/**
 			 * Maximum string length: 3000 \
 			 * Maximum grapheme length: 300
@@ -1428,7 +1428,7 @@ declare module '@atcute/client/lexicons' {
 			name: string;
 			purpose: ListPurpose;
 			uri: At.Uri;
-			avatar?: string;
+			avatar?: At.Uri;
 			indexedAt?: string;
 			labels?: ComAtprotoLabelDefs.Label[];
 			/** Minimum: 0 */
@@ -2085,7 +2085,7 @@ declare module '@atcute/client/lexicons' {
 		/** Facet feature for a URL. The text URL may have been simplified or truncated, but the facet reference should be a complete URL. */
 		interface Link {
 			[Brand.Type]?: 'app.bsky.richtext.facet#link';
-			uri: string;
+			uri: At.Uri;
 		}
 		/** Facet feature for mention of another account. The text is usually a handle, including a '@' prefix, but the facet reference is a DID. */
 		interface Mention {
@@ -2187,7 +2187,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface Suggestion {
 			[Brand.Type]?: 'app.bsky.unspecced.getTaggedSuggestions#suggestion';
-			subject: string;
+			subject: At.Uri;
 			subjectType: 'actor' | 'feed' | (string & {});
 			tag: string;
 		}
@@ -2279,7 +2279,7 @@ declare module '@atcute/client/lexicons' {
 			/** Filter results for posts before the indicated datetime (not inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYY-MM-DD). */
 			until?: string;
 			/** Filter to posts with links (facet links or embeds) pointing to this URL. Server may apply URL normalization or fuzzy matching. */
-			url?: string;
+			url?: At.Uri;
 			/** DID of the account making the request (not included for public/unauthenticated queries). Used for 'from:me' queries. */
 			viewer?: At.DID;
 		}
@@ -2389,7 +2389,7 @@ declare module '@atcute/client/lexicons' {
 			did: At.DID;
 			handle: At.Handle;
 			associated?: AppBskyActorDefs.ProfileAssociated;
-			avatar?: string;
+			avatar?: At.Uri;
 			/** Set to true when the actor cannot actively participate in converations */
 			chatDisabled?: boolean;
 			/**
