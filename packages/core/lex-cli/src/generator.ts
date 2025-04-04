@@ -117,6 +117,10 @@ const resolveType = (
 					val = 'At.Handle';
 					break;
 				}
+				case 'at-identifier': {
+					val = 'At.AtIdentifier';
+					break;
+				}
 				case 'nsid': {
 					val = 'At.NSID';
 					break;
@@ -133,7 +137,6 @@ const resolveType = (
 					val = 'At.Uri';
 					break;
 				}
-				case 'at-identifier':
 				case 'datetime':
 				case 'language': {
 					// deliberately ignored
@@ -273,6 +276,9 @@ export declare namespace At {
 
 	/** User handle */
 	type Handle = \`\${string}.\${string}\`;
+
+	/** AT identifier */
+	type AtIdentifier = DID | Handle;
 
 	/** NSID string */
 	type NSID = \`\${string}.\${string}.\${string}\`;

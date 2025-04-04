@@ -305,7 +305,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyActorGetProfile {
 		interface Params {
 			/** Handle or DID of account to fetch profile of. */
-			actor: string;
+			actor: At.AtIdentifier;
 		}
 		type Input = undefined;
 		type Output = AppBskyActorDefs.ProfileViewDetailed;
@@ -315,7 +315,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyActorGetProfiles {
 		interface Params {
 			/** Maximum array length: 25 */
-			actors: string[];
+			actors: At.AtIdentifier[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -829,7 +829,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get a list of feeds (feed generator records) created by the actor (in the actor's repo). */
 	namespace AppBskyFeedGetActorFeeds {
 		interface Params {
-			actor: string;
+			actor: At.AtIdentifier;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -848,7 +848,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get a list of posts liked by an actor. Requires auth, actor must be the requesting account. */
 	namespace AppBskyFeedGetActorLikes {
 		interface Params {
-			actor: string;
+			actor: At.AtIdentifier;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -871,7 +871,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get a view of an actor's 'author feed' (post and reposts by the author). Does not require auth. */
 	namespace AppBskyFeedGetAuthorFeed {
 		interface Params {
-			actor: string;
+			actor: At.AtIdentifier;
 			cursor?: string;
 			/**
 			 * Combinations of post/repost types to include in response.
@@ -1281,7 +1281,7 @@ declare module '@atcute/client/lexicons' {
 			/** Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended. */
 			q: string;
 			/** Filter to posts by the given account. Handles are resolved to DID before query-time. */
-			author?: string;
+			author?: At.AtIdentifier;
 			/** Optional pagination mechanism; may not necessarily allow scrolling through entire result set. */
 			cursor?: string;
 			/** Filter to posts with URLs (facet links or embeds) linking to the given domain (hostname). Server may apply hostname normalization. */
@@ -1295,7 +1295,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			limit?: number;
 			/** Filter to posts which mention the given account. Handles are resolved to DID before query-time. Only matches rich-text facet mentions. */
-			mentions?: string;
+			mentions?: At.AtIdentifier;
 			/** Filter results for posts after the indicated datetime (inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYYY-MM-DD). */
 			since?: string;
 			/**
@@ -1444,7 +1444,7 @@ declare module '@atcute/client/lexicons' {
 		/** indicates that a handle or DID could not be resolved */
 		interface NotFoundActor {
 			[Brand.Type]?: 'app.bsky.graph.defs#notFoundActor';
-			actor: string;
+			actor: At.AtIdentifier;
 			notFound: boolean;
 		}
 		type Referencelist = 'app.bsky.graph.defs#referencelist';
@@ -1504,7 +1504,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get a list of starter packs created by the actor. */
 	namespace AppBskyGraphGetActorStarterPacks {
 		interface Params {
-			actor: string;
+			actor: At.AtIdentifier;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1541,7 +1541,7 @@ declare module '@atcute/client/lexicons' {
 	/** Enumerates accounts which follow a specified account (actor). */
 	namespace AppBskyGraphGetFollowers {
 		interface Params {
-			actor: string;
+			actor: At.AtIdentifier;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1561,7 +1561,7 @@ declare module '@atcute/client/lexicons' {
 	/** Enumerates accounts which a specified account (actor) follows. */
 	namespace AppBskyGraphGetFollows {
 		interface Params {
-			actor: string;
+			actor: At.AtIdentifier;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1581,7 +1581,7 @@ declare module '@atcute/client/lexicons' {
 	/** Enumerates accounts which follow a specified account (actor) and are followed by the viewer. */
 	namespace AppBskyGraphGetKnownFollowers {
 		interface Params {
-			actor: string;
+			actor: At.AtIdentifier;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1659,7 +1659,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphGetLists {
 		interface Params {
 			/** The account (actor) to enumerate lists from. */
-			actor: string;
+			actor: At.AtIdentifier;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1697,12 +1697,12 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphGetRelationships {
 		interface Params {
 			/** Primary account requesting relationships for. */
-			actor: string;
+			actor: At.AtIdentifier;
 			/**
 			 * List of 'other' accounts to be related back to the primary. \
 			 * Maximum array length: 30
 			 */
-			others?: string[];
+			others?: At.AtIdentifier[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -1741,7 +1741,7 @@ declare module '@atcute/client/lexicons' {
 	/** Enumerates follows similar to a given account (actor). Expected use is to recommend additional accounts immediately after following one account. */
 	namespace AppBskyGraphGetSuggestedFollowsByActor {
 		interface Params {
-			actor: string;
+			actor: At.AtIdentifier;
 		}
 		type Input = undefined;
 		interface Output {
@@ -1806,7 +1806,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphMuteActor {
 		interface Params {}
 		interface Input {
-			actor: string;
+			actor: At.AtIdentifier;
 		}
 		type Output = undefined;
 	}
@@ -1882,7 +1882,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphUnmuteActor {
 		interface Params {}
 		interface Input {
-			actor: string;
+			actor: At.AtIdentifier;
 		}
 		type Output = undefined;
 	}
@@ -2248,7 +2248,7 @@ declare module '@atcute/client/lexicons' {
 			/** Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended. */
 			q: string;
 			/** Filter to posts by the given account. Handles are resolved to DID before query-time. */
-			author?: string;
+			author?: At.AtIdentifier;
 			/** Optional pagination mechanism; may not necessarily allow scrolling through entire result set. */
 			cursor?: string;
 			/** Filter to posts with URLs (facet links or embeds) linking to the given domain (hostname). Server may apply hostname normalization. */
@@ -2262,7 +2262,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			limit?: number;
 			/** Filter to posts which mention the given account. Handles are resolved to DID before query-time. Only matches rich-text facet mentions. */
-			mentions?: string;
+			mentions?: At.AtIdentifier;
 			/** Filter results for posts after the indicated datetime (inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYYY-MM-DD). */
 			since?: string;
 			/**

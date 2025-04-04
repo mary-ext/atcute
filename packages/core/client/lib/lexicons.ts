@@ -34,6 +34,9 @@ export declare namespace At {
 	/** User handle */
 	type Handle = `${string}.${string}`;
 
+	/** AT identifier */
+	type AtIdentifier = DID | Handle;
+
 	/** NSID string */
 	type NSID = `${string}.${string}.${string}`;
 
@@ -239,7 +242,7 @@ export declare namespace ComAtprotoAdminUpdateAccountEmail {
 	interface Params {}
 	interface Input {
 		/** The handle or DID of the repo. */
-		account: string;
+		account: At.AtIdentifier;
 		email: string;
 	}
 	type Output = undefined;
@@ -311,7 +314,7 @@ export declare namespace ComAtprotoIdentityGetRecommendedDidCredentials {
 export declare namespace ComAtprotoIdentityRefreshIdentity {
 	interface Params {}
 	interface Input {
-		identifier: string;
+		identifier: At.AtIdentifier;
 	}
 	type Output = ComAtprotoIdentityDefs.IdentityInfo;
 	interface Errors {
@@ -364,7 +367,7 @@ export declare namespace ComAtprotoIdentityResolveHandle {
 export declare namespace ComAtprotoIdentityResolveIdentity {
 	interface Params {
 		/** Handle or DID to resolve. */
-		identifier: string;
+		identifier: At.AtIdentifier;
 	}
 	type Input = undefined;
 	type Output = ComAtprotoIdentityDefs.IdentityInfo;
@@ -605,7 +608,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	interface Params {}
 	interface Input {
 		/** The handle or DID of the repo (aka, current account). */
-		repo: string;
+		repo: At.AtIdentifier;
 		writes: Brand.Union<Create | Delete | Update>[];
 		/** If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations. */
 		swapCommit?: At.CID;
@@ -666,7 +669,7 @@ export declare namespace ComAtprotoRepoCreateRecord {
 		/** The record itself. Must contain a $type field. */
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
-		repo: string;
+		repo: At.AtIdentifier;
 		/** The Record Key. */
 		rkey?: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
@@ -700,7 +703,7 @@ export declare namespace ComAtprotoRepoDeleteRecord {
 		/** The NSID of the record collection. */
 		collection: At.NSID;
 		/** The handle or DID of the repo (aka, current account). */
-		repo: string;
+		repo: At.AtIdentifier;
 		/** The Record Key. */
 		rkey: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
@@ -720,7 +723,7 @@ export declare namespace ComAtprotoRepoDeleteRecord {
 export declare namespace ComAtprotoRepoDescribeRepo {
 	interface Params {
 		/** The handle or DID of the repo. */
-		repo: string;
+		repo: At.AtIdentifier;
 	}
 	type Input = undefined;
 	interface Output {
@@ -741,7 +744,7 @@ export declare namespace ComAtprotoRepoGetRecord {
 		/** The NSID of the record collection. */
 		collection: At.NSID;
 		/** The handle or DID of the repo. */
-		repo: string;
+		repo: At.AtIdentifier;
 		/** The Record Key. */
 		rkey: At.RecordKey;
 		/** The CID of the version of the record. If not specified, then return the most recent version. */
@@ -794,7 +797,7 @@ export declare namespace ComAtprotoRepoListRecords {
 		/** The NSID of the record type. */
 		collection: At.NSID;
 		/** The handle or DID of the repo. */
-		repo: string;
+		repo: At.AtIdentifier;
 		cursor?: string;
 		/**
 		 * The number of records to return. \
@@ -828,7 +831,7 @@ export declare namespace ComAtprotoRepoPutRecord {
 		/** The record to write. */
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
-		repo: string;
+		repo: At.AtIdentifier;
 		/** The Record Key. */
 		rkey: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
