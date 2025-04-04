@@ -104,26 +104,36 @@ const resolveType = (
 		const format = def.format;
 
 		if (format !== undefined) {
-			if (format === 'did') {
-				val = 'At.DID';
-			} else if (format === 'cid') {
-				val = 'At.CID';
-			} else if (format === 'handle') {
-				val = 'At.Handle';
-			} else if (format === 'at-uri') {
-				val = 'At.Uri';
-			} else if (
-				format === 'at-identifier' ||
-				format === 'datetime' ||
-				format === 'language' ||
-				format === 'nsid' ||
-				format === 'uri'
-			) {
-				// deliberately ignored
-				val = 'string';
-			} else {
-				console.warn(`${nsid}: unknown format ${format}`);
-				val = 'string';
+			switch (format) {
+				case 'did': {
+					val = 'At.DID';
+					break;
+				}
+				case 'cid': {
+					val = 'At.CID';
+					break;
+				}
+				case 'handle': {
+					val = 'At.Handle';
+					break;
+				}
+				case 'at-uri': {
+					val = 'At.Uri';
+					break;
+				}
+				case 'at-identifier':
+				case 'datetime':
+				case 'language':
+				case 'nsid':
+				case 'uri': {
+					// deliberately ignored
+					val = 'string';
+					break;
+				}
+				default: {
+					console.warn(`${nsid}: unknown format ${format}`);
+					val = 'string';
+				}
 			}
 		} else {
 			if (def.minLength !== undefined) {
