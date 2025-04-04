@@ -37,6 +37,9 @@ export declare namespace At {
 	/** NSID string */
 	type NSID = `${string}.${string}.${string}`;
 
+	/** Record key */
+	type RecordKey = string;
+
 	/** URI string */
 	type Uri = `${string}:${string}`;
 
@@ -622,7 +625,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 		collection: At.NSID;
 		value: unknown;
 		/** NOTE: maxLength is redundant with record-key format. Keeping it temporarily to ensure backwards compatibility. */
-		rkey?: string;
+		rkey?: At.RecordKey;
 	}
 	interface CreateResult {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#createResult';
@@ -634,7 +637,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	interface Delete {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#delete';
 		collection: At.NSID;
-		rkey: string;
+		rkey: At.RecordKey;
 	}
 	interface DeleteResult {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#deleteResult';
@@ -643,7 +646,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	interface Update {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#update';
 		collection: At.NSID;
-		rkey: string;
+		rkey: At.RecordKey;
 		value: unknown;
 	}
 	interface UpdateResult {
@@ -665,7 +668,7 @@ export declare namespace ComAtprotoRepoCreateRecord {
 		/** The handle or DID of the repo (aka, current account). */
 		repo: string;
 		/** The Record Key. */
-		rkey?: string;
+		rkey?: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
 		swapCommit?: At.CID;
 		/** Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons. */
@@ -699,7 +702,7 @@ export declare namespace ComAtprotoRepoDeleteRecord {
 		/** The handle or DID of the repo (aka, current account). */
 		repo: string;
 		/** The Record Key. */
-		rkey: string;
+		rkey: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
 		swapCommit?: At.CID;
 		/** Compare and swap with the previous record by CID. */
@@ -740,7 +743,7 @@ export declare namespace ComAtprotoRepoGetRecord {
 		/** The handle or DID of the repo. */
 		repo: string;
 		/** The Record Key. */
-		rkey: string;
+		rkey: At.RecordKey;
 		/** The CID of the version of the record. If not specified, then return the most recent version. */
 		cid?: At.CID;
 	}
@@ -827,7 +830,7 @@ export declare namespace ComAtprotoRepoPutRecord {
 		/** The handle or DID of the repo (aka, current account). */
 		repo: string;
 		/** The Record Key. */
-		rkey: string;
+		rkey: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
 		swapCommit?: At.CID;
 		/** Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation */
@@ -1376,7 +1379,7 @@ export declare namespace ComAtprotoSyncGetRecord {
 		/** The DID of the repo. */
 		did: At.DID;
 		/** Record Key */
-		rkey: string;
+		rkey: At.RecordKey;
 	}
 	type Input = undefined;
 	type Output = Uint8Array;

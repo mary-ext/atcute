@@ -121,6 +121,10 @@ const resolveType = (
 					val = 'At.NSID';
 					break;
 				}
+				case 'record-key': {
+					val = 'At.RecordKey';
+					break;
+				}
 				case 'at-uri': {
 					val = 'At.Uri';
 					break;
@@ -272,6 +276,9 @@ export declare namespace At {
 
 	/** NSID string */
 	type NSID = \`\${string}.\${string}.\${string}\`;
+
+	/** Record key */
+	type RecordKey = string;
 
 	/** URI string */
 	type Uri = \`\${string}:\${string}\`;
