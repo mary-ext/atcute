@@ -1937,7 +1937,7 @@ declare module '@atcute/client/lexicons' {
 			/** The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed. */
 			reasonTypes?: ComAtprotoModerationDefs.ReasonType[];
 			/** Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type. */
-			subjectCollections?: string[];
+			subjectCollections?: At.NSID[];
 			/** The set of subject types (account, record, etc) this service accepts reports on. */
 			subjectTypes?: ComAtprotoModerationDefs.SubjectType[];
 			viewer?: LabelerViewerState;
@@ -1971,7 +1971,7 @@ declare module '@atcute/client/lexicons' {
 			/** The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed. */
 			reasonTypes?: ComAtprotoModerationDefs.ReasonType[];
 			/** Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type. */
-			subjectCollections?: string[];
+			subjectCollections?: At.NSID[];
 			/** The set of subject types (account, record, etc) this service accepts reports on. */
 			subjectTypes?: ComAtprotoModerationDefs.SubjectType[];
 		}

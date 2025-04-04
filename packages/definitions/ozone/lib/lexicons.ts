@@ -637,7 +637,7 @@ declare module '@atcute/client/lexicons' {
 			 * If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored. \
 			 * Maximum array length: 20
 			 */
-			collections?: string[];
+			collections?: At.NSID[];
 			/** If specified, only events with comments containing the keyword are returned. Apply || separator to use multiple keywords and match using OR condition. */
 			comment?: string;
 			/** Retrieve events created after a given timestamp */
@@ -693,7 +693,7 @@ declare module '@atcute/client/lexicons' {
 			 * If specified, subjects belonging to the given collections will be returned. When subjectType is set to 'account', this will be ignored. \
 			 * Maximum array length: 20
 			 */
-			collections?: string[];
+			collections?: At.NSID[];
 			/** Search subjects by keyword from comments */
 			comment?: string;
 			cursor?: string;
@@ -968,7 +968,7 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'tools.ozone.setting.defs#option';
 			createdBy: At.DID;
 			did: At.DID;
-			key: string;
+			key: At.NSID;
 			lastUpdatedBy: At.DID;
 			scope: 'instance' | 'personal' | (string & {});
 			value: unknown;
@@ -995,7 +995,7 @@ declare module '@atcute/client/lexicons' {
 			 * Filter for only the specified keys. Ignored if prefix is provided \
 			 * Maximum array length: 100
 			 */
-			keys?: string[];
+			keys?: At.NSID[];
 			/**
 			 * Minimum: 1 \
 			 * Maximum: 100
@@ -1022,7 +1022,7 @@ declare module '@atcute/client/lexicons' {
 			 * Minimum array length: 1 \
 			 * Maximum array length: 200
 			 */
-			keys: string[];
+			keys: At.NSID[];
 			scope: 'instance' | 'personal' | (string & {});
 		}
 		interface Output {}
@@ -1032,7 +1032,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneSettingUpsertOption {
 		interface Params {}
 		interface Input {
-			key: string;
+			key: At.NSID;
 			scope: 'instance' | 'personal' | (string & {});
 			value: unknown;
 			/** Maximum string length: 2000 */

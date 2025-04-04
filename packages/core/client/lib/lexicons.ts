@@ -34,6 +34,9 @@ export declare namespace At {
 	/** User handle */
 	type Handle = `${string}.${string}`;
 
+	/** NSID string */
+	type NSID = `${string}.${string}.${string}`;
+
 	/** URI string */
 	type Uri = `${string}:${string}`;
 
@@ -616,7 +619,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	/** Operation which creates a new record. */
 	interface Create {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#create';
-		collection: string;
+		collection: At.NSID;
 		value: unknown;
 		/** NOTE: maxLength is redundant with record-key format. Keeping it temporarily to ensure backwards compatibility. */
 		rkey?: string;
@@ -630,7 +633,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	/** Operation which deletes an existing record. */
 	interface Delete {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#delete';
-		collection: string;
+		collection: At.NSID;
 		rkey: string;
 	}
 	interface DeleteResult {
@@ -639,7 +642,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	/** Operation which updates an existing record. */
 	interface Update {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#update';
-		collection: string;
+		collection: At.NSID;
 		rkey: string;
 		value: unknown;
 	}
@@ -656,7 +659,7 @@ export declare namespace ComAtprotoRepoCreateRecord {
 	interface Params {}
 	interface Input {
 		/** The NSID of the record collection. */
-		collection: string;
+		collection: At.NSID;
 		/** The record itself. Must contain a $type field. */
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
@@ -692,7 +695,7 @@ export declare namespace ComAtprotoRepoDeleteRecord {
 	interface Params {}
 	interface Input {
 		/** The NSID of the record collection. */
-		collection: string;
+		collection: At.NSID;
 		/** The handle or DID of the repo (aka, current account). */
 		repo: string;
 		/** The Record Key. */
@@ -719,7 +722,7 @@ export declare namespace ComAtprotoRepoDescribeRepo {
 	type Input = undefined;
 	interface Output {
 		/** List of all the collections (NSIDs) for which this repo contains at least one record. */
-		collections: string[];
+		collections: At.NSID[];
 		did: At.DID;
 		/** The complete DID document for this account. */
 		didDoc: unknown;
@@ -733,7 +736,7 @@ export declare namespace ComAtprotoRepoDescribeRepo {
 export declare namespace ComAtprotoRepoGetRecord {
 	interface Params {
 		/** The NSID of the record collection. */
-		collection: string;
+		collection: At.NSID;
 		/** The handle or DID of the repo. */
 		repo: string;
 		/** The Record Key. */
@@ -786,7 +789,7 @@ export declare namespace ComAtprotoRepoListMissingBlobs {
 export declare namespace ComAtprotoRepoListRecords {
 	interface Params {
 		/** The NSID of the record type. */
-		collection: string;
+		collection: At.NSID;
 		/** The handle or DID of the repo. */
 		repo: string;
 		cursor?: string;
@@ -818,7 +821,7 @@ export declare namespace ComAtprotoRepoPutRecord {
 	interface Params {}
 	interface Input {
 		/** The NSID of the record collection. */
-		collection: string;
+		collection: At.NSID;
 		/** The record to write. */
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
@@ -1129,7 +1132,7 @@ export declare namespace ComAtprotoServerGetServiceAuth {
 		/** The time in Unix Epoch seconds that the JWT expires. Defaults to 60 seconds in the future. The service may enforce certain time bounds on tokens depending on the requested scope. */
 		exp?: number;
 		/** Lexicon (XRPC) method to bind the requested token to */
-		lxm?: string;
+		lxm?: At.NSID;
 	}
 	type Input = undefined;
 	interface Output {
@@ -1369,7 +1372,7 @@ export declare namespace ComAtprotoSyncGetLatestCommit {
 /** Get data blocks needed to prove the existence or non-existence of record in the current version of repo. Does not require auth. */
 export declare namespace ComAtprotoSyncGetRecord {
 	interface Params {
-		collection: string;
+		collection: At.NSID;
 		/** The DID of the repo. */
 		did: At.DID;
 		/** Record Key */
@@ -1497,7 +1500,7 @@ export declare namespace ComAtprotoSyncListRepos {
 /** Enumerates all the DIDs which have records with the given collection NSID. */
 export declare namespace ComAtprotoSyncListReposByCollection {
 	interface Params {
-		collection: string;
+		collection: At.NSID;
 		cursor?: string;
 		/**
 		 * Maximum size of response set. Recommend setting a large maximum (1000+) when enumerating large DID lists. \
