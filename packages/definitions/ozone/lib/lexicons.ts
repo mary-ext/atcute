@@ -1199,125 +1199,179 @@ declare module '@atcute/client/lexicons' {
 
 	interface Queries {
 		'tools.ozone.communication.listTemplates': {
+			/** @deprecated */
 			output: ToolsOzoneCommunicationListTemplates.Output;
+			response: { json: ToolsOzoneCommunicationListTemplates.Output };
 		};
 		'tools.ozone.moderation.getEvent': {
 			params: ToolsOzoneModerationGetEvent.Params;
+			/** @deprecated */
 			output: ToolsOzoneModerationGetEvent.Output;
+			response: { json: ToolsOzoneModerationGetEvent.Output };
 		};
 		'tools.ozone.moderation.getRecord': {
 			params: ToolsOzoneModerationGetRecord.Params;
+			/** @deprecated */
 			output: ToolsOzoneModerationGetRecord.Output;
+			response: { json: ToolsOzoneModerationGetRecord.Output };
 		};
 		'tools.ozone.moderation.getRecords': {
 			params: ToolsOzoneModerationGetRecords.Params;
+			/** @deprecated */
 			output: ToolsOzoneModerationGetRecords.Output;
+			response: { json: ToolsOzoneModerationGetRecords.Output };
 		};
 		'tools.ozone.moderation.getRepo': {
 			params: ToolsOzoneModerationGetRepo.Params;
+			/** @deprecated */
 			output: ToolsOzoneModerationGetRepo.Output;
+			response: { json: ToolsOzoneModerationGetRepo.Output };
 		};
 		'tools.ozone.moderation.getReporterStats': {
 			params: ToolsOzoneModerationGetReporterStats.Params;
+			/** @deprecated */
 			output: ToolsOzoneModerationGetReporterStats.Output;
+			response: { json: ToolsOzoneModerationGetReporterStats.Output };
 		};
 		'tools.ozone.moderation.getRepos': {
 			params: ToolsOzoneModerationGetRepos.Params;
+			/** @deprecated */
 			output: ToolsOzoneModerationGetRepos.Output;
+			response: { json: ToolsOzoneModerationGetRepos.Output };
 		};
 		'tools.ozone.moderation.queryEvents': {
 			params: ToolsOzoneModerationQueryEvents.Params;
+			/** @deprecated */
 			output: ToolsOzoneModerationQueryEvents.Output;
+			response: { json: ToolsOzoneModerationQueryEvents.Output };
 		};
 		'tools.ozone.moderation.queryStatuses': {
 			params: ToolsOzoneModerationQueryStatuses.Params;
+			/** @deprecated */
 			output: ToolsOzoneModerationQueryStatuses.Output;
+			response: { json: ToolsOzoneModerationQueryStatuses.Output };
 		};
 		'tools.ozone.moderation.searchRepos': {
 			params: ToolsOzoneModerationSearchRepos.Params;
+			/** @deprecated */
 			output: ToolsOzoneModerationSearchRepos.Output;
+			response: { json: ToolsOzoneModerationSearchRepos.Output };
 		};
 		'tools.ozone.server.getConfig': {
+			/** @deprecated */
 			output: ToolsOzoneServerGetConfig.Output;
+			response: { json: ToolsOzoneServerGetConfig.Output };
 		};
 		'tools.ozone.set.getValues': {
 			params: ToolsOzoneSetGetValues.Params;
+			/** @deprecated */
 			output: ToolsOzoneSetGetValues.Output;
+			response: { json: ToolsOzoneSetGetValues.Output };
 		};
 		'tools.ozone.set.querySets': {
 			params: ToolsOzoneSetQuerySets.Params;
+			/** @deprecated */
 			output: ToolsOzoneSetQuerySets.Output;
+			response: { json: ToolsOzoneSetQuerySets.Output };
 		};
 		'tools.ozone.setting.listOptions': {
 			params: ToolsOzoneSettingListOptions.Params;
+			/** @deprecated */
 			output: ToolsOzoneSettingListOptions.Output;
+			response: { json: ToolsOzoneSettingListOptions.Output };
 		};
 		'tools.ozone.signature.findCorrelation': {
 			params: ToolsOzoneSignatureFindCorrelation.Params;
+			/** @deprecated */
 			output: ToolsOzoneSignatureFindCorrelation.Output;
+			response: { json: ToolsOzoneSignatureFindCorrelation.Output };
 		};
 		'tools.ozone.signature.findRelatedAccounts': {
 			params: ToolsOzoneSignatureFindRelatedAccounts.Params;
+			/** @deprecated */
 			output: ToolsOzoneSignatureFindRelatedAccounts.Output;
+			response: { json: ToolsOzoneSignatureFindRelatedAccounts.Output };
 		};
 		'tools.ozone.signature.searchAccounts': {
 			params: ToolsOzoneSignatureSearchAccounts.Params;
+			/** @deprecated */
 			output: ToolsOzoneSignatureSearchAccounts.Output;
+			response: { json: ToolsOzoneSignatureSearchAccounts.Output };
 		};
 		'tools.ozone.team.listMembers': {
 			params: ToolsOzoneTeamListMembers.Params;
+			/** @deprecated */
 			output: ToolsOzoneTeamListMembers.Output;
+			response: { json: ToolsOzoneTeamListMembers.Output };
 		};
 	}
 
 	interface Procedures {
 		'tools.ozone.communication.createTemplate': {
 			input: ToolsOzoneCommunicationCreateTemplate.Input;
+			/** @deprecated */
 			output: ToolsOzoneCommunicationCreateTemplate.Output;
+			response: { json: ToolsOzoneCommunicationCreateTemplate.Output };
 		};
 		'tools.ozone.communication.deleteTemplate': {
 			input: ToolsOzoneCommunicationDeleteTemplate.Input;
 		};
 		'tools.ozone.communication.updateTemplate': {
 			input: ToolsOzoneCommunicationUpdateTemplate.Input;
+			/** @deprecated */
 			output: ToolsOzoneCommunicationUpdateTemplate.Output;
+			response: { json: ToolsOzoneCommunicationUpdateTemplate.Output };
 		};
 		'tools.ozone.moderation.emitEvent': {
 			input: ToolsOzoneModerationEmitEvent.Input;
+			/** @deprecated */
 			output: ToolsOzoneModerationEmitEvent.Output;
+			response: { json: ToolsOzoneModerationEmitEvent.Output };
 		};
 		'tools.ozone.set.addValues': {
 			input: ToolsOzoneSetAddValues.Input;
 		};
 		'tools.ozone.set.deleteSet': {
 			input: ToolsOzoneSetDeleteSet.Input;
+			/** @deprecated */
 			output: ToolsOzoneSetDeleteSet.Output;
+			response: { json: ToolsOzoneSetDeleteSet.Output };
 		};
 		'tools.ozone.set.deleteValues': {
 			input: ToolsOzoneSetDeleteValues.Input;
 		};
 		'tools.ozone.set.upsertSet': {
 			input: ToolsOzoneSetUpsertSet.Input;
+			/** @deprecated */
 			output: ToolsOzoneSetUpsertSet.Output;
+			response: { json: ToolsOzoneSetUpsertSet.Output };
 		};
 		'tools.ozone.setting.removeOptions': {
 			input: ToolsOzoneSettingRemoveOptions.Input;
+			/** @deprecated */
 			output: ToolsOzoneSettingRemoveOptions.Output;
+			response: { json: ToolsOzoneSettingRemoveOptions.Output };
 		};
 		'tools.ozone.setting.upsertOption': {
 			input: ToolsOzoneSettingUpsertOption.Input;
+			/** @deprecated */
 			output: ToolsOzoneSettingUpsertOption.Output;
+			response: { json: ToolsOzoneSettingUpsertOption.Output };
 		};
 		'tools.ozone.team.addMember': {
 			input: ToolsOzoneTeamAddMember.Input;
+			/** @deprecated */
 			output: ToolsOzoneTeamAddMember.Output;
+			response: { json: ToolsOzoneTeamAddMember.Output };
 		};
 		'tools.ozone.team.deleteMember': {
 			input: ToolsOzoneTeamDeleteMember.Input;
 		};
 		'tools.ozone.team.updateMember': {
 			input: ToolsOzoneTeamUpdateMember.Input;
+			/** @deprecated */
 			output: ToolsOzoneTeamUpdateMember.Output;
+			response: { json: ToolsOzoneTeamUpdateMember.Output };
 		};
 	}
 }

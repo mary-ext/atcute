@@ -1711,129 +1711,195 @@ export declare interface Records {
 export declare interface Queries {
 	'com.atproto.admin.getAccountInfo': {
 		params: ComAtprotoAdminGetAccountInfo.Params;
+		/** @deprecated */
 		output: ComAtprotoAdminGetAccountInfo.Output;
+		response: { json: ComAtprotoAdminGetAccountInfo.Output };
 	};
 	'com.atproto.admin.getAccountInfos': {
 		params: ComAtprotoAdminGetAccountInfos.Params;
+		/** @deprecated */
 		output: ComAtprotoAdminGetAccountInfos.Output;
+		response: { json: ComAtprotoAdminGetAccountInfos.Output };
 	};
 	'com.atproto.admin.getInviteCodes': {
 		params: ComAtprotoAdminGetInviteCodes.Params;
+		/** @deprecated */
 		output: ComAtprotoAdminGetInviteCodes.Output;
+		response: { json: ComAtprotoAdminGetInviteCodes.Output };
 	};
 	'com.atproto.admin.getSubjectStatus': {
 		params: ComAtprotoAdminGetSubjectStatus.Params;
+		/** @deprecated */
 		output: ComAtprotoAdminGetSubjectStatus.Output;
+		response: { json: ComAtprotoAdminGetSubjectStatus.Output };
 	};
 	'com.atproto.admin.searchAccounts': {
 		params: ComAtprotoAdminSearchAccounts.Params;
+		/** @deprecated */
 		output: ComAtprotoAdminSearchAccounts.Output;
+		response: { json: ComAtprotoAdminSearchAccounts.Output };
 	};
 	'com.atproto.identity.getRecommendedDidCredentials': {
+		/** @deprecated */
 		output: ComAtprotoIdentityGetRecommendedDidCredentials.Output;
+		response: { json: ComAtprotoIdentityGetRecommendedDidCredentials.Output };
 	};
 	'com.atproto.identity.resolveDid': {
 		params: ComAtprotoIdentityResolveDid.Params;
+		/** @deprecated */
 		output: ComAtprotoIdentityResolveDid.Output;
+		response: { json: ComAtprotoIdentityResolveDid.Output };
 	};
 	'com.atproto.identity.resolveHandle': {
 		params: ComAtprotoIdentityResolveHandle.Params;
+		/** @deprecated */
 		output: ComAtprotoIdentityResolveHandle.Output;
+		response: { json: ComAtprotoIdentityResolveHandle.Output };
 	};
 	'com.atproto.identity.resolveIdentity': {
 		params: ComAtprotoIdentityResolveIdentity.Params;
+		/** @deprecated */
 		output: ComAtprotoIdentityResolveIdentity.Output;
+		response: { json: ComAtprotoIdentityResolveIdentity.Output };
 	};
 	'com.atproto.label.queryLabels': {
 		params: ComAtprotoLabelQueryLabels.Params;
+		/** @deprecated */
 		output: ComAtprotoLabelQueryLabels.Output;
+		response: { json: ComAtprotoLabelQueryLabels.Output };
 	};
 	'com.atproto.repo.describeRepo': {
 		params: ComAtprotoRepoDescribeRepo.Params;
+		/** @deprecated */
 		output: ComAtprotoRepoDescribeRepo.Output;
+		response: { json: ComAtprotoRepoDescribeRepo.Output };
 	};
 	'com.atproto.repo.getRecord': {
 		params: ComAtprotoRepoGetRecord.Params;
+		/** @deprecated */
 		output: ComAtprotoRepoGetRecord.Output;
+		response: { json: ComAtprotoRepoGetRecord.Output };
 	};
 	'com.atproto.repo.listMissingBlobs': {
 		params: ComAtprotoRepoListMissingBlobs.Params;
+		/** @deprecated */
 		output: ComAtprotoRepoListMissingBlobs.Output;
+		response: { json: ComAtprotoRepoListMissingBlobs.Output };
 	};
 	'com.atproto.repo.listRecords': {
 		params: ComAtprotoRepoListRecords.Params;
+		/** @deprecated */
 		output: ComAtprotoRepoListRecords.Output;
+		response: { json: ComAtprotoRepoListRecords.Output };
 	};
 	'com.atproto.server.checkAccountStatus': {
+		/** @deprecated */
 		output: ComAtprotoServerCheckAccountStatus.Output;
+		response: { json: ComAtprotoServerCheckAccountStatus.Output };
 	};
 	'com.atproto.server.describeServer': {
+		/** @deprecated */
 		output: ComAtprotoServerDescribeServer.Output;
+		response: { json: ComAtprotoServerDescribeServer.Output };
 	};
 	'com.atproto.server.getAccountInviteCodes': {
 		params: ComAtprotoServerGetAccountInviteCodes.Params;
+		/** @deprecated */
 		output: ComAtprotoServerGetAccountInviteCodes.Output;
+		response: { json: ComAtprotoServerGetAccountInviteCodes.Output };
 	};
 	'com.atproto.server.getServiceAuth': {
 		params: ComAtprotoServerGetServiceAuth.Params;
+		/** @deprecated */
 		output: ComAtprotoServerGetServiceAuth.Output;
+		response: { json: ComAtprotoServerGetServiceAuth.Output };
 	};
 	'com.atproto.server.getSession': {
+		/** @deprecated */
 		output: ComAtprotoServerGetSession.Output;
+		response: { json: ComAtprotoServerGetSession.Output };
 	};
 	'com.atproto.server.listAppPasswords': {
+		/** @deprecated */
 		output: ComAtprotoServerListAppPasswords.Output;
+		response: { json: ComAtprotoServerListAppPasswords.Output };
 	};
 	'com.atproto.sync.getBlob': {
 		params: ComAtprotoSyncGetBlob.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncGetBlob.Output;
+		response: {};
 	};
 	'com.atproto.sync.getBlocks': {
 		params: ComAtprotoSyncGetBlocks.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncGetBlocks.Output;
+		response: {};
 	};
 	'com.atproto.sync.getCheckout': {
 		params: ComAtprotoSyncGetCheckout.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncGetCheckout.Output;
+		response: {};
 	};
 	'com.atproto.sync.getHead': {
 		params: ComAtprotoSyncGetHead.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncGetHead.Output;
+		response: { json: ComAtprotoSyncGetHead.Output };
 	};
 	'com.atproto.sync.getLatestCommit': {
 		params: ComAtprotoSyncGetLatestCommit.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncGetLatestCommit.Output;
+		response: { json: ComAtprotoSyncGetLatestCommit.Output };
 	};
 	'com.atproto.sync.getRecord': {
 		params: ComAtprotoSyncGetRecord.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncGetRecord.Output;
+		response: {};
 	};
 	'com.atproto.sync.getRepo': {
 		params: ComAtprotoSyncGetRepo.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncGetRepo.Output;
+		response: {};
 	};
 	'com.atproto.sync.getRepoStatus': {
 		params: ComAtprotoSyncGetRepoStatus.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncGetRepoStatus.Output;
+		response: { json: ComAtprotoSyncGetRepoStatus.Output };
 	};
 	'com.atproto.sync.listBlobs': {
 		params: ComAtprotoSyncListBlobs.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncListBlobs.Output;
+		response: { json: ComAtprotoSyncListBlobs.Output };
 	};
 	'com.atproto.sync.listRepos': {
 		params: ComAtprotoSyncListRepos.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncListRepos.Output;
+		response: { json: ComAtprotoSyncListRepos.Output };
 	};
 	'com.atproto.sync.listReposByCollection': {
 		params: ComAtprotoSyncListReposByCollection.Params;
+		/** @deprecated */
 		output: ComAtprotoSyncListReposByCollection.Output;
+		response: { json: ComAtprotoSyncListReposByCollection.Output };
 	};
 	'com.atproto.temp.checkSignupQueue': {
+		/** @deprecated */
 		output: ComAtprotoTempCheckSignupQueue.Output;
+		response: { json: ComAtprotoTempCheckSignupQueue.Output };
 	};
 	'com.atproto.temp.fetchLabels': {
 		params: ComAtprotoTempFetchLabels.Params;
+		/** @deprecated */
 		output: ComAtprotoTempFetchLabels.Output;
+		response: { json: ComAtprotoTempFetchLabels.Output };
 	};
 }
 
@@ -1852,7 +1918,9 @@ export declare interface Procedures {
 	};
 	'com.atproto.admin.sendEmail': {
 		input: ComAtprotoAdminSendEmail.Input;
+		/** @deprecated */
 		output: ComAtprotoAdminSendEmail.Output;
+		response: { json: ComAtprotoAdminSendEmail.Output };
 	};
 	'com.atproto.admin.updateAccountEmail': {
 		input: ComAtprotoAdminUpdateAccountEmail.Input;
@@ -1865,16 +1933,22 @@ export declare interface Procedures {
 	};
 	'com.atproto.admin.updateSubjectStatus': {
 		input: ComAtprotoAdminUpdateSubjectStatus.Input;
+		/** @deprecated */
 		output: ComAtprotoAdminUpdateSubjectStatus.Output;
+		response: { json: ComAtprotoAdminUpdateSubjectStatus.Output };
 	};
 	'com.atproto.identity.refreshIdentity': {
 		input: ComAtprotoIdentityRefreshIdentity.Input;
+		/** @deprecated */
 		output: ComAtprotoIdentityRefreshIdentity.Output;
+		response: { json: ComAtprotoIdentityRefreshIdentity.Output };
 	};
 	'com.atproto.identity.requestPlcOperationSignature': {};
 	'com.atproto.identity.signPlcOperation': {
 		input: ComAtprotoIdentitySignPlcOperation.Input;
+		/** @deprecated */
 		output: ComAtprotoIdentitySignPlcOperation.Output;
+		response: { json: ComAtprotoIdentitySignPlcOperation.Output };
 	};
 	'com.atproto.identity.submitPlcOperation': {
 		input: ComAtprotoIdentitySubmitPlcOperation.Input;
@@ -1884,30 +1958,42 @@ export declare interface Procedures {
 	};
 	'com.atproto.moderation.createReport': {
 		input: ComAtprotoModerationCreateReport.Input;
+		/** @deprecated */
 		output: ComAtprotoModerationCreateReport.Output;
+		response: { json: ComAtprotoModerationCreateReport.Output };
 	};
 	'com.atproto.repo.applyWrites': {
 		input: ComAtprotoRepoApplyWrites.Input;
+		/** @deprecated */
 		output: ComAtprotoRepoApplyWrites.Output;
+		response: { json: ComAtprotoRepoApplyWrites.Output };
 	};
 	'com.atproto.repo.createRecord': {
 		input: ComAtprotoRepoCreateRecord.Input;
+		/** @deprecated */
 		output: ComAtprotoRepoCreateRecord.Output;
+		response: { json: ComAtprotoRepoCreateRecord.Output };
 	};
 	'com.atproto.repo.deleteRecord': {
 		input: ComAtprotoRepoDeleteRecord.Input;
+		/** @deprecated */
 		output: ComAtprotoRepoDeleteRecord.Output;
+		response: { json: ComAtprotoRepoDeleteRecord.Output };
 	};
 	'com.atproto.repo.importRepo': {
 		input: ComAtprotoRepoImportRepo.Input;
 	};
 	'com.atproto.repo.putRecord': {
 		input: ComAtprotoRepoPutRecord.Input;
+		/** @deprecated */
 		output: ComAtprotoRepoPutRecord.Output;
+		response: { json: ComAtprotoRepoPutRecord.Output };
 	};
 	'com.atproto.repo.uploadBlob': {
 		input: ComAtprotoRepoUploadBlob.Input;
+		/** @deprecated */
 		output: ComAtprotoRepoUploadBlob.Output;
+		response: { json: ComAtprotoRepoUploadBlob.Output };
 	};
 	'com.atproto.server.activateAccount': {};
 	'com.atproto.server.confirmEmail': {
@@ -1915,23 +2001,33 @@ export declare interface Procedures {
 	};
 	'com.atproto.server.createAccount': {
 		input: ComAtprotoServerCreateAccount.Input;
+		/** @deprecated */
 		output: ComAtprotoServerCreateAccount.Output;
+		response: { json: ComAtprotoServerCreateAccount.Output };
 	};
 	'com.atproto.server.createAppPassword': {
 		input: ComAtprotoServerCreateAppPassword.Input;
+		/** @deprecated */
 		output: ComAtprotoServerCreateAppPassword.Output;
+		response: { json: ComAtprotoServerCreateAppPassword.Output };
 	};
 	'com.atproto.server.createInviteCode': {
 		input: ComAtprotoServerCreateInviteCode.Input;
+		/** @deprecated */
 		output: ComAtprotoServerCreateInviteCode.Output;
+		response: { json: ComAtprotoServerCreateInviteCode.Output };
 	};
 	'com.atproto.server.createInviteCodes': {
 		input: ComAtprotoServerCreateInviteCodes.Input;
+		/** @deprecated */
 		output: ComAtprotoServerCreateInviteCodes.Output;
+		response: { json: ComAtprotoServerCreateInviteCodes.Output };
 	};
 	'com.atproto.server.createSession': {
 		input: ComAtprotoServerCreateSession.Input;
+		/** @deprecated */
 		output: ComAtprotoServerCreateSession.Output;
+		response: { json: ComAtprotoServerCreateSession.Output };
 	};
 	'com.atproto.server.deactivateAccount': {
 		input: ComAtprotoServerDeactivateAccount.Input;
@@ -1941,19 +2037,25 @@ export declare interface Procedures {
 	};
 	'com.atproto.server.deleteSession': {};
 	'com.atproto.server.refreshSession': {
+		/** @deprecated */
 		output: ComAtprotoServerRefreshSession.Output;
+		response: { json: ComAtprotoServerRefreshSession.Output };
 	};
 	'com.atproto.server.requestAccountDelete': {};
 	'com.atproto.server.requestEmailConfirmation': {};
 	'com.atproto.server.requestEmailUpdate': {
+		/** @deprecated */
 		output: ComAtprotoServerRequestEmailUpdate.Output;
+		response: { json: ComAtprotoServerRequestEmailUpdate.Output };
 	};
 	'com.atproto.server.requestPasswordReset': {
 		input: ComAtprotoServerRequestPasswordReset.Input;
 	};
 	'com.atproto.server.reserveSigningKey': {
 		input: ComAtprotoServerReserveSigningKey.Input;
+		/** @deprecated */
 		output: ComAtprotoServerReserveSigningKey.Output;
+		response: { json: ComAtprotoServerReserveSigningKey.Output };
 	};
 	'com.atproto.server.resetPassword': {
 		input: ComAtprotoServerResetPassword.Input;
@@ -1972,7 +2074,9 @@ export declare interface Procedures {
 	};
 	'com.atproto.temp.addReservedHandle': {
 		input: ComAtprotoTempAddReservedHandle.Input;
+		/** @deprecated */
 		output: ComAtprotoTempAddReservedHandle.Output;
+		response: { json: ComAtprotoTempAddReservedHandle.Output };
 	};
 	'com.atproto.temp.requestPhoneVerification': {
 		input: ComAtprotoTempRequestPhoneVerification.Input;

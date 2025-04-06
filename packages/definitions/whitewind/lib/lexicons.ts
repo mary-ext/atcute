@@ -113,22 +113,30 @@ declare module '@atcute/client/lexicons' {
 	interface Queries {
 		'com.whtwnd.blog.getAuthorPosts': {
 			params: ComWhtwndBlogGetAuthorPosts.Params;
+			/** @deprecated */
 			output: ComWhtwndBlogGetAuthorPosts.Output;
+			response: { json: ComWhtwndBlogGetAuthorPosts.Output };
 		};
 		'com.whtwnd.blog.getEntryMetadataByName': {
 			params: ComWhtwndBlogGetEntryMetadataByName.Params;
+			/** @deprecated */
 			output: ComWhtwndBlogGetEntryMetadataByName.Output;
+			response: { json: ComWhtwndBlogGetEntryMetadataByName.Output };
 		};
 		'com.whtwnd.blog.getMentionsByEntry': {
 			params: ComWhtwndBlogGetMentionsByEntry.Params;
+			/** @deprecated */
 			output: ComWhtwndBlogGetMentionsByEntry.Output;
+			response: { json: ComWhtwndBlogGetMentionsByEntry.Output };
 		};
 	}
 
 	interface Procedures {
 		'com.whtwnd.blog.notifyOfNewEntry': {
 			input: ComWhtwndBlogNotifyOfNewEntry.Input;
+			/** @deprecated */
 			output: ComWhtwndBlogNotifyOfNewEntry.Output;
+			response: { json: ComWhtwndBlogNotifyOfNewEntry.Output };
 		};
 	}
 }

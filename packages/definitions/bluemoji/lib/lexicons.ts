@@ -345,34 +345,48 @@ declare module '@atcute/client/lexicons' {
 	interface Queries {
 		'blue.moji.collection.getItem': {
 			params: BlueMojiCollectionGetItem.Params;
+			/** @deprecated */
 			output: BlueMojiCollectionGetItem.Output;
+			response: { json: BlueMojiCollectionGetItem.Output };
 		};
 		'blue.moji.collection.listCollection': {
 			params: BlueMojiCollectionListCollection.Params;
+			/** @deprecated */
 			output: BlueMojiCollectionListCollection.Output;
+			response: { json: BlueMojiCollectionListCollection.Output };
 		};
 		'blue.moji.packs.getActorPacks': {
 			params: BlueMojiPacksGetActorPacks.Params;
+			/** @deprecated */
 			output: BlueMojiPacksGetActorPacks.Output;
+			response: { json: BlueMojiPacksGetActorPacks.Output };
 		};
 		'blue.moji.packs.getPack': {
 			params: BlueMojiPacksGetPack.Params;
+			/** @deprecated */
 			output: BlueMojiPacksGetPack.Output;
+			response: { json: BlueMojiPacksGetPack.Output };
 		};
 		'blue.moji.packs.getPacks': {
 			params: BlueMojiPacksGetPacks.Params;
+			/** @deprecated */
 			output: BlueMojiPacksGetPacks.Output;
+			response: { json: BlueMojiPacksGetPacks.Output };
 		};
 	}
 
 	interface Procedures {
 		'blue.moji.collection.putItem': {
 			input: BlueMojiCollectionPutItem.Input;
+			/** @deprecated */
 			output: BlueMojiCollectionPutItem.Output;
+			response: { json: BlueMojiCollectionPutItem.Output };
 		};
 		'blue.moji.collection.saveToCollection': {
 			input: BlueMojiCollectionSaveToCollection.Input;
+			/** @deprecated */
 			output: BlueMojiCollectionSaveToCollection.Output;
+			response: { json: BlueMojiCollectionSaveToCollection.Output };
 		};
 	}
 }

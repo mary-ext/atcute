@@ -561,7 +561,14 @@ declare module "@atcute/client/lexicons" {`;
 						rc += `input: ${tsNamespace}.Input;`;
 					}
 					if (output) {
+						rc += `\n/** @deprecated */\n`;
 						rc += `output: ${tsNamespace}.Output;`;
+
+						if (output.encoding === 'application/json') {
+							rc += `response: { json: ${tsNamespace}.Output };`;
+						} else {
+							rc += `response: {};`;
+						}
 					}
 
 					rc += '};';

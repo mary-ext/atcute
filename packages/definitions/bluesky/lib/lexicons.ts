@@ -2850,238 +2850,358 @@ declare module '@atcute/client/lexicons' {
 
 	interface Queries {
 		'app.bsky.actor.getPreferences': {
+			/** @deprecated */
 			output: AppBskyActorGetPreferences.Output;
+			response: { json: AppBskyActorGetPreferences.Output };
 		};
 		'app.bsky.actor.getProfile': {
 			params: AppBskyActorGetProfile.Params;
+			/** @deprecated */
 			output: AppBskyActorGetProfile.Output;
+			response: { json: AppBskyActorGetProfile.Output };
 		};
 		'app.bsky.actor.getProfiles': {
 			params: AppBskyActorGetProfiles.Params;
+			/** @deprecated */
 			output: AppBskyActorGetProfiles.Output;
+			response: { json: AppBskyActorGetProfiles.Output };
 		};
 		'app.bsky.actor.getSuggestions': {
 			params: AppBskyActorGetSuggestions.Params;
+			/** @deprecated */
 			output: AppBskyActorGetSuggestions.Output;
+			response: { json: AppBskyActorGetSuggestions.Output };
 		};
 		'app.bsky.actor.searchActors': {
 			params: AppBskyActorSearchActors.Params;
+			/** @deprecated */
 			output: AppBskyActorSearchActors.Output;
+			response: { json: AppBskyActorSearchActors.Output };
 		};
 		'app.bsky.actor.searchActorsTypeahead': {
 			params: AppBskyActorSearchActorsTypeahead.Params;
+			/** @deprecated */
 			output: AppBskyActorSearchActorsTypeahead.Output;
+			response: { json: AppBskyActorSearchActorsTypeahead.Output };
 		};
 		'app.bsky.feed.describeFeedGenerator': {
+			/** @deprecated */
 			output: AppBskyFeedDescribeFeedGenerator.Output;
+			response: { json: AppBskyFeedDescribeFeedGenerator.Output };
 		};
 		'app.bsky.feed.getActorFeeds': {
 			params: AppBskyFeedGetActorFeeds.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetActorFeeds.Output;
+			response: { json: AppBskyFeedGetActorFeeds.Output };
 		};
 		'app.bsky.feed.getActorLikes': {
 			params: AppBskyFeedGetActorLikes.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetActorLikes.Output;
+			response: { json: AppBskyFeedGetActorLikes.Output };
 		};
 		'app.bsky.feed.getAuthorFeed': {
 			params: AppBskyFeedGetAuthorFeed.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetAuthorFeed.Output;
+			response: { json: AppBskyFeedGetAuthorFeed.Output };
 		};
 		'app.bsky.feed.getFeed': {
 			params: AppBskyFeedGetFeed.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetFeed.Output;
+			response: { json: AppBskyFeedGetFeed.Output };
 		};
 		'app.bsky.feed.getFeedGenerator': {
 			params: AppBskyFeedGetFeedGenerator.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetFeedGenerator.Output;
+			response: { json: AppBskyFeedGetFeedGenerator.Output };
 		};
 		'app.bsky.feed.getFeedGenerators': {
 			params: AppBskyFeedGetFeedGenerators.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetFeedGenerators.Output;
+			response: { json: AppBskyFeedGetFeedGenerators.Output };
 		};
 		'app.bsky.feed.getFeedSkeleton': {
 			params: AppBskyFeedGetFeedSkeleton.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetFeedSkeleton.Output;
+			response: { json: AppBskyFeedGetFeedSkeleton.Output };
 		};
 		'app.bsky.feed.getLikes': {
 			params: AppBskyFeedGetLikes.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetLikes.Output;
+			response: { json: AppBskyFeedGetLikes.Output };
 		};
 		'app.bsky.feed.getListFeed': {
 			params: AppBskyFeedGetListFeed.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetListFeed.Output;
+			response: { json: AppBskyFeedGetListFeed.Output };
 		};
 		'app.bsky.feed.getPosts': {
 			params: AppBskyFeedGetPosts.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetPosts.Output;
+			response: { json: AppBskyFeedGetPosts.Output };
 		};
 		'app.bsky.feed.getPostThread': {
 			params: AppBskyFeedGetPostThread.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetPostThread.Output;
+			response: { json: AppBskyFeedGetPostThread.Output };
 		};
 		'app.bsky.feed.getQuotes': {
 			params: AppBskyFeedGetQuotes.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetQuotes.Output;
+			response: { json: AppBskyFeedGetQuotes.Output };
 		};
 		'app.bsky.feed.getRepostedBy': {
 			params: AppBskyFeedGetRepostedBy.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetRepostedBy.Output;
+			response: { json: AppBskyFeedGetRepostedBy.Output };
 		};
 		'app.bsky.feed.getSuggestedFeeds': {
 			params: AppBskyFeedGetSuggestedFeeds.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetSuggestedFeeds.Output;
+			response: { json: AppBskyFeedGetSuggestedFeeds.Output };
 		};
 		'app.bsky.feed.getTimeline': {
 			params: AppBskyFeedGetTimeline.Params;
+			/** @deprecated */
 			output: AppBskyFeedGetTimeline.Output;
+			response: { json: AppBskyFeedGetTimeline.Output };
 		};
 		'app.bsky.feed.searchPosts': {
 			params: AppBskyFeedSearchPosts.Params;
+			/** @deprecated */
 			output: AppBskyFeedSearchPosts.Output;
+			response: { json: AppBskyFeedSearchPosts.Output };
 		};
 		'app.bsky.graph.getActorStarterPacks': {
 			params: AppBskyGraphGetActorStarterPacks.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetActorStarterPacks.Output;
+			response: { json: AppBskyGraphGetActorStarterPacks.Output };
 		};
 		'app.bsky.graph.getBlocks': {
 			params: AppBskyGraphGetBlocks.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetBlocks.Output;
+			response: { json: AppBskyGraphGetBlocks.Output };
 		};
 		'app.bsky.graph.getFollowers': {
 			params: AppBskyGraphGetFollowers.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetFollowers.Output;
+			response: { json: AppBskyGraphGetFollowers.Output };
 		};
 		'app.bsky.graph.getFollows': {
 			params: AppBskyGraphGetFollows.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetFollows.Output;
+			response: { json: AppBskyGraphGetFollows.Output };
 		};
 		'app.bsky.graph.getKnownFollowers': {
 			params: AppBskyGraphGetKnownFollowers.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetKnownFollowers.Output;
+			response: { json: AppBskyGraphGetKnownFollowers.Output };
 		};
 		'app.bsky.graph.getList': {
 			params: AppBskyGraphGetList.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetList.Output;
+			response: { json: AppBskyGraphGetList.Output };
 		};
 		'app.bsky.graph.getListBlocks': {
 			params: AppBskyGraphGetListBlocks.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetListBlocks.Output;
+			response: { json: AppBskyGraphGetListBlocks.Output };
 		};
 		'app.bsky.graph.getListMutes': {
 			params: AppBskyGraphGetListMutes.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetListMutes.Output;
+			response: { json: AppBskyGraphGetListMutes.Output };
 		};
 		'app.bsky.graph.getLists': {
 			params: AppBskyGraphGetLists.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetLists.Output;
+			response: { json: AppBskyGraphGetLists.Output };
 		};
 		'app.bsky.graph.getMutes': {
 			params: AppBskyGraphGetMutes.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetMutes.Output;
+			response: { json: AppBskyGraphGetMutes.Output };
 		};
 		'app.bsky.graph.getRelationships': {
 			params: AppBskyGraphGetRelationships.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetRelationships.Output;
+			response: { json: AppBskyGraphGetRelationships.Output };
 		};
 		'app.bsky.graph.getStarterPack': {
 			params: AppBskyGraphGetStarterPack.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetStarterPack.Output;
+			response: { json: AppBskyGraphGetStarterPack.Output };
 		};
 		'app.bsky.graph.getStarterPacks': {
 			params: AppBskyGraphGetStarterPacks.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetStarterPacks.Output;
+			response: { json: AppBskyGraphGetStarterPacks.Output };
 		};
 		'app.bsky.graph.getSuggestedFollowsByActor': {
 			params: AppBskyGraphGetSuggestedFollowsByActor.Params;
+			/** @deprecated */
 			output: AppBskyGraphGetSuggestedFollowsByActor.Output;
+			response: { json: AppBskyGraphGetSuggestedFollowsByActor.Output };
 		};
 		'app.bsky.graph.searchStarterPacks': {
 			params: AppBskyGraphSearchStarterPacks.Params;
+			/** @deprecated */
 			output: AppBskyGraphSearchStarterPacks.Output;
+			response: { json: AppBskyGraphSearchStarterPacks.Output };
 		};
 		'app.bsky.labeler.getServices': {
 			params: AppBskyLabelerGetServices.Params;
+			/** @deprecated */
 			output: AppBskyLabelerGetServices.Output;
+			response: { json: AppBskyLabelerGetServices.Output };
 		};
 		'app.bsky.notification.getUnreadCount': {
 			params: AppBskyNotificationGetUnreadCount.Params;
+			/** @deprecated */
 			output: AppBskyNotificationGetUnreadCount.Output;
+			response: { json: AppBskyNotificationGetUnreadCount.Output };
 		};
 		'app.bsky.notification.listNotifications': {
 			params: AppBskyNotificationListNotifications.Params;
+			/** @deprecated */
 			output: AppBskyNotificationListNotifications.Output;
+			response: { json: AppBskyNotificationListNotifications.Output };
 		};
 		'app.bsky.unspecced.getConfig': {
+			/** @deprecated */
 			output: AppBskyUnspeccedGetConfig.Output;
+			response: { json: AppBskyUnspeccedGetConfig.Output };
 		};
 		'app.bsky.unspecced.getPopularFeedGenerators': {
 			params: AppBskyUnspeccedGetPopularFeedGenerators.Params;
+			/** @deprecated */
 			output: AppBskyUnspeccedGetPopularFeedGenerators.Output;
+			response: { json: AppBskyUnspeccedGetPopularFeedGenerators.Output };
 		};
 		'app.bsky.unspecced.getSuggestionsSkeleton': {
 			params: AppBskyUnspeccedGetSuggestionsSkeleton.Params;
+			/** @deprecated */
 			output: AppBskyUnspeccedGetSuggestionsSkeleton.Output;
+			response: { json: AppBskyUnspeccedGetSuggestionsSkeleton.Output };
 		};
 		'app.bsky.unspecced.getTaggedSuggestions': {
+			/** @deprecated */
 			output: AppBskyUnspeccedGetTaggedSuggestions.Output;
+			response: { json: AppBskyUnspeccedGetTaggedSuggestions.Output };
 		};
 		'app.bsky.unspecced.getTrendingTopics': {
 			params: AppBskyUnspeccedGetTrendingTopics.Params;
+			/** @deprecated */
 			output: AppBskyUnspeccedGetTrendingTopics.Output;
+			response: { json: AppBskyUnspeccedGetTrendingTopics.Output };
 		};
 		'app.bsky.unspecced.searchActorsSkeleton': {
 			params: AppBskyUnspeccedSearchActorsSkeleton.Params;
+			/** @deprecated */
 			output: AppBskyUnspeccedSearchActorsSkeleton.Output;
+			response: { json: AppBskyUnspeccedSearchActorsSkeleton.Output };
 		};
 		'app.bsky.unspecced.searchPostsSkeleton': {
 			params: AppBskyUnspeccedSearchPostsSkeleton.Params;
+			/** @deprecated */
 			output: AppBskyUnspeccedSearchPostsSkeleton.Output;
+			response: { json: AppBskyUnspeccedSearchPostsSkeleton.Output };
 		};
 		'app.bsky.unspecced.searchStarterPacksSkeleton': {
 			params: AppBskyUnspeccedSearchStarterPacksSkeleton.Params;
+			/** @deprecated */
 			output: AppBskyUnspeccedSearchStarterPacksSkeleton.Output;
+			response: { json: AppBskyUnspeccedSearchStarterPacksSkeleton.Output };
 		};
 		'app.bsky.video.getJobStatus': {
 			params: AppBskyVideoGetJobStatus.Params;
+			/** @deprecated */
 			output: AppBskyVideoGetJobStatus.Output;
+			response: { json: AppBskyVideoGetJobStatus.Output };
 		};
 		'app.bsky.video.getUploadLimits': {
+			/** @deprecated */
 			output: AppBskyVideoGetUploadLimits.Output;
+			response: { json: AppBskyVideoGetUploadLimits.Output };
 		};
 		'chat.bsky.actor.exportAccountData': {
+			/** @deprecated */
 			output: ChatBskyActorExportAccountData.Output;
+			response: {};
 		};
 		'chat.bsky.convo.getConvo': {
 			params: ChatBskyConvoGetConvo.Params;
+			/** @deprecated */
 			output: ChatBskyConvoGetConvo.Output;
+			response: { json: ChatBskyConvoGetConvo.Output };
 		};
 		'chat.bsky.convo.getConvoAvailability': {
 			params: ChatBskyConvoGetConvoAvailability.Params;
+			/** @deprecated */
 			output: ChatBskyConvoGetConvoAvailability.Output;
+			response: { json: ChatBskyConvoGetConvoAvailability.Output };
 		};
 		'chat.bsky.convo.getConvoForMembers': {
 			params: ChatBskyConvoGetConvoForMembers.Params;
+			/** @deprecated */
 			output: ChatBskyConvoGetConvoForMembers.Output;
+			response: { json: ChatBskyConvoGetConvoForMembers.Output };
 		};
 		'chat.bsky.convo.getLog': {
 			params: ChatBskyConvoGetLog.Params;
+			/** @deprecated */
 			output: ChatBskyConvoGetLog.Output;
+			response: { json: ChatBskyConvoGetLog.Output };
 		};
 		'chat.bsky.convo.getMessages': {
 			params: ChatBskyConvoGetMessages.Params;
+			/** @deprecated */
 			output: ChatBskyConvoGetMessages.Output;
+			response: { json: ChatBskyConvoGetMessages.Output };
 		};
 		'chat.bsky.convo.listConvos': {
 			params: ChatBskyConvoListConvos.Params;
+			/** @deprecated */
 			output: ChatBskyConvoListConvos.Output;
+			response: { json: ChatBskyConvoListConvos.Output };
 		};
 		'chat.bsky.moderation.getActorMetadata': {
 			params: ChatBskyModerationGetActorMetadata.Params;
+			/** @deprecated */
 			output: ChatBskyModerationGetActorMetadata.Output;
+			response: { json: ChatBskyModerationGetActorMetadata.Output };
 		};
 		'chat.bsky.moderation.getMessageContext': {
 			params: ChatBskyModerationGetMessageContext.Params;
+			/** @deprecated */
 			output: ChatBskyModerationGetMessageContext.Output;
+			response: { json: ChatBskyModerationGetMessageContext.Output };
 		};
 	}
 
@@ -3091,7 +3211,9 @@ declare module '@atcute/client/lexicons' {
 		};
 		'app.bsky.feed.sendInteractions': {
 			input: AppBskyFeedSendInteractions.Input;
+			/** @deprecated */
 			output: AppBskyFeedSendInteractions.Output;
+			response: { json: AppBskyFeedSendInteractions.Output };
 		};
 		'app.bsky.graph.muteActor': {
 			input: AppBskyGraphMuteActor.Input;
@@ -3122,54 +3244,80 @@ declare module '@atcute/client/lexicons' {
 		};
 		'app.bsky.video.uploadVideo': {
 			input: AppBskyVideoUploadVideo.Input;
+			/** @deprecated */
 			output: AppBskyVideoUploadVideo.Output;
+			response: { json: AppBskyVideoUploadVideo.Output };
 		};
 		'chat.bsky.actor.deleteAccount': {
+			/** @deprecated */
 			output: ChatBskyActorDeleteAccount.Output;
+			response: { json: ChatBskyActorDeleteAccount.Output };
 		};
 		'chat.bsky.convo.acceptConvo': {
 			input: ChatBskyConvoAcceptConvo.Input;
+			/** @deprecated */
 			output: ChatBskyConvoAcceptConvo.Output;
+			response: { json: ChatBskyConvoAcceptConvo.Output };
 		};
 		'chat.bsky.convo.addReaction': {
 			input: ChatBskyConvoAddReaction.Input;
+			/** @deprecated */
 			output: ChatBskyConvoAddReaction.Output;
+			response: { json: ChatBskyConvoAddReaction.Output };
 		};
 		'chat.bsky.convo.deleteMessageForSelf': {
 			input: ChatBskyConvoDeleteMessageForSelf.Input;
+			/** @deprecated */
 			output: ChatBskyConvoDeleteMessageForSelf.Output;
+			response: { json: ChatBskyConvoDeleteMessageForSelf.Output };
 		};
 		'chat.bsky.convo.leaveConvo': {
 			input: ChatBskyConvoLeaveConvo.Input;
+			/** @deprecated */
 			output: ChatBskyConvoLeaveConvo.Output;
+			response: { json: ChatBskyConvoLeaveConvo.Output };
 		};
 		'chat.bsky.convo.muteConvo': {
 			input: ChatBskyConvoMuteConvo.Input;
+			/** @deprecated */
 			output: ChatBskyConvoMuteConvo.Output;
+			response: { json: ChatBskyConvoMuteConvo.Output };
 		};
 		'chat.bsky.convo.removeReaction': {
 			input: ChatBskyConvoRemoveReaction.Input;
+			/** @deprecated */
 			output: ChatBskyConvoRemoveReaction.Output;
+			response: { json: ChatBskyConvoRemoveReaction.Output };
 		};
 		'chat.bsky.convo.sendMessage': {
 			input: ChatBskyConvoSendMessage.Input;
+			/** @deprecated */
 			output: ChatBskyConvoSendMessage.Output;
+			response: { json: ChatBskyConvoSendMessage.Output };
 		};
 		'chat.bsky.convo.sendMessageBatch': {
 			input: ChatBskyConvoSendMessageBatch.Input;
+			/** @deprecated */
 			output: ChatBskyConvoSendMessageBatch.Output;
+			response: { json: ChatBskyConvoSendMessageBatch.Output };
 		};
 		'chat.bsky.convo.unmuteConvo': {
 			input: ChatBskyConvoUnmuteConvo.Input;
+			/** @deprecated */
 			output: ChatBskyConvoUnmuteConvo.Output;
+			response: { json: ChatBskyConvoUnmuteConvo.Output };
 		};
 		'chat.bsky.convo.updateAllRead': {
 			input: ChatBskyConvoUpdateAllRead.Input;
+			/** @deprecated */
 			output: ChatBskyConvoUpdateAllRead.Output;
+			response: { json: ChatBskyConvoUpdateAllRead.Output };
 		};
 		'chat.bsky.convo.updateRead': {
 			input: ChatBskyConvoUpdateRead.Input;
+			/** @deprecated */
 			output: ChatBskyConvoUpdateRead.Output;
+			response: { json: ChatBskyConvoUpdateRead.Output };
 		};
 		'chat.bsky.moderation.updateActorAccess': {
 			input: ChatBskyModerationUpdateActorAccess.Input;
