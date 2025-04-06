@@ -148,7 +148,7 @@ declare module '@atcute/client/lexicons' {
 			timestamp: string;
 			comment?: string;
 			handle?: At.Handle;
-			pdsHost?: At.Uri;
+			pdsHost?: At.GenericUri;
 			tombstone?: boolean;
 		}
 		interface ImageDetails {
@@ -389,7 +389,7 @@ declare module '@atcute/client/lexicons' {
 			indexedAt: string;
 			moderation: Moderation;
 			repo: RepoView;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			value: unknown;
 		}
 		interface RecordViewDetail {
@@ -399,13 +399,13 @@ declare module '@atcute/client/lexicons' {
 			indexedAt: string;
 			moderation: ModerationDetail;
 			repo: RepoView;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			value: unknown;
 			labels?: ComAtprotoLabelDefs.Label[];
 		}
 		interface RecordViewNotFound {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#recordViewNotFound';
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface ReporterStats {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#reporterStats';
@@ -564,7 +564,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get details about a record. */
 	namespace ToolsOzoneModerationGetRecord {
 		interface Params {
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			cid?: At.CID;
 		}
 		type Input = undefined;
@@ -578,7 +578,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneModerationGetRecords {
 		interface Params {
 			/** Maximum array length: 100 */
-			uris: At.AtUri[];
+			uris: At.ResourceUri[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -671,7 +671,7 @@ declare module '@atcute/client/lexicons' {
 			 * @default "desc"
 			 */
 			sortDirection?: 'asc' | 'desc';
-			subject?: At.Uri;
+			subject?: At.GenericUri;
 			/** If specified, only events where the subject is of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored. */
 			subjectType?: 'account' | 'record' | (string & {});
 			/** The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned. */
@@ -708,7 +708,7 @@ declare module '@atcute/client/lexicons' {
 			hostingUpdatedAfter?: string;
 			/** Search subjects where the associated record/account was updated before a given timestamp */
 			hostingUpdatedBefore?: string;
-			ignoreSubjects?: At.Uri[];
+			ignoreSubjects?: At.GenericUri[];
 			/** All subjects, or subjects from given 'collections' param, belonging to the account specified in the 'subject' param will be returned. */
 			includeAllUserRecords?: boolean;
 			/** By default, we don't include muted subjects in the results. Set this to true to include them. */
@@ -761,7 +761,7 @@ declare module '@atcute/client/lexicons' {
 				| 'takendownRecordsCount'
 				| 'priorityScore';
 			/** The subject to get the status for. */
-			subject?: At.Uri;
+			subject?: At.GenericUri;
 			/** If specified, subjects of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored. */
 			subjectType?: 'account' | 'record' | (string & {});
 			/**
@@ -816,7 +816,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface ServiceConfig {
 			[Brand.Type]?: 'tools.ozone.server.getConfig#serviceConfig';
-			url?: At.Uri;
+			url?: At.GenericUri;
 		}
 		interface ViewerConfig {
 			[Brand.Type]?: 'tools.ozone.server.getConfig#viewerConfig';

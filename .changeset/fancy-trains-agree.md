@@ -1,7 +1,7 @@
 ---
-'@atcute/whitewind': minor
-'@atcute/bluemoji': minor
-'@atcute/bluesky': minor
+'@atcute/whitewind': major
+'@atcute/bluemoji': major
+'@atcute/bluesky': major
 '@atcute/lex-cli': minor
 '@atcute/client': minor
 ---

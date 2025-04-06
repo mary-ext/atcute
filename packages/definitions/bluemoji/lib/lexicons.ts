@@ -21,8 +21,8 @@ declare module '@atcute/client/lexicons' {
 			 * Maximum string length: 64
 			 */
 			name: string;
-			uri: At.AtUri;
-			avatar?: At.Uri;
+			uri: At.ResourceUri;
+			avatar?: At.GenericUri;
 			/** Minimum: 0 */
 			collectionItemCount?: number;
 			/**
@@ -46,7 +46,7 @@ declare module '@atcute/client/lexicons' {
 		type Input = undefined;
 		interface Output {
 			item: BlueMojiCollectionItem.ItemView;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 	}
 
@@ -62,7 +62,7 @@ declare module '@atcute/client/lexicons' {
 			/** @default false */
 			adultOnly?: boolean;
 			alt?: string;
-			copyOf?: At.AtUri;
+			copyOf?: At.ResourceUri;
 			/**
 			 * Maximum string length: 1
 			 * @default "◌"
@@ -117,7 +117,7 @@ declare module '@atcute/client/lexicons' {
 		interface ItemView {
 			[Brand.Type]?: 'blue.moji.collection.listCollection#itemView';
 			record: BlueMojiCollectionItem.ItemView;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 	}
 
@@ -135,7 +135,7 @@ declare module '@atcute/client/lexicons' {
 			validate?: boolean;
 		}
 		interface Output {
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface Errors {}
 	}
@@ -156,7 +156,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface Output {
 			item: BlueMojiCollectionItem.ItemView;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface Errors {
 			EmojiNotFound: {};
@@ -168,7 +168,7 @@ declare module '@atcute/client/lexicons' {
 		interface PackItemView {
 			[Brand.Type]?: 'blue.moji.packs.defs#packItemView';
 			subject: BlueMojiCollectionItem.ItemView;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface PackView {
 			[Brand.Type]?: 'blue.moji.packs.defs#packView';
@@ -180,8 +180,8 @@ declare module '@atcute/client/lexicons' {
 			 * Maximum string length: 64
 			 */
 			name: string;
-			uri: At.AtUri;
-			avatar?: At.Uri;
+			uri: At.ResourceUri;
+			avatar?: At.GenericUri;
 			/**
 			 * Maximum string length: 3000 \
 			 * Maximum grapheme length: 300
@@ -201,8 +201,8 @@ declare module '@atcute/client/lexicons' {
 			 * Maximum string length: 64
 			 */
 			name: string;
-			uri: At.AtUri;
-			avatar?: At.Uri;
+			uri: At.ResourceUri;
+			avatar?: At.GenericUri;
 			/**
 			 * Maximum string length: 3000 \
 			 * Maximum grapheme length: 300
@@ -244,7 +244,7 @@ declare module '@atcute/client/lexicons' {
 	namespace BlueMojiPacksGetPack {
 		interface Params {
 			/** Reference (AT-URI) of the pack record to hydrate. */
-			pack: At.AtUri;
+			pack: At.ResourceUri;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -265,7 +265,7 @@ declare module '@atcute/client/lexicons' {
 	namespace BlueMojiPacksGetPacks {
 		interface Params {
 			/** Maximum array length: 25 */
-			uris: At.AtUri[];
+			uris: At.ResourceUri[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -303,9 +303,9 @@ declare module '@atcute/client/lexicons' {
 			$type: 'blue.moji.packs.packitem';
 			createdAt: string;
 			/** Reference (AT-URI) to the pack record (blue.moji.packs.pack). */
-			pack: At.AtUri;
+			pack: At.ResourceUri;
 			/** Reference (AT-URI) to the Bluemoji item record (blue.moji.collection.item). */
-			subject: At.AtUri;
+			subject: At.ResourceUri;
 		}
 	}
 

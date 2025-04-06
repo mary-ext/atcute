@@ -65,7 +65,7 @@ declare module '@atcute/client/lexicons' {
 		interface HiddenPostsPref {
 			[Brand.Type]?: 'app.bsky.actor.defs#hiddenPostsPref';
 			/** A list of URIs of posts the account owner has hidden. */
-			items: At.AtUri[];
+			items: At.ResourceUri[];
 		}
 		interface InterestsPref {
 			[Brand.Type]?: 'app.bsky.actor.defs#interestsPref';
@@ -197,7 +197,7 @@ declare module '@atcute/client/lexicons' {
 			did: At.DID;
 			handle: At.Handle;
 			associated?: ProfileAssociated;
-			avatar?: At.Uri;
+			avatar?: At.GenericUri;
 			createdAt?: string;
 			/**
 			 * Maximum string length: 2560 \
@@ -218,7 +218,7 @@ declare module '@atcute/client/lexicons' {
 			did: At.DID;
 			handle: At.Handle;
 			associated?: ProfileAssociated;
-			avatar?: At.Uri;
+			avatar?: At.GenericUri;
 			createdAt?: string;
 			/**
 			 * Maximum string length: 640 \
@@ -233,8 +233,8 @@ declare module '@atcute/client/lexicons' {
 			did: At.DID;
 			handle: At.Handle;
 			associated?: ProfileAssociated;
-			avatar?: At.Uri;
-			banner?: At.Uri;
+			avatar?: At.GenericUri;
+			banner?: At.GenericUri;
 			createdAt?: string;
 			/**
 			 * Maximum string length: 2560 \
@@ -264,8 +264,8 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface SavedFeedsPref {
 			[Brand.Type]?: 'app.bsky.actor.defs#savedFeedsPref';
-			pinned: At.AtUri[];
-			saved: At.AtUri[];
+			pinned: At.ResourceUri[];
+			saved: At.ResourceUri[];
 			timelineIndex?: number;
 		}
 		interface SavedFeedsPrefV2 {
@@ -283,10 +283,10 @@ declare module '@atcute/client/lexicons' {
 		interface ViewerState {
 			[Brand.Type]?: 'app.bsky.actor.defs#viewerState';
 			blockedBy?: boolean;
-			blocking?: At.AtUri;
+			blocking?: At.ResourceUri;
 			blockingByList?: AppBskyGraphDefs.ListViewBasic;
-			followedBy?: At.AtUri;
-			following?: At.AtUri;
+			followedBy?: At.ResourceUri;
+			following?: At.ResourceUri;
 			knownFollowers?: KnownFollowers;
 			muted?: boolean;
 			mutedByList?: AppBskyGraphDefs.ListViewBasic;
@@ -448,7 +448,7 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.embed.external#external';
 			description: string;
 			title: string;
-			uri: At.Uri;
+			uri: At.GenericUri;
 			thumb?: At.Blob;
 		}
 		interface View {
@@ -459,8 +459,8 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.embed.external#viewExternal';
 			description: string;
 			title: string;
-			uri: At.Uri;
-			thumb?: At.Uri;
+			uri: At.GenericUri;
+			thumb?: At.GenericUri;
 		}
 	}
 
@@ -487,9 +487,9 @@ declare module '@atcute/client/lexicons' {
 			/** Alt text description of the image, for accessibility. */
 			alt: string;
 			/** Fully-qualified URL where a large version of the image can be fetched. May or may not be the exact original blob. For example, CDN location provided by the App View. */
-			fullsize: At.Uri;
+			fullsize: At.GenericUri;
 			/** Fully-qualified URL where a thumbnail of the image can be fetched. For example, CDN location provided by the App View. */
-			thumb: At.Uri;
+			thumb: At.GenericUri;
 			aspectRatio?: AppBskyEmbedDefs.AspectRatio;
 		}
 	}
@@ -516,24 +516,24 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.embed.record#viewBlocked';
 			author: AppBskyFeedDefs.BlockedAuthor;
 			blocked: boolean;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface ViewDetached {
 			[Brand.Type]?: 'app.bsky.embed.record#viewDetached';
 			detached: boolean;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface ViewNotFound {
 			[Brand.Type]?: 'app.bsky.embed.record#viewNotFound';
 			notFound: boolean;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface ViewRecord {
 			[Brand.Type]?: 'app.bsky.embed.record#viewRecord';
 			author: AppBskyActorDefs.ProfileViewBasic;
 			cid: At.CID;
 			indexedAt: string;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			/** The record data itself. */
 			value: unknown;
 			embeds?: Brand.Union<
@@ -587,14 +587,14 @@ declare module '@atcute/client/lexicons' {
 		interface View {
 			[Brand.Type]?: 'app.bsky.embed.video#view';
 			cid: At.CID;
-			playlist: At.Uri;
+			playlist: At.GenericUri;
 			/**
 			 * Maximum string length: 10000 \
 			 * Maximum grapheme length: 1000
 			 */
 			alt?: string;
 			aspectRatio?: AppBskyEmbedDefs.AspectRatio;
-			thumbnail?: At.Uri;
+			thumbnail?: At.GenericUri;
 		}
 	}
 
@@ -608,7 +608,7 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.feed.defs#blockedPost';
 			author: BlockedAuthor;
 			blocked: boolean;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		type ClickthroughAuthor = 'app.bsky.feed.defs#clickthroughAuthor';
 		type ClickthroughEmbed = 'app.bsky.feed.defs#clickthroughEmbed';
@@ -634,9 +634,9 @@ declare module '@atcute/client/lexicons' {
 			did: At.DID;
 			displayName: string;
 			indexedAt: string;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			acceptsInteractions?: boolean;
-			avatar?: At.Uri;
+			avatar?: At.GenericUri;
 			contentMode?:
 				| 'app.bsky.feed.defs#contentModeUnspecified'
 				| 'app.bsky.feed.defs#contentModeVideo'
@@ -654,7 +654,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface GeneratorViewerState {
 			[Brand.Type]?: 'app.bsky.feed.defs#generatorViewerState';
-			like?: At.AtUri;
+			like?: At.ResourceUri;
 		}
 		interface Interaction {
 			[Brand.Type]?: 'app.bsky.feed.defs#interaction';
@@ -677,7 +677,7 @@ declare module '@atcute/client/lexicons' {
 			 * Maximum string length: 2000
 			 */
 			feedContext?: string;
-			item?: At.AtUri;
+			item?: At.ResourceUri;
 		}
 		type InteractionLike = 'app.bsky.feed.defs#interactionLike';
 		type InteractionQuote = 'app.bsky.feed.defs#interactionQuote';
@@ -688,7 +688,7 @@ declare module '@atcute/client/lexicons' {
 		interface NotFoundPost {
 			[Brand.Type]?: 'app.bsky.feed.defs#notFoundPost';
 			notFound: boolean;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface PostView {
 			[Brand.Type]?: 'app.bsky.feed.defs#postView';
@@ -696,7 +696,7 @@ declare module '@atcute/client/lexicons' {
 			cid: At.CID;
 			indexedAt: string;
 			record: unknown;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			embed?: Brand.Union<
 				| AppBskyEmbedExternal.View
 				| AppBskyEmbedImages.View
@@ -731,7 +731,7 @@ declare module '@atcute/client/lexicons' {
 		type RequestMore = 'app.bsky.feed.defs#requestMore';
 		interface SkeletonFeedPost {
 			[Brand.Type]?: 'app.bsky.feed.defs#skeletonFeedPost';
-			post: At.AtUri;
+			post: At.ResourceUri;
 			/**
 			 * Context that will be passed through to client and may be passed to feed generator back alongside interactions. \
 			 * Maximum string length: 2000
@@ -744,19 +744,19 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface SkeletonReasonRepost {
 			[Brand.Type]?: 'app.bsky.feed.defs#skeletonReasonRepost';
-			repost: At.AtUri;
+			repost: At.ResourceUri;
 		}
 		/** Metadata about this post within the context of the thread it is in. */
 		interface ThreadContext {
 			[Brand.Type]?: 'app.bsky.feed.defs#threadContext';
-			rootAuthorLike?: At.AtUri;
+			rootAuthorLike?: At.ResourceUri;
 		}
 		interface ThreadgateView {
 			[Brand.Type]?: 'app.bsky.feed.defs#threadgateView';
 			cid?: At.CID;
 			lists?: AppBskyGraphDefs.ListViewBasic[];
 			record?: unknown;
-			uri?: At.AtUri;
+			uri?: At.ResourceUri;
 		}
 		interface ThreadViewPost {
 			[Brand.Type]?: 'app.bsky.feed.defs#threadViewPost';
@@ -769,10 +769,10 @@ declare module '@atcute/client/lexicons' {
 		interface ViewerState {
 			[Brand.Type]?: 'app.bsky.feed.defs#viewerState';
 			embeddingDisabled?: boolean;
-			like?: At.AtUri;
+			like?: At.ResourceUri;
 			pinned?: boolean;
 			replyDisabled?: boolean;
-			repost?: At.AtUri;
+			repost?: At.ResourceUri;
 			threadMuted?: boolean;
 		}
 	}
@@ -788,7 +788,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface Feed {
 			[Brand.Type]?: 'app.bsky.feed.describeFeedGenerator#feed';
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface Links {
 			[Brand.Type]?: 'app.bsky.feed.describeFeedGenerator#links';
@@ -907,7 +907,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get a hydrated feed from an actor's selected feed generator. Implemented by App View. */
 	namespace AppBskyFeedGetFeed {
 		interface Params {
-			feed: At.AtUri;
+			feed: At.ResourceUri;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -930,7 +930,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyFeedGetFeedGenerator {
 		interface Params {
 			/** AT-URI of the feed generator record. */
-			feed: At.AtUri;
+			feed: At.ResourceUri;
 		}
 		type Input = undefined;
 		interface Output {
@@ -945,7 +945,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get information about a list of feed generators. */
 	namespace AppBskyFeedGetFeedGenerators {
 		interface Params {
-			feeds: At.AtUri[];
+			feeds: At.ResourceUri[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -957,7 +957,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyFeedGetFeedSkeleton {
 		interface Params {
 			/** Reference to feed generator record describing the specific feed being requested. */
-			feed: At.AtUri;
+			feed: At.ResourceUri;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -980,7 +980,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyFeedGetLikes {
 		interface Params {
 			/** AT-URI of the subject (eg, a post record). */
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			/** CID of the subject record (aka, specific version of record), to filter likes. */
 			cid?: At.CID;
 			cursor?: string;
@@ -994,7 +994,7 @@ declare module '@atcute/client/lexicons' {
 		type Input = undefined;
 		interface Output {
 			likes: Like[];
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			cid?: At.CID;
 			cursor?: string;
 		}
@@ -1010,7 +1010,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyFeedGetListFeed {
 		interface Params {
 			/** Reference (AT-URI) to the list record. */
-			list: At.AtUri;
+			list: At.ResourceUri;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1036,7 +1036,7 @@ declare module '@atcute/client/lexicons' {
 			 * List of post AT-URIs to return hydrated views for. \
 			 * Maximum array length: 25
 			 */
-			uris: At.AtUri[];
+			uris: At.ResourceUri[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -1048,7 +1048,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyFeedGetPostThread {
 		interface Params {
 			/** Reference (AT-URI) to post record. */
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			/**
 			 * How many levels of reply depth should be included in response. \
 			 * Minimum: 0 \
@@ -1080,7 +1080,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyFeedGetQuotes {
 		interface Params {
 			/** Reference (AT-URI) of post record */
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			/** If supplied, filters to quotes of specific version (by CID) of the post record. */
 			cid?: At.CID;
 			cursor?: string;
@@ -1094,7 +1094,7 @@ declare module '@atcute/client/lexicons' {
 		type Input = undefined;
 		interface Output {
 			posts: AppBskyFeedDefs.PostView[];
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			cid?: At.CID;
 			cursor?: string;
 		}
@@ -1104,7 +1104,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyFeedGetRepostedBy {
 		interface Params {
 			/** Reference (AT-URI) of post record */
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			/** If supplied, filters to reposts of specific version (by CID) of the post record. */
 			cid?: At.CID;
 			cursor?: string;
@@ -1118,7 +1118,7 @@ declare module '@atcute/client/lexicons' {
 		type Input = undefined;
 		interface Output {
 			repostedBy: AppBskyActorDefs.ProfileView[];
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			cid?: At.CID;
 			cursor?: string;
 		}
@@ -1248,12 +1248,12 @@ declare module '@atcute/client/lexicons' {
 			$type: 'app.bsky.feed.postgate';
 			createdAt: string;
 			/** Reference (AT-URI) to the post record. */
-			post: At.AtUri;
+			post: At.ResourceUri;
 			/**
 			 * List of AT-URIs embedding this post that the author has detached from. \
 			 * Maximum array length: 50
 			 */
-			detachedEmbeddingUris?: At.AtUri[];
+			detachedEmbeddingUris?: At.ResourceUri[];
 			/**
 			 * List of rules defining who can embed this post. If value is an empty array or is undefined, no particular rules apply and anyone can embed. \
 			 * Maximum array length: 5
@@ -1312,7 +1312,7 @@ declare module '@atcute/client/lexicons' {
 			/** Filter results for posts before the indicated datetime (not inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYY-MM-DD). */
 			until?: string;
 			/** Filter to posts with links (facet links or embeds) pointing to this URL. Server may apply URL normalization or fuzzy matching. */
-			url?: At.Uri;
+			url?: At.GenericUri;
 		}
 		type Input = undefined;
 		interface Output {
@@ -1341,7 +1341,7 @@ declare module '@atcute/client/lexicons' {
 			$type: 'app.bsky.feed.threadgate';
 			createdAt: string;
 			/** Reference (AT-URI) to the post record. */
-			post: At.AtUri;
+			post: At.ResourceUri;
 			/**
 			 * List of rules defining who can reply to this post. If value is an empty array, no one can reply. If value is undefined, anyone can reply. \
 			 * Maximum array length: 5
@@ -1351,7 +1351,7 @@ declare module '@atcute/client/lexicons' {
 			 * List of hidden reply URIs. \
 			 * Maximum array length: 50
 			 */
-			hiddenReplies?: At.AtUri[];
+			hiddenReplies?: At.ResourceUri[];
 		}
 		/** Allow replies from actors who follow you. */
 		interface FollowerRule {
@@ -1364,7 +1364,7 @@ declare module '@atcute/client/lexicons' {
 		/** Allow replies from actors on a list. */
 		interface ListRule {
 			[Brand.Type]?: 'app.bsky.feed.threadgate#listRule';
-			list: At.AtUri;
+			list: At.ResourceUri;
 		}
 		/** Allow replies from actors mentioned in your post. */
 		interface MentionRule {
@@ -1387,7 +1387,7 @@ declare module '@atcute/client/lexicons' {
 		interface ListItemView {
 			[Brand.Type]?: 'app.bsky.graph.defs#listItemView';
 			subject: AppBskyActorDefs.ProfileView;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		type ListPurpose =
 			| 'app.bsky.graph.defs#curatelist'
@@ -1405,8 +1405,8 @@ declare module '@atcute/client/lexicons' {
 			 */
 			name: string;
 			purpose: ListPurpose;
-			uri: At.AtUri;
-			avatar?: At.Uri;
+			uri: At.ResourceUri;
+			avatar?: At.GenericUri;
 			/**
 			 * Maximum string length: 3000 \
 			 * Maximum grapheme length: 300
@@ -1427,8 +1427,8 @@ declare module '@atcute/client/lexicons' {
 			 */
 			name: string;
 			purpose: ListPurpose;
-			uri: At.AtUri;
-			avatar?: At.Uri;
+			uri: At.ResourceUri;
+			avatar?: At.GenericUri;
 			indexedAt?: string;
 			labels?: ComAtprotoLabelDefs.Label[];
 			/** Minimum: 0 */
@@ -1437,7 +1437,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface ListViewerState {
 			[Brand.Type]?: 'app.bsky.graph.defs#listViewerState';
-			blocked?: At.AtUri;
+			blocked?: At.ResourceUri;
 			muted?: boolean;
 		}
 		type Modlist = 'app.bsky.graph.defs#modlist';
@@ -1453,9 +1453,9 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.graph.defs#relationship';
 			did: At.DID;
 			/** if the actor is followed by this DID, contains the AT-URI of the follow record */
-			followedBy?: At.AtUri;
+			followedBy?: At.ResourceUri;
 			/** if the actor follows this DID, this is the AT-URI of the follow record */
-			following?: At.AtUri;
+			following?: At.ResourceUri;
 		}
 		interface StarterPackView {
 			[Brand.Type]?: 'app.bsky.graph.defs#starterPackView';
@@ -1463,7 +1463,7 @@ declare module '@atcute/client/lexicons' {
 			creator: AppBskyActorDefs.ProfileViewBasic;
 			indexedAt: string;
 			record: unknown;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			/** Maximum array length: 3 */
 			feeds?: AppBskyFeedDefs.GeneratorView[];
 			/** Minimum: 0 */
@@ -1481,7 +1481,7 @@ declare module '@atcute/client/lexicons' {
 			creator: AppBskyActorDefs.ProfileViewBasic;
 			indexedAt: string;
 			record: unknown;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			/** Minimum: 0 */
 			joinedAllTimeCount?: number;
 			/** Minimum: 0 */
@@ -1602,7 +1602,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphGetList {
 		interface Params {
 			/** Reference (AT-URI) of the list record to hydrate. */
-			list: At.AtUri;
+			list: At.ResourceUri;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1718,7 +1718,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphGetStarterPack {
 		interface Params {
 			/** Reference (AT-URI) of the starter pack record. */
-			starterPack: At.AtUri;
+			starterPack: At.ResourceUri;
 		}
 		type Input = undefined;
 		interface Output {
@@ -1730,7 +1730,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphGetStarterPacks {
 		interface Params {
 			/** Maximum array length: 25 */
-			uris: At.AtUri[];
+			uris: At.ResourceUri[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -1786,7 +1786,7 @@ declare module '@atcute/client/lexicons' {
 			$type: 'app.bsky.graph.listblock';
 			createdAt: string;
 			/** Reference (AT-URI) to the mod list record. */
-			subject: At.AtUri;
+			subject: At.ResourceUri;
 		}
 	}
 
@@ -1796,7 +1796,7 @@ declare module '@atcute/client/lexicons' {
 			$type: 'app.bsky.graph.listitem';
 			createdAt: string;
 			/** Reference (AT-URI) to the list record (app.bsky.graph.list). */
-			list: At.AtUri;
+			list: At.ResourceUri;
 			/** The account which is included on the list. */
 			subject: At.DID;
 		}
@@ -1815,7 +1815,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphMuteActorList {
 		interface Params {}
 		interface Input {
-			list: At.AtUri;
+			list: At.ResourceUri;
 		}
 		type Output = undefined;
 	}
@@ -1824,7 +1824,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphMuteThread {
 		interface Params {}
 		interface Input {
-			root: At.AtUri;
+			root: At.ResourceUri;
 		}
 		type Output = undefined;
 	}
@@ -1855,7 +1855,7 @@ declare module '@atcute/client/lexicons' {
 			$type: 'app.bsky.graph.starterpack';
 			createdAt: string;
 			/** Reference (AT-URI) to the list record. */
-			list: At.AtUri;
+			list: At.ResourceUri;
 			/**
 			 * Display name for starter pack; can not be empty. \
 			 * Minimum string length: 1 \
@@ -1874,7 +1874,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface FeedItem {
 			[Brand.Type]?: 'app.bsky.graph.starterpack#feedItem';
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 	}
 
@@ -1891,7 +1891,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphUnmuteActorList {
 		interface Params {}
 		interface Input {
-			list: At.AtUri;
+			list: At.ResourceUri;
 		}
 		type Output = undefined;
 	}
@@ -1900,7 +1900,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyGraphUnmuteThread {
 		interface Params {}
 		interface Input {
-			root: At.AtUri;
+			root: At.ResourceUri;
 		}
 		type Output = undefined;
 	}
@@ -1918,7 +1918,7 @@ declare module '@atcute/client/lexicons' {
 			cid: At.CID;
 			creator: AppBskyActorDefs.ProfileView;
 			indexedAt: string;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			labels?: ComAtprotoLabelDefs.Label[];
 			/** Minimum: 0 */
 			likeCount?: number;
@@ -1930,7 +1930,7 @@ declare module '@atcute/client/lexicons' {
 			creator: AppBskyActorDefs.ProfileView;
 			indexedAt: string;
 			policies: AppBskyLabelerDefs.LabelerPolicies;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			labels?: ComAtprotoLabelDefs.Label[];
 			/** Minimum: 0 */
 			likeCount?: number;
@@ -1944,7 +1944,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface LabelerViewerState {
 			[Brand.Type]?: 'app.bsky.labeler.defs#labelerViewerState';
-			like?: At.AtUri;
+			like?: At.ResourceUri;
 		}
 	}
 
@@ -2031,9 +2031,9 @@ declare module '@atcute/client/lexicons' {
 				| 'starterpack-joined'
 				| (string & {});
 			record: unknown;
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 			labels?: ComAtprotoLabelDefs.Label[];
-			reasonSubject?: At.AtUri;
+			reasonSubject?: At.ResourceUri;
 		}
 	}
 
@@ -2085,7 +2085,7 @@ declare module '@atcute/client/lexicons' {
 		/** Facet feature for a URL. The text URL may have been simplified or truncated, but the facet reference should be a complete URL. */
 		interface Link {
 			[Brand.Type]?: 'app.bsky.richtext.facet#link';
-			uri: At.Uri;
+			uri: At.GenericUri;
 		}
 		/** Facet feature for mention of another account. The text is usually a handle, including a '@' prefix, but the facet reference is a DID. */
 		interface Mention {
@@ -2110,11 +2110,11 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface SkeletonSearchPost {
 			[Brand.Type]?: 'app.bsky.unspecced.defs#skeletonSearchPost';
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface SkeletonSearchStarterPack {
 			[Brand.Type]?: 'app.bsky.unspecced.defs#skeletonSearchStarterPack';
-			uri: At.AtUri;
+			uri: At.ResourceUri;
 		}
 		interface TrendingTopic {
 			[Brand.Type]?: 'app.bsky.unspecced.defs#trendingTopic';
@@ -2187,7 +2187,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface Suggestion {
 			[Brand.Type]?: 'app.bsky.unspecced.getTaggedSuggestions#suggestion';
-			subject: At.Uri;
+			subject: At.GenericUri;
 			subjectType: 'actor' | 'feed' | (string & {});
 			tag: string;
 		}
@@ -2279,7 +2279,7 @@ declare module '@atcute/client/lexicons' {
 			/** Filter results for posts before the indicated datetime (not inclusive). Expected to use 'sortAt' timestamp, which may not match 'createdAt'. Can be a datetime, or just an ISO date (YYY-MM-DD). */
 			until?: string;
 			/** Filter to posts with links (facet links or embeds) pointing to this URL. Server may apply URL normalization or fuzzy matching. */
-			url?: At.Uri;
+			url?: At.GenericUri;
 			/** DID of the account making the request (not included for public/unauthenticated queries). Used for 'from:me' queries. */
 			viewer?: At.DID;
 		}
@@ -2389,7 +2389,7 @@ declare module '@atcute/client/lexicons' {
 			did: At.DID;
 			handle: At.Handle;
 			associated?: AppBskyActorDefs.ProfileAssociated;
-			avatar?: At.Uri;
+			avatar?: At.GenericUri;
 			/** Set to true when the actor cannot actively participate in converations */
 			chatDisabled?: boolean;
 			/**

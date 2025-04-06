@@ -47,13 +47,13 @@ export declare namespace At {
 	type TID = string;
 
 	/** AT-URI string */
-	type AtUri =
+	type ResourceUri =
 		| `at://${AtIdentifier}`
 		| `at://${AtIdentifier}/${NSID}`
 		| `at://${AtIdentifier}/${NSID}/${RecordKey}`;
 
 	/** URI string */
-	type Uri = `${string}:${string}`;
+	type GenericUri = `${string}:${string}`;
 
 	/** Object containing a CID string */
 	interface CIDLink {
@@ -95,7 +95,7 @@ export declare namespace ComAtprotoAdminDefs {
 		[Brand.Type]?: 'com.atproto.admin.defs#repoBlobRef';
 		cid: At.CID;
 		did: At.DID;
-		recordUri?: At.AtUri;
+		recordUri?: At.ResourceUri;
 	}
 	interface RepoRef {
 		[Brand.Type]?: 'com.atproto.admin.defs#repoRef';
@@ -199,7 +199,7 @@ export declare namespace ComAtprotoAdminGetSubjectStatus {
 	interface Params {
 		blob?: At.CID;
 		did?: At.DID;
-		uri?: At.AtUri;
+		uri?: At.ResourceUri;
 	}
 	type Input = undefined;
 	interface Output {
@@ -432,7 +432,7 @@ export declare namespace ComAtprotoLabelDefs {
 		/** DID of the actor who created this label. */
 		src: At.DID;
 		/** AT URI of the record, repository (account), or other resource that this label applies to. */
-		uri: At.Uri;
+		uri: At.GenericUri;
 		/**
 		 * The short string name of the value or type of this label. \
 		 * Maximum string length: 128
@@ -642,7 +642,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	interface CreateResult {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#createResult';
 		cid: At.CID;
-		uri: At.AtUri;
+		uri: At.ResourceUri;
 		validationStatus?: 'unknown' | 'valid' | (string & {});
 	}
 	/** Operation which deletes an existing record. */
@@ -664,7 +664,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	interface UpdateResult {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#updateResult';
 		cid: At.CID;
-		uri: At.AtUri;
+		uri: At.ResourceUri;
 		validationStatus?: 'unknown' | 'valid' | (string & {});
 	}
 }
@@ -688,7 +688,7 @@ export declare namespace ComAtprotoRepoCreateRecord {
 	}
 	interface Output {
 		cid: At.CID;
-		uri: At.AtUri;
+		uri: At.ResourceUri;
 		commit?: ComAtprotoRepoDefs.CommitMeta;
 		validationStatus?: 'unknown' | 'valid' | (string & {});
 	}
@@ -761,7 +761,7 @@ export declare namespace ComAtprotoRepoGetRecord {
 	}
 	type Input = undefined;
 	interface Output {
-		uri: At.AtUri;
+		uri: At.ResourceUri;
 		value: unknown;
 		cid?: At.CID;
 	}
@@ -796,7 +796,7 @@ export declare namespace ComAtprotoRepoListMissingBlobs {
 	interface RecordBlob {
 		[Brand.Type]?: 'com.atproto.repo.listMissingBlobs#recordBlob';
 		cid: At.CID;
-		recordUri: At.AtUri;
+		recordUri: At.ResourceUri;
 	}
 }
 
@@ -826,7 +826,7 @@ export declare namespace ComAtprotoRepoListRecords {
 	interface Record {
 		[Brand.Type]?: 'com.atproto.repo.listRecords#record';
 		cid: At.CID;
-		uri: At.AtUri;
+		uri: At.ResourceUri;
 		value: unknown;
 	}
 }
@@ -852,7 +852,7 @@ export declare namespace ComAtprotoRepoPutRecord {
 	}
 	interface Output {
 		cid: At.CID;
-		uri: At.AtUri;
+		uri: At.ResourceUri;
 		commit?: ComAtprotoRepoDefs.CommitMeta;
 		validationStatus?: 'unknown' | 'valid' | (string & {});
 	}
@@ -865,7 +865,7 @@ export declare namespace ComAtprotoRepoStrongRef {
 	interface Main {
 		[Brand.Type]?: 'com.atproto.repo.strongRef';
 		cid: At.CID;
-		uri: At.AtUri;
+		uri: At.ResourceUri;
 	}
 }
 
@@ -1114,8 +1114,8 @@ export declare namespace ComAtprotoServerDescribeServer {
 	}
 	interface Links {
 		[Brand.Type]?: 'com.atproto.server.describeServer#links';
-		privacyPolicy?: At.Uri;
-		termsOfService?: At.Uri;
+		privacyPolicy?: At.GenericUri;
+		termsOfService?: At.GenericUri;
 	}
 }
 

@@ -1,8 +1,10 @@
 ---
-'@atcute/bluesky': minor
-'@atcute/ozone': minor
+'@atcute/bluesky': major
+'@atcute/ozone': major
 '@atcute/lex-cli': minor
 '@atcute/client': minor
 ---
 
-NSID string type
+add `At.NSID` string type
+
+this is a specialized type for `nsid` formatted strings, where there were previously none.

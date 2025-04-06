@@ -134,11 +134,11 @@ const resolveType = (
 					break;
 				}
 				case 'at-uri': {
-					val = 'At.AtUri';
+					val = 'At.ResourceUri';
 					break;
 				}
 				case 'uri': {
-					val = 'At.Uri';
+					val = 'At.GenericUri';
 					break;
 				}
 				case 'datetime':
@@ -294,10 +294,10 @@ export declare namespace At {
 	type TID = string;
 
 	/** AT-URI string */
-	type AtUri = \`at://\${AtIdentifier}\` | \`at://\${AtIdentifier}/\${NSID}\` | \`at://\${AtIdentifier}/\${NSID}/\${RecordKey}\`;
+	type ResourceUri = \`at://\${AtIdentifier}\` | \`at://\${AtIdentifier}/\${NSID}\` | \`at://\${AtIdentifier}/\${NSID}/\${RecordKey}\`;
 
 	/** URI string */
-	type Uri = \`\${string}:\${string}\`;
+	type GenericUri = \`\${string}:\${string}\`;
 
 	/** Object containing a CID string */
 	interface CIDLink {

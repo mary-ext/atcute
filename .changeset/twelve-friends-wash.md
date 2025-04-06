@@ -2,4 +2,4 @@
 '@atcute/cbor': patch
 ---
 
-Lazily initialize DataView
+lazily initialize DataView

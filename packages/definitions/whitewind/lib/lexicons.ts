@@ -25,11 +25,11 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'com.whtwnd.blog.defs#comment';
 			/** Maximum string length: 1000 */
 			content: string;
-			entryUri: At.AtUri;
+			entryUri: At.ResourceUri;
 		}
 		interface Ogp {
 			[Brand.Type]?: 'com.whtwnd.blog.defs#ogp';
-			url: At.Uri;
+			url: At.GenericUri;
 			height?: number;
 			width?: number;
 		}
@@ -76,7 +76,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		type Input = undefined;
 		interface Output {
-			entryUri: At.AtUri;
+			entryUri: At.ResourceUri;
 			cid?: At.CID;
 			lastUpdate?: string;
 		}
@@ -88,11 +88,11 @@ declare module '@atcute/client/lexicons' {
 	/** Get comments associated to designated post. */
 	namespace ComWhtwndBlogGetMentionsByEntry {
 		interface Params {
-			postUri: At.AtUri;
+			postUri: At.ResourceUri;
 		}
 		type Input = undefined;
 		interface Output {
-			mentions: At.AtUri[];
+			mentions: At.ResourceUri[];
 		}
 	}
 
@@ -100,7 +100,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ComWhtwndBlogNotifyOfNewEntry {
 		interface Params {}
 		interface Input {
-			entryUri: At.AtUri;
+			entryUri: At.ResourceUri;
 		}
 		interface Output {}
 		interface Errors {}

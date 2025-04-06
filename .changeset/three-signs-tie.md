@@ -1,10 +1,12 @@
 ---
-'@atcute/whitewind': minor
-'@atcute/bluemoji': minor
-'@atcute/bluesky': minor
-'@atcute/ozone': minor
+'@atcute/whitewind': major
+'@atcute/bluemoji': major
+'@atcute/bluesky': major
+'@atcute/ozone': major
 '@atcute/lex-cli': minor
 '@atcute/client': minor
 ---
 
-correct type for uri string format
+add `At.GenericUri` string type
+
+this is a specialized type for `uri` formatted strings, where there were previously none.
