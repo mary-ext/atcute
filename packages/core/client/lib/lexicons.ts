@@ -773,7 +773,7 @@ export declare namespace ComAtprotoRepoGetRecord {
 /** Import a repo in the form of a CAR file. Requires Content-Length HTTP header to be set. */
 export declare namespace ComAtprotoRepoImportRepo {
 	interface Params {}
-	type Input = Blob | ArrayBufferView;
+	type Input = Blob | BufferSource | ReadableStream;
 	type Output = undefined;
 }
 
@@ -872,7 +872,7 @@ export declare namespace ComAtprotoRepoStrongRef {
 /** Upload a new blob, to be referenced from a repository record. The blob will be deleted if it is not referenced within a time window (eg, minutes). Blob restrictions (mimetype, size, etc) are enforced when the reference is created. Requires auth, implemented by PDS. */
 export declare namespace ComAtprotoRepoUploadBlob {
 	interface Params {}
-	type Input = Blob | ArrayBufferView;
+	type Input = Blob | BufferSource | ReadableStream;
 	interface Output {
 		blob: At.Blob;
 	}

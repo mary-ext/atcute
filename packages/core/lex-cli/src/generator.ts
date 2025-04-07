@@ -517,7 +517,7 @@ declare module "@atcute/client/lexicons" {`;
 							chunk += `type Input = ${value};`;
 						}
 					} else {
-						chunk += `type Input = Blob | ArrayBufferView;`;
+						chunk += `type Input = Blob | BufferSource | ReadableStream;`;
 					}
 				} else {
 					chunk += `type Input = undefined;`;

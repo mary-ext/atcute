@@ -2369,7 +2369,7 @@ declare module '@atcute/client/lexicons' {
 	/** Upload a video to be processed then stored on the PDS. */
 	namespace AppBskyVideoUploadVideo {
 		interface Params {}
-		type Input = Blob | ArrayBufferView;
+		type Input = Blob | BufferSource | ReadableStream;
 		interface Output {
 			jobStatus: AppBskyVideoDefs.JobStatus;
 		}
