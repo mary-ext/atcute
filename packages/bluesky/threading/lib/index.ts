@@ -83,7 +83,7 @@ export async function createThread(
 		if (typeof post === 'string') {
 			// AT-URI being passed
 			assertXrpc(rpc, `ComposedThread.reply`);
-			post = await getPost(post);
+			post = await getPost(post as At.ResourceUri);
 		}
 
 		let root: ComAtprotoRepoStrongRef.Main | undefined;
@@ -116,7 +116,7 @@ export async function createThread(
 		rkey = TID.createRaw(now.getTime(), Math.floor(Math.random() * 1023));
 
 		const post = posts[idx];
-		const uri = `at://${did}/app.bsky.feed.post/${rkey}`;
+		const uri: At.ResourceUri = `at://${did}/app.bsky.feed.post/${rkey}`;
 
 		// Resolve embeds
 		let embed: AppBskyFeedPost.Record['embed'];
@@ -357,7 +357,7 @@ export async function createThread(
 		return data.blob;
 	}
 
-	async function getPost(uri: string): Promise<AppBskyFeedDefs.PostView> {
+	async function getPost(uri: At.ResourceUri): Promise<AppBskyFeedDefs.PostView> {
 		// `rpc` intentionally non-null asserted.
 		const { data } = await rpc!.get('app.bsky.feed.getPosts', {
 			signal: signal,
