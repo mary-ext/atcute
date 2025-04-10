@@ -282,7 +282,7 @@ export declare namespace At {
 	type Handle = \`\${string}.\${string}\`;
 
 	/** Either a DID or a handle */
-	type Identifier = Cid | Handle;
+	type Identifier = Did | Handle;
 
 	/** Namespace ID */
 	type Nsid = \`\${string}.\${string}.\${string}\`;
