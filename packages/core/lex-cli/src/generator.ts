@@ -255,7 +255,7 @@ export interface GenerateDefinitionsOptions {
 
 const mainPrelude = `type ObjectOmit<T, K extends keyof any> = Omit<T, K>;
 
-/** Handles type branding in objects */
+/** handles type branding in objects */
 export declare namespace Brand {
 	/** Symbol used to brand objects, this does not actually exist in runtime */
 	const Type: unique symbol;
@@ -270,30 +270,52 @@ export declare namespace Brand {
 	type Omit<T extends { [Type]?: string }> = ObjectOmit<T, typeof Type>;
 }
 
-/** Base AT Protocol schema types */
+/** base AT Protocol schema types */
 export declare namespace At {
-	/** CID digest */
+	/**
+	 * represents a Content Identifier (CID) string
+	 */
 	type Cid = string;
 
-	/** Decentralized identifier */
+	/**
+	 * represents a Decentralized Identifier (DID).
+	 */
 	type Did<Method extends string = string> = \`did:\${Method}:\${string}\`;
 
-	/** Account handle */
+	/**
+	 * represents an account's handle, using domains as a human-friendly
+	 * identifier.
+	 */
 	type Handle = \`\${string}.\${string}\`;
 
-	/** Either a DID or a handle */
+	/**
+	 * represents an account's identifier, either a {@link Did} or a
+	 * {@link Handle}
+	 */
 	type Identifier = Did | Handle;
 
-	/** Namespace ID */
+	/**
+	 * represents a Namespace Identifier (NSID)
+	 */
 	type Nsid = \`\${string}.\${string}.\${string}\`;
 
-	/** Record key */
+	/**
+	 * represents the unique key identifying a specific record within a
+	 * repository's collection. this is usually a {@link Tid}.
+	 */
 	type RecordKey = string;
 
-	/** Timestamp identifier */
+	/**
+	 * represents a Timestamp Identifier (TID)
+	 */
 	type Tid = string;
 
-	/** AT-URI string */
+	/**
+	 * represents a general AT Protocol URI, representing either an entire
+	 * repository, a specific collection within a repository, or a record.
+	 * 
+	 * it allows using handles over DIDs, but this means that it won't be stable.
+	 */
 	type ResourceUri = \`at://\${Identifier}\` | \`at://\${Identifier}/\${Nsid}\` | \`at://\${Identifier}/\${Nsid}/\${RecordKey}\`;
 
 	/**
@@ -305,20 +327,28 @@ export declare namespace At {
 	 */
 	type CanonicalResourceUri = \`at://\${Did}/\${Nsid}/\${RecordKey}\`;
 
-	/** URI string */
+	/**
+	 * represents a generic URI
+	 */
 	type GenericUri = \`\${string}:\${string}\`;
 
-	/** Object containing a CID string */
+	/**
+	 * represents a Content Identifier (CID) reference
+	 */
 	interface CidLink {
 		$link: Cid;
 	}
 
-	/** Object containing a base64-encoded bytes */
+	/**
+	 * represents an object containing raw binary data encoded as a base64 string
+	 */
 	interface Bytes {
 		$bytes: string;
 	}
 
-	/** Blob interface */
+	/**
+	 * represents a reference to a data blob
+	 */
 	interface Blob<T extends string = string> {
 		$type: 'blob';
 		mimeType: T;
