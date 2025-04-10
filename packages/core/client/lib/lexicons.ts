@@ -35,7 +35,7 @@ export declare namespace At {
 	type Handle = `${string}.${string}`;
 
 	/** Either a DID or a handle */
-	type AtIdentifier = DID | Handle;
+	type Identifier = DID | Handle;
 
 	/** Namespace ID */
 	type NSID = `${string}.${string}.${string}`;
@@ -48,9 +48,9 @@ export declare namespace At {
 
 	/** AT-URI string */
 	type ResourceUri =
-		| `at://${AtIdentifier}`
-		| `at://${AtIdentifier}/${NSID}`
-		| `at://${AtIdentifier}/${NSID}/${RecordKey}`;
+		| `at://${Identifier}`
+		| `at://${Identifier}/${NSID}`
+		| `at://${Identifier}/${NSID}/${RecordKey}`;
 
 	/** URI string */
 	type GenericUri = `${string}:${string}`;
@@ -251,7 +251,7 @@ export declare namespace ComAtprotoAdminUpdateAccountEmail {
 	interface Params {}
 	interface Input {
 		/** The handle or DID of the repo. */
-		account: At.AtIdentifier;
+		account: At.Identifier;
 		email: string;
 	}
 	type Output = undefined;
@@ -323,7 +323,7 @@ export declare namespace ComAtprotoIdentityGetRecommendedDidCredentials {
 export declare namespace ComAtprotoIdentityRefreshIdentity {
 	interface Params {}
 	interface Input {
-		identifier: At.AtIdentifier;
+		identifier: At.Identifier;
 	}
 	type Output = ComAtprotoIdentityDefs.IdentityInfo;
 	interface Errors {
@@ -376,7 +376,7 @@ export declare namespace ComAtprotoIdentityResolveHandle {
 export declare namespace ComAtprotoIdentityResolveIdentity {
 	interface Params {
 		/** Handle or DID to resolve. */
-		identifier: At.AtIdentifier;
+		identifier: At.Identifier;
 	}
 	type Input = undefined;
 	type Output = ComAtprotoIdentityDefs.IdentityInfo;
@@ -617,7 +617,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	interface Params {}
 	interface Input {
 		/** The handle or DID of the repo (aka, current account). */
-		repo: At.AtIdentifier;
+		repo: At.Identifier;
 		writes: Brand.Union<Create | Delete | Update>[];
 		/** If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations. */
 		swapCommit?: At.CID;
@@ -678,7 +678,7 @@ export declare namespace ComAtprotoRepoCreateRecord {
 		/** The record itself. Must contain a $type field. */
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
-		repo: At.AtIdentifier;
+		repo: At.Identifier;
 		/** The Record Key. */
 		rkey?: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
@@ -712,7 +712,7 @@ export declare namespace ComAtprotoRepoDeleteRecord {
 		/** The NSID of the record collection. */
 		collection: At.NSID;
 		/** The handle or DID of the repo (aka, current account). */
-		repo: At.AtIdentifier;
+		repo: At.Identifier;
 		/** The Record Key. */
 		rkey: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
@@ -732,7 +732,7 @@ export declare namespace ComAtprotoRepoDeleteRecord {
 export declare namespace ComAtprotoRepoDescribeRepo {
 	interface Params {
 		/** The handle or DID of the repo. */
-		repo: At.AtIdentifier;
+		repo: At.Identifier;
 	}
 	type Input = undefined;
 	interface Output {
@@ -753,7 +753,7 @@ export declare namespace ComAtprotoRepoGetRecord {
 		/** The NSID of the record collection. */
 		collection: At.NSID;
 		/** The handle or DID of the repo. */
-		repo: At.AtIdentifier;
+		repo: At.Identifier;
 		/** The Record Key. */
 		rkey: At.RecordKey;
 		/** The CID of the version of the record. If not specified, then return the most recent version. */
@@ -806,7 +806,7 @@ export declare namespace ComAtprotoRepoListRecords {
 		/** The NSID of the record type. */
 		collection: At.NSID;
 		/** The handle or DID of the repo. */
-		repo: At.AtIdentifier;
+		repo: At.Identifier;
 		cursor?: string;
 		/**
 		 * The number of records to return. \
@@ -840,7 +840,7 @@ export declare namespace ComAtprotoRepoPutRecord {
 		/** The record to write. */
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
-		repo: At.AtIdentifier;
+		repo: At.Identifier;
 		/** The Record Key. */
 		rkey: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */

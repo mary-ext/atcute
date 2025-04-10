@@ -71,7 +71,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get AT URI by blog author and entry name. If there are multiple blog entries associated with the name, return the latest one. */
 	namespace ComWhtwndBlogGetEntryMetadataByName {
 		interface Params {
-			author: At.AtIdentifier;
+			author: At.Identifier;
 			entryTitle: string;
 		}
 		type Input = undefined;

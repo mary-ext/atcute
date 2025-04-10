@@ -3,4 +3,4 @@
 '@atcute/client': minor
 ---
 
-stricter At.Handle string type
+`At.Handle` string type is now stricter

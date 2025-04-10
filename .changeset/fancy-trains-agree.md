@@ -6,4 +6,6 @@
 '@atcute/client': minor
 ---
 
-at-identifier string type
+add `At.Identifier` string type
+
+an alias for either `At.DID` or `At.Handle`

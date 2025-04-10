@@ -41,7 +41,7 @@ declare module '@atcute/client/lexicons' {
 			/** The Bluemoji alias/rkey. */
 			name: string;
 			/** The handle or DID of the repo. */
-			repo: At.AtIdentifier;
+			repo: At.Identifier;
 		}
 		type Input = undefined;
 		interface Output {
@@ -127,7 +127,7 @@ declare module '@atcute/client/lexicons' {
 		interface Input {
 			item: BlueMojiCollectionItem.ItemView;
 			/** The handle or DID of the repo (aka, current account). */
-			repo: At.AtIdentifier;
+			repo: At.Identifier;
 			/**
 			 * Can be set to 'false' to skip Lexicon schema validation of record data.
 			 * @default true
@@ -150,7 +150,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			name: string;
 			/** The handle or DID of the repo to copy from. */
-			source: At.AtIdentifier;
+			source: At.Identifier;
 			/** The alias to save the Bluemoji to in the current logged-in user's repo. */
 			renameTo?: string;
 		}
@@ -224,7 +224,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get a list of Bluemoji packs created by the actor. */
 	namespace BlueMojiPacksGetActorPacks {
 		interface Params {
-			actor: At.AtIdentifier;
+			actor: At.Identifier;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \

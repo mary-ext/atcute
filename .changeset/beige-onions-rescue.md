@@ -3,4 +3,6 @@
 '@atcute/client': minor
 ---
 
-record key string type
+add `At.RecordKey` string type
+
+this is currently an alias to `string` for now.

@@ -118,7 +118,7 @@ const resolveType = (
 					break;
 				}
 				case 'at-identifier': {
-					val = 'At.AtIdentifier';
+					val = 'At.Identifier';
 					break;
 				}
 				case 'nsid': {
@@ -282,7 +282,7 @@ export declare namespace At {
 	type Handle = \`\${string}.\${string}\`;
 
 	/** Either a DID or a handle */
-	type AtIdentifier = DID | Handle;
+	type Identifier = DID | Handle;
 
 	/** Namespace ID */
 	type NSID = \`\${string}.\${string}.\${string}\`;
@@ -294,7 +294,7 @@ export declare namespace At {
 	type TID = string;
 
 	/** AT-URI string */
-	type ResourceUri = \`at://\${AtIdentifier}\` | \`at://\${AtIdentifier}/\${NSID}\` | \`at://\${AtIdentifier}/\${NSID}/\${RecordKey}\`;
+	type ResourceUri = \`at://\${Identifier}\` | \`at://\${Identifier}/\${NSID}\` | \`at://\${Identifier}/\${NSID}/\${RecordKey}\`;
 
 	/** URI string */
 	type GenericUri = \`\${string}:\${string}\`;
