@@ -112,7 +112,7 @@ class RichtextBuilder {
 	 * @param uri Valid URL, for example: https://example.com
 	 * @returns The builder instance, for chaining
 	 */
-	addLink(substr: string, uri: At.Uri): this {
+	addLink(substr: string, uri: At.GenericUri): this {
 		return this.addDecoratedText(substr, { $type: 'app.bsky.richtext.facet#link', uri: uri });
 	}
 
@@ -122,7 +122,7 @@ class RichtextBuilder {
 	 * @param did Valid DID, for example: did:plc:ia76kvnndjutgedggx2ibrem
 	 * @returns The builder instance, for chaining
 	 */
-	addMention(substr: string, did: At.DID): this {
+	addMention(substr: string, did: At.Did): this {
 		return this.addDecoratedText(substr, { $type: 'app.bsky.richtext.facet#mention', did: did });
 	}
 
