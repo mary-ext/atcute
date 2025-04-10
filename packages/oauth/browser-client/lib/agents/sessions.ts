@@ -14,9 +14,9 @@ export interface SessionGetOptions {
 }
 
 type PendingItem<V> = Promise<{ value: V; isFresh: boolean }>;
-const pending = new Map<At.DID, PendingItem<Session>>();
+const pending = new Map<At.Did, PendingItem<Session>>();
 
-export const getSession = async (sub: At.DID, options?: SessionGetOptions): Promise<Session> => {
+export const getSession = async (sub: At.Did, options?: SessionGetOptions): Promise<Session> => {
 	options?.signal?.throwIfAborted();
 
 	let allowStored = isTokenUsable;
@@ -89,7 +89,7 @@ export const getSession = async (sub: At.DID, options?: SessionGetOptions): Prom
 	return value;
 };
 
-export const storeSession = async (sub: At.DID, newSession: Session): Promise<void> => {
+export const storeSession = async (sub: At.Did, newSession: Session): Promise<void> => {
 	try {
 		database.sessions.set(sub, newSession);
 	} catch (err) {
@@ -98,18 +98,18 @@ export const storeSession = async (sub: At.DID, newSession: Session): Promise<vo
 	}
 };
 
-export const deleteStoredSession = (sub: At.DID): void => {
+export const deleteStoredSession = (sub: At.Did): void => {
 	database.sessions.delete(sub);
 };
 
-export const listStoredSessions = (): At.DID[] => {
+export const listStoredSessions = (): At.Did[] => {
 	return database.sessions.keys();
 };
 
 const returnTrue = () => true;
 const returnFalse = () => false;
 
-const refreshToken = async (sub: At.DID, storedSession: Session | undefined): Promise<Session> => {
+const refreshToken = async (sub: At.Did, storedSession: Session | undefined): Promise<Session> => {
 	if (storedSession === undefined) {
 		throw new TokenRefreshError(sub, `session deleted by another tab`);
 	}

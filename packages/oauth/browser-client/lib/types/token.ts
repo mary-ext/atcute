@@ -34,7 +34,7 @@ export interface TokenInfo {
 }
 
 export interface ExchangeInfo {
-	sub: At.DID;
+	sub: At.Did;
 	aud: string;
 	server: PersistedAuthorizationServerMetadata;
 }

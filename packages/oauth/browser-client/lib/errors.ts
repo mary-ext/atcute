@@ -16,7 +16,7 @@ export class TokenRefreshError extends Error {
 	override name = 'TokenRefreshError';
 
 	constructor(
-		public readonly sub: At.DID,
+		public readonly sub: At.Did,
 		message: string,
 		options?: ErrorOptions,
 	) {

@@ -74,7 +74,7 @@ export class OAuthServerAgent {
 		}
 	}
 
-	async refresh({ sub, token }: { sub: At.DID; token: TokenInfo }): Promise<TokenInfo> {
+	async refresh({ sub, token }: { sub: At.Did; token: TokenInfo }): Promise<TokenInfo> {
 		if (!token.refresh) {
 			throw new TokenRefreshError(sub, 'no refresh token available');
 		}
@@ -133,7 +133,7 @@ export class OAuthServerAgent {
 		return {
 			token: token,
 			info: {
-				sub: sub as At.DID,
+				sub: sub as At.Did,
 				aud: resolved.identity.pds.href,
 				server: pick(resolved.metadata, [
 					'issuer',

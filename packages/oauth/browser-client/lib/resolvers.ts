@@ -16,7 +16,7 @@ const DID_WEB_RE = /^([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,}))$/;
  * @param handle Domain handle to resolve
  * @returns DID identifier resolved from the domain handle
  */
-export const resolveHandle = async (handle: string): Promise<At.DID> => {
+export const resolveHandle = async (handle: string): Promise<At.Did> => {
 	const url = DEFAULT_APPVIEW_URL + `/xrpc/com.atproto.identity.resolveHandle` + `?handle=${handle}`;
 
 	const response = await fetch(url);
@@ -35,7 +35,7 @@ export const resolveHandle = async (handle: string): Promise<At.DID> => {
  * @param did DID identifier we're seeking DID doc from
  * @returns Retrieved DID document
  */
-export const getDidDocument = async (did: At.DID): Promise<DidDocument> => {
+export const getDidDocument = async (did: At.Did): Promise<DidDocument> => {
 	const colon_index = did.indexOf(':', 4);
 
 	const type = did.slice(4, colon_index);
@@ -151,7 +151,7 @@ export const getAuthorizationServerMetadata = async (host: string): Promise<Auth
 export const resolveFromIdentity = async (
 	ident: string,
 ): Promise<{ identity: IdentityMetadata; metadata: AuthorizationServerMetadata }> => {
-	let did: At.DID;
+	let did: At.Did;
 	if (isDid(ident)) {
 		did = ident;
 	} else {

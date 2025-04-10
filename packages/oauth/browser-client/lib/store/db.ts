@@ -18,7 +18,7 @@ interface SchemaItem<T> {
 
 interface Schema {
 	sessions: {
-		key: At.DID;
+		key: At.Did;
 		value: Session;
 		indexes: {
 			expiresAt: number;

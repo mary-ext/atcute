@@ -2,7 +2,7 @@ import type { At } from '@atcute/client/lexicons';
 
 const isUrlParseSupported = 'parse' in URL;
 
-export const isDid = (value: string): value is At.DID => {
+export const isDid = (value: string): value is At.Did => {
 	return value.startsWith('did:');
 };
 
