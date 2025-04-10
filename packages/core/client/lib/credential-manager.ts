@@ -16,7 +16,7 @@ export interface AtpAccessJwt {
 		| 'com.atproto.signupQueued'
 		| 'com.atproto.takendown';
 	/** Account DID */
-	sub: At.DID;
+	sub: At.Did;
 	/** Expiration time */
 	exp: number;
 	/** Creation/issued time */
@@ -30,9 +30,9 @@ export interface AtpRefreshJwt {
 	/** ID of this refresh token */
 	jti: string;
 	/** Account DID */
-	sub: At.DID;
+	sub: At.Did;
 	/** Intended audience of this refresh token, in DID */
-	aud: At.DID;
+	aud: At.Did;
 	/** Expiration time */
 	exp: number;
 	/** Creation/issued time */
@@ -48,7 +48,7 @@ export interface AtpSessionData {
 	/** Account handle */
 	handle: string;
 	/** Account DID */
-	did: At.DID;
+	did: At.Did;
 	/** PDS endpoint found in the DID document, this will be used as the service URI if provided */
 	pdsUri?: string;
 	/** Email address of the account, might not be available if on app password */
