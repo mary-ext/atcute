@@ -2,7 +2,7 @@
 '@atcute/bluesky': major
 '@atcute/ozone': major
 '@atcute/lex-cli': minor
-'@atcute/client': minor
+'@atcute/client': major
 ---
 
 add `At.NSID` string type
