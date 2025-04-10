@@ -296,6 +296,15 @@ export declare namespace At {
 	/** AT-URI string */
 	type ResourceUri = \`at://\${Identifier}\` | \`at://\${Identifier}/\${Nsid}\` | \`at://\${Identifier}/\${Nsid}/\${RecordKey}\`;
 
+	/**
+	 * represents a canonical AT Protocol URI for a specific record.
+	 * 
+	 * this URI format uses the account's DID as the authority, ensuring that
+	 * the URI remains valid even as the account changes handles, uniquely
+	 * identifying a specific piece of record within AT Protocol.
+	 */
+	type CanonicalResourceUri = \`at://\${Did}/\${Nsid}/\${RecordKey}\`;
+
 	/** URI string */
 	type GenericUri = \`\${string}:\${string}\`;
 
