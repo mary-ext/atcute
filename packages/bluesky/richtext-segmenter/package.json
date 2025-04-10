@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/bluesky-richtext-segmenter",
-	"version": "1.0.5",
+	"version": "2.0.0",
 	"description": "segments Bluesky's rich text facets into tokens",
 	"license": "MIT",
 	"repository": {
@@ -24,8 +24,8 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
-		"@atcute/bluesky": "^1.0.0",
-		"@atcute/client": "^1.0.0 || ^2.0.0"
+		"@atcute/bluesky": "^2.0.0",
+		"@atcute/client": "^3.0.0"
 	},
 	"devDependencies": {
 		"@atcute/bluesky": "workspace:^",

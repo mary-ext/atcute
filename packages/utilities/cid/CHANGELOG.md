@@ -1,5 +1,12 @@
 # @atcute/cid
 
+## 2.2.1
+
+### Patch Changes
+
+- Updated dependencies [5aedfc5]
+  - @atcute/multibase@1.1.3
+
 ## 2.2.0
 
 ### Minor Changes

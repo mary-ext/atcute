@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/bluemoji",
-	"version": "1.0.4",
+	"version": "2.0.0",
 	"description": "Bluemoji type definitions for atcute",
 	"license": "MIT",
 	"repository": {
@@ -23,8 +23,8 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
-		"@atcute/bluesky": "^1.0.0",
-		"@atcute/client": "^1.0.0 || ^2.0.0"
+		"@atcute/bluesky": "^2.0.0",
+		"@atcute/client": "^3.0.0"
 	},
 	"devDependencies": {
 		"@atcute/bluesky": "workspace:^",

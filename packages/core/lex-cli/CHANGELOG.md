@@ -1,30 +1,6 @@
-# @atcute/client
+# @atcute/lex-cli
 
-## 3.0.0
-
-this version contains breaking changes to the lexicon type definitions.
-
-### Major Changes
-
-- 813679f: add `At.Nsid` string type
-
-  this is a specialized type for `nsid` formatted strings, where there were previously none.
-
-- d3fbc7e: consistent casing on types and interfaces
-
-  no more capitalized/pascalcase mixing, these following types are renamed:
-
-  - `At.CID` → `At.Cid`
-  - `At.CIDLink` → `At.CidLink`
-  - `At.DID` → `At.Did`
-
-- c7e8573: add `At.ResourceUri` string type
-
-  this is a specialized type for `at-uri` formatted strings, replacing the previous `At.Uri` string
-
-- 61bd8d2: add `At.GenericUri` string type
-
-  this is a specialized type for `uri` formatted strings, where there were previously none.
+## 1.1.0
 
 ### Minor Changes
 
@@ -41,17 +17,32 @@ this version contains breaking changes to the lexicon type definitions.
 - 8aedcc5: `At.Did` now contains a `TMethod` type parameter for specifying DID methods in the
   identifier.
 - 45cfe46: add new response field, deprecating the old output field
+- 813679f: add `At.Nsid` string type
+
+  this is a specialized type for `nsid` formatted strings, where there were previously none.
+
 - 24be9be: `At.Handle` string type is now stricter
+- d3fbc7e: consistent casing on types and interfaces
+
+  no more capitalized/pascalcase mixing, these following types are renamed:
+
+  - `At.CID` → `At.Cid`
+  - `At.CIDLink` → `At.CidLink`
+  - `At.DID` → `At.Did`
+
+- c7e8573: add `At.ResourceUri` string type
+
+  this is a specialized type for `at-uri` formatted strings, replacing the previous `At.Uri` string
+
+- 61bd8d2: add `At.GenericUri` string type
+
+  this is a specialized type for `uri` formatted strings, where there were previously none.
+
 - 87a99f1: add `At.Tid` string type
 
   this is currently an alias to string for now, but it can be made stricter later.
 
 ### Patch Changes
 
+- e278e91: clean up string format handling
 - 45cc699: clean up base types JSDoc
-
-## 2.0.9
-
-### Patch Changes
-
-- 298189f: pull latest Bluesky lexicons

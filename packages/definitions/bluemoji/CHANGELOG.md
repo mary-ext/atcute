@@ -1,12 +1,12 @@
-# @atcute/ozone
+# @atcute/bluemoji
 
 ## 2.0.0
 
 ### Major Changes
 
-- 813679f: add `At.Nsid` string type
+- a47373f: add `At.Identifier` string type
 
-  this is a specialized type for `nsid` formatted strings, where there were previously none.
+  an alias for either `At.DID` or `At.Handle`
 
 - d3fbc7e: consistent casing on types and interfaces
 
@@ -46,9 +46,3 @@
 - Updated dependencies [87a99f1]
   - @atcute/client@3.0.0
   - @atcute/bluesky@2.0.0
-
-## 1.0.12
-
-### Patch Changes
-
-- 298189f: pull latest Bluesky lexicons

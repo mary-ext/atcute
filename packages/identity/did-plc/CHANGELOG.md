@@ -1,5 +1,16 @@
 # @atcute/did-plc
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [5aedfc5]
+- Updated dependencies [3972bbf]
+  - @atcute/multibase@1.1.3
+  - @atcute/cbor@2.2.1
+  - @atcute/cid@2.2.1
+  - @atcute/crypto@2.2.1
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @atcute/cbor
 
+## 2.2.1
+
+### Patch Changes
+
+- 3972bbf: lazily initialize DataView
+- Updated dependencies [5aedfc5]
+  - @atcute/multibase@1.1.3
+  - @atcute/cid@2.2.1
+
 ## 2.2.0
 
 ### Minor Changes
