@@ -60,7 +60,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get blog posts associated to designated author. */
 	namespace ComWhtwndBlogGetAuthorPosts {
 		interface Params {
-			author: At.DID;
+			author: At.Did;
 		}
 		type Input = undefined;
 		interface Output {
@@ -77,7 +77,7 @@ declare module '@atcute/client/lexicons' {
 		type Input = undefined;
 		interface Output {
 			entryUri: At.ResourceUri;
-			cid?: At.CID;
+			cid?: At.Cid;
 			lastUpdate?: string;
 		}
 		interface Errors {

@@ -5,6 +5,6 @@
 '@atcute/client': major
 ---
 
-add `At.NSID` string type
+add `At.Nsid` string type
 
 this is a specialized type for `nsid` formatted strings, where there were previously none.

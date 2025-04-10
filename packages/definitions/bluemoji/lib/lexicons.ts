@@ -13,7 +13,7 @@ declare module '@atcute/client/lexicons' {
 	namespace BlueMojiCollectionDefs {
 		interface CollectionView {
 			[Brand.Type]?: 'blue.moji.collection.defs#collectionView';
-			cid: At.CID;
+			cid: At.Cid;
 			creator: AppBskyActorDefs.ProfileView;
 			indexedAt: string;
 			/**
@@ -172,7 +172,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface PackView {
 			[Brand.Type]?: 'blue.moji.packs.defs#packView';
-			cid: At.CID;
+			cid: At.Cid;
 			creator: AppBskyActorDefs.ProfileView;
 			indexedAt: string;
 			/**
@@ -195,7 +195,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface PackViewBasic {
 			[Brand.Type]?: 'blue.moji.packs.defs#packViewBasic';
-			cid: At.CID;
+			cid: At.Cid;
 			/**
 			 * Minimum string length: 1 \
 			 * Maximum string length: 64
@@ -328,11 +328,11 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'blue.moji.richtext.facet#formats_v0';
 			/** @default false */
 			apng_128?: boolean;
-			gif_128?: At.CID;
+			gif_128?: At.Cid;
 			/** @default false */
 			lottie?: boolean;
-			png_128?: At.CID;
-			webp_128?: At.CID;
+			png_128?: At.Cid;
+			webp_128?: At.Cid;
 		}
 	}
 

@@ -77,7 +77,7 @@ const resolveType = (
 	if (type === 'unknown') {
 		val = 'unknown';
 	} else if (type === 'cid-link') {
-		val = 'At.CIDLink';
+		val = 'At.CidLink';
 	} else if (type === 'integer') {
 		val = 'number';
 
@@ -106,11 +106,11 @@ const resolveType = (
 		if (format !== undefined) {
 			switch (format) {
 				case 'did': {
-					val = 'At.DID';
+					val = 'At.Did';
 					break;
 				}
 				case 'cid': {
-					val = 'At.CID';
+					val = 'At.Cid';
 					break;
 				}
 				case 'handle': {
@@ -122,7 +122,7 @@ const resolveType = (
 					break;
 				}
 				case 'nsid': {
-					val = 'At.NSID';
+					val = 'At.Nsid';
 					break;
 				}
 				case 'record-key': {
@@ -130,7 +130,7 @@ const resolveType = (
 					break;
 				}
 				case 'tid': {
-					val = 'At.TID';
+					val = 'At.Tid';
 					break;
 				}
 				case 'at-uri': {
@@ -273,35 +273,35 @@ export declare namespace Brand {
 /** Base AT Protocol schema types */
 export declare namespace At {
 	/** CID digest */
-	type CID = string;
+	type Cid = string;
 
 	/** Decentralized identifier */
-	type DID<Method extends string = string> = \`did:\${Method}:\${string}\`;
+	type Did<Method extends string = string> = \`did:\${Method}:\${string}\`;
 
 	/** Account handle */
 	type Handle = \`\${string}.\${string}\`;
 
 	/** Either a DID or a handle */
-	type Identifier = DID | Handle;
+	type Identifier = Cid | Handle;
 
 	/** Namespace ID */
-	type NSID = \`\${string}.\${string}.\${string}\`;
+	type Nsid = \`\${string}.\${string}.\${string}\`;
 
 	/** Record key */
 	type RecordKey = string;
 
 	/** Timestamp identifier */
-	type TID = string;
+	type Tid = string;
 
 	/** AT-URI string */
-	type ResourceUri = \`at://\${Identifier}\` | \`at://\${Identifier}/\${NSID}\` | \`at://\${Identifier}/\${NSID}/\${RecordKey}\`;
+	type ResourceUri = \`at://\${Identifier}\` | \`at://\${Identifier}/\${Nsid}\` | \`at://\${Identifier}/\${Nsid}/\${RecordKey}\`;
 
 	/** URI string */
 	type GenericUri = \`\${string}:\${string}\`;
 
 	/** Object containing a CID string */
-	interface CIDLink {
-		$link: CID;
+	interface CidLink {
+		$link: Cid;
 	}
 
 	/** Object containing a base64-encoded bytes */

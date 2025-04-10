@@ -53,7 +53,7 @@ export class XRPCError extends Error {
 /** Service proxy options */
 export interface XRPCProxyOptions {
 	type: 'atproto_pds' | 'atproto_labeler' | 'bsky_fg' | 'bsky_notif' | ({} & string);
-	service: At.DID;
+	service: At.Did;
 }
 
 /** Options for constructing an XRPC */

@@ -21,7 +21,7 @@ declare module '@atcute/client/lexicons' {
 			/** Subject of the message, used in emails. */
 			subject: string;
 			/** DID of the user who is creating the template. */
-			createdBy?: At.DID;
+			createdBy?: At.Did;
 			/** Message language. */
 			lang?: string;
 		}
@@ -40,7 +40,7 @@ declare module '@atcute/client/lexicons' {
 			disabled: boolean;
 			id: string;
 			/** DID of the user who last updated the template. */
-			lastUpdatedBy: At.DID;
+			lastUpdatedBy: At.Did;
 			/** Name of the template. */
 			name: string;
 			updatedAt: string;
@@ -85,7 +85,7 @@ declare module '@atcute/client/lexicons' {
 			/** Subject of the message, used in emails. */
 			subject?: string;
 			/** DID of the user who is updating the template. */
-			updatedBy?: At.DID;
+			updatedBy?: At.Did;
 		}
 		type Output = ToolsOzoneCommunicationDefs.TemplateView;
 		interface Errors {
@@ -135,7 +135,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface BlobView {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#blobView';
-			cid: At.CID;
+			cid: At.Cid;
 			createdAt: string;
 			mimeType: string;
 			size: number;
@@ -288,7 +288,7 @@ declare module '@atcute/client/lexicons' {
 		interface ModEventView {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#modEventView';
 			createdAt: string;
-			createdBy: At.DID;
+			createdBy: At.Did;
 			event: Brand.Union<
 				| AccountEvent
 				| IdentityEvent
@@ -321,7 +321,7 @@ declare module '@atcute/client/lexicons' {
 		interface ModEventViewDetail {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#modEventViewDetail';
 			createdAt: string;
-			createdBy: At.DID;
+			createdBy: At.Did;
 			event: Brand.Union<
 				| AccountEvent
 				| IdentityEvent
@@ -352,7 +352,7 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#recordEvent';
 			op: 'create' | 'delete' | 'update' | (string & {});
 			timestamp: string;
-			cid?: At.CID;
+			cid?: At.Cid;
 			comment?: string;
 		}
 		interface RecordHosting {
@@ -384,8 +384,8 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface RecordView {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#recordView';
-			blobCids: At.CID[];
-			cid: At.CID;
+			blobCids: At.Cid[];
+			cid: At.Cid;
 			indexedAt: string;
 			moderation: Moderation;
 			repo: RepoView;
@@ -395,7 +395,7 @@ declare module '@atcute/client/lexicons' {
 		interface RecordViewDetail {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#recordViewDetail';
 			blobs: BlobView[];
-			cid: At.CID;
+			cid: At.Cid;
 			indexedAt: string;
 			moderation: ModerationDetail;
 			repo: RepoView;
@@ -411,7 +411,7 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#reporterStats';
 			/** The total number of reports made by the user on accounts. */
 			accountReportCount: number;
-			did: At.DID;
+			did: At.Did;
 			/** The total number of accounts labeled as a result of the user's reports. */
 			labeledAccountCount: number;
 			/** The total number of records labeled as a result of the user's reports. */
@@ -429,7 +429,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface RepoView {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#repoView';
-			did: At.DID;
+			did: At.Did;
 			handle: At.Handle;
 			indexedAt: string;
 			moderation: Moderation;
@@ -443,7 +443,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface RepoViewDetail {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#repoViewDetail';
-			did: At.DID;
+			did: At.Did;
 			handle: At.Handle;
 			indexedAt: string;
 			moderation: ModerationDetail;
@@ -460,7 +460,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface RepoViewNotFound {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#repoViewNotFound';
-			did: At.DID;
+			did: At.Did;
 		}
 		type ReviewClosed = 'tools.ozone.moderation.defs#reviewClosed';
 		type ReviewEscalated = 'tools.ozone.moderation.defs#reviewEscalated';
@@ -492,7 +492,7 @@ declare module '@atcute/client/lexicons' {
 			lastAppealedAt?: string;
 			lastReportedAt?: string;
 			lastReviewedAt?: string;
-			lastReviewedBy?: At.DID;
+			lastReviewedBy?: At.Did;
 			muteReportingUntil?: string;
 			muteUntil?: string;
 			/**
@@ -503,7 +503,7 @@ declare module '@atcute/client/lexicons' {
 			priorityScore?: number;
 			/** Statistics related to the record subjects authored by the subject's account */
 			recordsStats?: RecordsStats;
-			subjectBlobCids?: At.CID[];
+			subjectBlobCids?: At.Cid[];
 			subjectRepoHandle?: string;
 			suspendUntil?: string;
 			tags?: string[];
@@ -521,7 +521,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneModerationEmitEvent {
 		interface Params {}
 		interface Input {
-			createdBy: At.DID;
+			createdBy: At.Did;
 			event: Brand.Union<
 				| ToolsOzoneModerationDefs.AccountEvent
 				| ToolsOzoneModerationDefs.IdentityEvent
@@ -544,7 +544,7 @@ declare module '@atcute/client/lexicons' {
 				| ToolsOzoneModerationDefs.RecordEvent
 			>;
 			subject: Brand.Union<ComAtprotoAdminDefs.RepoRef | ComAtprotoRepoStrongRef.Main>;
-			subjectBlobCids?: At.CID[];
+			subjectBlobCids?: At.Cid[];
 		}
 		type Output = ToolsOzoneModerationDefs.ModEventView;
 		interface Errors {
@@ -565,7 +565,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneModerationGetRecord {
 		interface Params {
 			uri: At.ResourceUri;
-			cid?: At.CID;
+			cid?: At.Cid;
 		}
 		type Input = undefined;
 		type Output = ToolsOzoneModerationDefs.RecordViewDetail;
@@ -591,7 +591,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get details about a repository. */
 	namespace ToolsOzoneModerationGetRepo {
 		interface Params {
-			did: At.DID;
+			did: At.Did;
 		}
 		type Input = undefined;
 		type Output = ToolsOzoneModerationDefs.RepoViewDetail;
@@ -604,7 +604,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneModerationGetReporterStats {
 		interface Params {
 			/** Maximum array length: 100 */
-			dids: At.DID[];
+			dids: At.Did[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -616,7 +616,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneModerationGetRepos {
 		interface Params {
 			/** Maximum array length: 100 */
-			dids: At.DID[];
+			dids: At.Did[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -637,14 +637,14 @@ declare module '@atcute/client/lexicons' {
 			 * If specified, only events where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored. \
 			 * Maximum array length: 20
 			 */
-			collections?: At.NSID[];
+			collections?: At.Nsid[];
 			/** If specified, only events with comments containing the keyword are returned. Apply || separator to use multiple keywords and match using OR condition. */
 			comment?: string;
 			/** Retrieve events created after a given timestamp */
 			createdAfter?: string;
 			/** Retrieve events created before a given timestamp */
 			createdBefore?: string;
-			createdBy?: At.DID;
+			createdBy?: At.Did;
 			cursor?: string;
 			/** If true, only events with comments are returned */
 			hasComment?: boolean;
@@ -693,7 +693,7 @@ declare module '@atcute/client/lexicons' {
 			 * If specified, subjects belonging to the given collections will be returned. When subjectType is set to 'account', this will be ignored. \
 			 * Maximum array length: 20
 			 */
-			collections?: At.NSID[];
+			collections?: At.Nsid[];
 			/** Search subjects by keyword from comments */
 			comment?: string;
 			cursor?: string;
@@ -714,7 +714,7 @@ declare module '@atcute/client/lexicons' {
 			/** By default, we don't include muted subjects in the results. Set this to true to include them. */
 			includeMuted?: boolean;
 			/** Get all subject statuses that were reviewed by a specific moderator */
-			lastReviewedBy?: At.DID;
+			lastReviewedBy?: At.Did;
 			/**
 			 * Minimum: 1 \
 			 * Maximum: 100
@@ -966,10 +966,10 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneSettingDefs {
 		interface Option {
 			[Brand.Type]?: 'tools.ozone.setting.defs#option';
-			createdBy: At.DID;
-			did: At.DID;
-			key: At.NSID;
-			lastUpdatedBy: At.DID;
+			createdBy: At.Did;
+			did: At.Did;
+			key: At.Nsid;
+			lastUpdatedBy: At.Did;
 			scope: 'instance' | 'personal' | (string & {});
 			value: unknown;
 			createdAt?: string;
@@ -995,7 +995,7 @@ declare module '@atcute/client/lexicons' {
 			 * Filter for only the specified keys. Ignored if prefix is provided \
 			 * Maximum array length: 100
 			 */
-			keys?: At.NSID[];
+			keys?: At.Nsid[];
 			/**
 			 * Minimum: 1 \
 			 * Maximum: 100
@@ -1022,7 +1022,7 @@ declare module '@atcute/client/lexicons' {
 			 * Minimum array length: 1 \
 			 * Maximum array length: 200
 			 */
-			keys: At.NSID[];
+			keys: At.Nsid[];
 			scope: 'instance' | 'personal' | (string & {});
 		}
 		interface Output {}
@@ -1032,7 +1032,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneSettingUpsertOption {
 		interface Params {}
 		interface Input {
-			key: At.NSID;
+			key: At.Nsid;
 			scope: 'instance' | 'personal' | (string & {});
 			value: unknown;
 			/** Maximum string length: 2000 */
@@ -1059,7 +1059,7 @@ declare module '@atcute/client/lexicons' {
 	/** Find all correlated threat signatures between 2 or more accounts. */
 	namespace ToolsOzoneSignatureFindCorrelation {
 		interface Params {
-			dids: At.DID[];
+			dids: At.Did[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -1070,7 +1070,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get accounts that share some matching threat signatures with the root account. */
 	namespace ToolsOzoneSignatureFindRelatedAccounts {
 		interface Params {
-			did: At.DID;
+			did: At.Did;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1114,7 +1114,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneTeamAddMember {
 		interface Params {}
 		interface Input {
-			did: At.DID;
+			did: At.Did;
 			role:
 				| 'tools.ozone.team.defs#roleAdmin'
 				| 'tools.ozone.team.defs#roleModerator'
@@ -1130,7 +1130,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneTeamDefs {
 		interface Member {
 			[Brand.Type]?: 'tools.ozone.team.defs#member';
-			did: At.DID;
+			did: At.Did;
 			role: '#roleAdmin' | '#roleModerator' | '#roleTriage' | (string & {});
 			createdAt?: string;
 			disabled?: boolean;
@@ -1147,7 +1147,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneTeamDeleteMember {
 		interface Params {}
 		interface Input {
-			did: At.DID;
+			did: At.Did;
 		}
 		type Output = undefined;
 		interface Errors {
@@ -1181,7 +1181,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ToolsOzoneTeamUpdateMember {
 		interface Params {}
 		interface Input {
-			did: At.DID;
+			did: At.Did;
 			disabled?: boolean;
 			role?:
 				| 'tools.ozone.team.defs#roleAdmin'

@@ -26,38 +26,38 @@ export declare namespace Brand {
 /** Base AT Protocol schema types */
 export declare namespace At {
 	/** CID digest */
-	type CID = string;
+	type Cid = string;
 
 	/** Decentralized identifier */
-	type DID<Method extends string = string> = `did:${Method}:${string}`;
+	type Did<Method extends string = string> = `did:${Method}:${string}`;
 
 	/** Account handle */
 	type Handle = `${string}.${string}`;
 
 	/** Either a DID or a handle */
-	type Identifier = DID | Handle;
+	type Identifier = Cid | Handle;
 
 	/** Namespace ID */
-	type NSID = `${string}.${string}.${string}`;
+	type Nsid = `${string}.${string}.${string}`;
 
 	/** Record key */
 	type RecordKey = string;
 
 	/** Timestamp identifier */
-	type TID = string;
+	type Tid = string;
 
 	/** AT-URI string */
 	type ResourceUri =
 		| `at://${Identifier}`
-		| `at://${Identifier}/${NSID}`
-		| `at://${Identifier}/${NSID}/${RecordKey}`;
+		| `at://${Identifier}/${Nsid}`
+		| `at://${Identifier}/${Nsid}/${RecordKey}`;
 
 	/** URI string */
 	type GenericUri = `${string}:${string}`;
 
 	/** Object containing a CID string */
-	interface CIDLink {
-		$link: CID;
+	interface CidLink {
+		$link: Cid;
 	}
 
 	/** Object containing a base64-encoded bytes */
@@ -78,7 +78,7 @@ export declare namespace At {
 export declare namespace ComAtprotoAdminDefs {
 	interface AccountView {
 		[Brand.Type]?: 'com.atproto.admin.defs#accountView';
-		did: At.DID;
+		did: At.Did;
 		handle: At.Handle;
 		indexedAt: string;
 		deactivatedAt?: string;
@@ -93,13 +93,13 @@ export declare namespace ComAtprotoAdminDefs {
 	}
 	interface RepoBlobRef {
 		[Brand.Type]?: 'com.atproto.admin.defs#repoBlobRef';
-		cid: At.CID;
-		did: At.DID;
+		cid: At.Cid;
+		did: At.Did;
 		recordUri?: At.ResourceUri;
 	}
 	interface RepoRef {
 		[Brand.Type]?: 'com.atproto.admin.defs#repoRef';
-		did: At.DID;
+		did: At.Did;
 	}
 	interface StatusAttr {
 		[Brand.Type]?: 'com.atproto.admin.defs#statusAttr';
@@ -117,7 +117,7 @@ export declare namespace ComAtprotoAdminDefs {
 export declare namespace ComAtprotoAdminDeleteAccount {
 	interface Params {}
 	interface Input {
-		did: At.DID;
+		did: At.Did;
 	}
 	type Output = undefined;
 }
@@ -126,7 +126,7 @@ export declare namespace ComAtprotoAdminDeleteAccount {
 export declare namespace ComAtprotoAdminDisableAccountInvites {
 	interface Params {}
 	interface Input {
-		account: At.DID;
+		account: At.Did;
 		/** Optional reason for disabled invites. */
 		note?: string;
 	}
@@ -147,7 +147,7 @@ export declare namespace ComAtprotoAdminDisableInviteCodes {
 export declare namespace ComAtprotoAdminEnableAccountInvites {
 	interface Params {}
 	interface Input {
-		account: At.DID;
+		account: At.Did;
 		/** Optional reason for enabled invites. */
 		note?: string;
 	}
@@ -157,7 +157,7 @@ export declare namespace ComAtprotoAdminEnableAccountInvites {
 /** Get details about an account. */
 export declare namespace ComAtprotoAdminGetAccountInfo {
 	interface Params {
-		did: At.DID;
+		did: At.Did;
 	}
 	type Input = undefined;
 	type Output = ComAtprotoAdminDefs.AccountView;
@@ -166,7 +166,7 @@ export declare namespace ComAtprotoAdminGetAccountInfo {
 /** Get details about some accounts. */
 export declare namespace ComAtprotoAdminGetAccountInfos {
 	interface Params {
-		dids: At.DID[];
+		dids: At.Did[];
 	}
 	type Input = undefined;
 	interface Output {
@@ -197,8 +197,8 @@ export declare namespace ComAtprotoAdminGetInviteCodes {
 /** Get the service-specific admin status of a subject (account, record, or blob). */
 export declare namespace ComAtprotoAdminGetSubjectStatus {
 	interface Params {
-		blob?: At.CID;
-		did?: At.DID;
+		blob?: At.Cid;
+		did?: At.Did;
 		uri?: At.ResourceUri;
 	}
 	type Input = undefined;
@@ -235,8 +235,8 @@ export declare namespace ComAtprotoAdminSendEmail {
 	interface Params {}
 	interface Input {
 		content: string;
-		recipientDid: At.DID;
-		senderDid: At.DID;
+		recipientDid: At.Did;
+		senderDid: At.Did;
 		/** Additional comment by the sender that won't be used in the email itself but helpful to provide more context for moderators/reviewers */
 		comment?: string;
 		subject?: string;
@@ -261,7 +261,7 @@ export declare namespace ComAtprotoAdminUpdateAccountEmail {
 export declare namespace ComAtprotoAdminUpdateAccountHandle {
 	interface Params {}
 	interface Input {
-		did: At.DID;
+		did: At.Did;
 		handle: At.Handle;
 	}
 	type Output = undefined;
@@ -271,7 +271,7 @@ export declare namespace ComAtprotoAdminUpdateAccountHandle {
 export declare namespace ComAtprotoAdminUpdateAccountPassword {
 	interface Params {}
 	interface Input {
-		did: At.DID;
+		did: At.Did;
 		password: string;
 	}
 	type Output = undefined;
@@ -298,7 +298,7 @@ export declare namespace ComAtprotoAdminUpdateSubjectStatus {
 export declare namespace ComAtprotoIdentityDefs {
 	interface IdentityInfo {
 		[Brand.Type]?: 'com.atproto.identity.defs#identityInfo';
-		did: At.DID;
+		did: At.Did;
 		/** The complete DID document for the identity. */
 		didDoc: unknown;
 		/** The validated handle of the account; or 'handle.invalid' if the handle did not bi-directionally match the DID document. */
@@ -344,7 +344,7 @@ export declare namespace ComAtprotoIdentityRequestPlcOperationSignature {
 export declare namespace ComAtprotoIdentityResolveDid {
 	interface Params {
 		/** DID to resolve. */
-		did: At.DID;
+		did: At.Did;
 	}
 	type Input = undefined;
 	interface Output {
@@ -365,7 +365,7 @@ export declare namespace ComAtprotoIdentityResolveHandle {
 	}
 	type Input = undefined;
 	interface Output {
-		did: At.DID;
+		did: At.Did;
 	}
 	interface Errors {
 		HandleNotFound: {};
@@ -430,7 +430,7 @@ export declare namespace ComAtprotoLabelDefs {
 		/** Timestamp when this label was created. */
 		cts: string;
 		/** DID of the actor who created this label. */
-		src: At.DID;
+		src: At.Did;
 		/** AT URI of the record, repository (account), or other resource that this label applies to. */
 		uri: At.GenericUri;
 		/**
@@ -439,7 +439,7 @@ export declare namespace ComAtprotoLabelDefs {
 		 */
 		val: string;
 		/** Optionally, CID specifying the specific version of 'uri' resource this label applies to. */
-		cid?: At.CID;
+		cid?: At.Cid;
 		/** Timestamp at which this label expires (no longer applies). */
 		exp?: string;
 		/** If true, this is a negation label, overwriting a previous label. */
@@ -532,7 +532,7 @@ export declare namespace ComAtprotoLabelQueryLabels {
 		 */
 		limit?: number;
 		/** Optional list of label sources (DIDs) to filter on. */
-		sources?: At.DID[];
+		sources?: At.Did[];
 	}
 	type Input = undefined;
 	interface Output {
@@ -581,7 +581,7 @@ export declare namespace ComAtprotoModerationCreateReport {
 		createdAt: string;
 		id: number;
 		reasonType: ComAtprotoModerationDefs.ReasonType;
-		reportedBy: At.DID;
+		reportedBy: At.Did;
 		subject: Brand.Union<ComAtprotoAdminDefs.RepoRef | ComAtprotoRepoStrongRef.Main>;
 		/**
 		 * Maximum string length: 20000 \
@@ -620,7 +620,7 @@ export declare namespace ComAtprotoRepoApplyWrites {
 		repo: At.Identifier;
 		writes: Brand.Union<Create | Delete | Update>[];
 		/** If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations. */
-		swapCommit?: At.CID;
+		swapCommit?: At.Cid;
 		/** Can be set to 'false' to skip Lexicon schema validation of record data across all operations, 'true' to require it, or leave unset to validate only for known Lexicons. */
 		validate?: boolean;
 	}
@@ -634,21 +634,21 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	/** Operation which creates a new record. */
 	interface Create {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#create';
-		collection: At.NSID;
+		collection: At.Nsid;
 		value: unknown;
 		/** NOTE: maxLength is redundant with record-key format. Keeping it temporarily to ensure backwards compatibility. */
 		rkey?: At.RecordKey;
 	}
 	interface CreateResult {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#createResult';
-		cid: At.CID;
+		cid: At.Cid;
 		uri: At.ResourceUri;
 		validationStatus?: 'unknown' | 'valid' | (string & {});
 	}
 	/** Operation which deletes an existing record. */
 	interface Delete {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#delete';
-		collection: At.NSID;
+		collection: At.Nsid;
 		rkey: At.RecordKey;
 	}
 	interface DeleteResult {
@@ -657,13 +657,13 @@ export declare namespace ComAtprotoRepoApplyWrites {
 	/** Operation which updates an existing record. */
 	interface Update {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#update';
-		collection: At.NSID;
+		collection: At.Nsid;
 		rkey: At.RecordKey;
 		value: unknown;
 	}
 	interface UpdateResult {
 		[Brand.Type]?: 'com.atproto.repo.applyWrites#updateResult';
-		cid: At.CID;
+		cid: At.Cid;
 		uri: At.ResourceUri;
 		validationStatus?: 'unknown' | 'valid' | (string & {});
 	}
@@ -674,7 +674,7 @@ export declare namespace ComAtprotoRepoCreateRecord {
 	interface Params {}
 	interface Input {
 		/** The NSID of the record collection. */
-		collection: At.NSID;
+		collection: At.Nsid;
 		/** The record itself. Must contain a $type field. */
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
@@ -682,12 +682,12 @@ export declare namespace ComAtprotoRepoCreateRecord {
 		/** The Record Key. */
 		rkey?: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
-		swapCommit?: At.CID;
+		swapCommit?: At.Cid;
 		/** Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons. */
 		validate?: boolean;
 	}
 	interface Output {
-		cid: At.CID;
+		cid: At.Cid;
 		uri: At.ResourceUri;
 		commit?: ComAtprotoRepoDefs.CommitMeta;
 		validationStatus?: 'unknown' | 'valid' | (string & {});
@@ -700,8 +700,8 @@ export declare namespace ComAtprotoRepoCreateRecord {
 export declare namespace ComAtprotoRepoDefs {
 	interface CommitMeta {
 		[Brand.Type]?: 'com.atproto.repo.defs#commitMeta';
-		cid: At.CID;
-		rev: At.TID;
+		cid: At.Cid;
+		rev: At.Tid;
 	}
 }
 
@@ -710,15 +710,15 @@ export declare namespace ComAtprotoRepoDeleteRecord {
 	interface Params {}
 	interface Input {
 		/** The NSID of the record collection. */
-		collection: At.NSID;
+		collection: At.Nsid;
 		/** The handle or DID of the repo (aka, current account). */
 		repo: At.Identifier;
 		/** The Record Key. */
 		rkey: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
-		swapCommit?: At.CID;
+		swapCommit?: At.Cid;
 		/** Compare and swap with the previous record by CID. */
-		swapRecord?: At.CID;
+		swapRecord?: At.Cid;
 	}
 	interface Output {
 		commit?: ComAtprotoRepoDefs.CommitMeta;
@@ -737,8 +737,8 @@ export declare namespace ComAtprotoRepoDescribeRepo {
 	type Input = undefined;
 	interface Output {
 		/** List of all the collections (NSIDs) for which this repo contains at least one record. */
-		collections: At.NSID[];
-		did: At.DID;
+		collections: At.Nsid[];
+		did: At.Did;
 		/** The complete DID document for this account. */
 		didDoc: unknown;
 		handle: At.Handle;
@@ -751,19 +751,19 @@ export declare namespace ComAtprotoRepoDescribeRepo {
 export declare namespace ComAtprotoRepoGetRecord {
 	interface Params {
 		/** The NSID of the record collection. */
-		collection: At.NSID;
+		collection: At.Nsid;
 		/** The handle or DID of the repo. */
 		repo: At.Identifier;
 		/** The Record Key. */
 		rkey: At.RecordKey;
 		/** The CID of the version of the record. If not specified, then return the most recent version. */
-		cid?: At.CID;
+		cid?: At.Cid;
 	}
 	type Input = undefined;
 	interface Output {
 		uri: At.ResourceUri;
 		value: unknown;
-		cid?: At.CID;
+		cid?: At.Cid;
 	}
 	interface Errors {
 		RecordNotFound: {};
@@ -795,7 +795,7 @@ export declare namespace ComAtprotoRepoListMissingBlobs {
 	}
 	interface RecordBlob {
 		[Brand.Type]?: 'com.atproto.repo.listMissingBlobs#recordBlob';
-		cid: At.CID;
+		cid: At.Cid;
 		recordUri: At.ResourceUri;
 	}
 }
@@ -804,7 +804,7 @@ export declare namespace ComAtprotoRepoListMissingBlobs {
 export declare namespace ComAtprotoRepoListRecords {
 	interface Params {
 		/** The NSID of the record type. */
-		collection: At.NSID;
+		collection: At.Nsid;
 		/** The handle or DID of the repo. */
 		repo: At.Identifier;
 		cursor?: string;
@@ -825,7 +825,7 @@ export declare namespace ComAtprotoRepoListRecords {
 	}
 	interface Record {
 		[Brand.Type]?: 'com.atproto.repo.listRecords#record';
-		cid: At.CID;
+		cid: At.Cid;
 		uri: At.ResourceUri;
 		value: unknown;
 	}
@@ -836,7 +836,7 @@ export declare namespace ComAtprotoRepoPutRecord {
 	interface Params {}
 	interface Input {
 		/** The NSID of the record collection. */
-		collection: At.NSID;
+		collection: At.Nsid;
 		/** The record to write. */
 		record: unknown;
 		/** The handle or DID of the repo (aka, current account). */
@@ -844,14 +844,14 @@ export declare namespace ComAtprotoRepoPutRecord {
 		/** The Record Key. */
 		rkey: At.RecordKey;
 		/** Compare and swap with the previous commit by CID. */
-		swapCommit?: At.CID;
+		swapCommit?: At.Cid;
 		/** Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation */
-		swapRecord?: At.CID | null;
+		swapRecord?: At.Cid | null;
 		/** Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons. */
 		validate?: boolean;
 	}
 	interface Output {
-		cid: At.CID;
+		cid: At.Cid;
 		uri: At.ResourceUri;
 		commit?: ComAtprotoRepoDefs.CommitMeta;
 		validationStatus?: 'unknown' | 'valid' | (string & {});
@@ -864,7 +864,7 @@ export declare namespace ComAtprotoRepoPutRecord {
 export declare namespace ComAtprotoRepoStrongRef {
 	interface Main {
 		[Brand.Type]?: 'com.atproto.repo.strongRef';
-		cid: At.CID;
+		cid: At.Cid;
 		uri: At.ResourceUri;
 	}
 }
@@ -896,7 +896,7 @@ export declare namespace ComAtprotoServerCheckAccountStatus {
 		indexedRecords: number;
 		privateStateValues: number;
 		repoBlocks: number;
-		repoCommit: At.CID;
+		repoCommit: At.Cid;
 		repoRev: string;
 		validDid: boolean;
 	}
@@ -925,7 +925,7 @@ export declare namespace ComAtprotoServerCreateAccount {
 		/** Requested handle for the account. */
 		handle: At.Handle;
 		/** Pre-existing atproto DID, being imported to a new account. */
-		did?: At.DID;
+		did?: At.Did;
 		email?: string;
 		inviteCode?: string;
 		/** Initial account password. May need to meet instance-specific password strength requirements. */
@@ -941,7 +941,7 @@ export declare namespace ComAtprotoServerCreateAccount {
 	interface Output {
 		accessJwt: string;
 		/** The DID of the new account. */
-		did: At.DID;
+		did: At.Did;
 		handle: At.Handle;
 		refreshJwt: string;
 		/** Complete DID document. */
@@ -985,7 +985,7 @@ export declare namespace ComAtprotoServerCreateInviteCode {
 	interface Params {}
 	interface Input {
 		useCount: number;
-		forAccount?: At.DID;
+		forAccount?: At.Did;
 	}
 	interface Output {
 		code: string;
@@ -999,7 +999,7 @@ export declare namespace ComAtprotoServerCreateInviteCodes {
 		/** @default 1 */
 		codeCount: number;
 		useCount: number;
-		forAccounts?: At.DID[];
+		forAccounts?: At.Did[];
 	}
 	interface Output {
 		codes: AccountCodes[];
@@ -1024,7 +1024,7 @@ export declare namespace ComAtprotoServerCreateSession {
 	}
 	interface Output {
 		accessJwt: string;
-		did: At.DID;
+		did: At.Did;
 		handle: At.Handle;
 		refreshJwt: string;
 		active?: boolean;
@@ -1065,7 +1065,7 @@ export declare namespace ComAtprotoServerDefs {
 	interface InviteCodeUse {
 		[Brand.Type]?: 'com.atproto.server.defs#inviteCodeUse';
 		usedAt: string;
-		usedBy: At.DID;
+		usedBy: At.Did;
 	}
 }
 
@@ -1073,7 +1073,7 @@ export declare namespace ComAtprotoServerDefs {
 export declare namespace ComAtprotoServerDeleteAccount {
 	interface Params {}
 	interface Input {
-		did: At.DID;
+		did: At.Did;
 		password: string;
 		token: string;
 	}
@@ -1098,7 +1098,7 @@ export declare namespace ComAtprotoServerDescribeServer {
 	interface Output {
 		/** List of domain suffixes that can be used in account handles. */
 		availableUserDomains: string[];
-		did: At.DID;
+		did: At.Did;
 		/** Contact information */
 		contact?: Contact;
 		/** If true, an invite code must be supplied to create an account on this instance. */
@@ -1143,11 +1143,11 @@ export declare namespace ComAtprotoServerGetAccountInviteCodes {
 export declare namespace ComAtprotoServerGetServiceAuth {
 	interface Params {
 		/** The DID of the service that the token will be used to authenticate with */
-		aud: At.DID;
+		aud: At.Did;
 		/** The time in Unix Epoch seconds that the JWT expires. Defaults to 60 seconds in the future. The service may enforce certain time bounds on tokens depending on the requested scope. */
 		exp?: number;
 		/** Lexicon (XRPC) method to bind the requested token to */
-		lxm?: At.NSID;
+		lxm?: At.Nsid;
 	}
 	type Input = undefined;
 	interface Output {
@@ -1163,7 +1163,7 @@ export declare namespace ComAtprotoServerGetSession {
 	interface Params {}
 	type Input = undefined;
 	interface Output {
-		did: At.DID;
+		did: At.Did;
 		handle: At.Handle;
 		active?: boolean;
 		didDoc?: unknown;
@@ -1199,7 +1199,7 @@ export declare namespace ComAtprotoServerRefreshSession {
 	type Input = undefined;
 	interface Output {
 		accessJwt: string;
-		did: At.DID;
+		did: At.Did;
 		handle: At.Handle;
 		refreshJwt: string;
 		active?: boolean;
@@ -1249,7 +1249,7 @@ export declare namespace ComAtprotoServerReserveSigningKey {
 	interface Params {}
 	interface Input {
 		/** The DID to reserve a key for. */
-		did?: At.DID;
+		did?: At.Did;
 	}
 	interface Output {
 		/** The public key for the reserved signing key, in did:key serialization. */
@@ -1301,9 +1301,9 @@ export declare namespace ComAtprotoServerUpdateEmail {
 export declare namespace ComAtprotoSyncGetBlob {
 	interface Params {
 		/** The CID of the blob to fetch */
-		cid: At.CID;
+		cid: At.Cid;
 		/** The DID of the account. */
-		did: At.DID;
+		did: At.Did;
 	}
 	type Input = undefined;
 	type Output = Uint8Array;
@@ -1319,9 +1319,9 @@ export declare namespace ComAtprotoSyncGetBlob {
 /** Get data blocks from a given repo, by CID. For example, intermediate MST nodes, or records. Does not require auth; implemented by PDS. */
 export declare namespace ComAtprotoSyncGetBlocks {
 	interface Params {
-		cids: At.CID[];
+		cids: At.Cid[];
 		/** The DID of the repo. */
-		did: At.DID;
+		did: At.Did;
 	}
 	type Input = undefined;
 	type Output = Uint8Array;
@@ -1341,7 +1341,7 @@ export declare namespace ComAtprotoSyncGetBlocks {
 export declare namespace ComAtprotoSyncGetCheckout {
 	interface Params {
 		/** The DID of the repo. */
-		did: At.DID;
+		did: At.Did;
 	}
 	type Input = undefined;
 	type Output = Uint8Array;
@@ -1354,11 +1354,11 @@ export declare namespace ComAtprotoSyncGetCheckout {
 export declare namespace ComAtprotoSyncGetHead {
 	interface Params {
 		/** The DID of the repo. */
-		did: At.DID;
+		did: At.Did;
 	}
 	type Input = undefined;
 	interface Output {
-		root: At.CID;
+		root: At.Cid;
 	}
 	interface Errors {
 		HeadNotFound: {};
@@ -1369,12 +1369,12 @@ export declare namespace ComAtprotoSyncGetHead {
 export declare namespace ComAtprotoSyncGetLatestCommit {
 	interface Params {
 		/** The DID of the repo. */
-		did: At.DID;
+		did: At.Did;
 	}
 	type Input = undefined;
 	interface Output {
-		cid: At.CID;
-		rev: At.TID;
+		cid: At.Cid;
+		rev: At.Tid;
 	}
 	interface Errors {
 		RepoNotFound: {};
@@ -1387,9 +1387,9 @@ export declare namespace ComAtprotoSyncGetLatestCommit {
 /** Get data blocks needed to prove the existence or non-existence of record in the current version of repo. Does not require auth. */
 export declare namespace ComAtprotoSyncGetRecord {
 	interface Params {
-		collection: At.NSID;
+		collection: At.Nsid;
 		/** The DID of the repo. */
-		did: At.DID;
+		did: At.Did;
 		/** Record Key */
 		rkey: At.RecordKey;
 	}
@@ -1408,9 +1408,9 @@ export declare namespace ComAtprotoSyncGetRecord {
 export declare namespace ComAtprotoSyncGetRepo {
 	interface Params {
 		/** The DID of the repo. */
-		did: At.DID;
+		did: At.Did;
 		/** The revision ('rev') of the repo to create a diff from. */
-		since?: At.TID;
+		since?: At.Tid;
 	}
 	type Input = undefined;
 	type Output = Uint8Array;
@@ -1426,14 +1426,14 @@ export declare namespace ComAtprotoSyncGetRepo {
 export declare namespace ComAtprotoSyncGetRepoStatus {
 	interface Params {
 		/** The DID of the repo. */
-		did: At.DID;
+		did: At.Did;
 	}
 	type Input = undefined;
 	interface Output {
 		active: boolean;
-		did: At.DID;
+		did: At.Did;
 		/** Optional field, the current rev of the repo, if active=true */
-		rev?: At.TID;
+		rev?: At.Tid;
 		/** If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted. */
 		status?:
 			| 'deactivated'
@@ -1453,7 +1453,7 @@ export declare namespace ComAtprotoSyncGetRepoStatus {
 export declare namespace ComAtprotoSyncListBlobs {
 	interface Params {
 		/** The DID of the repo. */
-		did: At.DID;
+		did: At.Did;
 		cursor?: string;
 		/**
 		 * Minimum: 1 \
@@ -1462,11 +1462,11 @@ export declare namespace ComAtprotoSyncListBlobs {
 		 */
 		limit?: number;
 		/** Optional revision of the repo to list blobs since. */
-		since?: At.TID;
+		since?: At.Tid;
 	}
 	type Input = undefined;
 	interface Output {
-		cids: At.CID[];
+		cids: At.Cid[];
 		cursor?: string;
 	}
 	interface Errors {
@@ -1495,10 +1495,10 @@ export declare namespace ComAtprotoSyncListRepos {
 	}
 	interface Repo {
 		[Brand.Type]?: 'com.atproto.sync.listRepos#repo';
-		did: At.DID;
+		did: At.Did;
 		/** Current repo commit CID */
-		head: At.CID;
-		rev: At.TID;
+		head: At.Cid;
+		rev: At.Tid;
 		active?: boolean;
 		/** If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted. */
 		status?:
@@ -1515,7 +1515,7 @@ export declare namespace ComAtprotoSyncListRepos {
 /** Enumerates all the DIDs which have records with the given collection NSID. */
 export declare namespace ComAtprotoSyncListReposByCollection {
 	interface Params {
-		collection: At.NSID;
+		collection: At.Nsid;
 		cursor?: string;
 		/**
 		 * Maximum size of response set. Recommend setting a large maximum (1000+) when enumerating large DID lists. \
@@ -1532,7 +1532,7 @@ export declare namespace ComAtprotoSyncListReposByCollection {
 	}
 	interface Repo {
 		[Brand.Type]?: 'com.atproto.sync.listReposByCollection#repo';
-		did: At.DID;
+		did: At.Did;
 	}
 }
 
@@ -1562,7 +1562,7 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#account';
 		/** Indicates that the account has a repository which can be fetched from the host that emitted this event. */
 		active: boolean;
-		did: At.DID;
+		did: At.Did;
 		seq: number;
 		time: string;
 		/** If active=false, this optional field indicates a reason for why the account is not active. */
@@ -1582,11 +1582,11 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		 * DEPRECATED -- will soon always be empty. List of new blobs (by CID) referenced by records in this commit.
 		 * @deprecated
 		 */
-		blobs: At.CIDLink[];
+		blobs: At.CidLink[];
 		/** CAR file containing relevant blocks, as a diff since the previous repo state. The commit must be included as a block, and the commit block CID must be the first entry in the CAR header 'roots' list. */
 		blocks: At.Bytes;
 		/** Repo commit object CID. */
-		commit: At.CIDLink;
+		commit: At.CidLink;
 		/**
 		 * Maximum array length: 200 \
 		 * List of repo mutation operations in this commit (eg, records created, updated, or deleted).
@@ -1598,13 +1598,13 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		 */
 		rebase: boolean;
 		/** The repo this event comes from. Note that all other message types name this field 'did'. */
-		repo: At.DID;
+		repo: At.Did;
 		/** The rev of the emitted commit. Note that this information is also in the commit object included in blocks, unless this is a tooBig event. */
-		rev: At.TID;
+		rev: At.Tid;
 		/** The stream sequence number of this message. */
 		seq: number;
 		/** The rev of the last emitted commit from this repo (if any). */
-		since: At.TID | null;
+		since: At.Tid | null;
 		/** Timestamp of when this message was originally broadcast. */
 		time: string;
 		/**
@@ -1613,12 +1613,12 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		 */
 		tooBig: boolean;
 		/** The root CID of the MST tree for the previous commit from this repo (indicated by the 'since' revision field in this message). Corresponds to the 'data' field in the repo commit object. NOTE: this field is effectively required for the 'inductive' version of firehose. */
-		prevData?: At.CIDLink;
+		prevData?: At.CidLink;
 	}
 	/** Represents a change to an account's identity. Could be an updated handle, signing key, or pds hosting endpoint. Serves as a prod to all downstream services to refresh their identity cache. */
 	interface Identity {
 		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#identity';
-		did: At.DID;
+		did: At.Did;
 		seq: number;
 		time: string;
 		/** The current handle for the account, or 'handle.invalid' if validation fails. This field is optional, might have been validated or passed-through from an upstream source. Semantics and behaviors for PDS vs Relay may evolve in the future; see atproto specs for more details. */
@@ -1634,10 +1634,10 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		[Brand.Type]?: 'com.atproto.sync.subscribeRepos#repoOp';
 		action: 'create' | 'delete' | 'update' | (string & {});
 		/** For creates and updates, the new record CID. For deletions, null. */
-		cid: At.CIDLink | null;
+		cid: At.CidLink | null;
 		path: string;
 		/** For updates and deletes, the previous record CID (required for inductive firehose). For creations, field should not be defined. */
-		prev?: At.CIDLink;
+		prev?: At.CidLink;
 	}
 	/** Updates the repo to a new state, without necessarily including that state on the firehose. Used to recover from broken commit streams, data loss incidents, or in situations where upstream host does not know recent state of the repository. */
 	interface Sync {
@@ -1645,7 +1645,7 @@ export declare namespace ComAtprotoSyncSubscribeRepos {
 		/** CAR file containing the commit, as a block. The CAR header must include the commit block CID as the first 'root'. */
 		blocks: At.Bytes;
 		/** The account this repo event corresponds to. Must match that in the commit object. */
-		did: At.DID;
+		did: At.Did;
 		/** The rev of the commit. This value must match that in the commit object. */
 		rev: string;
 		/** The stream sequence number of this message. */

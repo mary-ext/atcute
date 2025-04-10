@@ -42,7 +42,7 @@ declare module '@atcute/client/lexicons' {
 			label: string;
 			visibility: 'hide' | 'ignore' | 'show' | 'warn' | (string & {});
 			/** Which labeler does this preference apply to? If undefined, applies globally. */
-			labelerDid?: At.DID;
+			labelerDid?: At.Did;
 		}
 		interface FeedViewPref {
 			[Brand.Type]?: 'app.bsky.actor.defs#feedViewPref';
@@ -89,7 +89,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface LabelerPrefItem {
 			[Brand.Type]?: 'app.bsky.actor.defs#labelerPrefItem';
-			did: At.DID;
+			did: At.Did;
 		}
 		interface LabelersPref {
 			[Brand.Type]?: 'app.bsky.actor.defs#labelersPref';
@@ -194,7 +194,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface ProfileView {
 			[Brand.Type]?: 'app.bsky.actor.defs#profileView';
-			did: At.DID;
+			did: At.Did;
 			handle: At.Handle;
 			associated?: ProfileAssociated;
 			avatar?: At.GenericUri;
@@ -215,7 +215,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface ProfileViewBasic {
 			[Brand.Type]?: 'app.bsky.actor.defs#profileViewBasic';
-			did: At.DID;
+			did: At.Did;
 			handle: At.Handle;
 			associated?: ProfileAssociated;
 			avatar?: At.GenericUri;
@@ -230,7 +230,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface ProfileViewDetailed {
 			[Brand.Type]?: 'app.bsky.actor.defs#profileViewDetailed';
-			did: At.DID;
+			did: At.Did;
 			handle: At.Handle;
 			associated?: ProfileAssociated;
 			avatar?: At.GenericUri;
@@ -531,7 +531,7 @@ declare module '@atcute/client/lexicons' {
 		interface ViewRecord {
 			[Brand.Type]?: 'app.bsky.embed.record#viewRecord';
 			author: AppBskyActorDefs.ProfileViewBasic;
-			cid: At.CID;
+			cid: At.Cid;
 			indexedAt: string;
 			uri: At.ResourceUri;
 			/** The record data itself. */
@@ -586,7 +586,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface View {
 			[Brand.Type]?: 'app.bsky.embed.video#view';
-			cid: At.CID;
+			cid: At.Cid;
 			playlist: At.GenericUri;
 			/**
 			 * Maximum string length: 10000 \
@@ -601,7 +601,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyFeedDefs {
 		interface BlockedAuthor {
 			[Brand.Type]?: 'app.bsky.feed.defs#blockedAuthor';
-			did: At.DID;
+			did: At.Did;
 			viewer?: AppBskyActorDefs.ViewerState;
 		}
 		interface BlockedPost {
@@ -629,9 +629,9 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface GeneratorView {
 			[Brand.Type]?: 'app.bsky.feed.defs#generatorView';
-			cid: At.CID;
+			cid: At.Cid;
 			creator: AppBskyActorDefs.ProfileView;
-			did: At.DID;
+			did: At.Did;
 			displayName: string;
 			indexedAt: string;
 			uri: At.ResourceUri;
@@ -693,7 +693,7 @@ declare module '@atcute/client/lexicons' {
 		interface PostView {
 			[Brand.Type]?: 'app.bsky.feed.defs#postView';
 			author: AppBskyActorDefs.ProfileViewBasic;
-			cid: At.CID;
+			cid: At.Cid;
 			indexedAt: string;
 			record: unknown;
 			uri: At.ResourceUri;
@@ -753,7 +753,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface ThreadgateView {
 			[Brand.Type]?: 'app.bsky.feed.defs#threadgateView';
-			cid?: At.CID;
+			cid?: At.Cid;
 			lists?: AppBskyGraphDefs.ListViewBasic[];
 			record?: unknown;
 			uri?: At.ResourceUri;
@@ -782,7 +782,7 @@ declare module '@atcute/client/lexicons' {
 		interface Params {}
 		type Input = undefined;
 		interface Output {
-			did: At.DID;
+			did: At.Did;
 			feeds: Feed[];
 			links?: Links;
 		}
@@ -802,7 +802,7 @@ declare module '@atcute/client/lexicons' {
 		interface Record {
 			$type: 'app.bsky.feed.generator';
 			createdAt: string;
-			did: At.DID;
+			did: At.Did;
 			/**
 			 * Maximum string length: 240 \
 			 * Maximum grapheme length: 24
@@ -982,7 +982,7 @@ declare module '@atcute/client/lexicons' {
 			/** AT-URI of the subject (eg, a post record). */
 			uri: At.ResourceUri;
 			/** CID of the subject record (aka, specific version of record), to filter likes. */
-			cid?: At.CID;
+			cid?: At.Cid;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -995,7 +995,7 @@ declare module '@atcute/client/lexicons' {
 		interface Output {
 			likes: Like[];
 			uri: At.ResourceUri;
-			cid?: At.CID;
+			cid?: At.Cid;
 			cursor?: string;
 		}
 		interface Like {
@@ -1082,7 +1082,7 @@ declare module '@atcute/client/lexicons' {
 			/** Reference (AT-URI) of post record */
 			uri: At.ResourceUri;
 			/** If supplied, filters to quotes of specific version (by CID) of the post record. */
-			cid?: At.CID;
+			cid?: At.Cid;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1095,7 +1095,7 @@ declare module '@atcute/client/lexicons' {
 		interface Output {
 			posts: AppBskyFeedDefs.PostView[];
 			uri: At.ResourceUri;
-			cid?: At.CID;
+			cid?: At.Cid;
 			cursor?: string;
 		}
 	}
@@ -1106,7 +1106,7 @@ declare module '@atcute/client/lexicons' {
 			/** Reference (AT-URI) of post record */
 			uri: At.ResourceUri;
 			/** If supplied, filters to reposts of specific version (by CID) of the post record. */
-			cid?: At.CID;
+			cid?: At.Cid;
 			cursor?: string;
 			/**
 			 * Minimum: 1 \
@@ -1119,7 +1119,7 @@ declare module '@atcute/client/lexicons' {
 		interface Output {
 			repostedBy: AppBskyActorDefs.ProfileView[];
 			uri: At.ResourceUri;
-			cid?: At.CID;
+			cid?: At.Cid;
 			cursor?: string;
 		}
 	}
@@ -1378,7 +1378,7 @@ declare module '@atcute/client/lexicons' {
 			$type: 'app.bsky.graph.block';
 			createdAt: string;
 			/** DID of the account to be blocked. */
-			subject: At.DID;
+			subject: At.Did;
 		}
 	}
 
@@ -1396,7 +1396,7 @@ declare module '@atcute/client/lexicons' {
 			| (string & {});
 		interface ListView {
 			[Brand.Type]?: 'app.bsky.graph.defs#listView';
-			cid: At.CID;
+			cid: At.Cid;
 			creator: AppBskyActorDefs.ProfileView;
 			indexedAt: string;
 			/**
@@ -1420,7 +1420,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface ListViewBasic {
 			[Brand.Type]?: 'app.bsky.graph.defs#listViewBasic';
-			cid: At.CID;
+			cid: At.Cid;
 			/**
 			 * Minimum string length: 1 \
 			 * Maximum string length: 64
@@ -1451,7 +1451,7 @@ declare module '@atcute/client/lexicons' {
 		/** lists the bi-directional graph relationships between one actor (not indicated in the object), and the target actors (the DID included in the object) */
 		interface Relationship {
 			[Brand.Type]?: 'app.bsky.graph.defs#relationship';
-			did: At.DID;
+			did: At.Did;
 			/** if the actor is followed by this DID, contains the AT-URI of the follow record */
 			followedBy?: At.ResourceUri;
 			/** if the actor follows this DID, this is the AT-URI of the follow record */
@@ -1459,7 +1459,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface StarterPackView {
 			[Brand.Type]?: 'app.bsky.graph.defs#starterPackView';
-			cid: At.CID;
+			cid: At.Cid;
 			creator: AppBskyActorDefs.ProfileViewBasic;
 			indexedAt: string;
 			record: unknown;
@@ -1477,7 +1477,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface StarterPackViewBasic {
 			[Brand.Type]?: 'app.bsky.graph.defs#starterPackViewBasic';
-			cid: At.CID;
+			cid: At.Cid;
 			creator: AppBskyActorDefs.ProfileViewBasic;
 			indexedAt: string;
 			record: unknown;
@@ -1497,7 +1497,7 @@ declare module '@atcute/client/lexicons' {
 		interface Record {
 			$type: 'app.bsky.graph.follow';
 			createdAt: string;
-			subject: At.DID;
+			subject: At.Did;
 		}
 	}
 
@@ -1707,7 +1707,7 @@ declare module '@atcute/client/lexicons' {
 		type Input = undefined;
 		interface Output {
 			relationships: Brand.Union<AppBskyGraphDefs.NotFoundActor | AppBskyGraphDefs.Relationship>[];
-			actor?: At.DID;
+			actor?: At.Did;
 		}
 		interface Errors {
 			ActorNotFound: {};
@@ -1798,7 +1798,7 @@ declare module '@atcute/client/lexicons' {
 			/** Reference (AT-URI) to the list record (app.bsky.graph.list). */
 			list: At.ResourceUri;
 			/** The account which is included on the list. */
-			subject: At.DID;
+			subject: At.Did;
 		}
 	}
 
@@ -1915,7 +1915,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface LabelerView {
 			[Brand.Type]?: 'app.bsky.labeler.defs#labelerView';
-			cid: At.CID;
+			cid: At.Cid;
 			creator: AppBskyActorDefs.ProfileView;
 			indexedAt: string;
 			uri: At.ResourceUri;
@@ -1926,7 +1926,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface LabelerViewDetailed {
 			[Brand.Type]?: 'app.bsky.labeler.defs#labelerViewDetailed';
-			cid: At.CID;
+			cid: At.Cid;
 			creator: AppBskyActorDefs.ProfileView;
 			indexedAt: string;
 			policies: AppBskyLabelerDefs.LabelerPolicies;
@@ -1937,7 +1937,7 @@ declare module '@atcute/client/lexicons' {
 			/** The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed. */
 			reasonTypes?: ComAtprotoModerationDefs.ReasonType[];
 			/** Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type. */
-			subjectCollections?: At.NSID[];
+			subjectCollections?: At.Nsid[];
 			/** The set of subject types (account, record, etc) this service accepts reports on. */
 			subjectTypes?: ComAtprotoModerationDefs.SubjectType[];
 			viewer?: LabelerViewerState;
@@ -1951,7 +1951,7 @@ declare module '@atcute/client/lexicons' {
 	/** Get information about a list of labeler services. */
 	namespace AppBskyLabelerGetServices {
 		interface Params {
-			dids: At.DID[];
+			dids: At.Did[];
 			/** @default false */
 			detailed?: boolean;
 		}
@@ -1971,7 +1971,7 @@ declare module '@atcute/client/lexicons' {
 			/** The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed. */
 			reasonTypes?: ComAtprotoModerationDefs.ReasonType[];
 			/** Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type. */
-			subjectCollections?: At.NSID[];
+			subjectCollections?: At.Nsid[];
 			/** The set of subject types (account, record, etc) this service accepts reports on. */
 			subjectTypes?: ComAtprotoModerationDefs.SubjectType[];
 		}
@@ -2017,7 +2017,7 @@ declare module '@atcute/client/lexicons' {
 		interface Notification {
 			[Brand.Type]?: 'app.bsky.notification.listNotifications#notification';
 			author: AppBskyActorDefs.ProfileView;
-			cid: At.CID;
+			cid: At.Cid;
 			indexedAt: string;
 			isRead: boolean;
 			/** Expected values are 'like', 'repost', 'follow', 'mention', 'reply', 'quote', and 'starterpack-joined'. */
@@ -2052,7 +2052,7 @@ declare module '@atcute/client/lexicons' {
 		interface Input {
 			appId: string;
 			platform: 'android' | 'ios' | 'web' | (string & {});
-			serviceDid: At.DID;
+			serviceDid: At.Did;
 			token: string;
 		}
 		type Output = undefined;
@@ -2090,7 +2090,7 @@ declare module '@atcute/client/lexicons' {
 		/** Facet feature for mention of another account. The text is usually a handle, including a '@' prefix, but the facet reference is a DID. */
 		interface Mention {
 			[Brand.Type]?: 'app.bsky.richtext.facet#mention';
-			did: At.DID;
+			did: At.Did;
 		}
 		/** Facet feature for a hashtag. The text usually includes a '#' prefix, but the facet reference should not (except in the case of 'double hash tags'). */
 		interface Tag {
@@ -2106,7 +2106,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyUnspeccedDefs {
 		interface SkeletonSearchActor {
 			[Brand.Type]?: 'app.bsky.unspecced.defs#skeletonSearchActor';
-			did: At.DID;
+			did: At.Did;
 		}
 		interface SkeletonSearchPost {
 			[Brand.Type]?: 'app.bsky.unspecced.defs#skeletonSearchPost';
@@ -2164,9 +2164,9 @@ declare module '@atcute/client/lexicons' {
 			 */
 			limit?: number;
 			/** DID of the account to get suggestions relative to. If not provided, suggestions will be based on the viewer. */
-			relativeToDid?: At.DID;
+			relativeToDid?: At.Did;
 			/** DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking. */
-			viewer?: At.DID;
+			viewer?: At.Did;
 		}
 		type Input = undefined;
 		interface Output {
@@ -2175,7 +2175,7 @@ declare module '@atcute/client/lexicons' {
 			/** Snowflake for this recommendation, use when submitting recommendation events. */
 			recId?: number;
 			/** DID of the account these suggestions are relative to. If this is returned undefined, suggestions are based on the viewer. */
-			relativeToDid?: At.DID;
+			relativeToDid?: At.Did;
 		}
 	}
 
@@ -2203,7 +2203,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			limit?: number;
 			/** DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking. */
-			viewer?: At.DID;
+			viewer?: At.Did;
 		}
 		type Input = undefined;
 		interface Output {
@@ -2228,7 +2228,7 @@ declare module '@atcute/client/lexicons' {
 			/** If true, acts as fast/simple 'typeahead' query. */
 			typeahead?: boolean;
 			/** DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking. */
-			viewer?: At.DID;
+			viewer?: At.Did;
 		}
 		type Input = undefined;
 		interface Output {
@@ -2281,7 +2281,7 @@ declare module '@atcute/client/lexicons' {
 			/** Filter to posts with links (facet links or embeds) pointing to this URL. Server may apply URL normalization or fuzzy matching. */
 			url?: At.GenericUri;
 			/** DID of the account making the request (not included for public/unauthenticated queries). Used for 'from:me' queries. */
-			viewer?: At.DID;
+			viewer?: At.Did;
 		}
 		type Input = undefined;
 		interface Output {
@@ -2309,7 +2309,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			limit?: number;
 			/** DID of the account making the request (not included for public/unauthenticated queries). */
-			viewer?: At.DID;
+			viewer?: At.Did;
 		}
 		type Input = undefined;
 		interface Output {
@@ -2326,7 +2326,7 @@ declare module '@atcute/client/lexicons' {
 	namespace AppBskyVideoDefs {
 		interface JobStatus {
 			[Brand.Type]?: 'app.bsky.video.defs#jobStatus';
-			did: At.DID;
+			did: At.Did;
 			jobId: string;
 			/** The state of the video processing job. All values not listed as a known value indicate that the job is in process. */
 			state: 'JOB_STATE_COMPLETED' | 'JOB_STATE_FAILED' | (string & {});
@@ -2386,7 +2386,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ChatBskyActorDefs {
 		interface ProfileViewBasic {
 			[Brand.Type]?: 'chat.bsky.actor.defs#profileViewBasic';
-			did: At.DID;
+			did: At.Did;
 			handle: At.Handle;
 			associated?: AppBskyActorDefs.ProfileAssociated;
 			avatar?: At.GenericUri;
@@ -2542,7 +2542,7 @@ declare module '@atcute/client/lexicons' {
 		interface MessageRef {
 			[Brand.Type]?: 'chat.bsky.convo.defs#messageRef';
 			convoId: string;
-			did: At.DID;
+			did: At.Did;
 			messageId: string;
 		}
 		interface MessageView {
@@ -2563,7 +2563,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface MessageViewSender {
 			[Brand.Type]?: 'chat.bsky.convo.defs#messageViewSender';
-			did: At.DID;
+			did: At.Did;
 		}
 		interface ReactionView {
 			[Brand.Type]?: 'chat.bsky.convo.defs#reactionView';
@@ -2573,7 +2573,7 @@ declare module '@atcute/client/lexicons' {
 		}
 		interface ReactionViewSender {
 			[Brand.Type]?: 'chat.bsky.convo.defs#reactionViewSender';
-			did: At.DID;
+			did: At.Did;
 		}
 	}
 
@@ -2603,7 +2603,7 @@ declare module '@atcute/client/lexicons' {
 			 * Minimum array length: 1 \
 			 * Maximum array length: 10
 			 */
-			members: At.DID[];
+			members: At.Did[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -2618,7 +2618,7 @@ declare module '@atcute/client/lexicons' {
 			 * Minimum array length: 1 \
 			 * Maximum array length: 10
 			 */
-			members: At.DID[];
+			members: At.Did[];
 		}
 		type Input = undefined;
 		interface Output {
@@ -2787,7 +2787,7 @@ declare module '@atcute/client/lexicons' {
 
 	namespace ChatBskyModerationGetActorMetadata {
 		interface Params {
-			actor: At.DID;
+			actor: At.Did;
 		}
 		type Input = undefined;
 		interface Output {
@@ -2823,7 +2823,7 @@ declare module '@atcute/client/lexicons' {
 	namespace ChatBskyModerationUpdateActorAccess {
 		interface Params {}
 		interface Input {
-			actor: At.DID;
+			actor: At.Did;
 			allowAccess: boolean;
 			ref?: string;
 		}

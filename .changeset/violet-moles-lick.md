@@ -3,6 +3,6 @@
 '@atcute/client': minor
 ---
 
-add `At.TID` string type
+add `At.Tid` string type
 
 this is currently an alias to string for now, but it can be made stricter later.
