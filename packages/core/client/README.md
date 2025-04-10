@@ -7,24 +7,83 @@ lightweight and cute API client for AT Protocol.
   be trusted in returning valid responses.
 
 ```ts
-import { XRPC, CredentialManager } from '@atcute/client';
+import { Client, CredentialManager, ok, simpleFetchHandler } from '@atcute/client';
 
-const manager = new CredentialManager({ service: 'https://bsky.social' });
-const rpc = new XRPC({ handler: manager });
+// import additional lexicons
+import '@atcute/bluesky/lexicons';
 
-await manager.login({ identifier: 'example.com', password: 'ofki-yrwl-hmcc-cvau' });
+// basic usage
+{
+	const handler = simpleFetchHandler({ service: 'https://public.api.bsky.app' });
+	const rpc = new Client({ handler });
 
-console.log(manager.session);
-// -> { refreshJwt: 'eyJhb...', ... }
+	// explicit response handling
+	{
+		const { ok, data } = await rpc.get('app.bsky.actor.getProfile', {
+			params: {
+				actor: 'bsky.app',
+			},
+		});
 
-const { data } = await rpc.get('com.atproto.identity.resolveHandle', {
-	params: {
-		handle: 'pfrazee.com',
-	},
-});
+		if (!ok) {
+			switch (data.error) {
+				case 'InvalidRequest': {
+					// Account doesn't exist
+					break;
+				}
+				case 'AccountTakedown': {
+					// Account taken down
+					break;
+				}
+				case 'AccountDeactivated': {
+					// Account deactivated
+					break;
+				}
+			}
+		}
 
-console.log(data.did);
-// -> did:plc:ragtjsm2j2vknwkz3zp4oxrd
+		if (ok) {
+			console.log(data.displayName);
+			// -> "Bluesky"
+		}
+	}
+
+	// optimistic response handling
+	{
+		const data = await ok(
+			rpc.get('app.bsky.actor.getProfile', {
+				params: {
+					actor: 'bsky.app',
+				},
+			}),
+		);
+
+		console.log(data.displayName);
+		// -> "Bluesky"
+	}
+}
+
+// performing authenticated requests
+{
+	const manager = new CredentialManager({ service: 'https://bsky.social' });
+	const rpc = new Client({ handler: manager });
+
+	await manager.login({ identifier: 'example.com', password: 'ofki-yrwl-hmcc-cvau' });
+
+	console.log(manager.session);
+	// -> { refreshJwt: 'eyJhb...', ... }
+
+	const data = await ok(
+		rpc.get('com.atproto.identity.resolveHandle', {
+			params: {
+				handle: 'pfrazee.com',
+			},
+		}),
+	);
+
+	console.log(data.did);
+	// -> 'did:plc:ragtjsm2j2vknwkz3zp4oxrd'
+}
 ```
 
 by default, the API client only ships with the base AT Protocol (`com.atproto.*`) lexicons and

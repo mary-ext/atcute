@@ -3,15 +3,24 @@ import type { At, Procedures, Queries } from './lexicons.js';
 import { buildFetchHandler, type FetchHandler, type FetchHandlerObject } from './fetch-handler.js';
 import { mergeHeaders } from './utils/http.js';
 
+/**
+ * @deprecated
+ */
 export type HeadersObject = Record<string, string>;
 
-/** Response from XRPC service */
+/**
+ * Response from XRPC service
+ * @deprecated
+ */
 export interface XRPCResponse<T = any> {
 	data: T;
 	headers: HeadersObject;
 }
 
-/** Options for constructing an XRPC error */
+/**
+ * Options for constructing an XRPC error
+ * @deprecated
+ */
 export interface XRPCErrorOptions {
 	kind?: string;
 	description?: string;
@@ -19,7 +28,10 @@ export interface XRPCErrorOptions {
 	cause?: unknown;
 }
 
-/** Error coming from the XRPC service */
+/**
+ * Error coming from the XRPC service
+ * @deprecated
+ */
 export class XRPCError extends Error {
 	override name = 'XRPCError';
 
@@ -50,19 +62,28 @@ export class XRPCError extends Error {
 	}
 }
 
-/** Service proxy options */
+/**
+ * Service proxy options
+ * @deprecated
+ */
 export interface XRPCProxyOptions {
 	type: 'atproto_pds' | 'atproto_labeler' | 'bsky_fg' | 'bsky_notif' | ({} & string);
 	service: At.Did;
 }
 
-/** Options for constructing an XRPC */
+/**
+ * Options for constructing an XRPC
+ * @deprecated
+ */
 export interface XRPCOptions {
 	handler: FetchHandler | FetchHandlerObject;
 	proxy?: XRPCProxyOptions;
 }
 
-/** XRPC request options */
+/**
+ * XRPC request options
+ * @deprecated
+ */
 export interface XRPCRequestOptions {
 	type: 'get' | 'post';
 	nsid: string;
@@ -72,7 +93,10 @@ export interface XRPCRequestOptions {
 	signal?: AbortSignal;
 }
 
-/** XRPC response */
+/**
+ * XRPC response
+ * @deprecated
+ */
 export interface XRPCResponse<T = any> {
 	data: T;
 	headers: HeadersObject;
@@ -86,13 +110,19 @@ interface BaseRPCOptions {
 	signal?: AbortSignal;
 }
 
-/** Options for the query/procedure request */
+/**
+ * Options for the query/procedure request
+ * @deprecated
+ */
 export type RPCOptions<T> = BaseRPCOptions &
 	(T extends { params: any } ? { params: T['params'] } : {}) &
 	(T extends { input: any } ? { data: T['input'] } : {});
 
 type OutputOf<T> = T extends { output: any } ? T['output'] : never;
 
+/**
+ * @deprecated
+ */
 export class XRPC {
 	handle: FetchHandler;
 	proxy: XRPCProxyOptions | undefined;
@@ -253,10 +283,16 @@ interface ErrorResponseBody {
 	message?: string;
 }
 
+/**
+ * @deprecated
+ */
 export const clone = (rpc: XRPC): XRPC => {
 	return new XRPC({ handler: rpc.handle, proxy: rpc.proxy });
 };
 
+/**
+ * @deprecated
+ */
 export const withProxy = (rpc: XRPC, options: XRPCProxyOptions) => {
 	return new XRPC({ handler: rpc.handle, proxy: options });
 };

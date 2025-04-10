@@ -2,16 +2,18 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { TestNetwork } from '@atcute/internal-dev-env';
 
+import type { At } from './lexicons.js';
+
+import { Client, ok } from './client.js';
 import { CredentialManager, type AtpSessionData } from './credential-manager.js';
 import { simpleFetchHandler } from './fetch-handler.js';
-import { XRPC, XRPCError } from './rpc.js';
 
 let network: TestNetwork;
 
 beforeAll(async () => {
 	network = await TestNetwork.create({});
 
-	const rpc = new XRPC({ handler: simpleFetchHandler({ service: network.pds.url }) });
+	const rpc = new Client({ handler: simpleFetchHandler({ service: network.pds.url }) });
 	await createAccount(rpc, 'user1.test');
 });
 
@@ -20,9 +22,9 @@ afterAll(async () => {
 });
 
 it('can connect to a PDS', async () => {
-	const rpc = new XRPC({ handler: simpleFetchHandler({ service: network.pds.url }) });
+	const rpc = new Client({ handler: simpleFetchHandler({ service: network.pds.url }) });
 
-	const { data } = await rpc.get('com.atproto.server.describeServer', {});
+	const data = await ok(rpc.get('com.atproto.server.describeServer'));
 
 	expect(data).toEqual({
 		did: 'did:web:localhost',
@@ -41,15 +43,15 @@ describe('CredentialManager', () => {
 		const onSessionUpdate = vi.fn();
 
 		const manager = new CredentialManager({ service: network.pds.url, onSessionUpdate });
-		const rpc = new XRPC({ handler: manager });
+		const rpc = new Client({ handler: manager });
 
-		await expect(rpc.get('com.atproto.server.getSession', {})).rejects.toThrow();
+		await expect(ok(rpc.get('com.atproto.server.getSession'))).rejects.toThrow();
 		expect(onSessionUpdate).not.toHaveBeenCalled();
 		expect(manager.session).toBe(undefined);
 
 		await manager.login({ identifier: 'user1.test', password: 'password' });
 
-		await expect(rpc.get('com.atproto.server.getSession', {})).resolves.not.toBe(undefined);
+		await expect(ok(rpc.get('com.atproto.server.getSession'))).resolves.not.toBe(undefined);
 		expect(onSessionUpdate).toHaveBeenCalledOnce();
 		expect(manager.session).not.toBe(undefined);
 	});
@@ -59,7 +61,7 @@ describe('CredentialManager', () => {
 		const onRefresh = vi.fn();
 
 		const manager = new CredentialManager({ service: network.pds.url, fetch, onRefresh });
-		const rpc = new XRPC({ handler: manager });
+		const rpc = new Client({ handler: manager });
 
 		await manager.login({ identifier: 'user1.test', password: 'password' });
 
@@ -78,7 +80,7 @@ describe('CredentialManager', () => {
 			}),
 		);
 
-		await rpc.get('com.atproto.server.getSession', {});
+		await ok(rpc.get('com.atproto.server.getSession'));
 		expect(onRefresh).toHaveBeenCalledOnce();
 
 		const refreshedJwt = manager.session!.accessJwt;
@@ -93,7 +95,7 @@ describe('CredentialManager', () => {
 		const onRefresh = vi.fn();
 
 		const manager = new CredentialManager({ service: network.pds.url, fetch, onRefresh });
-		const rpc = new XRPC({ handler: manager });
+		const rpc = new Client({ handler: manager });
 
 		await manager.login({ identifier: 'user1.test', password: 'password' });
 
@@ -129,9 +131,9 @@ describe('CredentialManager', () => {
 			},
 			async () => {
 				await Promise.all([
-					rpc.get('com.atproto.server.getSession', {}),
-					rpc.get('com.atproto.server.getSession', {}),
-					rpc.get('com.atproto.server.getSession', {}),
+					ok(rpc.get('com.atproto.server.getSession')),
+					ok(rpc.get('com.atproto.server.getSession')),
+					ok(rpc.get('com.atproto.server.getSession')),
 				]);
 			},
 		);
@@ -153,7 +155,7 @@ describe('CredentialManager', () => {
 		const onRefresh = vi.fn();
 
 		const manager = new CredentialManager({ service: network.pds.url, fetch, onRefresh });
-		const rpc = new XRPC({ handler: manager });
+		const rpc = new Client({ handler: manager });
 
 		await manager.login({ identifier: 'user1.test', password: 'password' });
 
@@ -183,16 +185,13 @@ describe('CredentialManager', () => {
 				return originalFetch(request);
 			},
 			async () => {
-				try {
-					await rpc.get('com.atproto.server.getSession', {});
-					expect.fail(`getSession call should not succeed`);
-				} catch (err) {
-					if (!(err instanceof XRPCError)) {
-						expect.fail(`No errors other than XRPC error should be thrown`);
-					}
+				const response = await rpc.get('com.atproto.server.getSession');
 
-					expect(err.kind).toBe('ExpiredToken');
+				if (response.ok) {
+					expect.fail(`getSession call should not succeed`);
 				}
+
+				expect(response.data.error).toBe('ExpiredToken');
 			},
 		);
 
@@ -236,14 +235,16 @@ describe('CredentialManager', () => {
 	});
 });
 
-const createAccount = async (rpc: XRPC, handle: string) => {
-	await rpc.call('com.atproto.server.createAccount', {
-		data: {
-			handle: handle,
-			email: `user@test.com`,
-			password: `password`,
-		},
-	});
+const createAccount = async (rpc: Client, handle: At.Handle) => {
+	await ok(
+		rpc.post('com.atproto.server.createAccount', {
+			input: {
+				handle: handle,
+				email: `user@test.com`,
+				password: `password`,
+			},
+		}),
+	);
 };
 
 const sleep = (ms: number) => {

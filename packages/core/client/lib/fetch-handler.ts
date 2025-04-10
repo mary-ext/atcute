@@ -1,7 +1,7 @@
-/** Fetch handler function */
+/** fetch handler function */
 export type FetchHandler = (pathname: string, init: RequestInit) => Promise<Response>;
 
-/** Fetch handler in an object */
+/** fetch handler in an object */
 export interface FetchHandlerObject {
 	handle(this: FetchHandlerObject, pathname: string, init: RequestInit): Promise<Response>;
 }
@@ -25,6 +25,6 @@ export const simpleFetchHandler = ({
 }: SimpleFetchHandlerOptions): FetchHandler => {
 	return async (pathname, init) => {
 		const url = new URL(pathname, service);
-		return _fetch(url, init);
+		return await _fetch(url, init);
 	};
 };

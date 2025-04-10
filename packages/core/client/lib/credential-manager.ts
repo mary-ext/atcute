@@ -1,65 +1,71 @@
 import type { At, ComAtprotoServerCreateSession } from './lexicons.js';
 
+import { Client, ClientResponseError, isXRPCErrorPayload, ok } from './client.js';
 import { simpleFetchHandler, type FetchHandlerObject } from './fetch-handler.js';
-import { XRPC, XRPCError } from './rpc.js';
 
 import { getPdsEndpoint, type DidDocument } from './utils/did.js';
 import { decodeJwt } from './utils/jwt.js';
 
-/** Interface for the decoded access token, for convenience */
+/**
+ * represents the decoded access token, for convenience
+ * @deprecated
+ */
 export interface AtpAccessJwt {
-	/** Access token scope, app password returns a different scope. */
+	/** access token scope */
 	scope:
 		| 'com.atproto.access'
 		| 'com.atproto.appPass'
 		| 'com.atproto.appPassPrivileged'
 		| 'com.atproto.signupQueued'
 		| 'com.atproto.takendown';
-	/** Account DID */
+	/** account DID */
 	sub: At.Did;
-	/** Expiration time */
+	/** expiration time in Unix seconds */
 	exp: number;
-	/** Creation/issued time */
+	/** token issued time in Unix seconds */
 	iat: number;
 }
 
-/** Interface for the decoded refresh token, for convenience */
+/**
+ * represents the the decoded refresh token, for convenience
+ * @deprecated
+ */
 export interface AtpRefreshJwt {
-	/** Refresh token scope */
+	/** refresh token scope */
 	scope: 'com.atproto.refresh';
-	/** ID of this refresh token */
+	/** unique identifier for this session */
 	jti: string;
-	/** Account DID */
+	/** account DID */
 	sub: At.Did;
-	/** Intended audience of this refresh token, in DID */
+	/** intended audience of this refresh token, in DID */
 	aud: At.Did;
-	/** Expiration time */
+	/** token expiration time in seconds */
 	exp: number;
-	/** Creation/issued time */
+	/** token issued time in seconds */
 	iat: number;
 }
 
-/** Saved session data, this can be reused again for next time. */
+/** session data, can be persisted and reused */
 export interface AtpSessionData {
-	/** Refresh token */
+	/** refresh token */
 	refreshJwt: string;
-	/** Access token */
+	/** access token */
 	accessJwt: string;
-	/** Account handle */
+	/** account handle */
 	handle: string;
-	/** Account DID */
+	/** account DID */
 	did: At.Did;
 	/** PDS endpoint found in the DID document, this will be used as the service URI if provided */
 	pdsUri?: string;
-	/** Email address of the account, might not be available if on app password */
+	/** email address of the account, might not be available if on app password */
 	email?: string;
-	/** If the email address has been confirmed or not */
+	/** whether the email address has been confirmed or not */
 	emailConfirmed?: boolean;
-	/** If the account has email-based two-factor authentication enabled */
+	/** whether the account has email-based two-factor authentication enabled */
 	emailAuthFactor?: boolean;
-	/** Whether the account is active (not deactivated, taken down, or suspended) */
+	/** whether the account is active (not deactivated, taken down, or suspended) */
 	active: boolean;
-	/** Possible reason for why the account is inactive */
+	/** possible reason for why the account is inactive */
 	inactiveStatus?: string;
 }
 
@@ -67,29 +73,36 @@ export interface CredentialManagerOptions {
 	/** PDS server URL */
 	service: string;
 
-	/** Custom fetch function */
-	fetch?: typeof globalThis.fetch;
+	/** custom fetch function */
+	fetch?: typeof fetch;
 
-	/** Function that gets called if the session turned out to have expired during an XRPC request */
+	/** function called when the session expires and can't be refreshed */
 	onExpired?: (session: AtpSessionData) => void;
-	/** Function that gets called if the session has been refreshed during an XRPC request */
+	/** function called after a successful session refresh */
 	onRefresh?: (session: AtpSessionData) => void;
-	/** Function that gets called if the session object has been refreshed */
+	/** function called whenever the session object is updated (login, resume, refresh) */
 	onSessionUpdate?: (session: AtpSessionData) => void;
 }
 
 export class CredentialManager implements FetchHandlerObject {
+	/** service URL to make authentication requests with */
 	readonly serviceUrl: string;
+	/** fetch implementation */
 	fetch: typeof fetch;
 
-	#server: XRPC;
+	/** internal client instance for making authentication requests */
+	#server: Client;
+	/** holds a promise for the current refresh operation, used for debouncing */
 	#refreshSessionPromise: Promise<void> | undefined;
 
+	/** callback for session expiration */
 	#onExpired: CredentialManagerOptions['onExpired'];
+	/** callback for successful session refresh */
 	#onRefresh: CredentialManagerOptions['onRefresh'];
+	/** callback for session updates */
 	#onSessionUpdate: CredentialManagerOptions['onSessionUpdate'];
 
-	/** Current session state */
+	/** current active session, undefined if not authenticated */
 	session?: AtpSessionData;
 
 	constructor({
@@ -102,13 +115,14 @@ export class CredentialManager implements FetchHandlerObject {
 		this.serviceUrl = service;
 		this.fetch = _fetch;
 
-		this.#server = new XRPC({ handler: simpleFetchHandler({ service: service, fetch: _fetch }) });
+		this.#server = new Client({ handler: simpleFetchHandler({ service, fetch: _fetch }) });
 
 		this.#onRefresh = onRefresh;
 		this.#onExpired = onExpired;
 		this.#onSessionUpdate = onSessionUpdate;
 	}
 
+	/** service URL to make actual API requests with */
 	get dispatchUrl() {
 		return this.session?.pdsUri ?? this.serviceUrl;
 	}
@@ -138,13 +152,14 @@ export class CredentialManager implements FetchHandlerObject {
 			return initialResponse;
 		}
 
-		// Return initial response if:
-		// - refreshSession returns expired
-		// - Body stream has been consumed
+		// return initial response if:
+		// - the above refreshSession failed and cleared the session
+		// - provided request body was a stream, which can't be resent once consumed
 		if (!this.session || init.body instanceof ReadableStream) {
 			return initialResponse;
 		}
 
+		// set the new token and retry the request
 		headers.set('authorization', `Bearer ${this.session.accessJwt}`);
 
 		return await (0, this.fetch)(url, { ...init, headers });
@@ -158,30 +173,29 @@ export class CredentialManager implements FetchHandlerObject {
 
 	async #refreshSessionInner(): Promise<void> {
 		const currentSession = this.session;
-
 		if (!currentSession) {
 			return;
 		}
 
-		try {
-			const { data } = await this.#server.call('com.atproto.server.refreshSession', {
-				headers: {
-					authorization: `Bearer ${currentSession.refreshJwt}`,
-				},
-			});
+		const response = await this.#server.post('com.atproto.server.refreshSession', {
+			headers: {
+				authorization: `Bearer ${currentSession.refreshJwt}`,
+			},
+		});
 
-			this.#updateSession({ ...currentSession, ...data });
-			this.#onRefresh?.(this.session!);
-		} catch (err) {
-			if (err instanceof XRPCError) {
-				const kind = err.kind;
+		if (!response.ok) {
+			const error = response.data.error;
 
-				if (kind === 'ExpiredToken' || kind === 'InvalidToken') {
-					this.session = undefined;
-					this.#onExpired?.(currentSession);
-				}
+			if (error === 'ExpiredToken' || error === 'InvalidToken') {
+				this.session = undefined;
+				this.#onExpired?.(currentSession);
 			}
+
+			throw new ClientResponseError(response);
 		}
+
+		this.#updateSession({ ...currentSession, ...response.data });
+		this.#onRefresh?.(this.session!);
 	}
 
 	#updateSession(raw: ComAtprotoServerCreateSession.Output): AtpSessionData {
@@ -192,7 +206,7 @@ export class CredentialManager implements FetchHandlerObject {
 			pdsUri = getPdsEndpoint(didDoc);
 		}
 
-		const newSession = {
+		const newSession: AtpSessionData = {
 			accessJwt: raw.accessJwt,
 			refreshJwt: raw.refreshJwt,
 			handle: raw.handle,
@@ -200,7 +214,7 @@ export class CredentialManager implements FetchHandlerObject {
 			pdsUri: pdsUri,
 			email: raw.email,
 			emailConfirmed: raw.emailConfirmed,
-			emailAuthFactor: raw.emailConfirmed,
+			emailAuthFactor: raw.emailAuthFactor,
 			active: raw.active ?? true,
 			inactiveStatus: raw.status,
 		};
@@ -212,16 +226,16 @@ export class CredentialManager implements FetchHandlerObject {
 	}
 
 	/**
-	 * Resume a saved session
-	 * @param session Session information, taken from `AtpAuth#session` after login
+	 * resume from a persisted session
+	 * @param session session data, taken from `AtpAuth#session` after login
 	 */
 	async resume(session: AtpSessionData): Promise<AtpSessionData> {
-		const now = Date.now() / 1000 + 60 * 5;
+		const now = Date.now() / 1_000 + 60 * 5;
 
 		const refreshToken = decodeJwt(session.refreshJwt) as AtpRefreshJwt;
 
 		if (now >= refreshToken.exp) {
-			throw new XRPCError(401, { kind: 'InvalidToken' });
+			throw new ClientResponseError({ status: 401, data: { error: 'InvalidToken' } });
 		}
 
 		const accessToken = decodeJwt(session.accessJwt) as AtpAccessJwt;
@@ -230,62 +244,69 @@ export class CredentialManager implements FetchHandlerObject {
 		if (now >= accessToken.exp) {
 			await this.#refreshSession();
 		} else {
-			const promise = this.#server.get('com.atproto.server.getSession', {
-				headers: {
-					authorization: `Bearer ${session.accessJwt}`,
+			const promise = ok(
+				this.#server.get('com.atproto.server.getSession', {
+					headers: {
+						authorization: `Bearer ${session.accessJwt}`,
+					},
+				}),
+			);
+
+			promise.then(
+				(next) => {
+					const existing = this.session;
+					if (!existing || existing.did !== next.did) {
+						return;
+					}
+
+					this.#updateSession({ ...existing, ...next });
 				},
-			});
-
-			promise.then((response) => {
-				const existing = this.session;
-				const next = response.data;
-
-				if (!existing) {
-					return;
-				}
-
-				this.#updateSession({ ...existing, ...next });
-			});
+				(_err) => {
+					// ignore error
+				},
+			);
 		}
 
 		if (!this.session) {
-			throw new XRPCError(401, { kind: 'InvalidToken' });
+			throw new ClientResponseError({ status: 401, data: { error: 'InvalidToken' } });
 		}
 
 		return this.session;
 	}
 
 	/**
-	 * Perform a login operation
-	 * @param options Login options
-	 * @returns Session data that can be saved for later
+	 * sign in to an account
+	 * @param options credential options
+	 * @returns session data
 	 */
 	async login(options: AuthLoginOptions): Promise<AtpSessionData> {
 		// Reset the session
 		this.session = undefined;
 
-		const res = await this.#server.call('com.atproto.server.createSession', {
-			data: {
-				identifier: options.identifier,
-				password: options.password,
-				authFactorToken: options.code,
-				allowTakendown: options.allowTakendown,
-			},
-		});
+		const session = await ok(
+			this.#server.post('com.atproto.server.createSession', {
+				input: {
+					identifier: options.identifier,
+					password: options.password,
+					authFactorToken: options.code,
+					allowTakendown: options.allowTakendown,
+				},
+			}),
+		);
 
-		return this.#updateSession(res.data);
+		return this.#updateSession(session);
 	}
 }
 
-/** Login options */
+/** credentials */
 export interface AuthLoginOptions {
-	/** What account to login as, this could be domain handle, DID, or email address */
+	/** what account to login as, this could be domain handle, DID, or email address */
 	identifier: string;
-	/** Account password */
+	/** account password */
 	password: string;
-	/** Two-factor authentication code */
+	/** two-factor authentication code, if email TOTP is enabled */
 	code?: string;
-	/** Allow signing in even if the account has been taken down,  */
+	/** allow signing in even if the account has been taken down */
 	allowTakendown?: boolean;
 }
 
@@ -298,6 +319,9 @@ const isExpiredTokenResponse = async (response: Response): Promise<boolean> => {
 		return false;
 	}
 
+	// this is nasty as it relies heavily on what the PDS returns, but avoiding
+	// cloning and reading the request as much as possible is better.
+
 	// {"error":"ExpiredToken","message":"Token has expired"}
 	// {"error":"ExpiredToken","message":"Token is expired"}
 	if (extractContentLength(response.headers) > 54 * 1.5) {
@@ -305,8 +329,10 @@ const isExpiredTokenResponse = async (response: Response): Promise<boolean> => {
 	}
 
 	try {
-		const { error, message } = await response.clone().json();
-		return error === 'ExpiredToken' && (typeof message === 'string' || message === undefined);
+		const data = await response.clone().json();
+		if (isXRPCErrorPayload(data)) {
+			return data.error === 'ExpiredToken';
+		}
 	} catch {}
 
 	return false;
