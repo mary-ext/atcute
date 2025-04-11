@@ -1,5 +1,11 @@
 # @atcute/identity
 
+## 0.1.3
+
+### Patch Changes
+
+- 199ecf0: stop normalizing service array
+
 ## 0.1.2
 
 ### Patch Changes
