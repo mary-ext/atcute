@@ -114,25 +114,26 @@ export const didDocument: v.Type<t.DidDocument> = v
 	.chain((input) => {
 		const { id: did, service: services } = input;
 
-		let newServices: t.Service[] | undefined;
+		if (services?.length) {
+			const len = services.length;
+			const identifiers = new Array(len);
 
-		if (services) {
-			for (let i = 0, len = services.length; i < len; i++) {
+			for (let i = 0; i < len; i++) {
 				const service = services[i];
 
 				let id = service.id;
 				if (id[0] === '#') {
 					id = did + id;
-
-					if (newServices !== undefined) {
-						newServices[i] = { ...service, id };
-					} else {
-						newServices = services.with(i, { ...service, id });
-					}
 				}
 
+				identifiers[i] = id;
+			}
+
+			for (let i = 0; i < len; i++) {
+				const id = identifiers[i];
+
 				for (let j = 0; j < i; j++) {
-					if (id === (newServices ?? services)[j].id) {
+					if (id === identifiers[j]) {
 						return v.err({
 							message: `duplicate "${id}" service`,
 							path: ['service', i, 'id'],
@@ -140,10 +141,6 @@ export const didDocument: v.Type<t.DidDocument> = v
 					}
 				}
 			}
-		}
-
-		if (newServices !== undefined) {
-			return v.ok({ ...input, service: newServices });
 		}
 
 		return v.ok(input);

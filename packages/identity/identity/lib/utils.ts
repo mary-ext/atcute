@@ -71,23 +71,20 @@ export const getAtprotoServiceEndpoint = (
 		return;
 	}
 
-	const expectedId = doc.id + predicate.id;
-	const expectedType = predicate.type;
-
 	for (let idx = 0, len = services.length; idx < len; idx++) {
 		const { id, type, serviceEndpoint } = services[idx];
 
-		if (id !== expectedId) {
+		if (id !== predicate.id && id !== doc.id + predicate.id) {
 			continue;
 		}
 
-		if (expectedType !== undefined) {
+		if (predicate.type !== undefined) {
 			if (Array.isArray(type)) {
-				if (!type.includes(expectedType)) {
+				if (!type.includes(predicate.type)) {
 					continue;
 				}
 			} else {
-				if (type !== expectedType) {
+				if (type !== predicate.type) {
 					continue;
 				}
 			}
