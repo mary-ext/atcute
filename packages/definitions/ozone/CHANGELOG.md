@@ -1,5 +1,11 @@
 # @atcute/ozone
 
+## 2.0.2
+
+### Patch Changes
+
+- 287a157: account for unions with no members
+
 ## 2.0.1
 
 ### Patch Changes

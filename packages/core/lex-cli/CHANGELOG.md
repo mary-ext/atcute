@@ -1,5 +1,11 @@
 # @atcute/lex-cli
 
+## 1.1.1
+
+### Patch Changes
+
+- 287a157: account for unions with no members
+
 ## 1.1.0
 
 ### Minor Changes
