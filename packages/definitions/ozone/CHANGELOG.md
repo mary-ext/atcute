@@ -1,5 +1,11 @@
 # @atcute/ozone
 
+## 2.0.1
+
+### Patch Changes
+
+- 4f59252: pull latest Bluesky lexicons
+
 ## 2.0.0
 
 ### Major Changes

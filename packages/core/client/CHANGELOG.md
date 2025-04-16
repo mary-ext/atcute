@@ -1,5 +1,11 @@
 # @atcute/client
 
+## 3.0.1
+
+### Patch Changes
+
+- 4f59252: pull latest Bluesky lexicons
+
 ## 3.0.0
 
 this version contains breaking changes to the lexicon type definitions.
