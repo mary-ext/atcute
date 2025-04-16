@@ -207,7 +207,11 @@ const resolveType = (
 			return (ns ? toNamespace(ns) + '.' : '') + (ref ? toUpper(ref) : 'Main');
 		});
 
-		val = `Brand.Union<${refs.join('|')}>`;
+		if (refs.length !== 0) {
+			val = `Brand.Union<${refs.join('|')}>`;
+		} else {
+			val = `unknown`;
+		}
 	} else if (type === 'object' || type === 'params') {
 		const required = def.required;
 		const nullable = type === 'object' ? def.nullable : [];

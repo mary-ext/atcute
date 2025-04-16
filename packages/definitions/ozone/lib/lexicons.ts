@@ -514,7 +514,7 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#subjectView';
 			subject: string;
 			type: ComAtprotoModerationDefs.SubjectType;
-			profile?: Brand.Union<>;
+			profile?: unknown;
 			record?: RecordViewDetail;
 			repo?: RepoViewDetail;
 			status?: SubjectStatusView;
