@@ -509,6 +509,16 @@ declare module '@atcute/client/lexicons' {
 			tags?: string[];
 			takendown?: boolean;
 		}
+		/** Detailed view of a subject. For record subjects, the author's repo and profile will be returned. */
+		interface SubjectView {
+			[Brand.Type]?: 'tools.ozone.moderation.defs#subjectView';
+			subject: string;
+			type: ComAtprotoModerationDefs.SubjectType;
+			profile?: Brand.Union<>;
+			record?: RecordViewDetail;
+			repo?: RepoViewDetail;
+			status?: SubjectStatusView;
+		}
 		interface VideoDetails {
 			[Brand.Type]?: 'tools.ozone.moderation.defs#videoDetails';
 			height: number;
@@ -623,6 +633,21 @@ declare module '@atcute/client/lexicons' {
 			repos: Brand.Union<
 				ToolsOzoneModerationDefs.RepoViewDetail | ToolsOzoneModerationDefs.RepoViewNotFound
 			>[];
+		}
+	}
+
+	/** Get details about subjects. */
+	namespace ToolsOzoneModerationGetSubjects {
+		interface Params {
+			/**
+			 * Minimum array length: 1 \
+			 * Maximum array length: 100
+			 */
+			subjects: string[];
+		}
+		type Input = undefined;
+		interface Output {
+			subjects: ToolsOzoneModerationDefs.SubjectView[];
 		}
 	}
 
@@ -1238,6 +1263,12 @@ declare module '@atcute/client/lexicons' {
 			/** @deprecated */
 			output: ToolsOzoneModerationGetRepos.Output;
 			response: { json: ToolsOzoneModerationGetRepos.Output };
+		};
+		'tools.ozone.moderation.getSubjects': {
+			params: ToolsOzoneModerationGetSubjects.Params;
+			/** @deprecated */
+			output: ToolsOzoneModerationGetSubjects.Output;
+			response: { json: ToolsOzoneModerationGetSubjects.Output };
 		};
 		'tools.ozone.moderation.queryEvents': {
 			params: ToolsOzoneModerationQueryEvents.Params;

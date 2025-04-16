@@ -1905,6 +1905,21 @@ declare module '@atcute/client/lexicons' {
 		type Output = undefined;
 	}
 
+	namespace AppBskyGraphVerification {
+		/** Record declaring a verification relationship between two accounts. Verifications are only considered valid by an app if issued by an account the app considers trusted. */
+		interface Record {
+			$type: 'app.bsky.graph.verification';
+			/** Date of when the verification was created. */
+			createdAt: string;
+			/** Display name of the subject the verification applies to at the moment of verifying, which might not be the same at the time of viewing. The verification is only valid if the current displayName matches the one at the time of verifying. */
+			displayName: string;
+			/** Handle of the subject the verification applies to at the moment of verifying, which might not be the same at the time of viewing. The verification is only valid if the current handle matches the one at the time of verifying. */
+			handle: At.Handle;
+			/** DID of the subject the verification applies to. */
+			subject: At.Did;
+		}
+	}
+
 	namespace AppBskyLabelerDefs {
 		interface LabelerPolicies {
 			[Brand.Type]?: 'app.bsky.labeler.defs#labelerPolicies';
@@ -2116,12 +2131,34 @@ declare module '@atcute/client/lexicons' {
 			[Brand.Type]?: 'app.bsky.unspecced.defs#skeletonSearchStarterPack';
 			uri: At.ResourceUri;
 		}
+		interface SkeletonTrend {
+			[Brand.Type]?: 'app.bsky.unspecced.defs#skeletonTrend';
+			dids: At.Did[];
+			displayName: string;
+			link: string;
+			postCount: number;
+			startedAt: string;
+			topic: string;
+			category?: string;
+			status?: 'hot' | (string & {});
+		}
 		interface TrendingTopic {
 			[Brand.Type]?: 'app.bsky.unspecced.defs#trendingTopic';
 			link: string;
 			topic: string;
 			description?: string;
 			displayName?: string;
+		}
+		interface TrendView {
+			[Brand.Type]?: 'app.bsky.unspecced.defs#trendView';
+			actors: AppBskyActorDefs.ProfileViewBasic[];
+			displayName: string;
+			link: string;
+			postCount: number;
+			startedAt: string;
+			topic: string;
+			category?: string;
+			status?: 'hot' | (string & {});
 		}
 	}
 
@@ -2150,6 +2187,112 @@ declare module '@atcute/client/lexicons' {
 		interface Output {
 			feeds: AppBskyFeedDefs.GeneratorView[];
 			cursor?: string;
+		}
+	}
+
+	/** Get a list of suggested feeds */
+	namespace AppBskyUnspeccedGetSuggestedFeeds {
+		interface Params {
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 25
+			 * @default 10
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			feeds: AppBskyFeedDefs.GeneratorView[];
+		}
+	}
+
+	/** Get a skeleton of suggested feeds. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedFeeds */
+	namespace AppBskyUnspeccedGetSuggestedFeedsSkeleton {
+		interface Params {
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 25
+			 * @default 10
+			 */
+			limit?: number;
+			/** DID of the account making the request (not included for public/unauthenticated queries). */
+			viewer?: At.Did;
+		}
+		type Input = undefined;
+		interface Output {
+			feeds: At.ResourceUri[];
+		}
+	}
+
+	/** Get a list of suggested starterpacks */
+	namespace AppBskyUnspeccedGetSuggestedStarterPacks {
+		interface Params {
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 25
+			 * @default 10
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			starterPacks: AppBskyGraphDefs.StarterPackView[];
+		}
+	}
+
+	/** Get a skeleton of suggested starterpacks. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedStarterpacks */
+	namespace AppBskyUnspeccedGetSuggestedStarterPacksSkeleton {
+		interface Params {
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 25
+			 * @default 10
+			 */
+			limit?: number;
+			/** DID of the account making the request (not included for public/unauthenticated queries). */
+			viewer?: At.Did;
+		}
+		type Input = undefined;
+		interface Output {
+			starterPacks: At.ResourceUri[];
+		}
+	}
+
+	/** Get a list of suggested users */
+	namespace AppBskyUnspeccedGetSuggestedUsers {
+		interface Params {
+			/** Category of users to get suggestions for. */
+			category?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 50
+			 * @default 25
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			actors: AppBskyActorDefs.ProfileView[];
+		}
+	}
+
+	/** Get a skeleton of suggested users. Intended to be called and hydrated by app.bsky.unspecced.getSuggestedUsers */
+	namespace AppBskyUnspeccedGetSuggestedUsersSkeleton {
+		interface Params {
+			/** Category of users to get suggestions for. */
+			category?: string;
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 50
+			 * @default 25
+			 */
+			limit?: number;
+			/** DID of the account making the request (not included for public/unauthenticated queries). */
+			viewer?: At.Did;
+		}
+		type Input = undefined;
+		interface Output {
+			dids: At.Did[];
 		}
 	}
 
@@ -2209,6 +2352,40 @@ declare module '@atcute/client/lexicons' {
 		interface Output {
 			suggested: AppBskyUnspeccedDefs.TrendingTopic[];
 			topics: AppBskyUnspeccedDefs.TrendingTopic[];
+		}
+	}
+
+	/** Get the current trends on the network */
+	namespace AppBskyUnspeccedGetTrends {
+		interface Params {
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 25
+			 * @default 10
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			trends: AppBskyUnspeccedDefs.TrendView[];
+		}
+	}
+
+	/** Get the skeleton of trends on the network. Intended to be called and then hydrated through app.bsky.unspecced.getTrends */
+	namespace AppBskyUnspeccedGetTrendsSkeleton {
+		interface Params {
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 25
+			 * @default 10
+			 */
+			limit?: number;
+			/** DID of the account making the request (not included for public/unauthenticated queries). */
+			viewer?: At.Did;
+		}
+		type Input = undefined;
+		interface Output {
+			trends: AppBskyUnspeccedDefs.SkeletonTrend[];
 		}
 	}
 
@@ -2433,7 +2610,7 @@ declare module '@atcute/client/lexicons' {
 			messageId: string;
 			/**
 			 * Minimum string length: 1 \
-			 * Maximum string length: 32 \
+			 * Maximum string length: 64 \
 			 * Maximum grapheme length: 1
 			 */
 			value: string;
@@ -2456,7 +2633,8 @@ declare module '@atcute/client/lexicons' {
 			muted: boolean;
 			rev: string;
 			unreadCount: number;
-			lastMessage?: Brand.Union<DeletedMessageView | MessageAndReactionView | MessageView>;
+			lastMessage?: Brand.Union<DeletedMessageView | MessageView>;
+			lastReaction?: Brand.Union<MessageAndReactionView>;
 			status?: 'accepted' | 'request' | (string & {});
 		}
 		interface DeletedMessageView {
@@ -2559,6 +2737,7 @@ declare module '@atcute/client/lexicons' {
 			embed?: Brand.Union<AppBskyEmbedRecord.View>;
 			/** Annotations of text (mentions, URLs, hashtags, etc) */
 			facets?: AppBskyRichtextFacet.Main[];
+			/** Reactions to this message, in ascending order of creation time. */
 			reactions?: ReactionView[];
 		}
 		interface MessageViewSender {
@@ -2714,7 +2893,7 @@ declare module '@atcute/client/lexicons' {
 			messageId: string;
 			/**
 			 * Minimum string length: 1 \
-			 * Maximum string length: 32 \
+			 * Maximum string length: 64 \
 			 * Maximum grapheme length: 1
 			 */
 			value: string;
@@ -2844,6 +3023,7 @@ declare module '@atcute/client/lexicons' {
 		'app.bsky.graph.listblock': AppBskyGraphListblock.Record;
 		'app.bsky.graph.listitem': AppBskyGraphListitem.Record;
 		'app.bsky.graph.starterpack': AppBskyGraphStarterpack.Record;
+		'app.bsky.graph.verification': AppBskyGraphVerification.Record;
 		'app.bsky.labeler.service': AppBskyLabelerService.Record;
 		'chat.bsky.actor.declaration': ChatBskyActorDeclaration.Record;
 	}
@@ -3104,6 +3284,42 @@ declare module '@atcute/client/lexicons' {
 			output: AppBskyUnspeccedGetPopularFeedGenerators.Output;
 			response: { json: AppBskyUnspeccedGetPopularFeedGenerators.Output };
 		};
+		'app.bsky.unspecced.getSuggestedFeeds': {
+			params: AppBskyUnspeccedGetSuggestedFeeds.Params;
+			/** @deprecated */
+			output: AppBskyUnspeccedGetSuggestedFeeds.Output;
+			response: { json: AppBskyUnspeccedGetSuggestedFeeds.Output };
+		};
+		'app.bsky.unspecced.getSuggestedFeedsSkeleton': {
+			params: AppBskyUnspeccedGetSuggestedFeedsSkeleton.Params;
+			/** @deprecated */
+			output: AppBskyUnspeccedGetSuggestedFeedsSkeleton.Output;
+			response: { json: AppBskyUnspeccedGetSuggestedFeedsSkeleton.Output };
+		};
+		'app.bsky.unspecced.getSuggestedStarterPacks': {
+			params: AppBskyUnspeccedGetSuggestedStarterPacks.Params;
+			/** @deprecated */
+			output: AppBskyUnspeccedGetSuggestedStarterPacks.Output;
+			response: { json: AppBskyUnspeccedGetSuggestedStarterPacks.Output };
+		};
+		'app.bsky.unspecced.getSuggestedStarterPacksSkeleton': {
+			params: AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.Params;
+			/** @deprecated */
+			output: AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.Output;
+			response: { json: AppBskyUnspeccedGetSuggestedStarterPacksSkeleton.Output };
+		};
+		'app.bsky.unspecced.getSuggestedUsers': {
+			params: AppBskyUnspeccedGetSuggestedUsers.Params;
+			/** @deprecated */
+			output: AppBskyUnspeccedGetSuggestedUsers.Output;
+			response: { json: AppBskyUnspeccedGetSuggestedUsers.Output };
+		};
+		'app.bsky.unspecced.getSuggestedUsersSkeleton': {
+			params: AppBskyUnspeccedGetSuggestedUsersSkeleton.Params;
+			/** @deprecated */
+			output: AppBskyUnspeccedGetSuggestedUsersSkeleton.Output;
+			response: { json: AppBskyUnspeccedGetSuggestedUsersSkeleton.Output };
+		};
 		'app.bsky.unspecced.getSuggestionsSkeleton': {
 			params: AppBskyUnspeccedGetSuggestionsSkeleton.Params;
 			/** @deprecated */
@@ -3120,6 +3336,18 @@ declare module '@atcute/client/lexicons' {
 			/** @deprecated */
 			output: AppBskyUnspeccedGetTrendingTopics.Output;
 			response: { json: AppBskyUnspeccedGetTrendingTopics.Output };
+		};
+		'app.bsky.unspecced.getTrends': {
+			params: AppBskyUnspeccedGetTrends.Params;
+			/** @deprecated */
+			output: AppBskyUnspeccedGetTrends.Output;
+			response: { json: AppBskyUnspeccedGetTrends.Output };
+		};
+		'app.bsky.unspecced.getTrendsSkeleton': {
+			params: AppBskyUnspeccedGetTrendsSkeleton.Params;
+			/** @deprecated */
+			output: AppBskyUnspeccedGetTrendsSkeleton.Output;
+			response: { json: AppBskyUnspeccedGetTrendsSkeleton.Output };
 		};
 		'app.bsky.unspecced.searchActorsSkeleton': {
 			params: AppBskyUnspeccedSearchActorsSkeleton.Params;

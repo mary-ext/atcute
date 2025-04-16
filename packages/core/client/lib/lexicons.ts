@@ -316,6 +316,17 @@ export declare namespace ComAtprotoAdminUpdateAccountPassword {
 	type Output = undefined;
 }
 
+/** Administrative action to update an account's signing key in their Did document. */
+export declare namespace ComAtprotoAdminUpdateAccountSigningKey {
+	interface Params {}
+	interface Input {
+		did: At.Did;
+		/** Did-key formatted public key */
+		signingKey: At.Did;
+	}
+	type Output = undefined;
+}
+
 /** Update the service-specific admin status of a subject (account, record, or blob). */
 export declare namespace ComAtprotoAdminUpdateSubjectStatus {
 	interface Params {}
@@ -1336,6 +1347,10 @@ export declare namespace ComAtprotoServerUpdateEmail {
 	}
 }
 
+export declare namespace ComAtprotoSyncDefs {
+	type HostStatus = 'active' | 'banned' | 'idle' | 'offline' | 'throttled' | (string & {});
+}
+
 /** Get a blob associated with a given account. Returns the full blob as originally uploaded. Does not require auth; implemented by PDS. */
 export declare namespace ComAtprotoSyncGetBlob {
 	interface Params {
@@ -1401,6 +1416,26 @@ export declare namespace ComAtprotoSyncGetHead {
 	}
 	interface Errors {
 		HeadNotFound: {};
+	}
+}
+
+/** Returns information about a specified upstream host, as consumed by the server. Implemented by relays. */
+export declare namespace ComAtprotoSyncGetHostStatus {
+	interface Params {
+		/** Hostname of the host (eg, PDS or relay) being queried. */
+		hostname: string;
+	}
+	type Input = undefined;
+	interface Output {
+		hostname: string;
+		/** Number of accounts on the server which are associated with the upstream host. Note that the upstream may actually have more accounts. */
+		accountCount?: number;
+		/** Recent repo stream event sequence number. May be delayed from actual stream processing (eg, persisted cursor not in-memory cursor). */
+		seq?: number;
+		status?: ComAtprotoSyncDefs.HostStatus;
+	}
+	interface Errors {
+		HostNotFound: {};
 	}
 }
 
@@ -1516,6 +1551,34 @@ export declare namespace ComAtprotoSyncListBlobs {
 	}
 }
 
+/** Enumerates upstream hosts (eg, PDS or relay instances) that this service consumes from. Implemented by relays. */
+export declare namespace ComAtprotoSyncListHosts {
+	interface Params {
+		cursor?: string;
+		/**
+		 * Minimum: 1 \
+		 * Maximum: 1000
+		 * @default 200
+		 */
+		limit?: number;
+	}
+	type Input = undefined;
+	interface Output {
+		/** Sort order is not formally specified. Recommended order is by time host was first seen by the server, with oldest first. */
+		hosts: Host[];
+		cursor?: string;
+	}
+	interface Host {
+		[Brand.Type]?: 'com.atproto.sync.listHosts#host';
+		/** hostname of server; not a URL (no scheme) */
+		hostname: string;
+		accountCount?: number;
+		/** Recent repo stream event sequence number. May be delayed from actual stream processing (eg, persisted cursor not in-memory cursor). */
+		seq?: number;
+		status?: ComAtprotoSyncDefs.HostStatus;
+	}
+}
+
 /** Enumerates all the DID, rev, and commit CID for all repos hosted by this service. Does not require auth; implemented by PDS and Relay. */
 export declare namespace ComAtprotoSyncListRepos {
 	interface Params {
@@ -1593,6 +1656,9 @@ export declare namespace ComAtprotoSyncRequestCrawl {
 		hostname: string;
 	}
 	type Output = undefined;
+	interface Errors {
+		HostBanned: {};
+	}
 }
 
 export declare namespace ComAtprotoSyncSubscribeRepos {
@@ -1887,6 +1953,12 @@ export declare interface Queries {
 		output: ComAtprotoSyncGetHead.Output;
 		response: { json: ComAtprotoSyncGetHead.Output };
 	};
+	'com.atproto.sync.getHostStatus': {
+		params: ComAtprotoSyncGetHostStatus.Params;
+		/** @deprecated */
+		output: ComAtprotoSyncGetHostStatus.Output;
+		response: { json: ComAtprotoSyncGetHostStatus.Output };
+	};
 	'com.atproto.sync.getLatestCommit': {
 		params: ComAtprotoSyncGetLatestCommit.Params;
 		/** @deprecated */
@@ -1916,6 +1988,12 @@ export declare interface Queries {
 		/** @deprecated */
 		output: ComAtprotoSyncListBlobs.Output;
 		response: { json: ComAtprotoSyncListBlobs.Output };
+	};
+	'com.atproto.sync.listHosts': {
+		params: ComAtprotoSyncListHosts.Params;
+		/** @deprecated */
+		output: ComAtprotoSyncListHosts.Output;
+		response: { json: ComAtprotoSyncListHosts.Output };
 	};
 	'com.atproto.sync.listRepos': {
 		params: ComAtprotoSyncListRepos.Params;
@@ -1969,6 +2047,9 @@ export declare interface Procedures {
 	};
 	'com.atproto.admin.updateAccountPassword': {
 		input: ComAtprotoAdminUpdateAccountPassword.Input;
+	};
+	'com.atproto.admin.updateAccountSigningKey': {
+		input: ComAtprotoAdminUpdateAccountSigningKey.Input;
 	};
 	'com.atproto.admin.updateSubjectStatus': {
 		input: ComAtprotoAdminUpdateSubjectStatus.Input;
