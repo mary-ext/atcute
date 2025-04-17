@@ -1,8 +1,4 @@
 [tools]
-bun = "latest"
-node = "lts"
-pnpm = "latest"
-
-[settings]
-experimental = true
-lockfile = true
+bun = "1.2.9"
+node = "22.14.0"
+pnpm = "10.8.1"
