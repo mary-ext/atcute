@@ -179,6 +179,7 @@ declare module '@atcute/client/lexicons' {
 			| SavedFeedsPref
 			| SavedFeedsPrefV2
 			| ThreadViewPref
+			| VerificationPrefs
 		>[];
 		interface ProfileAssociated {
 			[Brand.Type]?: 'app.bsky.actor.defs#profileAssociated';
@@ -211,6 +212,7 @@ declare module '@atcute/client/lexicons' {
 			displayName?: string;
 			indexedAt?: string;
 			labels?: ComAtprotoLabelDefs.Label[];
+			verification?: VerificationState;
 			viewer?: ViewerState;
 		}
 		interface ProfileViewBasic {
@@ -226,6 +228,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			displayName?: string;
 			labels?: ComAtprotoLabelDefs.Label[];
+			verification?: VerificationState;
 			viewer?: ViewerState;
 		}
 		interface ProfileViewDetailed {
@@ -253,6 +256,7 @@ declare module '@atcute/client/lexicons' {
 			labels?: ComAtprotoLabelDefs.Label[];
 			pinnedPost?: ComAtprotoRepoStrongRef.Main;
 			postsCount?: number;
+			verification?: VerificationState;
 			viewer?: ViewerState;
 		}
 		interface SavedFeed {
@@ -278,6 +282,37 @@ declare module '@atcute/client/lexicons' {
 			prioritizeFollowedUsers?: boolean;
 			/** Sorting mode for threads. */
 			sort?: 'hotness' | 'most-likes' | 'newest' | 'oldest' | 'random' | (string & {});
+		}
+		/** Preferences for how verified accounts appear in the app. */
+		interface VerificationPrefs {
+			[Brand.Type]?: 'app.bsky.actor.defs#verificationPrefs';
+			/**
+			 * Hide the blue check badges for verified accounts and trusted verifiers.
+			 * @default false
+			 */
+			hideBadges?: boolean;
+		}
+		/** Represents the verification information about the user this object is attached to. */
+		interface VerificationState {
+			[Brand.Type]?: 'app.bsky.actor.defs#verificationState';
+			/** The user's status as a trusted verifier. */
+			trustedVerifierStatus: 'invalid' | 'none' | 'valid' | (string & {});
+			/** All verifications issued by trusted verifiers on behalf of this user. Verifications by untrusted verifiers are not included. */
+			verifications: VerificationView[];
+			/** The user's status as a verified account. */
+			verifiedStatus: 'invalid' | 'none' | 'valid' | (string & {});
+		}
+		/** An individual verification for an associated subject. */
+		interface VerificationView {
+			[Brand.Type]?: 'app.bsky.actor.defs#verificationView';
+			/** Timestamp when the verification was created. */
+			createdAt: string;
+			/** The user who issued this verification. */
+			issuer: At.Did;
+			/** True if the verification passes validation, otherwise false. */
+			isValid: boolean;
+			/** The AT-URI of the verification record. */
+			uri: At.ResourceUri;
 		}
 		/** Metadata about the requesting account's relationship with the subject account. Only has meaningful content for authed requests. */
 		interface ViewerState {
@@ -2575,6 +2610,7 @@ declare module '@atcute/client/lexicons' {
 			 */
 			displayName?: string;
 			labels?: ComAtprotoLabelDefs.Label[];
+			verification?: AppBskyActorDefs.VerificationState;
 			viewer?: AppBskyActorDefs.ViewerState;
 		}
 	}
