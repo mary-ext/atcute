@@ -95,11 +95,6 @@ const readBytes = (state: State, length: number): Bytes => {
 	return toBytes(slice);
 };
 
-const readTypeInfo = (state: State): [number, number] => {
-	const prelude = readUint8(state);
-	return [prelude >> 5, prelude & 0x1f];
-};
-
 const readCid = (state: State, length: number): CidLink => {
 	// CID bytes are prefixed with 0x00 for historical reasons, apparently.
 	const slice = state.b.subarray(state.p + 1, (state.p += length));
@@ -195,7 +190,10 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 			case 6: {
 				switch (arg) {
 					case 42: {
-						const [type, info] = readTypeInfo(state);
+						const prelude = readUint8(state);
+
+						const type = prelude >> 5;
+						const info = prelude & 0x1f;
 						if (type !== 2) {
 							throw new TypeError(`expected cid-link to be type 2 (bytes); got type ${type}`);
 						}
