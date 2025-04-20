@@ -102,6 +102,19 @@ const readCid = (state: State, length: number): CidLink => {
 	return new CidLinkWrapper(slice);
 };
 
+const decodeStringKey = (state: State): string => {
+	const prelude = readUint8(state);
+
+	const type = prelude >> 5;
+	if (type !== 3) {
+		throw new TypeError(`expected map to only have string keys; got type ${type}`);
+	}
+
+	const info = prelude & 0x1f;
+	const length = readArgument(state, info);
+	return readString(state, length);
+};
+
 type Container =
 	| {
 			/** map type */
@@ -109,7 +122,7 @@ type Container =
 			/** container value */
 			c: Record<string, unknown>;
 			/** held key (as we decode the value) */
-			k: string | null;
+			k: string;
 			/** remaining elements (key + value) */
 			r: number;
 			/** next container in stack */
@@ -180,8 +193,10 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 				value = obj;
 
 				if (arg > 0) {
-					// `arg * 2` because we're reading both keys and values
-					stack = { t: 0, c: obj, k: null, r: arg * 2, n: stack };
+					// We'll read the key of the first item here.
+					const first = decodeStringKey(state);
+
+					stack = { t: 0, c: obj, k: first, r: arg, n: stack };
 					continue jump;
 				}
 
@@ -243,21 +258,12 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 					const obj = stack.c;
 					const key = stack.k;
 
-					if (key === null) {
-						if (typeof value !== 'string') {
-							throw new TypeError(`expected map to only have string keys; got ${type}`);
-						}
-
-						stack.k = value;
-					} else {
-						if (key === '__proto__') {
-							// Guard against prototype pollution. CWE-1321
-							Object.defineProperty(obj, key, { enumerable: true, configurable: true, writable: true });
-						}
-
-						obj[key] = value;
-						stack.k = null;
+					if (key === '__proto__') {
+						// Guard against prototype pollution. CWE-1321
+						Object.defineProperty(obj, key, { enumerable: true, configurable: true, writable: true });
 					}
+
+					obj[key] = value;
 
 					break;
 				}
@@ -272,6 +278,12 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 
 			if (--stack.r !== 0) {
 				// We still have more values to decode, continue
+
+				if (stack.t === 0) {
+					// Read the key of the next map item
+					stack.k = decodeStringKey(state);
+				}
+
 				continue jump;
 			}
 
