@@ -158,51 +158,54 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 
 		const type = prelude >> 5;
 		const info = prelude & 0x1f;
-		const arg = type < 7 ? readArgument(state, info) : 0;
 
 		switch (type) {
 			case 0: {
-				value = arg;
+				value = readArgument(state, info);
 				break;
 			}
 			case 1: {
-				value = -1 - arg;
+				value = -1 - readArgument(state, info);
 				break;
 			}
 			case 2: {
-				value = readBytes(state, arg);
+				value = readBytes(state, readArgument(state, info));
 				break;
 			}
 			case 3: {
-				value = readString(state, arg);
+				value = readString(state, readArgument(state, info));
 				break;
 			}
 			case 4: {
-				const arr = new Array(arg);
+				const len = readArgument(state, info);
+				const arr = new Array(len);
 				value = arr;
 
-				if (arg > 0) {
-					stack = { t: 1, c: arr, k: null, r: arg, n: stack };
+				if (len > 0) {
+					stack = { t: 1, c: arr, k: null, r: len, n: stack };
 					continue jump;
 				}
 
 				break;
 			}
 			case 5: {
+				const len = readArgument(state, info);
 				const obj: Record<string, unknown> = {};
 				value = obj;
 
-				if (arg > 0) {
+				if (len > 0) {
 					// We'll read the key of the first item here.
 					const first = decodeStringKey(state);
 
-					stack = { t: 0, c: obj, k: first, r: arg, n: stack };
+					stack = { t: 0, c: obj, k: first, r: len, n: stack };
 					continue jump;
 				}
 
 				break;
 			}
 			case 6: {
+				const arg = readArgument(state, info);
+
 				switch (arg) {
 					case 42: {
 						const prelude = readUint8(state);
