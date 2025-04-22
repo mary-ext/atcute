@@ -1,5 +1,14 @@
 # @atcute/did-plc
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [9ea1e46]
+- Updated dependencies [fce1e2c]
+- Updated dependencies [745e12b]
+  - @atcute/cbor@2.2.2
+
 ## 0.1.2
 
 ### Patch Changes

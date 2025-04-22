@@ -1,5 +1,13 @@
 # @atcute/cbor
 
+## 2.2.2
+
+### Patch Changes
+
+- 9ea1e46: inline readTypeInfo
+- fce1e2c: optimize string key decoding
+- 745e12b: move readArgument inside types
+
 ## 2.2.1
 
 ### Patch Changes

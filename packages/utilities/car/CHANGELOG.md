@@ -1,5 +1,14 @@
 # @atcute/car
 
+## 3.0.3
+
+### Patch Changes
+
+- Updated dependencies [9ea1e46]
+- Updated dependencies [fce1e2c]
+- Updated dependencies [745e12b]
+  - @atcute/cbor@2.2.2
+
 ## 3.0.2
 
 ### Patch Changes

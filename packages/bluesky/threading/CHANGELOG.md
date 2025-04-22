@@ -1,5 +1,14 @@
 # @atcute/bluesky-threading
 
+## 4.0.1
+
+### Patch Changes
+
+- Updated dependencies [9ea1e46]
+- Updated dependencies [fce1e2c]
+- Updated dependencies [745e12b]
+  - @atcute/cbor@2.2.2
+
 ## 4.0.0
 
 ### Patch Changes
