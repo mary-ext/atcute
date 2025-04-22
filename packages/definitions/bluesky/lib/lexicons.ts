@@ -2027,6 +2027,12 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	namespace AppBskyNotificationDefs {
+		interface RecordDeleted {
+			[Brand.Type]?: 'app.bsky.notification.defs#recordDeleted';
+		}
+	}
+
 	/** Count the number of unread notifications for the requesting account. Requires auth. */
 	namespace AppBskyNotificationGetUnreadCount {
 		interface Params {
@@ -2070,7 +2076,7 @@ declare module '@atcute/client/lexicons' {
 			cid: At.Cid;
 			indexedAt: string;
 			isRead: boolean;
-			/** Expected values are 'like', 'repost', 'follow', 'mention', 'reply', 'quote', and 'starterpack-joined'. */
+			/** Expected values are 'like', 'repost', 'follow', 'mention', 'reply', 'quote', 'starterpack-joined', 'verified', and 'unverified'. */
 			reason:
 				| 'follow'
 				| 'like'
@@ -2079,6 +2085,8 @@ declare module '@atcute/client/lexicons' {
 				| 'reply'
 				| 'repost'
 				| 'starterpack-joined'
+				| 'unverified'
+				| 'verified'
 				| (string & {});
 			record: unknown;
 			uri: At.ResourceUri;
@@ -2602,7 +2610,7 @@ declare module '@atcute/client/lexicons' {
 			handle: At.Handle;
 			associated?: AppBskyActorDefs.ProfileAssociated;
 			avatar?: At.GenericUri;
-			/** Set to true when the actor cannot actively participate in converations */
+			/** Set to true when the actor cannot actively participate in conversations */
 			chatDisabled?: boolean;
 			/**
 			 * Maximum string length: 640 \
