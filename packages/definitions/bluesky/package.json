@@ -15,6 +15,7 @@
 		"!lib/**/*.test.ts"
 	],
 	"exports": {
+		".": "./dist/index.js",
 		"./lexicons": "./dist/lexicons.js"
 	},
 	"scripts": {
