@@ -19,9 +19,10 @@ import {
 	mergeModerationDecisions,
 	type ModerationDecision,
 } from '../decision.js';
-import type { KeywordFilter, ModerationOptions, PostSubject } from '../types.js';
+import type { ModerationOptions, PostSubject } from '../types.js';
 
 import { matchesKeywordFilters } from '../internal/keyword-filter.js';
+import type { KeywordFilter } from '../keyword-filter.js';
 
 import { moderateProfile } from './profile.js';
 
