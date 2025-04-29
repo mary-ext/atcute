@@ -1,6 +1,6 @@
 # @atcute/bluesky-moderation
 
-Bluesky's moderation utilities.
+interprets Bluesky's content moderation labels.
 
 ```ts
 import type { XRPC } from '@atcute/client';
