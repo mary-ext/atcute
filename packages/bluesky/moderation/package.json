@@ -1,0 +1,36 @@
+{
+	"type": "module",
+	"name": "@atcute/bluesky-moderation",
+	"version": "1.0.0",
+	"description": "interprets Bluesky's content labels",
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/bluesky/moderation"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "vitest",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"peerDependencies": {
+		"@atcute/bluesky": "^2.0.0",
+		"@atcute/client": "^3.0.0"
+	},
+	"devDependencies": {
+		"@atcute/bluesky": "workspace:^",
+		"@atcute/client": "workspace:^",
+		"@types/bun": "^1.2.1",
+		"vitest": "^3.0.4"
+	}
+}
