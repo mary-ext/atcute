@@ -127,46 +127,48 @@ let labelers: AppBskyLabelerDefs.LabelerViewDetailed[] = [];
 const labelDefs = interpretLabelerDefinitions(labelers);
 
 // then we call the appropriate moderation functions
-declare const post: AppBskyFeedDefs.PostView;
-
-const mod = moderatePost(post, {
-	viewerDid: 'did:plc:xyz',
-	labelDefs,
-	prefs: modPrefs,
-});
-
-// when displaying the post in feeds...
 {
-	const ui = getDisplayRestrictions(mod, DisplayContext.ContentList);
+	declare const post: AppBskyFeedDefs.PostView;
 
-	if (ui.filters.length > 0) {
-		// don't include the post in the feed
-	}
+	const mod = moderatePost(post, {
+		viewerDid: 'did:plc:xyz',
+		labelDefs,
+		prefs: modPrefs,
+	});
 
-	if (ui.blurs.length > 0) {
-		// hide the post behind a cover
+	// when displaying the post in feeds...
+	{
+		const ui = getDisplayRestrictions(mod, DisplayContext.ContentList);
 
-		if (ui.noOverride) {
-			// don't allow the cover to be removed
+		if (ui.filters.length > 0) {
+			// don't include the post in the feed
+		}
+
+		if (ui.blurs.length > 0) {
+			// hide the post behind a cover
+
+			if (ui.noOverride) {
+				// don't allow the cover to be removed
+			}
+		}
+
+		if (ui.alerts.length > 0 || ui.informs.length > 0) {
+			// show warning/inform badges in the post
 		}
 	}
 
-	if (ui.alerts.length > 0 || ui.informs.length > 0) {
-		// show warning/inform badges in the post
+	// when displaying an expanded version of the post...
+	{
+		const ui = getDisplayRestrictions(mod, DisplayContext.ContentView);
+
+		// ...
 	}
-}
 
-// when displaying an expanded version of the post...
-{
-	const ui = getDisplayRestrictions(mod, DisplayContext.ContentView);
+	// when displaying images/videos of a post...
+	{
+		const ui = getDisplayRestrictions(mod, DisplayContext.ProfileMedia);
 
-	// ...
-}
-
-// when displaying images/videos of a post...
-{
-	const ui = getDisplayRestrictions(mod, DisplayContext.ProfileMedia);
-
-	// ...
+		// ...
+	}
 }
 ```
