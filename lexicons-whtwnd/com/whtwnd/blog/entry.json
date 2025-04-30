@@ -22,6 +22,10 @@
 						"type": "string",
 						"maxLength": 1000
 					},
+						"subtitle": {
+						"type": "string",
+						"maxLength": 1000
+					},
 					"ogp": {
 						"type": "ref",
 						"ref": "com.whtwnd.blog.defs#ogp"

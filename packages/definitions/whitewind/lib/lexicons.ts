@@ -46,6 +46,8 @@ declare module '@atcute/client/lexicons' {
 			/** (DEPRECATED) Marks this entry as draft to tell AppViews not to show it to anyone except for the author */
 			isDraft?: boolean;
 			ogp?: ComWhtwndBlogDefs.Ogp;
+			/** Maximum string length: 1000 */
+			subtitle?: string;
 			theme?: 'github-light';
 			/** Maximum string length: 1000 */
 			title?: string;
