@@ -56,6 +56,7 @@ of atcute.
 | [`tid`](./packages/utilities/tid): atproto timestamp identifier codec                                                  |
 | [`varint`](./packages/utilities/varint): protobuf-style LEB128 varint codec                                            |
 | **Bluesky-specific packages**                                                                                          |
+| [`bluesky-moderation`](./packages/bluesky/moderation): interprets Bluesky's content moderation labels                  |
 | [`bluesky-richtext-builder`](./packages/bluesky/richtext-builder): builder pattern for Bluesky's rich text facets      |
 | [`bluesky-richtext-parser`](./packages/bluesky/richtext-parser): parse Bluesky's (extended) rich text syntax           |
 | [`bluesky-richtext-segmenter`](./packages/bluesky/richtext-segmenter): segments Bluesky's rich text facets into tokens |
