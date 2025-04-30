@@ -93,6 +93,59 @@ declare module '@atcute/client/lexicons' {
 		}
 	}
 
+	/** Get account history, e.g. log of updated email addresses or other identity information. */
+	namespace ToolsOzoneHostingGetAccountHistory {
+		interface Params {
+			did: At.Did;
+			cursor?: string;
+			events?: (
+				| 'accountCreated'
+				| 'emailConfirmed'
+				| 'emailUpdated'
+				| 'handleUpdated'
+				| 'passwordUpdated'
+				| (string & {})
+			)[];
+			/**
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+		}
+		type Input = undefined;
+		interface Output {
+			events: Event[];
+			cursor?: string;
+		}
+		interface AccountCreated {
+			[Brand.Type]?: 'tools.ozone.hosting.getAccountHistory#accountCreated';
+			email?: string;
+			handle?: At.Handle;
+		}
+		interface EmailConfirmed {
+			[Brand.Type]?: 'tools.ozone.hosting.getAccountHistory#emailConfirmed';
+			email: string;
+		}
+		interface EmailUpdated {
+			[Brand.Type]?: 'tools.ozone.hosting.getAccountHistory#emailUpdated';
+			email: string;
+		}
+		interface Event {
+			[Brand.Type]?: 'tools.ozone.hosting.getAccountHistory#event';
+			createdAt: string;
+			createdBy: string;
+			details: Brand.Union<AccountCreated | EmailConfirmed | EmailUpdated | HandleUpdated | PasswordUpdated>;
+		}
+		interface HandleUpdated {
+			[Brand.Type]?: 'tools.ozone.hosting.getAccountHistory#handleUpdated';
+			handle: At.Handle;
+		}
+		interface PasswordUpdated {
+			[Brand.Type]?: 'tools.ozone.hosting.getAccountHistory#passwordUpdated';
+		}
+	}
+
 	namespace ToolsOzoneModerationDefs {
 		/** Logs account status related events on a repo subject. Normally captured by automod from the firehose and emitted to ozone for historical tracking. */
 		interface AccountEvent {
@@ -837,6 +890,8 @@ declare module '@atcute/client/lexicons' {
 			blobDivert?: ServiceConfig;
 			chat?: ServiceConfig;
 			pds?: ServiceConfig;
+			/** The did of the verifier used for verification. */
+			verifierDid?: At.Did;
 			viewer?: ViewerConfig;
 		}
 		interface ServiceConfig {
@@ -849,6 +904,7 @@ declare module '@atcute/client/lexicons' {
 				| 'tools.ozone.team.defs#roleAdmin'
 				| 'tools.ozone.team.defs#roleModerator'
 				| 'tools.ozone.team.defs#roleTriage'
+				| 'tools.ozone.team.defs#roleVerifier'
 				| (string & {});
 		}
 	}
@@ -1007,6 +1063,7 @@ declare module '@atcute/client/lexicons' {
 				| 'tools.ozone.team.defs#roleAdmin'
 				| 'tools.ozone.team.defs#roleModerator'
 				| 'tools.ozone.team.defs#roleTriage'
+				| 'tools.ozone.team.defs#roleVerifier'
 				| (string & {});
 			updatedAt?: string;
 		}
@@ -1066,6 +1123,7 @@ declare module '@atcute/client/lexicons' {
 				| 'tools.ozone.team.defs#roleAdmin'
 				| 'tools.ozone.team.defs#roleModerator'
 				| 'tools.ozone.team.defs#roleTriage'
+				| 'tools.ozone.team.defs#roleVerifier'
 				| (string & {});
 		}
 		interface Output {
@@ -1144,6 +1202,7 @@ declare module '@atcute/client/lexicons' {
 				| 'tools.ozone.team.defs#roleAdmin'
 				| 'tools.ozone.team.defs#roleModerator'
 				| 'tools.ozone.team.defs#roleTriage'
+				| 'tools.ozone.team.defs#roleVerifier'
 				| (string & {});
 		}
 		type Output = ToolsOzoneTeamDefs.Member;
@@ -1156,7 +1215,7 @@ declare module '@atcute/client/lexicons' {
 		interface Member {
 			[Brand.Type]?: 'tools.ozone.team.defs#member';
 			did: At.Did;
-			role: '#roleAdmin' | '#roleModerator' | '#roleTriage' | (string & {});
+			role: '#roleAdmin' | '#roleModerator' | '#roleTriage' | '#roleVerifier' | (string & {});
 			createdAt?: string;
 			disabled?: boolean;
 			lastUpdatedBy?: string;
@@ -1166,6 +1225,7 @@ declare module '@atcute/client/lexicons' {
 		type RoleAdmin = 'tools.ozone.team.defs#roleAdmin';
 		type RoleModerator = 'tools.ozone.team.defs#roleModerator';
 		type RoleTriage = 'tools.ozone.team.defs#roleTriage';
+		type RoleVerifier = 'tools.ozone.team.defs#roleVerifier';
 	}
 
 	/** Delete a member from ozone team. Requires admin role. */
@@ -1212,11 +1272,153 @@ declare module '@atcute/client/lexicons' {
 				| 'tools.ozone.team.defs#roleAdmin'
 				| 'tools.ozone.team.defs#roleModerator'
 				| 'tools.ozone.team.defs#roleTriage'
+				| 'tools.ozone.team.defs#roleVerifier'
 				| (string & {});
 		}
 		type Output = ToolsOzoneTeamDefs.Member;
 		interface Errors {
 			MemberNotFound: {};
+		}
+	}
+
+	namespace ToolsOzoneVerificationDefs {
+		/** Verification data for the associated subject. */
+		interface VerificationView {
+			[Brand.Type]?: 'tools.ozone.verification.defs#verificationView';
+			/** Timestamp when the verification was created. */
+			createdAt: string;
+			/** Display name of the subject the verification applies to at the moment of verifying, which might not be the same at the time of viewing. The verification is only valid if the current displayName matches the one at the time of verifying. */
+			displayName: string;
+			/** Handle of the subject the verification applies to at the moment of verifying, which might not be the same at the time of viewing. The verification is only valid if the current handle matches the one at the time of verifying. */
+			handle: At.Handle;
+			/** The user who issued this verification. */
+			issuer: At.Did;
+			/** The subject of the verification. */
+			subject: At.Did;
+			/** The AT-URI of the verification record. */
+			uri: At.ResourceUri;
+			issuerProfile?: unknown;
+			issuerRepo?: Brand.Union<
+				ToolsOzoneModerationDefs.RepoViewDetail | ToolsOzoneModerationDefs.RepoViewNotFound
+			>;
+			/** Timestamp when the verification was revoked. */
+			revokedAt?: string;
+			/** The user who revoked this verification. */
+			revokedBy?: At.Did;
+			/** Describes the reason for revocation, also indicating that the verification is no longer valid. */
+			revokeReason?: string;
+			subjectProfile?: unknown;
+			subjectRepo?: Brand.Union<
+				ToolsOzoneModerationDefs.RepoViewDetail | ToolsOzoneModerationDefs.RepoViewNotFound
+			>;
+		}
+	}
+
+	/** Grant verifications to multiple subjects. Allows batch processing of up to 100 verifications at once. */
+	namespace ToolsOzoneVerificationGrantVerifications {
+		interface Params {}
+		interface Input {
+			/**
+			 * Array of verification requests to process \
+			 * Maximum array length: 100
+			 */
+			verifications: VerificationInput[];
+		}
+		interface Output {
+			failedVerifications: GrantError[];
+			verifications: ToolsOzoneVerificationDefs.VerificationView[];
+		}
+		/** Error object for failed verifications. */
+		interface GrantError {
+			[Brand.Type]?: 'tools.ozone.verification.grantVerifications#grantError';
+			/** Error message describing the reason for failure. */
+			error: string;
+			/** The did of the subject being verified */
+			subject: At.Did;
+		}
+		interface VerificationInput {
+			[Brand.Type]?: 'tools.ozone.verification.grantVerifications#verificationInput';
+			/** Display name of the subject the verification applies to at the moment of verifying. */
+			displayName: string;
+			/** Handle of the subject the verification applies to at the moment of verifying. */
+			handle: At.Handle;
+			/** The did of the subject being verified */
+			subject: At.Did;
+			/** Timestamp for verification record. Defaults to current time when not specified. */
+			createdAt?: string;
+		}
+	}
+
+	/** List verifications */
+	namespace ToolsOzoneVerificationListVerifications {
+		interface Params {
+			/** Filter to verifications created after this timestamp */
+			createdAfter?: string;
+			/** Filter to verifications created before this timestamp */
+			createdBefore?: string;
+			/** Pagination cursor */
+			cursor?: string;
+			/** Filter to verifications that are revoked or not. By default, includes both. */
+			isRevoked?: boolean;
+			/**
+			 * Filter to verifications from specific issuers \
+			 * Maximum array length: 100
+			 */
+			issuers?: At.Did[];
+			/**
+			 * Maximum number of results to return \
+			 * Minimum: 1 \
+			 * Maximum: 100
+			 * @default 50
+			 */
+			limit?: number;
+			/**
+			 * Sort direction for creation date
+			 * @default "desc"
+			 */
+			sortDirection?: 'asc' | 'desc';
+			/**
+			 * Filter to specific verified DIDs \
+			 * Maximum array length: 100
+			 */
+			subjects?: At.Did[];
+		}
+		type Input = undefined;
+		interface Output {
+			verifications: ToolsOzoneVerificationDefs.VerificationView[];
+			cursor?: string;
+		}
+	}
+
+	/** Revoke previously granted verifications in batches of up to 100. */
+	namespace ToolsOzoneVerificationRevokeVerifications {
+		interface Params {}
+		interface Input {
+			/**
+			 * Array of verification record uris to revoke \
+			 * Maximum array length: 100 \
+			 * The AT-URI of the verification record to revoke.
+			 */
+			uris: At.ResourceUri[];
+			/**
+			 * Reason for revoking the verification. This is optional and can be omitted if not needed. \
+			 * Maximum string length: 1000
+			 */
+			revokeReason?: string;
+		}
+		interface Output {
+			/** List of verification uris that couldn't be revoked, including failure reasons */
+			failedRevocations: RevokeError[];
+			/** List of verification uris successfully revoked */
+			revokedVerifications: At.ResourceUri[];
+		}
+		/** Error object for failed revocations */
+		interface RevokeError {
+			[Brand.Type]?: 'tools.ozone.verification.revokeVerifications#revokeError';
+			/** Description of the error that occurred during revocation. */
+			error: string;
+			/** The AT-URI of the verification record that failed to revoke. */
+			uri: At.ResourceUri;
 		}
 	}
 
@@ -1227,6 +1429,12 @@ declare module '@atcute/client/lexicons' {
 			/** @deprecated */
 			output: ToolsOzoneCommunicationListTemplates.Output;
 			response: { json: ToolsOzoneCommunicationListTemplates.Output };
+		};
+		'tools.ozone.hosting.getAccountHistory': {
+			params: ToolsOzoneHostingGetAccountHistory.Params;
+			/** @deprecated */
+			output: ToolsOzoneHostingGetAccountHistory.Output;
+			response: { json: ToolsOzoneHostingGetAccountHistory.Output };
 		};
 		'tools.ozone.moderation.getEvent': {
 			params: ToolsOzoneModerationGetEvent.Params;
@@ -1335,6 +1543,12 @@ declare module '@atcute/client/lexicons' {
 			output: ToolsOzoneTeamListMembers.Output;
 			response: { json: ToolsOzoneTeamListMembers.Output };
 		};
+		'tools.ozone.verification.listVerifications': {
+			params: ToolsOzoneVerificationListVerifications.Params;
+			/** @deprecated */
+			output: ToolsOzoneVerificationListVerifications.Output;
+			response: { json: ToolsOzoneVerificationListVerifications.Output };
+		};
 	}
 
 	interface Procedures {
@@ -1403,6 +1617,18 @@ declare module '@atcute/client/lexicons' {
 			/** @deprecated */
 			output: ToolsOzoneTeamUpdateMember.Output;
 			response: { json: ToolsOzoneTeamUpdateMember.Output };
+		};
+		'tools.ozone.verification.grantVerifications': {
+			input: ToolsOzoneVerificationGrantVerifications.Input;
+			/** @deprecated */
+			output: ToolsOzoneVerificationGrantVerifications.Output;
+			response: { json: ToolsOzoneVerificationGrantVerifications.Output };
+		};
+		'tools.ozone.verification.revokeVerifications': {
+			input: ToolsOzoneVerificationRevokeVerifications.Input;
+			/** @deprecated */
+			output: ToolsOzoneVerificationRevokeVerifications.Output;
+			response: { json: ToolsOzoneVerificationRevokeVerifications.Output };
 		};
 	}
 }
