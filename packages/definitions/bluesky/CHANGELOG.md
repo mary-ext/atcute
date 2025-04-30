@@ -1,5 +1,11 @@
 # @atcute/bluesky
 
+## 2.1.0
+
+### Minor Changes
+
+- fd166c3: utility functions for unwrapping embeds from a post
+
 ## 2.0.3
 
 ### Patch Changes

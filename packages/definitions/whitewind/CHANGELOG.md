@@ -1,5 +1,11 @@
 # @atcute/whitewind
 
+## 2.0.1
+
+### Patch Changes
+
+- 5ce4642: update whitewind lexicons
+
 ## 2.0.0
 
 ### Major Changes
