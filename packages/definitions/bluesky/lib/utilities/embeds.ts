@@ -1,4 +1,10 @@
-import type { AppBskyEmbedRecordWithMedia, AppBskyFeedDefs, AppBskyFeedPost } from '@atcute/client/lexicons';
+import type {
+	AppBskyEmbedRecord,
+	AppBskyEmbedRecordWithMedia,
+	AppBskyFeedDefs,
+	AppBskyFeedPost,
+	Brand,
+} from '@atcute/client/lexicons';
 
 export interface RawEmbeds {
 	media?: AppBskyEmbedRecordWithMedia.Main['media'];
@@ -100,4 +106,32 @@ export const unwrapEmbed = (embed: AppBskyFeedDefs.PostView['embed']): Embeds =>
 		media: unwrapMediaEmbed(embed),
 		record: unwrapRecordEmbed(embed),
 	};
+};
+
+export type QuoteEmbed = Brand.Union<
+	| AppBskyEmbedRecord.ViewBlocked
+	| AppBskyEmbedRecord.ViewDetached
+	| AppBskyEmbedRecord.ViewNotFound
+	| AppBskyEmbedRecord.ViewRecord
+>;
+
+/**
+ * get quote embed from a record embed
+ * @param embed the record embed to extract from
+ * @returns the extracted quote embed, if any
+ */
+export const unwrapQuoteEmbed = (embed: RecordEmbed | undefined): QuoteEmbed | undefined => {
+	switch (embed?.$type) {
+		case 'app.bsky.embed.record#viewRecord': {
+			return embed;
+		}
+
+		case 'app.bsky.embed.record#viewBlocked':
+		case 'app.bsky.embed.record#viewDetached':
+		case 'app.bsky.embed.record#viewNotFound': {
+			if (embed.uri.includes('/app.bsky.feed.post/')) {
+				return embed;
+			}
+		}
+	}
 };
