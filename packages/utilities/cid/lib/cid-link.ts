@@ -2,11 +2,16 @@ import { toBase32 } from '@atcute/multibase';
 
 import { decode, fromString, type Cid } from './codec.js';
 
+const CID_LINK_SYMBOL = Symbol.for('@atcute/cid-link-wrapper');
+
 export interface CidLink {
 	$link: string;
 }
 
 export class CidLinkWrapper implements CidLink {
+	/** @internal */
+	readonly [CID_LINK_SYMBOL] = true;
+
 	constructor(public bytes: Uint8Array) {}
 
 	get $link(): string {
