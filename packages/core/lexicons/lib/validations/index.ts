@@ -74,3 +74,6 @@ export { bytesSize, type BytesSizeConstraint } from './constraints/bytes-size.js
 export { integerRange, type IntegerRangeConstraint } from './constraints/integer-range.js';
 export { stringGraphemes, type StringGraphemesConstraint } from './constraints/string-graphemes.js';
 export { stringLength, type StringLengthConstraint } from './constraints/string-length.js';
+
+export { xrpcProcedure, type XRPCProcedureMetadata } from './metadata/xrpc-procedure.js';
+export { xrpcQuery, type XRPCQueryMetadata } from './metadata/xrpc-query.js';
