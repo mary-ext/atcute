@@ -12,6 +12,7 @@ export {
 	type SchemaWithPipe,
 } from './base.js';
 
+export { is, parse, safeParse, ValidationError } from './parse.js';
 export { pipe } from './pipe.js';
 
 export {
