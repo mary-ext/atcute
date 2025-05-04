@@ -1,4 +1,4 @@
-export type { Identifier } from '../syntax/at-identifier.js';
+export type { ActorIdentifier } from '../syntax/at-identifier.js';
 export type { CanonicalResourceUri, ResourceUri } from '../syntax/at-uri.js';
 export type { Cid } from '../syntax/cid.js';
 export type { Datetime } from '../syntax/datetime.js';

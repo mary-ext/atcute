@@ -1,4 +1,4 @@
-import { isIdentifier, type Identifier } from './at-identifier.js';
+import { isActorIdentifier, type ActorIdentifier } from './at-identifier.js';
 import { isDid, type Did } from './did.js';
 import { isNsid, type Nsid } from './nsid.js';
 import { isRecordKey, type RecordKey } from './record-key.js';
@@ -12,14 +12,14 @@ import { type Result } from '../utils.js';
  * it allows using handles over DIDs, but this means that it won't be stable.
  */
 export type ResourceUri =
-	| `at://${Identifier}`
-	| `at://${Identifier}/${Nsid}`
-	| `at://${Identifier}/${Nsid}/${RecordKey}`;
+	| `at://${ActorIdentifier}`
+	| `at://${ActorIdentifier}/${Nsid}`
+	| `at://${ActorIdentifier}/${Nsid}/${RecordKey}`;
 
 export type ParsedResourceUri =
-	| { repo: Identifier; collection: undefined; rkey: undefined; fragment: string | undefined }
-	| { repo: Identifier; collection: Nsid; rkey: undefined; fragment: string | undefined }
-	| { repo: Identifier; collection: Nsid; rkey: RecordKey; fragment: string | undefined };
+	| { repo: ActorIdentifier; collection: undefined; rkey: undefined; fragment: string | undefined }
+	| { repo: ActorIdentifier; collection: Nsid; rkey: undefined; fragment: string | undefined }
+	| { repo: ActorIdentifier; collection: Nsid; rkey: RecordKey; fragment: string | undefined };
 
 const ATURI_RE =
 	/^at:\/\/([a-zA-Z0-9._:%-]+)(?:\/([a-zA-Z0-9-.]+)(?:\/([a-zA-Z0-9._~:@!$&%')(*+,;=-]+))?)?(?:#(\/[a-zA-Z0-9._~:@!$&%')(*+,;=\-[\]/\\]*))?$/;
@@ -37,7 +37,7 @@ export const isResourceUri = (input: unknown): input is ResourceUri => {
 
 	const [, r, c, k] = match;
 
-	return isIdentifier(r) && (c === undefined || isNsid(c)) && (k === undefined || isRecordKey(k));
+	return isActorIdentifier(r) && (c === undefined || isNsid(c)) && (k === undefined || isRecordKey(k));
 };
 
 // #__NO_SIDE_EFFECTS__
@@ -49,7 +49,7 @@ export const parseResourceUri = (input: string): Result<ParsedResourceUri, strin
 
 	const [, r, c, k, f] = match;
 
-	if (!isIdentifier(r)) {
+	if (!isActorIdentifier(r)) {
 		return { ok: false, error: `invalid repo in at-uri: ${r}` };
 	}
 

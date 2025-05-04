@@ -61,7 +61,7 @@ export {
 	type RecordSchema,
 } from './schemas/record.js';
 
-export { identifierString } from './string-formats/at-identifier.js';
+export { actorIdentifierString } from './string-formats/at-identifier.js';
 export { resourceUriString } from './string-formats/at-uri.js';
 export { datetimeString } from './string-formats/datetime.js';
 export { didString } from './string-formats/did.js';

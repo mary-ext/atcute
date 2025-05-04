@@ -5,9 +5,9 @@ import { isHandle, type Handle } from './handle.js';
  * represents an account's identifier, either a {@link Did} or a
  * {@link Handle}
  */
-export type Identifier = Did | Handle;
+export type ActorIdentifier = Did | Handle;
 
 // #__NO_SIDE_EFFECTS__
-export const isIdentifier = (input: unknown): input is Identifier => {
+export const isActorIdentifier = (input: unknown): input is ActorIdentifier => {
 	return isDid(input) || isHandle(input);
 };
