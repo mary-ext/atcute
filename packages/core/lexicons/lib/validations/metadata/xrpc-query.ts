@@ -3,6 +3,7 @@ import type { Nsid } from '../../syntax/nsid.js';
 import type { BaseMetadata } from '../base.js';
 import type { ObjectSchema } from '../schemas/object.js';
 import type { XRPCBodyParam, XRPCParametersShape } from '../types/xrpc.js';
+import { lazy } from '../utils.js';
 
 export interface XRPCQueryMetadata<
 	TParams extends ObjectSchema<XRPCParametersShape> | null,
@@ -26,11 +27,29 @@ export const xrpcQuery = <
 		output: TOutput;
 	},
 ): XRPCQueryMetadata<TParams, TOutput, TNsid> => {
+	// `schema` can be a getter, and we'd have to resolve that getter.
+	const output = lazy(() => {
+		const val = options.output;
+
+		switch (val?.type) {
+			case 'lex': {
+				return {
+					type: 'lex',
+					schema: val.schema,
+				} as TOutput;
+			}
+		}
+
+		return val;
+	});
+
 	return {
 		kind: 'metadata',
 		type: 'xrpc_query',
 		nsid: nsid,
 		params: options.params,
-		output: options.output,
+		get output() {
+			return output.value;
+		},
 	};
 };

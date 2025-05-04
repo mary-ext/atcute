@@ -1,16 +1,15 @@
-import type { Nsid } from '../../syntax/nsid.js';
 import type { BaseSchema, InferInput, InferOutput, Literal } from '../base.js';
 
 import type { ObjectSchema } from '../schemas/object.js';
 import type { VariantSchema } from '../schemas/variant.js';
 
-export interface XRPCLexBodyParam<TSchema extends ObjectSchema<any, Nsid | null> | VariantSchema<any, any>> {
-	type: 'lex';
-	schema: TSchema;
+export interface XRPCLexBodyParam<TSchema extends ObjectSchema<any> | VariantSchema<any, any>> {
+	readonly type: 'lex';
+	readonly schema: TSchema;
 }
 
 export interface XRPCBlobBodyParam {
-	type: 'blob';
+	readonly type: 'blob';
 }
 
 export type XRPCBodyParam = XRPCLexBodyParam<any> | XRPCBlobBodyParam | null;
