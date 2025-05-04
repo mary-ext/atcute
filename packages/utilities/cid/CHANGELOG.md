@@ -1,5 +1,11 @@
 # @atcute/cid
 
+## 2.2.2
+
+### Patch Changes
+
+- e55a918: internal identity symbol
+
 ## 2.2.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @atcute/bluesky
 
+## 2.1.1
+
+### Patch Changes
+
+- 2774138: unwrapQuoteEmbed function
+
 ## 2.1.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # @atcute/cbor
 
+## 2.2.3
+
+### Patch Changes
+
+- b6ea3f3: internal identity symbol
+- Updated dependencies [e55a918]
+  - @atcute/cid@2.2.2
+
 ## 2.2.2
 
 ### Patch Changes

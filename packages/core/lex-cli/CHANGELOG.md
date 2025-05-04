@@ -1,5 +1,11 @@
 # @atcute/lex-cli
 
+## 1.1.2
+
+### Patch Changes
+
+- 7a125f1: relaxed string schema rules
+
 ## 1.1.1
 
 ### Patch Changes
