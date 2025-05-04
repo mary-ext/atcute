@@ -4,7 +4,12 @@ export interface Bytes {
 	$bytes: string;
 }
 
+const BYTES_SYMBOL = Symbol.for('@atcute/bytes-wrapper');
+
 export class BytesWrapper implements Bytes {
+	/** @internal */
+	readonly [BYTES_SYMBOL] = true;
+
 	constructor(public buf: Uint8Array) {}
 
 	get $bytes(): string {
