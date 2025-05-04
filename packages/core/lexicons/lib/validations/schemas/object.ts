@@ -1,5 +1,3 @@
-import type { Nsid } from '../../syntax/nsid.js';
-
 import {
 	FLAG_ABORT_EARLY,
 	joinIssues,
@@ -30,26 +28,25 @@ export type OptionalObjectOutputKeys<TShape extends ObjectShape> = {
 		: never;
 }[keyof TShape];
 
-export type InferObjectInput<TShape extends ObjectShape, TNsid extends Nsid | null> = Flatten<
-	(null extends TNsid ? { $type?: TNsid } : {}) & {
+export type InferObjectInput<TShape extends ObjectShape> = Flatten<
+	{
 		-readonly [Key in Exclude<keyof TShape, OptionalObjectInputKeys<TShape>>]: InferInput<TShape[Key]>;
 	} & {
 		-readonly [Key in OptionalObjectInputKeys<TShape>]?: InferInput<TShape[Key]>;
 	}
 >;
 
-export type InferObjectOutput<TShape extends ObjectShape, TNsid extends Nsid | null> = Flatten<
-	(null extends TNsid ? { $type?: TNsid } : {}) & {
+export type InferObjectOutput<TShape extends ObjectShape> = Flatten<
+	{
 		-readonly [Key in Exclude<keyof TShape, OptionalObjectOutputKeys<TShape>>]: InferOutput<TShape[Key]>;
 	} & {
 		-readonly [Key in OptionalObjectOutputKeys<TShape>]?: InferOutput<TShape[Key]>;
 	}
 >;
 
-export interface ObjectSchema<TShape extends ObjectShape, TNsid extends Nsid | null>
-	extends BaseSchema<InferObjectInput<TShape, TNsid>, InferObjectOutput<TShape, TNsid>> {
+export interface ObjectSchema<TShape extends ObjectShape>
+	extends BaseSchema<InferObjectInput<TShape>, InferObjectOutput<TShape>> {
 	readonly type: 'object';
-	readonly nsid: TNsid | null;
 	readonly shape: Readonly<TShape>;
 }
 
@@ -72,10 +69,7 @@ const ISSUE_MISSING: IssueLeaf = {
 };
 
 // #__NO_SIDE_EFFECTS__
-export const object = <TNsid extends Nsid | null, TShape extends ObjectShape>(
-	nsid: TNsid,
-	shape: TShape,
-): ObjectSchema<TShape, TNsid> => {
+export const object = <TShape extends ObjectShape>(shape: TShape): ObjectSchema<TShape> => {
 	const resolvedEntries = lazy(() => {
 		const array: ObjectEntry[] = [];
 
@@ -105,30 +99,15 @@ export const object = <TNsid extends Nsid | null, TShape extends ObjectShape>(
 		return obj as TShape;
 	});
 
-	let typeIssue: IssueTree | null = null;
-
 	return {
 		kind: 'schema',
 		type: 'object',
-		nsid: nsid,
 		get shape() {
 			return introspect.value;
 		},
 		'~run'(input, flags) {
 			if (!isObject(input)) {
 				return ISSUE_TYPE_OBJECT;
-			}
-
-			if (nsid !== null) {
-				const type = input.$type;
-
-				if (type !== undefined && type !== nsid) {
-					return (typeIssue ??= prependPath('$type', {
-						ok: false,
-						code: 'invalid_literal',
-						expected: [nsid],
-					}));
-				}
 			}
 
 			const entries = resolvedEntries.value;

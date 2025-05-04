@@ -41,30 +41,13 @@ export {
 	type OptionalObjectOutputKeys,
 } from './schemas/object.js';
 export {
-	record,
-	type InferRecordInput,
-	type InferRecordOutput,
-	type OptionalRecordInputKeys,
-	type OptionalRecordOutputKeys,
-	type RecordSchema,
-	type RecordShape,
-} from './schemas/record.js';
-export {
 	variant,
 	type InferVariantInput,
 	type InferVariantOutput,
+	type VariantObjectSchema,
+	type VariantObjectShape,
 	type VariantSchema,
 } from './schemas/variant.js';
-
-export {
-	xrpcParameters,
-	type InferXRPCParametersInput,
-	type InferXRPCParametersOutput,
-	type OptionalXRPCParametersInputKeys,
-	type OptionalXRPCParametersOutputKeys,
-	type XRPCParametersSchema,
-	type XRPCParametersShape,
-} from './schemas/xrpc-parameters.js';
 
 export { identifierString } from './string-formats/at-identifier.js';
 export { resourceUriString } from './string-formats/at-uri.js';

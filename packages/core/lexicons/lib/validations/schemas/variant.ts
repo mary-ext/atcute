@@ -2,20 +2,26 @@ import type { Nsid } from '../../syntax/nsid.js';
 import type { $type } from '../../types/brand.js';
 
 import { prependPath, type BaseSchema, type InferInput, type InferOutput, type IssueLeaf } from '../base.js';
+import type { OptionalSchema } from '../misc.js';
 import { isObject } from '../utils.js';
 
-import type { ObjectSchema, ObjectShape } from './object.js';
-import type { RecordSchema, RecordShape } from './record.js';
-import type { StringSchema } from './string.js';
+import type { LiteralSchema } from './literal.js';
+import type { ObjectSchema } from './object.js';
 
-type Member = ObjectSchema<ObjectShape, Nsid> | RecordSchema<StringSchema, RecordShape, Nsid>;
-type MemberTuple = readonly [Member, ...Member[]];
+export type VariantObjectShape = {
+	$type: LiteralSchema<Nsid> | OptionalSchema<LiteralSchema<Nsid>, undefined>;
+	[key: string]: BaseSchema<any>;
+};
 
-export type InferVariantInput<TMembers extends MemberTuple> = $type.enforce<InferInput<TMembers[number]>>;
+export type VariantObjectSchema = ObjectSchema<VariantObjectShape>;
 
-export type InferVariantOutput<TMembers extends MemberTuple> = $type.enforce<InferOutput<TMembers[number]>>;
+type VariantTuple = readonly [VariantObjectSchema, ...VariantObjectSchema[]];
 
-export interface VariantSchema<TMembers extends MemberTuple, TClosed extends boolean = false>
+export type InferVariantInput<TMembers extends VariantTuple> = $type.enforce<InferInput<TMembers[number]>>;
+
+export type InferVariantOutput<TMembers extends VariantTuple> = $type.enforce<InferOutput<TMembers[number]>>;
+
+export interface VariantSchema<TMembers extends VariantTuple, TClosed extends boolean = false>
 	extends BaseSchema<InferVariantInput<TMembers>, InferVariantOutput<TMembers>> {
 	readonly type: 'variant';
 	readonly members: TMembers;
@@ -41,19 +47,26 @@ const ISSUE_VARIANT_TYPE = prependPath('$type', {
 
 // #__NO_SIDE_EFFECTS__
 export const variant: {
-	<TMembers extends MemberTuple>(members: TMembers): VariantSchema<TMembers>;
-	<TMembers extends MemberTuple, TClosed extends boolean>(
+	<TMembers extends VariantTuple>(members: TMembers): VariantSchema<TMembers>;
+	<TMembers extends VariantTuple, TClosed extends boolean>(
 		members: TMembers,
 		closed: TClosed,
 	): VariantSchema<TMembers, TClosed>;
-} = (members: Member[], closed: boolean = false): VariantSchema<any, any> => {
+} = (members: VariantObjectSchema[], closed: boolean = false): VariantSchema<any, any> => {
+	const map = Object.fromEntries(
+		members.map((schema) => {
+			const nsidType = schema.shape.$type;
+			const nsid = nsidType.type === 'optional' ? nsidType.wrapped.expected : nsidType.expected;
+
+			return [nsid, schema];
+		}),
+	);
+
 	const issue: IssueLeaf = {
 		ok: false,
 		code: 'invalid_variant',
-		expected: members.map((schema) => schema.nsid),
+		expected: Object.keys(map),
 	};
-
-	const map = Object.fromEntries(members.map((schema) => [schema.nsid, schema]));
 
 	return {
 		kind: 'schema',

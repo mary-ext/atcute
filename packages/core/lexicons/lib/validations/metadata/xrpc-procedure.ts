@@ -5,7 +5,7 @@ import type { ObjectSchema } from '../schemas/object.js';
 import type { XRPCBodyParam, XRPCParametersShape } from '../types/xrpc.js';
 
 export interface XRPCProcedureMetadata<
-	TParams extends ObjectSchema<XRPCParametersShape, null> | null,
+	TParams extends ObjectSchema<XRPCParametersShape> | null,
 	TInput extends XRPCBodyParam,
 	TOutput extends XRPCBodyParam,
 	TNsid extends Nsid,
@@ -19,7 +19,7 @@ export interface XRPCProcedureMetadata<
 
 export const xrpcProcedure = <
 	TNsid extends Nsid,
-	TParams extends ObjectSchema<XRPCParametersShape, null> | null,
+	TParams extends ObjectSchema<XRPCParametersShape> | null,
 	TInput extends XRPCBodyParam,
 	TOutput extends XRPCBodyParam,
 >(
