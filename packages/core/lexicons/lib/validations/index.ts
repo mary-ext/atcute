@@ -80,3 +80,4 @@ export { stringLength, type StringLengthConstraint } from './constraints/string-
 
 export { xrpcProcedure, type XRPCProcedureMetadata } from './metadata/xrpc-procedure.js';
 export { xrpcQuery, type XRPCQueryMetadata } from './metadata/xrpc-query.js';
+export { xrpcSubscription, type XRPCSubscriptionMetadata } from './metadata/xrpc-subscription.js';
