@@ -1,5 +1,5 @@
 ---
-'@atcute/client': major
+'@atcute/client': minor
 ---
 
 a new Client class for making API requests, replacing the previous `XRPC` class.
