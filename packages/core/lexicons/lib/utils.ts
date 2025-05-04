@@ -10,6 +10,6 @@ export const assert: { (condition: any, message?: string): asserts condition } =
 	}
 };
 
-export const assertNever = (value: never, message?: string): never => {
+export const assertNever = (_: never, message?: string): never => {
 	assert(false, message);
 };
