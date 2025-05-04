@@ -8,7 +8,7 @@ import { lazy } from '../utils.js';
 
 export interface XRPCSubscriptionMetadata<
 	TParams extends ObjectSchema<XRPCParametersShape> | null,
-	TMessage extends ObjectSchema<any> | VariantSchema<any, any>,
+	TMessage extends ObjectSchema<any> | VariantSchema<any, any> | null,
 	TNsid extends Nsid,
 > extends BaseMetadata {
 	readonly type: 'xrpc_subscription';
@@ -17,10 +17,11 @@ export interface XRPCSubscriptionMetadata<
 	readonly message: TMessage;
 }
 
+// #__NO_SIDE_EFFECTS__
 export const xrpcSubscription = <
 	TNsid extends Nsid,
 	TParams extends ObjectSchema<XRPCParametersShape> | null,
-	TMessage extends ObjectSchema<any> | VariantSchema<any, any>,
+	TMessage extends ObjectSchema<any> | VariantSchema<any, any> | null,
 >(
 	nsid: TNsid,
 	options: {

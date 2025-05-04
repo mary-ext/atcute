@@ -18,6 +18,7 @@ export interface XRPCProcedureMetadata<
 	readonly output: TOutput;
 }
 
+// #__NO_SIDE_EFFECTS__
 export const xrpcProcedure = <
 	TNsid extends Nsid,
 	TParams extends ObjectSchema<XRPCParametersShape> | null,

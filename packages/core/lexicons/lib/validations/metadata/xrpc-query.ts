@@ -16,6 +16,7 @@ export interface XRPCQueryMetadata<
 	readonly output: TOutput;
 }
 
+// #__NO_SIDE_EFFECTS__
 export const xrpcQuery = <
 	TNsid extends Nsid,
 	TParams extends ObjectSchema<XRPCParametersShape> | null,

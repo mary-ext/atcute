@@ -15,7 +15,11 @@
 		"!lib/**/*.test.ts"
 	],
 	"exports": {
-		".": "./dist/index.js"
+		".": "./dist/index.js",
+		"./ambient": "./dist/ambient.js",
+		"./interfaces": "./dist/interfaces/index.js",
+		"./syntax": "./dist/syntax/index.js",
+		"./validations": "./dist/validations/index.js"
 	},
 	"sideEffects": false,
 	"scripts": {
