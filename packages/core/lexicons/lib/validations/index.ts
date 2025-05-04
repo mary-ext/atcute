@@ -49,6 +49,14 @@ export {
 	type VariantSchema,
 } from './schemas/variant.js';
 
+export {
+	record,
+	type RecordKeySchema,
+	type RecordObjectSchema,
+	type RecordObjectShape,
+	type RecordSchema,
+} from './schemas/record.js';
+
 export { identifierString } from './string-formats/at-identifier.js';
 export { resourceUriString } from './string-formats/at-uri.js';
 export { datetimeString } from './string-formats/datetime.js';
