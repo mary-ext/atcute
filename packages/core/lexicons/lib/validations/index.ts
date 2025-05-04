@@ -24,12 +24,15 @@ export {
 	type OptionalSchema,
 } from './misc.js';
 
-export { blob, type BlobSchema } from './schemas/blob.js';
 export { boolean, type BooleanSchema } from './schemas/boolean.js';
 export { integer, type IntegerSchema } from './schemas/integer.js';
 export { literal, literalUnion, type LiteralSchema, type LiteralUnionSchema } from './schemas/literal.js';
 export { string, type StringSchema } from './schemas/string.js';
 export { unknown, type UnknownSchema } from './schemas/unknown.js';
+
+export { blob, type BlobSchema } from './schemas/blob.js';
+export { bytes, type BytesSchema } from './schemas/bytes.js';
+export { cidLink, type CidLinkSchema } from './schemas/cid-link.js';
 
 export { array, type ArraySchema } from './schemas/array.js';
 export {

@@ -9,9 +9,10 @@ type InputType =
 	| 'integer'
 	| 'boolean'
 	| 'blob'
+	| 'bytes'
+	| 'cid-link'
 	| 'object'
-	| 'array'
-	| 'record';
+	| 'array';
 
 export type StringFormat =
 	| 'at-identifier'
