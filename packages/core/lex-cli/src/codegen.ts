@@ -389,7 +389,7 @@ const generateObject = (
 		const optional = !required.has(prop) && !('default' in propSpec);
 		const nulled = nullable.has(prop);
 
-		let call = generateType(imports, defUri, propSpec);
+		let call = generateType(imports, defUri, propSpec, lazy);
 
 		if (nulled) {
 			call = `${PURE} v.nullable(${call})`;
@@ -413,6 +413,7 @@ const generateType = (
 	imports: ImportSet,
 	defUri: string,
 	spec: LexArray | LexPrimitive | LexIpldType | LexRefVariant | LexBlob,
+	lazy = false,
 ): string => {
 	switch (spec.type) {
 		// LexRefVariant
@@ -457,7 +458,10 @@ const generateType = (
 
 		// LexArray
 		case 'array': {
-			const item = generateType(imports, defUri, spec.items);
+			let item = generateType(imports, defUri, spec.items);
+			if (!lazy && (spec.items.type === 'ref' || spec.items.type === 'union')) {
+				item = `(() => { return ${item}; })`;
+			}
 
 			let pipe: string[] = [];
 
