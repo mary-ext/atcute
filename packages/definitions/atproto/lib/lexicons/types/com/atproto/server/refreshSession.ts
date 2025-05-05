@@ -14,7 +14,9 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.server.refreshSes
 			did: /*#__PURE__*/ v.didString(),
 			didDoc: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 			active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			status: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.string<'takendown' | 'suspended' | 'deactivated' | (string & {})>(),
+			),
 		}),
 	},
 });

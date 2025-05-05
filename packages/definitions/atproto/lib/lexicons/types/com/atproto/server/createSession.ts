@@ -25,7 +25,9 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.server.createSess
 			emailConfirmed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			emailAuthFactor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			status: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.string<'takendown' | 'suspended' | 'deactivated' | (string & {})>(),
+			),
 		}),
 	},
 });

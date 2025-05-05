@@ -45,7 +45,7 @@ const _createSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#create')),
 	collection: /*#__PURE__*/ v.nsidString(),
 	rkey: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.pipe(/*#__PURE__*/ v.recordKeyString(), /*#__PURE__*/ v.stringLength(0, 512)),
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.recordKeyString(), [/*#__PURE__*/ v.stringLength(0, 512)]),
 	),
 	value: /*#__PURE__*/ v.unknown(),
 });
@@ -88,7 +88,7 @@ const _createResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#createResult')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.string(),
-	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
 });
 export const createResultSchema = _createResultSchema as createResultSchema.$schema;
 export interface CreateResult extends v.InferInput<typeof createResultSchema> {}
@@ -102,7 +102,7 @@ const _updateResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#updateResult')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.string(),
-	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
 });
 export const updateResultSchema = _updateResultSchema as updateResultSchema.$schema;
 export interface UpdateResult extends v.InferInput<typeof updateResultSchema> {}

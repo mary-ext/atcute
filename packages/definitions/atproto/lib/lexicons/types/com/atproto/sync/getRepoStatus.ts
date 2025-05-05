@@ -11,7 +11,17 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.getRepoStatus', 
 		schema: /*#__PURE__*/ v.object({
 			did: /*#__PURE__*/ v.didString(),
 			active: /*#__PURE__*/ v.boolean(),
-			status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			status: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.string<
+					| 'takendown'
+					| 'suspended'
+					| 'deleted'
+					| 'deactivated'
+					| 'desynchronized'
+					| 'throttled'
+					| (string & {})
+				>(),
+			),
 			rev: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.tidString()),
 		}),
 	},

@@ -25,5 +25,12 @@ export type { CidLink } from './interfaces/cid-link.js';
 
 export type { $type } from './types/brand.js';
 
-export type { InferInput, InferOutput } from './validations/base.js';
-export { is, parse, safeParse, ValidationError } from './validations/parse.js';
+export {
+	is,
+	parse,
+	safeParse,
+	ValidationError,
+	type InferInput,
+	type InferOutput,
+	type ValidationResult,
+} from './validations/index.js';

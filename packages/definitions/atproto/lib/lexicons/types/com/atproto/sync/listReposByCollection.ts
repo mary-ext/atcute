@@ -6,7 +6,7 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.listReposByColle
 	params: /*#__PURE__*/ v.object({
 		collection: /*#__PURE__*/ v.nsidString(),
 		limit: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.pipe(/*#__PURE__*/ v.integer(), /*#__PURE__*/ v.integerRange(1, 2000)),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 2000)]),
 			500,
 		),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

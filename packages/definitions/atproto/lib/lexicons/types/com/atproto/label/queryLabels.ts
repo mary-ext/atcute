@@ -8,7 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.label.queryLabels', {
 		uriPatterns: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
 		sources: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
 		limit: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.pipe(/*#__PURE__*/ v.integer(), /*#__PURE__*/ v.integerRange(1, 250)),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 250)]),
 			50,
 		),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

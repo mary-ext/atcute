@@ -7,7 +7,7 @@ const _labelSchema = /*#__PURE__*/ v.object({
 	src: /*#__PURE__*/ v.didString(),
 	uri: /*#__PURE__*/ v.genericUriString(),
 	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	val: /*#__PURE__*/ v.pipe(/*#__PURE__*/ v.string(), /*#__PURE__*/ v.stringLength(0, 128)),
+	val: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 128)]),
 	neg: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	cts: /*#__PURE__*/ v.datetimeString(),
 	exp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
@@ -24,7 +24,7 @@ export declare namespace labelSchema {
 const _selfLabelsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.defs#selfLabels')),
 	get values() {
-		return /*#__PURE__*/ v.pipe(v.array(selfLabelSchema), /*#__PURE__*/ v.arrayLength(0, 10));
+		return /*#__PURE__*/ v.constrain(v.array(selfLabelSchema), [/*#__PURE__*/ v.arrayLength(0, 10)]);
 	},
 });
 export const selfLabelsSchema = _selfLabelsSchema as selfLabelsSchema.$schema;
@@ -37,7 +37,7 @@ export declare namespace selfLabelsSchema {
 
 const _selfLabelSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.defs#selfLabel')),
-	val: /*#__PURE__*/ v.pipe(/*#__PURE__*/ v.string(), /*#__PURE__*/ v.stringLength(0, 128)),
+	val: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 128)]),
 });
 export const selfLabelSchema = _selfLabelSchema as selfLabelSchema.$schema;
 export interface SelfLabel extends v.InferInput<typeof selfLabelSchema> {}
@@ -49,14 +49,16 @@ export declare namespace selfLabelSchema {
 
 const _labelValueDefinitionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.defs#labelValueDefinition')),
-	identifier: /*#__PURE__*/ v.pipe(
-		/*#__PURE__*/ v.string(),
+	identifier: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 100),
 		/*#__PURE__*/ v.stringGraphemes(0, 100),
+	]),
+	severity: /*#__PURE__*/ v.string<'inform' | 'alert' | 'none' | (string & {})>(),
+	blurs: /*#__PURE__*/ v.string<'content' | 'media' | 'none' | (string & {})>(),
+	defaultSetting: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<'ignore' | 'warn' | 'hide' | (string & {})>(),
+		'warn',
 	),
-	severity: /*#__PURE__*/ v.string(),
-	blurs: /*#__PURE__*/ v.string(),
-	defaultSetting: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string(), 'warn'),
 	adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	get locales() {
 		return /*#__PURE__*/ v.array(labelValueDefinitionStringsSchema);
@@ -75,16 +77,14 @@ const _labelValueDefinitionStringsSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.literal('com.atproto.label.defs#labelValueDefinitionStrings'),
 	),
 	lang: /*#__PURE__*/ v.languageCodeString(),
-	name: /*#__PURE__*/ v.pipe(
-		/*#__PURE__*/ v.string(),
+	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 640),
 		/*#__PURE__*/ v.stringGraphemes(0, 64),
-	),
-	description: /*#__PURE__*/ v.pipe(
-		/*#__PURE__*/ v.string(),
+	]),
+	description: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 100000),
 		/*#__PURE__*/ v.stringGraphemes(0, 10000),
-	),
+	]),
 });
 export const labelValueDefinitionStringsSchema =
 	_labelValueDefinitionStringsSchema as labelValueDefinitionStringsSchema.$schema;
@@ -95,7 +95,20 @@ export declare namespace labelValueDefinitionStringsSchema {
 	export interface $schema extends $schematype {}
 }
 
-const _labelValueSchema = /*#__PURE__*/ v.string();
+const _labelValueSchema = /*#__PURE__*/ v.string<
+	| '!hide'
+	| '!no-promote'
+	| '!warn'
+	| '!no-unauthenticated'
+	| 'dmca-violation'
+	| 'doxxing'
+	| 'porn'
+	| 'sexual'
+	| 'nudity'
+	| 'nsfl'
+	| 'gore'
+	| (string & {})
+>();
 export const labelValueSchema = _labelValueSchema as labelValueSchema.$schema;
 export type LabelValue = v.InferInput<typeof labelValueSchema>;
 export declare namespace labelValueSchema {

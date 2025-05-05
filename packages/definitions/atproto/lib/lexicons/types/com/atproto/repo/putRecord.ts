@@ -10,7 +10,9 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.repo.putRecord', 
 		schema: /*#__PURE__*/ v.object({
 			repo: /*#__PURE__*/ v.actorIdentifierString(),
 			collection: /*#__PURE__*/ v.nsidString(),
-			rkey: /*#__PURE__*/ v.pipe(/*#__PURE__*/ v.recordKeyString(), /*#__PURE__*/ v.stringLength(0, 512)),
+			rkey: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.recordKeyString(), [
+				/*#__PURE__*/ v.stringLength(0, 512),
+			]),
 			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			record: /*#__PURE__*/ v.unknown(),
 			swapRecord: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nullable(/*#__PURE__*/ v.string())),
@@ -25,7 +27,9 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.repo.putRecord', 
 			get commit() {
 				return /*#__PURE__*/ v.optional(ComAtprotoRepoDefs.commitMetaSchema);
 			},
-			validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			validationStatus: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>(),
+			),
 		}),
 	},
 });

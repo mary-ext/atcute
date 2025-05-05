@@ -476,7 +476,7 @@ const generateType = (
 			if (pipe.length === 0) {
 				return `${PURE} v.array(${item})`;
 			} else {
-				return `${PURE} v.pipe(v.array(${item}), ${pipe.join(', ')})`;
+				return `${PURE} v.constrain(v.array(${item}), [ ${pipe.join(', ')} ])`;
 			}
 		}
 
@@ -516,7 +516,7 @@ const generateType = (
 			let call = `${PURE} v.integer()`;
 
 			if (pipe.length !== 0) {
-				call = `${PURE} v.pipe(${call}, ${pipe.join(', ')})`;
+				call = `${PURE} v.constrain(${call}, [ ${pipe.join(', ')} ])`;
 			}
 
 			if (spec.default !== undefined) {
@@ -553,6 +553,11 @@ const generateType = (
 			}
 
 			let call = `${PURE} v.string()`;
+
+			if (spec.knownValues?.length) {
+				call = `${PURE} v.string<${spec.knownValues.map(lit).join(' | ')} | (string & {})>()`;
+			}
+
 			switch (spec.format) {
 				case 'at-identifier': {
 					call = `${PURE} v.actorIdentifierString()`;
@@ -597,7 +602,7 @@ const generateType = (
 			}
 
 			if (pipe.length !== 0) {
-				call = `${PURE} v.pipe(${call}, ${pipe.join(', ')})`;
+				call = `${PURE} v.constrain(${call}, [ ${pipe.join(', ')} ])`;
 			}
 
 			if (spec.default !== undefined) {
@@ -630,7 +635,7 @@ const generateType = (
 			let call = `${PURE} v.bytes()`;
 
 			if (pipe.length !== 0) {
-				call = `${PURE} v.pipe(${call}, ${pipe.join(', ')})`;
+				call = `${PURE} v.constrain(${call}, [ ${pipe.join(', ')} ])`;
 			}
 
 			return call;

@@ -5,9 +5,9 @@ import * as ComAtprotoServerDefs from '../server/defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.admin.getInviteCodes', {
 	params: /*#__PURE__*/ v.object({
-		sort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string(), 'recent'),
+		sort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'recent' | 'usage' | (string & {})>(), 'recent'),
 		limit: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.pipe(/*#__PURE__*/ v.integer(), /*#__PURE__*/ v.integerRange(1, 500)),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 500)]),
 			100,
 		),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

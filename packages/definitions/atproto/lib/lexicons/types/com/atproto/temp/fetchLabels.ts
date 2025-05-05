@@ -7,7 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.temp.fetchLabels', {
 	params: /*#__PURE__*/ v.object({
 		since: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		limit: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.pipe(/*#__PURE__*/ v.integer(), /*#__PURE__*/ v.integerRange(1, 250)),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 250)]),
 			50,
 		),
 	}),

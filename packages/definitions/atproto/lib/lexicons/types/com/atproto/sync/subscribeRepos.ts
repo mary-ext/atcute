@@ -26,9 +26,9 @@ const _commitSchema = /*#__PURE__*/ v.object({
 	commit: /*#__PURE__*/ v.cidLink(),
 	rev: /*#__PURE__*/ v.tidString(),
 	since: /*#__PURE__*/ v.nullable(/*#__PURE__*/ v.tidString()),
-	blocks: /*#__PURE__*/ v.pipe(/*#__PURE__*/ v.bytes(), /*#__PURE__*/ v.bytesSize(0, 2000000)),
+	blocks: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.bytes(), [/*#__PURE__*/ v.bytesSize(0, 2000000)]),
 	get ops() {
-		return /*#__PURE__*/ v.pipe(v.array(repoOpSchema), /*#__PURE__*/ v.arrayLength(0, 200));
+		return /*#__PURE__*/ v.constrain(v.array(repoOpSchema), [/*#__PURE__*/ v.arrayLength(0, 200)]);
 	},
 	blobs: /*#__PURE__*/ v.array(/*#__PURE__*/ v.cidLink()),
 	prevData: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidLink()),
@@ -46,7 +46,7 @@ const _syncSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#sync')),
 	seq: /*#__PURE__*/ v.integer(),
 	did: /*#__PURE__*/ v.didString(),
-	blocks: /*#__PURE__*/ v.pipe(/*#__PURE__*/ v.bytes(), /*#__PURE__*/ v.bytesSize(0, 10000)),
+	blocks: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.bytes(), [/*#__PURE__*/ v.bytesSize(0, 10000)]),
 	rev: /*#__PURE__*/ v.string(),
 	time: /*#__PURE__*/ v.datetimeString(),
 });
@@ -79,7 +79,11 @@ const _accountSchema = /*#__PURE__*/ v.object({
 	did: /*#__PURE__*/ v.didString(),
 	time: /*#__PURE__*/ v.datetimeString(),
 	active: /*#__PURE__*/ v.boolean(),
-	status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	status: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<
+			'takendown' | 'suspended' | 'deleted' | 'deactivated' | 'desynchronized' | 'throttled' | (string & {})
+		>(),
+	),
 });
 export const accountSchema = _accountSchema as accountSchema.$schema;
 export interface Account extends v.InferInput<typeof accountSchema> {}
@@ -91,7 +95,7 @@ export declare namespace accountSchema {
 
 const _infoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#info')),
-	name: /*#__PURE__*/ v.string(),
+	name: /*#__PURE__*/ v.string<'OutdatedCursor' | (string & {})>(),
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 export const infoSchema = _infoSchema as infoSchema.$schema;
@@ -104,7 +108,7 @@ export declare namespace infoSchema {
 
 const _repoOpSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#repoOp')),
-	action: /*#__PURE__*/ v.string(),
+	action: /*#__PURE__*/ v.string<'create' | 'update' | 'delete' | (string & {})>(),
 	path: /*#__PURE__*/ v.string(),
 	cid: /*#__PURE__*/ v.nullable(/*#__PURE__*/ v.cidLink()),
 	prev: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidLink()),

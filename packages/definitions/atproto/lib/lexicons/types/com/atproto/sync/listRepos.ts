@@ -5,7 +5,7 @@ import type {} from '@atcute/lexicons/ambient';
 const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.listRepos', {
 	params: /*#__PURE__*/ v.object({
 		limit: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.pipe(/*#__PURE__*/ v.integer(), /*#__PURE__*/ v.integerRange(1, 1000)),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 1000)]),
 			500,
 		),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
@@ -33,7 +33,11 @@ const _repoSchema = /*#__PURE__*/ v.object({
 	head: /*#__PURE__*/ v.string(),
 	rev: /*#__PURE__*/ v.tidString(),
 	active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-	status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	status: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<
+			'takendown' | 'suspended' | 'deleted' | 'deactivated' | 'desynchronized' | 'throttled' | (string & {})
+		>(),
+	),
 });
 export const repoSchema = _repoSchema as repoSchema.$schema;
 export interface Repo extends v.InferInput<typeof repoSchema> {}

@@ -35,7 +35,7 @@ export declare namespace labelsSchema {
 
 const _infoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.subscribeLabels#info')),
-	name: /*#__PURE__*/ v.string(),
+	name: /*#__PURE__*/ v.string<'OutdatedCursor' | (string & {})>(),
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 export const infoSchema = _infoSchema as infoSchema.$schema;

@@ -1,7 +1,16 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-const _reasonTypeSchema = /*#__PURE__*/ v.string();
+const _reasonTypeSchema = /*#__PURE__*/ v.string<
+	| 'com.atproto.moderation.defs#reasonSpam'
+	| 'com.atproto.moderation.defs#reasonViolation'
+	| 'com.atproto.moderation.defs#reasonMisleading'
+	| 'com.atproto.moderation.defs#reasonSexual'
+	| 'com.atproto.moderation.defs#reasonRude'
+	| 'com.atproto.moderation.defs#reasonOther'
+	| 'com.atproto.moderation.defs#reasonAppeal'
+	| (string & {})
+>();
 export const reasonTypeSchema = _reasonTypeSchema as reasonTypeSchema.$schema;
 export type ReasonType = v.InferInput<typeof reasonTypeSchema>;
 export declare namespace reasonTypeSchema {
@@ -73,7 +82,7 @@ export declare namespace reasonAppealSchema {
 	export interface $schema extends $schematype {}
 }
 
-const _subjectTypeSchema = /*#__PURE__*/ v.string();
+const _subjectTypeSchema = /*#__PURE__*/ v.string<'account' | 'record' | 'chat' | (string & {})>();
 export const subjectTypeSchema = _subjectTypeSchema as subjectTypeSchema.$schema;
 export type SubjectType = v.InferInput<typeof subjectTypeSchema>;
 export declare namespace subjectTypeSchema {

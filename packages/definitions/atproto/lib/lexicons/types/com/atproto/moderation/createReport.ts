@@ -14,11 +14,10 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.moderation.create
 				return ComAtprotoModerationDefs.reasonTypeSchema;
 			},
 			reason: /*#__PURE__*/ v.optional(
-				/*#__PURE__*/ v.pipe(
-					/*#__PURE__*/ v.string(),
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 					/*#__PURE__*/ v.stringLength(0, 20000),
 					/*#__PURE__*/ v.stringGraphemes(0, 2000),
-				),
+				]),
 			),
 			get subject() {
 				return /*#__PURE__*/ v.variant([
@@ -36,11 +35,10 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.moderation.create
 				return ComAtprotoModerationDefs.reasonTypeSchema;
 			},
 			reason: /*#__PURE__*/ v.optional(
-				/*#__PURE__*/ v.pipe(
-					/*#__PURE__*/ v.string(),
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 					/*#__PURE__*/ v.stringLength(0, 20000),
 					/*#__PURE__*/ v.stringGraphemes(0, 2000),
-				),
+				]),
 			),
 			get subject() {
 				return /*#__PURE__*/ v.variant([

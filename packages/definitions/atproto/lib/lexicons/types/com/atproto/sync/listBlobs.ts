@@ -7,7 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.listBlobs', {
 		did: /*#__PURE__*/ v.didString(),
 		since: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.tidString()),
 		limit: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.pipe(/*#__PURE__*/ v.integer(), /*#__PURE__*/ v.integerRange(1, 1000)),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 1000)]),
 			500,
 		),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
