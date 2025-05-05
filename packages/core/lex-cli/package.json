@@ -16,17 +16,21 @@
 		"cli.mjs"
 	],
 	"bin": "./cli.mjs",
+	"exports": {
+		".": "./dist/index.js"
+	},
 	"scripts": {
 		"build": "tsc",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"@badrap/valita": "^0.4.2",
-		"@externdefs/collider": "^0.1.0",
+		"@externdefs/collider": "^0.2.0",
 		"picocolors": "^1.1.1",
-		"prettier": "^3.4.2"
+		"prettier": "^3.5.3",
+		"valibot": "^1.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "^22.12.0"
+		"@atcute/lexicons": "workspace:^",
+		"@types/node": "^22.15.3"
 	}
 }
