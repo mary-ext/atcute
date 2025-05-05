@@ -1,0 +1,36 @@
+import type {} from '@atcute/lexicons';
+import * as v from '@atcute/lexicons/validations';
+import type {} from '@atcute/lexicons/ambient';
+import * as ComAtprotoAdminDefs from './defs.js';
+
+const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.admin.searchAccounts', {
+	params: /*#__PURE__*/ v.object({
+		email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		limit: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.pipe(/*#__PURE__*/ v.integer(), /*#__PURE__*/ v.integerRange(1, 100)),
+			50,
+		),
+	}),
+	output: {
+		type: 'lex',
+		schema: /*#__PURE__*/ v.object({
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			get accounts() {
+				return /*#__PURE__*/ v.array(ComAtprotoAdminDefs.accountViewSchema);
+			},
+		}),
+	},
+});
+export const mainSchema = _mainSchema as mainSchema.$schema;
+export declare namespace mainSchema {
+	export {};
+	type $schematype = typeof _mainSchema;
+	export interface $schema extends $schematype {}
+}
+
+declare module '@atcute/lexicons/ambient' {
+	interface XRPCQueries {
+		'com.atproto.admin.searchAccounts': mainSchema.$schema;
+	}
+}

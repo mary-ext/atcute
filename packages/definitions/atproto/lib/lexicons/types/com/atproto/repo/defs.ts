@@ -1,0 +1,15 @@
+import type {} from '@atcute/lexicons';
+import * as v from '@atcute/lexicons/validations';
+
+const _commitMetaSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.defs#commitMeta')),
+	cid: /*#__PURE__*/ v.string(),
+	rev: /*#__PURE__*/ v.tidString(),
+});
+export const commitMetaSchema = _commitMetaSchema as commitMetaSchema.$schema;
+export interface CommitMeta extends v.InferInput<typeof commitMetaSchema> {}
+export declare namespace commitMetaSchema {
+	export {};
+	type $schematype = typeof _commitMetaSchema;
+	export interface $schema extends $schematype {}
+}

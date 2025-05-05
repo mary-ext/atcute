@@ -1,0 +1,37 @@
+import type {} from '@atcute/lexicons';
+import * as v from '@atcute/lexicons/validations';
+import type {} from '@atcute/lexicons/ambient';
+import * as ComAtprotoLabelDefs from './defs.js';
+
+const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.label.queryLabels', {
+	params: /*#__PURE__*/ v.object({
+		uriPatterns: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
+		sources: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
+		limit: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.pipe(/*#__PURE__*/ v.integer(), /*#__PURE__*/ v.integerRange(1, 250)),
+			50,
+		),
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	}),
+	output: {
+		type: 'lex',
+		schema: /*#__PURE__*/ v.object({
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			get labels() {
+				return /*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema);
+			},
+		}),
+	},
+});
+export const mainSchema = _mainSchema as mainSchema.$schema;
+export declare namespace mainSchema {
+	export {};
+	type $schematype = typeof _mainSchema;
+	export interface $schema extends $schematype {}
+}
+
+declare module '@atcute/lexicons/ambient' {
+	interface XRPCQueries {
+		'com.atproto.label.queryLabels': mainSchema.$schema;
+	}
+}
