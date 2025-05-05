@@ -65,15 +65,7 @@ const resolveExternalImport = (nsid: string, mappings: ImportMapping[]): ImportM
 	});
 };
 
-// const INVALID_INFER: LexUserType['type'][] = [
-// 	'query',
-// 	'procedure',
-// 	'subscription',
-// 	'token',
-// 	'string',
-// 	'boolean',
-// 	'integer',
-// ];
+const PURE = `/*#__PURE__*/`;
 
 const INTERFACE_INFER: LexUserType['type'][] = [
 	'array',
@@ -175,7 +167,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 					break;
 				}
 				case 'token': {
-					result = `v.literal(${lit(stripMainHash(defUri))})`;
+					result = `${PURE} v.literal(${lit(stripMainHash(defUri))})`;
 					break;
 				}
 				default: {
@@ -264,7 +256,7 @@ const generateXrpcQuery = (imports: ImportSet, defUri: string, spec: LexXrpcQuer
 	const params = generateXrpcParameters(imports, defUri, spec.parameters);
 	const output = generateXrpcBody(imports, defUri, spec.output);
 
-	return `v.xrpcQuery(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "output": ${output} })`;
+	return `${PURE} v.xrpcQuery(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "output": ${output} })`;
 };
 
 const generateXrpcProcedure = (imports: ImportSet, defUri: string, spec: LexXrpcProcedure): string => {
@@ -272,7 +264,7 @@ const generateXrpcProcedure = (imports: ImportSet, defUri: string, spec: LexXrpc
 	const input = generateXrpcBody(imports, defUri, spec.input);
 	const output = generateXrpcBody(imports, defUri, spec.output);
 
-	return `v.xrpcProcedure(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "input": ${input}, "output": ${output} })`;
+	return `${PURE} v.xrpcProcedure(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "input": ${input}, "output": ${output} })`;
 };
 
 const generateXrpcSubscription = (imports: ImportSet, defUri: string, spec: LexXrpcSubscription): string => {
@@ -298,7 +290,7 @@ const generateXrpcSubscription = (imports: ImportSet, defUri: string, spec: LexX
 		inner += `"message": null,`;
 	}
 
-	return `v.xrpcSubscription(${lit(stripMainHash(defUri))}, {\n${inner}})`;
+	return `${PURE} v.xrpcSubscription(${lit(stripMainHash(defUri))}, {\n${inner}})`;
 };
 
 const generateXrpcBody = (imports: ImportSet, defUri: string, spec: LexXrpcBody | undefined): string => {
@@ -356,18 +348,18 @@ const generateXrpcParameters = (
 const generateRecord = (imports: ImportSet, defUri: string, spec: LexRecord): string => {
 	const schema = generateObject(imports, defUri, spec.record, 'required');
 
-	let key = `v.string()`;
+	let key = `${PURE} v.string()`;
 	if (spec.key) {
 		if (spec.key === 'tid') {
-			key = `v.tidString()`;
+			key = `${PURE} v.tidString()`;
 		} else if (spec.key === 'nsid') {
-			key = `v.nsidString()`;
+			key = `${PURE} v.nsidString()`;
 		} else if (spec.key.startsWith('literal:')) {
-			key = `v.literal(${lit(spec.key.slice('literal:'.length))})`;
+			key = `${PURE} v.literal(${lit(spec.key.slice('literal:'.length))})`;
 		}
 	}
 
-	return `v.record(${key}, ${schema})`;
+	return `${PURE} v.record(${key}, ${schema})`;
 };
 
 const generateObject = (
@@ -383,11 +375,11 @@ const generateObject = (
 
 	switch (writeType) {
 		case 'optional': {
-			inner += `"$type": v.optional(v.literal(${lit(stripMainHash(defUri))})),`;
+			inner += `"$type": ${PURE} v.optional(${PURE} v.literal(${lit(stripMainHash(defUri))})),`;
 			break;
 		}
 		case 'required': {
-			inner += `"$type": v.literal(${lit(stripMainHash(defUri))}),`;
+			inner += `"$type": ${PURE} v.literal(${lit(stripMainHash(defUri))}),`;
 			break;
 		}
 	}
@@ -400,11 +392,11 @@ const generateObject = (
 		let call = generateType(imports, defUri, propSpec);
 
 		if (nulled) {
-			call = `v.nullable(${call})`;
+			call = `${PURE} v.nullable(${call})`;
 		}
 
 		if (optional) {
-			call = `v.optional(${call})`;
+			call = `${PURE} v.optional(${call})`;
 		}
 
 		if (lazy) {
@@ -414,7 +406,7 @@ const generateObject = (
 		}
 	}
 
-	return `v.object({\n${inner}})`;
+	return `${PURE} v.object({\n${inner}})`;
 };
 
 const generateType = (
@@ -460,7 +452,7 @@ const generateType = (
 				}
 			});
 
-			return `v.variant([${refs.join(', ')}]${spec.closed ? `, true` : ``})`;
+			return `${PURE} v.variant([${refs.join(', ')}]${spec.closed ? `, true` : ``})`;
 		}
 
 		// LexArray
@@ -471,152 +463,152 @@ const generateType = (
 
 			if (spec.minLength !== undefined || spec.maxLength !== undefined) {
 				if (spec.maxLength === undefined) {
-					pipe.push(`v.arrayLength(${lit(spec.minLength ?? 0)})`);
+					pipe.push(`${PURE} v.arrayLength(${lit(spec.minLength ?? 0)})`);
 				} else {
-					pipe.push(`v.arrayLength(${lit(spec.minLength ?? 0)}, ${lit(spec.maxLength)})`);
+					pipe.push(`${PURE} v.arrayLength(${lit(spec.minLength ?? 0)}, ${lit(spec.maxLength)})`);
 				}
 			}
 
 			if (pipe.length === 0) {
-				return `v.array(${item})`;
+				return `${PURE} v.array(${item})`;
 			} else {
-				return `v.pipe(v.array(${item}), ${pipe.join(', ')})`;
+				return `${PURE} v.pipe(v.array(${item}), ${pipe.join(', ')})`;
 			}
 		}
 
 		// LexPrimitive
 		case 'boolean': {
 			if (spec.const !== undefined) {
-				return `v.literal(${spec.const})`;
+				return `${PURE} v.literal(${spec.const})`;
 			}
 
-			let call = `v.boolean()`;
+			let call = `${PURE} v.boolean()`;
 
 			if (spec.default !== undefined) {
-				call = `v.optional(${call}, ${lit(spec.default)})`;
+				call = `${PURE} v.optional(${call}, ${lit(spec.default)})`;
 			}
 
 			return call;
 		}
 		case 'integer': {
 			if (spec.const !== undefined) {
-				return `v.literal(${lit(spec.const)})`;
+				return `${PURE} v.literal(${lit(spec.const)})`;
 			}
 
 			if (spec.enum !== undefined) {
-				return `v.literalUnion(${lit(spec.enum)})`;
+				return `${PURE} v.literalUnion(${lit(spec.enum)})`;
 			}
 
 			let pipe: string[] = [];
 
 			if (spec.minimum !== undefined || spec.maximum !== undefined) {
 				if (spec.maximum === undefined) {
-					pipe.push(`v.integerRange(${lit(spec.minimum ?? 0)})`);
+					pipe.push(`${PURE} v.integerRange(${lit(spec.minimum ?? 0)})`);
 				} else {
-					pipe.push(`v.integerRange(${lit(spec.minimum ?? 0)}, ${lit(spec.maximum)})`);
+					pipe.push(`${PURE} v.integerRange(${lit(spec.minimum ?? 0)}, ${lit(spec.maximum)})`);
 				}
 			}
 
-			let call = `v.integer()`;
+			let call = `${PURE} v.integer()`;
 
 			if (pipe.length !== 0) {
-				call = `v.pipe(${call}, ${pipe.join(', ')})`;
+				call = `${PURE} v.pipe(${call}, ${pipe.join(', ')})`;
 			}
 
 			if (spec.default !== undefined) {
-				call = `v.optional(${call}, ${lit(spec.default)})`;
+				call = `${PURE} v.optional(${call}, ${lit(spec.default)})`;
 			}
 
 			return call;
 		}
 		case 'string': {
 			if (spec.const !== undefined) {
-				return `v.literal(${lit(spec.const)})`;
+				return `${PURE} v.literal(${lit(spec.const)})`;
 			}
 
 			if (spec.enum !== undefined) {
-				return `v.literalUnion(${lit(spec.enum)})`;
+				return `${PURE} v.literalUnion(${lit(spec.enum)})`;
 			}
 
 			let pipe: string[] = [];
 
 			if (spec.minLength !== undefined || spec.maxLength !== undefined) {
 				if (spec.maxLength === undefined) {
-					pipe.push(`v.stringLength(${lit(spec.minLength ?? 0)})`);
+					pipe.push(`${PURE} v.stringLength(${lit(spec.minLength ?? 0)})`);
 				} else {
-					pipe.push(`v.stringLength(${lit(spec.minLength ?? 0)}, ${lit(spec.maxLength)})`);
+					pipe.push(`${PURE} v.stringLength(${lit(spec.minLength ?? 0)}, ${lit(spec.maxLength)})`);
 				}
 			}
 
 			if (spec.minGraphemes !== undefined || spec.maxGraphemes !== undefined) {
 				if (spec.maxGraphemes === undefined) {
-					pipe.push(`v.stringGraphemes(${lit(spec.minGraphemes ?? 0)})`);
+					pipe.push(`${PURE} v.stringGraphemes(${lit(spec.minGraphemes ?? 0)})`);
 				} else {
-					pipe.push(`v.stringGraphemes(${lit(spec.minGraphemes ?? 0)}, ${lit(spec.maxGraphemes)})`);
+					pipe.push(`${PURE} v.stringGraphemes(${lit(spec.minGraphemes ?? 0)}, ${lit(spec.maxGraphemes)})`);
 				}
 			}
 
-			let call = `v.string()`;
+			let call = `${PURE} v.string()`;
 			switch (spec.format) {
 				case 'at-identifier': {
-					call = `v.actorIdentifierString()`;
+					call = `${PURE} v.actorIdentifierString()`;
 					break;
 				}
 				case 'at-uri': {
-					call = `v.resourceUriString()`;
+					call = `${PURE} v.resourceUriString()`;
 					break;
 				}
 				case 'datetime': {
-					call = `v.datetimeString()`;
+					call = `${PURE} v.datetimeString()`;
 					break;
 				}
 				case 'did': {
-					call = `v.didString()`;
+					call = `${PURE} v.didString()`;
 					break;
 				}
 				case 'handle': {
-					call = `v.handleString()`;
+					call = `${PURE} v.handleString()`;
 					break;
 				}
 				case 'language': {
-					call = `v.languageCodeString()`;
+					call = `${PURE} v.languageCodeString()`;
 					break;
 				}
 				case 'nsid': {
-					call = `v.nsidString()`;
+					call = `${PURE} v.nsidString()`;
 					break;
 				}
 				case 'record-key': {
-					call = `v.recordKeyString()`;
+					call = `${PURE} v.recordKeyString()`;
 					break;
 				}
 				case 'tid': {
-					call = `v.tidString()`;
+					call = `${PURE} v.tidString()`;
 					break;
 				}
 				case 'uri': {
-					call = `v.genericUriString()`;
+					call = `${PURE} v.genericUriString()`;
 					break;
 				}
 			}
 
 			if (pipe.length !== 0) {
-				call = `v.pipe(${call}, ${pipe.join(', ')})`;
+				call = `${PURE} v.pipe(${call}, ${pipe.join(', ')})`;
 			}
 
 			if (spec.default !== undefined) {
-				call = `v.optional(${call}, ${lit(spec.default)})`;
+				call = `${PURE} v.optional(${call}, ${lit(spec.default)})`;
 			}
 
 			return call;
 		}
 		case 'unknown': {
-			return `v.unknown()`;
+			return `${PURE} v.unknown()`;
 		}
 
 		// LexBlob
 		case 'blob': {
-			return `v.blob()`;
+			return `${PURE} v.blob()`;
 		}
 
 		// LexIpldType
@@ -625,22 +617,22 @@ const generateType = (
 
 			if (spec.minLength !== undefined || spec.maxLength !== undefined) {
 				if (spec.maxLength === undefined) {
-					pipe.push(`v.bytesSize(${lit(spec.minLength ?? 0)})`);
+					pipe.push(`${PURE} v.bytesSize(${lit(spec.minLength ?? 0)})`);
 				} else {
-					pipe.push(`v.bytesSize(${lit(spec.minLength ?? 0)}, ${lit(spec.maxLength)})`);
+					pipe.push(`${PURE} v.bytesSize(${lit(spec.minLength ?? 0)}, ${lit(spec.maxLength)})`);
 				}
 			}
 
-			let call = `v.bytes()`;
+			let call = `${PURE} v.bytes()`;
 
 			if (pipe.length !== 0) {
-				call = `v.pipe(${call}, ${pipe.join(', ')})`;
+				call = `${PURE} v.pipe(${call}, ${pipe.join(', ')})`;
 			}
 
 			return call;
 		}
 		case 'cid-link': {
-			return `v.cidLink()`;
+			return `${PURE} v.cidLink()`;
 		}
 	}
 };
