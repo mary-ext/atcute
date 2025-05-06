@@ -27,7 +27,7 @@ export interface SourceFile {
 
 export interface ImportMapping {
 	nsid: string[];
-	imports: string;
+	imports: string | ((nsid: string) => { type: 'named' | 'namespace'; from: string });
 }
 
 export interface LexiconApiOptions {
@@ -194,7 +194,18 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 		{
 			const dirname = getDirname(filename);
 
-			for (const ns of imports) {
+			const sortedImports = [...imports].toSorted((a, b) => {
+				if (a < b) {
+					return -1;
+				}
+				if (a > b) {
+					return 1;
+				}
+
+				return 0;
+			});
+
+			for (const ns of sortedImports) {
 				const local = map.get(ns);
 
 				if (local) {
@@ -212,7 +223,18 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 				const external = resolveExternalImport(ns, opts.mappings);
 
 				if (external) {
-					file.imports += `import { ${toTitleCase(ns)} } from ${lit(external.imports)};\n`;
+					if (typeof external.imports === 'function') {
+						const res = external.imports(ns);
+
+						if (res.type === 'named') {
+							file.imports += `import { ${toTitleCase(ns)} } from ${lit(res.from)};\n`;
+						} else if (res.type === 'namespace') {
+							file.imports += `import * as ${toTitleCase(ns)} from ${lit(res.from)};\n`;
+						}
+					} else {
+						file.imports += `import { ${toTitleCase(ns)} } from ${lit(external.imports)};\n`;
+					}
+
 					continue;
 				}
 
