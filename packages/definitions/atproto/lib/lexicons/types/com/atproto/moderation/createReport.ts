@@ -1,8 +1,8 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
-import * as ComAtprotoModerationDefs from './defs.js';
 import * as ComAtprotoAdminDefs from '../admin/defs.js';
+import * as ComAtprotoModerationDefs from './defs.js';
 import * as ComAtprotoRepoStrongRef from '../repo/strongRef.js';
 
 const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.moderation.createReport', {
