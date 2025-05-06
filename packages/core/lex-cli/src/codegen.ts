@@ -104,7 +104,18 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 		const imports = new Set<string>();
 
-		for (const defId in doc.defs) {
+		const sortedDefIds = Object.keys(doc.defs).toSorted((a, b) => {
+			if (a < b) {
+				return -1;
+			}
+			if (a > b) {
+				return 1;
+			}
+
+			return 0;
+		});
+
+		for (const defId of sortedDefIds) {
 			const def = doc.defs[defId];
 			const defUri = `${doc.id}#${defId}`;
 

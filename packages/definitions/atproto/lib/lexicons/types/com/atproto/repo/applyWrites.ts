@@ -3,6 +3,28 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoRepoDefs from './defs.js';
 
+const _createSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#create')),
+	collection: /*#__PURE__*/ v.nsidString(),
+	rkey: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.recordKeyString(), [/*#__PURE__*/ v.stringLength(0, 512)]),
+	),
+	value: /*#__PURE__*/ v.unknown(),
+});
+const _createResultSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#createResult')),
+	uri: /*#__PURE__*/ v.resourceUriString(),
+	cid: /*#__PURE__*/ v.string(),
+	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
+});
+const _deleteSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#delete')),
+	collection: /*#__PURE__*/ v.nsidString(),
+	rkey: /*#__PURE__*/ v.recordKeyString(),
+});
+const _deleteResultSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#deleteResult')),
+});
 const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.repo.applyWrites', {
 	params: null,
 	input: {
@@ -34,30 +56,11 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.repo.applyWrites'
 		}),
 	},
 });
-const _createSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#create')),
-	collection: /*#__PURE__*/ v.nsidString(),
-	rkey: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.recordKeyString(), [/*#__PURE__*/ v.stringLength(0, 512)]),
-	),
-	value: /*#__PURE__*/ v.unknown(),
-});
 const _updateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#update')),
 	collection: /*#__PURE__*/ v.nsidString(),
 	rkey: /*#__PURE__*/ v.recordKeyString(),
 	value: /*#__PURE__*/ v.unknown(),
-});
-const _deleteSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#delete')),
-	collection: /*#__PURE__*/ v.nsidString(),
-	rkey: /*#__PURE__*/ v.recordKeyString(),
-});
-const _createResultSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#createResult')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
-	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
 });
 const _updateResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#updateResult')),
@@ -65,47 +68,44 @@ const _updateResultSchema = /*#__PURE__*/ v.object({
 	cid: /*#__PURE__*/ v.string(),
 	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
 });
-const _deleteResultSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#deleteResult')),
-});
 
-type main$schematype = typeof _mainSchema;
 type create$schematype = typeof _createSchema;
-type update$schematype = typeof _updateSchema;
-type delete$schematype = typeof _deleteSchema;
 type createResult$schematype = typeof _createResultSchema;
-type updateResult$schematype = typeof _updateResultSchema;
+type delete$schematype = typeof _deleteSchema;
 type deleteResult$schematype = typeof _deleteResultSchema;
+type main$schematype = typeof _mainSchema;
+type update$schematype = typeof _updateSchema;
+type updateResult$schematype = typeof _updateResultSchema;
 
-/** @deprecated */
-export interface main$schema extends main$schematype {}
 /** @deprecated */
 export interface create$schema extends create$schematype {}
 /** @deprecated */
-export interface update$schema extends update$schematype {}
+export interface createResult$schema extends createResult$schematype {}
 /** @deprecated */
 export interface delete$schema extends delete$schematype {}
 /** @deprecated */
-export interface createResult$schema extends createResult$schematype {}
+export interface deleteResult$schema extends deleteResult$schematype {}
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+/** @deprecated */
+export interface update$schema extends update$schematype {}
 /** @deprecated */
 export interface updateResult$schema extends updateResult$schematype {}
-/** @deprecated */
-export interface deleteResult$schema extends deleteResult$schematype {}
 
-export const mainSchema = _mainSchema as main$schema;
 export const createSchema = _createSchema as create$schema;
-export const updateSchema = _updateSchema as update$schema;
-export const deleteSchema = _deleteSchema as delete$schema;
 export const createResultSchema = _createResultSchema as createResult$schema;
-export const updateResultSchema = _updateResultSchema as updateResult$schema;
+export const deleteSchema = _deleteSchema as delete$schema;
 export const deleteResultSchema = _deleteResultSchema as deleteResult$schema;
+export const mainSchema = _mainSchema as main$schema;
+export const updateSchema = _updateSchema as update$schema;
+export const updateResultSchema = _updateResultSchema as updateResult$schema;
 
 export interface Create extends v.InferInput<typeof createSchema> {}
-export interface Update extends v.InferInput<typeof updateSchema> {}
-export interface Delete extends v.InferInput<typeof deleteSchema> {}
 export interface CreateResult extends v.InferInput<typeof createResultSchema> {}
-export interface UpdateResult extends v.InferInput<typeof updateResultSchema> {}
+export interface Delete extends v.InferInput<typeof deleteSchema> {}
 export interface DeleteResult extends v.InferInput<typeof deleteResultSchema> {}
+export interface Update extends v.InferInput<typeof updateSchema> {}
+export interface UpdateResult extends v.InferInput<typeof updateResultSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
