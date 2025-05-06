@@ -1105,10 +1105,11 @@ const isOptionalSchema = (schema: BaseSchema): schema is OptionalSchema<any, unk
 
 // #region Array schema
 
-export interface ArraySchema<TItem extends BaseSchema>
-	extends BaseSchema<InferInput<TItem>[], InferOutput<TItem>[]> {
+export interface ArraySchema<TItem extends BaseSchema> extends BaseSchema<unknown[], unknown[]> {
 	readonly type: 'array';
 	readonly item: TItem;
+
+	readonly [kObjectType]?: { in: InferInput<TItem>[]; out: InferOutput<TItem>[] };
 }
 
 const ISSUE_TYPE_ARRAY: IssueLeaf = {
@@ -1434,7 +1435,7 @@ export const record = <TKey extends RecordKeySchema, TObject extends ObjectSchem
 
 // #region Variant schema
 
-type VariantTuple = readonly [ObjectSchema, ...ObjectSchema[]];
+type VariantTuple = readonly ObjectSchema<any>[];
 
 type InferVariantInput<TMembers extends VariantTuple> = $type.enforce<InferInput<TMembers[number]>>;
 
@@ -1464,8 +1465,8 @@ const ISSUE_VARIANT_TYPE = prependPath('$type', {
 
 // #__NO_SIDE_EFFECTS__
 export const variant: {
-	<TMembers extends VariantTuple>(members: TMembers): VariantSchema<TMembers>;
-	<TMembers extends VariantTuple, TClosed extends boolean>(
+	<const TMembers extends VariantTuple>(members: TMembers): VariantSchema<TMembers>;
+	<const TMembers extends VariantTuple, TClosed extends boolean>(
 		members: TMembers,
 		closed: TClosed,
 	): VariantSchema<TMembers, TClosed>;
@@ -1579,10 +1580,6 @@ export interface XRPCBlobBodyParam {
 
 export type XRPCBodyParam = XRPCLexBodyParam | XRPCBlobBodyParam | null;
 
-// unlike variants and records where we can't check against a shape, we do have the option for
-// XRPC parameters because these only have simple primitive types
-export type XRPCParametersShape = Record<string, BaseSchema<Literal | Literal[] | undefined>>;
-
 export type InferXRPCBodyInput<T extends XRPCBodyParam> =
 	T extends XRPCLexBodyParam<infer Schema>
 		? InferInput<Schema>
@@ -1604,7 +1601,7 @@ export type InferXRPCBodyOutput<T extends XRPCBodyParam> =
 // #region XRPC procedure metadata
 
 export interface XRPCProcedureMetadata<
-	TParams extends ObjectSchema<XRPCParametersShape> | null,
+	TParams extends ObjectSchema | null,
 	TInput extends XRPCBodyParam,
 	TOutput extends XRPCBodyParam,
 	TNsid extends syntax.Nsid,
@@ -1619,7 +1616,7 @@ export interface XRPCProcedureMetadata<
 // #__NO_SIDE_EFFECTS__
 export const xrpcProcedure = <
 	TNsid extends syntax.Nsid,
-	TParams extends ObjectSchema<XRPCParametersShape> | null,
+	TParams extends ObjectSchema | null,
 	TInput extends XRPCBodyParam,
 	TOutput extends XRPCBodyParam,
 >(
@@ -1678,7 +1675,7 @@ export const xrpcProcedure = <
 // #region XRPC query metadata
 
 export interface XRPCQueryMetadata<
-	TParams extends ObjectSchema<XRPCParametersShape> | null,
+	TParams extends ObjectSchema | null,
 	TOutput extends XRPCBodyParam,
 	TNsid extends syntax.Nsid,
 > extends BaseMetadata {
@@ -1691,7 +1688,7 @@ export interface XRPCQueryMetadata<
 // #__NO_SIDE_EFFECTS__
 export const xrpcQuery = <
 	TNsid extends syntax.Nsid,
-	TParams extends ObjectSchema<XRPCParametersShape> | null,
+	TParams extends ObjectSchema | null,
 	TOutput extends XRPCBodyParam,
 >(
 	nsid: TNsid,
@@ -1730,7 +1727,7 @@ export const xrpcQuery = <
 // #region XRPC subscription metadata
 
 export interface XRPCSubscriptionMetadata<
-	TParams extends ObjectSchema<XRPCParametersShape> | null,
+	TParams extends ObjectSchema | null,
 	TMessage extends ObjectSchema<any> | VariantSchema<any, any> | null,
 	TNsid extends syntax.Nsid,
 > extends BaseMetadata {
@@ -1743,7 +1740,7 @@ export interface XRPCSubscriptionMetadata<
 // #__NO_SIDE_EFFECTS__
 export const xrpcSubscription = <
 	TNsid extends syntax.Nsid,
-	TParams extends ObjectSchema<XRPCParametersShape> | null,
+	TParams extends ObjectSchema | null,
 	TMessage extends ObjectSchema<any> | VariantSchema<any, any> | null,
 >(
 	nsid: TNsid,
