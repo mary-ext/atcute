@@ -24,7 +24,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "workspace:^"
+		"@atcute/lexicons": "^1.0.0"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "file:",

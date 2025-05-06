@@ -29,18 +29,16 @@ const _repoSchema = /*#__PURE__*/ v.object({
 type main$schematype = typeof _mainSchema;
 type repo$schematype = typeof _repoSchema;
 
-/** @deprecated */
-export interface main$schema extends main$schematype {}
-/** @deprecated */
-export interface repo$schema extends repo$schematype {}
+export interface mainSchema extends main$schematype {}
+export interface repoSchema extends repo$schematype {}
 
-export const mainSchema = _mainSchema as main$schema;
-export const repoSchema = _repoSchema as repo$schema;
+export const mainSchema = _mainSchema as mainSchema;
+export const repoSchema = _repoSchema as repoSchema;
 
 export interface Repo extends v.InferInput<typeof repoSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.sync.listReposByCollection': main$schema;
+		'com.atproto.sync.listReposByCollection': mainSchema;
 	}
 }

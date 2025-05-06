@@ -14,13 +14,12 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.getBlob', {
 
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const mainSchema = _mainSchema as main$schema;
+export const mainSchema = _mainSchema as mainSchema;
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.sync.getBlob': main$schema;
+		'com.atproto.sync.getBlob': mainSchema;
 	}
 }

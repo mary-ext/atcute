@@ -77,28 +77,21 @@ type main$schematype = typeof _mainSchema;
 type update$schematype = typeof _updateSchema;
 type updateResult$schematype = typeof _updateResultSchema;
 
-/** @deprecated */
-export interface create$schema extends create$schematype {}
-/** @deprecated */
-export interface createResult$schema extends createResult$schematype {}
-/** @deprecated */
-export interface delete$schema extends delete$schematype {}
-/** @deprecated */
-export interface deleteResult$schema extends deleteResult$schematype {}
-/** @deprecated */
-export interface main$schema extends main$schematype {}
-/** @deprecated */
-export interface update$schema extends update$schematype {}
-/** @deprecated */
-export interface updateResult$schema extends updateResult$schematype {}
+export interface createSchema extends create$schematype {}
+export interface createResultSchema extends createResult$schematype {}
+export interface deleteSchema extends delete$schematype {}
+export interface deleteResultSchema extends deleteResult$schematype {}
+export interface mainSchema extends main$schematype {}
+export interface updateSchema extends update$schematype {}
+export interface updateResultSchema extends updateResult$schematype {}
 
-export const createSchema = _createSchema as create$schema;
-export const createResultSchema = _createResultSchema as createResult$schema;
-export const deleteSchema = _deleteSchema as delete$schema;
-export const deleteResultSchema = _deleteResultSchema as deleteResult$schema;
-export const mainSchema = _mainSchema as main$schema;
-export const updateSchema = _updateSchema as update$schema;
-export const updateResultSchema = _updateResultSchema as updateResult$schema;
+export const createSchema = _createSchema as createSchema;
+export const createResultSchema = _createResultSchema as createResultSchema;
+export const deleteSchema = _deleteSchema as deleteSchema;
+export const deleteResultSchema = _deleteResultSchema as deleteResultSchema;
+export const mainSchema = _mainSchema as mainSchema;
+export const updateSchema = _updateSchema as updateSchema;
+export const updateResultSchema = _updateResultSchema as updateResultSchema;
 
 export interface Create extends v.InferInput<typeof createSchema> {}
 export interface CreateResult extends v.InferInput<typeof createResultSchema> {}
@@ -109,6 +102,6 @@ export interface UpdateResult extends v.InferInput<typeof updateResultSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'com.atproto.repo.applyWrites': main$schema;
+		'com.atproto.repo.applyWrites': mainSchema;
 	}
 }

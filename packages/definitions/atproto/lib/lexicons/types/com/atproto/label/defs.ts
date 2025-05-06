@@ -76,26 +76,20 @@ type labelValueDefinitionStrings$schematype = typeof _labelValueDefinitionString
 type selfLabel$schematype = typeof _selfLabelSchema;
 type selfLabels$schematype = typeof _selfLabelsSchema;
 
-/** @deprecated */
-export interface label$schema extends label$schematype {}
-/** @deprecated */
-export interface labelValue$schema extends labelValue$schematype {}
-/** @deprecated */
-export interface labelValueDefinition$schema extends labelValueDefinition$schematype {}
-/** @deprecated */
-export interface labelValueDefinitionStrings$schema extends labelValueDefinitionStrings$schematype {}
-/** @deprecated */
-export interface selfLabel$schema extends selfLabel$schematype {}
-/** @deprecated */
-export interface selfLabels$schema extends selfLabels$schematype {}
+export interface labelSchema extends label$schematype {}
+export interface labelValueSchema extends labelValue$schematype {}
+export interface labelValueDefinitionSchema extends labelValueDefinition$schematype {}
+export interface labelValueDefinitionStringsSchema extends labelValueDefinitionStrings$schematype {}
+export interface selfLabelSchema extends selfLabel$schematype {}
+export interface selfLabelsSchema extends selfLabels$schematype {}
 
-export const labelSchema = _labelSchema as label$schema;
-export const labelValueSchema = _labelValueSchema as labelValue$schema;
-export const labelValueDefinitionSchema = _labelValueDefinitionSchema as labelValueDefinition$schema;
+export const labelSchema = _labelSchema as labelSchema;
+export const labelValueSchema = _labelValueSchema as labelValueSchema;
+export const labelValueDefinitionSchema = _labelValueDefinitionSchema as labelValueDefinitionSchema;
 export const labelValueDefinitionStringsSchema =
-	_labelValueDefinitionStringsSchema as labelValueDefinitionStrings$schema;
-export const selfLabelSchema = _selfLabelSchema as selfLabel$schema;
-export const selfLabelsSchema = _selfLabelsSchema as selfLabels$schema;
+	_labelValueDefinitionStringsSchema as labelValueDefinitionStringsSchema;
+export const selfLabelSchema = _selfLabelSchema as selfLabelSchema;
+export const selfLabelsSchema = _selfLabelsSchema as selfLabelsSchema;
 
 export interface Label extends v.InferInput<typeof labelSchema> {}
 export type LabelValue = v.InferInput<typeof labelValueSchema>;

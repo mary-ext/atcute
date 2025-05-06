@@ -75,28 +75,21 @@ type main$schematype = typeof _mainSchema;
 type repoOp$schematype = typeof _repoOpSchema;
 type sync$schematype = typeof _syncSchema;
 
-/** @deprecated */
-export interface account$schema extends account$schematype {}
-/** @deprecated */
-export interface commit$schema extends commit$schematype {}
-/** @deprecated */
-export interface identity$schema extends identity$schematype {}
-/** @deprecated */
-export interface info$schema extends info$schematype {}
-/** @deprecated */
-export interface main$schema extends main$schematype {}
-/** @deprecated */
-export interface repoOp$schema extends repoOp$schematype {}
-/** @deprecated */
-export interface sync$schema extends sync$schematype {}
+export interface accountSchema extends account$schematype {}
+export interface commitSchema extends commit$schematype {}
+export interface identitySchema extends identity$schematype {}
+export interface infoSchema extends info$schematype {}
+export interface mainSchema extends main$schematype {}
+export interface repoOpSchema extends repoOp$schematype {}
+export interface syncSchema extends sync$schematype {}
 
-export const accountSchema = _accountSchema as account$schema;
-export const commitSchema = _commitSchema as commit$schema;
-export const identitySchema = _identitySchema as identity$schema;
-export const infoSchema = _infoSchema as info$schema;
-export const mainSchema = _mainSchema as main$schema;
-export const repoOpSchema = _repoOpSchema as repoOp$schema;
-export const syncSchema = _syncSchema as sync$schema;
+export const accountSchema = _accountSchema as accountSchema;
+export const commitSchema = _commitSchema as commitSchema;
+export const identitySchema = _identitySchema as identitySchema;
+export const infoSchema = _infoSchema as infoSchema;
+export const mainSchema = _mainSchema as mainSchema;
+export const repoOpSchema = _repoOpSchema as repoOpSchema;
+export const syncSchema = _syncSchema as syncSchema;
 
 export interface Account extends v.InferInput<typeof accountSchema> {}
 export interface Commit extends v.InferInput<typeof commitSchema> {}
@@ -107,6 +100,6 @@ export interface Sync extends v.InferInput<typeof syncSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCSubscriptions {
-		'com.atproto.sync.subscribeRepos': main$schema;
+		'com.atproto.sync.subscribeRepos': mainSchema;
 	}
 }

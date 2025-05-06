@@ -9,9 +9,8 @@ const _mainSchema = /*#__PURE__*/ v.object({
 
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const mainSchema = _mainSchema as main$schema;
+export const mainSchema = _mainSchema as mainSchema;
 
 export interface Main extends v.InferInput<typeof mainSchema> {}

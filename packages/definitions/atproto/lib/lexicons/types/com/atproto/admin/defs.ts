@@ -50,22 +50,17 @@ type repoRef$schematype = typeof _repoRefSchema;
 type statusAttr$schematype = typeof _statusAttrSchema;
 type threatSignature$schematype = typeof _threatSignatureSchema;
 
-/** @deprecated */
-export interface accountView$schema extends accountView$schematype {}
-/** @deprecated */
-export interface repoBlobRef$schema extends repoBlobRef$schematype {}
-/** @deprecated */
-export interface repoRef$schema extends repoRef$schematype {}
-/** @deprecated */
-export interface statusAttr$schema extends statusAttr$schematype {}
-/** @deprecated */
-export interface threatSignature$schema extends threatSignature$schematype {}
+export interface accountViewSchema extends accountView$schematype {}
+export interface repoBlobRefSchema extends repoBlobRef$schematype {}
+export interface repoRefSchema extends repoRef$schematype {}
+export interface statusAttrSchema extends statusAttr$schematype {}
+export interface threatSignatureSchema extends threatSignature$schematype {}
 
-export const accountViewSchema = _accountViewSchema as accountView$schema;
-export const repoBlobRefSchema = _repoBlobRefSchema as repoBlobRef$schema;
-export const repoRefSchema = _repoRefSchema as repoRef$schema;
-export const statusAttrSchema = _statusAttrSchema as statusAttr$schema;
-export const threatSignatureSchema = _threatSignatureSchema as threatSignature$schema;
+export const accountViewSchema = _accountViewSchema as accountViewSchema;
+export const repoBlobRefSchema = _repoBlobRefSchema as repoBlobRefSchema;
+export const repoRefSchema = _repoRefSchema as repoRefSchema;
+export const statusAttrSchema = _statusAttrSchema as statusAttrSchema;
+export const threatSignatureSchema = _threatSignatureSchema as threatSignatureSchema;
 
 export interface AccountView extends v.InferInput<typeof accountViewSchema> {}
 export interface RepoBlobRef extends v.InferInput<typeof repoBlobRefSchema> {}

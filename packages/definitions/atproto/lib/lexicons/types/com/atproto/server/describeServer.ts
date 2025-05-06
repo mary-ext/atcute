@@ -34,22 +34,19 @@ type contact$schematype = typeof _contactSchema;
 type links$schematype = typeof _linksSchema;
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface contact$schema extends contact$schematype {}
-/** @deprecated */
-export interface links$schema extends links$schematype {}
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface contactSchema extends contact$schematype {}
+export interface linksSchema extends links$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const contactSchema = _contactSchema as contact$schema;
-export const linksSchema = _linksSchema as links$schema;
-export const mainSchema = _mainSchema as main$schema;
+export const contactSchema = _contactSchema as contactSchema;
+export const linksSchema = _linksSchema as linksSchema;
+export const mainSchema = _mainSchema as mainSchema;
 
 export interface Contact extends v.InferInput<typeof contactSchema> {}
 export interface Links extends v.InferInput<typeof linksSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.server.describeServer': main$schema;
+		'com.atproto.server.describeServer': mainSchema;
 	}
 }

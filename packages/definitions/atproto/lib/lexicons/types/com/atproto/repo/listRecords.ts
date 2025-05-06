@@ -33,18 +33,16 @@ const _recordSchema = /*#__PURE__*/ v.object({
 type main$schematype = typeof _mainSchema;
 type record$schematype = typeof _recordSchema;
 
-/** @deprecated */
-export interface main$schema extends main$schematype {}
-/** @deprecated */
-export interface record$schema extends record$schematype {}
+export interface mainSchema extends main$schematype {}
+export interface recordSchema extends record$schematype {}
 
-export const mainSchema = _mainSchema as main$schema;
-export const recordSchema = _recordSchema as record$schema;
+export const mainSchema = _mainSchema as mainSchema;
+export const recordSchema = _recordSchema as recordSchema;
 
 export interface Record extends v.InferInput<typeof recordSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.repo.listRecords': main$schema;
+		'com.atproto.repo.listRecords': mainSchema;
 	}
 }

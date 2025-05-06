@@ -23,18 +23,16 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.server.listAppPasswor
 type appPassword$schematype = typeof _appPasswordSchema;
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface appPassword$schema extends appPassword$schematype {}
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface appPasswordSchema extends appPassword$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const appPasswordSchema = _appPasswordSchema as appPassword$schema;
-export const mainSchema = _mainSchema as main$schema;
+export const appPasswordSchema = _appPasswordSchema as appPasswordSchema;
+export const mainSchema = _mainSchema as mainSchema;
 
 export interface AppPassword extends v.InferInput<typeof appPasswordSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.server.listAppPasswords': main$schema;
+		'com.atproto.server.listAppPasswords': mainSchema;
 	}
 }

@@ -10,9 +10,8 @@ const _identityInfoSchema = /*#__PURE__*/ v.object({
 
 type identityInfo$schematype = typeof _identityInfoSchema;
 
-/** @deprecated */
-export interface identityInfo$schema extends identityInfo$schematype {}
+export interface identityInfoSchema extends identityInfo$schematype {}
 
-export const identityInfoSchema = _identityInfoSchema as identityInfo$schema;
+export const identityInfoSchema = _identityInfoSchema as identityInfoSchema;
 
 export interface IdentityInfo extends v.InferInput<typeof identityInfoSchema> {}

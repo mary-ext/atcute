@@ -12,7 +12,6 @@ import type {
 	LexPrimitive,
 	LexRecord,
 	LexRefVariant,
-	LexUserType,
 	LexXrpcBody,
 	LexXrpcParameters,
 	LexXrpcProcedure,
@@ -60,17 +59,6 @@ const resolveExternalImport = (nsid: string, mappings: ImportMapping[]): ImportM
 };
 
 const PURE = `/*#__PURE__*/`;
-
-const INTERFACE_INFER: LexUserType['type'][] = [
-	'array',
-	'blob',
-	'bytes',
-	'cid-link',
-	'object',
-	'record',
-	'unknown',
-];
-const TYPE_INFER: LexUserType['type'][] = ['boolean', 'integer', 'string', 'token'];
 
 export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<LexiconApiResult> => {
 	const documents = opts.documents.toSorted((a, b) => {
@@ -131,7 +119,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
 					file.ambients += `  interface XRPCQueries {\n`;
-					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}$schema;\n`;
+					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}Schema;\n`;
 					file.ambients += `  }\n`;
 					file.ambients += `}`;
 					break;
@@ -143,7 +131,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
 					file.ambients += `  interface XRPCProcedures {\n`;
-					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}$schema;\n`;
+					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}Schema;\n`;
 					file.ambients += `  }\n`;
 					file.ambients += `}`;
 					break;
@@ -155,7 +143,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
 					file.ambients += `  interface XRPCSubscriptions {\n`;
-					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}$schema;\n`;
+					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}Schema;\n`;
 					file.ambients += `  }\n`;
 					file.ambients += `}`;
 					break;
@@ -171,7 +159,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
 					file.ambients += `  interface Records {\n`;
-					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}$schema;\n`;
+					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}Schema;\n`;
 					file.ambients += `  }\n`;
 					file.ambients += `}`;
 					break;
@@ -190,15 +178,28 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 			file.schemadefs += `type ${camelcased}$schematype = typeof _${varname};\n`;
 
-			file.schemas += `/** @deprecated */\n`;
-			file.schemas += `export interface ${camelcased}$schema extends ${camelcased}$schematype {}\n`;
+			file.schemas += `export interface ${camelcased}Schema extends ${camelcased}$schematype {}\n`;
 
-			file.exports += `export const ${varname} = _${varname} as ${camelcased}$schema;\n`;
+			file.exports += `export const ${varname} = _${varname} as ${camelcased}Schema;\n`;
 
-			if (INTERFACE_INFER.includes(def.type)) {
-				file.interfaces += `export interface ${toTitleCase(defId)} extends v.InferInput<typeof ${varname}> {}\n`;
-			} else if (TYPE_INFER.includes(def.type)) {
-				file.interfaces += `export type ${toTitleCase(defId)} = v.InferInput<typeof ${varname}>;\n`;
+			switch (def.type) {
+				case 'array':
+				case 'blob':
+				case 'bytes':
+				case 'cid-link':
+				case 'object':
+				case 'record':
+				case 'unknown': {
+					file.interfaces += `export interface ${toTitleCase(defId)} extends v.InferInput<typeof ${varname}> {}\n`;
+					break;
+				}
+				case 'boolean':
+				case 'integer':
+				case 'string':
+				case 'token': {
+					file.interfaces += `export type ${toTitleCase(defId)} = v.InferInput<typeof ${varname}>;\n`;
+					break;
+				}
 			}
 		}
 

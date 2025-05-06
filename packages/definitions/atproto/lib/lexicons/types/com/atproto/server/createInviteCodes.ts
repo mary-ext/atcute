@@ -32,18 +32,16 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.server.createInvi
 type accountCodes$schematype = typeof _accountCodesSchema;
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface accountCodes$schema extends accountCodes$schematype {}
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface accountCodesSchema extends accountCodes$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const accountCodesSchema = _accountCodesSchema as accountCodes$schema;
-export const mainSchema = _mainSchema as main$schema;
+export const accountCodesSchema = _accountCodesSchema as accountCodesSchema;
+export const mainSchema = _mainSchema as mainSchema;
 
 export interface AccountCodes extends v.InferInput<typeof accountCodesSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'com.atproto.server.createInviteCodes': main$schema;
+		'com.atproto.server.createInviteCodes': mainSchema;
 	}
 }

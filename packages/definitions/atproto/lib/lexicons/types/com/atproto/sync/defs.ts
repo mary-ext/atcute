@@ -7,9 +7,8 @@ const _hostStatusSchema = /*#__PURE__*/ v.string<
 
 type hostStatus$schematype = typeof _hostStatusSchema;
 
-/** @deprecated */
-export interface hostStatus$schema extends hostStatus$schematype {}
+export interface hostStatusSchema extends hostStatus$schematype {}
 
-export const hostStatusSchema = _hostStatusSchema as hostStatus$schema;
+export const hostStatusSchema = _hostStatusSchema as hostStatusSchema;
 
 export type HostStatus = v.InferInput<typeof hostStatusSchema>;

@@ -34,18 +34,16 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.listHosts', {
 type host$schematype = typeof _hostSchema;
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface host$schema extends host$schematype {}
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface hostSchema extends host$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const hostSchema = _hostSchema as host$schema;
-export const mainSchema = _mainSchema as main$schema;
+export const hostSchema = _hostSchema as hostSchema;
+export const mainSchema = _mainSchema as mainSchema;
 
 export interface Host extends v.InferInput<typeof hostSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.sync.listHosts': main$schema;
+		'com.atproto.sync.listHosts': mainSchema;
 	}
 }

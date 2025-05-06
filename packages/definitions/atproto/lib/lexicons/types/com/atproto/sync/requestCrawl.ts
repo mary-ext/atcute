@@ -15,13 +15,12 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.sync.requestCrawl
 
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const mainSchema = _mainSchema as main$schema;
+export const mainSchema = _mainSchema as mainSchema;
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'com.atproto.sync.requestCrawl': main$schema;
+		'com.atproto.sync.requestCrawl': mainSchema;
 	}
 }

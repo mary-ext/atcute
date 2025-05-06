@@ -22,13 +22,11 @@ const _inviteCodeUseSchema = /*#__PURE__*/ v.object({
 type inviteCode$schematype = typeof _inviteCodeSchema;
 type inviteCodeUse$schematype = typeof _inviteCodeUseSchema;
 
-/** @deprecated */
-export interface inviteCode$schema extends inviteCode$schematype {}
-/** @deprecated */
-export interface inviteCodeUse$schema extends inviteCodeUse$schematype {}
+export interface inviteCodeSchema extends inviteCode$schematype {}
+export interface inviteCodeUseSchema extends inviteCodeUse$schematype {}
 
-export const inviteCodeSchema = _inviteCodeSchema as inviteCode$schema;
-export const inviteCodeUseSchema = _inviteCodeUseSchema as inviteCodeUse$schema;
+export const inviteCodeSchema = _inviteCodeSchema as inviteCodeSchema;
+export const inviteCodeUseSchema = _inviteCodeUseSchema as inviteCodeUseSchema;
 
 export interface InviteCode extends v.InferInput<typeof inviteCodeSchema> {}
 export interface InviteCodeUse extends v.InferInput<typeof inviteCodeUseSchema> {}

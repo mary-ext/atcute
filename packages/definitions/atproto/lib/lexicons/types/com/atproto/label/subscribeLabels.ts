@@ -28,22 +28,19 @@ type info$schematype = typeof _infoSchema;
 type labels$schematype = typeof _labelsSchema;
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface info$schema extends info$schematype {}
-/** @deprecated */
-export interface labels$schema extends labels$schematype {}
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface infoSchema extends info$schematype {}
+export interface labelsSchema extends labels$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const infoSchema = _infoSchema as info$schema;
-export const labelsSchema = _labelsSchema as labels$schema;
-export const mainSchema = _mainSchema as main$schema;
+export const infoSchema = _infoSchema as infoSchema;
+export const labelsSchema = _labelsSchema as labelsSchema;
+export const mainSchema = _mainSchema as mainSchema;
 
 export interface Info extends v.InferInput<typeof infoSchema> {}
 export interface Labels extends v.InferInput<typeof labelsSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCSubscriptions {
-		'com.atproto.label.subscribeLabels': main$schema;
+		'com.atproto.label.subscribeLabels': mainSchema;
 	}
 }

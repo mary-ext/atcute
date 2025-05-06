@@ -34,13 +34,12 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.server.createSess
 
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const mainSchema = _mainSchema as main$schema;
+export const mainSchema = _mainSchema as mainSchema;
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'com.atproto.server.createSession': main$schema;
+		'com.atproto.server.createSession': mainSchema;
 	}
 }

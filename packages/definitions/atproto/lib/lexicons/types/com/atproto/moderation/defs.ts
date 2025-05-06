@@ -30,34 +30,25 @@ type reasonType$schematype = typeof _reasonTypeSchema;
 type reasonViolation$schematype = typeof _reasonViolationSchema;
 type subjectType$schematype = typeof _subjectTypeSchema;
 
-/** @deprecated */
-export interface reasonAppeal$schema extends reasonAppeal$schematype {}
-/** @deprecated */
-export interface reasonMisleading$schema extends reasonMisleading$schematype {}
-/** @deprecated */
-export interface reasonOther$schema extends reasonOther$schematype {}
-/** @deprecated */
-export interface reasonRude$schema extends reasonRude$schematype {}
-/** @deprecated */
-export interface reasonSexual$schema extends reasonSexual$schematype {}
-/** @deprecated */
-export interface reasonSpam$schema extends reasonSpam$schematype {}
-/** @deprecated */
-export interface reasonType$schema extends reasonType$schematype {}
-/** @deprecated */
-export interface reasonViolation$schema extends reasonViolation$schematype {}
-/** @deprecated */
-export interface subjectType$schema extends subjectType$schematype {}
+export interface reasonAppealSchema extends reasonAppeal$schematype {}
+export interface reasonMisleadingSchema extends reasonMisleading$schematype {}
+export interface reasonOtherSchema extends reasonOther$schematype {}
+export interface reasonRudeSchema extends reasonRude$schematype {}
+export interface reasonSexualSchema extends reasonSexual$schematype {}
+export interface reasonSpamSchema extends reasonSpam$schematype {}
+export interface reasonTypeSchema extends reasonType$schematype {}
+export interface reasonViolationSchema extends reasonViolation$schematype {}
+export interface subjectTypeSchema extends subjectType$schematype {}
 
-export const reasonAppealSchema = _reasonAppealSchema as reasonAppeal$schema;
-export const reasonMisleadingSchema = _reasonMisleadingSchema as reasonMisleading$schema;
-export const reasonOtherSchema = _reasonOtherSchema as reasonOther$schema;
-export const reasonRudeSchema = _reasonRudeSchema as reasonRude$schema;
-export const reasonSexualSchema = _reasonSexualSchema as reasonSexual$schema;
-export const reasonSpamSchema = _reasonSpamSchema as reasonSpam$schema;
-export const reasonTypeSchema = _reasonTypeSchema as reasonType$schema;
-export const reasonViolationSchema = _reasonViolationSchema as reasonViolation$schema;
-export const subjectTypeSchema = _subjectTypeSchema as subjectType$schema;
+export const reasonAppealSchema = _reasonAppealSchema as reasonAppealSchema;
+export const reasonMisleadingSchema = _reasonMisleadingSchema as reasonMisleadingSchema;
+export const reasonOtherSchema = _reasonOtherSchema as reasonOtherSchema;
+export const reasonRudeSchema = _reasonRudeSchema as reasonRudeSchema;
+export const reasonSexualSchema = _reasonSexualSchema as reasonSexualSchema;
+export const reasonSpamSchema = _reasonSpamSchema as reasonSpamSchema;
+export const reasonTypeSchema = _reasonTypeSchema as reasonTypeSchema;
+export const reasonViolationSchema = _reasonViolationSchema as reasonViolationSchema;
+export const subjectTypeSchema = _subjectTypeSchema as subjectTypeSchema;
 
 export type ReasonAppeal = v.InferInput<typeof reasonAppealSchema>;
 export type ReasonMisleading = v.InferInput<typeof reasonMisleadingSchema>;

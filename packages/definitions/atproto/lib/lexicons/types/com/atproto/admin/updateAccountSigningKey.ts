@@ -16,13 +16,12 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.admin.updateAccou
 
 type main$schematype = typeof _mainSchema;
 
-/** @deprecated */
-export interface main$schema extends main$schematype {}
+export interface mainSchema extends main$schematype {}
 
-export const mainSchema = _mainSchema as main$schema;
+export const mainSchema = _mainSchema as mainSchema;
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'com.atproto.admin.updateAccountSigningKey': main$schema;
+		'com.atproto.admin.updateAccountSigningKey': mainSchema;
 	}
 }

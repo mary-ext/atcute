@@ -9,9 +9,8 @@ const _commitMetaSchema = /*#__PURE__*/ v.object({
 
 type commitMeta$schematype = typeof _commitMetaSchema;
 
-/** @deprecated */
-export interface commitMeta$schema extends commitMeta$schematype {}
+export interface commitMetaSchema extends commitMeta$schematype {}
 
-export const commitMetaSchema = _commitMetaSchema as commitMeta$schema;
+export const commitMetaSchema = _commitMetaSchema as commitMetaSchema;
 
 export interface CommitMeta extends v.InferInput<typeof commitMetaSchema> {}

@@ -29,18 +29,16 @@ const _recordBlobSchema = /*#__PURE__*/ v.object({
 type main$schematype = typeof _mainSchema;
 type recordBlob$schematype = typeof _recordBlobSchema;
 
-/** @deprecated */
-export interface main$schema extends main$schematype {}
-/** @deprecated */
-export interface recordBlob$schema extends recordBlob$schematype {}
+export interface mainSchema extends main$schematype {}
+export interface recordBlobSchema extends recordBlob$schematype {}
 
-export const mainSchema = _mainSchema as main$schema;
-export const recordBlobSchema = _recordBlobSchema as recordBlob$schema;
+export const mainSchema = _mainSchema as mainSchema;
+export const recordBlobSchema = _recordBlobSchema as recordBlobSchema;
 
 export interface RecordBlob extends v.InferInput<typeof recordBlobSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.repo.listMissingBlobs': main$schema;
+		'com.atproto.repo.listMissingBlobs': mainSchema;
 	}
 }
