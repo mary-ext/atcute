@@ -331,7 +331,7 @@ const formatIssueTree = (tree: IssueTree): string => {
 		}
 	}
 
-	let msg = `${tree.code} at ${path ?? '.'}: ${message}`;
+	let msg = `${tree.code} at .${path} (${message})`;
 	if (count > 0) {
 		msg += ` (+${count} other issue(s))`;
 	}
