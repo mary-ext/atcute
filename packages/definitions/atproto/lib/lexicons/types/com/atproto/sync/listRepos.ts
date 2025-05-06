@@ -20,13 +20,6 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.listRepos', {
 		}),
 	},
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _repoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.listRepos#repo')),
 	did: /*#__PURE__*/ v.didString(),
@@ -39,16 +32,22 @@ const _repoSchema = /*#__PURE__*/ v.object({
 		>(),
 	),
 });
-export const repoSchema = _repoSchema as repoSchema.$schema;
+
+type main$schematype = typeof _mainSchema;
+type repo$schematype = typeof _repoSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+/** @deprecated */
+export interface repo$schema extends repo$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
+export const repoSchema = _repoSchema as repo$schema;
+
 export interface Repo extends v.InferInput<typeof repoSchema> {}
-export declare namespace repoSchema {
-	export {};
-	type $schematype = typeof _repoSchema;
-	export interface $schema extends $schematype {}
-}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.sync.listRepos': mainSchema.$schema;
+		'com.atproto.sync.listRepos': main$schema;
 	}
 }

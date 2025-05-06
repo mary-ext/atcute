@@ -9,16 +9,18 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		lexicon: /*#__PURE__*/ v.integer(),
 	}),
 );
-export const mainSchema = _mainSchema as mainSchema.$schema;
+
+type main$schematype = typeof _mainSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
+
 export interface Main extends v.InferInput<typeof mainSchema> {}
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
 
 declare module '@atcute/lexicons/ambient' {
 	interface Records {
-		'com.atproto.lexicon.schema': mainSchema.$schema;
+		'com.atproto.lexicon.schema': main$schema;
 	}
 }

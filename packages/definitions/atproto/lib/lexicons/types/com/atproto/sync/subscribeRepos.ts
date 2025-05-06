@@ -10,13 +10,6 @@ const _mainSchema = /*#__PURE__*/ v.xrpcSubscription('com.atproto.sync.subscribe
 		return /*#__PURE__*/ v.variant([commitSchema, syncSchema, identitySchema, accountSchema, infoSchema]);
 	},
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _commitSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#commit')),
 	seq: /*#__PURE__*/ v.integer(),
@@ -34,14 +27,6 @@ const _commitSchema = /*#__PURE__*/ v.object({
 	prevData: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidLink()),
 	time: /*#__PURE__*/ v.datetimeString(),
 });
-export const commitSchema = _commitSchema as commitSchema.$schema;
-export interface Commit extends v.InferInput<typeof commitSchema> {}
-export declare namespace commitSchema {
-	export {};
-	type $schematype = typeof _commitSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _syncSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#sync')),
 	seq: /*#__PURE__*/ v.integer(),
@@ -50,14 +35,6 @@ const _syncSchema = /*#__PURE__*/ v.object({
 	rev: /*#__PURE__*/ v.string(),
 	time: /*#__PURE__*/ v.datetimeString(),
 });
-export const syncSchema = _syncSchema as syncSchema.$schema;
-export interface Sync extends v.InferInput<typeof syncSchema> {}
-export declare namespace syncSchema {
-	export {};
-	type $schematype = typeof _syncSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _identitySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#identity')),
 	seq: /*#__PURE__*/ v.integer(),
@@ -65,14 +42,6 @@ const _identitySchema = /*#__PURE__*/ v.object({
 	time: /*#__PURE__*/ v.datetimeString(),
 	handle: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.handleString()),
 });
-export const identitySchema = _identitySchema as identitySchema.$schema;
-export interface Identity extends v.InferInput<typeof identitySchema> {}
-export declare namespace identitySchema {
-	export {};
-	type $schematype = typeof _identitySchema;
-	export interface $schema extends $schematype {}
-}
-
 const _accountSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#account')),
 	seq: /*#__PURE__*/ v.integer(),
@@ -85,27 +54,11 @@ const _accountSchema = /*#__PURE__*/ v.object({
 		>(),
 	),
 });
-export const accountSchema = _accountSchema as accountSchema.$schema;
-export interface Account extends v.InferInput<typeof accountSchema> {}
-export declare namespace accountSchema {
-	export {};
-	type $schematype = typeof _accountSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _infoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#info')),
 	name: /*#__PURE__*/ v.string<'OutdatedCursor' | (string & {})>(),
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
-export const infoSchema = _infoSchema as infoSchema.$schema;
-export interface Info extends v.InferInput<typeof infoSchema> {}
-export declare namespace infoSchema {
-	export {};
-	type $schematype = typeof _infoSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _repoOpSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#repoOp')),
 	action: /*#__PURE__*/ v.string<'create' | 'update' | 'delete' | (string & {})>(),
@@ -113,16 +66,47 @@ const _repoOpSchema = /*#__PURE__*/ v.object({
 	cid: /*#__PURE__*/ v.nullable(/*#__PURE__*/ v.cidLink()),
 	prev: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidLink()),
 });
-export const repoOpSchema = _repoOpSchema as repoOpSchema.$schema;
+
+type main$schematype = typeof _mainSchema;
+type commit$schematype = typeof _commitSchema;
+type sync$schematype = typeof _syncSchema;
+type identity$schematype = typeof _identitySchema;
+type account$schematype = typeof _accountSchema;
+type info$schematype = typeof _infoSchema;
+type repoOp$schematype = typeof _repoOpSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+/** @deprecated */
+export interface commit$schema extends commit$schematype {}
+/** @deprecated */
+export interface sync$schema extends sync$schematype {}
+/** @deprecated */
+export interface identity$schema extends identity$schematype {}
+/** @deprecated */
+export interface account$schema extends account$schematype {}
+/** @deprecated */
+export interface info$schema extends info$schematype {}
+/** @deprecated */
+export interface repoOp$schema extends repoOp$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
+export const commitSchema = _commitSchema as commit$schema;
+export const syncSchema = _syncSchema as sync$schema;
+export const identitySchema = _identitySchema as identity$schema;
+export const accountSchema = _accountSchema as account$schema;
+export const infoSchema = _infoSchema as info$schema;
+export const repoOpSchema = _repoOpSchema as repoOp$schema;
+
+export interface Commit extends v.InferInput<typeof commitSchema> {}
+export interface Sync extends v.InferInput<typeof syncSchema> {}
+export interface Identity extends v.InferInput<typeof identitySchema> {}
+export interface Account extends v.InferInput<typeof accountSchema> {}
+export interface Info extends v.InferInput<typeof infoSchema> {}
 export interface RepoOp extends v.InferInput<typeof repoOpSchema> {}
-export declare namespace repoOpSchema {
-	export {};
-	type $schematype = typeof _repoOpSchema;
-	export interface $schema extends $schematype {}
-}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCSubscriptions {
-		'com.atproto.sync.subscribeRepos': mainSchema.$schema;
+		'com.atproto.sync.subscribeRepos': main$schema;
 	}
 }

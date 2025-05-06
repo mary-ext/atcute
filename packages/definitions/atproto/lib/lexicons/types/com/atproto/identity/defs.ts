@@ -7,10 +7,12 @@ const _identityInfoSchema = /*#__PURE__*/ v.object({
 	handle: /*#__PURE__*/ v.handleString(),
 	didDoc: /*#__PURE__*/ v.unknown(),
 });
-export const identityInfoSchema = _identityInfoSchema as identityInfoSchema.$schema;
+
+type identityInfo$schematype = typeof _identityInfoSchema;
+
+/** @deprecated */
+export interface identityInfo$schema extends identityInfo$schematype {}
+
+export const identityInfoSchema = _identityInfoSchema as identityInfo$schema;
+
 export interface IdentityInfo extends v.InferInput<typeof identityInfoSchema> {}
-export declare namespace identityInfoSchema {
-	export {};
-	type $schematype = typeof _identityInfoSchema;
-	export interface $schema extends $schematype {}
-}

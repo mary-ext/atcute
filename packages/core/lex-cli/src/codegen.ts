@@ -20,12 +20,6 @@ import type {
 	LexXrpcSubscription,
 } from './schema.js';
 
-interface RawSourceFile {
-	body: string;
-	prologue: string;
-	epilogue: string;
-}
-
 export interface SourceFile {
 	filename: string;
 	code: string;
@@ -95,14 +89,18 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 	for (const doc of documents) {
 		const filename = `types/${doc.id.replaceAll('.', '/')}.ts`;
-		const file: RawSourceFile = {
-			body: '',
-			prologue: '',
-			epilogue: '',
+		const file = {
+			imports: '',
+			rawschemas: '',
+			schemadefs: '',
+			schemas: '',
+			interfaces: '',
+			exports: '',
+			ambients: '',
 		};
 
-		file.prologue += `import type {} from '@atcute/lexicons';\n`;
-		file.prologue += `import * as v from '@atcute/lexicons/validations';\n`;
+		file.imports += `import type {} from '@atcute/lexicons';\n`;
+		file.imports += `import * as v from '@atcute/lexicons/validations';\n`;
 
 		const imports = new Set<string>();
 
@@ -110,44 +108,45 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 			const def = doc.defs[defId];
 			const defUri = `${doc.id}#${defId}`;
 
-			const varName = `${toCamelCase(defId)}Schema`;
+			const camelcased = toCamelCase(defId);
+			const varname = `${camelcased}Schema`;
 
 			let result: string;
 			switch (def.type) {
 				case 'query': {
 					result = generateXrpcQuery(imports, defUri, def);
 
-					file.prologue += `import type {} from '@atcute/lexicons/ambient';\n`;
+					file.imports += `import type {} from '@atcute/lexicons/ambient';\n`;
 
-					file.epilogue += `declare module '@atcute/lexicons/ambient' {\n`;
-					file.epilogue += `  interface XRPCQueries {\n`;
-					file.epilogue += `    ${lit(stripMainHash(defUri))}: ${varName}.$schema;\n`;
-					file.epilogue += `  }\n`;
-					file.epilogue += `}`;
+					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
+					file.ambients += `  interface XRPCQueries {\n`;
+					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}$schema;\n`;
+					file.ambients += `  }\n`;
+					file.ambients += `}`;
 					break;
 				}
 				case 'procedure': {
 					result = generateXrpcProcedure(imports, defUri, def);
 
-					file.prologue += `import type {} from '@atcute/lexicons/ambient';\n`;
+					file.imports += `import type {} from '@atcute/lexicons/ambient';\n`;
 
-					file.epilogue += `declare module '@atcute/lexicons/ambient' {\n`;
-					file.epilogue += `  interface XRPCProcedures {\n`;
-					file.epilogue += `    ${lit(stripMainHash(defUri))}: ${varName}.$schema;\n`;
-					file.epilogue += `  }\n`;
-					file.epilogue += `}`;
+					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
+					file.ambients += `  interface XRPCProcedures {\n`;
+					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}$schema;\n`;
+					file.ambients += `  }\n`;
+					file.ambients += `}`;
 					break;
 				}
 				case 'subscription': {
 					result = generateXrpcSubscription(imports, defUri, def);
 
-					file.prologue += `import type {} from '@atcute/lexicons/ambient';\n`;
+					file.imports += `import type {} from '@atcute/lexicons/ambient';\n`;
 
-					file.epilogue += `declare module '@atcute/lexicons/ambient' {\n`;
-					file.epilogue += `  interface XRPCSubscriptions {\n`;
-					file.epilogue += `    ${lit(stripMainHash(defUri))}: ${varName}.$schema;\n`;
-					file.epilogue += `  }\n`;
-					file.epilogue += `}`;
+					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
+					file.ambients += `  interface XRPCSubscriptions {\n`;
+					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}$schema;\n`;
+					file.ambients += `  }\n`;
+					file.ambients += `}`;
 					break;
 				}
 				case 'object': {
@@ -157,13 +156,13 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 				case 'record': {
 					result = generateRecord(imports, defUri, def);
 
-					file.prologue += `import type {} from '@atcute/lexicons/ambient';\n`;
+					file.imports += `import type {} from '@atcute/lexicons/ambient';\n`;
 
-					file.epilogue += `declare module '@atcute/lexicons/ambient' {\n`;
-					file.epilogue += `  interface Records {\n`;
-					file.epilogue += `    ${lit(stripMainHash(defUri))}: ${varName}.$schema;\n`;
-					file.epilogue += `  }\n`;
-					file.epilogue += `}`;
+					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
+					file.ambients += `  interface Records {\n`;
+					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}$schema;\n`;
+					file.ambients += `  }\n`;
+					file.ambients += `}`;
 					break;
 				}
 				case 'token': {
@@ -176,20 +175,20 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 				}
 			}
 
-			file.body += `const _${varName} = ${result};\n`;
-			file.body += `export const ${varName} = _${varName} as ${varName}.$schema;\n`;
+			file.rawschemas += `const _${varname} = ${result};\n`;
+
+			file.schemadefs += `type ${camelcased}$schematype = typeof _${varname};\n`;
+
+			file.schemas += `/** @deprecated */\n`;
+			file.schemas += `export interface ${camelcased}$schema extends ${camelcased}$schematype {}\n`;
+
+			file.exports += `export const ${varname} = _${varname} as ${camelcased}$schema;\n`;
 
 			if (INTERFACE_INFER.includes(def.type)) {
-				file.body += `export interface ${toTitleCase(defId)} extends v.InferInput<typeof ${varName}> {}\n`;
+				file.interfaces += `export interface ${toTitleCase(defId)} extends v.InferInput<typeof ${varname}> {}\n`;
 			} else if (TYPE_INFER.includes(def.type)) {
-				file.body += `export type ${toTitleCase(defId)} = v.InferInput<typeof ${varName}>;\n`;
+				file.interfaces += `export type ${toTitleCase(defId)} = v.InferInput<typeof ${varname}>;\n`;
 			}
-
-			file.body += `export declare namespace ${varName} {\n`;
-			file.body += `  export {};\n`;
-			file.body += `  type $schematype = typeof _${varName};\n`;
-			file.body += `  export interface $schema extends $schematype {}\n`;
-			file.body += `}\n\n`;
 		}
 
 		{
@@ -206,14 +205,14 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 						relative = `./${relative}`;
 					}
 
-					file.prologue += `import * as ${toTitleCase(ns)} from ${lit(relative)};\n`;
+					file.imports += `import * as ${toTitleCase(ns)} from ${lit(relative)};\n`;
 					continue;
 				}
 
 				const external = resolveExternalImport(ns, opts.mappings);
 
 				if (external) {
-					file.prologue += `import { ${toTitleCase(ns)} } from ${lit(external.imports)};\n`;
+					file.imports += `import { ${toTitleCase(ns)} } from ${lit(external.imports)};\n`;
 					continue;
 				}
 
@@ -223,7 +222,20 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 		files.push({
 			filename: filename,
-			code: `${file.prologue}\n\n${file.body}\n\n${file.epilogue}`,
+			code:
+				file.imports +
+				`\n\n` +
+				file.rawschemas +
+				`\n\n` +
+				file.schemadefs +
+				`\n\n` +
+				file.schemas +
+				`\n\n` +
+				file.exports +
+				`\n\n` +
+				file.interfaces +
+				`\n\n` +
+				file.ambients,
 		});
 	}
 

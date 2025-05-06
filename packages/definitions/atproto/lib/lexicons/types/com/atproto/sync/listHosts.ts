@@ -21,13 +21,6 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.listHosts', {
 		}),
 	},
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _hostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.listHosts#host')),
 	hostname: /*#__PURE__*/ v.string(),
@@ -37,16 +30,22 @@ const _hostSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(ComAtprotoSyncDefs.hostStatusSchema);
 	},
 });
-export const hostSchema = _hostSchema as hostSchema.$schema;
+
+type main$schematype = typeof _mainSchema;
+type host$schematype = typeof _hostSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+/** @deprecated */
+export interface host$schema extends host$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
+export const hostSchema = _hostSchema as host$schema;
+
 export interface Host extends v.InferInput<typeof hostSchema> {}
-export declare namespace hostSchema {
-	export {};
-	type $schematype = typeof _hostSchema;
-	export interface $schema extends $schematype {}
-}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.sync.listHosts': mainSchema.$schema;
+		'com.atproto.sync.listHosts': main$schema;
 	}
 }

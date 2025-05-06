@@ -11,82 +11,60 @@ const _reasonTypeSchema = /*#__PURE__*/ v.string<
 	| 'com.atproto.moderation.defs#reasonAppeal'
 	| (string & {})
 >();
-export const reasonTypeSchema = _reasonTypeSchema as reasonTypeSchema.$schema;
-export type ReasonType = v.InferInput<typeof reasonTypeSchema>;
-export declare namespace reasonTypeSchema {
-	export {};
-	type $schematype = typeof _reasonTypeSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _reasonSpamSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonSpam');
-export const reasonSpamSchema = _reasonSpamSchema as reasonSpamSchema.$schema;
-export type ReasonSpam = v.InferInput<typeof reasonSpamSchema>;
-export declare namespace reasonSpamSchema {
-	export {};
-	type $schematype = typeof _reasonSpamSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _reasonViolationSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonViolation');
-export const reasonViolationSchema = _reasonViolationSchema as reasonViolationSchema.$schema;
-export type ReasonViolation = v.InferInput<typeof reasonViolationSchema>;
-export declare namespace reasonViolationSchema {
-	export {};
-	type $schematype = typeof _reasonViolationSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _reasonMisleadingSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonMisleading');
-export const reasonMisleadingSchema = _reasonMisleadingSchema as reasonMisleadingSchema.$schema;
-export type ReasonMisleading = v.InferInput<typeof reasonMisleadingSchema>;
-export declare namespace reasonMisleadingSchema {
-	export {};
-	type $schematype = typeof _reasonMisleadingSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _reasonSexualSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonSexual');
-export const reasonSexualSchema = _reasonSexualSchema as reasonSexualSchema.$schema;
-export type ReasonSexual = v.InferInput<typeof reasonSexualSchema>;
-export declare namespace reasonSexualSchema {
-	export {};
-	type $schematype = typeof _reasonSexualSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _reasonRudeSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonRude');
-export const reasonRudeSchema = _reasonRudeSchema as reasonRudeSchema.$schema;
-export type ReasonRude = v.InferInput<typeof reasonRudeSchema>;
-export declare namespace reasonRudeSchema {
-	export {};
-	type $schematype = typeof _reasonRudeSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _reasonOtherSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonOther');
-export const reasonOtherSchema = _reasonOtherSchema as reasonOtherSchema.$schema;
-export type ReasonOther = v.InferInput<typeof reasonOtherSchema>;
-export declare namespace reasonOtherSchema {
-	export {};
-	type $schematype = typeof _reasonOtherSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _reasonAppealSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonAppeal');
-export const reasonAppealSchema = _reasonAppealSchema as reasonAppealSchema.$schema;
-export type ReasonAppeal = v.InferInput<typeof reasonAppealSchema>;
-export declare namespace reasonAppealSchema {
-	export {};
-	type $schematype = typeof _reasonAppealSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _subjectTypeSchema = /*#__PURE__*/ v.string<'account' | 'record' | 'chat' | (string & {})>();
-export const subjectTypeSchema = _subjectTypeSchema as subjectTypeSchema.$schema;
+
+type reasonType$schematype = typeof _reasonTypeSchema;
+type reasonSpam$schematype = typeof _reasonSpamSchema;
+type reasonViolation$schematype = typeof _reasonViolationSchema;
+type reasonMisleading$schematype = typeof _reasonMisleadingSchema;
+type reasonSexual$schematype = typeof _reasonSexualSchema;
+type reasonRude$schematype = typeof _reasonRudeSchema;
+type reasonOther$schematype = typeof _reasonOtherSchema;
+type reasonAppeal$schematype = typeof _reasonAppealSchema;
+type subjectType$schematype = typeof _subjectTypeSchema;
+
+/** @deprecated */
+export interface reasonType$schema extends reasonType$schematype {}
+/** @deprecated */
+export interface reasonSpam$schema extends reasonSpam$schematype {}
+/** @deprecated */
+export interface reasonViolation$schema extends reasonViolation$schematype {}
+/** @deprecated */
+export interface reasonMisleading$schema extends reasonMisleading$schematype {}
+/** @deprecated */
+export interface reasonSexual$schema extends reasonSexual$schematype {}
+/** @deprecated */
+export interface reasonRude$schema extends reasonRude$schematype {}
+/** @deprecated */
+export interface reasonOther$schema extends reasonOther$schematype {}
+/** @deprecated */
+export interface reasonAppeal$schema extends reasonAppeal$schematype {}
+/** @deprecated */
+export interface subjectType$schema extends subjectType$schematype {}
+
+export const reasonTypeSchema = _reasonTypeSchema as reasonType$schema;
+export const reasonSpamSchema = _reasonSpamSchema as reasonSpam$schema;
+export const reasonViolationSchema = _reasonViolationSchema as reasonViolation$schema;
+export const reasonMisleadingSchema = _reasonMisleadingSchema as reasonMisleading$schema;
+export const reasonSexualSchema = _reasonSexualSchema as reasonSexual$schema;
+export const reasonRudeSchema = _reasonRudeSchema as reasonRude$schema;
+export const reasonOtherSchema = _reasonOtherSchema as reasonOther$schema;
+export const reasonAppealSchema = _reasonAppealSchema as reasonAppeal$schema;
+export const subjectTypeSchema = _subjectTypeSchema as subjectType$schema;
+
+export type ReasonType = v.InferInput<typeof reasonTypeSchema>;
+export type ReasonSpam = v.InferInput<typeof reasonSpamSchema>;
+export type ReasonViolation = v.InferInput<typeof reasonViolationSchema>;
+export type ReasonMisleading = v.InferInput<typeof reasonMisleadingSchema>;
+export type ReasonSexual = v.InferInput<typeof reasonSexualSchema>;
+export type ReasonRude = v.InferInput<typeof reasonRudeSchema>;
+export type ReasonOther = v.InferInput<typeof reasonOtherSchema>;
+export type ReasonAppeal = v.InferInput<typeof reasonAppealSchema>;
 export type SubjectType = v.InferInput<typeof subjectTypeSchema>;
-export declare namespace subjectTypeSchema {
-	export {};
-	type $schematype = typeof _subjectTypeSchema;
-	export interface $schema extends $schematype {}
-}

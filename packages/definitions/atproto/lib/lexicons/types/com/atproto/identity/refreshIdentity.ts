@@ -18,15 +18,16 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.identity.refreshI
 		},
 	},
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
+
+type main$schematype = typeof _mainSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'com.atproto.identity.refreshIdentity': mainSchema.$schema;
+		'com.atproto.identity.refreshIdentity': main$schema;
 	}
 }

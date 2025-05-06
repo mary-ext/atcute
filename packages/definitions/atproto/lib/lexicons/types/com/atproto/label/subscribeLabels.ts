@@ -11,13 +11,6 @@ const _mainSchema = /*#__PURE__*/ v.xrpcSubscription('com.atproto.label.subscrib
 		return /*#__PURE__*/ v.variant([labelsSchema, infoSchema]);
 	},
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _labelsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.subscribeLabels#labels')),
 	seq: /*#__PURE__*/ v.integer(),
@@ -25,29 +18,32 @@ const _labelsSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema);
 	},
 });
-export const labelsSchema = _labelsSchema as labelsSchema.$schema;
-export interface Labels extends v.InferInput<typeof labelsSchema> {}
-export declare namespace labelsSchema {
-	export {};
-	type $schematype = typeof _labelsSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _infoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.subscribeLabels#info')),
 	name: /*#__PURE__*/ v.string<'OutdatedCursor' | (string & {})>(),
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
-export const infoSchema = _infoSchema as infoSchema.$schema;
+
+type main$schematype = typeof _mainSchema;
+type labels$schematype = typeof _labelsSchema;
+type info$schematype = typeof _infoSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+/** @deprecated */
+export interface labels$schema extends labels$schematype {}
+/** @deprecated */
+export interface info$schema extends info$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
+export const labelsSchema = _labelsSchema as labels$schema;
+export const infoSchema = _infoSchema as info$schema;
+
+export interface Labels extends v.InferInput<typeof labelsSchema> {}
 export interface Info extends v.InferInput<typeof infoSchema> {}
-export declare namespace infoSchema {
-	export {};
-	type $schematype = typeof _infoSchema;
-	export interface $schema extends $schematype {}
-}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCSubscriptions {
-		'com.atproto.label.subscribeLabels': mainSchema.$schema;
+		'com.atproto.label.subscribeLabels': main$schema;
 	}
 }

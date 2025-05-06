@@ -34,13 +34,6 @@ const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.repo.applyWrites'
 		}),
 	},
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _createSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#create')),
 	collection: /*#__PURE__*/ v.nsidString(),
@@ -49,82 +42,73 @@ const _createSchema = /*#__PURE__*/ v.object({
 	),
 	value: /*#__PURE__*/ v.unknown(),
 });
-export const createSchema = _createSchema as createSchema.$schema;
-export interface Create extends v.InferInput<typeof createSchema> {}
-export declare namespace createSchema {
-	export {};
-	type $schematype = typeof _createSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _updateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#update')),
 	collection: /*#__PURE__*/ v.nsidString(),
 	rkey: /*#__PURE__*/ v.recordKeyString(),
 	value: /*#__PURE__*/ v.unknown(),
 });
-export const updateSchema = _updateSchema as updateSchema.$schema;
-export interface Update extends v.InferInput<typeof updateSchema> {}
-export declare namespace updateSchema {
-	export {};
-	type $schematype = typeof _updateSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _deleteSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#delete')),
 	collection: /*#__PURE__*/ v.nsidString(),
 	rkey: /*#__PURE__*/ v.recordKeyString(),
 });
-export const deleteSchema = _deleteSchema as deleteSchema.$schema;
-export interface Delete extends v.InferInput<typeof deleteSchema> {}
-export declare namespace deleteSchema {
-	export {};
-	type $schematype = typeof _deleteSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _createResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#createResult')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.string(),
 	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
 });
-export const createResultSchema = _createResultSchema as createResultSchema.$schema;
-export interface CreateResult extends v.InferInput<typeof createResultSchema> {}
-export declare namespace createResultSchema {
-	export {};
-	type $schematype = typeof _createResultSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _updateResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#updateResult')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.string(),
 	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
 });
-export const updateResultSchema = _updateResultSchema as updateResultSchema.$schema;
-export interface UpdateResult extends v.InferInput<typeof updateResultSchema> {}
-export declare namespace updateResultSchema {
-	export {};
-	type $schematype = typeof _updateResultSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _deleteResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#deleteResult')),
 });
-export const deleteResultSchema = _deleteResultSchema as deleteResultSchema.$schema;
+
+type main$schematype = typeof _mainSchema;
+type create$schematype = typeof _createSchema;
+type update$schematype = typeof _updateSchema;
+type delete$schematype = typeof _deleteSchema;
+type createResult$schematype = typeof _createResultSchema;
+type updateResult$schematype = typeof _updateResultSchema;
+type deleteResult$schematype = typeof _deleteResultSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+/** @deprecated */
+export interface create$schema extends create$schematype {}
+/** @deprecated */
+export interface update$schema extends update$schematype {}
+/** @deprecated */
+export interface delete$schema extends delete$schematype {}
+/** @deprecated */
+export interface createResult$schema extends createResult$schematype {}
+/** @deprecated */
+export interface updateResult$schema extends updateResult$schematype {}
+/** @deprecated */
+export interface deleteResult$schema extends deleteResult$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
+export const createSchema = _createSchema as create$schema;
+export const updateSchema = _updateSchema as update$schema;
+export const deleteSchema = _deleteSchema as delete$schema;
+export const createResultSchema = _createResultSchema as createResult$schema;
+export const updateResultSchema = _updateResultSchema as updateResult$schema;
+export const deleteResultSchema = _deleteResultSchema as deleteResult$schema;
+
+export interface Create extends v.InferInput<typeof createSchema> {}
+export interface Update extends v.InferInput<typeof updateSchema> {}
+export interface Delete extends v.InferInput<typeof deleteSchema> {}
+export interface CreateResult extends v.InferInput<typeof createResultSchema> {}
+export interface UpdateResult extends v.InferInput<typeof updateResultSchema> {}
 export interface DeleteResult extends v.InferInput<typeof deleteResultSchema> {}
-export declare namespace deleteResultSchema {
-	export {};
-	type $schematype = typeof _deleteResultSchema;
-	export interface $schema extends $schematype {}
-}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'com.atproto.repo.applyWrites': mainSchema.$schema;
+		'com.atproto.repo.applyWrites': main$schema;
 	}
 }

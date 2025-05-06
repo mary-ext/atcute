@@ -19,15 +19,16 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.getHostStatus', 
 		}),
 	},
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
+
+type main$schematype = typeof _mainSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.sync.getHostStatus': mainSchema.$schema;
+		'com.atproto.sync.getHostStatus': main$schema;
 	}
 }

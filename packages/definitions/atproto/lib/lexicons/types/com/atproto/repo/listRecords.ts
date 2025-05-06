@@ -23,29 +23,28 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.repo.listRecords', {
 		}),
 	},
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _recordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.listRecords#record')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.string(),
 	value: /*#__PURE__*/ v.unknown(),
 });
-export const recordSchema = _recordSchema as recordSchema.$schema;
+
+type main$schematype = typeof _mainSchema;
+type record$schematype = typeof _recordSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+/** @deprecated */
+export interface record$schema extends record$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
+export const recordSchema = _recordSchema as record$schema;
+
 export interface Record extends v.InferInput<typeof recordSchema> {}
-export declare namespace recordSchema {
-	export {};
-	type $schematype = typeof _recordSchema;
-	export interface $schema extends $schematype {}
-}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.repo.listRecords': mainSchema.$schema;
+		'com.atproto.repo.listRecords': main$schema;
 	}
 }

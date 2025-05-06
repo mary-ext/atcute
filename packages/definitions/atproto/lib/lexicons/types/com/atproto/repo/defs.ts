@@ -6,10 +6,12 @@ const _commitMetaSchema = /*#__PURE__*/ v.object({
 	cid: /*#__PURE__*/ v.string(),
 	rev: /*#__PURE__*/ v.tidString(),
 });
-export const commitMetaSchema = _commitMetaSchema as commitMetaSchema.$schema;
+
+type commitMeta$schematype = typeof _commitMetaSchema;
+
+/** @deprecated */
+export interface commitMeta$schema extends commitMeta$schematype {}
+
+export const commitMetaSchema = _commitMetaSchema as commitMeta$schema;
+
 export interface CommitMeta extends v.InferInput<typeof commitMetaSchema> {}
-export declare namespace commitMetaSchema {
-	export {};
-	type $schematype = typeof _commitMetaSchema;
-	export interface $schema extends $schematype {}
-}

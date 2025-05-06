@@ -13,23 +13,22 @@ const _inviteCodeSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.array(inviteCodeUseSchema);
 	},
 });
-export const inviteCodeSchema = _inviteCodeSchema as inviteCodeSchema.$schema;
-export interface InviteCode extends v.InferInput<typeof inviteCodeSchema> {}
-export declare namespace inviteCodeSchema {
-	export {};
-	type $schematype = typeof _inviteCodeSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _inviteCodeUseSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.server.defs#inviteCodeUse')),
 	usedBy: /*#__PURE__*/ v.didString(),
 	usedAt: /*#__PURE__*/ v.datetimeString(),
 });
-export const inviteCodeUseSchema = _inviteCodeUseSchema as inviteCodeUseSchema.$schema;
+
+type inviteCode$schematype = typeof _inviteCodeSchema;
+type inviteCodeUse$schematype = typeof _inviteCodeUseSchema;
+
+/** @deprecated */
+export interface inviteCode$schema extends inviteCode$schematype {}
+/** @deprecated */
+export interface inviteCodeUse$schema extends inviteCodeUse$schematype {}
+
+export const inviteCodeSchema = _inviteCodeSchema as inviteCode$schema;
+export const inviteCodeUseSchema = _inviteCodeUseSchema as inviteCodeUse$schema;
+
+export interface InviteCode extends v.InferInput<typeof inviteCodeSchema> {}
 export interface InviteCodeUse extends v.InferInput<typeof inviteCodeUseSchema> {}
-export declare namespace inviteCodeUseSchema {
-	export {};
-	type $schematype = typeof _inviteCodeUseSchema;
-	export interface $schema extends $schematype {}
-}

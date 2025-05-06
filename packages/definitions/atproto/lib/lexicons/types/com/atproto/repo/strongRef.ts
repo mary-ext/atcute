@@ -6,10 +6,12 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.string(),
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
+
+type main$schematype = typeof _mainSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
+
 export interface Main extends v.InferInput<typeof mainSchema> {}
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}

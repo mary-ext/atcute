@@ -13,29 +13,28 @@ const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.server.listAppPasswor
 		}),
 	},
 });
-export const mainSchema = _mainSchema as mainSchema.$schema;
-export declare namespace mainSchema {
-	export {};
-	type $schematype = typeof _mainSchema;
-	export interface $schema extends $schematype {}
-}
-
 const _appPasswordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.server.listAppPasswords#appPassword')),
 	name: /*#__PURE__*/ v.string(),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
 	privileged: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
-export const appPasswordSchema = _appPasswordSchema as appPasswordSchema.$schema;
+
+type main$schematype = typeof _mainSchema;
+type appPassword$schematype = typeof _appPasswordSchema;
+
+/** @deprecated */
+export interface main$schema extends main$schematype {}
+/** @deprecated */
+export interface appPassword$schema extends appPassword$schematype {}
+
+export const mainSchema = _mainSchema as main$schema;
+export const appPasswordSchema = _appPasswordSchema as appPassword$schema;
+
 export interface AppPassword extends v.InferInput<typeof appPasswordSchema> {}
-export declare namespace appPasswordSchema {
-	export {};
-	type $schematype = typeof _appPasswordSchema;
-	export interface $schema extends $schematype {}
-}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'com.atproto.server.listAppPasswords': mainSchema.$schema;
+		'com.atproto.server.listAppPasswords': main$schema;
 	}
 }
