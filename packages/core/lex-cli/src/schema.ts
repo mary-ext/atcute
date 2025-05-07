@@ -161,15 +161,17 @@ export declare namespace lexIpldType {
 	export interface $schema extends $schematype {}
 }
 
+const refString = v.pipe(
+	v.string(),
+	v.regex(
+		/^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9_]{0,62}?)?$/,
+	),
+);
+
 const _lexRef = v.strictObject({
 	type: v.literal('ref'),
 	description: v.optional(v.string()),
-	ref: v.pipe(
-		v.string(),
-		v.regex(
-			/^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9]{0,62}?)?$/,
-		),
-	),
+	ref: refString,
 });
 
 export const lexRef = _lexRef as lexRef.$schema;
@@ -184,14 +186,7 @@ export declare namespace lexRef {
 const _lexRefUnion = v.strictObject({
 	type: v.literal('union'),
 	description: v.optional(v.string()),
-	refs: v.array(
-		v.pipe(
-			v.string(),
-			v.regex(
-				/^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9]{0,62}?)?$/,
-			),
-		),
-	),
+	refs: v.array(refString),
 	closed: v.optional(v.boolean(), false),
 });
 
@@ -283,7 +278,7 @@ const _lexObject = v.strictObject({
 	nullable: v.optional(v.array(v.string())),
 	properties: v.optional(
 		v.record(
-			v.pipe(v.string(), v.regex(/^[a-zA-Z][a-zA-Z0-9]{0,62}?$/)),
+			v.pipe(v.string(), v.regex(/^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/)),
 			v.variant('type', [lexArray, lexPrimitive, lexIpldType, lexRefVariant, lexBlob]),
 		),
 	),
@@ -578,7 +573,7 @@ const _lexiconDoc = v.strictObject({
 	),
 	revision: v.optional(integer),
 	description: v.optional(v.string()),
-	defs: v.record(v.pipe(v.string(), v.regex(/^[a-zA-Z][a-zA-Z0-9]{0,62}?$/)), lexUserType),
+	defs: v.record(v.pipe(v.string(), v.regex(/^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/)), lexUserType),
 });
 
 export const lexiconDoc = v.pipe(
