@@ -546,7 +546,7 @@ const generateType = (
 			}
 
 			if (spec.enum !== undefined) {
-				return `${PURE} v.literalUnion(${lit(spec.enum)})`;
+				return `${PURE} v.literalEnum(${lit(spec.enum)})`;
 			}
 
 			let pipe: string[] = [];
@@ -577,7 +577,7 @@ const generateType = (
 			}
 
 			if (spec.enum !== undefined) {
-				return `${PURE} v.literalUnion(${lit(spec.enum)})`;
+				return `${PURE} v.literalEnum(${lit(spec.enum)})`;
 			}
 
 			let pipe: string[] = [];
