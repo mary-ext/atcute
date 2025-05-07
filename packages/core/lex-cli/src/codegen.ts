@@ -511,7 +511,7 @@ const generateType = (
 
 			let pipe: string[] = [];
 
-			if (spec.minLength !== undefined || spec.maxLength !== undefined) {
+			if ((spec.minLength ?? 0) > 0 || spec.maxLength !== undefined) {
 				if (spec.maxLength === undefined) {
 					pipe.push(`${PURE} v.arrayLength(${lit(spec.minLength ?? 0)})`);
 				} else {
@@ -551,7 +551,7 @@ const generateType = (
 
 			let pipe: string[] = [];
 
-			if (spec.minimum !== undefined || spec.maximum !== undefined) {
+			if ((spec.minimum ?? 0) > 0 || spec.maximum !== undefined) {
 				if (spec.maximum === undefined) {
 					pipe.push(`${PURE} v.integerRange(${lit(spec.minimum ?? 0)})`);
 				} else {
@@ -582,7 +582,7 @@ const generateType = (
 
 			let pipe: string[] = [];
 
-			if (spec.minLength !== undefined || spec.maxLength !== undefined) {
+			if ((spec.minLength ?? 0) > 0 || spec.maxLength !== undefined) {
 				if (spec.maxLength === undefined) {
 					pipe.push(`${PURE} v.stringLength(${lit(spec.minLength ?? 0)})`);
 				} else {
@@ -590,7 +590,7 @@ const generateType = (
 				}
 			}
 
-			if (spec.minGraphemes !== undefined || spec.maxGraphemes !== undefined) {
+			if ((spec.minGraphemes ?? 0) > 0 || spec.maxGraphemes !== undefined) {
 				if (spec.maxGraphemes === undefined) {
 					pipe.push(`${PURE} v.stringGraphemes(${lit(spec.minGraphemes ?? 0)})`);
 				} else {
@@ -670,7 +670,7 @@ const generateType = (
 		case 'bytes': {
 			let pipe: string[] = [];
 
-			if (spec.minLength !== undefined || spec.maxLength !== undefined) {
+			if ((spec.minLength ?? 0) > 0 || spec.maxLength !== undefined) {
 				if (spec.maxLength === undefined) {
 					pipe.push(`${PURE} v.bytesSize(${lit(spec.minLength ?? 0)})`);
 				} else {
