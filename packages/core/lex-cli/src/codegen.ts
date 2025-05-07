@@ -184,16 +184,16 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 			switch (def.type) {
 				case 'array':
-				case 'blob':
-				case 'bytes':
-				case 'cid-link':
 				case 'object':
 				case 'record':
 				case 'unknown': {
 					file.interfaces += `export interface ${toTitleCase(defId)} extends v.InferInput<typeof ${varname}> {}\n`;
 					break;
 				}
+				case 'blob':
 				case 'boolean':
+				case 'bytes':
+				case 'cid-link':
 				case 'integer':
 				case 'string':
 				case 'token': {
