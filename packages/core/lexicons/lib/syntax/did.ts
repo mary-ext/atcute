@@ -8,7 +8,7 @@ export type Did<Method extends string = string> = `did:${Method}:${string}`;
  */
 export type AtprotoDid = Did<'plc' | 'web'>;
 
-const DID_RE = /^(?=.{7,2048}$)did:([a-z]+):([a-zA-Z0-9._:%\-]*[a-zA-Z0-9._\-])$/;
+const DID_RE = /^did:([a-z]+):([a-zA-Z0-9._:%\-]*[a-zA-Z0-9._\-])$/;
 
 // #__NO_SIDE_EFFECTS__
 export const isDid = (input: unknown): input is Did => {
