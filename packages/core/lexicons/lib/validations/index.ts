@@ -310,7 +310,7 @@ const formatIssueTree = (tree: IssueTree): string => {
 			break;
 		}
 		case 'invalid_string_format': {
-			message = `expected a string with a format of ${tree.expected}`;
+			message = `expected a ${tree.expected} formatted string`;
 			break;
 		}
 		case 'invalid_string_graphemes': {
@@ -331,7 +331,7 @@ const formatIssueTree = (tree: IssueTree): string => {
 		}
 	}
 
-	let msg = `${tree.code} at .${path} (${message})`;
+	let msg = `${tree.code} at ${path ?? '.'} (${message})`;
 	if (count > 0) {
 		msg += ` (+${count} other issue(s))`;
 	}
