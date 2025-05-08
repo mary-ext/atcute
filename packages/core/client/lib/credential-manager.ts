@@ -1,9 +1,12 @@
-import type { At, ComAtprotoServerCreateSession } from './lexicons.js';
+import { getPdsEndpoint, type DidDocument } from '@atcute/identity';
+import type { Did } from '@atcute/lexicons';
+import type { InferXRPCBodyOutput } from '@atcute/lexicons/validations';
+
+import type { ComAtprotoServerCreateSession } from '@atcute/atproto';
 
 import { Client, ClientResponseError, isXRPCErrorPayload, ok } from './client.js';
 import { simpleFetchHandler, type FetchHandlerObject } from './fetch-handler.js';
 
-import { getPdsEndpoint, type DidDocument } from './utils/did.js';
 import { decodeJwt } from './utils/jwt.js';
 
 /**
@@ -19,7 +22,7 @@ export interface AtpAccessJwt {
 		| 'com.atproto.signupQueued'
 		| 'com.atproto.takendown';
 	/** account DID */
-	sub: At.Did;
+	sub: Did;
 	/** expiration time in Unix seconds */
 	exp: number;
 	/** token issued time in Unix seconds */
@@ -36,9 +39,9 @@ export interface AtpRefreshJwt {
 	/** unique identifier for this session */
 	jti: string;
 	/** account DID */
-	sub: At.Did;
+	sub: Did;
 	/** intended audience of this refresh token, in DID */
-	aud: At.Did;
+	aud: Did;
 	/** token expiration time in seconds */
 	exp: number;
 	/** token issued time in seconds */
@@ -54,7 +57,7 @@ export interface AtpSessionData {
 	/** account handle */
 	handle: string;
 	/** account DID */
-	did: At.Did;
+	did: Did;
 	/** PDS endpoint found in the DID document, this will be used as the service URI if provided */
 	pdsUri?: string;
 	/** email address of the account, might not be available if on app password */
@@ -184,11 +187,13 @@ export class CredentialManager implements FetchHandlerObject {
 		});
 
 		if (!response.ok) {
-			const error = response.data.error;
-
-			if (error === 'ExpiredToken' || error === 'InvalidToken') {
-				this.session = undefined;
-				this.#onExpired?.(currentSession);
+			switch (response.data.error) {
+				case 'ExpiredToken':
+				case 'InvalidToken': {
+					this.session = undefined;
+					this.#onExpired?.(currentSession);
+					break;
+				}
 			}
 
 			throw new ClientResponseError(response);
@@ -198,7 +203,9 @@ export class CredentialManager implements FetchHandlerObject {
 		this.#onRefresh?.(this.session!);
 	}
 
-	#updateSession(raw: ComAtprotoServerCreateSession.Output): AtpSessionData {
+	#updateSession(
+		raw: InferXRPCBodyOutput<ComAtprotoServerCreateSession.mainSchema['output']>,
+	): AtpSessionData {
 		const didDoc = raw.didDoc as DidDocument | undefined;
 
 		let pdsUri: string | undefined;

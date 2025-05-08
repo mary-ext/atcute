@@ -1,30 +1,71 @@
 # @atcute/ozone
 
-[Ozone](https://ozone.tools) type definitions for `@atcute/client`, a lightweight and cute API
-client for AT Protocol.
+[Ozone](https://ozone.tools) (tools.ozone.\*) schema definitions
 
 ## usage
 
-you'd need to import `@atcute/ozone/lexicons` into your project, either by adding it into the
-`types` field in `tsconfig.json` or by importing it on your source code.
+```ts
+import { is, type $type } from '@atcute/lexicons';
+import { ToolsOzoneModerationDefs } from '@atcute/ozone';
+
+type LabelEvent = $type.enforce<ToolsOzoneModerationDefs.ModEventLabel>;
+
+const evt: LabelEvent = {
+	$type: 'tools.ozone.moderation.defs#modEventLabel',
+	createLabelVals: ['awesome'],
+	negateLabelVals: [],
+};
+
+is(ToolsOzoneModerationDefs.modEventLabelSchema, evt);
+// -> true
+```
+
+### with `@atcute/client`
+
+pick either one of these 3 options to register the ambient declarations
 
 ```jsonc
 // tsconfig.json
 {
 	"compilerOptions": {
-		"types": ["@atcute/ozone/lexicons"],
+		"types": ["@atcute/ozone"],
 	},
 }
 ```
 
 ```ts
 // env.d.ts
-/// <reference types="@atcute/ozone/lexicons" />
+/// <reference types="@atcute/ozone" />
 ```
 
 ```ts
 // index.ts
-import '@atcute/ozone/lexicons';
+import type {} from '@atcute/ozone';
 ```
 
-newly added lexicons are augmented to `@atcute/client/lexicons` module
+now all the XRPC operations should be visible in the client
+
+```ts
+import { Client, simpleFetchHandler } from '@atcute/client';
+
+const client = new Client({
+	handler: simpleFetchHandler({ service: 'https://mod.example.com' }),
+});
+
+const response = await client.post('tools.ozone.moderation.emitEvent', {
+	input: {
+		createdBy: 'did:plc:ia76kvnndjutgedggx2ibrem',
+		subject: {
+			$type: 'com.atproto.repo.strongRef',
+			uri: 'at://did:plc:ia76kvnndjutgedggx2ibrem/app.bsky.feed.post/3l6uo5yecnsu7',
+			cid: 'bafyreibluyqpqno2ixrhdkztquyarpug7k6t4en6ug7g3sw6fonzzmakbq',
+		},
+		event: {
+			$type: 'tools.ozone.moderation.defs#modEventLabel',
+			createLabelVals: ['awesome'],
+			negateLabelVals: [],
+		},
+	},
+});
+// ...
+```

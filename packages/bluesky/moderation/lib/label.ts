@@ -1,4 +1,6 @@
-import type { AppBskyLabelerDefs, At, ComAtprotoLabelDefs } from '@atcute/client/lexicons';
+import type { ComAtprotoLabelDefs } from '@atcute/atproto';
+import type { AppBskyLabelerDefs } from '@atcute/bluesky';
+import type { Did } from '@atcute/lexicons';
 
 import { DisplayContext, LabelTarget, ModerationAction, type LabelBehaviorMatrix } from './behaviors.js';
 
@@ -342,8 +344,8 @@ export const interpretLabelerDefinition = (
 
 export const interpretLabelerDefinitions = (
 	labelers: AppBskyLabelerDefs.LabelerViewDetailed[],
-): Record<At.Did, InterpretedLabelMapping> => {
-	const labelDefs: Record<At.Did, InterpretedLabelMapping> = {};
+): Record<Did, InterpretedLabelMapping> => {
+	const labelDefs: Record<Did, InterpretedLabelMapping> = {};
 
 	for (const labeler of labelers) {
 		labelDefs[labeler.creator.did] = interpretLabelerDefinition(labeler);

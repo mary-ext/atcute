@@ -1,10 +1,9 @@
-import type {
-	AppBskyEmbedRecord,
-	AppBskyEmbedRecordWithMedia,
-	AppBskyFeedDefs,
-	AppBskyFeedPost,
-	Brand,
-} from '@atcute/client/lexicons';
+import type { $type } from '@atcute/lexicons';
+
+import type * as AppBskyEmbedRecord from '../lexicons/types/app/bsky/embed/record.js';
+import type * as AppBskyEmbedRecordWithMedia from '../lexicons/types/app/bsky/embed/recordWithMedia.js';
+import type * as AppBskyFeedDefs from '../lexicons/types/app/bsky/feed/defs.js';
+import type * as AppBskyFeedPost from '../lexicons/types/app/bsky/feed/post.js';
 
 export interface RawEmbeds {
 	media?: AppBskyEmbedRecordWithMedia.Main['media'];
@@ -19,7 +18,7 @@ export type RawRecordEmbed = NonNullable<RawEmbeds['record']>;
  * @param embed the embed interface to extract from
  * @returns the extracted raw media embed, if any
  */
-export const unwrapRawMediaEmbed = (embed: AppBskyFeedPost.Record['embed']): RawEmbeds['media'] => {
+export const unwrapRawMediaEmbed = (embed: AppBskyFeedPost.Main['embed']): RawEmbeds['media'] => {
 	switch (embed?.$type) {
 		case 'app.bsky.embed.recordWithMedia':
 			return embed.media;
@@ -35,7 +34,7 @@ export const unwrapRawMediaEmbed = (embed: AppBskyFeedPost.Record['embed']): Raw
  * @param embed the embed interface to extract from
  * @returns the extracted raw record embed, if any
  */
-export const unwrapRawRecordEmbed = (embed: AppBskyFeedPost.Record['embed']): RawEmbeds['record'] => {
+export const unwrapRawRecordEmbed = (embed: AppBskyFeedPost.Main['embed']): RawEmbeds['record'] => {
 	switch (embed?.$type) {
 		case 'app.bsky.embed.recordWithMedia':
 			return embed.record;
@@ -50,7 +49,7 @@ export const unwrapRawRecordEmbed = (embed: AppBskyFeedPost.Record['embed']): Ra
  * @param embed the embed interface to extract from
  * @returns the extracted raw media and record embeds, if any
  */
-export const unwrapRawEmbed = (embed: AppBskyFeedPost.Record['embed']): RawEmbeds => {
+export const unwrapRawEmbed = (embed: AppBskyFeedPost.Main['embed']): RawEmbeds => {
 	return {
 		media: unwrapRawMediaEmbed(embed),
 		record: unwrapRawRecordEmbed(embed),
@@ -108,7 +107,7 @@ export const unwrapEmbed = (embed: AppBskyFeedDefs.PostView['embed']): Embeds =>
 	};
 };
 
-export type QuoteEmbed = Brand.Union<
+export type QuoteEmbed = $type.enforce<
 	| AppBskyEmbedRecord.ViewBlocked
 	| AppBskyEmbedRecord.ViewDetached
 	| AppBskyEmbedRecord.ViewNotFound

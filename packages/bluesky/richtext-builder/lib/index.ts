@@ -1,5 +1,5 @@
-import '@atcute/bluesky/lexicons';
-import type { AppBskyRichtextFacet, At } from '@atcute/client/lexicons';
+import type { AppBskyRichtextFacet } from '@atcute/bluesky';
+import type { Did, GenericUri } from '@atcute/lexicons';
 
 type UnwrapArray<T> = T extends (infer V)[] ? V : never;
 
@@ -112,7 +112,7 @@ class RichtextBuilder {
 	 * @param uri Valid URL, for example: https://example.com
 	 * @returns The builder instance, for chaining
 	 */
-	addLink(substr: string, uri: At.GenericUri): this {
+	addLink(substr: string, uri: GenericUri): this {
 		return this.addDecoratedText(substr, { $type: 'app.bsky.richtext.facet#link', uri: uri });
 	}
 
@@ -122,7 +122,7 @@ class RichtextBuilder {
 	 * @param did Valid DID, for example: did:plc:ia76kvnndjutgedggx2ibrem
 	 * @returns The builder instance, for chaining
 	 */
-	addMention(substr: string, did: At.Did): this {
+	addMention(substr: string, did: Did): this {
 		return this.addDecoratedText(substr, { $type: 'app.bsky.richtext.facet#mention', did: did });
 	}
 

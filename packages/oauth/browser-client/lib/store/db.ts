@@ -1,4 +1,4 @@
-import type { At } from '@atcute/client/lexicons';
+import type { Did } from '@atcute/lexicons';
 
 import type { DPoPKey } from '../types/dpop.js';
 import type { AuthorizationServerMetadata } from '../types/server.js';
@@ -18,7 +18,7 @@ interface SchemaItem<T> {
 
 interface Schema {
 	sessions: {
-		key: At.Did;
+		key: Did;
 		value: Session;
 		indexes: {
 			expiresAt: number;

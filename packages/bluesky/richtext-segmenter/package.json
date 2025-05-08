@@ -25,11 +25,11 @@
 	},
 	"peerDependencies": {
 		"@atcute/bluesky": "^2.0.0",
-		"@atcute/client": "^3.0.0"
+		"@atcute/lexicons": "^1.0.0"
 	},
 	"devDependencies": {
 		"@atcute/bluesky": "workspace:^",
-		"@atcute/client": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
 		"@types/bun": "^1.2.1"
 	}
 }

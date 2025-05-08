@@ -1,4 +1,5 @@
-import type { AppBskyGraphDefs, At } from '@atcute/client/lexicons';
+import type { AppBskyGraphDefs } from '@atcute/bluesky';
+import type { Did } from '@atcute/lexicons';
 
 import { DisplayContext, ModerationAction, type BehaviorMapping, type LabelTarget } from './behaviors.js';
 import type { Label, LabelerPreference, ModerationOptions } from './types.js';
@@ -60,7 +61,7 @@ export interface HiddenModerationCause {
 export interface LabelModerationCause {
 	type: ModerationCauseType.Label;
 	priority: 1 | 2 | 5 | 7 | 8;
-	source: At.Did | null;
+	source: Did | null;
 
 	label: Label;
 	labelDef: InterpretedLabelDefinition;
@@ -106,13 +107,13 @@ export type ModerationCause =
 	| MutedTemporaryModerationCause;
 
 export interface ModerationDecision {
-	authorDid: At.Did;
+	authorDid: Did;
 	isMe: boolean;
 	causes: ModerationCause[];
 }
 
 export const createModerationDecision = (
-	authorDid: At.Did,
+	authorDid: Did,
 	{ viewerDid }: ModerationOptions,
 ): ModerationDecision => {
 	return {

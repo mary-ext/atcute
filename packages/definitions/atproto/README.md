@@ -1,7 +1,6 @@
 # @atcute/atproto
 
-[AT Protocol](https://atproto.com) (com.atproto.\*) schema definitions for atcute, a collection of
-lightweight TypeScript packages for AT Protocol.
+[AT Protocol](https://atproto.com) (com.atproto.\*) schema definitions
 
 ## usage
 

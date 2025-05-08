@@ -1,7 +1,7 @@
-import type { At } from '@atcute/client/lexicons';
+import type { Did } from '@atcute/lexicons';
 
 export interface IdentityMetadata {
-	id: At.Did;
+	id: Did;
 	raw: string;
 	pds: URL;
 }

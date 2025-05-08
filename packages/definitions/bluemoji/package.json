@@ -15,20 +15,23 @@
 		"!lib/**/*.test.ts"
 	],
 	"exports": {
-		"./lexicons": "./dist/lexicons.js"
+		".": "./dist/index.js",
+		"./types/": "./dist/lexicons/types/blue/moji/*.js"
 	},
 	"scripts": {
 		"build": "tsc",
-		"generate": "./scripts/generate-lexicons.sh",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
+		"@atcute/atproto": "^3.0.0",
 		"@atcute/bluesky": "^2.0.0",
-		"@atcute/client": "^3.0.0"
+		"@atcute/lexicons": "^1.0.0"
 	},
 	"devDependencies": {
+		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
-		"@atcute/client": "workspace:^",
-		"@atcute/lex-cli": "workspace:^"
+		"@atcute/lex-cli": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
 	}
 }

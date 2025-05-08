@@ -1,3 +1,6 @@
+import type { $type, Did, GenericUri, Handle, ResourceUri } from '@atcute/lexicons';
+
+import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 import type {
 	AppBskyActorDefs,
 	AppBskyEmbedRecord,
@@ -5,10 +8,7 @@ import type {
 	AppBskyFeedPost,
 	AppBskyGraphDefs,
 	AppBskyNotificationListNotifications,
-	At,
-	Brand,
-	ComAtprotoLabelDefs,
-} from '@atcute/client/lexicons';
+} from '@atcute/bluesky';
 
 const FAKE_CID = 'bafyreiclp443lavogvhj3d2ob2cxbfuscni2k5jk7bebjzg7khl3esabwq';
 
@@ -19,10 +19,10 @@ export const post = ({
 	embed,
 }: {
 	text: string;
-	facets?: AppBskyFeedPost.Record['facets'];
+	facets?: AppBskyFeedPost.Main['facets'];
 	reply?: AppBskyFeedPost.ReplyRef;
-	embed?: AppBskyFeedPost.Record['embed'];
-}): AppBskyFeedPost.Record => {
+	embed?: AppBskyFeedPost.Main['embed'];
+}): AppBskyFeedPost.Main => {
 	return {
 		$type: 'app.bsky.feed.post',
 		text,
@@ -44,7 +44,7 @@ export const postView = ({
 	viewer,
 	labels,
 }: {
-	record: AppBskyFeedPost.Record;
+	record: AppBskyFeedPost.Main;
 	author: AppBskyActorDefs.ProfileViewBasic;
 	embed?: AppBskyFeedDefs.PostView['embed'];
 	replyCount?: number;
@@ -52,7 +52,7 @@ export const postView = ({
 	likeCount?: number;
 	viewer?: AppBskyFeedDefs.ViewerState;
 	labels?: ComAtprotoLabelDefs.Label[];
-}): Brand.Union<AppBskyFeedDefs.PostView> => {
+}): $type.enforce<AppBskyFeedDefs.PostView> => {
 	return {
 		$type: 'app.bsky.feed.defs#postView',
 		uri: `at://${author.did}/app.bsky.feed.post/fake`,
@@ -74,10 +74,10 @@ export const embedRecordView = ({
 	author,
 	labels,
 }: {
-	record: AppBskyFeedPost.Record;
+	record: AppBskyFeedPost.Main;
 	author: AppBskyActorDefs.ProfileViewBasic;
 	labels?: ComAtprotoLabelDefs.Label[];
-}): Brand.Union<AppBskyEmbedRecord.View> => {
+}): $type.enforce<AppBskyEmbedRecord.View> => {
 	return {
 		$type: 'app.bsky.embed.record#view',
 		record: {
@@ -98,11 +98,11 @@ export const profileView = ({
 	viewer,
 	labels,
 }: {
-	handle: At.Handle;
+	handle: Handle;
 	displayName?: string;
 	viewer?: AppBskyActorDefs.ViewerState;
 	labels?: ComAtprotoLabelDefs.Label[];
-}): Brand.Omit<AppBskyActorDefs.ProfileView | AppBskyActorDefs.ProfileViewBasic> => {
+}): $type.omit<AppBskyActorDefs.ProfileView | AppBskyActorDefs.ProfileViewBasic> => {
 	return {
 		did: `did:web:${handle}`,
 		handle,
@@ -124,10 +124,10 @@ export const actorViewerState = ({
 	muted?: boolean;
 	mutedByList?: AppBskyGraphDefs.ListViewBasic;
 	blockedBy?: boolean;
-	blocking?: At.ResourceUri;
+	blocking?: ResourceUri;
 	blockingByList?: AppBskyGraphDefs.ListViewBasic;
-	following?: At.ResourceUri;
-	followedBy?: At.ResourceUri;
+	following?: ResourceUri;
+	followedBy?: ResourceUri;
 }): AppBskyActorDefs.ViewerState => {
 	return {
 		muted,
@@ -155,7 +155,7 @@ export const replyNotification = ({
 	record,
 	labels,
 }: {
-	record: AppBskyFeedPost.Record;
+	record: AppBskyFeedPost.Main;
 	author: AppBskyActorDefs.ProfileView;
 	labels?: ComAtprotoLabelDefs.Label[];
 }): AppBskyNotificationListNotifications.Notification => {
@@ -203,8 +203,8 @@ export const label = ({
 	src,
 }: {
 	val: string;
-	uri: At.GenericUri;
-	src?: At.Did;
+	uri: GenericUri;
+	src?: Did;
 }): ComAtprotoLabelDefs.Label => {
 	return {
 		src: src || 'did:plc:fake-labeler',

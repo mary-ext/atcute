@@ -32,12 +32,15 @@ importers:
 
   packages/bluesky/moderation:
     devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
       '@atcute/bluesky':
         specifier: workspace:^
         version: link:../../definitions/bluesky
-      '@atcute/client':
+      '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/client
+        version: link:../../core/lexicons
       '@types/bun':
         specifier: ^1.2.1
         version: 1.2.1
@@ -53,6 +56,9 @@ importers:
       '@atcute/client':
         specifier: workspace:^
         version: link:../../core/client
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
       '@types/bun':
         specifier: ^1.2.1
         version: 1.2.1
@@ -68,9 +74,9 @@ importers:
       '@atcute/bluesky':
         specifier: workspace:^
         version: link:../../definitions/bluesky
-      '@atcute/client':
+      '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/client
+        version: link:../../core/lexicons
       '@types/bun':
         specifier: ^1.2.1
         version: 1.2.1
@@ -96,6 +102,9 @@ importers:
         specifier: workspace:^
         version: link:../../utilities/tid
     devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
       '@atcute/bluesky':
         specifier: workspace:^
         version: link:../../definitions/bluesky
@@ -105,18 +114,31 @@ importers:
       '@atcute/client':
         specifier: workspace:^
         version: link:../../core/client
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
       '@types/bun':
         specifier: ^1.2.1
         version: 1.2.1
 
   packages/core/client:
+    dependencies:
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../../identity/identity
     devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
+      '@atcute/bluesky':
+        specifier: workspace:^
+        version: link:../../definitions/bluesky
       '@atcute/internal-dev-env':
         specifier: workspace:^
         version: link:../../internal/dev-env
-      '@atcute/lex-cli':
+      '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../lex-cli
+        version: link:../lexicons
       '@vitest/coverage-v8':
         specifier: ^3.0.4
         version: 3.0.4(vitest@3.0.4(@types/node@22.15.3))
@@ -169,45 +191,63 @@ importers:
 
   packages/definitions/bluemoji:
     devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../atproto
       '@atcute/bluesky':
         specifier: workspace:^
         version: link:../bluesky
-      '@atcute/client':
-        specifier: workspace:^
-        version: link:../../core/client
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../core/lex-cli
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
 
   packages/definitions/bluesky:
     devDependencies:
-      '@atcute/client':
+      '@atcute/atproto':
         specifier: workspace:^
-        version: link:../../core/client
+        version: link:../atproto
+      '@atcute/bluesky':
+        specifier: 'file:'
+        version: file:packages/definitions/bluesky(@atcute/atproto@packages+definitions+atproto)(@atcute/lexicons@packages+core+lexicons)
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../core/lex-cli
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
 
   packages/definitions/ozone:
     devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../atproto
       '@atcute/bluesky':
         specifier: workspace:^
         version: link:../bluesky
-      '@atcute/client':
-        specifier: workspace:^
-        version: link:../../core/client
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../core/lex-cli
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
+      '@atcute/ozone':
+        specifier: 'file:'
+        version: file:packages/definitions/ozone(@atcute/atproto@packages+definitions+atproto)(@atcute/bluesky@packages+definitions+bluesky)(@atcute/lexicons@packages+core+lexicons)
 
   packages/definitions/whitewind:
     devDependencies:
-      '@atcute/client':
-        specifier: workspace:^
-        version: link:../../core/client
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../core/lex-cli
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
+      '@atcute/whitewind':
+        specifier: 'file:'
+        version: file:packages/definitions/whitewind(@atcute/lexicons@packages+core+lexicons)
 
   packages/identity/did-plc:
     dependencies:
@@ -330,6 +370,12 @@ importers:
       '@atcute/client':
         specifier: workspace:^
         version: link:../../core/client
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../../identity/identity
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
       '@atcute/multibase':
         specifier: workspace:^
         version: link:../../utilities/multibase
@@ -337,6 +383,9 @@ importers:
         specifier: workspace:^
         version: link:../../utilities/uint8array
     devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
       '@types/bun':
         specifier: ^1.2.1
         version: 1.2.1
@@ -457,7 +506,25 @@ packages:
   '@atcute/atproto@file:packages/definitions/atproto':
     resolution: {directory: packages/definitions/atproto, type: directory}
     peerDependencies:
-      '@atcute/lexicons': workspace:^
+      '@atcute/lexicons': ^1.0.0
+
+  '@atcute/bluesky@file:packages/definitions/bluesky':
+    resolution: {directory: packages/definitions/bluesky, type: directory}
+    peerDependencies:
+      '@atcute/atproto': ^3.0.0
+      '@atcute/lexicons': ^1.0.0
+
+  '@atcute/ozone@file:packages/definitions/ozone':
+    resolution: {directory: packages/definitions/ozone, type: directory}
+    peerDependencies:
+      '@atcute/atproto': ^3.0.0
+      '@atcute/bluesky': ^2.0.0
+      '@atcute/lexicons': ^1.0.0
+
+  '@atcute/whitewind@file:packages/definitions/whitewind':
+    resolution: {directory: packages/definitions/whitewind, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atproto-labs/fetch-node@0.1.6':
     resolution: {integrity: sha512-MtisrDQZuBiR3yUyhVqaNrukGTZfZHANG23E1w5t4biz1ONWWSFc1CkqUGOHPJJ7JpjaNbHRf1kfKsMZotQZsQ==}
@@ -3128,6 +3195,21 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.25
 
   '@atcute/atproto@file:packages/definitions/atproto(@atcute/lexicons@packages+core+lexicons)':
+    dependencies:
+      '@atcute/lexicons': link:packages/core/lexicons
+
+  '@atcute/bluesky@file:packages/definitions/bluesky(@atcute/atproto@packages+definitions+atproto)(@atcute/lexicons@packages+core+lexicons)':
+    dependencies:
+      '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/lexicons': link:packages/core/lexicons
+
+  '@atcute/ozone@file:packages/definitions/ozone(@atcute/atproto@packages+definitions+atproto)(@atcute/bluesky@packages+definitions+bluesky)(@atcute/lexicons@packages+core+lexicons)':
+    dependencies:
+      '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/bluesky': link:packages/definitions/bluesky
+      '@atcute/lexicons': link:packages/core/lexicons
+
+  '@atcute/whitewind@file:packages/definitions/whitewind(@atcute/lexicons@packages+core+lexicons)':
     dependencies:
       '@atcute/lexicons': link:packages/core/lexicons
 

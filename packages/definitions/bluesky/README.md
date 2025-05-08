@@ -1,39 +1,15 @@
 # @atcute/bluesky
 
-[Bluesky](https://bsky.app) type definitions for `@atcute/client`, a lightweight and cute API client
-for AT Protocol.
+[Bluesky](https://bsky.app) (app.bsky.\* and chat.bsky.\*) schema definitions
 
 ## usage
 
-you'd need to import `@atcute/bluesky/lexicons` into your project, either by adding it into the
-`types` field in `tsconfig.json` or by importing it on your source code.
-
-```jsonc
-// tsconfig.json
-{
-	"compilerOptions": {
-		"types": ["@atcute/bluesky/lexicons"],
-	},
-}
-```
-
 ```ts
-// env.d.ts
-/// <reference types="@atcute/bluesky/lexicons" />
-```
-
-```ts
-// index.ts
-import '@atcute/bluesky/lexicons';
-```
-
-newly added lexicons are augmented to `@atcute/client/lexicons` module
-
-```ts
-import type { AppBskyFeedPost, AppBskyRichtextFacet, Brand } from '@atcute/client/lexicons';
+import { is, type $type } from '@atcute/lexicons';
+import { AppBskyFeedPost, AppBskyRichtextFacet } from '@atcute/bluesky';
 
 type Facet = AppBskyRichtextFacet.Main;
-type MentionFeature = Brand.Union<AppBskyRichtextFacet.Mention>;
+type MentionFeature = $type.enforce<AppBskyRichtextFacet.Mention>;
 
 const mention: MentionFeature = {
 	$type: 'app.bsky.richtext.facet#mention',
@@ -48,23 +24,53 @@ const facet: Facet = {
 	features: [mention],
 };
 
-const record: AppBskyFeedPost.Record = {
+const record: AppBskyFeedPost.Main = {
 	$type: 'app.bsky.feed.post',
 	text: `hello @bsky.app!`,
 	facets: [facet],
 	createdAt: new Date().toISOString(),
 };
+
+is(AppBskyFeedPost.mainSchema, record);
+// -> true
+```
+
+### with `@atcute/client`
+
+pick either one of these 3 options to register the ambient declarations
+
+```jsonc
+// tsconfig.json
+{
+	"compilerOptions": {
+		"types": ["@atcute/bluesky"],
+	},
+}
 ```
 
 ```ts
-const rpc = new XRPC({ handler: simpleFetchHandler({ service: 'https://api.bsky.app' }) });
+// env.d.ts
+/// <reference types="@atcute/bluesky" />
+```
 
-const { data } = await rpc.get('app.bsky.actor.getProfile', {
+```ts
+// index.ts
+import type {} from '@atcute/bluesky';
+```
+
+now all the XRPC operations should be visible in the client
+
+```ts
+import { Client, simpleFetchHandler } from '@atcute/client';
+
+const client = new Client({
+	handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }),
+});
+
+const response = await client.get('app.bsky.actor.getProfile', {
 	params: {
 		actor: 'did:plc:z72i7hdynmk6r22z27h6tvur',
 	},
 });
-
-data;
-// -> { handle: 'bsky.app', displayName: 'Bluesky', ... }
+// ...
 ```

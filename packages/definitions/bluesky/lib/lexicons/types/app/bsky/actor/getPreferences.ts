@@ -1,0 +1,28 @@
+import type {} from '@atcute/lexicons';
+import * as v from '@atcute/lexicons/validations';
+import type {} from '@atcute/lexicons/ambient';
+import * as AppBskyActorDefs from './defs.js';
+
+const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.actor.getPreferences', {
+	params: /*#__PURE__*/ v.object({}),
+	output: {
+		type: 'lex',
+		schema: /*#__PURE__*/ v.object({
+			get preferences() {
+				return AppBskyActorDefs.preferencesSchema;
+			},
+		}),
+	},
+});
+
+type main$schematype = typeof _mainSchema;
+
+export interface mainSchema extends main$schematype {}
+
+export const mainSchema = _mainSchema as mainSchema;
+
+declare module '@atcute/lexicons/ambient' {
+	interface XRPCQueries {
+		'app.bsky.actor.getPreferences': mainSchema;
+	}
+}

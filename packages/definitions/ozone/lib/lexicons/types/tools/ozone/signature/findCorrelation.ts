@@ -1,0 +1,30 @@
+import type {} from '@atcute/lexicons';
+import * as v from '@atcute/lexicons/validations';
+import type {} from '@atcute/lexicons/ambient';
+import * as ToolsOzoneSignatureDefs from './defs.js';
+
+const _mainSchema = /*#__PURE__*/ v.xrpcQuery('tools.ozone.signature.findCorrelation', {
+	params: /*#__PURE__*/ v.object({
+		dids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
+	}),
+	output: {
+		type: 'lex',
+		schema: /*#__PURE__*/ v.object({
+			get details() {
+				return /*#__PURE__*/ v.array(ToolsOzoneSignatureDefs.sigDetailSchema);
+			},
+		}),
+	},
+});
+
+type main$schematype = typeof _mainSchema;
+
+export interface mainSchema extends main$schematype {}
+
+export const mainSchema = _mainSchema as mainSchema;
+
+declare module '@atcute/lexicons/ambient' {
+	interface XRPCQueries {
+		'tools.ozone.signature.findCorrelation': mainSchema;
+	}
+}

@@ -1,5 +1,9 @@
-import type { XRPC } from '@atcute/client';
-import type { AppBskyEmbedRecord, AppBskyFeedDefs, AppBskyRichtextFacet, At } from '@atcute/client/lexicons';
+import type { Client } from '@atcute/client';
+import type { Blob as AtBlob, Did, GenericUri, ResourceUri } from '@atcute/lexicons';
+
+import type * as AppBskyEmbedRecord from '@atcute/bluesky/types/app/embed/record';
+import type * as AppBskyFeedDefs from '@atcute/bluesky/types/app/feed/defs';
+import type * as AppBskyRichtextFacet from '@atcute/bluesky/types/app/richtext/facet';
 
 /** Interface containing aspect ratio of the media */
 export interface MediaAspectRatio {
@@ -13,7 +17,7 @@ export interface MediaAspectRatio {
 export interface PostExternalEmbed {
 	type: 'external';
 	/** Link to the page */
-	uri: At.GenericUri;
+	uri: GenericUri;
 	/** Page title */
 	title: string;
 	/** Page description */
@@ -24,7 +28,7 @@ export interface PostExternalEmbed {
 	 * you to also supply an authenticated RPC instance for it to be able to make
 	 * procedure calls.
 	 */
-	thumbnail?: Blob | At.Blob;
+	thumbnail?: Blob | AtBlob;
 	/** Labels to describe this external embed */
 	labels?: string[];
 }
@@ -37,7 +41,7 @@ export interface ComposedImage {
 	 * you to also supply an authenticated RPC instance for it to be able to make
 	 * procedure calls.
 	 */
-	blob: Blob | At.Blob;
+	blob: Blob | AtBlob;
 	/**
 	 * Alternative text for this image, helps describe images for low-vision users
 	 * and provide context for everyone.
@@ -68,7 +72,7 @@ export interface PostVideoEmbed {
 	 * you to also supply an authenticated RPC instance for it to be able to make
 	 * procedure calls.
 	 */
-	blob: Blob | At.Blob;
+	blob: Blob | AtBlob;
 	/**
 	 * Alternative text for this video, helps describe video for low-vision users
 	 * and provide context for everyone.
@@ -92,7 +96,7 @@ export type PostMediaEmbed = PostExternalEmbed | PostImageEmbed | PostVideoEmbed
 export interface PostFeedEmbed {
 	type: 'feed';
 	/** AT-URI of the feed */
-	uri: At.ResourceUri;
+	uri: ResourceUri;
 	/**
 	 * CID of the feed, if not supplied, requires you to also supply an RPC
 	 * instance for it to be able to make query calls.
@@ -104,7 +108,7 @@ export interface PostFeedEmbed {
 export interface PostListEmbed {
 	type: 'list';
 	/** AT-URI of the list */
-	uri: At.ResourceUri;
+	uri: ResourceUri;
 	/**
 	 * CID of the list, if not supplied, requires you to also supply an RPC
 	 * instance for it to be able to make query calls.
@@ -116,7 +120,7 @@ export interface PostListEmbed {
 export interface PostQuoteEmbed {
 	type: 'quote';
 	/** AT-URI of the post */
-	uri: At.ResourceUri;
+	uri: ResourceUri;
 	/**
 	 * CID of the post, if not supplied, requires you to also supply an RPC
 	 * instance for it to be able to make query calls.
@@ -128,7 +132,7 @@ export interface PostQuoteEmbed {
 export interface PostStarterpackEmbed {
 	type: 'starterpack';
 	/** AT-URI of the post */
-	uri: At.ResourceUri;
+	uri: ResourceUri;
 	/**
 	 * CID of the starter pack, if not supplied, requires you to also supply an
 	 * RPC instance for it to be able to make query calls.
@@ -167,17 +171,17 @@ export interface ComposedThreadgate {
 	/** Allow replies from users mentioned in the post */
 	mentions?: boolean;
 	/** Allow replies from users that are in these user lists */
-	listUris?: At.ResourceUri[];
+	listUris?: ResourceUri[];
 }
 
 /** Base interface for the thread being composed */
 export interface ComposedThread {
 	/** An RPC instance, necessary for some options that takes action on your behalf */
-	rpc?: XRPC;
+	client?: Client;
 	/** Abort signal */
 	signal?: AbortSignal;
 	/** Author of the thread */
-	author: At.Did;
+	author: Did;
 	/**
 	 * The "creation time" for this thread,
 	 * if not supplied, the current time is used

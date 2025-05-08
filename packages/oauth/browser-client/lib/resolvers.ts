@@ -1,12 +1,14 @@
-import type { At, ComAtprotoIdentityResolveHandle } from '@atcute/client/lexicons';
-import { type DidDocument, getPdsEndpoint } from '@atcute/client/utils/did';
+import type { ComAtprotoIdentityResolveHandle } from '@atcute/atproto';
+import { type DidDocument, getPdsEndpoint } from '@atcute/identity';
+import type { Did, InferXRPCBodyOutput } from '@atcute/lexicons';
+import { isDid } from '@atcute/lexicons/syntax';
 
 import { DEFAULT_APPVIEW_URL } from './constants.js';
 import { ResolverError } from './errors.js';
 import type { IdentityMetadata } from './types/identity.js';
 import type { AuthorizationServerMetadata, ProtectedResourceMetadata } from './types/server.js';
 import { extractContentType } from './utils/response.js';
-import { isDid, isValidUrl } from './utils/strings.js';
+import { isValidUrl } from './utils/strings.js';
 
 const DID_WEB_RE = /^([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,}))$/;
 
@@ -16,7 +18,7 @@ const DID_WEB_RE = /^([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,}))$/;
  * @param handle Domain handle to resolve
  * @returns DID identifier resolved from the domain handle
  */
-export const resolveHandle = async (handle: string): Promise<At.Did> => {
+export const resolveHandle = async (handle: string): Promise<Did> => {
 	const url = DEFAULT_APPVIEW_URL + `/xrpc/com.atproto.identity.resolveHandle` + `?handle=${handle}`;
 
 	const response = await fetch(url);
@@ -26,7 +28,9 @@ export const resolveHandle = async (handle: string): Promise<At.Did> => {
 		throw new ResolverError(`directory is unreachable`);
 	}
 
-	const json = (await response.json()) as ComAtprotoIdentityResolveHandle.Output;
+	const json = (await response.json()) as InferXRPCBodyOutput<
+		ComAtprotoIdentityResolveHandle.mainSchema['output']
+	>;
 	return json.did;
 };
 
@@ -35,7 +39,7 @@ export const resolveHandle = async (handle: string): Promise<At.Did> => {
  * @param did DID identifier we're seeking DID doc from
  * @returns Retrieved DID document
  */
-export const getDidDocument = async (did: At.Did): Promise<DidDocument> => {
+export const getDidDocument = async (did: Did): Promise<DidDocument> => {
 	const colon_index = did.indexOf(':', 4);
 
 	const type = did.slice(4, colon_index);
@@ -151,7 +155,7 @@ export const getAuthorizationServerMetadata = async (host: string): Promise<Auth
 export const resolveFromIdentity = async (
 	ident: string,
 ): Promise<{ identity: IdentityMetadata; metadata: AuthorizationServerMetadata }> => {
-	let did: At.Did;
+	let did: Did;
 	if (isDid(ident)) {
 		did = ident;
 	} else {

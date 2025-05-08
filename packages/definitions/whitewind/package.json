@@ -2,7 +2,12 @@
 	"type": "module",
 	"name": "@atcute/whitewind",
 	"version": "2.0.1",
-	"description": "WhiteWind type definitions for atcute",
+	"description": "WhiteWind (com.whtwnd.*) schema definitions",
+	"keywords": [
+		"atcute",
+		"atproto",
+		"whitewind"
+	],
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
@@ -15,18 +20,20 @@
 		"!lib/**/*.test.ts"
 	],
 	"exports": {
-		"./lexicons": "./dist/lexicons.js"
+		".": "./dist/index.js",
+		"./types/*": "./dist/lexicons/types/com/whtwnd/*.js"
 	},
 	"scripts": {
 		"build": "tsc",
-		"generate": "./scripts/generate-lexicons.sh",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
-		"@atcute/client": "^3.0.0"
+		"@atcute/lexicons": "^1.0.0"
 	},
 	"devDependencies": {
-		"@atcute/client": "workspace:^",
-		"@atcute/lex-cli": "workspace:^"
+		"@atcute/lex-cli": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
+		"@atcute/whitewind": "file:"
 	}
 }

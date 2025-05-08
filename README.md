@@ -34,7 +34,8 @@ of atcute.
 | ---------------------------------------------------------------------------------------------------------------------- |
 | **Core packages**                                                                                                      |
 | [`client`](./packages/core/client): API client library                                                                 |
-| [`lex-cli`](./packages/core/lex-cli): CLI tool to generate type definitions for the API client                         |
+| [`lex-cli`](./packages/core/lex-cli): CLI tool to generate schema definitions                                          |
+| [`lexicons`](./packages/core/lexicons): core lexicon types, interfaces, and schema validations                         |
 | **OAuth packages**                                                                                                     |
 | [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth browser client implementation                 |
 | **Identity packages** _(work in progress)_                                                                             |
@@ -43,10 +44,11 @@ of atcute.
 | [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution                       |
 | [`identity-resolver-node`](./packages/identity/identity-resolver-node): additional identity resolvers for Node.js      |
 | **Lexicon definitions**                                                                                                |
-| [`bluemoji`](./packages/definitions/bluemoji): adds `blue.moji.*` lexicons                                             |
-| [`bluesky`](./packages/definitions/bluesky): adds `app.bsky.*` and `chat.bsky.*` lexicons                              |
-| [`ozone`](./packages/definitions/ozone): adds `tools.ozone.*` lexicons                                                 |
-| [`whitewind`](./packages/definitions/whitewind): adds `com.whtwnd.*` lexicons                                          |
+| [`atproto`](./packages/definitions/atproto): `com.atproto.*` schema definitions                                        |
+| [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*` schema definitions                                        |
+| [`bluesky`](./packages/definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions                         |
+| [`ozone`](./packages/definitions/ozone): `tools.ozone.*` schema definitions                                            |
+| [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` schema definitions                                     |
 | **Utility packages**                                                                                                   |
 | [`car`](./packages/utilities/car): DASL CAR and atproto repository decoder                                             |
 | [`cbor`](./packages/utilities/cbor): DASL dCBOR42 codec                                                                |

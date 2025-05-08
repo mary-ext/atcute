@@ -1,4 +1,4 @@
-import type { At } from '@atcute/client/lexicons';
+import type { Did } from '@atcute/lexicons';
 
 export class LoginError extends Error {
 	override name = 'LoginError';
@@ -16,7 +16,7 @@ export class TokenRefreshError extends Error {
 	override name = 'TokenRefreshError';
 
 	constructor(
-		public readonly sub: At.Did,
+		public readonly sub: Did,
 		message: string,
 		options?: ErrorOptions,
 	) {

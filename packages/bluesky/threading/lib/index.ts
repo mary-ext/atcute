@@ -1,20 +1,22 @@
-import '@atcute/bluesky/lexicons';
+import { ClientResponseError, ok, type Client } from '@atcute/client';
+import type { $type, Blob as AtBlob, CanonicalResourceUri, ResourceUri } from '@atcute/lexicons';
 
-import { XRPCError, type XRPC } from '@atcute/client';
-import type {
-	AppBskyEmbedExternal,
-	AppBskyEmbedImages,
-	AppBskyEmbedRecord,
-	AppBskyEmbedVideo,
-	AppBskyFeedDefs,
-	AppBskyFeedPost,
-	AppBskyFeedThreadgate,
-	At,
-	Brand,
-	ComAtprotoLabelDefs,
-	ComAtprotoRepoApplyWrites,
-	ComAtprotoRepoStrongRef,
-} from '@atcute/client/lexicons';
+import type * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
+import type * as ComAtprotoRepoApplyWrites from '@atcute/atproto/types/repo/applyWrites';
+import type * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
+import type {} from '@atcute/atproto/types/repo/uploadBlob';
+import type * as AppBskyEmbedExternal from '@atcute/bluesky/types/app/embed/external';
+import type * as AppBskyEmbedImages from '@atcute/bluesky/types/app/embed/images';
+import type * as AppBskyEmbedRecord from '@atcute/bluesky/types/app/embed/record';
+import type * as AppBskyEmbedVideo from '@atcute/bluesky/types/app/embed/video';
+import type * as AppBskyFeedDefs from '@atcute/bluesky/types/app/feed/defs';
+import type {} from '@atcute/bluesky/types/app/feed/getFeedGenerator';
+import type {} from '@atcute/bluesky/types/app/feed/getPosts';
+import type * as AppBskyFeedPost from '@atcute/bluesky/types/app/feed/post';
+import type * as AppBskyFeedThreadgate from '@atcute/bluesky/types/app/feed/threadgate';
+import type {} from '@atcute/bluesky/types/app/graph/getList';
+import type {} from '@atcute/bluesky/types/app/graph/getStarterPack';
+
 import * as TID from '@atcute/tid';
 
 import { serializeRecordCid } from './cbor.js';
@@ -37,18 +39,20 @@ export type * from './types.js';
  * @returns An array of post records that were published
  */
 export async function publishThread(
-	rpc: XRPC,
+	rpc: Client,
 	thread: Omit<ComposedThread, 'rpc'>,
-): Promise<Brand.Union<ComAtprotoRepoApplyWrites.Create>[]> {
-	const records = await createThread({ ...thread, rpc });
+): Promise<$type.enforce<ComAtprotoRepoApplyWrites.Create>[]> {
+	const records = await createThread({ ...thread, client: rpc });
 
-	await rpc.call('com.atproto.repo.applyWrites', {
-		signal: thread.signal,
-		data: {
-			repo: thread.author,
-			writes: records,
-		},
-	});
+	await ok(
+		rpc.post('com.atproto.repo.applyWrites', {
+			signal: thread.signal,
+			input: {
+				repo: thread.author,
+				writes: records,
+			},
+		}),
+	);
 
 	return records;
 }
@@ -60,8 +64,8 @@ export async function publishThread(
  */
 export async function createThread(
 	thread: ComposedThread,
-): Promise<Brand.Union<ComAtprotoRepoApplyWrites.Create>[]> {
-	const rpc = thread.rpc;
+): Promise<$type.enforce<ComAtprotoRepoApplyWrites.Create>[]> {
+	const client = thread.client;
 	const signal = thread.signal;
 
 	const did = thread.author;
@@ -69,7 +73,7 @@ export async function createThread(
 	const threadgate = thread.gate;
 	const languages = thread.languages;
 
-	const writes: Brand.Union<ComAtprotoRepoApplyWrites.Create>[] = [];
+	const writes: $type.enforce<ComAtprotoRepoApplyWrites.Create>[] = [];
 
 	const now = thread.createdAt !== undefined ? new Date(thread.createdAt) : new Date(getNow(posts.length));
 	assert(!Number.isNaN(now.getTime()), `provided createdAt value is invalid`);
@@ -82,8 +86,8 @@ export async function createThread(
 
 		if (typeof post === 'string') {
 			// AT-URI being passed
-			assertXrpc(rpc, `ComposedThread.reply`);
-			post = await getPost(post as At.ResourceUri);
+			assertClient(client, `ComposedThread.reply`);
+			post = await getPost(post as ResourceUri);
 		}
 
 		let root: ComAtprotoRepoStrongRef.Main | undefined;
@@ -92,12 +96,12 @@ export async function createThread(
 		if ('record' in post) {
 			// AppBskyFeedDefs.PostView being passed
 
-			root = (post.record as AppBskyFeedPost.Record).reply?.root;
+			root = (post.record as AppBskyFeedPost.Main).reply?.root;
 			ref = { uri: post.uri, cid: post.cid };
 		} else if ('value' in post) {
 			// AppBskyEmbedRecord.ViewRecord being passed
 
-			root = (post.value as AppBskyFeedPost.Record).reply?.root;
+			root = (post.value as AppBskyFeedPost.Main).reply?.root;
 			ref = { uri: post.uri, cid: post.cid };
 		} else {
 			assert(false, `Unexpected end of code`);
@@ -116,17 +120,17 @@ export async function createThread(
 		rkey = TID.createRaw(now.getTime(), Math.floor(Math.random() * 1023));
 
 		const post = posts[idx];
-		const uri: At.ResourceUri = `at://${did}/app.bsky.feed.post/${rkey}`;
+		const uri: CanonicalResourceUri = `at://${did}/app.bsky.feed.post/${rkey}`;
 
 		// Resolve embeds
-		let embed: AppBskyFeedPost.Record['embed'];
+		let embed: AppBskyFeedPost.Main['embed'];
 		if (post.embed !== undefined) {
 			embed = await resolveEmbed(post.embed);
 		}
 
 		// Get the self-labels
 		const labels = getEmbedLabels(post.embed);
-		let selfLabels: Brand.Union<ComAtprotoLabelDefs.SelfLabels> | undefined;
+		let selfLabels: $type.enforce<ComAtprotoLabelDefs.SelfLabels> | undefined;
 
 		if (labels?.length) {
 			selfLabels = {
@@ -138,7 +142,7 @@ export async function createThread(
 		// Now form the record
 		const content = post.content;
 
-		const record: AppBskyFeedPost.Record = {
+		const record: AppBskyFeedPost.Main = {
 			$type: 'app.bsky.feed.post',
 			createdAt: now.toISOString(),
 			text: content.text,
@@ -158,7 +162,7 @@ export async function createThread(
 
 		// If this is the first post, and we have a threadgate set, create one now.
 		if (idx === 0 && threadgate) {
-			const threadgateRecord: AppBskyFeedThreadgate.Record = {
+			const threadgateRecord: AppBskyFeedThreadgate.Main = {
 				$type: 'app.bsky.feed.threadgate',
 				createdAt: now.toISOString(),
 				post: uri,
@@ -195,7 +199,7 @@ export async function createThread(
 
 	return writes;
 
-	async function resolveEmbed(embed: PostEmbed): Promise<AppBskyFeedPost.Record['embed'] | undefined> {
+	async function resolveEmbed(embed: PostEmbed): Promise<AppBskyFeedPost.Main['embed'] | undefined> {
 		const { media, record } = embed;
 
 		if (media && record) {
@@ -214,16 +218,16 @@ export async function createThread(
 
 		async function resolveMediaEmbed(
 			embed: PostMediaEmbed,
-		): Promise<Brand.Union<AppBskyEmbedExternal.Main | AppBskyEmbedImages.Main | AppBskyEmbedVideo.Main>> {
+		): Promise<$type.enforce<AppBskyEmbedExternal.Main | AppBskyEmbedImages.Main | AppBskyEmbedVideo.Main>> {
 			const type = embed.type;
 
 			if (type === 'external') {
 				const rawThumb = embed.thumbnail;
-				let thumb: At.Blob<any> | undefined;
+				let thumb: AtBlob<any> | undefined;
 
 				if (rawThumb !== undefined) {
 					if (rawThumb instanceof Blob) {
-						assertXrpc(rpc, `PostExternalEmbed.thumbnail`);
+						assertClient(client, `PostExternalEmbed.thumbnail`);
 						thumb = await uploadBlob(rawThumb);
 					} else {
 						thumb = rawThumb;
@@ -247,10 +251,10 @@ export async function createThread(
 				for (const image of embed.images) {
 					const aspectRatio = image.aspectRatio;
 					const rawBlob = image.blob;
-					let blob: At.Blob<any>;
+					let blob: AtBlob<any>;
 
 					if (rawBlob instanceof Blob) {
-						assertXrpc(rpc, `PostImageEmbed.images[].blob`);
+						assertClient(client, `PostImageEmbed.images[].blob`);
 						blob = await uploadBlob(rawBlob);
 					} else {
 						blob = rawBlob;
@@ -272,10 +276,10 @@ export async function createThread(
 			if (type === 'video') {
 				const aspectRatio = embed.aspectRatio;
 				const rawBlob = embed.blob;
-				let blob: At.Blob<any> | undefined;
+				let blob: AtBlob<any> | undefined;
 
 				if (rawBlob instanceof Blob) {
-					assertXrpc(rpc, `PostVideoEmbed.blob`);
+					assertClient(client, `PostVideoEmbed.blob`);
 					blob = await uploadBlob(rawBlob);
 				} else {
 					blob = rawBlob;
@@ -292,7 +296,9 @@ export async function createThread(
 			assert(false, `Unexpected end of code`);
 		}
 
-		async function resolveRecordEmbed(embed: PostRecordEmbed): Promise<Brand.Union<AppBskyEmbedRecord.Main>> {
+		async function resolveRecordEmbed(
+			embed: PostRecordEmbed,
+		): Promise<$type.enforce<AppBskyEmbedRecord.Main>> {
 			const uri = embed.uri;
 			let cid = embed.cid;
 
@@ -300,36 +306,42 @@ export async function createThread(
 				const type = embed.type;
 
 				if (type === 'quote') {
-					assertXrpc(rpc, 'PostQuoteEmbed');
+					assertClient(client, 'PostQuoteEmbed');
 
 					const post = await getPost(uri);
 
 					cid = post.cid;
 				} else if (type === 'feed') {
-					assertXrpc(rpc, 'PostFeedEmbed');
+					assertClient(client, 'PostFeedEmbed');
 
-					const { data } = await rpc.get('app.bsky.feed.getFeedGenerator', {
-						signal: signal,
-						params: { feed: uri },
-					});
+					const data = await ok(
+						client.get('app.bsky.feed.getFeedGenerator', {
+							signal: signal,
+							params: { feed: uri },
+						}),
+					);
 
 					cid = data.view.cid;
 				} else if (type === 'list') {
-					assertXrpc(rpc, 'PostListEmbed');
+					assertClient(client, 'PostListEmbed');
 
-					const { data } = await rpc.get('app.bsky.graph.getList', {
-						signal: signal,
-						params: { list: uri, limit: 1 },
-					});
+					const data = await ok(
+						client.get('app.bsky.graph.getList', {
+							signal: signal,
+							params: { list: uri, limit: 1 },
+						}),
+					);
 
 					cid = data.list.cid;
 				} else if (type === 'starterpack') {
-					assertXrpc(rpc, 'PostStarterpackEmbed');
+					assertClient(client, 'PostStarterpackEmbed');
 
-					const { data } = await rpc.get('app.bsky.graph.getStarterPack', {
-						signal: signal,
-						params: { starterPack: uri },
-					});
+					const data = await ok(
+						client.get('app.bsky.graph.getStarterPack', {
+							signal: signal,
+							params: { starterPack: uri },
+						}),
+					);
 
 					cid = data.starterPack.cid;
 				} else {
@@ -347,36 +359,43 @@ export async function createThread(
 		}
 	}
 
-	async function uploadBlob(blob: Blob): Promise<At.Blob> {
+	async function uploadBlob(blob: Blob): Promise<AtBlob> {
 		// `rpc` intentionally non-null asserted.
-		const { data } = await rpc!.call('com.atproto.repo.uploadBlob', {
-			signal: signal,
-			data: blob,
-		});
+		const data = await ok(
+			client!.post('com.atproto.repo.uploadBlob', {
+				signal: signal,
+				input: blob,
+			}),
+		);
 
 		return data.blob;
 	}
 
-	async function getPost(uri: At.ResourceUri): Promise<AppBskyFeedDefs.PostView> {
+	async function getPost(uri: ResourceUri): Promise<AppBskyFeedDefs.PostView> {
 		// `rpc` intentionally non-null asserted.
-		const { data } = await rpc!.get('app.bsky.feed.getPosts', {
-			signal: signal,
-			params: {
-				uris: [uri],
-			},
-		});
+		const data = await ok(
+			client!.get('app.bsky.feed.getPosts', {
+				signal: signal,
+				params: {
+					uris: [uri],
+				},
+			}),
+		);
 
 		const post = data.posts[0];
 		if (!post) {
-			throw new XRPCError(400, { kind: 'NotFound', description: `Post not found: ${uri}` });
+			throw new ClientResponseError({
+				status: 400,
+				data: { error: 'NotFound', message: `Post not found: ${uri}` },
+			});
 		}
 
 		return post;
 	}
 }
 
-function resolveThreadgate(gate: ComposedThreadgate): AppBskyFeedThreadgate.Record['allow'] {
-	const rules: AppBskyFeedThreadgate.Record['allow'] = [];
+function resolveThreadgate(gate: ComposedThreadgate): AppBskyFeedThreadgate.Main['allow'] {
+	const rules: AppBskyFeedThreadgate.Main['allow'] = [];
 
 	if (gate.follows) {
 		rules.push({ $type: 'app.bsky.feed.threadgate#followingRule' });
@@ -410,8 +429,8 @@ function assert(condition: boolean, message: string): asserts condition {
 	}
 }
 
-function assertXrpc(rpc: XRPC | undefined, thing: string): asserts rpc {
-	if (rpc === undefined) {
-		throw new Error(`${thing} requires supplying RPC instance`);
+function assertClient(client: Client | undefined, thing: string): asserts client {
+	if (client === undefined) {
+		throw new Error(`${thing} requires supplying Client instance`);
 	}
 }

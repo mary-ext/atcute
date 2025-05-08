@@ -20,15 +20,19 @@
 	"sideEffects": false,
 	"scripts": {
 		"build": "tsc --project tsconfig.build.json",
+		"postbuild": "node ./scripts/ensure-files.js",
 		"test": "bun test --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
 		"@atcute/client": "workspace:^",
+		"@atcute/identity": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^"
 	},
 	"devDependencies": {
+		"@atcute/atproto": "workspace:^",
 		"@types/bun": "^1.2.1"
 	}
 }

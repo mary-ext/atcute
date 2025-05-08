@@ -15,22 +15,26 @@
 		"!lib/**/*.test.ts"
 	],
 	"exports": {
-		".": "./dist/index.js",
-		"./lexicons": "./dist/lexicons.js",
-		"./utils/did": "./dist/utils/did.js",
-		"./utils/http": "./dist/utils/http.js",
-		"./utils/jwt": "./dist/utils/jwt.js"
+		".": "./dist/index.js"
 	},
 	"scripts": {
 		"build": "tsc --project tsconfig.build.json",
+		"postbuild": "node ./scripts/ensure-files.js",
 		"test": "vitest run --coverage",
-		"generate": "./scripts/generate-lexicons.sh",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
+	},
 	"devDependencies": {
+		"@atcute/atproto": "workspace:^",
+		"@atcute/bluesky": "workspace:^",
 		"@atcute/internal-dev-env": "workspace:^",
-		"@atcute/lex-cli": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
 		"@vitest/coverage-v8": "^3.0.4",
 		"vitest": "^3.0.4"
+	},
+	"dependencies": {
+		"@atcute/identity": "workspace:^"
 	}
 }

@@ -24,8 +24,10 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
+		"@atcute/atproto": "^3.0.0",
 		"@atcute/bluesky": "^2.0.0",
-		"@atcute/client": "^3.0.0"
+		"@atcute/client": "^3.0.0",
+		"@atcute/lexicons": "^1.0.0"
 	},
 	"dependencies": {
 		"@atcute/cbor": "workspace:^",
@@ -33,9 +35,11 @@
 		"@atcute/tid": "workspace:^"
 	},
 	"devDependencies": {
+		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/bluesky-richtext-builder": "workspace:^",
 		"@atcute/client": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
 		"@types/bun": "^1.2.1"
 	}
 }

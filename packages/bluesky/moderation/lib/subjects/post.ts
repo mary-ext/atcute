@@ -1,11 +1,12 @@
-import { unwrapEmbed, unwrapRecordEmbed } from '@atcute/bluesky';
-import type {
+import {
 	AppBskyActorDefs,
 	AppBskyFeedDefs,
 	AppBskyFeedPost,
 	AppBskyGraphStarterpack,
-	At,
-} from '@atcute/client/lexicons';
+	unwrapEmbed,
+	unwrapRecordEmbed,
+} from '@atcute/bluesky';
+import type { CanonicalResourceUri } from '@atcute/lexicons';
 
 import { LabelTarget } from '../behaviors.js';
 import {
@@ -90,15 +91,12 @@ const decideEmbed = (
 	}
 };
 
-const checkHiddenPost = (
-	subject: PostSubject,
-	hiddenPosts: At.CanonicalResourceUri[] | undefined,
-): boolean => {
+const checkHiddenPost = (subject: PostSubject, hiddenPosts: CanonicalResourceUri[] | undefined): boolean => {
 	if (!hiddenPosts?.length) {
 		return false;
 	}
 
-	if (hiddenPosts.includes(subject.uri as At.CanonicalResourceUri)) {
+	if (hiddenPosts.includes(subject.uri as CanonicalResourceUri)) {
 		return true;
 	}
 
@@ -109,7 +107,7 @@ const checkHiddenPost = (
 			case 'app.bsky.embed.record#viewDetached':
 			case 'app.bsky.embed.record#viewNotFound':
 			case 'app.bsky.embed.record#viewRecord': {
-				return hiddenPosts.includes(subject.uri as At.CanonicalResourceUri);
+				return hiddenPosts.includes(subject.uri as CanonicalResourceUri);
 			}
 		}
 	}
@@ -130,7 +128,7 @@ const checkKeywordFilters = (
 	const author = subject.author;
 
 	{
-		const record = subject.record as AppBskyFeedPost.Record;
+		const record = subject.record as AppBskyFeedPost.Main;
 
 		const tags: string[] = [
 			...(record.tags ?? []),
@@ -235,7 +233,7 @@ const checkEmbedKeywordFilters = (
 			case 'app.bsky.embed.record#viewRecord': {
 				{
 					const author = link.author;
-					const record = link.value as AppBskyFeedPost.Record;
+					const record = link.value as AppBskyFeedPost.Main;
 
 					const tags: string[] = [
 						...(record.tags ?? []),
@@ -295,7 +293,7 @@ const checkEmbedKeywordFilters = (
 				break;
 			}
 			case 'app.bsky.graph.defs#starterPackViewBasic': {
-				const record = link.record as AppBskyGraphStarterpack.Record;
+				const record = link.record as AppBskyGraphStarterpack.Main;
 
 				if (
 					(match = matchesKeywordFilters({

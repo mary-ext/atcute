@@ -1,30 +1,45 @@
 # @atcute/whitewind
 
-[WhiteWind](https://whtwnd.com) type definitions for `@atcute/client`, a lightweight and cute API
-client for AT Protocol.
+[WhiteWind](https://whtwnd.com) (com.whtwnd.\*) schema definitions
 
 ## usage
 
-you'd need to import `@atcute/whitewind/lexicons` into your project, either by adding it into the
-`types` field in `tsconfig.json` or by importing it on your source code.
+```ts
+import { is } from '@atcute/lexicons';
+import { ComWhtwndBlogEntry } from '@atcute/whitewind';
+
+const record: ComWhtwndBlogEntry.Main = {
+	$type: 'com.whtwnd.blog.entry',
+	content: `# Hello world!`,
+	visibility: 'public',
+	createdAt: '2025-05-07T10:00:00.000Z',
+};
+
+is(ComWhtwndBlogEntry.mainSchema, record);
+// -> true
+```
+
+### with `@atcute/client`
+
+pick either one of these 3 options to register the ambient declarations
 
 ```jsonc
 // tsconfig.json
 {
 	"compilerOptions": {
-		"types": ["@atcute/whitewind/lexicons"],
+		"types": ["@atcute/whitewind"],
 	},
 }
 ```
 
 ```ts
 // env.d.ts
-/// <reference types="@atcute/whitewind/lexicons" />
+/// <reference types="@atcute/whitewind" />
 ```
 
 ```ts
 // index.ts
-import '@atcute/whitewind/lexicons';
+import type {} from '@atcute/whitewind';
 ```
 
-newly added lexicons are augmented to `@atcute/client/lexicons` module
+now all the XRPC operations should be visible in the client

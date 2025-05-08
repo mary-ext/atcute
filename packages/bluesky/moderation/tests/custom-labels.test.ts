@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import type { ComAtprotoLabelDefs } from '@atcute/atproto';
+
 import {
 	DisplayContext,
 	type InterpretedLabelDefinition,
@@ -11,7 +13,6 @@ import {
 	moderateProfile,
 } from '../lib/index.js';
 
-import type { ComAtprotoLabelDefs } from '@atcute/client/lexicons';
 import * as mock from './util/mock.js';
 import { type ModerationTestSuiteResultFlag } from './util/moderation-behavior.js';
 

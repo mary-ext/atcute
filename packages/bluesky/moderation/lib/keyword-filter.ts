@@ -1,4 +1,4 @@
-import type { AppBskyActorDefs } from '@atcute/client/lexicons';
+import type { AppBskyActorDefs } from '@atcute/bluesky';
 
 const WORD_CHAR_RE = /^\w$/;
 const WHITESPACE_RE = /\s+/;

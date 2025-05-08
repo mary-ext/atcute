@@ -1,4 +1,4 @@
-import type { At } from '@atcute/client/lexicons';
+import type { Did } from '@atcute/lexicons';
 
 import { createDPoPFetch } from '../dpop.js';
 import { CLIENT_ID, REDIRECT_URI } from '../environment.js';
@@ -74,7 +74,7 @@ export class OAuthServerAgent {
 		}
 	}
 
-	async refresh({ sub, token }: { sub: At.Did; token: TokenInfo }): Promise<TokenInfo> {
+	async refresh({ sub, token }: { sub: Did; token: TokenInfo }): Promise<TokenInfo> {
 		if (!token.refresh) {
 			throw new TokenRefreshError(sub, 'no refresh token available');
 		}
@@ -133,7 +133,7 @@ export class OAuthServerAgent {
 		return {
 			token: token,
 			info: {
-				sub: sub as At.Did,
+				sub: sub as Did,
 				aud: resolved.identity.pds.href,
 				server: pick(resolved.metadata, [
 					'issuer',

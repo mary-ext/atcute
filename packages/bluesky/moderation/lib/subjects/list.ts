@@ -1,4 +1,5 @@
-import type { At } from '@atcute/client/lexicons';
+import { parseCanonicalResourceUri } from '@atcute/lexicons';
+
 import { LabelTarget } from '../behaviors.js';
 import {
 	considerLabels,
@@ -6,11 +7,9 @@ import {
 	mergeModerationDecisions,
 	type ModerationDecision,
 } from '../decision.js';
-import type { ModerationOptions, ListSubject } from '../types.js';
+import type { ListSubject, ModerationOptions } from '../types.js';
 
 import { moderateProfile } from './profile.js';
-
-const ATURI_RE = /^at:\/\/([a-zA-Z0-9._:%-]+)\//;
 
 export const moderateList = (subject: ListSubject, opts: ModerationOptions): ModerationDecision => {
 	if ('creator' in subject) {
@@ -21,17 +20,12 @@ export const moderateList = (subject: ListSubject, opts: ModerationOptions): Mod
 
 		return mergeModerationDecisions(decision, moderateProfile(creator, opts));
 	} else {
-		let creatorDid: At.Did;
-
-		// TODO: can we have @atcute/syntax yet
-		{
-			const match = ATURI_RE.exec(subject.uri);
-			if (!match) {
-				throw new Error(`can't parse at-uri from user list`);
-			}
-
-			creatorDid = match[1] as At.Did;
+		const uri = parseCanonicalResourceUri(subject.uri);
+		if (!uri.ok) {
+			throw new Error(`can't parse at-uri from user list (${uri.error})`);
 		}
+
+		const creatorDid = uri.value.repo;
 
 		const decision = createModerationDecision(creatorDid, opts);
 		considerLabels(decision, LabelTarget.Content, subject.labels, opts);

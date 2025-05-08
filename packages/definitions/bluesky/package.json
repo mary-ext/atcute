@@ -2,7 +2,12 @@
 	"type": "module",
 	"name": "@atcute/bluesky",
 	"version": "2.1.1",
-	"description": "Bluesky type definitions for atcute",
+	"description": "Bluesky (app.bsky.* and chat.bsky.*) schema definitions",
+	"keywords": [
+		"atcute",
+		"atproto",
+		"bluesky"
+	],
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
@@ -16,18 +21,22 @@
 	],
 	"exports": {
 		".": "./dist/index.js",
-		"./lexicons": "./dist/lexicons.js"
+		"./types/app/*": "./dist/lexicons/types/app/bsky/*.js",
+		"./types/chat/*": "./dist/lexicons/types/chat/bsky/*.js"
 	},
 	"scripts": {
 		"build": "tsc",
-		"generate": "./scripts/generate-lexicons.sh",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
-		"@atcute/client": "^3.0.0"
+		"@atcute/atproto": "^3.0.0",
+		"@atcute/lexicons": "^1.0.0"
 	},
 	"devDependencies": {
-		"@atcute/client": "workspace:^",
-		"@atcute/lex-cli": "workspace:^"
+		"@atcute/atproto": "workspace:^",
+		"@atcute/bluesky": "file:",
+		"@atcute/lex-cli": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
 	}
 }

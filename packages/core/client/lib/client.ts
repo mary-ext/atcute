@@ -1,7 +1,16 @@
-import type { At, Procedures, Queries } from './lexicons.js';
+import type { Did } from '@atcute/lexicons';
+import type { XRPCProcedures, XRPCQueries } from '@atcute/lexicons/ambient';
+import type {
+	InferInput,
+	InferOutput,
+	ObjectSchema,
+	XRPCBlobBodyParam,
+	XRPCLexBodyParam,
+	XRPCProcedureMetadata,
+	XRPCQueryMetadata,
+} from '@atcute/lexicons/validations';
 
 import { buildFetchHandler, type FetchHandler, type FetchHandlerObject } from './fetch-handler.js';
-import { mergeHeaders } from './utils/http.js';
 
 // #region Type utilities
 type RequiredKeysOf<TType extends object> = TType extends any
@@ -21,7 +30,11 @@ type HasRequiredKeys<TType extends object> = RequiredKeysOf<TType> extends never
 type ResponseFormat = 'json' | 'blob' | 'bytes' | 'stream';
 
 type FormattedResponse<TDef> = {
-	json: TDef extends { response: { json: infer TData } } ? TData : unknown;
+	json: TDef extends XRPCQueryMetadata<any, infer Body extends XRPCLexBodyParam, any>
+		? InferOutput<Body['schema']>
+		: TDef extends XRPCProcedureMetadata<any, any, infer Body extends XRPCLexBodyParam, any>
+			? InferOutput<Body['schema']>
+			: unknown;
 	blob: Blob;
 	bytes: Uint8Array;
 	stream: ReadableStream<Uint8Array>;
@@ -36,27 +49,46 @@ type BaseRequestOptions = {
 };
 
 export type QueryRequestOptions<TDef> = BaseRequestOptions &
-	(TDef extends { response: infer TResponse }
-		? TResponse extends { json: any }
-			? // query has JSON response, format is optionally specified
-				{ as?: ResponseFormat | null }
-			: // query doesn't have JSON response, format needs to be specified
-				{ as: ResponseFormat | null }
-		: // query doesn't specify a response, format can be null to ensure no response
-			{ as: ResponseFormat | null }) &
-	(TDef extends { params: infer TParams } ? { params: TParams } : { params?: Record<string, unknown> });
+	(TDef extends XRPCQueryMetadata<infer Params, infer Output, any>
+		? (Params extends ObjectSchema
+				? // query has parameters
+					{ params: InferInput<Params> }
+				: // query has no parameters
+					{ params?: Record<string, unknown> }) &
+				(Output extends XRPCLexBodyParam // query has JSON response, format is optionally specified
+					? { as?: ResponseFormat | null }
+					: // query doesn't have JSON response, format needs to be specified
+						{ as: ResponseFormat | null })
+		: {
+				as: ResponseFormat | null;
+				params?: Record<string, unknown>;
+			});
 
 export type ProcedureRequestOptions<TDef> = BaseRequestOptions &
-	(TDef extends { response: infer TResponse }
-		? TResponse extends { json: any }
-			? // procedure has JSON response, format is optionally specified
-				{ as?: ResponseFormat | null }
-			: // procedure doesn't have JSON response, format needs to be specified
-				{ as: ResponseFormat | null }
-		: // procedure doesn't specify a response, format can be null to ensure no response
-			{ as: ResponseFormat | null }) &
-	(TDef extends { params: infer TParams } ? { params: TParams } : { params?: Record<string, unknown> }) &
-	(TDef extends { input: infer TInput } ? { input: TInput } : { input?: Record<string, unknown> });
+	(TDef extends XRPCProcedureMetadata<infer Params, infer Input, infer Output, any>
+		? (Params extends ObjectSchema
+				? // procedure has parameters
+					{ params: InferInput<Params> }
+				: // procedure has no parameters
+					{ params?: Record<string, unknown> }) &
+				(Input extends XRPCLexBodyParam
+					? // procedure requires JSON input
+						{ input: InferInput<Input['schema']> }
+					: Input extends XRPCBlobBodyParam
+						? // procedure requires blob
+							{ input: Blob | ArrayBuffer | ArrayBufferView | ReadableStream }
+						: // procedure doesn't specify input
+							{ input?: Record<string, unknown> | Blob | ArrayBuffer | ArrayBufferView | ReadableStream }) &
+				(Output extends XRPCLexBodyParam
+					? // procedure has JSON response, format is optionally specified
+						{ as?: ResponseFormat | null }
+					: // procedure doesn't have JSON response, format needs to be specified
+						{ as: ResponseFormat | null })
+		: {
+				as: ResponseFormat | null;
+				input?: Record<string, unknown> | Blob | ArrayBuffer | ArrayBufferView | ReadableStream;
+				params?: Record<string, unknown>;
+			});
 
 type InternalRequestOptions = BaseRequestOptions & {
 	as?: ResponseFormat | null;
@@ -92,9 +124,11 @@ export type SuccessClientResponse<TDef, TInit> = BaseClientResponse & {
 			: TFormat extends null
 				? null
 				: never
-		: TDef extends { response: { json: infer TData } }
-			? TData
-			: never;
+		: TDef extends XRPCQueryMetadata<any, infer Body extends XRPCLexBodyParam, any>
+			? InferOutput<Body['schema']>
+			: TDef extends XRPCProcedureMetadata<any, any, infer Body extends XRPCLexBodyParam, any>
+				? InferOutput<Body['schema']>
+				: never;
 };
 
 /** represents a failed response returned by the client */
@@ -113,7 +147,7 @@ export type ClientResponse<TDef, TInit> = SuccessClientResponse<TDef, TInit> | F
 /** options for configuring service proxying */
 export type ServiceProxyOptions = {
 	/** DID identifier that the upstream service should look up */
-	did: At.Did;
+	did: Did;
 	/**
 	 * the specific service ID within the resolved DID document's `service` array
 	 * that the upstream service should forward requests to.
@@ -139,7 +173,7 @@ export type ClientOptions = {
 const JSON_CONTENT_TYPE_RE = /\bapplication\/json\b/;
 
 /** XRPC API client */
-export class Client<TQueries = Queries, TProcedures = Procedures> {
+export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 	handler: FetchHandler;
 	proxy: ServiceProxyOptions | null;
 
@@ -206,7 +240,7 @@ export class Client<TQueries = Queries, TProcedures = Procedures> {
 			method,
 			signal,
 			body: input && !isWebInput ? JSON.stringify(input) : input,
-			headers: mergeHeaders(headers, {
+			headers: _mergeHeaders(headers, {
 				'content-type': input && !isWebInput ? 'application/json' : null,
 				'atproto-proxy': _constructProxyHeader(this.proxy),
 			}),
@@ -329,6 +363,27 @@ const _constructProxyHeader = (proxy: ServiceProxyOptions | null | undefined): s
 	}
 
 	return null;
+};
+
+const _mergeHeaders = (
+	init: HeadersInit | undefined,
+	defaults: Record<string, string | null>,
+): HeadersInit | undefined => {
+	let headers: Headers | undefined;
+
+	for (const name in defaults) {
+		const value = defaults[name];
+
+		if (value !== null) {
+			headers ??= new Headers(init);
+
+			if (!headers.has(name)) {
+				headers.set(name, value);
+			}
+		}
+	}
+
+	return headers ?? init;
 };
 
 export const isXRPCErrorPayload = (input: any): input is XRPCErrorPayload => {

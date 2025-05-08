@@ -1,8 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { TestNetwork } from '@atcute/internal-dev-env';
-
-import type { At } from './lexicons.js';
+import type { Handle } from '@atcute/lexicons';
 
 import { Client, ok } from './client.js';
 import { CredentialManager, type AtpSessionData } from './credential-manager.js';
@@ -235,7 +234,7 @@ describe('CredentialManager', () => {
 	});
 });
 
-const createAccount = async (rpc: Client, handle: At.Handle) => {
+const createAccount = async (rpc: Client, handle: Handle) => {
 	await ok(
 		rpc.post('com.atproto.server.createAccount', {
 			input: {

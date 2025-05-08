@@ -1,12 +1,12 @@
+import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 import type {
 	AppBskyActorDefs,
 	AppBskyFeedDefs,
 	AppBskyGraphDefs,
 	AppBskyNotificationListNotifications,
-	At,
 	ChatBskyActorDefs,
-	ComAtprotoLabelDefs,
-} from '@atcute/client/lexicons';
+} from '@atcute/bluesky';
+import type { CanonicalResourceUri, Did } from '@atcute/lexicons';
 
 import type { KeywordFilter } from './keyword-filter.js';
 import type { InterpretedLabelMapping, LabelPreference } from './label.js';
@@ -25,12 +25,12 @@ export interface ModerationPreferences {
 	/** preferences for global-defined labels */
 	globalLabelPrefs?: Record<string, LabelPreference | undefined>;
 	/** preferences for labelers */
-	prefsByLabelers?: { [D in At.Did]?: LabelerPreference };
+	prefsByLabelers?: { [D in Did]?: LabelerPreference };
 
 	/** list of hidden posts */
-	hiddenPosts?: At.CanonicalResourceUri[];
+	hiddenPosts?: CanonicalResourceUri[];
 	/** list of temporarily muted users */
-	temporaryMutes?: At.Did[];
+	temporaryMutes?: Did[];
 
 	/** list of keyword filters */
 	keywordFilters?: KeywordFilter[];
@@ -38,12 +38,12 @@ export interface ModerationPreferences {
 
 export interface ModerationOptions {
 	/** DID of the viewer */
-	viewerDid: At.Did | undefined;
+	viewerDid: Did | undefined;
 	/** moderation preferences */
 	prefs: ModerationPreferences;
 
 	/** interpreted label definitions from labelers */
-	labelDefs?: { [D in At.Did]?: InterpretedLabelMapping };
+	labelDefs?: { [D in Did]?: InterpretedLabelMapping };
 }
 
 export type FeedGeneratorSubject = AppBskyFeedDefs.GeneratorView;

@@ -1,5 +1,4 @@
-import '@atcute/bluesky/lexicons';
-import type { AppBskyRichtextFacet } from '@atcute/client/lexicons';
+import type { AppBskyRichtextFacet } from '@atcute/bluesky';
 
 type UnwrapArray<T> = T extends (infer V)[] ? V : never;
 

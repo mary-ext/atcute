@@ -1,5 +1,3 @@
-import '@atcute/bluesky/lexicons';
-
 export {
 	DisplayContext,
 	LabelTarget,

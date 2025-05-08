@@ -1,4 +1,4 @@
-import type { At } from '@atcute/client/lexicons';
+import type { Did } from '@atcute/lexicons';
 
 import type { DPoPKey } from './dpop.js';
 import type { PersistedAuthorizationServerMetadata } from './server.js';
@@ -34,7 +34,7 @@ export interface TokenInfo {
 }
 
 export interface ExchangeInfo {
-	sub: At.Did;
+	sub: Did;
 	aud: string;
 	server: PersistedAuthorizationServerMetadata;
 }

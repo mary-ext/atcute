@@ -1,5 +1,5 @@
 import type { FetchHandlerObject } from '@atcute/client';
-import type { At } from '@atcute/client/lexicons';
+import type { Did } from '@atcute/lexicons';
 
 import { createDPoPFetch } from '../dpop.js';
 import { CLIENT_ID } from '../environment.js';
@@ -16,7 +16,7 @@ export class OAuthUserAgent implements FetchHandlerObject {
 		this.#fetch = createDPoPFetch(CLIENT_ID, session.dpopKey, false);
 	}
 
-	get sub(): At.Did {
+	get sub(): Did {
 		return this.session.info.sub;
 	}
 
