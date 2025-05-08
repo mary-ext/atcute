@@ -32,5 +32,7 @@ export {
 	ValidationError,
 	type InferInput,
 	type InferOutput,
+	type InferXRPCBodyInput,
+	type InferXRPCBodyOutput,
 	type ValidationResult,
 } from './validations/index.js';
