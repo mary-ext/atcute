@@ -133,39 +133,9 @@ export type InferOutput<T extends BaseSchema> = T extends { [kObjectType]?: any 
 
 // #region Schema runner
 const cloneIssueWithPath = (issue: IssueLeaf, path: Key[]): Issue => {
-	const code = issue.code;
-	switch (code) {
-		case 'missing_value': {
-			return { code, path };
-		}
-		case 'invalid_literal': {
-			return { code, path, expected: issue.expected };
-		}
-		case 'invalid_type': {
-			return { code, path, expected: issue.expected };
-		}
-		case 'invalid_variant': {
-			return { code, path, expected: issue.expected };
-		}
-		case 'invalid_integer_range': {
-			return { code, path, min: issue.min, max: issue.max };
-		}
-		case 'invalid_string_format': {
-			return { code, path, expected: issue.expected };
-		}
-		case 'invalid_string_graphemes': {
-			return { code, path, minGraphemes: issue.minGraphemes, maxGraphemes: issue.maxGraphemes };
-		}
-		case 'invalid_string_length': {
-			return { code, path, minLength: issue.minLength, maxLength: issue.maxLength };
-		}
-		case 'invalid_array_length': {
-			return { code, path, minLength: issue.minLength, maxLength: issue.maxLength };
-		}
-		case 'invalid_bytes_size': {
-			return { code, path, minSize: issue.minSize, maxSize: issue.maxSize };
-		}
-	}
+	const { ok: _ok, ...clone } = issue;
+
+	return { ...clone, path };
 };
 
 const collectIssues = (tree: IssueTree, path: Key[] = [], issues: Issue[] = []): Issue[] => {
