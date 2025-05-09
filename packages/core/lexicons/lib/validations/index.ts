@@ -422,15 +422,14 @@ export const constrain = <
 		constraints: constraints,
 		'~run'(input, flags) {
 			let result = base['~run'](input, flags);
-			if (result !== undefined && !result.ok) {
-				return result;
-			}
-
 			let current: any;
-			if (result !== undefined) {
+
+			if (result === undefined) {
+				current = input;
+			} else if (result.ok) {
 				current = result.value;
 			} else {
-				current = input;
+				return result;
 			}
 
 			for (let idx = 0, len = constraints.length; idx < len; idx++) {
@@ -1731,6 +1730,22 @@ export const xrpcSubscription = <
 		params: options.params,
 		get message() {
 			return message.value;
+		},
+	};
+};
+
+interface OverwriteConstraint<T> extends BaseConstraint<T> {
+	readonly type: 'overwrite';
+	readonly transformer: (value: T) => T;
+}
+
+const overwrite = <T>(transformer: (value: T) => T): OverwriteConstraint<T> => {
+	return {
+		kind: 'constraint',
+		type: 'overwrite',
+		transformer: transformer,
+		'~run'(input, _flags) {
+			return { ok: true, value: transformer(input) };
 		},
 	};
 };
