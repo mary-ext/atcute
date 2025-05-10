@@ -74,10 +74,12 @@ export type Issue =
 	| { code: 'invalid_array_length'; path: Key[]; minLength: number; maxLength: number }
 	| { code: 'invalid_bytes_size'; path: Key[]; minSize: number; maxSize: number };
 
+// #__NO_SIDE_EFFECTS__
 const joinIssues = (left: IssueTree | undefined, right: IssueTree): IssueTree => {
 	return left ? { ok: false, code: 'join', left, right } : right;
 };
 
+// #__NO_SIDE_EFFECTS__
 const prependPath = (key: Key, tree: IssueTree): IssueTree => {
 	return { ok: false, code: 'prepend', key, tree };
 };
@@ -352,6 +354,7 @@ class ErrImpl implements Err {
 	}
 }
 
+// #__NO_SIDE_EFFECTS__
 export const is = <const TSchema extends BaseSchema>(
 	schema: TSchema,
 	input: unknown,
@@ -360,6 +363,7 @@ export const is = <const TSchema extends BaseSchema>(
 	return r === undefined || r.ok;
 };
 
+// #__NO_SIDE_EFFECTS__
 export const safeParse = <const TSchema extends BaseSchema>(
 	schema: TSchema,
 	input: unknown,
@@ -1433,12 +1437,12 @@ export interface VariantSchema<
 	readonly [kObjectType]?: { in: InferVariantInput<TMembers>; out: InferVariantOutput<TMembers> };
 }
 
-const ISSUE_VARIANT_MISSING = prependPath('$type', {
+const ISSUE_VARIANT_MISSING = /*#__PURE__*/ prependPath('$type', {
 	ok: false,
 	code: 'missing_value',
 });
 
-const ISSUE_VARIANT_TYPE = prependPath('$type', {
+const ISSUE_VARIANT_TYPE = /*#__PURE__*/ prependPath('$type', {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'string',
