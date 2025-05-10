@@ -422,6 +422,8 @@ export const constrain = <
 	base: TItem,
 	constraints: TConstraints,
 ): SchemaWithConstraint<TItem, TConstraints> => {
+	const len = constraints.length;
+
 	return {
 		...base,
 		constraints: constraints,
@@ -437,7 +439,7 @@ export const constrain = <
 				return result;
 			}
 
-			for (let idx = 0, len = constraints.length; idx < len; idx++) {
+			for (let idx = 0; idx < len; idx++) {
 				const r = constraints[idx]['~run'](current, flags);
 
 				if (r !== undefined) {
