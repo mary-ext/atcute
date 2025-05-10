@@ -1730,19 +1730,3 @@ export const xrpcSubscription = <
 		},
 	};
 };
-
-interface OverwriteConstraint<T> extends BaseConstraint<T> {
-	readonly type: 'overwrite';
-	readonly transformer: (value: T) => T;
-}
-
-const overwrite = <T>(transformer: (value: T) => T): OverwriteConstraint<T> => {
-	return {
-		kind: 'constraint',
-		type: 'overwrite',
-		transformer: transformer,
-		'~run'(input, _flags) {
-			return { ok: true, value: transformer(input) };
-		},
-	};
-};
