@@ -1230,7 +1230,6 @@ export interface ObjectSchema<TShape extends LooseObjectShape = LooseObjectShape
 }
 
 interface ObjectEntry {
-	key: string;
 	schema: BaseSchema;
 	optional: boolean;
 	missing: IssueTree;
@@ -1249,30 +1248,30 @@ const ISSUE_MISSING: IssueLeaf = {
 
 // #__NO_SIDE_EFFECTS__
 export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSchema<TShape> => {
-	const resolvedEntries = lazy(() => {
-		const array: ObjectEntry[] = [];
+	const resolvedShape = lazy(() => {
+		const resolved: Record<string, ObjectEntry> = {};
 
 		for (const key in shape) {
 			const schema = shape[key];
 
-			array.push({
-				key: key,
+			resolved[key] = {
 				schema: schema,
 				optional: isOptionalSchema(schema),
 				missing: prependPath(key, ISSUE_MISSING),
-			});
+			};
 		}
 
-		return array;
+		return resolved;
 	});
 
 	// if we just return the shape as is then it wouldn't be the same exact
 	// shape when getters are present.
 	const introspect = lazy(() => {
+		const resolved = resolvedShape.value;
 		const obj: any = {};
 
-		for (const entry of resolvedEntries.value) {
-			obj[entry.key] = entry.schema;
+		for (const key in resolved) {
+			obj[key] = resolved[key].schema;
 		}
 
 		return obj as TShape;
@@ -1289,15 +1288,13 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 				return ISSUE_TYPE_OBJECT;
 			}
 
-			const entries = resolvedEntries.value;
+			const resolved = resolvedShape.value;
 
 			let issues: IssueTree | undefined;
 			let output: Record<string, unknown> | undefined;
 
-			for (let idx = 0, len = entries.length; idx < len; idx++) {
-				const entry = entries[idx];
-
-				const key = entry.key;
+			for (const key in resolved) {
+				const entry = resolved[key];
 				const value = input[key];
 
 				if (value === undefined && !(key in input)) {
