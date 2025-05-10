@@ -28,12 +28,11 @@
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
-	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+	"dependencies": {
+		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
 		"@atcute/lex-cli": "workspace:^",
-		"@atcute/lexicons": "workspace:^",
 		"@atcute/whitewind": "file:"
 	}
 }

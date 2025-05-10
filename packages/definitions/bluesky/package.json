@@ -29,14 +29,12 @@
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
-	"peerDependencies": {
-		"@atcute/atproto": "^3.0.0",
-		"@atcute/lexicons": "^1.0.0"
+	"dependencies": {
+		"@atcute/atproto": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
-		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "file:",
-		"@atcute/lex-cli": "workspace:^",
-		"@atcute/lexicons": "workspace:^"
+		"@atcute/lex-cli": "workspace:^"
 	}
 }

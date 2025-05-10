@@ -23,18 +23,15 @@
 		"test": "vitest run --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
-	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+	"dependencies": {
+		"@atcute/identity": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/internal-dev-env": "workspace:^",
-		"@atcute/lexicons": "workspace:^",
 		"@vitest/coverage-v8": "^3.0.4",
 		"vitest": "^3.0.4"
-	},
-	"dependencies": {
-		"@atcute/identity": "workspace:^"
 	}
 }

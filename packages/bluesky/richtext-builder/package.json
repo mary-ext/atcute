@@ -23,14 +23,11 @@
 		"test": "bun test --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
-	"peerDependencies": {
-		"@atcute/bluesky": "^2.0.0",
-		"@atcute/lexicons": "^1.0.0"
+	"dependencies": {
+		"@atcute/bluesky": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
-		"@atcute/bluesky": "workspace:^",
-		"@atcute/client": "workspace:^",
-		"@atcute/lexicons": "workspace:^",
 		"@types/bun": "^1.2.1"
 	}
 }
