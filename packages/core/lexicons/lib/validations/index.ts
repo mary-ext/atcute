@@ -7,7 +7,7 @@ import type { $type } from '../types/brand.js';
 
 import { assert } from '../utils.js';
 
-import { getGraphemeLength, getUtf8Length, isArray, isObject, lazy } from './utils.js';
+import { getGraphemeLength, getUtf8Length, isArray, isObject, lazy, lazyProperty } from './utils.js';
 
 type Identity<T> = T;
 type Flatten<T> = Identity<{ [K in keyof T]: T[K] }>;
@@ -114,11 +114,12 @@ export const FLAG_EMPTY = 0;
 export const FLAG_ABORT_EARLY = 1 << 0;
 
 type MatcherResult = undefined | Ok<unknown> | IssueTree;
+type Matcher = (input: unknown, flags: number) => MatcherResult;
 
 export interface BaseSchema<TInput = unknown, TOutput = TInput> {
 	readonly kind: 'schema';
 	readonly type: string;
-	readonly '~run': (input: unknown, flags: number) => MatcherResult;
+	readonly '~run': Matcher;
 
 	readonly [kType]?: { in: TInput; out: TOutput };
 }
@@ -1097,48 +1098,52 @@ export const array = <TItem extends BaseSchema>(item: TItem | (() => TItem)): Ar
 		kind: 'schema',
 		type: 'array',
 		get item() {
-			return resolvedShape.value;
+			return lazyProperty(this, 'item', resolvedShape.value);
 		},
-		'~run'(input, flags) {
-			if (!isArray(input)) {
-				return ISSUE_TYPE_ARRAY;
-			}
-
+		get '~run'() {
 			const shape = resolvedShape.value;
 
-			let issues: IssueTree | undefined;
-			let output: any[] | undefined;
+			const matcher: Matcher = (input, flags) => {
+				if (!isArray(input)) {
+					return ISSUE_TYPE_ARRAY;
+				}
 
-			for (let idx = 0, len = input.length; idx < len; idx++) {
-				const val = input[idx];
-				const r = shape['~run'](val, flags);
+				let issues: IssueTree | undefined;
+				let output: any[] | undefined;
 
-				if (r !== undefined) {
-					if (r.ok) {
-						if (output === undefined) {
-							output = input.slice();
+				for (let idx = 0, len = input.length; idx < len; idx++) {
+					const val = input[idx];
+					const r = shape['~run'](val, flags);
+
+					if (r !== undefined) {
+						if (r.ok) {
+							if (output === undefined) {
+								output = input.slice();
+							}
+
+							output[idx] = r.value;
+						} else {
+							if (flags & FLAG_ABORT_EARLY) {
+								return r;
+							}
+
+							issues = joinIssues(issues, prependPath(idx, r));
 						}
-
-						output[idx] = r.value;
-					} else {
-						if (flags & FLAG_ABORT_EARLY) {
-							return r;
-						}
-
-						issues = joinIssues(issues, prependPath(idx, r));
 					}
 				}
-			}
 
-			if (issues !== undefined) {
-				return issues;
-			}
+				if (issues !== undefined) {
+					return issues;
+				}
 
-			if (output !== undefined) {
-				return { ok: true, value: output };
-			}
+				if (output !== undefined) {
+					return { ok: true, value: output };
+				}
 
-			return undefined;
+				return undefined;
+			};
+
+			return lazyProperty(this, '~run', matcher);
 		},
 	};
 };
@@ -1264,81 +1269,81 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 		return resolved;
 	});
 
-	// if we just return the shape as is then it wouldn't be the same exact
-	// shape when getters are present.
-	const introspect = lazy(() => {
-		const resolved = resolvedShape.value;
-		const obj: any = {};
-
-		for (const key in resolved) {
-			obj[key] = resolved[key].schema;
-		}
-
-		return obj as TShape;
-	});
-
 	return {
 		kind: 'schema',
 		type: 'object',
 		get shape() {
-			return introspect.value;
-		},
-		'~run'(input, flags) {
-			if (!isObject(input)) {
-				return ISSUE_TYPE_OBJECT;
-			}
-
+			// if we just return the shape as is then it wouldn't be the same exact
+			// shape when getters are present.
 			const resolved = resolvedShape.value;
-
-			let issues: IssueTree | undefined;
-			let output: Record<string, unknown> | undefined;
+			const obj: any = {};
 
 			for (const key in resolved) {
-				const entry = resolved[key];
-				const value = input[key];
+				obj[key] = resolved[key].schema;
+			}
 
-				if (value === undefined && !(key in input)) {
-					if (!entry.optional) {
-						issues = joinIssues(issues, entry.missing);
+			return lazyProperty(this, 'shape', obj as TShape);
+		},
+		get '~run'() {
+			const shape = resolvedShape.value;
+
+			const matcher: Matcher = (input, flags) => {
+				if (!isObject(input)) {
+					return ISSUE_TYPE_OBJECT;
+				}
+
+				let issues: IssueTree | undefined;
+				let output: Record<string, unknown> | undefined;
+
+				for (const key in shape) {
+					const entry = shape[key];
+					const value = input[key];
+
+					if (value === undefined && !(key in input)) {
+						if (!entry.optional) {
+							issues = joinIssues(issues, entry.missing);
+
+							if (flags & FLAG_ABORT_EARLY) {
+								return issues;
+							}
+
+							continue;
+						}
+					}
+
+					const r = entry.schema['~run'](value, flags);
+
+					if (r === undefined) {
+						if (output !== undefined) {
+							output[key] = value;
+						}
+					} else if (r.ok) {
+						if (output === undefined) {
+							output = { ...input };
+						}
+
+						output[key] = r.value;
+					} else {
+						issues = joinIssues(issues, prependPath(key, r));
 
 						if (flags & FLAG_ABORT_EARLY) {
 							return issues;
 						}
-
-						continue;
 					}
 				}
 
-				const r = entry.schema['~run'](value, flags);
-
-				if (r === undefined) {
-					if (output !== undefined) {
-						output[key] = value;
-					}
-				} else if (r.ok) {
-					if (output === undefined) {
-						output = { ...input };
-					}
-
-					output[key] = r.value;
-				} else {
-					issues = joinIssues(issues, prependPath(key, r));
-
-					if (flags & FLAG_ABORT_EARLY) {
-						return issues;
-					}
+				if (issues !== undefined) {
+					return issues;
 				}
-			}
 
-			if (issues !== undefined) {
-				return issues;
-			}
+				if (output !== undefined) {
+					return { ok: true, value: output };
+				}
 
-			if (output !== undefined) {
-				return { ok: true, value: output };
-			}
+				return undefined;
+			};
 
-			return undefined;
+			return lazyProperty(this, '~run', matcher);
 		},
 	};
 };
@@ -1390,11 +1395,16 @@ export const record = <TKey extends RecordKeySchema, TObject extends ObjectSchem
 		type: 'record',
 		key: key,
 		get object() {
-			return validatedObject.value;
+			return lazyProperty(this, 'object', validatedObject.value);
 		},
-		'~run'(input, flags) {
-			const schema = validatedObject.value;
-			return schema['~run'](input, flags);
+		get '~run'() {
+			const object = validatedObject.value;
+
+			const matcher: Matcher = (input, flags) => {
+				return object['~run'](input, flags);
+			};
+
+			return lazyProperty(this, '~run', matcher);
 		},
 	};
 };
@@ -1437,67 +1447,66 @@ export const variant: {
 		closed: TClosed,
 	): VariantSchema<TMembers, TClosed>;
 } = (members: ObjectSchema[], closed: boolean = false): VariantSchema<any, any> => {
-	const validatedMap = lazy((): Record<string, ObjectSchema> => {
-		const entries = members.map((member, idx) => {
-			const shape = member.shape;
-
-			let t = shape.$type as MaybeOptional<LiteralSchema<syntax.Nsid>> | undefined;
-
-			assert(t !== undefined, `expected $type in variant member #${idx} to be defined`);
-			if (t.type === 'optional') {
-				t = t.wrapped;
-			}
-
-			assert(
-				t.type === 'literal' && typeof t.expected === 'string',
-				`expected $type in variant member #${idx} to be a string literal`,
-			);
-
-			return [t.expected, member];
-		});
-
-		return Object.fromEntries(entries);
-	});
-
-	const issue = lazy((): IssueLeaf => {
-		return {
-			ok: false,
-			code: 'invalid_variant',
-			expected: Object.keys(validatedMap.value),
-		};
-	});
-
 	return {
 		kind: 'schema',
 		type: 'variant',
 		members: members,
 		closed: closed,
-		'~run'(input, flags) {
-			if (!isObject(input)) {
-				return ISSUE_TYPE_OBJECT;
-			}
+		get '~run'() {
+			const map = Object.fromEntries(
+				members.map((member, idx) => {
+					const shape = member.shape;
 
-			if (!('$type' in input)) {
-				return ISSUE_VARIANT_MISSING;
-			}
+					let t = shape.$type as MaybeOptional<LiteralSchema<syntax.Nsid>> | undefined;
 
-			const type = input.$type;
-			if (typeof type !== 'string') {
-				return ISSUE_VARIANT_TYPE;
-			}
+					assert(t !== undefined, `expected $type in variant member #${idx} to be defined`);
+					if (t.type === 'optional') {
+						t = t.wrapped;
+					}
 
-			const map = validatedMap.value;
-			if (!(type in map)) {
-				if (closed) {
-					return issue.value;
+					assert(
+						t.type === 'literal' && typeof t.expected === 'string',
+						`expected $type in variant member #${idx} to be a string literal`,
+					);
+
+					return [t.expected, member];
+				}),
+			);
+
+			const issue: IssueLeaf = {
+				ok: false,
+				code: 'invalid_variant',
+				expected: Object.keys(map),
+			};
+
+			const matcher: Matcher = (input, flags) => {
+				if (!isObject(input)) {
+					return ISSUE_TYPE_OBJECT;
 				}
 
-				return undefined;
-			}
+				if (!('$type' in input)) {
+					return ISSUE_VARIANT_MISSING;
+				}
 
-			const schema = map[type];
+				const type = input.$type;
+				if (typeof type !== 'string') {
+					return ISSUE_VARIANT_TYPE;
+				}
 
-			return schema['~run'](input, flags);
+				if (!(type in map)) {
+					if (closed) {
+						return issue;
+					}
+
+					return undefined;
+				}
+
+				const schema = map[type];
+
+				return schema['~run'](input, flags);
+			};
+
+			return lazyProperty(this, '~run', matcher);
 		},
 	};
 };
@@ -1594,35 +1603,6 @@ export const xrpcProcedure = <
 	},
 ): XRPCProcedureMetadata<TParams, TInput, TOutput, TNsid> => {
 	// `schema` can be a getter, and we'd have to resolve that getter.
-	const input = lazy((): TInput => {
-		const val = options.input;
-
-		switch (val?.type) {
-			case 'lex': {
-				return {
-					type: 'lex',
-					schema: val.schema,
-				} as TInput;
-			}
-		}
-
-		return val;
-	});
-
-	const output = lazy((): TOutput => {
-		const val = options.output;
-
-		switch (val?.type) {
-			case 'lex': {
-				return {
-					type: 'lex',
-					schema: val.schema,
-				} as TOutput;
-			}
-		}
-
-		return val;
-	});
 
 	return {
 		kind: 'metadata',
@@ -1630,10 +1610,34 @@ export const xrpcProcedure = <
 		nsid: nsid,
 		params: options.params,
 		get input() {
-			return input.value;
+			let val = options.input;
+
+			switch (val?.type) {
+				case 'lex': {
+					val = {
+						type: 'lex',
+						schema: val.schema,
+					} as TInput;
+					break;
+				}
+			}
+
+			return lazyProperty(this, 'input', val);
 		},
 		get output() {
-			return output.value;
+			let val = options.output;
+
+			switch (val?.type) {
+				case 'lex': {
+					val = {
+						type: 'lex',
+						schema: val.schema,
+					} as TOutput;
+					break;
+				}
+			}
+
+			return lazyProperty(this, 'output', val);
 		},
 	};
 };
@@ -1664,20 +1668,6 @@ export const xrpcQuery = <
 	},
 ): XRPCQueryMetadata<TParams, TOutput, TNsid> => {
 	// `schema` can be a getter, and we'd have to resolve that getter.
-	const output = lazy(() => {
-		const val = options.output;
-
-		switch (val?.type) {
-			case 'lex': {
-				return {
-					type: 'lex',
-					schema: val.schema,
-				} as TOutput;
-			}
-		}
-
-		return val;
-	});
 
 	return {
 		kind: 'metadata',
@@ -1685,7 +1675,18 @@ export const xrpcQuery = <
 		nsid: nsid,
 		params: options.params,
 		get output() {
-			return output.value;
+			let val = options.output;
+
+			switch (val?.type) {
+				case 'lex': {
+					val = {
+						type: 'lex',
+						schema: val.schema,
+					} as TOutput;
+				}
+			}
+
+			return lazyProperty(this, 'output', val);
 		},
 	};
 };
@@ -1716,9 +1717,6 @@ export const xrpcSubscription = <
 	},
 ): XRPCSubscriptionMetadata<TParams, TMessage, TNsid> => {
 	// `message` can be a getter, and we'd have to resolve that getter.
-	const message = lazy(() => {
-		return options.message;
-	});
 
 	return {
 		kind: 'metadata',
@@ -1726,7 +1724,7 @@ export const xrpcSubscription = <
 		nsid: nsid,
 		params: options.params,
 		get message() {
-			return message.value;
+			return lazyProperty(this, 'message', options.message);
 		},
 	};
 };

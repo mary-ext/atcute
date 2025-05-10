@@ -39,13 +39,17 @@ export const getGraphemeLength = (text: string): number => {
 };
 
 // #__NO_SIDE_EFFECTS__
+export const lazyProperty = <T>(obj: object, prop: string | number | symbol, value: T): T => {
+	Object.defineProperty(obj, prop, { value });
+	return value;
+};
+
+// #__NO_SIDE_EFFECTS__
 export const lazy = <T>(getter: () => T): { readonly value: T } => {
 	return {
 		get value() {
 			const value = getter();
-
-			Object.defineProperty(this, 'value', { value });
-			return value;
+			return lazyProperty(this, 'value', value);
 		},
 	};
 };
