@@ -1235,6 +1235,7 @@ export interface ObjectSchema<TShape extends LooseObjectShape = LooseObjectShape
 }
 
 interface ObjectEntry {
+	key: string;
 	schema: BaseSchema;
 	optional: boolean;
 	missing: IssueTree;
@@ -1253,17 +1254,18 @@ const ISSUE_MISSING: IssueLeaf = {
 
 // #__NO_SIDE_EFFECTS__
 export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSchema<TShape> => {
-	const resolvedShape = lazy(() => {
-		const resolved: Record<string, ObjectEntry> = {};
+	const resolvedEntries = lazy(() => {
+		const resolved: ObjectEntry[] = [];
 
 		for (const key in shape) {
 			const schema = shape[key];
 
-			resolved[key] = {
+			resolved.push({
+				key: key,
 				schema: schema,
 				optional: isOptionalSchema(schema),
 				missing: prependPath(key, ISSUE_MISSING),
-			};
+			});
 		}
 
 		return resolved;
@@ -1275,17 +1277,17 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 		get shape() {
 			// if we just return the shape as is then it wouldn't be the same exact
 			// shape when getters are present.
-			const resolved = resolvedShape.value;
+			const resolved = resolvedEntries.value;
 			const obj: any = {};
 
-			for (const key in resolved) {
-				obj[key] = resolved[key].schema;
+			for (const entry of resolved) {
+				obj[entry.key] = entry.schema;
 			}
 
 			return lazyProperty(this, 'shape', obj as TShape);
 		},
 		get '~run'() {
-			const shape = resolvedShape.value;
+			const shape = resolvedEntries.value;
 
 			const matcher: Matcher = (input, flags) => {
 				if (!isObject(input)) {
@@ -1295,8 +1297,8 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 				let issues: IssueTree | undefined;
 				let output: Record<string, unknown> | undefined;
 
-				for (const key in shape) {
-					const entry = shape[key];
+				for (const entry of shape) {
+					const key = entry.key;
 					const value = input[key];
 
 					if (value === undefined && !(key in input)) {
