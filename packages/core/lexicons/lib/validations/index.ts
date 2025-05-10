@@ -1288,6 +1288,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 		},
 		get '~run'() {
 			const shape = resolvedEntries.value;
+			const len = shape.length;
 
 			const matcher: Matcher = (input, flags) => {
 				if (!isObject(input)) {
@@ -1297,7 +1298,9 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 				let issues: IssueTree | undefined;
 				let output: Record<string, unknown> | undefined;
 
-				for (const entry of shape) {
+				for (let idx = 0; idx < len; idx++) {
+					const entry = shape[idx];
+
 					const key = entry.key;
 					const value = input[key];
 
