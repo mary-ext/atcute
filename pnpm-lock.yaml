@@ -149,8 +149,8 @@ importers:
         specifier: ^0.4.4
         version: 0.4.4
       '@externdefs/collider':
-        specifier: ^0.2.0
-        version: 0.2.0(valibot@1.0.0(typescript@5.8.3))
+        specifier: ^0.3.0
+        version: 0.3.0(@badrap/valita@0.4.4)
       picocolors:
         specifier: ^1.1.1
         version: 1.1.1
@@ -388,9 +388,6 @@ importers:
       '@atcute/atproto':
         specifier: workspace:^
         version: link:../../definitions/atproto
-      '@types/bun':
-        specifier: ^1.2.13
-        version: 1.2.13
 
   packages/utilities/car:
     dependencies:
@@ -1050,10 +1047,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@externdefs/collider@0.2.0':
-    resolution: {integrity: sha512-Ox6SGzK2tspbmcljbKgxbPSX2W+V0CuJzZpNqRaGIwkvK0UwMx+UDt7IyOKCEFHLi9xPFxuldrr8RMzL8aA6qw==}
+  '@externdefs/collider@0.3.0':
+    resolution: {integrity: sha512-x5CpeZ4c8n+1wMFthUMWSQKqCGcQo52/Qbda5ES+JFRRg/D8Ep6/JOvUUq5HExFuv/wW+6UYG2U/mXzw0IAd8Q==}
     peerDependencies:
-      valibot: ^1.0.0
+      '@badrap/valita': ^0.4.4
 
   '@hapi/accept@6.0.3':
     resolution: {integrity: sha512-p72f9k56EuF0n3MwlBNThyVE5PXX40g+aQh+C/xbKrfzahM2Oispv3AXmOIU51t3j77zay1qrX7IIziZXspMlw==}
@@ -3070,14 +3067,6 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
 
-  valibot@1.0.0:
-    resolution: {integrity: sha512-1Hc0ihzWxBar6NGeZv7fPLY0QuxFMyxwYR2sF1Blu7Wq7EnremwY2W02tit2ij2VJT8HcSkHAQqmFfl77f73Yw==}
-    peerDependencies:
-      typescript: '>=5'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
   varint@6.0.0:
     resolution: {integrity: sha512-cXEIW6cfr15lFv563k4GuVuW/fiwjknytD37jIOLSdSWuOI6WnO/oKwmP2FQTU2l01LP8/M5TSAJpzUaGe3uWg==}
 
@@ -4338,9 +4327,9 @@ snapshots:
   '@esbuild/win32-x64@0.25.4':
     optional: true
 
-  '@externdefs/collider@0.2.0(valibot@1.0.0(typescript@5.8.3))':
+  '@externdefs/collider@0.3.0(@badrap/valita@0.4.4)':
     dependencies:
-      valibot: 1.0.0(typescript@5.8.3)
+      '@badrap/valita': 0.4.4
 
   '@hapi/accept@6.0.3':
     dependencies:
@@ -6472,10 +6461,6 @@ snapshots:
   utils-merge@1.0.1: {}
 
   uuid@9.0.1: {}
-
-  valibot@1.0.0(typescript@5.8.3):
-    optionalDependencies:
-      typescript: 5.8.3
 
   varint@6.0.0: {}
 
