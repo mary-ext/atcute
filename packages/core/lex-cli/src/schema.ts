@@ -1,10 +1,12 @@
-import * as v from 'valibot';
+import * as v from '@badrap/valita';
 
 // tsc dislikes this schema with the amount of type expansion that happens here.
 // the interface declaration allows tsc to just reference it instead of
 // expanding on every type reference.
 
-const _integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
+const _integer = v
+	.number()
+	.assert((input) => input >= 0 && Number.isSafeInteger(input), `expected non-negative integer`);
 
 const integer = _integer as integer.$schema;
 declare namespace integer {
@@ -14,15 +16,15 @@ declare namespace integer {
 	export interface $schema extends $schematype {}
 }
 
-const _lexBoolean = v.strictObject({
+const _lexBoolean = v.object({
 	type: v.literal('boolean'),
-	description: v.optional(v.string()),
-	default: v.optional(v.boolean()),
-	const: v.optional(v.boolean()),
+	description: v.string().optional(),
+	default: v.boolean().optional(),
+	const: v.boolean().optional(),
 });
 
 export const lexBoolean = _lexBoolean as lexBoolean.$schema;
-export interface LexBoolean extends v.InferInput<typeof lexBoolean> {}
+export interface LexBoolean extends v.Infer<typeof lexBoolean> {}
 export declare namespace lexBoolean {
 	export {};
 
@@ -30,18 +32,18 @@ export declare namespace lexBoolean {
 	export interface $schema extends $schematype {}
 }
 
-const _lexInteger = v.strictObject({
+const _lexInteger = v.object({
 	type: v.literal('integer'),
-	description: v.optional(v.string()),
-	default: v.optional(integer),
-	minimum: v.optional(integer),
-	maximum: v.optional(integer),
-	enum: v.optional(v.array(integer)),
-	const: v.optional(integer),
+	description: v.string().optional(),
+	default: integer.optional(),
+	minimum: integer.optional(),
+	maximum: integer.optional(),
+	enum: v.array(integer).optional(),
+	const: integer.optional(),
 });
 
 export const lexInteger = _lexInteger as lexInteger.$schema;
-export interface LexInteger extends v.InferInput<typeof lexInteger> {}
+export interface LexInteger extends v.Infer<typeof lexInteger> {}
 export declare namespace lexInteger {
 	export {};
 
@@ -49,22 +51,22 @@ export declare namespace lexInteger {
 	export interface $schema extends $schematype {}
 }
 
-const _lexStringFormat = v.picklist([
-	'datetime',
-	'uri',
-	'at-uri',
-	'did',
-	'handle',
-	'at-identifier',
-	'nsid',
-	'cid',
-	'language',
-	'tid',
-	'record-key',
-]);
+const _lexStringFormat = v.union(
+	v.literal('datetime'),
+	v.literal('uri'),
+	v.literal('at-uri'),
+	v.literal('did'),
+	v.literal('handle'),
+	v.literal('at-identifier'),
+	v.literal('nsid'),
+	v.literal('cid'),
+	v.literal('language'),
+	v.literal('tid'),
+	v.literal('record-key'),
+);
 
 export const lexStringFormat = _lexStringFormat as lexStringFormat.$schema;
-export type LexStringFormat = v.InferInput<typeof lexStringFormat>;
+export type LexStringFormat = v.Infer<typeof lexStringFormat>;
 export declare namespace lexStringFormat {
 	export {};
 
@@ -72,22 +74,22 @@ export declare namespace lexStringFormat {
 	export interface $schema extends $schematype {}
 }
 
-const _lexString = v.strictObject({
+const _lexString = v.object({
 	type: v.literal('string'),
-	format: v.optional(lexStringFormat),
-	description: v.optional(v.string()),
-	default: v.optional(v.string()),
-	minLength: v.optional(integer),
-	maxLength: v.optional(integer),
-	minGraphemes: v.optional(integer),
-	maxGraphemes: v.optional(integer),
-	enum: v.optional(v.array(v.string())),
-	const: v.optional(v.string()),
-	knownValues: v.optional(v.array(v.string())),
+	format: lexStringFormat.optional(),
+	description: v.string().optional(),
+	default: v.string().optional(),
+	minLength: integer.optional(),
+	maxLength: integer.optional(),
+	minGraphemes: integer.optional(),
+	maxGraphemes: integer.optional(),
+	enum: v.array(v.string()).optional(),
+	const: v.string().optional(),
+	knownValues: v.array(v.string()).optional(),
 });
 
 export const lexString = _lexString as lexString.$schema;
-export interface LexString extends v.InferInput<typeof lexString> {}
+export interface LexString extends v.Infer<typeof lexString> {}
 export declare namespace lexString {
 	export {};
 
@@ -95,13 +97,13 @@ export declare namespace lexString {
 	export interface $schema extends $schematype {}
 }
 
-const _lexUnknown = v.strictObject({
+const _lexUnknown = v.object({
 	type: v.literal('unknown'),
-	description: v.optional(v.string()),
+	description: v.string().optional(),
 });
 
 export const lexUnknown = _lexUnknown as lexUnknown.$schema;
-export interface LexUnknown extends v.InferInput<typeof lexUnknown> {}
+export interface LexUnknown extends v.Infer<typeof lexUnknown> {}
 export declare namespace lexUnknown {
 	export {};
 
@@ -109,10 +111,10 @@ export declare namespace lexUnknown {
 	export interface $schema extends $schematype {}
 }
 
-const _lexPrimitive = v.variant('type', [lexBoolean, lexInteger, lexString, lexUnknown]);
+const _lexPrimitive = v.union(lexBoolean, lexInteger, lexString, lexUnknown);
 
 export const lexPrimitive = _lexPrimitive as lexPrimitive.$schema;
-export type LexPrimitive = v.InferInput<typeof lexPrimitive>;
+export type LexPrimitive = v.Infer<typeof lexPrimitive>;
 export declare namespace lexPrimitive {
 	export {};
 
@@ -120,15 +122,15 @@ export declare namespace lexPrimitive {
 	export interface $schema extends $schematype {}
 }
 
-const _lexBytes = v.strictObject({
+const _lexBytes = v.object({
 	type: v.literal('bytes'),
-	description: v.optional(v.string()),
-	minLength: v.optional(integer),
-	maxLength: v.optional(integer),
+	description: v.string().optional(),
+	minLength: integer.optional(),
+	maxLength: integer.optional(),
 });
 
 export const lexBytes = _lexBytes as lexBytes.$schema;
-export interface LexBytes extends v.InferInput<typeof lexBytes> {}
+export interface LexBytes extends v.Infer<typeof lexBytes> {}
 export declare namespace lexBytes {
 	export {};
 
@@ -136,13 +138,13 @@ export declare namespace lexBytes {
 	export interface $schema extends $schematype {}
 }
 
-const _lexCidLink = v.strictObject({
+const _lexCidLink = v.object({
 	type: v.literal('cid-link'),
-	description: v.optional(v.string()),
+	description: v.string().optional(),
 });
 
 export const lexCidLink = _lexCidLink as lexCidLink.$schema;
-export interface LexCidLink extends v.InferInput<typeof lexCidLink> {}
+export interface LexCidLink extends v.Infer<typeof lexCidLink> {}
 export declare namespace lexCidLink {
 	export {};
 
@@ -150,10 +152,10 @@ export declare namespace lexCidLink {
 	export interface $schema extends $schematype {}
 }
 
-const _lexIpldType = v.variant('type', [lexBytes, lexCidLink]);
+const _lexIpldType = v.union(lexBytes, lexCidLink);
 
 export const lexIpldType = _lexIpldType as lexIpldType.$schema;
-export type LexIpldType = v.InferInput<typeof lexIpldType>;
+export type LexIpldType = v.Infer<typeof lexIpldType>;
 export declare namespace lexIpldType {
 	export {};
 
@@ -161,21 +163,19 @@ export declare namespace lexIpldType {
 	export interface $schema extends $schematype {}
 }
 
-const refString = v.pipe(
-	v.string(),
-	v.regex(
-		/^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9_]{0,62}?)?$/,
-	),
-);
+const REF_RE =
+	/^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9_]{0,62}?)?$/;
 
-const _lexRef = v.strictObject({
+const refString = v.string().assert((input) => REF_RE.test(input));
+
+const _lexRef = v.object({
 	type: v.literal('ref'),
-	description: v.optional(v.string()),
+	description: v.string().optional(),
 	ref: refString,
 });
 
 export const lexRef = _lexRef as lexRef.$schema;
-export interface LexRef extends v.InferInput<typeof lexRef> {}
+export interface LexRef extends v.Infer<typeof lexRef> {}
 export declare namespace lexRef {
 	export {};
 
@@ -183,15 +183,15 @@ export declare namespace lexRef {
 	export interface $schema extends $schematype {}
 }
 
-const _lexRefUnion = v.strictObject({
+const _lexRefUnion = v.object({
 	type: v.literal('union'),
-	description: v.optional(v.string()),
+	description: v.string().optional(),
 	refs: v.array(refString),
-	closed: v.optional(v.boolean(), false),
+	closed: v.boolean().optional(() => false),
 });
 
 export const lexRefUnion = _lexRefUnion as lexRefUnion.$schema;
-export interface LexRefUnion extends v.InferInput<typeof lexRefUnion> {}
+export interface LexRefUnion extends v.Infer<typeof lexRefUnion> {}
 export declare namespace lexRefUnion {
 	export {};
 
@@ -199,10 +199,10 @@ export declare namespace lexRefUnion {
 	export interface $schema extends $schematype {}
 }
 
-const _lexRefVariant = v.variant('type', [lexRef, lexRefUnion]);
+const _lexRefVariant = v.union(lexRef, lexRefUnion);
 
 export const lexRefVariant = _lexRefVariant as lexRefVariant.$schema;
-export type LexRefVariant = v.InferInput<typeof lexRefVariant>;
+export type LexRefVariant = v.Infer<typeof lexRefVariant>;
 export declare namespace lexRefVariant {
 	export {};
 
@@ -210,15 +210,15 @@ export declare namespace lexRefVariant {
 	export interface $schema extends $schematype {}
 }
 
-const _lexBlob = v.strictObject({
+const _lexBlob = v.object({
 	type: v.literal('blob'),
-	description: v.optional(v.string()),
-	accept: v.optional(v.array(v.string())),
-	maxSize: v.optional(integer),
+	description: v.string().optional(),
+	accept: v.array(v.string()).optional(),
+	maxSize: integer.optional(),
 });
 
 export const lexBlob = _lexBlob as lexBlob.$schema;
-export interface LexBlob extends v.InferInput<typeof lexBlob> {}
+export interface LexBlob extends v.Infer<typeof lexBlob> {}
 export declare namespace lexBlob {
 	export {};
 
@@ -226,16 +226,16 @@ export declare namespace lexBlob {
 	export interface $schema extends $schematype {}
 }
 
-const _lexArray = v.strictObject({
+const _lexArray = v.object({
 	type: v.literal('array'),
-	description: v.optional(v.string()),
-	items: v.variant('type', [lexPrimitive, lexIpldType, lexRefVariant, lexBlob]),
-	minLength: v.optional(integer),
-	maxLength: v.optional(integer),
+	description: v.string().optional(),
+	items: v.union(lexPrimitive, lexIpldType, lexRefVariant, lexBlob),
+	minLength: integer.optional(),
+	maxLength: integer.optional(),
 });
 
 export const lexArray = _lexArray as lexArray.$schema;
-export interface LexArray extends v.InferInput<typeof lexArray> {}
+export interface LexArray extends v.Infer<typeof lexArray> {}
 export declare namespace lexArray {
 	export {};
 
@@ -243,13 +243,12 @@ export declare namespace lexArray {
 	export interface $schema extends $schematype {}
 }
 
-const _lexPrimitiveArray = v.strictObject({
-	...lexArray.entries,
+const _lexPrimitiveArray = lexArray.extend({
 	items: lexPrimitive,
 });
 
 export const lexPrimitiveArray = _lexPrimitiveArray as lexPrimitiveArray.$schema;
-export interface LexPrimitiveArray extends v.InferInput<typeof lexPrimitiveArray> {}
+export interface LexPrimitiveArray extends v.Infer<typeof lexPrimitiveArray> {}
 export declare namespace lexPrimitiveArray {
 	export {};
 
@@ -257,13 +256,13 @@ export declare namespace lexPrimitiveArray {
 	export interface $schema extends $schematype {}
 }
 
-const _lexToken = v.strictObject({
+const _lexToken = v.object({
 	type: v.literal('token'),
-	description: v.optional(v.string()),
+	description: v.string().optional(),
 });
 
 export const lexToken = _lexToken as lexToken.$schema;
-export interface LexToken extends v.InferInput<typeof lexToken> {}
+export interface LexToken extends v.Infer<typeof lexToken> {}
 export declare namespace lexToken {
 	export {};
 
@@ -271,75 +270,55 @@ export declare namespace lexToken {
 	export interface $schema extends $schematype {}
 }
 
-const _lexObject = v.strictObject({
-	type: v.literal('object'),
-	description: v.optional(v.string()),
-	required: v.optional(v.array(v.string())),
-	nullable: v.optional(v.array(v.string())),
-	properties: v.optional(
-		v.record(
-			v.pipe(v.string(), v.regex(/^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/)),
-			v.variant('type', [lexArray, lexPrimitive, lexIpldType, lexRefVariant, lexBlob]),
-		),
-	),
-});
+const KEY_RE = /^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/;
 
-export const lexObject = v.pipe(
-	_lexObject,
-	v.rawCheck(({ dataset, addIssue }) => {
-		if (!dataset.typed) {
-			return;
-		}
+const refineObjectProperties = <T extends { required?: string[]; properties?: Record<string, unknown> }>(
+	input: T,
+): v.ValitaResult<T> => {
+	const { required = [], properties } = input;
 
-		const { required = [], properties } = dataset.value;
-
-		if (required.length === 0) {
-			return;
-		}
-
-		if (properties === undefined) {
-			addIssue({
-				message: 'required fields specified but no properties defined',
-				path: [
-					{
-						type: 'object',
-						origin: 'value',
-						input: dataset.value,
-						key: 'properties',
-						value: undefined,
-					},
-				],
+	for (const key in properties) {
+		if (!KEY_RE.test(key)) {
+			return v.err({
+				message: `invalid property key`,
+				path: ['properties', key],
 			});
+		}
+	}
 
-			return;
+	if (required.length > 0) {
+		if (properties === undefined) {
+			return v.err({
+				message: `required fields specified but no properties defined`,
+				path: ['properties'],
+			});
 		}
 
-		for (const field of required) {
-			if (properties[field] === undefined) {
-				addIssue({
-					message: `required field not defined`,
-					path: [
-						{
-							type: 'object',
-							origin: 'value',
-							input: dataset.value,
-							key: 'properties',
-							value: properties,
-						},
-						{
-							type: 'object',
-							origin: 'value',
-							input: properties,
-							key: field,
-							value: undefined,
-						},
-					],
+		for (const key of required) {
+			if (properties[key] === undefined) {
+				return v.err({
+					message: `required fields not defined`,
+					path: ['properties', key],
 				});
 			}
 		}
-	}),
-) as lexObject.$schema;
-export interface LexObject extends v.InferInput<typeof lexObject> {}
+	}
+
+	return v.ok(input);
+};
+
+const _lexObject = v
+	.object({
+		type: v.literal('object'),
+		description: v.string().optional(),
+		required: v.array(v.string()).optional(),
+		nullable: v.array(v.string()).optional(),
+		properties: v.record(v.union(lexArray, lexPrimitive, lexIpldType, lexRefVariant, lexBlob)).optional(),
+	})
+	.chain(refineObjectProperties);
+
+export const lexObject = _lexObject as lexObject.$schema;
+export interface LexObject extends v.Infer<typeof lexObject> {}
 export declare namespace lexObject {
 	export {};
 
@@ -347,74 +326,17 @@ export declare namespace lexObject {
 	export interface $schema extends $schematype {}
 }
 
-const _lexXrpcParameters = v.strictObject({
-	type: v.literal('params'),
-	description: v.optional(v.string()),
-	required: v.optional(v.array(v.string())),
-	properties: v.optional(
-		v.record(
-			v.pipe(v.string(), v.regex(/^[a-zA-Z][a-zA-Z0-9]{0,62}?$/)),
-			v.variant('type', [lexPrimitive, lexPrimitiveArray]),
-		),
-	),
-});
+const _lexXrpcParameters = v
+	.object({
+		type: v.literal('params'),
+		description: v.string().optional(),
+		required: v.array(v.string()).optional(),
+		properties: v.record(v.union(lexPrimitive, lexPrimitiveArray)).optional(),
+	})
+	.chain(refineObjectProperties);
 
-export const lexXrpcParameters = v.pipe(
-	_lexXrpcParameters,
-	v.rawCheck(({ dataset, addIssue }) => {
-		if (!dataset.typed) {
-			return;
-		}
-
-		const { required = [], properties } = dataset.value;
-
-		if (required.length === 0) {
-			return;
-		}
-
-		if (properties === undefined) {
-			addIssue({
-				message: 'required fields specified but no properties defined',
-				path: [
-					{
-						type: 'object',
-						origin: 'value',
-						input: dataset.value,
-						key: 'properties',
-						value: undefined,
-					},
-				],
-			});
-
-			return;
-		}
-
-		for (const field of required) {
-			if (properties[field] === undefined) {
-				addIssue({
-					message: `required field not defined`,
-					path: [
-						{
-							type: 'object',
-							origin: 'value',
-							input: dataset.value,
-							key: 'properties',
-							value: properties,
-						},
-						{
-							type: 'object',
-							origin: 'value',
-							input: properties,
-							key: field,
-							value: undefined,
-						},
-					],
-				});
-			}
-		}
-	}),
-) as lexXrpcParameters.$schema;
-export interface LexXrpcParameters extends v.InferInput<typeof lexXrpcParameters> {}
+export const lexXrpcParameters = _lexXrpcParameters as lexXrpcParameters.$schema;
+export interface LexXrpcParameters extends v.Infer<typeof lexXrpcParameters> {}
 export declare namespace lexXrpcParameters {
 	export {};
 
@@ -422,14 +344,14 @@ export declare namespace lexXrpcParameters {
 	export interface $schema extends $schematype {}
 }
 
-const _lexXrpcBody = v.strictObject({
-	description: v.optional(v.string()),
+const _lexXrpcBody = v.object({
+	description: v.string().optional(),
 	encoding: v.string(),
-	schema: v.optional(v.variant('type', [lexRefVariant, lexObject])),
+	schema: v.union(lexRefVariant, lexObject).optional(),
 });
 
 export const lexXrpcBody = _lexXrpcBody as lexXrpcBody.$schema;
-export interface LexXrpcBody extends v.InferInput<typeof lexXrpcBody> {}
+export interface LexXrpcBody extends v.Infer<typeof lexXrpcBody> {}
 export declare namespace lexXrpcBody {
 	export {};
 
@@ -437,13 +359,13 @@ export declare namespace lexXrpcBody {
 	export interface $schema extends $schematype {}
 }
 
-const _lexXrpcSubscriptionMessage = v.strictObject({
-	description: v.optional(v.string()),
-	schema: v.optional(v.variant('type', [lexRefVariant, lexObject])),
+const _lexXrpcSubscriptionMessage = v.object({
+	description: v.string().optional(),
+	schema: v.union(lexRefVariant, lexObject).optional(),
 });
 
 export const lexXrpcSubscriptionMessage = _lexXrpcSubscriptionMessage as lexXrpcSubscriptionMessage.$schema;
-export interface LexXrpcSubscriptionMessage extends v.InferInput<typeof lexXrpcSubscriptionMessage> {}
+export interface LexXrpcSubscriptionMessage extends v.Infer<typeof lexXrpcSubscriptionMessage> {}
 export declare namespace lexXrpcSubscriptionMessage {
 	export {};
 
@@ -451,13 +373,13 @@ export declare namespace lexXrpcSubscriptionMessage {
 	export interface $schema extends $schematype {}
 }
 
-const _lexXrpcError = v.strictObject({
+const _lexXrpcError = v.object({
 	name: v.string(),
-	description: v.optional(v.string()),
+	description: v.string().optional(),
 });
 
 export const lexXrpcError = _lexXrpcError as lexXrpcError.$schema;
-export interface LexXrpcError extends v.InferInput<typeof lexXrpcError> {}
+export interface LexXrpcError extends v.Infer<typeof lexXrpcError> {}
 export declare namespace lexXrpcError {
 	export {};
 
@@ -465,16 +387,16 @@ export declare namespace lexXrpcError {
 	export interface $schema extends $schematype {}
 }
 
-const _lexXrpcQuery = v.strictObject({
+const _lexXrpcQuery = v.object({
 	type: v.literal('query'),
-	description: v.optional(v.string()),
-	parameters: v.optional(lexXrpcParameters),
-	output: v.optional(lexXrpcBody),
-	errors: v.optional(v.array(lexXrpcError)),
+	description: v.string().optional(),
+	parameters: lexXrpcParameters.optional(),
+	output: lexXrpcBody.optional(),
+	errors: v.array(lexXrpcError).optional(),
 });
 
 export const lexXrpcQuery = _lexXrpcQuery as lexXrpcQuery.$schema;
-export interface LexXrpcQuery extends v.InferInput<typeof lexXrpcQuery> {}
+export interface LexXrpcQuery extends v.Infer<typeof lexXrpcQuery> {}
 export declare namespace lexXrpcQuery {
 	export {};
 
@@ -482,17 +404,17 @@ export declare namespace lexXrpcQuery {
 	export interface $schema extends $schematype {}
 }
 
-const _lexXrpcProcedure = v.strictObject({
+const _lexXrpcProcedure = v.object({
 	type: v.literal('procedure'),
-	description: v.optional(v.string()),
-	parameters: v.optional(lexXrpcParameters),
-	input: v.optional(lexXrpcBody),
-	output: v.optional(lexXrpcBody),
-	errors: v.optional(v.array(lexXrpcError)),
+	description: v.string().optional(),
+	parameters: lexXrpcParameters.optional(),
+	input: lexXrpcBody.optional(),
+	output: lexXrpcBody.optional(),
+	errors: v.array(lexXrpcError).optional(),
 });
 
 export const lexXrpcProcedure = _lexXrpcProcedure as lexXrpcProcedure.$schema;
-export interface LexXrpcProcedure extends v.InferInput<typeof lexXrpcProcedure> {}
+export interface LexXrpcProcedure extends v.Infer<typeof lexXrpcProcedure> {}
 export declare namespace lexXrpcProcedure {
 	export {};
 
@@ -500,16 +422,16 @@ export declare namespace lexXrpcProcedure {
 	export interface $schema extends $schematype {}
 }
 
-const _lexXrpcSubscription = v.strictObject({
+const _lexXrpcSubscription = v.object({
 	type: v.literal('subscription'),
-	description: v.optional(v.string()),
-	parameters: v.optional(lexXrpcParameters),
-	message: v.optional(lexXrpcSubscriptionMessage),
-	errors: v.optional(v.array(lexXrpcError)),
+	description: v.string().optional(),
+	parameters: lexXrpcParameters.optional(),
+	message: lexXrpcSubscriptionMessage.optional(),
+	errors: v.array(lexXrpcError).optional(),
 });
 
 export const lexXrpcSubscription = _lexXrpcSubscription as lexXrpcSubscription.$schema;
-export interface LexXrpcSubscription extends v.InferInput<typeof lexXrpcSubscription> {}
+export interface LexXrpcSubscription extends v.Infer<typeof lexXrpcSubscription> {}
 export declare namespace lexXrpcSubscription {
 	export {};
 
@@ -517,23 +439,24 @@ export declare namespace lexXrpcSubscription {
 	export interface $schema extends $schematype {}
 }
 
-const _lexRecord = v.strictObject({
+const LITERAL_KEY_RE = /^literal:(.+)$/;
+
+const _lexRecord = v.object({
 	type: v.literal('record'),
-	description: v.optional(v.string()),
-	key: v.optional(
-		v.union([
+	description: v.string().optional(),
+	key: v
+		.union(
 			v.literal('tid'),
 			v.literal('nsid'),
 			v.literal('any'),
-			v.pipe(v.string(), v.regex(/^literal:(.+)$/)),
-		]),
-		'any',
-	),
+			v.string().assert<`literal:${string}`>((input) => LITERAL_KEY_RE.test(input)),
+		)
+		.optional(() => 'any'),
 	record: lexObject,
 });
 
 export const lexRecord = _lexRecord as lexRecord.$schema;
-export interface LexRecord extends v.InferInput<typeof lexRecord> {}
+export interface LexRecord extends v.Infer<typeof lexRecord> {}
 export declare namespace lexRecord {
 	export {};
 
@@ -541,7 +464,7 @@ export declare namespace lexRecord {
 	export interface $schema extends $schematype {}
 }
 
-const _lexUserType = v.variant('type', [
+const _lexUserType = v.union(
 	lexRecord,
 	lexXrpcQuery,
 	lexXrpcProcedure,
@@ -552,10 +475,10 @@ const _lexUserType = v.variant('type', [
 	lexIpldType,
 	lexBlob,
 	lexPrimitive,
-]);
+);
 
 export const lexUserType = _lexUserType as lexUserType.$schema;
-export type LexUserType = v.InferInput<typeof lexUserType>;
+export type LexUserType = v.Infer<typeof lexUserType>;
 export declare namespace lexUserType {
 	export {};
 
@@ -563,62 +486,43 @@ export declare namespace lexUserType {
 	export interface $schema extends $schematype {}
 }
 
-const _lexiconDoc = v.strictObject({
-	lexicon: v.literal(1),
-	id: v.pipe(
-		v.string(),
-		v.regex(
-			/^[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?:\.[a-zA-Z](?:[a-zA-Z0-9]{0,62})?)$/,
-		),
-	),
-	revision: v.optional(integer),
-	description: v.optional(v.string()),
-	defs: v.record(v.pipe(v.string(), v.regex(/^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/)), lexUserType),
-});
+const NSID_RE =
+	/^[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?:\.[a-zA-Z](?:[a-zA-Z0-9]{0,62})?)$/;
 
-export const lexiconDoc = v.pipe(
-	_lexiconDoc,
-	v.rawCheck(({ dataset, addIssue }) => {
-		if (!dataset.typed) {
-			return;
-		}
+const _lexiconDoc = v
+	.object({
+		lexicon: v.literal(1),
+		id: v.string().assert((input) => NSID_RE.test(input), `must be valid nsid`),
+		revision: integer.optional(),
+		description: v.string().optional(),
+		// defs: v.record(v.pipe(v.string(), v.regex(/^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/)), lexUserType),
+		defs: v.record(lexUserType),
+	})
+	.chain((input) => {
+		const { defs } = input;
 
-		const { defs } = dataset.value;
-
-		for (const defId in defs) {
-			const def = defs[defId];
+		for (const key in defs) {
+			const def = defs[key];
 
 			if (
-				defId !== 'main' &&
+				key !== 'main' &&
 				(def.type === 'record' ||
 					def.type === 'procedure' ||
 					def.type === 'query' ||
 					def.type === 'subscription')
 			) {
-				addIssue({
-					message: `records, procedures, queries, and subscriptions must be the main definition.`,
-					path: [
-						{
-							type: 'object',
-							origin: 'value',
-							input: dataset.value,
-							key: 'defs',
-							value: defs,
-						},
-						{
-							type: 'object',
-							origin: 'value',
-							input: defs,
-							key: defId,
-							value: def,
-						},
-					],
+				return v.err({
+					message: `records, procedures, queries and subscriptions must be the main definition`,
+					path: ['defs', key],
 				});
 			}
 		}
-	}),
-) as lexiconDoc.$schema;
-export interface LexiconDoc extends v.InferInput<typeof lexiconDoc> {}
+
+		return v.ok(input);
+	});
+
+export const lexiconDoc = _lexiconDoc as lexiconDoc.$schema;
+export interface LexiconDoc extends v.Infer<typeof lexiconDoc> {}
 export declare namespace lexiconDoc {
 	export {};
 

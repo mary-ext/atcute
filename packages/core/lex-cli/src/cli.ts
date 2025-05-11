@@ -3,7 +3,6 @@ import * as path from 'node:path';
 
 import { Builtins, Command, Option, Program } from '@externdefs/collider';
 import pc from 'picocolors';
-import * as v from 'valibot';
 
 import { generateLexiconApi } from './codegen.js';
 import type { LexiconConfig } from './index.js';
@@ -64,22 +63,18 @@ program.register(
 					return 1;
 				}
 
-				const result = v.safeParse(lexiconDoc, json);
-				if (!result.success) {
+				const result = lexiconDoc.try(json, { mode: 'strict' });
+				if (!result.ok) {
 					console.error(pc.bold(pc.red(`schema validation failed for "${filename}"`)));
 
 					for (const issue of result.issues) {
-						console.log(`- ${issue.message}`);
-
-						if (issue.path) {
-							console.log(`    at .${issue.path.map((path) => path.key).join('.')}`);
-						}
+						console.log(`- ${issue.code} at .${issue.path.join('.')}`);
 					}
 
 					return 1;
 				}
 
-				documents.push(result.output);
+				documents.push(result.value);
 			}
 
 			const result = await generateLexiconApi({

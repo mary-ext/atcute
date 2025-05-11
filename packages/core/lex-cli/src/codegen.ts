@@ -1,7 +1,6 @@
 import { dirname as getDirname, relative as getRelativePath } from 'node:path/posix';
 
 import * as prettier from 'prettier';
-import type { Literal } from 'valibot';
 
 import type {
 	LexArray,
@@ -43,6 +42,8 @@ export interface LexiconApiResult {
 
 type DocumentMap = Map<string, LexiconDoc>;
 type ImportSet = Set<string>;
+
+type Literal = string | number | boolean;
 
 const lit: (val: Literal | Literal[]) => string = JSON.stringify;
 

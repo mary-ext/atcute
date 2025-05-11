@@ -25,7 +25,7 @@ importers:
         version: link:packages/internal/pkg-size-report
       prettier:
         specifier: ^3.4.2
-        version: 3.4.2
+        version: 3.5.3
       typescript:
         specifier: ~5.7.3
         version: 5.7.3
@@ -145,6 +145,9 @@ importers:
 
   packages/core/lex-cli:
     dependencies:
+      '@badrap/valita':
+        specifier: ^0.4.2
+        version: 0.4.2
       '@externdefs/collider':
         specifier: ^0.2.0
         version: 0.2.0(valibot@1.0.0(typescript@5.7.3))
@@ -154,9 +157,6 @@ importers:
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
-      valibot:
-        specifier: ^1.0.0
-        version: 1.0.0(typescript@5.7.3)
     devDependencies:
       '@atcute/lexicons':
         specifier: workspace:^
@@ -355,7 +355,7 @@ importers:
         version: 4.0.9
       '@types/node':
         specifier: ^22.12.0
-        version: 22.12.0
+        version: 22.15.3
 
   packages/misc/util-fetch:
     dependencies:
@@ -1569,9 +1569,6 @@ packages:
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
 
-  '@types/node@22.12.0':
-    resolution: {integrity: sha512-Fll2FZ1riMjNmlmJOdAyY5pUbkftXslB5DgEzlIuNaiWhXd00FhWxVC/r4yV/4wBb9JfImTu+jiSvXTkJ7F/gA==}
-
   '@types/node@22.15.3':
     resolution: {integrity: sha512-lX7HFZeHf4QG/J7tBZqrCAXwz9J5RD56Y6MpP0eJkka8p+K0RY/yBTW7CYFJ4VGCclxqOLKmiGP5juQc6MKgcw==}
 
@@ -2657,11 +2654,6 @@ packages:
     engines: {node: '>=10.13.0'}
     hasBin: true
 
-  prettier@3.4.2:
-    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
-    engines: {node: '>=14'}
-    hasBin: true
-
   prettier@3.5.3:
     resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
     engines: {node: '>=14'}
@@ -3017,9 +3009,6 @@ packages:
 
   uint8arrays@5.1.0:
     resolution: {integrity: sha512-vA6nFepEmlSKkMBnLBaUMVvAC4G3CTmO58C12y4sq6WPDOR7mOFYOi7GlrQ4djeSbP6JG9Pv9tJDM97PedRSww==}
-
-  undici-types@6.20.0:
-    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
@@ -4899,10 +4888,6 @@ snapshots:
 
   '@types/node@12.20.55': {}
 
-  '@types/node@22.12.0':
-    dependencies:
-      undici-types: 6.20.0
-
   '@types/node@22.15.3':
     dependencies:
       undici-types: 6.21.0
@@ -6010,8 +5995,6 @@ snapshots:
 
   prettier@2.8.8: {}
 
-  prettier@3.4.2: {}
-
   prettier@3.5.3: {}
 
   process-warning@3.0.0: {}
@@ -6414,8 +6397,6 @@ snapshots:
   uint8arrays@5.1.0:
     dependencies:
       multiformats: 13.3.1
-
-  undici-types@6.20.0: {}
 
   undici-types@6.21.0: {}
 
