@@ -27,8 +27,8 @@ importers:
         specifier: ^3.5.3
         version: 3.5.3
       typescript:
-        specifier: ~5.7.3
-        version: 5.7.3
+        specifier: ~5.8.3
+        version: 5.8.3
 
   packages/bluesky/moderation:
     dependencies:
@@ -150,7 +150,7 @@ importers:
         version: 0.4.4
       '@externdefs/collider':
         specifier: ^0.2.0
-        version: 0.2.0(valibot@1.0.0(typescript@5.7.3))
+        version: 0.2.0(valibot@1.0.0(typescript@5.8.3))
       picocolors:
         specifier: ^1.1.1
         version: 1.1.1
@@ -3028,8 +3028,8 @@ packages:
   typed-emitter@2.1.0:
     resolution: {integrity: sha512-g/KzbYKbH5C2vPkaXGu8DJlHrGKHLsM25Zg9WuC9pMGfuvT+X25tZQWo5fK1BjBm8+UrVE9LDCvaY0CQk+fXDA==}
 
-  typescript@5.7.3:
-    resolution: {integrity: sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==}
+  typescript@5.8.3:
+    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -4338,9 +4338,9 @@ snapshots:
   '@esbuild/win32-x64@0.25.4':
     optional: true
 
-  '@externdefs/collider@0.2.0(valibot@1.0.0(typescript@5.7.3))':
+  '@externdefs/collider@0.2.0(valibot@1.0.0(typescript@5.8.3))':
     dependencies:
-      valibot: 1.0.0(typescript@5.7.3)
+      valibot: 1.0.0(typescript@5.8.3)
 
   '@hapi/accept@6.0.3':
     dependencies:
@@ -6446,7 +6446,7 @@ snapshots:
     optionalDependencies:
       rxjs: 7.8.2
 
-  typescript@5.7.3: {}
+  typescript@5.8.3: {}
 
   uglify-js@3.19.3:
     optional: true
@@ -6473,9 +6473,9 @@ snapshots:
 
   uuid@9.0.1: {}
 
-  valibot@1.0.0(typescript@5.7.3):
+  valibot@1.0.0(typescript@5.8.3):
     optionalDependencies:
-      typescript: 5.7.3
+      typescript: 5.8.3
 
   varint@6.0.0: {}
 

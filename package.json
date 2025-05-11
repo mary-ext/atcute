@@ -14,6 +14,6 @@
 		"mitata": "^1.0.34",
 		"pkg-size-report": "workspace:^",
 		"prettier": "^3.5.3",
-		"typescript": "~5.7.3"
+		"typescript": "~5.8.3"
 	}
 }
