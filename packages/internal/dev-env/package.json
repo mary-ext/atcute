@@ -4,11 +4,11 @@
 	"name": "@atcute/internal-dev-env",
 	"version": "1.0.1",
 	"dependencies": {
-		"@atproto/crypto": "^0.4.3",
-		"@atproto/identity": "^0.4.5",
-		"@atproto/pds": "^0.4.90",
+		"@atproto/crypto": "^0.4.4",
+		"@atproto/identity": "^0.4.8",
+		"@atproto/pds": "^0.4.136",
 		"@did-plc/server": "^0.0.1",
-		"axios": "^1.7.9",
+		"axios": "^1.9.0",
 		"get-port": "^7.1.0",
 		"uint8arrays": "^5.1.0"
 	},

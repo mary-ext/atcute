@@ -33,7 +33,7 @@
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
-		"@types/bun": "^1.2.1",
-		"vitest": "^3.0.4"
+		"@types/bun": "^1.2.13",
+		"vitest": "^3.1.3"
 	}
 }

@@ -30,7 +30,7 @@
 	},
 	"devDependencies": {
 		"@atcute/multibase": "workspace:^",
-		"@types/bun": "^1.2.1"
+		"@types/bun": "^1.2.13"
 	},
 	"dependencies": {
 		"@atcute/cbor": "workspace:^",

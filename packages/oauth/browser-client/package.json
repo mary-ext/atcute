@@ -33,6 +33,6 @@
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
-		"@types/bun": "^1.2.1"
+		"@types/bun": "^1.2.13"
 	}
 }

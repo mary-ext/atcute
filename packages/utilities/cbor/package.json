@@ -30,8 +30,8 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@ipld/dag-cbor": "^9.2.2",
-		"@types/bun": "^1.2.1",
+		"@ipld/dag-cbor": "^9.2.3",
+		"@types/bun": "^1.2.13",
 		"cbor-x": "^1.6.0"
 	},
 	"dependencies": {
