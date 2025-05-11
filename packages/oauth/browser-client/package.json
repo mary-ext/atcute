@@ -32,7 +32,6 @@
 		"@atcute/uint8array": "workspace:^"
 	},
 	"devDependencies": {
-		"@atcute/atproto": "workspace:^",
-		"@types/bun": "^1.2.13"
+		"@atcute/atproto": "workspace:^"
 	}
 }
