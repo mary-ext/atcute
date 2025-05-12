@@ -1258,6 +1258,14 @@ const ISSUE_MISSING: IssueLeaf = {
 	code: 'missing_value',
 };
 
+const set = (obj: Record<string, unknown>, key: string, value: unknown): void => {
+	if (key === '__proto__') {
+		Object.defineProperty(obj, key, { value });
+	} else {
+		obj[key] = value;
+	}
+};
+
 // #__NO_SIDE_EFFECTS__
 export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSchema<TShape> => {
 	const resolvedEntries = lazy(() => {
@@ -1326,14 +1334,14 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 
 					if (r === undefined) {
 						if (output !== undefined) {
-							output[key] = value;
+							/*#__INLINE__*/ set(output, key, value);
 						}
 					} else if (r.ok) {
 						if (output === undefined) {
 							output = { ...input };
 						}
 
-						output[key] = r.value;
+						/*#__INLINE__*/ set(output, key, value);
 					} else {
 						issues = joinIssues(issues, prependPath(key, r));
 
