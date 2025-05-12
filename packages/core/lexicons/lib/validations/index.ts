@@ -1129,11 +1129,11 @@ export const array = <TItem extends BaseSchema>(item: TItem | (() => TItem)): Ar
 
 							output[idx] = r.value;
 						} else {
-							if (flags & FLAG_ABORT_EARLY) {
-								return r;
-							}
-
 							issues = joinIssues(issues, prependPath(idx, r));
+
+							if (flags & FLAG_ABORT_EARLY) {
+								return issues;
+							}
 						}
 					}
 				}
