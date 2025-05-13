@@ -7,6 +7,7 @@ export * as AppBskyActorProfile from './types/app/bsky/actor/profile.js';
 export * as AppBskyActorPutPreferences from './types/app/bsky/actor/putPreferences.js';
 export * as AppBskyActorSearchActors from './types/app/bsky/actor/searchActors.js';
 export * as AppBskyActorSearchActorsTypeahead from './types/app/bsky/actor/searchActorsTypeahead.js';
+export * as AppBskyActorStatus from './types/app/bsky/actor/status.js';
 export * as AppBskyEmbedDefs from './types/app/bsky/embed/defs.js';
 export * as AppBskyEmbedExternal from './types/app/bsky/embed/external.js';
 export * as AppBskyEmbedImages from './types/app/bsky/embed/images.js';

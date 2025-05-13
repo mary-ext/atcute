@@ -1,5 +1,6 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+import * as AppBskyEmbedExternal from '../embed/external.js';
 import * as AppBskyFeedPostgate from '../feed/postgate.js';
 import * as AppBskyFeedThreadgate from '../feed/threadgate.js';
 import * as AppBskyGraphDefs from '../graph/defs.js';
@@ -209,6 +210,9 @@ const _profileViewSchema = /*#__PURE__*/ v.object({
 	get verification() {
 		return /*#__PURE__*/ v.optional(verificationStateSchema);
 	},
+	get status() {
+		return /*#__PURE__*/ v.optional(statusViewSchema);
+	},
 });
 const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileViewBasic')),
@@ -233,6 +237,9 @@ const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	get verification() {
 		return /*#__PURE__*/ v.optional(verificationStateSchema);
+	},
+	get status() {
+		return /*#__PURE__*/ v.optional(statusViewSchema);
 	},
 });
 const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
@@ -276,6 +283,9 @@ const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 	get verification() {
 		return /*#__PURE__*/ v.optional(verificationStateSchema);
 	},
+	get status() {
+		return /*#__PURE__*/ v.optional(statusViewSchema);
+	},
 });
 const _savedFeedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#savedFeed')),
@@ -295,6 +305,16 @@ const _savedFeedsPrefV2Schema = /*#__PURE__*/ v.object({
 	get items() {
 		return /*#__PURE__*/ v.array(savedFeedSchema);
 	},
+});
+const _statusViewSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#statusView')),
+	status: /*#__PURE__*/ v.string<'app.bsky.actor.status#live' | (string & {})>(),
+	record: /*#__PURE__*/ v.unknown(),
+	get embed() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedExternal.viewSchema]));
+	},
+	expiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	isActive: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 const _threadViewPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#threadViewPref')),
@@ -365,6 +385,7 @@ type profileViewDetailed$schematype = typeof _profileViewDetailedSchema;
 type savedFeed$schematype = typeof _savedFeedSchema;
 type savedFeedsPref$schematype = typeof _savedFeedsPrefSchema;
 type savedFeedsPrefV2$schematype = typeof _savedFeedsPrefV2Schema;
+type statusView$schematype = typeof _statusViewSchema;
 type threadViewPref$schematype = typeof _threadViewPrefSchema;
 type verificationPrefs$schematype = typeof _verificationPrefsSchema;
 type verificationState$schematype = typeof _verificationStateSchema;
@@ -396,6 +417,7 @@ export interface profileViewDetailedSchema extends profileViewDetailed$schematyp
 export interface savedFeedSchema extends savedFeed$schematype {}
 export interface savedFeedsPrefSchema extends savedFeedsPref$schematype {}
 export interface savedFeedsPrefV2Schema extends savedFeedsPrefV2$schematype {}
+export interface statusViewSchema extends statusView$schematype {}
 export interface threadViewPrefSchema extends threadViewPref$schematype {}
 export interface verificationPrefsSchema extends verificationPrefs$schematype {}
 export interface verificationStateSchema extends verificationState$schematype {}
@@ -428,6 +450,7 @@ export const profileViewDetailedSchema = _profileViewDetailedSchema as profileVi
 export const savedFeedSchema = _savedFeedSchema as savedFeedSchema;
 export const savedFeedsPrefSchema = _savedFeedsPrefSchema as savedFeedsPrefSchema;
 export const savedFeedsPrefV2Schema = _savedFeedsPrefV2Schema as savedFeedsPrefV2Schema;
+export const statusViewSchema = _statusViewSchema as statusViewSchema;
 export const threadViewPrefSchema = _threadViewPrefSchema as threadViewPrefSchema;
 export const verificationPrefsSchema = _verificationPrefsSchema as verificationPrefsSchema;
 export const verificationStateSchema = _verificationStateSchema as verificationStateSchema;
@@ -459,6 +482,7 @@ export interface ProfileViewDetailed extends v.InferInput<typeof profileViewDeta
 export interface SavedFeed extends v.InferInput<typeof savedFeedSchema> {}
 export interface SavedFeedsPref extends v.InferInput<typeof savedFeedsPrefSchema> {}
 export interface SavedFeedsPrefV2 extends v.InferInput<typeof savedFeedsPrefV2Schema> {}
+export interface StatusView extends v.InferInput<typeof statusViewSchema> {}
 export interface ThreadViewPref extends v.InferInput<typeof threadViewPrefSchema> {}
 export interface VerificationPrefs extends v.InferInput<typeof verificationPrefsSchema> {}
 export interface VerificationState extends v.InferInput<typeof verificationStateSchema> {}
