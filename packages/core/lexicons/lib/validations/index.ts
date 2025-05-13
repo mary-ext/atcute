@@ -1059,24 +1059,18 @@ export const optional: {
 		type: 'optional',
 		wrapped: wrapped,
 		default: defaultValue,
-		get '~run'() {
-			const run = wrapped['~run'];
-
-			const matcher: Matcher = (input, flags) => {
-				if (input === undefined) {
-					if (defaultValue === undefined) {
-						return undefined;
-					}
-
-					const value = typeof defaultValue === 'function' ? defaultValue() : defaultValue;
-
-					return { ok: true, value };
+		'~run'(input, flags) {
+			if (input === undefined) {
+				if (defaultValue === undefined) {
+					return undefined;
 				}
 
-				return run(input, flags);
-			};
+				const value = typeof defaultValue === 'function' ? defaultValue() : defaultValue;
 
-			return lazyProperty(this, '~run', matcher);
+				return { ok: true, value };
+			}
+
+			return wrapped['~run'](input, flags);
 		},
 	};
 };
@@ -1114,7 +1108,6 @@ export const array = <TItem extends BaseSchema>(item: TItem | (() => TItem)): Ar
 		},
 		get '~run'() {
 			const shape = resolvedShape.value;
-			const run = shape['~run'];
 
 			const matcher: Matcher = (input, flags) => {
 				if (!isArray(input)) {
@@ -1126,7 +1119,7 @@ export const array = <TItem extends BaseSchema>(item: TItem | (() => TItem)): Ar
 
 				for (let idx = 0, len = input.length; idx < len; idx++) {
 					const val = input[idx];
-					const r = run(val, flags);
+					const r = shape['~run'](val, flags);
 
 					if (r !== undefined) {
 						if (r.ok) {
@@ -1250,7 +1243,6 @@ export interface ObjectSchema<TShape extends LooseObjectShape = LooseObjectShape
 interface ObjectEntry {
 	key: string;
 	schema: BaseSchema;
-	run: Matcher;
 	optional: boolean;
 	missing: IssueTree;
 }
@@ -1278,15 +1270,13 @@ const set = (obj: Record<string, unknown>, key: string, value: unknown): void =>
 export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSchema<TShape> => {
 	const resolvedEntries = lazy(() => {
 		const resolved: ObjectEntry[] = [];
-		const sh = shape as ObjectShape;
 
-		for (const key in sh) {
-			const schema = sh[key];
+		for (const key in shape) {
+			const schema = shape[key];
 
 			resolved.push({
 				key: key,
 				schema: schema,
-				run: schema['~run'],
 				optional: isOptionalSchema(schema),
 				missing: prependPath(key, ISSUE_MISSING),
 			});
@@ -1340,7 +1330,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 						}
 					}
 
-					const r = entry.run(value, flags);
+					const r = entry.schema['~run'](value, flags);
 
 					if (r === undefined) {
 						if (output !== undefined) {
@@ -1428,7 +1418,12 @@ export const record = <TKey extends RecordKeySchema, TObject extends ObjectSchem
 		},
 		get '~run'() {
 			const object = validatedObject.value;
-			return lazyProperty(this, '~run', object['~run']);
+
+			const matcher: Matcher = (input, flags) => {
+				return object['~run'](input, flags);
+			};
+
+			return lazyProperty(this, '~run', matcher);
 		},
 	};
 };
@@ -1493,7 +1488,7 @@ export const variant: {
 						`expected $type in variant member #${idx} to be a string literal`,
 					);
 
-					return [t.expected, member['~run']];
+					return [t.expected, member];
 				}),
 			);
 
@@ -1525,9 +1520,9 @@ export const variant: {
 					return undefined;
 				}
 
-				const run = map[type];
+				const schema = map[type];
 
-				return run(input, flags);
+				return schema['~run'](input, flags);
 			};
 
 			return lazyProperty(this, '~run', matcher);
