@@ -143,6 +143,37 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(@types/node@22.15.17)
 
+  packages/core/jetstream:
+    dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../lexicons
+      '@badrap/valita':
+        specifier: ^0.4.2
+        version: 0.4.4
+      '@mary-ext/event-iterator':
+        specifier: ^1.0.0
+        version: 1.0.0
+      '@mary-ext/simple-event-emitter':
+        specifier: ^1.0.0
+        version: 1.0.0
+      partysocket:
+        specifier: ^1.1.4
+        version: 1.1.4
+      type-fest:
+        specifier: ^4.41.0
+        version: 4.41.0
+      yocto-queue:
+        specifier: ^1.2.1
+        version: 1.2.1
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.0.4
+        version: 3.1.3(vitest@3.1.3(@types/node@22.15.17))
+      vitest:
+        specifier: ^3.0.4
+        version: 3.1.3(@types/node@22.15.17)
+
   packages/core/lex-cli:
     dependencies:
       '@badrap/valita':
@@ -1227,6 +1258,12 @@ packages:
   '@manypkg/get-packages@1.1.3':
     resolution: {integrity: sha512-fo+QhuU3qE/2TQMQmbVMqaQ6EWbMhi4ABWP+O4AM1NqPBuy0OrApV5LO6BrrgnhtAHS2NH6RrVk9OL181tTi8A==}
 
+  '@mary-ext/event-iterator@1.0.0':
+    resolution: {integrity: sha512-l6gCPsWJ8aRCe/s7/oCmero70kDHgIK5m4uJvYgwEYTqVxoBOIXbKr5tnkLqUHEg6mNduB4IWvms3h70Hp9ADQ==}
+
+  '@mary-ext/simple-event-emitter@1.0.0':
+    resolution: {integrity: sha512-meA/zJZKIN1RVBNEYIbjufkUrW7/tRjHH60FjolpG1ixJKo76TB208qefQLNdOVDA7uIG0CGEDuhmMirtHKLAg==}
+
   '@mitata/counters@0.0.8':
     resolution: {integrity: sha512-f11w0Y1ETFlarDP7CePj8Z+y8Gv5Ax4gMxWsEwrqh0kH/YIY030Ezx5SUJeQg0YPTZ2OHKGcLG1oGJbIqHzaJA==}
 
@@ -2013,6 +2050,9 @@ packages:
     resolution: {integrity: sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==}
     engines: {node: '>= 0.6'}
 
+  event-target-polyfill@0.0.4:
+    resolution: {integrity: sha512-Gs6RLjzlLRdT8X9ZipJdIZI/Y6/HhRLyq9RdDlCsnpxr/+Nn6bU2EFGuC94GjxqhM+Nmij2Vcq98yoHrU8uNFQ==}
+
   event-target-shim@5.0.1:
     resolution: {integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==}
     engines: {node: '>=6'}
@@ -2569,6 +2609,9 @@ packages:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==}
     engines: {node: '>= 0.8'}
 
+  partysocket@1.1.4:
+    resolution: {integrity: sha512-jXP7PFj2h5/v4UjDS8P7MZy6NJUQ7sspiFyxL4uc/+oKOL+KdtXzHnTV8INPGxBrLTXgalyG3kd12Qm7WrYc3A==}
+
   path-exists@4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==}
     engines: {node: '>=8'}
@@ -3024,6 +3067,10 @@ packages:
     resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
     engines: {node: '>=12.20'}
 
+  type-fest@4.41.0:
+    resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
+    engines: {node: '>=16'}
+
   type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
     engines: {node: '>= 0.6'}
@@ -3192,6 +3239,10 @@ packages:
   xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
+
+  yocto-queue@1.2.1:
+    resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
+    engines: {node: '>=12.20'}
 
   zod@3.24.4:
     resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
@@ -4491,6 +4542,12 @@ snapshots:
       globby: 11.1.0
       read-yaml-file: 1.1.0
 
+  '@mary-ext/event-iterator@1.0.0':
+    dependencies:
+      yocto-queue: 1.2.1
+
+  '@mary-ext/simple-event-emitter@1.0.0': {}
+
   '@mitata/counters@0.0.8': {}
 
   '@noble/curves@1.9.0':
@@ -5381,6 +5438,8 @@ snapshots:
 
   etag@1.8.1: {}
 
+  event-target-polyfill@0.0.4: {}
+
   event-target-shim@5.0.1: {}
 
   eventemitter3@4.0.7: {}
@@ -5924,6 +5983,10 @@ snapshots:
 
   parseurl@1.3.3: {}
 
+  partysocket@1.1.4:
+    dependencies:
+      event-target-polyfill: 0.0.4
+
   path-exists@4.0.0: {}
 
   path-key@3.1.1: {}
@@ -6432,6 +6495,8 @@ snapshots:
 
   type-fest@2.19.0: {}
 
+  type-fest@4.41.0: {}
+
   type-is@1.6.18:
     dependencies:
       media-typer: 0.3.0
@@ -6572,5 +6637,7 @@ snapshots:
   ws@8.18.2: {}
 
   xtend@4.0.2: {}
+
+  yocto-queue@1.2.1: {}
 
   zod@3.24.4: {}
