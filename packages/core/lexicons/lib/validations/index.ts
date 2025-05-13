@@ -116,7 +116,7 @@ export const FLAG_EMPTY = 0;
 export const FLAG_ABORT_EARLY = 1 << 0;
 
 type MatcherResult = undefined | Ok<unknown> | IssueTree;
-type Matcher = (input: unknown, flags: number) => MatcherResult;
+type Matcher = (this: void, input: unknown, flags: number) => MatcherResult;
 
 export interface BaseSchema<TInput = unknown, TOutput = TInput> {
 	readonly kind: 'schema';
