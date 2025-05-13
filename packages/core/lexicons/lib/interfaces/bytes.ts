@@ -23,12 +23,23 @@ export interface _BytesWrapper {
 /**
  * @internal
  */
+// #__NO_SIDE_EFFECTS__
 export const _isBytesWrapper = (input: unknown): input is _BytesWrapper => {
 	return typeof input === 'object' && input !== null && BYTES_SYMBOL in input;
 };
 
+const BASE64_RE = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}(?:==)?|[A-Za-z0-9+/]{3}=?)?$/;
+const isBase64 = (input: unknown): input is string => {
+	if (typeof input !== 'string') {
+		return false;
+	}
+
+	return BASE64_RE.test(input);
+};
+
+// #__NO_SIDE_EFFECTS__
 export const isBytes = (input: unknown): input is Bytes => {
 	const v = input as any;
 
-	return typeof v === 'object' && v !== null && (BYTES_SYMBOL in v || typeof v.$bytes === 'string');
+	return typeof v === 'object' && v !== null && (BYTES_SYMBOL in v || isBase64(v.$bytes));
 };

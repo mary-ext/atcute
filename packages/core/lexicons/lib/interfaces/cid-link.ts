@@ -1,4 +1,4 @@
-import type { Cid } from '../syntax/cid.js';
+import { isCid, type Cid } from '../syntax/cid.js';
 
 /**
  * represents a content identifier (CID) reference
@@ -32,5 +32,5 @@ export const _isCidLinkWrapper = (input: unknown): input is _CidLinkWrapper => {
 export const isCidLink = (input: unknown): input is CidLink => {
 	const v = input as any;
 
-	return typeof v === 'object' && v !== null && (CID_LINK_SYMBOL in v || typeof v.$link === 'string');
+	return typeof v === 'object' && v !== null && (CID_LINK_SYMBOL in v || isCid(v.$link));
 };

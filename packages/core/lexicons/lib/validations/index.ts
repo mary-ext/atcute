@@ -708,7 +708,7 @@ const _formattedString = <TFormat extends keyof StringFormatMap>(
 // prettier-ignore
 export const actorIdentifierString = /*#__PURE__*/ _formattedString('at-identifier', syntax.isActorIdentifier);
 export const resourceUriString = /*#__PURE__*/ _formattedString('at-uri', syntax.isResourceUri);
-export const cidString = /*#__PURE__*/ _formattedString('cid', () => true);
+export const cidString = /*#__PURE__*/ _formattedString('cid', syntax.isCid);
 export const datetimeString = /*#__PURE__*/ _formattedString('datetime', syntax.isDatetime);
 export const didString = /*#__PURE__*/ _formattedString('did', syntax.isDid);
 export const handleString = /*#__PURE__*/ _formattedString('handle', syntax.isHandle);
