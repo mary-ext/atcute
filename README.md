@@ -34,6 +34,7 @@ of atcute.
 | ---------------------------------------------------------------------------------------------------------------------- |
 | **Core packages**                                                                                                      |
 | [`client`](./packages/core/client): API client library                                                                 |
+| [`jetstream`](./packages/core/jetstream): Jetstream client                                                             |
 | [`lex-cli`](./packages/core/lex-cli): CLI tool to generate schema definitions                                          |
 | [`lexicons`](./packages/core/lexicons): core lexicon types, interfaces, and schema validations                         |
 | **OAuth packages**                                                                                                     |
