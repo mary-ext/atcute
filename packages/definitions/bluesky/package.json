@@ -26,7 +26,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"test": "vitest run",
+		"test": "vitest",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
