@@ -1,8 +1,4 @@
-export type Handle = `${string}.${string}`;
-
-export type Did<TMethod extends string = string> = `did:${TMethod}:${string}`;
-
-export type AtprotoDid = Did<'plc' | 'web'>;
+import type { Did } from '@atcute/lexicons';
 
 export interface VerificationMethod {
 	id: string;

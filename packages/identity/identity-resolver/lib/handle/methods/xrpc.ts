@@ -1,6 +1,7 @@
 import * as v from '@badrap/valita';
 
-import { isAtprotoDid, type AtprotoDid, type Handle } from '@atcute/identity';
+import { isAtprotoDid } from '@atcute/identity';
+import type { AtprotoDid, Handle } from '@atcute/lexicons/syntax';
 import {
 	FailedResponseError,
 	isResponseOk,

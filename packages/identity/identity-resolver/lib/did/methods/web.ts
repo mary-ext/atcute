@@ -1,4 +1,5 @@
-import { webDidToDocumentUrl, type Did, type DidDocument } from '@atcute/identity';
+import { webDidToDocumentUrl, type DidDocument } from '@atcute/identity';
+import type { Did } from '@atcute/lexicons/syntax';
 import { FailedResponseError } from '@atcute/util-fetch';
 
 import * as err from '../../errors.js';

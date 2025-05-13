@@ -1,6 +1,7 @@
 import * as v from '@badrap/valita';
 
-import { isDid } from './did.js';
+import { isDid } from '@atcute/lexicons/syntax';
+
 import * as t from './types.js';
 
 export const FRAGMENT_RE = /^#[^#]+$/;

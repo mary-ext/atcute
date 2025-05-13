@@ -1,4 +1,4 @@
-import type { AtprotoDid, Handle } from '@atcute/identity';
+import type { AtprotoDid, Handle } from '@atcute/lexicons/syntax';
 
 import * as err from '../errors.js';
 import type { HandleResolver, ResolveHandleOptions } from '../types.js';

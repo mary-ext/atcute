@@ -1,4 +1,5 @@
-import type { AtprotoDid, Did, DidDocument, Handle } from '@atcute/identity';
+import type { DidDocument } from '@atcute/identity';
+import type { AtprotoDid, Did, Handle } from '@atcute/lexicons/syntax';
 
 export interface ResolveDidDocumentOptions {
 	signal?: AbortSignal;

@@ -315,6 +315,9 @@ importers:
 
   packages/identity/identity:
     dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
       '@badrap/valita':
         specifier: ^0.4.4
         version: 0.4.4
@@ -325,6 +328,9 @@ importers:
 
   packages/identity/identity-resolver:
     dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
       '@atcute/util-fetch':
         specifier: workspace:^
         version: link:../../misc/util-fetch
@@ -340,6 +346,10 @@ importers:
         version: 1.2.13
 
   packages/identity/identity-resolver-node:
+    dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
     devDependencies:
       '@atcute/identity':
         specifier: workspace:^

@@ -1,4 +1,5 @@
-import { isAtprotoDid, type AtprotoDid, type Handle } from '@atcute/identity';
+import { isAtprotoDid } from '@atcute/identity';
+import type { AtprotoDid, Handle } from '@atcute/lexicons/syntax';
 import { FailedResponseError, isResponseOk, pipe, readResponseAsText } from '@atcute/util-fetch';
 
 import * as err from '../../errors.js';

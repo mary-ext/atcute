@@ -1,4 +1,4 @@
-import type { Did } from '../types.js';
+import type { Did } from '@atcute/lexicons/syntax';
 
 export const WEB_DID_RE =
 	/^did:web:([a-zA-Z0-9%\-]+(?:(?:\.[a-zA-Z0-9%\-]+)*(?:\.[a-zA-Z]{2,}))?)?((?::[a-zA-Z0-9\-%.]+)+)?$/;

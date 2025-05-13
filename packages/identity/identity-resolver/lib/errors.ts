@@ -1,4 +1,4 @@
-import type { Did } from '@atcute/identity';
+import type { Did } from '@atcute/lexicons/syntax';
 
 // #region DID document resolution errors
 export class DidDocumentResolutionError extends Error {

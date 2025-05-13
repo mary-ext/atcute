@@ -1,4 +1,5 @@
-import { extractDidMethod, type Did, type DidDocument } from '@atcute/identity';
+import { extractDidMethod, type DidDocument } from '@atcute/identity';
+import type { Did } from '@atcute/lexicons/syntax';
 
 import * as err from '../errors.js';
 import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../types.js';

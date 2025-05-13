@@ -1,4 +1,4 @@
-import type { Did } from '../types.js';
+import type { Did } from '@atcute/lexicons/syntax';
 
 export const PLC_DID_RE = /^did:plc:([a-z2-7]{24})$/;
 

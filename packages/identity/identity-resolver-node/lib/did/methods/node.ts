@@ -1,6 +1,6 @@
 import dns from 'node:dns/promises';
 
-import { isAtprotoDid, type AtprotoDid, type Handle } from '@atcute/identity';
+import { isAtprotoDid } from '@atcute/identity';
 import {
 	AmbiguousHandleError,
 	DidNotFoundError,
@@ -9,6 +9,7 @@ import {
 	type HandleResolver,
 	type ResolveHandleOptions,
 } from '@atcute/identity-resolver';
+import type { AtprotoDid, Handle } from '@atcute/lexicons/syntax';
 
 const SUBDOMAIN = '_atproto';
 const PREFIX = 'did=';
