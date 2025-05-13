@@ -218,6 +218,9 @@ importers:
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../core/lex-cli
+      vitest:
+        specifier: ^3.1.3
+        version: 3.1.3(@types/node@22.15.17)
 
   packages/definitions/ozone:
     dependencies:

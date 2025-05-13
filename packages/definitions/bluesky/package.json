@@ -26,6 +26,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
+		"test": "vitest run",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
@@ -35,6 +36,7 @@
 	},
 	"devDependencies": {
 		"@atcute/bluesky": "file:",
-		"@atcute/lex-cli": "workspace:^"
+		"@atcute/lex-cli": "workspace:^",
+		"vitest": "^3.1.3"
 	}
 }
