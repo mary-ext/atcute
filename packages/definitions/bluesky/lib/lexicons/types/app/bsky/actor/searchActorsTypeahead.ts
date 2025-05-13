@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyActorDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.actor.searchActorsTypeahead', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.actor.searchActorsTypeahead', {
 	params: /*#__PURE__*/ v.object({
 		term: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		q: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

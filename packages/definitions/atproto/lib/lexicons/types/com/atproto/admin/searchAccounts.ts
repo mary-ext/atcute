@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoAdminDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.admin.searchAccounts', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.admin.searchAccounts', {
 	params: /*#__PURE__*/ v.object({
 		email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

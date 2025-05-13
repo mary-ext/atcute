@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('tools.ozone.set.addValues', {
+const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.set.addValues', {
 	params: null,
 	input: {
 		type: 'lex',

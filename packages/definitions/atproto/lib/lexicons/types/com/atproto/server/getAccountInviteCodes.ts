@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoServerDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.server.getAccountInviteCodes', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.getAccountInviteCodes', {
 	params: /*#__PURE__*/ v.object({
 		includeUsed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 		createAvailable: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),

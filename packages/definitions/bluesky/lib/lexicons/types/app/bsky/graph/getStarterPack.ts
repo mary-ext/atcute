@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyGraphDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.graph.getStarterPack', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getStarterPack', {
 	params: /*#__PURE__*/ v.object({
 		starterPack: /*#__PURE__*/ v.resourceUriString(),
 	}),

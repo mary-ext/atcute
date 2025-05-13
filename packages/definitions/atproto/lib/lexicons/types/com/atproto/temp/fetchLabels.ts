@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoLabelDefs from '../label/defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.temp.fetchLabels', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.temp.fetchLabels', {
 	params: /*#__PURE__*/ v.object({
 		since: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		limit: /*#__PURE__*/ v.optional(

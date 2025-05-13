@@ -10,7 +10,7 @@ const _itemViewSchema = /*#__PURE__*/ v.object({
 		return BlueMojiCollectionItem.itemViewSchema;
 	},
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('blue.moji.collection.listCollection', {
+const _mainSchema = /*#__PURE__*/ v.query('blue.moji.collection.listCollection', {
 	params: /*#__PURE__*/ v.object({
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),

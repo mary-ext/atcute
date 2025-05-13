@@ -1608,7 +1608,7 @@ export interface XRPCProcedureMetadata<
 }
 
 // #__NO_SIDE_EFFECTS__
-export const xrpcProcedure = <
+export const procedure = <
 	TNsid extends syntax.Nsid,
 	TParams extends ObjectSchema | null,
 	TInput extends XRPCBodyParam,
@@ -1675,7 +1675,7 @@ export interface XRPCQueryMetadata<
 }
 
 // #__NO_SIDE_EFFECTS__
-export const xrpcQuery = <
+export const query = <
 	TNsid extends syntax.Nsid,
 	TParams extends ObjectSchema | null,
 	TOutput extends XRPCBodyParam,
@@ -1724,7 +1724,7 @@ export interface XRPCSubscriptionMetadata<
 }
 
 // #__NO_SIDE_EFFECTS__
-export const xrpcSubscription = <
+export const subscription = <
 	TNsid extends syntax.Nsid,
 	TParams extends ObjectSchema | null,
 	TMessage extends ObjectSchema<any> | VariantSchema<any, any> | null,

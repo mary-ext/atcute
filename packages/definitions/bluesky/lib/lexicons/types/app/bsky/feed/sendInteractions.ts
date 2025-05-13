@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyFeedDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('app.bsky.feed.sendInteractions', {
+const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.feed.sendInteractions', {
 	params: null,
 	input: {
 		type: 'lex',

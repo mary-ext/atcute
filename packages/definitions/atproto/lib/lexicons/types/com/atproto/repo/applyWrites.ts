@@ -25,7 +25,7 @@ const _deleteSchema = /*#__PURE__*/ v.object({
 const _deleteResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#deleteResult')),
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.repo.applyWrites', {
+const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.applyWrites', {
 	params: null,
 	input: {
 		type: 'lex',

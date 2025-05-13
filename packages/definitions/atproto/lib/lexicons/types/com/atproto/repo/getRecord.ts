@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.repo.getRecord', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.getRecord', {
 	params: /*#__PURE__*/ v.object({
 		repo: /*#__PURE__*/ v.actorIdentifierString(),
 		collection: /*#__PURE__*/ v.nsidString(),

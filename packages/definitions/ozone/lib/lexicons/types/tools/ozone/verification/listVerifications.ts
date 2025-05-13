@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ToolsOzoneVerificationDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('tools.ozone.verification.listVerifications', {
+const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.verification.listVerifications', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(

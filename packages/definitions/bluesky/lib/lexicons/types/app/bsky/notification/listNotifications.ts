@@ -4,7 +4,7 @@ import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyActorDefs from '../actor/defs.js';
 import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.notification.listNotifications', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.listNotifications', {
 	params: /*#__PURE__*/ v.object({
 		reasons: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		limit: /*#__PURE__*/ v.optional(

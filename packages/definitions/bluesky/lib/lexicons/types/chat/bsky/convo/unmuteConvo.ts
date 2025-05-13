@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ChatBskyConvoDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('chat.bsky.convo.unmuteConvo', {
+const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.convo.unmuteConvo', {
 	params: null,
 	input: {
 		type: 'lex',

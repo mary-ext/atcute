@@ -41,7 +41,7 @@ const _handleUpdatedSchema = /*#__PURE__*/ v.object({
 	),
 	handle: /*#__PURE__*/ v.handleString(),
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('tools.ozone.hosting.getAccountHistory', {
+const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.hosting.getAccountHistory', {
 	params: /*#__PURE__*/ v.object({
 		did: /*#__PURE__*/ v.didString(),
 		events: /*#__PURE__*/ v.optional(

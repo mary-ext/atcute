@@ -10,7 +10,7 @@ const _batchItemSchema = /*#__PURE__*/ v.object({
 		return ChatBskyConvoDefs.messageInputSchema;
 	},
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('chat.bsky.convo.sendMessageBatch', {
+const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.convo.sendMessageBatch', {
 	params: null,
 	input: {
 		type: 'lex',

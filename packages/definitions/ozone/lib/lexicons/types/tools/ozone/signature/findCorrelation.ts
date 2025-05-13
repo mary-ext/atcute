@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ToolsOzoneSignatureDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('tools.ozone.signature.findCorrelation', {
+const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.signature.findCorrelation', {
 	params: /*#__PURE__*/ v.object({
 		dids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
 	}),

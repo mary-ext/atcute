@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.unspecced.getSuggestedUsersSkeleton', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsersSkeleton', {
 	params: /*#__PURE__*/ v.object({
 		viewer: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		category: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

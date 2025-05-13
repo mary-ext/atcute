@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.listReposByCollection', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listReposByCollection', {
 	params: /*#__PURE__*/ v.object({
 		collection: /*#__PURE__*/ v.nsidString(),
 		limit: /*#__PURE__*/ v.optional(

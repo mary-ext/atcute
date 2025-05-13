@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComWhtwndBlogDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.whtwnd.blog.getAuthorPosts', {
+const _mainSchema = /*#__PURE__*/ v.query('com.whtwnd.blog.getAuthorPosts', {
 	params: /*#__PURE__*/ v.object({
 		author: /*#__PURE__*/ v.didString(),
 	}),

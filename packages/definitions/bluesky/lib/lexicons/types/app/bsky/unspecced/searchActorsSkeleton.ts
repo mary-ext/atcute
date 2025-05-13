@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyUnspeccedDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.unspecced.searchActorsSkeleton', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.searchActorsSkeleton', {
 	params: /*#__PURE__*/ v.object({
 		q: /*#__PURE__*/ v.string(),
 		viewer: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),

@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyActorDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.actor.getProfiles', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.actor.getProfiles', {
 	params: /*#__PURE__*/ v.object({
 		actors: /*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.actorIdentifierString()), [
 			/*#__PURE__*/ v.arrayLength(0, 25),

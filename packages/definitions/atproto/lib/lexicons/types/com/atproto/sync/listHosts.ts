@@ -12,7 +12,7 @@ const _hostSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(ComAtprotoSyncDefs.hostStatusSchema);
 	},
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.listHosts', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listHosts', {
 	params: /*#__PURE__*/ v.object({
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 1000)]),

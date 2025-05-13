@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoSyncDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.sync.getHostStatus', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getHostStatus', {
 	params: /*#__PURE__*/ v.object({
 		hostname: /*#__PURE__*/ v.string(),
 	}),

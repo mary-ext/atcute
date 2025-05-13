@@ -11,7 +11,7 @@ const _likeSchema = /*#__PURE__*/ v.object({
 		return AppBskyActorDefs.profileViewSchema;
 	},
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.feed.getLikes', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getLikes', {
 	params: /*#__PURE__*/ v.object({
 		uri: /*#__PURE__*/ v.resourceUriString(),
 		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

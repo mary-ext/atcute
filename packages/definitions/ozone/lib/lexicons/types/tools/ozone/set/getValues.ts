@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ToolsOzoneSetDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('tools.ozone.set.getValues', {
+const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.set.getValues', {
 	params: /*#__PURE__*/ v.object({
 		name: /*#__PURE__*/ v.string(),
 		limit: /*#__PURE__*/ v.optional(

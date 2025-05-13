@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyVideoDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('app.bsky.video.uploadVideo', {
+const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.video.uploadVideo', {
 	params: null,
 	input: {
 		type: 'blob',

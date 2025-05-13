@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyActorDefs from '../actor/defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.graph.getBlocks', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getBlocks', {
 	params: /*#__PURE__*/ v.object({
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),

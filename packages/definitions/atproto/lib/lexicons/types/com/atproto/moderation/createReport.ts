@@ -5,7 +5,7 @@ import * as ComAtprotoAdminDefs from '../admin/defs.js';
 import * as ComAtprotoModerationDefs from './defs.js';
 import * as ComAtprotoRepoStrongRef from '../repo/strongRef.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.moderation.createReport', {
+const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.moderation.createReport', {
 	params: null,
 	input: {
 		type: 'lex',

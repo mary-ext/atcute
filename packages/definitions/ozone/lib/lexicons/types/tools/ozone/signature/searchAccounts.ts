@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoAdminDefs from '@atcute/atproto/types/admin/defs';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('tools.ozone.signature.searchAccounts', {
+const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.signature.searchAccounts', {
 	params: /*#__PURE__*/ v.object({
 		values: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

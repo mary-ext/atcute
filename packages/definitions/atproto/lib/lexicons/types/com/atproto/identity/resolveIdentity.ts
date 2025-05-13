@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoIdentityDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.identity.resolveIdentity', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.identity.resolveIdentity', {
 	params: /*#__PURE__*/ v.object({
 		identifier: /*#__PURE__*/ v.actorIdentifierString(),
 	}),

@@ -11,7 +11,7 @@ const _linksSchema = /*#__PURE__*/ v.object({
 	privacyPolicy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	termsOfService: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.server.describeServer', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.describeServer', {
 	params: null,
 	output: {
 		type: 'lex',

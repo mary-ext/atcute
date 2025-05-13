@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.repo.listMissingBlobs', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.listMissingBlobs', {
 	params: /*#__PURE__*/ v.object({
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 1000)]),

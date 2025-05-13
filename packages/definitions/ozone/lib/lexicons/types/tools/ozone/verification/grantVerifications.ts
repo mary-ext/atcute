@@ -10,7 +10,7 @@ const _grantErrorSchema = /*#__PURE__*/ v.object({
 	error: /*#__PURE__*/ v.string(),
 	subject: /*#__PURE__*/ v.didString(),
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('tools.ozone.verification.grantVerifications', {
+const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.verification.grantVerifications', {
 	params: null,
 	input: {
 		type: 'lex',

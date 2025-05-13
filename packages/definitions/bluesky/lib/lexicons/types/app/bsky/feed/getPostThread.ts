@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyFeedDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.feed.getPostThread', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getPostThread', {
 	params: /*#__PURE__*/ v.object({
 		uri: /*#__PURE__*/ v.resourceUriString(),
 		depth: /*#__PURE__*/ v.optional(

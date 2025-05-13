@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.server.confirmEmail', {
+const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.confirmEmail', {
 	params: null,
 	input: {
 		type: 'lex',

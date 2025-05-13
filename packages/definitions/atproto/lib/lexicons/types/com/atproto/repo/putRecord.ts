@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoRepoDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.repo.putRecord', {
+const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.putRecord', {
 	params: null,
 	input: {
 		type: 'lex',

@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyActorDefs from '../actor/defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.graph.getSuggestedFollowsByActor', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getSuggestedFollowsByActor', {
 	params: /*#__PURE__*/ v.object({
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
 	}),

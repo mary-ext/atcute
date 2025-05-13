@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyVideoDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.video.getJobStatus', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.video.getJobStatus', {
 	params: /*#__PURE__*/ v.object({
 		jobId: /*#__PURE__*/ v.string(),
 	}),

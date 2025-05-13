@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ToolsOzoneSettingDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('tools.ozone.setting.upsertOption', {
+const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.setting.upsertOption', {
 	params: null,
 	input: {
 		type: 'lex',

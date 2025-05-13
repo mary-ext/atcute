@@ -43,7 +43,7 @@ const _infoSchema = /*#__PURE__*/ v.object({
 	name: /*#__PURE__*/ v.string<'OutdatedCursor' | (string & {})>(),
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcSubscription('com.atproto.sync.subscribeRepos', {
+const _mainSchema = /*#__PURE__*/ v.subscription('com.atproto.sync.subscribeRepos', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	}),

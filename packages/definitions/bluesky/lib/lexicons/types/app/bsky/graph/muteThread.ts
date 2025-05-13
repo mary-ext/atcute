@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('app.bsky.graph.muteThread', {
+const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.graph.muteThread', {
 	params: null,
 	input: {
 		type: 'lex',

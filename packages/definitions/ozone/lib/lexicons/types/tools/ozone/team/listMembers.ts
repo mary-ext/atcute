@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ToolsOzoneTeamDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('tools.ozone.team.listMembers', {
+const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.team.listMembers', {
 	params: /*#__PURE__*/ v.object({
 		q: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		disabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),

@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.identity.getRecommendedDidCredentials', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.identity.getRecommendedDidCredentials', {
 	params: null,
 	output: {
 		type: 'lex',

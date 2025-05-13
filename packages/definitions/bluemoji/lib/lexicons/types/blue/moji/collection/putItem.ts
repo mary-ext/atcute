@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as BlueMojiCollectionItem from './item.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('blue.moji.collection.putItem', {
+const _mainSchema = /*#__PURE__*/ v.procedure('blue.moji.collection.putItem', {
 	params: null,
 	input: {
 		type: 'lex',

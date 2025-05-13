@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ToolsOzoneModerationDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('tools.ozone.moderation.getRecord', {
+const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.getRecord', {
 	params: /*#__PURE__*/ v.object({
 		uri: /*#__PURE__*/ v.resourceUriString(),
 		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

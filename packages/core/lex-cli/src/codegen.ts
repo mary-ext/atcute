@@ -303,7 +303,7 @@ const generateXrpcQuery = (imports: ImportSet, defUri: string, spec: LexXrpcQuer
 	const params = generateXrpcParameters(imports, defUri, spec.parameters);
 	const output = generateXrpcBody(imports, defUri, spec.output);
 
-	return `${PURE} v.xrpcQuery(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "output": ${output} })`;
+	return `${PURE} v.query(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "output": ${output} })`;
 };
 
 const generateXrpcProcedure = (imports: ImportSet, defUri: string, spec: LexXrpcProcedure): string => {
@@ -311,7 +311,7 @@ const generateXrpcProcedure = (imports: ImportSet, defUri: string, spec: LexXrpc
 	const input = generateXrpcBody(imports, defUri, spec.input);
 	const output = generateXrpcBody(imports, defUri, spec.output);
 
-	return `${PURE} v.xrpcProcedure(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "input": ${input}, "output": ${output} })`;
+	return `${PURE} v.procedure(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "input": ${input}, "output": ${output} })`;
 };
 
 const generateXrpcSubscription = (imports: ImportSet, defUri: string, spec: LexXrpcSubscription): string => {
@@ -337,7 +337,7 @@ const generateXrpcSubscription = (imports: ImportSet, defUri: string, spec: LexX
 		inner += `"message": null,`;
 	}
 
-	return `${PURE} v.xrpcSubscription(${lit(stripMainHash(defUri))}, {\n${inner}})`;
+	return `${PURE} v.subscription(${lit(stripMainHash(defUri))}, {\n${inner}})`;
 };
 
 const generateXrpcBody = (imports: ImportSet, defUri: string, spec: LexXrpcBody | undefined): string => {

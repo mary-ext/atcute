@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoAdminDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.admin.getAccountInfos', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.admin.getAccountInfos', {
 	params: /*#__PURE__*/ v.object({
 		dids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
 	}),

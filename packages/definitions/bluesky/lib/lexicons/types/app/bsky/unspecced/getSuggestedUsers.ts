@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyActorDefs from '../actor/defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.unspecced.getSuggestedUsers', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsers', {
 	params: /*#__PURE__*/ v.object({
 		category: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(

@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoIdentityDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.identity.refreshIdentity', {
+const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.identity.refreshIdentity', {
 	params: null,
 	input: {
 		type: 'lex',

@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ChatBskyConvoDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('chat.bsky.convo.getLog', {
+const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getLog', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),

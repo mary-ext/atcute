@@ -4,7 +4,7 @@ import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoAdminDefs from './defs.js';
 import * as ComAtprotoRepoStrongRef from '../repo/strongRef.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.admin.getSubjectStatus', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.admin.getSubjectStatus', {
 	params: /*#__PURE__*/ v.object({
 		did: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		uri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),

@@ -15,7 +15,7 @@ const _labelsSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema);
 	},
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcSubscription('com.atproto.label.subscribeLabels', {
+const _mainSchema = /*#__PURE__*/ v.subscription('com.atproto.label.subscribeLabels', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	}),

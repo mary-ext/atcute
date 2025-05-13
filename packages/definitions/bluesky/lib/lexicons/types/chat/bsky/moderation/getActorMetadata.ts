@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('chat.bsky.moderation.getActorMetadata', {
+const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.moderation.getActorMetadata', {
 	params: /*#__PURE__*/ v.object({
 		actor: /*#__PURE__*/ v.didString(),
 	}),

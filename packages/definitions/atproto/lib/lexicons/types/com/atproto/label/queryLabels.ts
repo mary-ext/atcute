@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoLabelDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.label.queryLabels', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.label.queryLabels', {
 	params: /*#__PURE__*/ v.object({
 		uriPatterns: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
 		sources: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),

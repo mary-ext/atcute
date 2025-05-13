@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.sync.notifyOfUpdate', {
+const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.sync.notifyOfUpdate', {
 	params: null,
 	input: {
 		type: 'lex',

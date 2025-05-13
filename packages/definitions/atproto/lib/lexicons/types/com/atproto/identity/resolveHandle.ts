@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.identity.resolveHandle', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.identity.resolveHandle', {
 	params: /*#__PURE__*/ v.object({
 		handle: /*#__PURE__*/ v.handleString(),
 	}),

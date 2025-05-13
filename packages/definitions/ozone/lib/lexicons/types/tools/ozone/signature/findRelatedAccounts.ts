@@ -4,7 +4,7 @@ import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoAdminDefs from '@atcute/atproto/types/admin/defs';
 import * as ToolsOzoneSignatureDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('tools.ozone.signature.findRelatedAccounts', {
+const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.signature.findRelatedAccounts', {
 	params: /*#__PURE__*/ v.object({
 		did: /*#__PURE__*/ v.didString(),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

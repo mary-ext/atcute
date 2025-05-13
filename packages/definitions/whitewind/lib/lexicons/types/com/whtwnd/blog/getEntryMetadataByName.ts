@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.whtwnd.blog.getEntryMetadataByName', {
+const _mainSchema = /*#__PURE__*/ v.query('com.whtwnd.blog.getEntryMetadataByName', {
 	params: /*#__PURE__*/ v.object({
 		author: /*#__PURE__*/ v.actorIdentifierString(),
 		entryTitle: /*#__PURE__*/ v.string(),

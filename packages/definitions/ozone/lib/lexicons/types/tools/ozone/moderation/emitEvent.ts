@@ -5,7 +5,7 @@ import * as ComAtprotoAdminDefs from '@atcute/atproto/types/admin/defs';
 import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import * as ToolsOzoneModerationDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('tools.ozone.moderation.emitEvent', {
+const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent', {
 	params: null,
 	input: {
 		type: 'lex',

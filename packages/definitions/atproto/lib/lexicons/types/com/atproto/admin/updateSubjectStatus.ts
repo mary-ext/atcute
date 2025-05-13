@@ -4,7 +4,7 @@ import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoAdminDefs from './defs.js';
 import * as ComAtprotoRepoStrongRef from '../repo/strongRef.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.admin.updateSubjectStatus', {
+const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.updateSubjectStatus', {
 	params: null,
 	input: {
 		type: 'lex',

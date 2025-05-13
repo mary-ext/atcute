@@ -8,7 +8,7 @@ const _appPasswordSchema = /*#__PURE__*/ v.object({
 	createdAt: /*#__PURE__*/ v.datetimeString(),
 	privileged: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('com.atproto.server.listAppPasswords', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.listAppPasswords', {
 	params: null,
 	output: {
 		type: 'lex',

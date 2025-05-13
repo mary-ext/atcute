@@ -11,7 +11,7 @@ const _appPasswordSchema = /*#__PURE__*/ v.object({
 	createdAt: /*#__PURE__*/ v.datetimeString(),
 	privileged: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.server.createAppPassword', {
+const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.createAppPassword', {
 	params: null,
 	input: {
 		type: 'lex',

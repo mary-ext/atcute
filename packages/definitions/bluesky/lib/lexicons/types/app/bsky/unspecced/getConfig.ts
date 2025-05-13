@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.unspecced.getConfig', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getConfig', {
 	params: null,
 	output: {
 		type: 'lex',

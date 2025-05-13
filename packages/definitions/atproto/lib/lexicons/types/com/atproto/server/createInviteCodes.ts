@@ -9,7 +9,7 @@ const _accountCodesSchema = /*#__PURE__*/ v.object({
 	account: /*#__PURE__*/ v.string(),
 	codes: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('com.atproto.server.createInviteCodes', {
+const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.createInviteCodes', {
 	params: null,
 	input: {
 		type: 'lex',

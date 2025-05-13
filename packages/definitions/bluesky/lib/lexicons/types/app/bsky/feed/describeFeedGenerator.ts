@@ -11,7 +11,7 @@ const _linksSchema = /*#__PURE__*/ v.object({
 	privacyPolicy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	termsOfService: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.feed.describeFeedGenerator', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.describeFeedGenerator', {
 	params: null,
 	output: {
 		type: 'lex',

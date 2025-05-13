@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.notification.getUnreadCount', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.getUnreadCount', {
 	params: /*#__PURE__*/ v.object({
 		priority: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		seenAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),

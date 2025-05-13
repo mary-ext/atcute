@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.video.getUploadLimits', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.video.getUploadLimits', {
 	params: null,
 	output: {
 		type: 'lex',

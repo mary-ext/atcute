@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as ToolsOzoneCommunicationDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcProcedure('tools.ozone.communication.createTemplate', {
+const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.communication.createTemplate', {
 	params: null,
 	input: {
 		type: 'lex',

@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyFeedDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('app.bsky.feed.getActorFeeds', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getActorFeeds', {
 	params: /*#__PURE__*/ v.object({
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
 		limit: /*#__PURE__*/ v.optional(

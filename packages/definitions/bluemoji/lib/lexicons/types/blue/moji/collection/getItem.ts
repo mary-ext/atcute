@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as BlueMojiCollectionItem from './item.js';
 
-const _mainSchema = /*#__PURE__*/ v.xrpcQuery('blue.moji.collection.getItem', {
+const _mainSchema = /*#__PURE__*/ v.query('blue.moji.collection.getItem', {
 	params: /*#__PURE__*/ v.object({
 		repo: /*#__PURE__*/ v.actorIdentifierString(),
 		name: /*#__PURE__*/ v.string(),
