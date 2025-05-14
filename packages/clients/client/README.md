@@ -9,8 +9,8 @@ lightweight and cute API client for AT Protocol.
 ```ts
 import { Client, CredentialManager, ok, simpleFetchHandler } from '@atcute/client';
 
-// import additional lexicons
-import '@atcute/bluesky/lexicons';
+// import lexicons
+import type {} from '@atcute/bluesky';
 
 // basic usage
 {
@@ -86,11 +86,13 @@ import '@atcute/bluesky/lexicons';
 }
 ```
 
-by default, the API client only ships with the base AT Protocol (`com.atproto.*`) lexicons and
-endpoints , along with a middleware for doing a (legacy) authentication with a PDS. you can extend
-these with optional definition packages:
+by default, the API client ships with no queries or procedures. you can extend the client by
+installing one of these definition packages.
 
-- [`@atcute/bluemoji`](../../definitions/bluemoji): adds `blue.moji.*` definitions
-- [`@atcute/bluesky`](../../definitions/bluesky): adds `app.bsky.*` and `chat.bsky.*` definitions
-- [`@atcute/ozone`](../../definitions/ozone): adds `tools.ozone.*` definitions
-- [`@atcute/whitewind`](../../definitions/whitewind): adds `com.whtwnd.*` definitions
+- [`@atcute/atproto`](../../definitions/atproto): `com.atproto.*` schema definitions
+- [`@atcute/bluemoji`](../../definitions/bluemoji): `blue.moji.*` schema definitions
+- [`@atcute/bluesky`](../../definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions
+- [`@atcute/frontpage`](../../definitions/frontpage): `fyi.unravel.frontpage.*` schema definitions
+- [`@atcute/ozone`](../../definitions/ozone): `tools.ozone.*` schema definitions
+- [`@atcute/tangled`](../../definitions/tangled): `sh.tangled.*` schema definitions
+- [`@atcute/whitewind`](../../definitions/whitewind): `com.whtwnd.*` schema definitions
