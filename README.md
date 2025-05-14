@@ -32,7 +32,7 @@ of atcute.
 
 | Packages                                                                                                               |
 | ---------------------------------------------------------------------------------------------------------------------- |
-| **Client packages packages**                                                                                           |
+| **Client packages**                                                                                                    |
 | [`client`](./packages/clients/client): API client library                                                              |
 | [`jetstream`](./packages/clients/jetstream): Jetstream client                                                          |
 | **OAuth packages**                                                                                                     |
