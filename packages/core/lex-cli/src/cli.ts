@@ -63,7 +63,7 @@ program.register(
 					return 1;
 				}
 
-				const result = lexiconDoc.try(json, { mode: 'strict' });
+				const result = lexiconDoc.try(json, { mode: 'strip' });
 				if (!result.ok) {
 					console.error(pc.bold(pc.red(`schema validation failed for "${filename}"`)));
 
