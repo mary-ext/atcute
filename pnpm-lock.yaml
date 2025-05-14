@@ -233,6 +233,9 @@ importers:
         specifier: workspace:^
         version: link:../../core/lexicons
     devDependencies:
+      '@atcute/bluemoji':
+        specifier: 'file:'
+        version: file:packages/definitions/bluemoji
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../core/lex-cli
@@ -551,6 +554,9 @@ packages:
 
   '@atcute/atproto@file:packages/definitions/atproto':
     resolution: {directory: packages/definitions/atproto, type: directory}
+
+  '@atcute/bluemoji@file:packages/definitions/bluemoji':
+    resolution: {directory: packages/definitions/bluemoji, type: directory}
 
   '@atcute/bluesky@file:packages/definitions/bluesky':
     resolution: {directory: packages/definitions/bluesky, type: directory}
@@ -3266,6 +3272,12 @@ snapshots:
 
   '@atcute/atproto@file:packages/definitions/atproto':
     dependencies:
+      '@atcute/lexicons': link:packages/core/lexicons
+
+  '@atcute/bluemoji@file:packages/definitions/bluemoji':
+    dependencies:
+      '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/bluesky': link:packages/definitions/bluesky
       '@atcute/lexicons': link:packages/core/lexicons
 
   '@atcute/bluesky@file:packages/definitions/bluesky':

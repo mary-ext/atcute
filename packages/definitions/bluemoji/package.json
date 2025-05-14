@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@atcute/bluemoji",
 	"version": "2.0.0",
-	"description": "Bluemoji type definitions for atcute",
+	"description": "Bluemoji (blue.moji.*) schema definitions",
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
@@ -29,6 +29,7 @@
 		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
+		"@atcute/bluemoji": "file:",
 		"@atcute/lex-cli": "workspace:^"
 	}
 }

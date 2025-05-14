@@ -1,30 +1,72 @@
 # @atcute/bluemoji
 
-[Bluemoji](https://github.com/aendra-rininsland/bluemoji) type definitions for `@atcute/client`, a
-lightweight and cute API client for AT Protocol.
+[Bluemoji](https://github.com/aendra-rininsland/bluemoji) (blue.moji.\*) schema definitions
 
 ## usage
 
-you'd need to import `@atcute/bluemoji/lexicons` into your project, either by adding it into the
-`types` field in `tsconfig.json` or by importing it on your source code.
+```ts
+import { BlueMojiCollectionItem } from '@atcute/bluemoji';
+import { is } from '@atcute/lexicons';
+
+const record: BlueMojiCollectionItem.Main = {
+	$type: 'blue.moji.collection.item',
+	name: 'nyoron',
+	alt: '',
+	createdAt: '2024-08-18T15:20:49.297Z',
+	formats: {
+		$type: 'blue.moji.collection.item#formats_v0',
+		png_128: {
+			$type: 'blob',
+			ref: {
+				$link: 'bafkreif32i7xs4ltlattqepkodgsqt5o7j44bfwdigjdz3u7vrgim4xwwm',
+			},
+			mimeType: 'image/png',
+			size: 11624,
+		},
+		original: {
+			$type: 'blob',
+			ref: {
+				$link: 'bafkreif32i7xs4ltlattqepkodgsqt5o7j44bfwdigjdz3u7vrgim4xwwm',
+			},
+			mimeType: 'image/png',
+			size: 11624,
+		},
+		webp_128: {
+			$type: 'blob',
+			ref: {
+				$link: 'bafkreichujvpqyapxnke5uj7mc7p6k5kqprtxbfssstoj6xjh36kcetjoe',
+			},
+			mimeType: 'image/webp',
+			size: 8294,
+		},
+	},
+};
+
+is(BlueMojiCollectionItem.mainSchema, record);
+// -> true
+```
+
+### with `@atcute/client`
+
+pick either one of these 3 options to register the ambient declarations
 
 ```jsonc
 // tsconfig.json
 {
 	"compilerOptions": {
-		"types": ["@atcute/bluemoji/lexicons"],
+		"types": ["@atcute/bluemoji"],
 	},
 }
 ```
 
 ```ts
 // env.d.ts
-/// <reference types="@atcute/bluemoji/lexicons" />
+/// <reference types="@atcute/bluemoji" />
 ```
 
 ```ts
 // index.ts
-import '@atcute/bluemoji/lexicons';
+import type {} from '@atcute/bluemoji';
 ```
 
-newly added lexicons are augmented to `@atcute/client/lexicons` module
+now all the XRPC operations should be visible in the client
