@@ -1503,24 +1503,25 @@ export const variant: {
 					return ISSUE_TYPE_OBJECT;
 				}
 
-				if (!('$type' in input)) {
+				const type = input.$type;
+
+				if (type === undefined && !('$type' in input)) {
 					return ISSUE_VARIANT_MISSING;
 				}
 
-				const type = input.$type;
 				if (typeof type !== 'string') {
 					return ISSUE_VARIANT_TYPE;
 				}
 
-				if (!(type in map)) {
+				const schema = map[type];
+
+				if (schema === undefined) {
 					if (closed) {
 						return issue;
 					}
 
 					return undefined;
 				}
-
-				const schema = map[type];
 
 				return schema['~run'](input, flags);
 			};
