@@ -32,20 +32,16 @@ of atcute.
 
 | Packages                                                                                                               |
 | ---------------------------------------------------------------------------------------------------------------------- |
-| **Core packages**                                                                                                      |
-| [`client`](./packages/core/client): API client library                                                                 |
-| [`jetstream`](./packages/core/jetstream): Jetstream client                                                             |
-| [`lex-cli`](./packages/core/lex-cli): CLI tool to generate schema definitions                                          |
-| [`lexicon-doc`](./packages/core/lexicon-doc): type definitions and schemas for lexicon documents                       |
-| [`lexicons`](./packages/core/lexicons): core lexicon types, interfaces, and schema validations                         |
+| **Client packages packages**                                                                                           |
+| [`client`](./packages/clients/client): API client library                                                              |
+| [`jetstream`](./packages/clients/jetstream): Jetstream client                                                          |
 | **OAuth packages**                                                                                                     |
 | [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth browser client implementation                 |
-| **Identity packages**                                                                                                  |
-| [`did-plc`](./packages/identity/did-plc): validations, type definitions and schemas for did:plc operations             |
-| [`identity`](./packages/identity/identity): syntax, type definitions and schemas for handles, DIDs and DID documents   |
-| [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution                       |
-| [`identity-resolver-node`](./packages/identity/identity-resolver-node): additional identity resolvers for Node.js      |
-| **Lexicon definitions**                                                                                                |
+| **Lexicon packages**                                                                                                   |
+| [`lex-cli`](./packages/lexicons/lex-cli): CLI tool to generate schema definitions                                      |
+| [`lexicon-doc`](./packages/lexicons/lexicon-doc): type definitions and schemas for lexicon documents                   |
+| [`lexicons`](./packages/lexicons/lexicons): core lexicon types, interfaces, and schema validations                     |
+| **Lexicon definition packages**                                                                                        |
 | [`atproto`](./packages/definitions/atproto): `com.atproto.*` schema definitions                                        |
 | [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*` schema definitions                                        |
 | [`bluesky`](./packages/definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions                         |
@@ -53,6 +49,11 @@ of atcute.
 | [`ozone`](./packages/definitions/ozone): `tools.ozone.*` schema definitions                                            |
 | [`tangled`](./packages/definitions/tangled): `sh.tangled.*` schema definitions                                         |
 | [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` schema definitions                                     |
+| **Identity packages**                                                                                                  |
+| [`did-plc`](./packages/identity/did-plc): validations, type definitions and schemas for did:plc operations             |
+| [`identity`](./packages/identity/identity): syntax, type definitions and schemas for handles, DIDs and DID documents   |
+| [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution                       |
+| [`identity-resolver-node`](./packages/identity/identity-resolver-node): additional identity resolvers for Node.js      |
 | **Utility packages**                                                                                                   |
 | [`car`](./packages/utilities/car): DASL CAR and atproto repository decoder                                             |
 | [`cbor`](./packages/utilities/cbor): DASL dCBOR42 codec                                                                |

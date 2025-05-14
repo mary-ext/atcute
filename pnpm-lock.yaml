@@ -34,7 +34,7 @@ importers:
     dependencies:
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/atproto':
         specifier: workspace:^
@@ -56,7 +56,7 @@ importers:
         version: link:../../definitions/bluesky
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@types/bun':
         specifier: ^1.2.13
@@ -75,7 +75,7 @@ importers:
         version: link:../../definitions/bluesky
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@types/bun':
         specifier: ^1.2.13
@@ -106,10 +106,10 @@ importers:
         version: link:../../utilities/cid
       '@atcute/client':
         specifier: workspace:^
-        version: link:../../core/client
+        version: link:../../clients/client
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
       '@atcute/tid':
         specifier: workspace:^
         version: link:../../utilities/tid
@@ -118,14 +118,14 @@ importers:
         specifier: ^1.2.13
         version: 1.2.13
 
-  packages/core/client:
+  packages/clients/client:
     dependencies:
       '@atcute/identity':
         specifier: workspace:^
         version: link:../../identity/identity
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/atproto':
         specifier: workspace:^
@@ -143,11 +143,11 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(@types/node@22.15.17)
 
-  packages/core/jetstream:
+  packages/clients/jetstream:
     dependencies:
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../lexicons
+        version: link:../../lexicons/lexicons
       '@badrap/valita':
         specifier: ^0.4.2
         version: 0.4.4
@@ -174,61 +174,18 @@ importers:
         specifier: ^3.0.4
         version: 3.1.3(@types/node@22.15.17)
 
-  packages/core/lex-cli:
-    dependencies:
-      '@atcute/lexicon-doc':
-        specifier: workspace:^
-        version: link:../lexicon-doc
-      '@badrap/valita':
-        specifier: ^0.4.4
-        version: 0.4.4
-      '@externdefs/collider':
-        specifier: ^0.3.0
-        version: 0.3.0(@badrap/valita@0.4.4)
-      picocolors:
-        specifier: ^1.1.1
-        version: 1.1.1
-      prettier:
-        specifier: ^3.5.3
-        version: 3.5.3
-    devDependencies:
-      '@atcute/lexicons':
-        specifier: workspace:^
-        version: link:../lexicons
-      '@types/node':
-        specifier: ^22.15.17
-        version: 22.15.17
-
-  packages/core/lexicon-doc:
-    dependencies:
-      '@badrap/valita':
-        specifier: ^0.4.4
-        version: 0.4.4
-
-  packages/core/lexicons:
-    devDependencies:
-      '@types/bun':
-        specifier: ^1.2.13
-        version: 1.2.13
-      '@vitest/coverage-v8':
-        specifier: ^3.1.3
-        version: 3.1.3(vitest@3.1.3(@types/node@22.15.17))
-      vitest:
-        specifier: ^3.1.3
-        version: 3.1.3(@types/node@22.15.17)
-
   packages/definitions/atproto:
     dependencies:
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/atproto':
         specifier: 'file:'
         version: file:packages/definitions/atproto
       '@atcute/lex-cli':
         specifier: workspace:^
-        version: link:../../core/lex-cli
+        version: link:../../lexicons/lex-cli
 
   packages/definitions/bluemoji:
     dependencies:
@@ -240,14 +197,14 @@ importers:
         version: link:../bluesky
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/bluemoji':
         specifier: 'file:'
         version: file:packages/definitions/bluemoji
       '@atcute/lex-cli':
         specifier: workspace:^
-        version: link:../../core/lex-cli
+        version: link:../../lexicons/lex-cli
 
   packages/definitions/bluesky:
     dependencies:
@@ -256,14 +213,14 @@ importers:
         version: link:../atproto
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/bluesky':
         specifier: 'file:'
         version: file:packages/definitions/bluesky
       '@atcute/lex-cli':
         specifier: workspace:^
-        version: link:../../core/lex-cli
+        version: link:../../lexicons/lex-cli
       vitest:
         specifier: ^3.1.3
         version: 3.1.3(@types/node@22.15.17)
@@ -275,14 +232,14 @@ importers:
         version: link:../atproto
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/frontpage':
         specifier: 'file:'
         version: file:packages/definitions/frontpage
       '@atcute/lex-cli':
         specifier: workspace:^
-        version: link:../../core/lex-cli
+        version: link:../../lexicons/lex-cli
       vitest:
         specifier: ^3.1.3
         version: 3.1.3(@types/node@22.15.17)
@@ -297,11 +254,11 @@ importers:
         version: link:../bluesky
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/lex-cli':
         specifier: workspace:^
-        version: link:../../core/lex-cli
+        version: link:../../lexicons/lex-cli
       '@atcute/ozone':
         specifier: 'file:'
         version: file:packages/definitions/ozone
@@ -313,11 +270,11 @@ importers:
         version: link:../atproto
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/lex-cli':
         specifier: workspace:^
-        version: link:../../core/lex-cli
+        version: link:../../lexicons/lex-cli
       '@atcute/tangled':
         specifier: 'file:'
         version: file:packages/definitions/tangled
@@ -329,11 +286,11 @@ importers:
     dependencies:
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/lex-cli':
         specifier: workspace:^
-        version: link:../../core/lex-cli
+        version: link:../../lexicons/lex-cli
       '@atcute/whitewind':
         specifier: 'file:'
         version: file:packages/definitions/whitewind
@@ -367,7 +324,7 @@ importers:
     dependencies:
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
       '@badrap/valita':
         specifier: ^0.4.4
         version: 0.4.4
@@ -380,7 +337,7 @@ importers:
     dependencies:
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
       '@atcute/util-fetch':
         specifier: workspace:^
         version: link:../../misc/util-fetch
@@ -399,7 +356,7 @@ importers:
     dependencies:
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
     devDependencies:
       '@atcute/identity':
         specifier: workspace:^
@@ -454,6 +411,49 @@ importers:
         specifier: ^22.15.17
         version: 22.15.17
 
+  packages/lexicons/lex-cli:
+    dependencies:
+      '@atcute/lexicon-doc':
+        specifier: workspace:^
+        version: link:../lexicon-doc
+      '@badrap/valita':
+        specifier: ^0.4.4
+        version: 0.4.4
+      '@externdefs/collider':
+        specifier: ^0.3.0
+        version: 0.3.0(@badrap/valita@0.4.4)
+      picocolors:
+        specifier: ^1.1.1
+        version: 1.1.1
+      prettier:
+        specifier: ^3.5.3
+        version: 3.5.3
+    devDependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../lexicons
+      '@types/node':
+        specifier: ^22.15.17
+        version: 22.15.17
+
+  packages/lexicons/lexicon-doc:
+    dependencies:
+      '@badrap/valita':
+        specifier: ^0.4.4
+        version: 0.4.4
+
+  packages/lexicons/lexicons:
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.2.13
+        version: 1.2.13
+      '@vitest/coverage-v8':
+        specifier: ^3.1.3
+        version: 3.1.3(vitest@3.1.3(@types/node@22.15.17))
+      vitest:
+        specifier: ^3.1.3
+        version: 3.1.3(@types/node@22.15.17)
+
   packages/misc/util-fetch:
     dependencies:
       '@badrap/valita':
@@ -468,13 +468,13 @@ importers:
     dependencies:
       '@atcute/client':
         specifier: workspace:^
-        version: link:../../core/client
+        version: link:../../clients/client
       '@atcute/identity':
         specifier: workspace:^
         version: link:../../identity/identity
       '@atcute/lexicons':
         specifier: workspace:^
-        version: link:../../core/lexicons
+        version: link:../../lexicons/lexicons
       '@atcute/multibase':
         specifier: workspace:^
         version: link:../../utilities/multibase
@@ -3325,38 +3325,38 @@ snapshots:
 
   '@atcute/atproto@file:packages/definitions/atproto':
     dependencies:
-      '@atcute/lexicons': link:packages/core/lexicons
+      '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atcute/bluemoji@file:packages/definitions/bluemoji':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/bluesky': link:packages/definitions/bluesky
-      '@atcute/lexicons': link:packages/core/lexicons
+      '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atcute/bluesky@file:packages/definitions/bluesky':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
-      '@atcute/lexicons': link:packages/core/lexicons
+      '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atcute/frontpage@file:packages/definitions/frontpage':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
-      '@atcute/lexicons': link:packages/core/lexicons
+      '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atcute/ozone@file:packages/definitions/ozone':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/bluesky': link:packages/definitions/bluesky
-      '@atcute/lexicons': link:packages/core/lexicons
+      '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atcute/tangled@file:packages/definitions/tangled':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
-      '@atcute/lexicons': link:packages/core/lexicons
+      '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atcute/whitewind@file:packages/definitions/whitewind':
     dependencies:
-      '@atcute/lexicons': link:packages/core/lexicons
+      '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atproto-labs/fetch-node@0.1.8':
     dependencies:
