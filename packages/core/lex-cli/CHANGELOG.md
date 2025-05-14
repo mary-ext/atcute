@@ -1,5 +1,11 @@
 # @atcute/lex-cli
 
+## 2.0.0
+
+### Major Changes
+
+- 2ca2d0c: New lexicon code generator
+
 ## 1.1.2
 
 ### Patch Changes

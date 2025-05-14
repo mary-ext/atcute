@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/bluesky-threading",
-	"version": "4.0.2",
+	"version": "5.0.0",
 	"description": "create Bluesky threads containing multiple posts with one write",
 	"license": "MIT",
 	"repository": {

@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/identity-resolver",
-	"version": "0.1.2",
+	"version": "1.0.0",
 	"description": "atproto handle and DID document resolution",
 	"keywords": [
 		"atproto",
@@ -28,7 +28,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
-		"@atcute/identity": "^0.1.0"
+		"@atcute/identity": "^1.0.0"
 	},
 	"dependencies": {
 		"@atcute/lexicons": "workspace:^",
