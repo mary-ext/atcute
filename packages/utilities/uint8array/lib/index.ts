@@ -128,6 +128,8 @@ export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, len
 	return result.written;
 };
 
+const fromCharCode = String.fromCharCode;
+
 /**
  * decodes a UTF-8 string from a buffer
  */
@@ -142,9 +144,40 @@ export const decodeUtf8From = (from: Uint8Array, offset?: number, length?: numbe
 		buffer = from.subarray(offset, offset + length);
 	}
 
-	const result = textDecoder.decode(buffer);
+	const end = buffer.length;
+	if (end > 24) {
+		return textDecoder.decode(buffer);
+	}
 
-	return result;
+	{
+		let str = '';
+		let idx = 0;
+
+		for (; idx + 3 < end; idx += 4) {
+			const a = buffer[idx];
+			const b = buffer[idx + 1];
+			const c = buffer[idx + 2];
+			const d = buffer[idx + 3];
+
+			if ((a | b | c | d) & 0x80) {
+				return str + textDecoder.decode(buffer.subarray(idx));
+			}
+
+			str += fromCharCode(a, b, c, d);
+		}
+
+		for (; idx < end; idx++) {
+			const x = buffer[idx];
+
+			if (x & 0x80) {
+				return str + textDecoder.decode(buffer.subarray(idx));
+			}
+
+			str += fromCharCode(x);
+		}
+
+		return str;
+	}
 };
 
 /**
