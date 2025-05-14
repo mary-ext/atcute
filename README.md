@@ -40,7 +40,7 @@ of atcute.
 | [`lexicons`](./packages/core/lexicons): core lexicon types, interfaces, and schema validations                         |
 | **OAuth packages**                                                                                                     |
 | [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth browser client implementation                 |
-| **Identity packages** _(work in progress)_                                                                             |
+| **Identity packages**                                                                                                  |
 | [`did-plc`](./packages/identity/did-plc): validations, type definitions and schemas for did:plc operations             |
 | [`identity`](./packages/identity/identity): syntax, type definitions and schemas for handles, DIDs and DID documents   |
 | [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution                       |
