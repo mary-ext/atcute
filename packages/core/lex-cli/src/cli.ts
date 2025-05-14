@@ -4,9 +4,10 @@ import * as path from 'node:path';
 import { Builtins, Command, Option, Program } from '@externdefs/collider';
 import pc from 'picocolors';
 
+import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
+
 import { generateLexiconApi } from './codegen.js';
 import type { LexiconConfig } from './index.js';
-import { lexiconDoc, type LexiconDoc } from './schema.js';
 
 const program = new Program({ binaryName: 'lex-cli' });
 

@@ -36,6 +36,7 @@ of atcute.
 | [`client`](./packages/core/client): API client library                                                                 |
 | [`jetstream`](./packages/core/jetstream): Jetstream client                                                             |
 | [`lex-cli`](./packages/core/lex-cli): CLI tool to generate schema definitions                                          |
+| [`lexicon-doc`](./packages/core/lexicon-doc): type definitions and schemas for lexicon documents                       |
 | [`lexicons`](./packages/core/lexicons): core lexicon types, interfaces, and schema validations                         |
 | **OAuth packages**                                                                                                     |
 | [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth browser client implementation                 |
@@ -50,7 +51,7 @@ of atcute.
 | [`bluesky`](./packages/definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions                         |
 | [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*` schema definitions                          |
 | [`ozone`](./packages/definitions/ozone): `tools.ozone.*` schema definitions                                            |
-| [`tangled`](./packages/definitions/tangled): `sh.tangled.*` schema definitions                                        |
+| [`tangled`](./packages/definitions/tangled): `sh.tangled.*` schema definitions                                         |
 | [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` schema definitions                                     |
 | **Utility packages**                                                                                                   |
 | [`car`](./packages/utilities/car): DASL CAR and atproto repository decoder                                             |

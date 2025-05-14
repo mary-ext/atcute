@@ -16,7 +16,7 @@ import type {
 	LexXrpcProcedure,
 	LexXrpcQuery,
 	LexXrpcSubscription,
-} from './schema.js';
+} from '@atcute/lexicon-doc';
 
 export interface SourceFile {
 	filename: string;

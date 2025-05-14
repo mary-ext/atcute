@@ -176,6 +176,9 @@ importers:
 
   packages/core/lex-cli:
     dependencies:
+      '@atcute/lexicon-doc':
+        specifier: workspace:^
+        version: link:../lexicon-doc
       '@badrap/valita':
         specifier: ^0.4.4
         version: 0.4.4
@@ -195,6 +198,12 @@ importers:
       '@types/node':
         specifier: ^22.15.17
         version: 22.15.17
+
+  packages/core/lexicon-doc:
+    dependencies:
+      '@badrap/valita':
+        specifier: ^0.4.4
+        version: 0.4.4
 
   packages/core/lexicons:
     devDependencies:
