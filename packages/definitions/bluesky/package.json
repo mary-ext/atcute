@@ -25,7 +25,7 @@
 		"./types/chat/*": "./dist/lexicons/types/chat/bsky/*.js"
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc --project tsconfig.build.json",
 		"test": "vitest",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
@@ -37,6 +37,7 @@
 	"devDependencies": {
 		"@atcute/bluesky": "file:",
 		"@atcute/lex-cli": "workspace:^",
+		"@atproto/api": "^0.15.6",
 		"vitest": "^3.1.3"
 	}
 }
