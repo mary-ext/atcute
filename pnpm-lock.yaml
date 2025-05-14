@@ -259,6 +259,25 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(@types/node@22.15.17)
 
+  packages/definitions/frontpage:
+    dependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../atproto
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../core/lexicons
+    devDependencies:
+      '@atcute/frontpage':
+        specifier: 'file:'
+        version: file:packages/definitions/frontpage
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../../core/lex-cli
+      vitest:
+        specifier: ^3.1.3
+        version: 3.1.3(@types/node@22.15.17)
+
   packages/definitions/ozone:
     dependencies:
       '@atcute/atproto':
@@ -560,6 +579,9 @@ packages:
 
   '@atcute/bluesky@file:packages/definitions/bluesky':
     resolution: {directory: packages/definitions/bluesky, type: directory}
+
+  '@atcute/frontpage@file:packages/definitions/frontpage':
+    resolution: {directory: packages/definitions/frontpage, type: directory}
 
   '@atcute/ozone@file:packages/definitions/ozone':
     resolution: {directory: packages/definitions/ozone, type: directory}
@@ -3281,6 +3303,11 @@ snapshots:
       '@atcute/lexicons': link:packages/core/lexicons
 
   '@atcute/bluesky@file:packages/definitions/bluesky':
+    dependencies:
+      '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/lexicons': link:packages/core/lexicons
+
+  '@atcute/frontpage@file:packages/definitions/frontpage':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/lexicons': link:packages/core/lexicons

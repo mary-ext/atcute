@@ -48,6 +48,7 @@ of atcute.
 | [`atproto`](./packages/definitions/atproto): `com.atproto.*` schema definitions                                        |
 | [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*` schema definitions                                        |
 | [`bluesky`](./packages/definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions                         |
+| [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*` schema definitions                          |
 | [`ozone`](./packages/definitions/ozone): `tools.ozone.*` schema definitions                                            |
 | [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` schema definitions                                     |
 | **Utility packages**                                                                                                   |
