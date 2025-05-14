@@ -1,0 +1,58 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.pull",
+	"needsCbor": true,
+	"needsType": true,
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["targetRepo", "targetBranch", "pullId", "title", "patch", "createdAt"],
+				"properties": {
+					"targetRepo": {
+						"type": "string",
+						"format": "at-uri"
+					},
+					"targetBranch": {
+						"type": "string"
+					},
+					"pullId": {
+						"type": "integer"
+					},
+					"title": {
+						"type": "string"
+					},
+					"body": {
+						"type": "string"
+					},
+					"patch": {
+						"type": "string"
+					},
+					"source": {
+						"type": "ref",
+						"ref": "#source"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		},
+		"source": {
+			"type": "object",
+			"required": ["branch"],
+			"properties": {
+				"branch": {
+					"type": "string"
+				},
+				"repo": {
+					"type": "string",
+					"format": "at-uri"
+				}
+			}
+		}
+	}
+}

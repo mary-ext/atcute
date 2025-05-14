@@ -1,0 +1,40 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.pull.comment",
+	"needsCbor": true,
+	"needsType": true,
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["pull", "body", "createdAt"],
+				"properties": {
+					"pull": {
+						"type": "string",
+						"format": "at-uri"
+					},
+					"repo": {
+						"type": "string",
+						"format": "at-uri"
+					},
+					"commentId": {
+						"type": "integer"
+					},
+					"owner": {
+						"type": "string",
+						"format": "did"
+					},
+					"body": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}

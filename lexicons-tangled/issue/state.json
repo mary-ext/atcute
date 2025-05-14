@@ -1,0 +1,28 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.issue.state",
+	"needsCbor": true,
+	"needsType": true,
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["issue", "state"],
+				"properties": {
+					"issue": {
+						"type": "string",
+						"format": "at-uri"
+					},
+					"state": {
+						"type": "string",
+						"description": "state of the issue",
+						"knownValues": ["sh.tangled.repo.issue.state.open", "sh.tangled.repo.issue.state.closed"],
+						"default": "sh.tangled.repo.issue.state.open"
+					}
+				}
+			}
+		}
+	}
+}

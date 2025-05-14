@@ -1,0 +1,32 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.publicKey",
+	"needsCbor": true,
+	"needsType": true,
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["key", "name", "createdAt"],
+				"properties": {
+					"key": {
+						"type": "string",
+						"maxLength": 4096,
+						"description": "public key contents"
+					},
+					"name": {
+						"type": "string",
+						"description": "human-readable name for this key"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "key upload timestamp"
+					}
+				}
+			}
+		}
+	}
+}

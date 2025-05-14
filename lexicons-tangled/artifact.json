@@ -1,0 +1,44 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.artifact",
+	"needsCbor": true,
+	"needsType": true,
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["name", "repo", "tag", "createdAt", "artifact"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "name of the artifact"
+					},
+					"repo": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "repo that this artifact is being uploaded to"
+					},
+					"tag": {
+						"type": "bytes",
+						"description": "hash of the tag object that this artifact is attached to (only annotated tags are supported)",
+						"minLength": 20,
+						"maxLength": 20
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "time of creation of this artifact"
+					},
+					"artifact": {
+						"type": "blob",
+						"description": "the artifact",
+						"accept": ["*/*"],
+						"maxSize": 52428800
+					}
+				}
+			}
+		}
+	}
+}

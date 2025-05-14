@@ -1,0 +1,70 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.actor.profile",
+	"defs": {
+		"main": {
+			"type": "record",
+			"description": "A declaration of a Tangled account profile.",
+			"key": "literal:self",
+			"record": {
+				"type": "object",
+				"required": ["bluesky"],
+				"properties": {
+					"description": {
+						"type": "string",
+						"description": "Free-form profile description text.",
+						"maxGraphemes": 256,
+						"maxLength": 2560
+					},
+					"links": {
+						"type": "array",
+						"minLength": 0,
+						"maxLength": 5,
+						"items": {
+							"type": "string",
+							"description": "Any URI, intended for social profiles or websites, can be used to link DIDs/AT-URIs too.",
+							"format": "uri"
+						}
+					},
+					"stats": {
+						"type": "array",
+						"minLength": 0,
+						"maxLength": 2,
+						"items": {
+							"type": "string",
+							"description": "Vanity stats.",
+							"enum": [
+								"merged-pull-request-count",
+								"closed-pull-request-count",
+								"open-pull-request-count",
+								"open-issue-count",
+								"closed-issue-count",
+								"repository-count"
+							]
+						}
+					},
+					"bluesky": {
+						"type": "boolean",
+						"description": "Include link to this account on Bluesky."
+					},
+					"location": {
+						"type": "string",
+						"description": "Free-form location text.",
+						"maxGraphemes": 40,
+						"maxLength": 400
+					},
+					"pinnedRepositories": {
+						"type": "array",
+						"description": "Any ATURI, it is up to appviews to validate these fields.",
+						"minLength": 0,
+						"maxLength": 6,
+						"items": {
+							"type": "string",
+							"format": "at-uri"
+						}
+					}
+				}
+			}
+		}
+	}
+}

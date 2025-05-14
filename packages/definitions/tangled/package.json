@@ -1,0 +1,41 @@
+{
+	"type": "module",
+	"name": "@atcute/tangled",
+	"version": "1.0.0",
+	"description": "Tangled (sh.tangled.*) schema definitions",
+	"keywords": [
+		"atcute",
+		"atproto",
+		"tangled"
+	],
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/definitions/tangled"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js",
+		"./types/*": "./dist/lexicons/types/sh/tangled/*.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"test": "vitest",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/atproto": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/tangled": "file:",
+		"@atcute/lex-cli": "workspace:^",
+		"vitest": "^3.1.3"
+	}
+}

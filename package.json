@@ -5,6 +5,7 @@
 		"pull": "node ./scripts/pull-lexicons.js",
 		"pull:bluemoji": "node ./scripts/pull-bluemoji-lexicons.js",
 		"pull:frontpage": "node ./scripts/pull-frontpage-lexicons.js",
+		"pull:tangled": "node ./scripts/pull-tangled-lexicons.js",
 		"pull:whtwnd": "node ./scripts/pull-whtwnd-lexicons.js",
 		"fmt": "prettier --cache --write ."
 	},

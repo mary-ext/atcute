@@ -50,6 +50,7 @@ of atcute.
 | [`bluesky`](./packages/definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions                         |
 | [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*` schema definitions                          |
 | [`ozone`](./packages/definitions/ozone): `tools.ozone.*` schema definitions                                            |
+| [`tangled`]('./packages/definitions/tangled): `sh.tangled.*` schema definitions                                        |
 | [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` schema definitions                                     |
 | **Utility packages**                                                                                                   |
 | [`car`](./packages/utilities/car): DASL CAR and atproto repository decoder                                             |

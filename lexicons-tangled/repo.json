@@ -1,0 +1,45 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo",
+	"needsCbor": true,
+	"needsType": true,
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["name", "knot", "owner", "createdAt"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "name of the repo"
+					},
+					"owner": {
+						"type": "string",
+						"format": "did"
+					},
+					"knot": {
+						"type": "string",
+						"description": "knot where the repo was created"
+					},
+					"description": {
+						"type": "string",
+						"format": "datetime",
+						"minGraphemes": 1,
+						"maxGraphemes": 140
+					},
+					"source": {
+						"type": "string",
+						"format": "uri",
+						"description": "source of the repo"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}
