@@ -1318,16 +1318,14 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 					const key = entry.key;
 					const value = input[key];
 
-					if (value === undefined && !(key in input)) {
-						if (!entry.optional) {
-							issues = joinIssues(issues, entry.missing);
+					if (!entry.optional && value === undefined && !(key in input)) {
+						issues = joinIssues(issues, entry.missing);
 
-							if (flags & FLAG_ABORT_EARLY) {
-								return issues;
-							}
-
-							continue;
+						if (flags & FLAG_ABORT_EARLY) {
+							return issues;
 						}
+
+						continue;
 					}
 
 					const r = entry.schema['~run'](value, flags);
