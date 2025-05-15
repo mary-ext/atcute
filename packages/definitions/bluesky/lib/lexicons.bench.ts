@@ -201,4 +201,40 @@ summary(() => {
 	});
 });
 
+summary(() => {
+	bench('atcute', function* () {
+		yield {
+			[0]() {
+				const record: atcute.AppBskyFeedPost.Main = {
+					$type: 'app.bsky.feed.post',
+					createdAt: new Date().toISOString(),
+					text: '👨‍👩‍👧‍👦'.repeat(90),
+				};
+
+				return record;
+			},
+			bench(record: any) {
+				return do_not_optimize(is(atcute.AppBskyFeedPost.mainSchema, record));
+			},
+		};
+	});
+
+	bench('atproto', function* () {
+		yield {
+			[0]() {
+				const record: atcute.AppBskyFeedPost.Main = {
+					$type: 'app.bsky.feed.post',
+					createdAt: new Date().toISOString(),
+					text: '👨‍👩‍👧‍👦'.repeat(90),
+				};
+
+				return atproto.jsonToLex(record);
+			},
+			bench(record: any) {
+				return do_not_optimize(atproto.AppBskyFeedPost.validateRecord(record));
+			},
+		};
+	});
+});
+
 await run();
