@@ -6,6 +6,38 @@ export const getUtf8Length = (str: string): number => {
 	let u16pos = 0;
 	let u8pos = 0;
 
+	jump: if (str.charCodeAt(0) < 0x80) {
+		u16pos++;
+		u8pos++;
+
+		while (u16pos + 3 < len) {
+			const a = str.charCodeAt(u16pos);
+			const b = str.charCodeAt(u16pos + 1);
+			const c = str.charCodeAt(u16pos + 2);
+			const d = str.charCodeAt(u16pos + 3);
+
+			if ((a | b | c | d) >= 0x80) {
+				break jump;
+			}
+
+			u16pos += 4;
+			u8pos += 4;
+		}
+
+		while (u16pos < len) {
+			const x = str.charCodeAt(u16pos);
+
+			if (x >= 0x80) {
+				break jump;
+			}
+
+			u16pos++;
+			u8pos++;
+		}
+
+		return u8pos;
+	}
+
 	while (u16pos < len) {
 		const code = str.charCodeAt(u16pos);
 
