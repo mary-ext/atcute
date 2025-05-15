@@ -1037,8 +1037,10 @@ export type InferOptionalOutput<
 	TDefault extends DefaultValue<TItem>,
 > = undefined extends TDefault ? InferOutput<TItem> | undefined : InferOutput<TItem>;
 
-export interface OptionalSchema<TItem extends BaseSchema, TDefault extends DefaultValue<TItem>>
-	extends BaseSchema<InferInput<TItem> | undefined, InferOptionalOutput<TItem, TDefault>> {
+export interface OptionalSchema<
+	TItem extends BaseSchema = BaseSchema,
+	TDefault extends DefaultValue<TItem> = DefaultValue<TItem>,
+> extends BaseSchema<InferInput<TItem> | undefined, InferOptionalOutput<TItem, TDefault>> {
 	readonly type: 'optional';
 	readonly wrapped: TItem;
 	readonly default: TDefault;
@@ -1081,7 +1083,7 @@ const isOptionalSchema = (schema: BaseSchema): schema is OptionalSchema<any, unk
 
 // #region Array schema
 
-export interface ArraySchema<TItem extends BaseSchema> extends BaseSchema<unknown[], unknown[]> {
+export interface ArraySchema<TItem extends BaseSchema = BaseSchema> extends BaseSchema<unknown[], unknown[]> {
 	readonly type: 'array';
 	readonly item: TItem;
 
@@ -1594,10 +1596,10 @@ export type InferXRPCBodyOutput<T extends XRPCBodyParam> =
 // #region XRPC procedure metadata
 
 export interface XRPCProcedureMetadata<
-	TParams extends ObjectSchema | null,
-	TInput extends XRPCBodyParam,
-	TOutput extends XRPCBodyParam,
-	TNsid extends syntax.Nsid,
+	TParams extends ObjectSchema | null = ObjectSchema | null,
+	TInput extends XRPCBodyParam = XRPCBodyParam,
+	TOutput extends XRPCBodyParam = XRPCBodyParam,
+	TNsid extends syntax.Nsid = syntax.Nsid,
 > extends BaseMetadata {
 	readonly type: 'xrpc_procedure';
 	readonly nsid: TNsid;
@@ -1663,9 +1665,9 @@ export const procedure = <
 // #region XRPC query metadata
 
 export interface XRPCQueryMetadata<
-	TParams extends ObjectSchema | null,
-	TOutput extends XRPCBodyParam,
-	TNsid extends syntax.Nsid,
+	TParams extends ObjectSchema | null = ObjectSchema | null,
+	TOutput extends XRPCBodyParam = XRPCBodyParam,
+	TNsid extends syntax.Nsid = syntax.Nsid,
 > extends BaseMetadata {
 	readonly type: 'xrpc_query';
 	readonly nsid: TNsid;
@@ -1712,9 +1714,12 @@ export const query = <
 // #region XRPC subscription metadata
 
 export interface XRPCSubscriptionMetadata<
-	TParams extends ObjectSchema | null,
-	TMessage extends ObjectSchema<any> | VariantSchema<any, any> | null,
-	TNsid extends syntax.Nsid,
+	TParams extends ObjectSchema | null = ObjectSchema | null,
+	TMessage extends ObjectSchema<any> | VariantSchema<any, any> | null =
+		| ObjectSchema<any>
+		| VariantSchema<any, any>
+		| null,
+	TNsid extends syntax.Nsid = syntax.Nsid,
 > extends BaseMetadata {
 	readonly type: 'xrpc_subscription';
 	readonly nsid: TNsid;
