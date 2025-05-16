@@ -344,9 +344,14 @@ export declare namespace lexXrpcParameters {
 	export interface $schema extends $schematype {}
 }
 
+const MIME_TYPE_RE =
+	/^\s*(?:\*\/\*|[a-z]+\/[a-zA-Z][a-zA-Z0-9-+.]*(?:\s*,\s*[a-z]+\/[a-zA-Z][a-zA-Z0-9-+.]*)*?)\s*$/;
+
 const _lexXrpcBody = v.object({
 	description: v.string().optional(),
-	encoding: v.string(),
+	encoding: v
+		.string()
+		.assert((input) => MIME_TYPE_RE.test(input), `must be a comma-delimited list of mime types`),
 	schema: v.union(lexRefVariant, lexObject).optional(),
 });
 
