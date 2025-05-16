@@ -7,6 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.video.uploadVideo', {
 	params: null,
 	input: {
 		type: 'blob',
+		encoding: ['video/mp4'],
 	},
 	output: {
 		type: 'lex',

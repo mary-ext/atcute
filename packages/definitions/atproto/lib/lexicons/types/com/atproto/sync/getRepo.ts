@@ -9,6 +9,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getRepo', {
 	}),
 	output: {
 		type: 'blob',
+		encoding: ['application/vnd.ipld.car'],
 	},
 });
 

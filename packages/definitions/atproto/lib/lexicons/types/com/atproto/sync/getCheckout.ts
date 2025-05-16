@@ -8,6 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getCheckout', {
 	}),
 	output: {
 		type: 'blob',
+		encoding: ['application/vnd.ipld.car'],
 	},
 });
 

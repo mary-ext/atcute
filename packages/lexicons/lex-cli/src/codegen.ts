@@ -367,7 +367,17 @@ const generateXrpcBody = (imports: ImportSet, defUri: string, spec: LexXrpcBody 
 	}
 
 	if (encoding) {
-		return `{\n"type": "blob" }`;
+		const types = encoding.split(',').map((type) => type.trim());
+
+		let inner = ``;
+
+		inner += `"type": "blob",`;
+
+		if (types.length > 1 || types[0] !== '*/*') {
+			inner += `"encoding": ${lit(types)},`;
+		}
+
+		return `{\n${inner}}`;
 	}
 
 	return `null`;

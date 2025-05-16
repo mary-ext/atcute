@@ -6,6 +6,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.importRepo', {
 	params: null,
 	input: {
 		type: 'blob',
+		encoding: ['application/vnd.ipld.car'],
 	},
 	output: null,
 });

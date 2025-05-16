@@ -1571,6 +1571,7 @@ export interface XRPCLexBodyParam<
 
 export interface XRPCBlobBodyParam {
 	readonly type: 'blob';
+	readonly encoding?: string[];
 }
 
 export type XRPCBodyParam = XRPCLexBodyParam | XRPCBlobBodyParam | null;
