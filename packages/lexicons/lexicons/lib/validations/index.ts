@@ -1203,6 +1203,11 @@ export const arrayLength: {
 
 // #region Object schema
 
+// `ObjectSchema` accepts a `LooseObjectShape` instead of `ObjectShape` to allow
+// for circular references, and this means preventing TypeScript from attempting
+// to eagerly evaluate the shape, unfortunate that this means we can't throw a
+// type issue if you add a non-schema value into the shape though
+
 export type LooseObjectShape = Record<string, any>;
 export type ObjectShape = Record<string, BaseSchema>;
 
@@ -1239,6 +1244,10 @@ export interface ObjectSchema<TShape extends LooseObjectShape = LooseObjectShape
 	readonly type: 'object';
 	readonly shape: Readonly<TShape>;
 
+	// passing `InferObjectX` into `extends BaseSchema<...>` eagerly evaluates the
+	// shape, however, passing it as a property means that it's only evaluated if
+	// you attempt to grab the value. `InferX` is conditioned to grab from
+	// `kObjectType` first before going to `kType`
 	readonly [kObjectType]?: { in: InferObjectInput<TShape>; out: InferObjectOutput<TShape> };
 }
 
