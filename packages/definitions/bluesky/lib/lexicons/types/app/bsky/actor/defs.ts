@@ -22,13 +22,15 @@ const _bskyAppStatePrefSchema = /*#__PURE__*/ v.object({
 	},
 	queuedNudges: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(
-			v.array(/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)])),
+			/*#__PURE__*/ v.array(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+			),
 			[/*#__PURE__*/ v.arrayLength(0, 1000)],
 		),
 	),
 	get nuxs() {
 		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(nuxSchema), [/*#__PURE__*/ v.arrayLength(0, 100)]),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(nuxSchema), [/*#__PURE__*/ v.arrayLength(0, 100)]),
 		);
 	},
 });
@@ -54,7 +56,7 @@ const _hiddenPostsPrefSchema = /*#__PURE__*/ v.object({
 const _interestsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#interestsPref')),
 	tags: /*#__PURE__*/ v.constrain(
-		v.array(
+		/*#__PURE__*/ v.array(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 640),
 				/*#__PURE__*/ v.stringGraphemes(0, 64),
@@ -67,7 +69,9 @@ const _knownFollowersSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#knownFollowers')),
 	count: /*#__PURE__*/ v.integer(),
 	get followers() {
-		return /*#__PURE__*/ v.constrain(v.array(profileViewBasicSchema), [/*#__PURE__*/ v.arrayLength(0, 5)]);
+		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(profileViewBasicSchema), [
+			/*#__PURE__*/ v.arrayLength(0, 5),
+		]);
 	},
 });
 const _labelerPrefItemSchema = /*#__PURE__*/ v.object({
@@ -127,7 +131,7 @@ const _postInteractionSettingsPrefSchema = /*#__PURE__*/ v.object({
 	get threadgateAllowRules() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(
-				v.array(
+				/*#__PURE__*/ v.array(
 					/*#__PURE__*/ v.variant([
 						AppBskyFeedThreadgate.mentionRuleSchema,
 						AppBskyFeedThreadgate.followerRuleSchema,
@@ -141,9 +145,10 @@ const _postInteractionSettingsPrefSchema = /*#__PURE__*/ v.object({
 	},
 	get postgateEmbeddingRules() {
 		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.variant([AppBskyFeedPostgate.disableRuleSchema])), [
-				/*#__PURE__*/ v.arrayLength(0, 5),
-			]),
+			/*#__PURE__*/ v.constrain(
+				/*#__PURE__*/ v.array(/*#__PURE__*/ v.variant([AppBskyFeedPostgate.disableRuleSchema])),
+				[/*#__PURE__*/ v.arrayLength(0, 5)],
+			),
 		);
 	},
 });

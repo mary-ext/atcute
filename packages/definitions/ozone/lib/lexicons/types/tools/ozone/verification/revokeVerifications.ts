@@ -7,7 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.verification.revokeVe
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			uris: /*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.resourceUriString()), [
+			uris: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 				/*#__PURE__*/ v.arrayLength(0, 100),
 			]),
 			revokeReason: /*#__PURE__*/ v.optional(

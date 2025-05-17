@@ -7,7 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getRelationships', {
 	params: /*#__PURE__*/ v.object({
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
 		others: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.actorIdentifierString()), [
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.actorIdentifierString()), [
 				/*#__PURE__*/ v.arrayLength(0, 30),
 			]),
 		),

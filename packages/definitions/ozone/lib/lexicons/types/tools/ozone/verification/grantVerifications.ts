@@ -16,7 +16,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.verification.grantVer
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			get verifications() {
-				return /*#__PURE__*/ v.constrain(v.array(verificationInputSchema), [
+				return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(verificationInputSchema), [
 					/*#__PURE__*/ v.arrayLength(0, 100),
 				]);
 			},

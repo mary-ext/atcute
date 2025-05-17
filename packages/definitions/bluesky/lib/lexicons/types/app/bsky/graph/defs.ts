@@ -98,12 +98,14 @@ const _starterPackViewSchema = /*#__PURE__*/ v.object({
 	},
 	get listItemsSample() {
 		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(listItemViewSchema), [/*#__PURE__*/ v.arrayLength(0, 12)]),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(listItemViewSchema), [
+				/*#__PURE__*/ v.arrayLength(0, 12),
+			]),
 		);
 	},
 	get feeds() {
 		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(AppBskyFeedDefs.generatorViewSchema), [
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(AppBskyFeedDefs.generatorViewSchema), [
 				/*#__PURE__*/ v.arrayLength(0, 3),
 			]),
 		);

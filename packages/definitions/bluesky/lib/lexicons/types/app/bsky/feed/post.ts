@@ -47,7 +47,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			);
 		},
 		langs: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.languageCodeString()), [
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.languageCodeString()), [
 				/*#__PURE__*/ v.arrayLength(0, 3),
 			]),
 		),
@@ -56,7 +56,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		},
 		tags: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(
-				v.array(
+				/*#__PURE__*/ v.array(
 					/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 						/*#__PURE__*/ v.stringLength(0, 640),
 						/*#__PURE__*/ v.stringGraphemes(0, 64),

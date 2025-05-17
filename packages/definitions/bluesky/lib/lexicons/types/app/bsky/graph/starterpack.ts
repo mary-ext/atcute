@@ -27,7 +27,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		list: /*#__PURE__*/ v.resourceUriString(),
 		get feeds() {
 			return /*#__PURE__*/ v.optional(
-				/*#__PURE__*/ v.constrain(v.array(feedItemSchema), [/*#__PURE__*/ v.arrayLength(0, 3)]),
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(feedItemSchema), [/*#__PURE__*/ v.arrayLength(0, 3)]),
 			);
 		},
 		createdAt: /*#__PURE__*/ v.datetimeString(),

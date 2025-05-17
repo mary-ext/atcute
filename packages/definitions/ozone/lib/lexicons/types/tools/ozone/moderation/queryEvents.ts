@@ -12,7 +12,9 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryEvents', 
 		createdBefore: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		subject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 		collections: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.nsidString()), [/*#__PURE__*/ v.arrayLength(0, 20)]),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString()), [
+				/*#__PURE__*/ v.arrayLength(0, 20),
+			]),
 		),
 		subjectType: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'account' | 'record' | (string & {})>()),
 		includeAllUserRecords: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),

@@ -145,7 +145,9 @@ const _modEventTakedownSchema = /*#__PURE__*/ v.object({
 	durationInHours: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	acknowledgeAccountSubjects: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	policies: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.string()), [/*#__PURE__*/ v.arrayLength(0, 5)]),
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
+			/*#__PURE__*/ v.arrayLength(0, 5),
+		]),
 	),
 });
 const _modEventUnmuteSchema = /*#__PURE__*/ v.object({

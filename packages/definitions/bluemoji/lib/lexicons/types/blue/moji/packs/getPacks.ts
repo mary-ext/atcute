@@ -5,7 +5,7 @@ import * as BlueMojiPacksDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('blue.moji.packs.getPacks', {
 	params: /*#__PURE__*/ v.object({
-		uris: /*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.resourceUriString()), [
+		uris: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 			/*#__PURE__*/ v.arrayLength(0, 25),
 		]),
 	}),

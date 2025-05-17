@@ -25,7 +25,9 @@ const _commitSchema = /*#__PURE__*/ v.object({
 	since: /*#__PURE__*/ v.nullable(/*#__PURE__*/ v.tidString()),
 	blocks: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.bytes(), [/*#__PURE__*/ v.bytesSize(0, 2000000)]),
 	get ops() {
-		return /*#__PURE__*/ v.constrain(v.array(repoOpSchema), [/*#__PURE__*/ v.arrayLength(0, 200)]);
+		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(repoOpSchema), [
+			/*#__PURE__*/ v.arrayLength(0, 200),
+		]);
 	},
 	blobs: /*#__PURE__*/ v.array(/*#__PURE__*/ v.cidLink()),
 	prevData: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidLink()),

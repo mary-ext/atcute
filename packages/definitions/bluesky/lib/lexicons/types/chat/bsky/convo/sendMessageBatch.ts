@@ -16,7 +16,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.convo.sendMessageBatch'
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			get items() {
-				return /*#__PURE__*/ v.constrain(v.array(batchItemSchema), [/*#__PURE__*/ v.arrayLength(0, 100)]);
+				return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(batchItemSchema), [
+					/*#__PURE__*/ v.arrayLength(0, 100),
+				]);
 			},
 		}),
 	},

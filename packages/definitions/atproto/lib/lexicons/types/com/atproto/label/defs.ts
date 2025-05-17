@@ -65,7 +65,9 @@ const _selfLabelSchema = /*#__PURE__*/ v.object({
 const _selfLabelsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.defs#selfLabels')),
 	get values() {
-		return /*#__PURE__*/ v.constrain(v.array(selfLabelSchema), [/*#__PURE__*/ v.arrayLength(0, 10)]);
+		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(selfLabelSchema), [
+			/*#__PURE__*/ v.arrayLength(0, 10),
+		]);
 	},
 });
 

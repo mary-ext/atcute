@@ -7,7 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.setting.removeOptions
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			keys: /*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.nsidString()), [
+			keys: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString()), [
 				/*#__PURE__*/ v.arrayLength(1, 200),
 			]),
 			scope: /*#__PURE__*/ v.string<'instance' | 'personal' | (string & {})>(),

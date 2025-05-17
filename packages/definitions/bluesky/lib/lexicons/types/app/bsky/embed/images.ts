@@ -13,13 +13,15 @@ const _imageSchema = /*#__PURE__*/ v.object({
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images')),
 	get images() {
-		return /*#__PURE__*/ v.constrain(v.array(imageSchema), [/*#__PURE__*/ v.arrayLength(0, 4)]);
+		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(imageSchema), [/*#__PURE__*/ v.arrayLength(0, 4)]);
 	},
 });
 const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images#view')),
 	get images() {
-		return /*#__PURE__*/ v.constrain(v.array(viewImageSchema), [/*#__PURE__*/ v.arrayLength(0, 4)]);
+		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(viewImageSchema), [
+			/*#__PURE__*/ v.arrayLength(0, 4),
+		]);
 	},
 });
 const _viewImageSchema = /*#__PURE__*/ v.object({

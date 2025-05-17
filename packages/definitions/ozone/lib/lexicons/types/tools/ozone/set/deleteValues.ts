@@ -8,7 +8,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.set.deleteValues', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			name: /*#__PURE__*/ v.string(),
-			values: /*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.string()), [/*#__PURE__*/ v.arrayLength(1)]),
+			values: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
+				/*#__PURE__*/ v.arrayLength(1),
+			]),
 		}),
 	},
 	output: null,

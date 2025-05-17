@@ -20,7 +20,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get allow() {
 			return /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(
-					v.array(
+					/*#__PURE__*/ v.array(
 						/*#__PURE__*/ v.variant([
 							mentionRuleSchema,
 							followerRuleSchema,
@@ -34,7 +34,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		},
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		hiddenReplies: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.resourceUriString()), [
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 				/*#__PURE__*/ v.arrayLength(0, 50),
 			]),
 		),

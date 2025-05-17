@@ -5,7 +5,7 @@ import * as ChatBskyConvoDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getConvoForMembers', {
 	params: /*#__PURE__*/ v.object({
-		members: /*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.didString()), [
+		members: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
 			/*#__PURE__*/ v.arrayLength(1, 10),
 		]),
 	}),

@@ -12,7 +12,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	video: /*#__PURE__*/ v.blob(),
 	get captions() {
 		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(captionSchema), [/*#__PURE__*/ v.arrayLength(0, 20)]),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(captionSchema), [/*#__PURE__*/ v.arrayLength(0, 20)]),
 		);
 	},
 	alt: /*#__PURE__*/ v.optional(

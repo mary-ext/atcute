@@ -530,11 +530,13 @@ const generateType = (
 				}
 			}
 
-			if (pipe.length === 0) {
-				return `${PURE} v.array(${item})`;
-			} else {
-				return `${PURE} v.constrain(v.array(${item}), [ ${pipe.join(', ')} ])`;
+			let call = `${PURE} v.array(${item})`;
+
+			if (pipe.length !== 0) {
+				call = `${PURE} v.constrain(${call}, [ ${pipe.join(', ')} ])`;
 			}
+
+			return call;
 		}
 
 		// LexPrimitive

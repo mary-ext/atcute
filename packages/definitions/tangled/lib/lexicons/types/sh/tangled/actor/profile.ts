@@ -13,13 +13,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			]),
 		),
 		links: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.genericUriString()), [
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.genericUriString()), [
 				/*#__PURE__*/ v.arrayLength(0, 5),
 			]),
 		),
 		stats: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(
-				v.array(
+				/*#__PURE__*/ v.array(
 					/*#__PURE__*/ v.literalEnum([
 						'merged-pull-request-count',
 						'closed-pull-request-count',
@@ -40,7 +40,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			]),
 		),
 		pinnedRepositories: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(v.array(/*#__PURE__*/ v.resourceUriString()), [
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 				/*#__PURE__*/ v.arrayLength(0, 6),
 			]),
 		),
