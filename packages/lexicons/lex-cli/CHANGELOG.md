@@ -1,5 +1,14 @@
 # @atcute/lex-cli
 
+## 2.0.1
+
+### Patch Changes
+
+- 480e58b: missing pure annotation on constrained arrays
+- 69db9c7: include expected content-type in xrpc operation schema
+- Updated dependencies [2249c88]
+  - @atcute/lexicon-doc@1.0.1
+
 ## 2.0.0
 
 ### Major Changes

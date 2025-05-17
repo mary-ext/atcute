@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/lexicons",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "AT Protocol core lexicon types and schema validations",
 	"license": "MIT",
 	"repository": {

@@ -1,5 +1,16 @@
 # @atcute/did-plc
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [ede65cf]
+  - @atcute/uint8array@1.0.2
+  - @atcute/cbor@2.2.4
+  - @atcute/cid@2.2.3
+  - @atcute/crypto@2.2.2
+  - @atcute/multibase@1.1.4
+
 ## 0.1.4
 
 ### Patch Changes

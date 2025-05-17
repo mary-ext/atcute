@@ -1,5 +1,14 @@
 # @atcute/cbor
 
+## 2.2.4
+
+### Patch Changes
+
+- Updated dependencies [ede65cf]
+  - @atcute/uint8array@1.0.2
+  - @atcute/cid@2.2.3
+  - @atcute/multibase@1.1.4
+
 ## 2.2.3
 
 ### Patch Changes

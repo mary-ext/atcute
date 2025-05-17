@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/did-plc",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"description": "validations, type definitions and schemas for did:plc operations",
 	"keywords": [
 		"atproto",

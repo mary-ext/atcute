@@ -1,5 +1,12 @@
 # @atcute/car
 
+## 3.0.5
+
+### Patch Changes
+
+- @atcute/cbor@2.2.4
+- @atcute/cid@2.2.3
+
 ## 3.0.4
 
 ### Patch Changes
