@@ -46,6 +46,7 @@ of atcute.
 | [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*` schema definitions                                        |
 | [`bluesky`](./packages/definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions                         |
 | [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*` schema definitions                          |
+| [`lexicon-community`](./packages/definitions/lexicon-community): `community.lexicon.*` schema definitions              |
 | [`ozone`](./packages/definitions/ozone): `tools.ozone.*` schema definitions                                            |
 | [`tangled`](./packages/definitions/tangled): `sh.tangled.*` schema definitions                                         |
 | [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` schema definitions                                     |

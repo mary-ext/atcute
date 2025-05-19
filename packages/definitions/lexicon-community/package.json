@@ -1,0 +1,34 @@
+{
+	"type": "module",
+	"name": "@atcute/lexicon-community",
+	"version": "1.0.0",
+	"description": "Lexicon Community (community.lexicon.*) schema definitions",
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/definitions/lexicon-community"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js",
+		"./types/": "./dist/lexicons/types/community/lexicon/*.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/atproto": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/lexicon-community": "file:",
+		"@atcute/lex-cli": "workspace:^"
+	}
+}
