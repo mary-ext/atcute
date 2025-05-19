@@ -4,15 +4,19 @@ import * as fs from 'node:fs/promises';
 import { untar } from '@mary/tar';
 import prettier from 'prettier';
 
-const repo = `aendra-rininsland/bluemoji`;
+const config = {
+	repo: `aendra-rininsland/bluemoji`,
+	path: `schema/`,
+	out: `lexdocs/bluemoji/`,
+};
 
 async function main() {
-	const config = await prettier.resolveConfig(process.cwd() + '/foo', { editorconfig: true });
+	const prettierConfig = await prettier.resolveConfig(process.cwd() + '/foo', { editorconfig: true });
 
 	let sha;
 	{
 		console.log(`retrieving latest commit`);
-		const response = await fetch(`https://api.github.com/repos/${repo}/commits?path=schema/`);
+		const response = await fetch(`https://api.github.com/repos/${config.repo}/commits?path=${config.path}/`);
 
 		if (!response.ok) {
 			console.log(`  response error ${response.status}`);
@@ -35,14 +39,15 @@ async function main() {
 
 	{
 		console.log(`retrieving zip file`);
-		const response = await fetch(`https://github.com/${repo}/archive/${sha}.tar.gz`);
+		const response = await fetch(`https://github.com/${config.repo}/archive/${sha}.tar.gz`);
 
 		if (!response.ok) {
 			console.log(`  response error ${response.status}`);
 			return;
 		}
 
-		const basename = `bluemoji-${sha}/schema/`;
+		const reponame = config.repo.replace(/^.*?\//, '');
+		const basename = `${reponame}-${sha}/${config.path}`;
 
 		const ds = new DecompressionStream('gzip');
 		const stream = response.body.pipeThrough(ds);
@@ -58,7 +63,7 @@ async function main() {
 				const code = await entry.text();
 
 				const promise = (async () => {
-					const formatted = await prettier.format(code, { ...config, parser: 'json' });
+					const formatted = await prettier.format(code, { ...prettierConfig, parser: 'json' });
 
 					await fs.mkdir(basedir, { recursive: true });
 					await fs.writeFile(tmpdir + name, formatted);
@@ -73,7 +78,7 @@ async function main() {
 	}
 
 	{
-		const source = `https://github.com/${repo}/tree/${sha}/schema\n`;
+		const source = `https://github.com/${config.repo}/tree/${sha}/${config.path}\n`;
 
 		console.log(`writing readme file`);
 
@@ -81,12 +86,10 @@ async function main() {
 	}
 
 	{
-		const dest = `lexdocs/bluemoji/`;
-
 		console.log(`moving folder`);
 
-		await fs.rm(dest, { recursive: true, force: true });
-		await fs.rename(tmpdir, dest);
+		await fs.rm(config.out, { recursive: true, force: true });
+		await fs.rename(tmpdir, config.out);
 	}
 }
 
