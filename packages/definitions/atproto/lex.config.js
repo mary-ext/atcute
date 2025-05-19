@@ -1,6 +1,6 @@
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['../../../lexicons/com/atproto/**/*.json'],
+	files: ['../../../lexdocs/bluesky/com/atproto/**/*.json'],
 	outdir: 'lib/lexicons/',
 });

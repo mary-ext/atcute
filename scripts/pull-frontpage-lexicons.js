@@ -83,7 +83,7 @@ async function main() {
 	}
 
 	{
-		const dest = `lexicons-frontpage/`;
+		const dest = `lexdocs/frontpage/`;
 
 		console.log(`moving folder`);
 

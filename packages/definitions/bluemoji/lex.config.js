@@ -1,7 +1,7 @@
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['../../../lexicons-bluemoji/**/*.json'],
+	files: ['../../../lexdocs/bluemoji/**/*.json'],
 	outdir: 'lib/lexicons/',
 	mappings: [
 		{

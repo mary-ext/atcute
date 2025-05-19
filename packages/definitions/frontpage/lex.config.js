@@ -1,7 +1,7 @@
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['../../../lexicons-frontpage/**/*.json'],
+	files: ['../../../lexdocs/frontpage/**/*.json'],
 	outdir: 'lib/lexicons/',
 	mappings: [
 		{

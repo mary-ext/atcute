@@ -81,7 +81,7 @@ async function main() {
 	}
 
 	{
-		const dest = `lexicons-bluemoji/`;
+		const dest = `lexdocs/bluemoji/`;
 
 		console.log(`moving folder`);
 

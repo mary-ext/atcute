@@ -86,7 +86,7 @@ async function main() {
 	}
 
 	{
-		const dest = `lexicons-whtwnd/`;
+		const dest = `lexdocs/whtwnd/`;
 
 		console.log(`moving folder`);
 

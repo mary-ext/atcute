@@ -81,7 +81,7 @@ async function main() {
 	}
 
 	{
-		const dest = `lexicons-tangled/`;
+		const dest = `lexdocs/tangled/`;
 
 		console.log(`moving folder`);
 

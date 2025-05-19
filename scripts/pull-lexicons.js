@@ -81,7 +81,7 @@ async function main() {
 	}
 
 	{
-		const dest = `lexicons/`;
+		const dest = `lexdocs/bluesky/`;
 
 		console.log(`moving folder`);
 
