@@ -12,7 +12,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.whtwnd.blog.getEntryMetadataByNam
 		schema: /*#__PURE__*/ v.object({
 			entryUri: /*#__PURE__*/ v.resourceUriString(),
 			lastUpdate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		}),
 	},
 });

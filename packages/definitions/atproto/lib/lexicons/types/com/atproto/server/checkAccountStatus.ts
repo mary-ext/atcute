@@ -9,7 +9,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.checkAccountStatus
 		schema: /*#__PURE__*/ v.object({
 			activated: /*#__PURE__*/ v.boolean(),
 			validDid: /*#__PURE__*/ v.boolean(),
-			repoCommit: /*#__PURE__*/ v.string(),
+			repoCommit: /*#__PURE__*/ v.cidString(),
 			repoRev: /*#__PURE__*/ v.string(),
 			repoBlocks: /*#__PURE__*/ v.integer(),
 			indexedRecords: /*#__PURE__*/ v.integer(),

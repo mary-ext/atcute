@@ -16,7 +16,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listBlobs', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			cids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
+			cids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.cidString()),
 		}),
 	},
 });

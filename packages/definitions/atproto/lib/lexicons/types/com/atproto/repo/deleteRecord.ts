@@ -11,8 +11,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.deleteRecord', {
 			repo: /*#__PURE__*/ v.actorIdentifierString(),
 			collection: /*#__PURE__*/ v.nsidString(),
 			rkey: /*#__PURE__*/ v.recordKeyString(),
-			swapRecord: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			swapRecord: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		}),
 	},
 	output: {

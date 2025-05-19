@@ -6,7 +6,7 @@ import * as AppBskyActorDefs from '../actor/defs.js';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getRepostedBy', {
 	params: /*#__PURE__*/ v.object({
 		uri: /*#__PURE__*/ v.resourceUriString(),
-		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
@@ -17,7 +17,7 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getRepostedBy', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			uri: /*#__PURE__*/ v.resourceUriString(),
-			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get repostedBy() {
 				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);

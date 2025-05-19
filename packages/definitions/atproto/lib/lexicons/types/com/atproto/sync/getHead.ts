@@ -9,7 +9,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getHead', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			root: /*#__PURE__*/ v.string(),
+			root: /*#__PURE__*/ v.cidString(),
 		}),
 	},
 });

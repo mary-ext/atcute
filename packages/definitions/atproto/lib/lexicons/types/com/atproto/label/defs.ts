@@ -6,7 +6,7 @@ const _labelSchema = /*#__PURE__*/ v.object({
 	ver: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	src: /*#__PURE__*/ v.didString(),
 	uri: /*#__PURE__*/ v.genericUriString(),
-	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	val: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 128)]),
 	neg: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	cts: /*#__PURE__*/ v.datetimeString(),

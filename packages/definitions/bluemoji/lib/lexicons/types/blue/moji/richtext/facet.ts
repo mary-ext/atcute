@@ -4,9 +4,9 @@ import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 
 const _formats_v0Schema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.richtext.facet#formats_v0')),
-	png_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	webp_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	gif_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	png_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+	webp_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+	gif_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	apng_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	lottie: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 });

@@ -14,7 +14,7 @@ const _likeSchema = /*#__PURE__*/ v.object({
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getLikes', {
 	params: /*#__PURE__*/ v.object({
 		uri: /*#__PURE__*/ v.resourceUriString(),
-		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
@@ -25,7 +25,7 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getLikes', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			uri: /*#__PURE__*/ v.resourceUriString(),
-			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get likes() {
 				return /*#__PURE__*/ v.array(likeSchema);

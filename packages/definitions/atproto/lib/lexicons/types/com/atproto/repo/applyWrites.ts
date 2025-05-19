@@ -14,7 +14,7 @@ const _createSchema = /*#__PURE__*/ v.object({
 const _createResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#createResult')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
 });
 const _deleteSchema = /*#__PURE__*/ v.object({
@@ -37,7 +37,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.applyWrites', {
 					/*#__PURE__*/ v.variant([createSchema, updateSchema, deleteSchema], true),
 				);
 			},
-			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		}),
 	},
 	output: {
@@ -65,7 +65,7 @@ const _updateSchema = /*#__PURE__*/ v.object({
 const _updateResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#updateResult')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
 });
 

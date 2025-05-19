@@ -23,7 +23,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listRepos', {
 const _repoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.listRepos#repo')),
 	did: /*#__PURE__*/ v.didString(),
-	head: /*#__PURE__*/ v.string(),
+	head: /*#__PURE__*/ v.cidString(),
 	rev: /*#__PURE__*/ v.tidString(),
 	active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	status: /*#__PURE__*/ v.optional(

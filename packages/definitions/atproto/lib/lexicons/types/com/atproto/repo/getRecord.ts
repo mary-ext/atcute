@@ -7,13 +7,13 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.getRecord', {
 		repo: /*#__PURE__*/ v.actorIdentifierString(),
 		collection: /*#__PURE__*/ v.nsidString(),
 		rkey: /*#__PURE__*/ v.recordKeyString(),
-		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			uri: /*#__PURE__*/ v.resourceUriString(),
-			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 			value: /*#__PURE__*/ v.unknown(),
 		}),
 	},

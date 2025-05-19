@@ -27,7 +27,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 });
 const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.video#view')),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	playlist: /*#__PURE__*/ v.genericUriString(),
 	thumbnail: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	alt: /*#__PURE__*/ v.optional(

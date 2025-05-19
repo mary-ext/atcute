@@ -32,7 +32,7 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.literal('app.bsky.notification.listNotifications#notification'),
 	),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	get author() {
 		return AppBskyActorDefs.profileViewSchema;
 	},

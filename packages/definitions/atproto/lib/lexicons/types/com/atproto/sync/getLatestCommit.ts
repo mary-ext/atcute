@@ -9,7 +9,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getLatestCommit', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			cid: /*#__PURE__*/ v.string(),
+			cid: /*#__PURE__*/ v.cidString(),
 			rev: /*#__PURE__*/ v.tidString(),
 		}),
 	},

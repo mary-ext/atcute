@@ -49,7 +49,7 @@ const _feedViewPostSchema = /*#__PURE__*/ v.object({
 const _generatorViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#generatorView')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	did: /*#__PURE__*/ v.didString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
@@ -122,7 +122,7 @@ const _notFoundPostSchema = /*#__PURE__*/ v.object({
 const _postViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#postView')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	get author() {
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
@@ -224,7 +224,7 @@ const _threadViewPostSchema = /*#__PURE__*/ v.object({
 const _threadgateViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#threadgateView')),
 	uri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	record: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 	get lists() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyGraphDefs.listViewBasicSchema));

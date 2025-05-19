@@ -6,7 +6,7 @@ import * as ToolsOzoneModerationDefs from './defs.js';
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.getRecord', {
 	params: /*#__PURE__*/ v.object({
 		uri: /*#__PURE__*/ v.resourceUriString(),
-		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	}),
 	output: {
 		type: 'lex',

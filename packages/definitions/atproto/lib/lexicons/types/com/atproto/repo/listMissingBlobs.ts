@@ -22,7 +22,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.listMissingBlobs', {
 });
 const _recordBlobSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.listMissingBlobs#recordBlob')),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	recordUri: /*#__PURE__*/ v.resourceUriString(),
 });
 

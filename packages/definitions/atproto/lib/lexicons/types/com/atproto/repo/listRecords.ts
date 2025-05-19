@@ -26,7 +26,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.listRecords', {
 const _recordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.listRecords#record')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	value: /*#__PURE__*/ v.unknown(),
 });
 

@@ -16,7 +16,7 @@ const _labelerPoliciesSchema = /*#__PURE__*/ v.object({
 const _labelerViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.labeler.defs#labelerView')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
@@ -32,7 +32,7 @@ const _labelerViewSchema = /*#__PURE__*/ v.object({
 const _labelerViewDetailedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.labeler.defs#labelerViewDetailed')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},

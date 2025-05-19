@@ -53,7 +53,7 @@ const _viewNotFoundSchema = /*#__PURE__*/ v.object({
 const _viewRecordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.record#viewRecord')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	get author() {
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},

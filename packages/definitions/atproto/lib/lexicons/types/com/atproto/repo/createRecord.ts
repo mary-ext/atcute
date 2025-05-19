@@ -15,14 +15,14 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.createRecord', {
 			),
 			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			record: /*#__PURE__*/ v.unknown(),
-			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		}),
 	},
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			uri: /*#__PURE__*/ v.resourceUriString(),
-			cid: /*#__PURE__*/ v.string(),
+			cid: /*#__PURE__*/ v.cidString(),
 			get commit() {
 				return /*#__PURE__*/ v.optional(ComAtprotoRepoDefs.commitMetaSchema);
 			},

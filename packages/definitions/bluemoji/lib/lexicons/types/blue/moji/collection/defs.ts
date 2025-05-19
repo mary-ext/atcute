@@ -7,7 +7,7 @@ import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 const _collectionViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.collection.defs#collectionView')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},

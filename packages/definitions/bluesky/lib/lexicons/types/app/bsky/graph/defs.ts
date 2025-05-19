@@ -22,7 +22,7 @@ const _listPurposeSchema = /*#__PURE__*/ v.string<
 const _listViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#listView')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
@@ -52,7 +52,7 @@ const _listViewSchema = /*#__PURE__*/ v.object({
 const _listViewBasicSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#listViewBasic')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
 	get purpose() {
 		return listPurposeSchema;
@@ -88,7 +88,7 @@ const _relationshipSchema = /*#__PURE__*/ v.object({
 const _starterPackViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#starterPackView')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	record: /*#__PURE__*/ v.unknown(),
 	get creator() {
 		return AppBskyActorDefs.profileViewBasicSchema;
@@ -120,7 +120,7 @@ const _starterPackViewSchema = /*#__PURE__*/ v.object({
 const _starterPackViewBasicSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#starterPackViewBasic')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	record: /*#__PURE__*/ v.unknown(),
 	get creator() {
 		return AppBskyActorDefs.profileViewBasicSchema;

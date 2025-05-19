@@ -26,7 +26,7 @@ const _accountViewSchema = /*#__PURE__*/ v.object({
 const _repoBlobRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.admin.defs#repoBlobRef')),
 	did: /*#__PURE__*/ v.didString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	recordUri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _repoRefSchema = /*#__PURE__*/ v.object({

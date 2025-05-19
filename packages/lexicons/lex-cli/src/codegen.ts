@@ -626,6 +626,10 @@ const generateType = (
 					call = `${PURE} v.resourceUriString()`;
 					break;
 				}
+				case 'cid': {
+					call = `${PURE} v.cidString()`;
+					break;
+				}
 				case 'datetime': {
 					call = `${PURE} v.datetimeString()`;
 					break;

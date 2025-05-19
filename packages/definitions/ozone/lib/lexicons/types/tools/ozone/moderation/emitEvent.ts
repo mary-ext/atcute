@@ -39,7 +39,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 					ComAtprotoRepoStrongRef.mainSchema,
 				]);
 			},
-			subjectBlobCids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+			subjectBlobCids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.cidString())),
 			createdBy: /*#__PURE__*/ v.didString(),
 		}),
 	},

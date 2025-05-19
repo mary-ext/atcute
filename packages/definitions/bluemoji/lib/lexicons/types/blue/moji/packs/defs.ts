@@ -16,7 +16,7 @@ const _packItemViewSchema = /*#__PURE__*/ v.object({
 const _packViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.packs.defs#packView')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
@@ -43,7 +43,7 @@ const _packViewSchema = /*#__PURE__*/ v.object({
 const _packViewBasicSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.packs.defs#packViewBasic')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [

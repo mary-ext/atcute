@@ -39,7 +39,7 @@ const _accountStatsSchema = /*#__PURE__*/ v.object({
 });
 const _blobViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#blobView')),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	mimeType: /*#__PURE__*/ v.string(),
 	size: /*#__PURE__*/ v.integer(),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
@@ -255,7 +255,7 @@ const _recordEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#recordEvent')),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	op: /*#__PURE__*/ v.string<'create' | 'update' | 'delete' | (string & {})>(),
-	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	timestamp: /*#__PURE__*/ v.datetimeString(),
 });
 const _recordHostingSchema = /*#__PURE__*/ v.object({
@@ -268,9 +268,9 @@ const _recordHostingSchema = /*#__PURE__*/ v.object({
 const _recordViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#recordView')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	value: /*#__PURE__*/ v.unknown(),
-	blobCids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
+	blobCids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.cidString()),
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
 	get moderation() {
 		return moderationSchema;
@@ -282,7 +282,7 @@ const _recordViewSchema = /*#__PURE__*/ v.object({
 const _recordViewDetailSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#recordViewDetail')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.string(),
+	cid: /*#__PURE__*/ v.cidString(),
 	value: /*#__PURE__*/ v.unknown(),
 	get blobs() {
 		return /*#__PURE__*/ v.array(blobViewSchema);
@@ -392,7 +392,7 @@ const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 	get hosting() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([accountHostingSchema, recordHostingSchema]));
 	},
-	subjectBlobCids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+	subjectBlobCids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.cidString())),
 	subjectRepoHandle: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	updatedAt: /*#__PURE__*/ v.datetimeString(),
 	createdAt: /*#__PURE__*/ v.datetimeString(),

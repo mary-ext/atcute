@@ -8,7 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.admin.getSubjectStatus', 
 	params: /*#__PURE__*/ v.object({
 		did: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		uri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-		blob: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		blob: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	}),
 	output: {
 		type: 'lex',
