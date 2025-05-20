@@ -67,6 +67,7 @@ program.register(
 				const result = lexiconDoc.try(json, { mode: 'strip' });
 				if (!result.ok) {
 					console.error(pc.bold(pc.red(`schema validation failed for "${filename}"`)));
+					console.error(result.message);
 
 					for (const issue of result.issues) {
 						console.log(`- ${issue.code} at .${issue.path.join('.')}`);
