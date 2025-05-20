@@ -10,11 +10,11 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getFeedGenerator', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			isOnline: /*#__PURE__*/ v.boolean(),
+			isValid: /*#__PURE__*/ v.boolean(),
 			get view() {
 				return AppBskyFeedDefs.generatorViewSchema;
 			},
-			isOnline: /*#__PURE__*/ v.boolean(),
-			isValid: /*#__PURE__*/ v.boolean(),
 		}),
 	},
 });

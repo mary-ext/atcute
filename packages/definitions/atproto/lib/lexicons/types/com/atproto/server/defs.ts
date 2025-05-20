@@ -3,20 +3,20 @@ import * as v from '@atcute/lexicons/validations';
 
 const _inviteCodeSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.server.defs#inviteCode')),
-	code: /*#__PURE__*/ v.string(),
 	available: /*#__PURE__*/ v.integer(),
+	code: /*#__PURE__*/ v.string(),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
+	createdBy: /*#__PURE__*/ v.string(),
 	disabled: /*#__PURE__*/ v.boolean(),
 	forAccount: /*#__PURE__*/ v.string(),
-	createdBy: /*#__PURE__*/ v.string(),
-	createdAt: /*#__PURE__*/ v.datetimeString(),
 	get uses() {
 		return /*#__PURE__*/ v.array(inviteCodeUseSchema);
 	},
 });
 const _inviteCodeUseSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.server.defs#inviteCodeUse')),
-	usedBy: /*#__PURE__*/ v.didString(),
 	usedAt: /*#__PURE__*/ v.datetimeString(),
+	usedBy: /*#__PURE__*/ v.didString(),
 });
 
 type inviteCode$schematype = typeof _inviteCodeSchema;

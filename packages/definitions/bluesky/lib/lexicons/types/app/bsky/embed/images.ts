@@ -4,11 +4,11 @@ import * as AppBskyEmbedDefs from './defs.js';
 
 const _imageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images#image')),
-	image: /*#__PURE__*/ v.blob(),
 	alt: /*#__PURE__*/ v.string(),
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
+	image: /*#__PURE__*/ v.blob(),
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images')),
@@ -26,12 +26,12 @@ const _viewSchema = /*#__PURE__*/ v.object({
 });
 const _viewImageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images#viewImage')),
-	thumb: /*#__PURE__*/ v.genericUriString(),
-	fullsize: /*#__PURE__*/ v.genericUriString(),
 	alt: /*#__PURE__*/ v.string(),
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
+	fullsize: /*#__PURE__*/ v.genericUriString(),
+	thumb: /*#__PURE__*/ v.genericUriString(),
 });
 
 type image$schematype = typeof _imageSchema;

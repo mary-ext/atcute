@@ -8,27 +8,23 @@ import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 const _curatelistSchema = /*#__PURE__*/ v.literal('app.bsky.graph.defs#curatelist');
 const _listItemViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#listItemView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	get subject() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _listPurposeSchema = /*#__PURE__*/ v.string<
-	| 'app.bsky.graph.defs#modlist'
 	| 'app.bsky.graph.defs#curatelist'
+	| 'app.bsky.graph.defs#modlist'
 	| 'app.bsky.graph.defs#referencelist'
 	| (string & {})
 >();
 const _listViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#listView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
+	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	cid: /*#__PURE__*/ v.cidString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
-	},
-	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
-	get purpose() {
-		return listPurposeSchema;
 	},
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
@@ -39,38 +35,42 @@ const _listViewSchema = /*#__PURE__*/ v.object({
 	get descriptionFacets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 	},
-	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	indexedAt: /*#__PURE__*/ v.datetimeString(),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
-	get viewer() {
-		return /*#__PURE__*/ v.optional(listViewerStateSchema);
-	},
-	indexedAt: /*#__PURE__*/ v.datetimeString(),
-});
-const _listViewBasicSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#listViewBasic')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.cidString(),
+	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
 	get purpose() {
 		return listPurposeSchema;
 	},
-	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	get labels() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
-	},
+	uri: /*#__PURE__*/ v.resourceUriString(),
 	get viewer() {
 		return /*#__PURE__*/ v.optional(listViewerStateSchema);
 	},
+});
+const _listViewBasicSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#listViewBasic')),
+	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	cid: /*#__PURE__*/ v.cidString(),
 	indexedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	get labels() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
+	},
+	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
+	get purpose() {
+		return listPurposeSchema;
+	},
+	uri: /*#__PURE__*/ v.resourceUriString(),
+	get viewer() {
+		return /*#__PURE__*/ v.optional(listViewerStateSchema);
+	},
 });
 const _listViewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#listViewerState')),
-	muted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	blocked: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	muted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 const _modlistSchema = /*#__PURE__*/ v.literal('app.bsky.graph.defs#modlist');
 const _notFoundActorSchema = /*#__PURE__*/ v.object({
@@ -82,16 +82,27 @@ const _referencelistSchema = /*#__PURE__*/ v.literal('app.bsky.graph.defs#refere
 const _relationshipSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#relationship')),
 	did: /*#__PURE__*/ v.didString(),
-	following: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	followedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	following: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _starterPackViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#starterPackView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.cidString(),
-	record: /*#__PURE__*/ v.unknown(),
 	get creator() {
 		return AppBskyActorDefs.profileViewBasicSchema;
+	},
+	get feeds() {
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(AppBskyFeedDefs.generatorViewSchema), [
+				/*#__PURE__*/ v.arrayLength(0, 3),
+			]),
+		);
+	},
+	indexedAt: /*#__PURE__*/ v.datetimeString(),
+	joinedAllTimeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	joinedWeekCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	get labels() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
 	get list() {
 		return /*#__PURE__*/ v.optional(listViewBasicSchema);
@@ -103,35 +114,24 @@ const _starterPackViewSchema = /*#__PURE__*/ v.object({
 			]),
 		);
 	},
-	get feeds() {
-		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(AppBskyFeedDefs.generatorViewSchema), [
-				/*#__PURE__*/ v.arrayLength(0, 3),
-			]),
-		);
-	},
-	joinedWeekCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	joinedAllTimeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	get labels() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
-	},
-	indexedAt: /*#__PURE__*/ v.datetimeString(),
+	record: /*#__PURE__*/ v.unknown(),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _starterPackViewBasicSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#starterPackViewBasic')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.cidString(),
-	record: /*#__PURE__*/ v.unknown(),
 	get creator() {
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
-	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	joinedWeekCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	indexedAt: /*#__PURE__*/ v.datetimeString(),
 	joinedAllTimeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	joinedWeekCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
-	indexedAt: /*#__PURE__*/ v.datetimeString(),
+	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	record: /*#__PURE__*/ v.unknown(),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 
 type curatelist$schematype = typeof _curatelistSchema;

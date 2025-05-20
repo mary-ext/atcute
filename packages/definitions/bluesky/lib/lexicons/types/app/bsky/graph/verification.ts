@@ -6,10 +6,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.graph.verification'),
-		subject: /*#__PURE__*/ v.didString(),
-		handle: /*#__PURE__*/ v.handleString(),
-		displayName: /*#__PURE__*/ v.string(),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		displayName: /*#__PURE__*/ v.string(),
+		handle: /*#__PURE__*/ v.handleString(),
+		subject: /*#__PURE__*/ v.didString(),
 	}),
 );
 

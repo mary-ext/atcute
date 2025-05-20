@@ -8,19 +8,18 @@ import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 
 const _packItemViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.packs.defs#packItemView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	get subject() {
 		return BlueMojiCollectionItem.itemViewSchema;
 	},
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _packViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.packs.defs#packView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
+	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	cid: /*#__PURE__*/ v.cidString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
-	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 3000),
@@ -30,21 +29,21 @@ const _packViewSchema = /*#__PURE__*/ v.object({
 	get descriptionFacets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 	},
-	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-	packItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	indexedAt: /*#__PURE__*/ v.datetimeString(),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
+	packItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 	get viewer() {
 		return /*#__PURE__*/ v.optional(packViewerStateSchema);
 	},
-	indexedAt: /*#__PURE__*/ v.datetimeString(),
 });
 const _packViewBasicSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.packs.defs#packViewBasic')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
+	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	cid: /*#__PURE__*/ v.cidString(),
-	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 3000),
@@ -54,15 +53,16 @@ const _packViewBasicSchema = /*#__PURE__*/ v.object({
 	get descriptionFacets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(BlueMojiRichtextFacet.mainSchema));
 	},
-	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	indexedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	itemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 	get viewer() {
 		return /*#__PURE__*/ v.optional(packViewerStateSchema);
 	},
-	indexedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _packViewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.packs.defs#packViewerState')),

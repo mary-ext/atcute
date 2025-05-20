@@ -5,20 +5,20 @@ import * as ComAtprotoServerDefs from '../server/defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.admin.getInviteCodes', {
 	params: /*#__PURE__*/ v.object({
-		sort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'recent' | 'usage' | (string & {})>(), 'recent'),
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 500)]),
 			100,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		sort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'recent' | 'usage' | (string & {})>(), 'recent'),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get codes() {
 				return /*#__PURE__*/ v.array(ComAtprotoServerDefs.inviteCodeSchema);
 			},
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},
 });

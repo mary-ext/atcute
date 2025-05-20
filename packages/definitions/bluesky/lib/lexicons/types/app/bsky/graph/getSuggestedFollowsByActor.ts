@@ -10,11 +10,11 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getSuggestedFollowsByA
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			isFallback: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 			get suggestions() {
 				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);
 			},
-			isFallback: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
-			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		}),
 	},
 });

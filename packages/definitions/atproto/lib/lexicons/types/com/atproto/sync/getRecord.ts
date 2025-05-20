@@ -4,8 +4,8 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getRecord', {
 	params: /*#__PURE__*/ v.object({
-		did: /*#__PURE__*/ v.didString(),
 		collection: /*#__PURE__*/ v.nsidString(),
+		did: /*#__PURE__*/ v.didString(),
 		rkey: /*#__PURE__*/ v.recordKeyString(),
 	}),
 	output: {

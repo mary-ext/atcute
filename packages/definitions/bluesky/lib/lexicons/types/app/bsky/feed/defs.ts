@@ -19,11 +19,11 @@ const _blockedAuthorSchema = /*#__PURE__*/ v.object({
 });
 const _blockedPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#blockedPost')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
-	blocked: /*#__PURE__*/ v.literal(true),
 	get author() {
 		return blockedAuthorSchema;
 	},
+	blocked: /*#__PURE__*/ v.literal(true),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _clickthroughAuthorSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#clickthroughAuthor');
 const _clickthroughEmbedSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#clickthroughEmbed');
@@ -33,28 +33,32 @@ const _contentModeUnspecifiedSchema = /*#__PURE__*/ v.literal('app.bsky.feed.def
 const _contentModeVideoSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#contentModeVideo');
 const _feedViewPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#feedViewPost')),
+	feedContext: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
+	),
 	get post() {
 		return postViewSchema;
+	},
+	get reason() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([reasonPinSchema, reasonRepostSchema]));
 	},
 	get reply() {
 		return /*#__PURE__*/ v.optional(replyRefSchema);
 	},
-	get reason() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([reasonRepostSchema, reasonPinSchema]));
-	},
-	feedContext: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
-	),
 });
 const _generatorViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#generatorView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
+	acceptsInteractions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	cid: /*#__PURE__*/ v.cidString(),
-	did: /*#__PURE__*/ v.didString(),
+	contentMode: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<
+			'app.bsky.feed.defs#contentModeUnspecified' | 'app.bsky.feed.defs#contentModeVideo' | (string & {})
+		>(),
+	),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
-	displayName: /*#__PURE__*/ v.string(),
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 3000),
@@ -64,21 +68,17 @@ const _generatorViewSchema = /*#__PURE__*/ v.object({
 	get descriptionFacets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 	},
-	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	acceptsInteractions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	did: /*#__PURE__*/ v.didString(),
+	displayName: /*#__PURE__*/ v.string(),
+	indexedAt: /*#__PURE__*/ v.datetimeString(),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 	get viewer() {
 		return /*#__PURE__*/ v.optional(generatorViewerStateSchema);
 	},
-	contentMode: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.string<
-			'app.bsky.feed.defs#contentModeUnspecified' | 'app.bsky.feed.defs#contentModeVideo' | (string & {})
-		>(),
-	),
-	indexedAt: /*#__PURE__*/ v.datetimeString(),
 });
 const _generatorViewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#generatorViewerState')),
@@ -86,27 +86,27 @@ const _generatorViewerStateSchema = /*#__PURE__*/ v.object({
 });
 const _interactionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#interaction')),
-	item: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	event: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.string<
+			| 'app.bsky.feed.defs#clickthroughAuthor'
+			| 'app.bsky.feed.defs#clickthroughEmbed'
+			| 'app.bsky.feed.defs#clickthroughItem'
+			| 'app.bsky.feed.defs#clickthroughReposter'
+			| 'app.bsky.feed.defs#interactionLike'
+			| 'app.bsky.feed.defs#interactionQuote'
+			| 'app.bsky.feed.defs#interactionReply'
+			| 'app.bsky.feed.defs#interactionRepost'
+			| 'app.bsky.feed.defs#interactionSeen'
+			| 'app.bsky.feed.defs#interactionShare'
 			| 'app.bsky.feed.defs#requestLess'
 			| 'app.bsky.feed.defs#requestMore'
-			| 'app.bsky.feed.defs#clickthroughItem'
-			| 'app.bsky.feed.defs#clickthroughAuthor'
-			| 'app.bsky.feed.defs#clickthroughReposter'
-			| 'app.bsky.feed.defs#clickthroughEmbed'
-			| 'app.bsky.feed.defs#interactionSeen'
-			| 'app.bsky.feed.defs#interactionLike'
-			| 'app.bsky.feed.defs#interactionRepost'
-			| 'app.bsky.feed.defs#interactionReply'
-			| 'app.bsky.feed.defs#interactionQuote'
-			| 'app.bsky.feed.defs#interactionShare'
 			| (string & {})
 		>(),
 	),
 	feedContext: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 	),
+	item: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _interactionLikeSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionLike');
 const _interactionQuoteSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionQuote');
@@ -116,41 +116,41 @@ const _interactionSeenSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#inter
 const _interactionShareSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionShare');
 const _notFoundPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#notFoundPost')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	notFound: /*#__PURE__*/ v.literal(true),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _postViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#postView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.cidString(),
 	get author() {
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
-	record: /*#__PURE__*/ v.unknown(),
+	cid: /*#__PURE__*/ v.cidString(),
 	get embed() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.variant([
-				AppBskyEmbedImages.viewSchema,
-				AppBskyEmbedVideo.viewSchema,
 				AppBskyEmbedExternal.viewSchema,
+				AppBskyEmbedImages.viewSchema,
 				AppBskyEmbedRecord.viewSchema,
 				AppBskyEmbedRecordWithMedia.viewSchema,
+				AppBskyEmbedVideo.viewSchema,
 			]),
 		);
 	},
-	replyCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	repostCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	quoteCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
-	get viewer() {
-		return /*#__PURE__*/ v.optional(viewerStateSchema);
-	},
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	quoteCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	record: /*#__PURE__*/ v.unknown(),
+	replyCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	repostCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get threadgate() {
 		return /*#__PURE__*/ v.optional(threadgateViewSchema);
+	},
+	uri: /*#__PURE__*/ v.resourceUriString(),
+	get viewer() {
+		return /*#__PURE__*/ v.optional(viewerStateSchema);
 	},
 });
 const _reasonPinSchema = /*#__PURE__*/ v.object({
@@ -165,29 +165,29 @@ const _reasonRepostSchema = /*#__PURE__*/ v.object({
 });
 const _replyRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#replyRef')),
-	get root() {
-		return /*#__PURE__*/ v.variant([postViewSchema, notFoundPostSchema, blockedPostSchema]);
-	},
-	get parent() {
-		return /*#__PURE__*/ v.variant([postViewSchema, notFoundPostSchema, blockedPostSchema]);
-	},
 	get grandparentAuthor() {
 		return /*#__PURE__*/ v.optional(AppBskyActorDefs.profileViewBasicSchema);
+	},
+	get parent() {
+		return /*#__PURE__*/ v.variant([blockedPostSchema, notFoundPostSchema, postViewSchema]);
+	},
+	get root() {
+		return /*#__PURE__*/ v.variant([blockedPostSchema, notFoundPostSchema, postViewSchema]);
 	},
 });
 const _requestLessSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#requestLess');
 const _requestMoreSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#requestMore');
 const _skeletonFeedPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#skeletonFeedPost')),
-	post: /*#__PURE__*/ v.resourceUriString(),
-	get reason() {
-		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.variant([skeletonReasonRepostSchema, skeletonReasonPinSchema]),
-		);
-	},
 	feedContext: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 	),
+	post: /*#__PURE__*/ v.resourceUriString(),
+	get reason() {
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.variant([skeletonReasonPinSchema, skeletonReasonRepostSchema]),
+		);
+	},
 });
 const _skeletonReasonPinSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#skeletonReasonPin')),
@@ -202,18 +202,18 @@ const _threadContextSchema = /*#__PURE__*/ v.object({
 });
 const _threadViewPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#threadViewPost')),
-	get post() {
-		return postViewSchema;
-	},
 	get parent() {
 		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.variant([threadViewPostSchema, notFoundPostSchema, blockedPostSchema]),
+			/*#__PURE__*/ v.variant([blockedPostSchema, notFoundPostSchema, threadViewPostSchema]),
 		);
+	},
+	get post() {
+		return postViewSchema;
 	},
 	get replies() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.array(
-				/*#__PURE__*/ v.variant([threadViewPostSchema, notFoundPostSchema, blockedPostSchema]),
+				/*#__PURE__*/ v.variant([blockedPostSchema, notFoundPostSchema, threadViewPostSchema]),
 			),
 		);
 	},
@@ -223,21 +223,21 @@ const _threadViewPostSchema = /*#__PURE__*/ v.object({
 });
 const _threadgateViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#threadgateView')),
-	uri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
-	record: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 	get lists() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyGraphDefs.listViewBasicSchema));
 	},
+	record: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+	uri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _viewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#viewerState')),
-	repost: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-	like: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-	threadMuted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-	replyDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	embeddingDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	like: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	pinned: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	replyDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	repost: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	threadMuted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 
 type blockedAuthor$schematype = typeof _blockedAuthorSchema;

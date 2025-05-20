@@ -8,11 +8,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.communication.createT
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			name: /*#__PURE__*/ v.string(),
 			contentMarkdown: /*#__PURE__*/ v.string(),
-			subject: /*#__PURE__*/ v.string(),
-			lang: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.languageCodeString()),
 			createdBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+			lang: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.languageCodeString()),
+			name: /*#__PURE__*/ v.string(),
+			subject: /*#__PURE__*/ v.string(),
 		}),
 	},
 	output: {

@@ -7,8 +7,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.createInviteCo
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			useCount: /*#__PURE__*/ v.integer(),
 			forAccount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+			useCount: /*#__PURE__*/ v.integer(),
 		}),
 	},
 	output: {

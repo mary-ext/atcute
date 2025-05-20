@@ -6,11 +6,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.artifact'),
+		artifact: /*#__PURE__*/ v.blob(),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		name: /*#__PURE__*/ v.string(),
 		repo: /*#__PURE__*/ v.resourceUriString(),
 		tag: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.bytes(), [/*#__PURE__*/ v.bytesSize(20, 20)]),
-		createdAt: /*#__PURE__*/ v.datetimeString(),
-		artifact: /*#__PURE__*/ v.blob(),
 	}),
 );
 

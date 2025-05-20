@@ -6,24 +6,24 @@ import * as ComAtprotoRepoStrongRef from '../repo/strongRef.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.admin.getSubjectStatus', {
 	params: /*#__PURE__*/ v.object({
+		blob: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		did: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		uri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-		blob: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			get deactivated() {
+				return /*#__PURE__*/ v.optional(ComAtprotoAdminDefs.statusAttrSchema);
+			},
 			get subject() {
 				return /*#__PURE__*/ v.variant([
+					ComAtprotoAdminDefs.repoBlobRefSchema,
 					ComAtprotoAdminDefs.repoRefSchema,
 					ComAtprotoRepoStrongRef.mainSchema,
-					ComAtprotoAdminDefs.repoBlobRefSchema,
 				]);
 			},
 			get takedown() {
-				return /*#__PURE__*/ v.optional(ComAtprotoAdminDefs.statusAttrSchema);
-			},
-			get deactivated() {
 				return /*#__PURE__*/ v.optional(ComAtprotoAdminDefs.statusAttrSchema);
 			},
 		}),

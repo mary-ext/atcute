@@ -7,8 +7,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.resetPassword'
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			token: /*#__PURE__*/ v.string(),
 			password: /*#__PURE__*/ v.string(),
+			token: /*#__PURE__*/ v.string(),
 		}),
 	},
 	output: null,

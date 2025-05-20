@@ -5,14 +5,14 @@ import * as ToolsOzoneTeamDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.team.listMembers', {
 	params: /*#__PURE__*/ v.object({
-		q: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		disabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-		roles: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		q: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		roles: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 	}),
 	output: {
 		type: 'lex',

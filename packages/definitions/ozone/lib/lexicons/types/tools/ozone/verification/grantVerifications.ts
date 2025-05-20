@@ -25,11 +25,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.verification.grantVer
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			get verifications() {
-				return /*#__PURE__*/ v.array(ToolsOzoneVerificationDefs.verificationViewSchema);
-			},
 			get failedVerifications() {
 				return /*#__PURE__*/ v.array(grantErrorSchema);
+			},
+			get verifications() {
+				return /*#__PURE__*/ v.array(ToolsOzoneVerificationDefs.verificationViewSchema);
 			},
 		}),
 	},
@@ -38,10 +38,10 @@ const _verificationInputSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.verification.grantVerifications#verificationInput'),
 	),
-	subject: /*#__PURE__*/ v.didString(),
-	handle: /*#__PURE__*/ v.handleString(),
-	displayName: /*#__PURE__*/ v.string(),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	displayName: /*#__PURE__*/ v.string(),
+	handle: /*#__PURE__*/ v.handleString(),
+	subject: /*#__PURE__*/ v.didString(),
 });
 
 type grantError$schematype = typeof _grantErrorSchema;

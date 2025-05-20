@@ -7,28 +7,28 @@ import * as AppBskyEmbedVideo from './video.js';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.recordWithMedia')),
-	get record() {
-		return AppBskyEmbedRecord.mainSchema;
-	},
 	get media() {
 		return /*#__PURE__*/ v.variant([
+			AppBskyEmbedExternal.mainSchema,
 			AppBskyEmbedImages.mainSchema,
 			AppBskyEmbedVideo.mainSchema,
-			AppBskyEmbedExternal.mainSchema,
 		]);
+	},
+	get record() {
+		return AppBskyEmbedRecord.mainSchema;
 	},
 });
 const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.recordWithMedia#view')),
-	get record() {
-		return AppBskyEmbedRecord.viewSchema;
-	},
 	get media() {
 		return /*#__PURE__*/ v.variant([
+			AppBskyEmbedExternal.viewSchema,
 			AppBskyEmbedImages.viewSchema,
 			AppBskyEmbedVideo.viewSchema,
-			AppBskyEmbedExternal.viewSchema,
 		]);
+	},
+	get record() {
+		return AppBskyEmbedRecord.viewSchema;
 	},
 });
 

@@ -16,16 +16,16 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.describeServer', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			inviteCodeRequired: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			phoneVerificationRequired: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			availableUserDomains: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
-			get links() {
-				return /*#__PURE__*/ v.optional(linksSchema);
-			},
 			get contact() {
 				return /*#__PURE__*/ v.optional(contactSchema);
 			},
 			did: /*#__PURE__*/ v.didString(),
+			inviteCodeRequired: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			get links() {
+				return /*#__PURE__*/ v.optional(linksSchema);
+			},
+			phoneVerificationRequired: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		}),
 	},
 });

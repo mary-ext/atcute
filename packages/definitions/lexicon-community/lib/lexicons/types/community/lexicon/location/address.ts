@@ -4,11 +4,11 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('community.lexicon.location.address')),
 	country: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(2, 10)]),
+	locality: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	postalCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	region: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	locality: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	street: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 
 type main$schematype = typeof _mainSchema;

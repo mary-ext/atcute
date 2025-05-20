@@ -16,16 +16,15 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.feed.threadgate'),
-		post: /*#__PURE__*/ v.resourceUriString(),
 		get allow() {
 			return /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(
 					/*#__PURE__*/ v.array(
 						/*#__PURE__*/ v.variant([
-							mentionRuleSchema,
 							followerRuleSchema,
 							followingRuleSchema,
 							listRuleSchema,
+							mentionRuleSchema,
 						]),
 					),
 					[/*#__PURE__*/ v.arrayLength(0, 5)],
@@ -38,6 +37,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.arrayLength(0, 50),
 			]),
 		),
+		post: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );
 const _mentionRuleSchema = /*#__PURE__*/ v.object({

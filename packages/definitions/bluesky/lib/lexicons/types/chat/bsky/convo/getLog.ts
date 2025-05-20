@@ -14,16 +14,16 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getLog', {
 			get logs() {
 				return /*#__PURE__*/ v.array(
 					/*#__PURE__*/ v.variant([
-						ChatBskyConvoDefs.logBeginConvoSchema,
 						ChatBskyConvoDefs.logAcceptConvoSchema,
-						ChatBskyConvoDefs.logLeaveConvoSchema,
-						ChatBskyConvoDefs.logMuteConvoSchema,
-						ChatBskyConvoDefs.logUnmuteConvoSchema,
+						ChatBskyConvoDefs.logAddReactionSchema,
+						ChatBskyConvoDefs.logBeginConvoSchema,
 						ChatBskyConvoDefs.logCreateMessageSchema,
 						ChatBskyConvoDefs.logDeleteMessageSchema,
+						ChatBskyConvoDefs.logLeaveConvoSchema,
+						ChatBskyConvoDefs.logMuteConvoSchema,
 						ChatBskyConvoDefs.logReadMessageSchema,
-						ChatBskyConvoDefs.logAddReactionSchema,
 						ChatBskyConvoDefs.logRemoveReactionSchema,
+						ChatBskyConvoDefs.logUnmuteConvoSchema,
 					]),
 				);
 			},

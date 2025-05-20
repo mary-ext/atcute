@@ -10,7 +10,6 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.feed.postgate'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		post: /*#__PURE__*/ v.resourceUriString(),
 		detachedEmbeddingUris: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 				/*#__PURE__*/ v.arrayLength(0, 50),
@@ -23,6 +22,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				]),
 			);
 		},
+		post: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );
 

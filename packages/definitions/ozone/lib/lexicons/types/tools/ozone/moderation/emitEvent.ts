@@ -10,27 +10,28 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			createdBy: /*#__PURE__*/ v.didString(),
 			get event() {
 				return /*#__PURE__*/ v.variant([
-					ToolsOzoneModerationDefs.modEventTakedownSchema,
-					ToolsOzoneModerationDefs.modEventAcknowledgeSchema,
-					ToolsOzoneModerationDefs.modEventEscalateSchema,
-					ToolsOzoneModerationDefs.modEventCommentSchema,
-					ToolsOzoneModerationDefs.modEventLabelSchema,
-					ToolsOzoneModerationDefs.modEventReportSchema,
-					ToolsOzoneModerationDefs.modEventMuteSchema,
-					ToolsOzoneModerationDefs.modEventUnmuteSchema,
-					ToolsOzoneModerationDefs.modEventMuteReporterSchema,
-					ToolsOzoneModerationDefs.modEventUnmuteReporterSchema,
-					ToolsOzoneModerationDefs.modEventReverseTakedownSchema,
-					ToolsOzoneModerationDefs.modEventResolveAppealSchema,
-					ToolsOzoneModerationDefs.modEventEmailSchema,
-					ToolsOzoneModerationDefs.modEventDivertSchema,
-					ToolsOzoneModerationDefs.modEventTagSchema,
 					ToolsOzoneModerationDefs.accountEventSchema,
 					ToolsOzoneModerationDefs.identityEventSchema,
-					ToolsOzoneModerationDefs.recordEventSchema,
+					ToolsOzoneModerationDefs.modEventAcknowledgeSchema,
+					ToolsOzoneModerationDefs.modEventCommentSchema,
+					ToolsOzoneModerationDefs.modEventDivertSchema,
+					ToolsOzoneModerationDefs.modEventEmailSchema,
+					ToolsOzoneModerationDefs.modEventEscalateSchema,
+					ToolsOzoneModerationDefs.modEventLabelSchema,
+					ToolsOzoneModerationDefs.modEventMuteSchema,
+					ToolsOzoneModerationDefs.modEventMuteReporterSchema,
 					ToolsOzoneModerationDefs.modEventPriorityScoreSchema,
+					ToolsOzoneModerationDefs.modEventReportSchema,
+					ToolsOzoneModerationDefs.modEventResolveAppealSchema,
+					ToolsOzoneModerationDefs.modEventReverseTakedownSchema,
+					ToolsOzoneModerationDefs.modEventTagSchema,
+					ToolsOzoneModerationDefs.modEventTakedownSchema,
+					ToolsOzoneModerationDefs.modEventUnmuteSchema,
+					ToolsOzoneModerationDefs.modEventUnmuteReporterSchema,
+					ToolsOzoneModerationDefs.recordEventSchema,
 				]);
 			},
 			get subject() {
@@ -40,7 +41,6 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 				]);
 			},
 			subjectBlobCids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.cidString())),
-			createdBy: /*#__PURE__*/ v.didString(),
 		}),
 	},
 	output: {

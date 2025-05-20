@@ -6,23 +6,23 @@ import * as AppBskyFeedDefs from './defs.js';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getAuthorFeed', {
 	params: /*#__PURE__*/ v.object({
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
-		limit: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
-			50,
-		),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		filter: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<
-				| 'posts_with_replies'
+				| 'posts_and_author_threads'
 				| 'posts_no_replies'
 				| 'posts_with_media'
-				| 'posts_and_author_threads'
+				| 'posts_with_replies'
 				| 'posts_with_video'
 				| (string & {})
 			>(),
 			'posts_with_replies',
 		),
 		includePins: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+		limit: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
+			50,
+		),
 	}),
 	output: {
 		type: 'lex',

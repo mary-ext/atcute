@@ -6,9 +6,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.publicKey'),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		key: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 4096)]),
 		name: /*#__PURE__*/ v.string(),
-		createdAt: /*#__PURE__*/ v.datetimeString(),
 	}),
 );
 

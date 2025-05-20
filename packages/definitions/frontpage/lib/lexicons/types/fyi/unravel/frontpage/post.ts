@@ -6,12 +6,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('fyi.unravel.frontpage.post'),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		title: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 3000),
 			/*#__PURE__*/ v.stringGraphemes(0, 300),
 		]),
 		url: /*#__PURE__*/ v.genericUriString(),
-		createdAt: /*#__PURE__*/ v.datetimeString(),
 	}),
 );
 

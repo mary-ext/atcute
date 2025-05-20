@@ -6,12 +6,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.issue.comment'),
-		issue: /*#__PURE__*/ v.resourceUriString(),
-		repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-		commentId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-		owner: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		body: /*#__PURE__*/ v.string(),
+		commentId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		issue: /*#__PURE__*/ v.resourceUriString(),
+		owner: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+		repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	}),
 );
 

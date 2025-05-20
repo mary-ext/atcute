@@ -14,8 +14,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.team.updateMember', {
 				/*#__PURE__*/ v.string<
 					| 'tools.ozone.team.defs#roleAdmin'
 					| 'tools.ozone.team.defs#roleModerator'
-					| 'tools.ozone.team.defs#roleVerifier'
 					| 'tools.ozone.team.defs#roleTriage'
+					| 'tools.ozone.team.defs#roleVerifier'
 					| (string & {})
 				>(),
 			),

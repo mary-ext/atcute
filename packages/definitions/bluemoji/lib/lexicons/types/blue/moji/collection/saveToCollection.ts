@@ -8,18 +8,18 @@ const _mainSchema = /*#__PURE__*/ v.procedure('blue.moji.collection.saveToCollec
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			source: /*#__PURE__*/ v.actorIdentifierString(),
 			name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 15)]),
 			renameTo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			source: /*#__PURE__*/ v.actorIdentifierString(),
 		}),
 	},
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			uri: /*#__PURE__*/ v.resourceUriString(),
 			get item() {
 				return BlueMojiCollectionItem.itemViewSchema;
 			},
+			uri: /*#__PURE__*/ v.resourceUriString(),
 		}),
 	},
 });

@@ -3,8 +3,8 @@ import * as v from '@atcute/lexicons/validations';
 
 const _byteSliceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.richtext.facet#byteSlice')),
-	byteStart: /*#__PURE__*/ v.integer(),
 	byteEnd: /*#__PURE__*/ v.integer(),
+	byteStart: /*#__PURE__*/ v.integer(),
 });
 const _linkSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.richtext.facet#link')),
@@ -12,11 +12,11 @@ const _linkSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.richtext.facet')),
+	get features() {
+		return /*#__PURE__*/ v.array(/*#__PURE__*/ v.variant([linkSchema, mentionSchema, tagSchema]));
+	},
 	get index() {
 		return byteSliceSchema;
-	},
-	get features() {
-		return /*#__PURE__*/ v.array(/*#__PURE__*/ v.variant([mentionSchema, linkSchema, tagSchema]));
 	},
 });
 const _mentionSchema = /*#__PURE__*/ v.object({

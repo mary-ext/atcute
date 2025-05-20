@@ -4,8 +4,8 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getBlob', {
 	params: /*#__PURE__*/ v.object({
-		did: /*#__PURE__*/ v.didString(),
 		cid: /*#__PURE__*/ v.cidString(),
+		did: /*#__PURE__*/ v.didString(),
 	}),
 	output: {
 		type: 'blob',

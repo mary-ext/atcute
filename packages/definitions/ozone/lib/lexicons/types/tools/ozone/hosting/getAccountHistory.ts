@@ -23,17 +23,17 @@ const _emailUpdatedSchema = /*#__PURE__*/ v.object({
 });
 const _eventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.hosting.getAccountHistory#event')),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
+	createdBy: /*#__PURE__*/ v.string(),
 	get details() {
 		return /*#__PURE__*/ v.variant([
 			accountCreatedSchema,
-			emailUpdatedSchema,
 			emailConfirmedSchema,
-			passwordUpdatedSchema,
+			emailUpdatedSchema,
 			handleUpdatedSchema,
+			passwordUpdatedSchema,
 		]);
 	},
-	createdBy: /*#__PURE__*/ v.string(),
-	createdAt: /*#__PURE__*/ v.datetimeString(),
 });
 const _handleUpdatedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
@@ -43,20 +43,20 @@ const _handleUpdatedSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.hosting.getAccountHistory', {
 	params: /*#__PURE__*/ v.object({
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		did: /*#__PURE__*/ v.didString(),
 		events: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.array(
 				/*#__PURE__*/ v.string<
 					| 'accountCreated'
-					| 'emailUpdated'
 					| 'emailConfirmed'
-					| 'passwordUpdated'
+					| 'emailUpdated'
 					| 'handleUpdated'
+					| 'passwordUpdated'
 					| (string & {})
 				>(),
 			),
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,

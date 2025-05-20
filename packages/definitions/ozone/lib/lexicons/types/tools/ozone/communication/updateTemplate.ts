@@ -8,13 +8,13 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.communication.updateT
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			id: /*#__PURE__*/ v.string(),
-			name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			lang: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.languageCodeString()),
 			contentMarkdown: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			disabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			id: /*#__PURE__*/ v.string(),
+			lang: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.languageCodeString()),
+			name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			subject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			updatedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
-			disabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		}),
 	},
 	output: {

@@ -6,14 +6,14 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo'),
-		name: /*#__PURE__*/ v.string(),
-		owner: /*#__PURE__*/ v.didString(),
-		knot: /*#__PURE__*/ v.string(),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.datetimeString(), [/*#__PURE__*/ v.stringGraphemes(1, 140)]),
 		),
+		knot: /*#__PURE__*/ v.string(),
+		name: /*#__PURE__*/ v.string(),
+		owner: /*#__PURE__*/ v.didString(),
 		source: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-		createdAt: /*#__PURE__*/ v.datetimeString(),
 	}),
 );
 

@@ -6,12 +6,12 @@ import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 
 const _collectionViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.collection.defs#collectionView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
+	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	cid: /*#__PURE__*/ v.cidString(),
+	collectionItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
-	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 3000),
@@ -21,12 +21,12 @@ const _collectionViewSchema = /*#__PURE__*/ v.object({
 	get descriptionFacets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 	},
-	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-	collectionItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	indexedAt: /*#__PURE__*/ v.datetimeString(),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
-	indexedAt: /*#__PURE__*/ v.datetimeString(),
+	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 
 type collectionView$schematype = typeof _collectionViewSchema;

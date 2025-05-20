@@ -6,6 +6,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.literal('self'),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.actor.profile'),
+		bluesky: /*#__PURE__*/ v.boolean(),
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 2560),
@@ -17,22 +18,6 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.arrayLength(0, 5),
 			]),
 		),
-		stats: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(
-				/*#__PURE__*/ v.array(
-					/*#__PURE__*/ v.literalEnum([
-						'merged-pull-request-count',
-						'closed-pull-request-count',
-						'open-pull-request-count',
-						'open-issue-count',
-						'closed-issue-count',
-						'repository-count',
-					]),
-				),
-				[/*#__PURE__*/ v.arrayLength(0, 2)],
-			),
-		),
-		bluesky: /*#__PURE__*/ v.boolean(),
 		location: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 400),
@@ -43,6 +28,21 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 				/*#__PURE__*/ v.arrayLength(0, 6),
 			]),
+		),
+		stats: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(
+				/*#__PURE__*/ v.array(
+					/*#__PURE__*/ v.literalEnum([
+						'closed-issue-count',
+						'closed-pull-request-count',
+						'merged-pull-request-count',
+						'open-issue-count',
+						'open-pull-request-count',
+						'repository-count',
+					]),
+				),
+				[/*#__PURE__*/ v.arrayLength(0, 2)],
+			),
 		),
 	}),
 );

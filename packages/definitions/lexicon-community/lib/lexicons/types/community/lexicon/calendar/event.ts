@@ -13,17 +13,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('community.lexicon.calendar.event'),
-		name: /*#__PURE__*/ v.string(),
-		description: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		startsAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+		description: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		endsAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-		get mode() {
-			return /*#__PURE__*/ v.optional(modeSchema);
-		},
-		get status() {
-			return /*#__PURE__*/ v.optional(statusSchema);
-		},
 		get locations() {
 			return /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.array(
@@ -36,6 +28,14 @@ const _mainSchema = /*#__PURE__*/ v.record(
 					]),
 				),
 			);
+		},
+		get mode() {
+			return /*#__PURE__*/ v.optional(modeSchema);
+		},
+		name: /*#__PURE__*/ v.string(),
+		startsAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+		get status() {
+			return /*#__PURE__*/ v.optional(statusSchema);
 		},
 		get uris() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(uriSchema));
@@ -68,8 +68,8 @@ const _statusSchema = /*#__PURE__*/ v.optional(
 );
 const _uriSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('community.lexicon.calendar.event#uri')),
-	uri: /*#__PURE__*/ v.genericUriString(),
 	name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	uri: /*#__PURE__*/ v.genericUriString(),
 });
 const _virtualSchema = /*#__PURE__*/ v.literal('community.lexicon.calendar.event#virtual');
 

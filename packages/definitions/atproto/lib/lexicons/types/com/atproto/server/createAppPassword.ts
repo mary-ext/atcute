@@ -6,9 +6,9 @@ const _appPasswordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('com.atproto.server.createAppPassword#appPassword'),
 	),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
 	name: /*#__PURE__*/ v.string(),
 	password: /*#__PURE__*/ v.string(),
-	createdAt: /*#__PURE__*/ v.datetimeString(),
 	privileged: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.createAppPassword', {

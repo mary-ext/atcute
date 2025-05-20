@@ -4,19 +4,26 @@ import * as ToolsOzoneModerationDefs from '../moderation/defs.js';
 
 const _verificationViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.verification.defs#verificationView')),
-	issuer: /*#__PURE__*/ v.didString(),
-	uri: /*#__PURE__*/ v.resourceUriString(),
-	subject: /*#__PURE__*/ v.didString(),
-	handle: /*#__PURE__*/ v.handleString(),
-	displayName: /*#__PURE__*/ v.string(),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
+	displayName: /*#__PURE__*/ v.string(),
+	handle: /*#__PURE__*/ v.handleString(),
+	issuer: /*#__PURE__*/ v.didString(),
+	get issuerProfile() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([]));
+	},
+	get issuerRepo() {
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.variant([
+				ToolsOzoneModerationDefs.repoViewDetailSchema,
+				ToolsOzoneModerationDefs.repoViewNotFoundSchema,
+			]),
+		);
+	},
 	revokeReason: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	revokedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	revokedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+	subject: /*#__PURE__*/ v.didString(),
 	get subjectProfile() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([]));
-	},
-	get issuerProfile() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([]));
 	},
 	get subjectRepo() {
@@ -27,14 +34,7 @@ const _verificationViewSchema = /*#__PURE__*/ v.object({
 			]),
 		);
 	},
-	get issuerRepo() {
-		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.variant([
-				ToolsOzoneModerationDefs.repoViewDetailSchema,
-				ToolsOzoneModerationDefs.repoViewNotFoundSchema,
-			]),
-		);
-	},
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 
 type verificationView$schematype = typeof _verificationViewSchema;

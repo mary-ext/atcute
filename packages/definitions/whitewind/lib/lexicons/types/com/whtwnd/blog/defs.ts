@@ -18,9 +18,9 @@ const _commentSchema = /*#__PURE__*/ v.object({
 });
 const _ogpSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.whtwnd.blog.defs#ogp')),
+	height: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	url: /*#__PURE__*/ v.genericUriString(),
 	width: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	height: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 
 type blobMetadata$schematype = typeof _blobMetadataSchema;

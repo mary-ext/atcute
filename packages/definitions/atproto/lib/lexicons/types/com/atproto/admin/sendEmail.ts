@@ -7,11 +7,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.sendEmail', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			recipientDid: /*#__PURE__*/ v.didString(),
-			content: /*#__PURE__*/ v.string(),
-			subject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			senderDid: /*#__PURE__*/ v.didString(),
 			comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			content: /*#__PURE__*/ v.string(),
+			recipientDid: /*#__PURE__*/ v.didString(),
+			senderDid: /*#__PURE__*/ v.didString(),
+			subject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},
 	output: {

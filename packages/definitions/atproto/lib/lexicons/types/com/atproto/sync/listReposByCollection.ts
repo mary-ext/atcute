@@ -5,11 +5,11 @@ import type {} from '@atcute/lexicons/ambient';
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listReposByCollection', {
 	params: /*#__PURE__*/ v.object({
 		collection: /*#__PURE__*/ v.nsidString(),
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 2000)]),
 			500,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),
 	output: {
 		type: 'lex',

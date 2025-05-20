@@ -8,11 +8,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.deleteRecord', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			repo: /*#__PURE__*/ v.actorIdentifierString(),
 			collection: /*#__PURE__*/ v.nsidString(),
+			repo: /*#__PURE__*/ v.actorIdentifierString(),
 			rkey: /*#__PURE__*/ v.recordKeyString(),
-			swapRecord: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+			swapRecord: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		}),
 	},
 	output: {

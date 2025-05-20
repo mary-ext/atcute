@@ -6,8 +6,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.graph.block'),
-		subject: /*#__PURE__*/ v.didString(),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		subject: /*#__PURE__*/ v.didString(),
 	}),
 );
 

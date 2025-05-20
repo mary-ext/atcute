@@ -5,8 +5,8 @@ import * as ComAtprotoServerDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.getAccountInviteCodes', {
 	params: /*#__PURE__*/ v.object({
-		includeUsed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 		createAvailable: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+		includeUsed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 	}),
 	output: {
 		type: 'lex',

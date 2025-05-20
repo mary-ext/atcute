@@ -8,11 +8,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('blue.moji.collection.putItem', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			repo: /*#__PURE__*/ v.actorIdentifierString(),
-			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 			get item() {
 				return BlueMojiCollectionItem.itemViewSchema;
 			},
+			repo: /*#__PURE__*/ v.actorIdentifierString(),
+			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 		}),
 	},
 	output: {

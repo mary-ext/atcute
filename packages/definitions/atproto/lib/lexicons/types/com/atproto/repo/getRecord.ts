@@ -4,16 +4,16 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.getRecord', {
 	params: /*#__PURE__*/ v.object({
-		repo: /*#__PURE__*/ v.actorIdentifierString(),
-		collection: /*#__PURE__*/ v.nsidString(),
-		rkey: /*#__PURE__*/ v.recordKeyString(),
 		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+		collection: /*#__PURE__*/ v.nsidString(),
+		repo: /*#__PURE__*/ v.actorIdentifierString(),
+		rkey: /*#__PURE__*/ v.recordKeyString(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			uri: /*#__PURE__*/ v.resourceUriString(),
 			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+			uri: /*#__PURE__*/ v.resourceUriString(),
 			value: /*#__PURE__*/ v.unknown(),
 		}),
 	},

@@ -5,22 +5,22 @@ import * as ComAtprotoLabelDefs from './defs.js';
 
 const _infoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.subscribeLabels#info')),
-	name: /*#__PURE__*/ v.string<'OutdatedCursor' | (string & {})>(),
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	name: /*#__PURE__*/ v.string<'OutdatedCursor' | (string & {})>(),
 });
 const _labelsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.subscribeLabels#labels')),
-	seq: /*#__PURE__*/ v.integer(),
 	get labels() {
 		return /*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema);
 	},
+	seq: /*#__PURE__*/ v.integer(),
 });
 const _mainSchema = /*#__PURE__*/ v.subscription('com.atproto.label.subscribeLabels', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	}),
 	get message() {
-		return /*#__PURE__*/ v.variant([labelsSchema, infoSchema]);
+		return /*#__PURE__*/ v.variant([infoSchema, labelsSchema]);
 	},
 });
 

@@ -4,8 +4,8 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _appPasswordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.server.listAppPasswords#appPassword')),
-	name: /*#__PURE__*/ v.string(),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
+	name: /*#__PURE__*/ v.string(),
 	privileged: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.listAppPasswords', {

@@ -9,20 +9,20 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getRepoStatus', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			did: /*#__PURE__*/ v.didString(),
 			active: /*#__PURE__*/ v.boolean(),
+			did: /*#__PURE__*/ v.didString(),
+			rev: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.tidString()),
 			status: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.string<
-					| 'takendown'
-					| 'suspended'
-					| 'deleted'
 					| 'deactivated'
+					| 'deleted'
 					| 'desynchronized'
+					| 'suspended'
+					| 'takendown'
 					| 'throttled'
 					| (string & {})
 				>(),
 			),
-			rev: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.tidString()),
 		}),
 	},
 });

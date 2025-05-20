@@ -9,10 +9,10 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.describeRepo', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			handle: /*#__PURE__*/ v.handleString(),
+			collections: /*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString()),
 			did: /*#__PURE__*/ v.didString(),
 			didDoc: /*#__PURE__*/ v.unknown(),
-			collections: /*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString()),
+			handle: /*#__PURE__*/ v.handleString(),
 			handleIsCorrect: /*#__PURE__*/ v.boolean(),
 		}),
 	},

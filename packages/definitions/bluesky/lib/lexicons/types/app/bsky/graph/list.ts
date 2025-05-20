@@ -9,10 +9,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.graph.list'),
-		get purpose() {
-			return AppBskyGraphDefs.listPurposeSchema;
-		},
-		name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
+		avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 3000),
@@ -22,11 +20,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get descriptionFacets() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 		},
-		avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
-		createdAt: /*#__PURE__*/ v.datetimeString(),
+		name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
+		get purpose() {
+			return AppBskyGraphDefs.listPurposeSchema;
+		},
 	}),
 );
 

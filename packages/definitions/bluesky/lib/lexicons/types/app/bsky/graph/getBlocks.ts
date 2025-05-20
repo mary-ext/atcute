@@ -5,19 +5,19 @@ import * as AppBskyActorDefs from '../actor/defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getBlocks', {
 	params: /*#__PURE__*/ v.object({
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get blocks() {
 				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);
 			},
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},
 });

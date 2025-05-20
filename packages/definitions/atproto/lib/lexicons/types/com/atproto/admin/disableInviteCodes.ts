@@ -7,8 +7,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.disableInviteCo
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			codes: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			accounts: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+			codes: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		}),
 	},
 	output: null,

@@ -7,10 +7,10 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.notification.registerPus
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			appId: /*#__PURE__*/ v.string(),
+			platform: /*#__PURE__*/ v.string<'android' | 'ios' | 'web' | (string & {})>(),
 			serviceDid: /*#__PURE__*/ v.didString(),
 			token: /*#__PURE__*/ v.string(),
-			platform: /*#__PURE__*/ v.string<'ios' | 'android' | 'web' | (string & {})>(),
-			appId: /*#__PURE__*/ v.string(),
 		}),
 	},
 	output: null,

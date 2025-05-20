@@ -9,52 +9,52 @@ const _bytes_v0Schema = /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.bytes(), [
 ]);
 const _formats_v0Schema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.collection.item#formats_v0')),
-	original: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
-	get png_128() {
-		return /*#__PURE__*/ v.optional(blob_v0Schema);
-	},
 	get apng_128() {
 		return /*#__PURE__*/ v.optional(bytes_v0Schema);
 	},
 	get gif_128() {
 		return /*#__PURE__*/ v.optional(blob_v0Schema);
 	},
-	get webp_128() {
-		return /*#__PURE__*/ v.optional(blob_v0Schema);
-	},
 	get lottie() {
 		return /*#__PURE__*/ v.optional(bytes_v0Schema);
+	},
+	original: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+	get png_128() {
+		return /*#__PURE__*/ v.optional(blob_v0Schema);
+	},
+	get webp_128() {
+		return /*#__PURE__*/ v.optional(blob_v0Schema);
 	},
 });
 const _itemViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.collection.item#itemView')),
-	name: /*#__PURE__*/ v.string(),
+	adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	get formats() {
 		return formats_v0Schema;
 	},
-	adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+	name: /*#__PURE__*/ v.string(),
 });
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.string(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('blue.moji.collection.item'),
-		name: /*#__PURE__*/ v.string(),
-		alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		createdAt: /*#__PURE__*/ v.datetimeString(),
-		get formats() {
-			return /*#__PURE__*/ v.variant([formats_v0Schema]);
-		},
 		adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
-		get labels() {
-			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
-		},
+		alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		copyOf: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		fallbackText: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 1)]),
 			'◌',
 		),
+		get formats() {
+			return /*#__PURE__*/ v.variant([formats_v0Schema]);
+		},
+		get labels() {
+			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
+		},
+		name: /*#__PURE__*/ v.string(),
 	}),
 );
 

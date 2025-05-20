@@ -5,18 +5,18 @@ import * as BlueMojiCollectionItem from './item.js';
 
 const _itemViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.collection.listCollection#itemView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	get record() {
 		return BlueMojiCollectionItem.itemViewSchema;
 	},
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _mainSchema = /*#__PURE__*/ v.query('blue.moji.collection.listCollection', {
 	params: /*#__PURE__*/ v.object({
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		reverse: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	}),
 	output: {

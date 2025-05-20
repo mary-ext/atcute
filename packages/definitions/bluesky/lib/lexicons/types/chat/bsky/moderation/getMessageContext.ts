@@ -5,10 +5,10 @@ import * as ChatBskyConvoDefs from '../convo/defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.moderation.getMessageContext', {
 	params: /*#__PURE__*/ v.object({
+		after: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer(), 5),
+		before: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer(), 5),
 		convoId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		messageId: /*#__PURE__*/ v.string(),
-		before: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer(), 5),
-		after: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer(), 5),
 	}),
 	output: {
 		type: 'lex',
@@ -16,8 +16,8 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.moderation.getMessageContex
 			get messages() {
 				return /*#__PURE__*/ v.array(
 					/*#__PURE__*/ v.variant([
-						ChatBskyConvoDefs.messageViewSchema,
 						ChatBskyConvoDefs.deletedMessageViewSchema,
+						ChatBskyConvoDefs.messageViewSchema,
 					]),
 				);
 			},

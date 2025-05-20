@@ -441,7 +441,18 @@ const generateObject = (
 		}
 	}
 
-	for (const [prop, propSpec] of Object.entries(spec.properties ?? {})) {
+	const sortedEntries = Object.entries(spec.properties ?? {}).toSorted(([keyA], [keyB]) => {
+		if (keyA < keyB) {
+			return -1;
+		}
+		if (keyA > keyB) {
+			return 1;
+		}
+
+		return 0;
+	});
+
+	for (const [prop, propSpec] of sortedEntries) {
 		const lazy = isRefVariant(propSpec.type === 'array' ? propSpec.items : propSpec);
 		const optional = !required.has(prop) && !('default' in propSpec);
 		const nulled = nullable.has(prop);
@@ -493,17 +504,28 @@ const generateType = (
 			}
 		}
 		case 'union': {
-			const refs = spec.refs.map((ref): string => {
+			const normalizedRefs = spec.refs
+				.map((ref): string => {
+					if (ref.startsWith('#')) {
+						return ref;
+					}
+
+					const [ns, id = 'main'] = ref.split('#');
+					if (ns === stripHash(defUri)) {
+						return `#${id}`;
+					}
+
+					return `${ns}#${id}`;
+				})
+				.sort();
+
+			const refs = normalizedRefs.map((ref): string => {
 				if (ref.startsWith('#')) {
 					const id = ref.slice(1);
 
 					return `${toCamelCase(id)}Schema`;
 				} else {
 					const [ns, id = 'main'] = ref.split('#');
-					if (ns === stripHash(defUri)) {
-						return `${toCamelCase(id)}Schema`;
-					}
-
 					imports.add(ns);
 
 					return `${toTitleCase(ns)}.${toCamelCase(id)}Schema`;
@@ -559,7 +581,7 @@ const generateType = (
 			}
 
 			if (spec.enum !== undefined) {
-				return `${PURE} v.literalEnum(${lit(spec.enum)})`;
+				return `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
 			}
 
 			let pipe: string[] = [];
@@ -590,7 +612,7 @@ const generateType = (
 			}
 
 			if (spec.enum !== undefined) {
-				return `${PURE} v.literalEnum(${lit(spec.enum)})`;
+				return `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
 			}
 
 			let pipe: string[] = [];
@@ -614,7 +636,7 @@ const generateType = (
 			let call = `${PURE} v.string()`;
 
 			if (spec.knownValues?.length) {
-				call = `${PURE} v.string<${spec.knownValues.map(lit).join(' | ')} | (string & {})>()`;
+				call = `${PURE} v.string<${spec.knownValues.toSorted().map(lit).join(' | ')} | (string & {})>()`;
 			}
 
 			switch (spec.format) {

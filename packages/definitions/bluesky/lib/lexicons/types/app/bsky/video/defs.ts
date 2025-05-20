@@ -3,15 +3,15 @@ import * as v from '@atcute/lexicons/validations';
 
 const _jobStatusSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.video.defs#jobStatus')),
-	jobId: /*#__PURE__*/ v.string(),
+	blob: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
 	did: /*#__PURE__*/ v.didString(),
-	state: /*#__PURE__*/ v.string<'JOB_STATE_COMPLETED' | 'JOB_STATE_FAILED' | (string & {})>(),
+	error: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	jobId: /*#__PURE__*/ v.string(),
+	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	progress: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
 	),
-	blob: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
-	error: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	state: /*#__PURE__*/ v.string<'JOB_STATE_COMPLETED' | 'JOB_STATE_FAILED' | (string & {})>(),
 });
 
 type jobStatus$schematype = typeof _jobStatusSchema;

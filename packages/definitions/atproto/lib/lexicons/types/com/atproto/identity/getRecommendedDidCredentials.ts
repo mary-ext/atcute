@@ -7,10 +7,10 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.identity.getRecommendedDi
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			rotationKeys: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			alsoKnownAs: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
-			verificationMethods: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+			rotationKeys: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			services: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+			verificationMethods: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 		}),
 	},
 });

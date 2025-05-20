@@ -4,11 +4,13 @@ import * as ComAtprotoServerDefs from '../server/defs.js';
 
 const _accountViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.admin.defs#accountView')),
+	deactivatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	did: /*#__PURE__*/ v.didString(),
-	handle: /*#__PURE__*/ v.handleString(),
 	email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	relatedRecords: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.unknown())),
+	emailConfirmedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	handle: /*#__PURE__*/ v.handleString(),
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
+	inviteNote: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	get invitedBy() {
 		return /*#__PURE__*/ v.optional(ComAtprotoServerDefs.inviteCodeSchema);
 	},
@@ -16,17 +18,15 @@ const _accountViewSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoServerDefs.inviteCodeSchema));
 	},
 	invitesDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-	emailConfirmedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	inviteNote: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	deactivatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	relatedRecords: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.unknown())),
 	get threatSignatures() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(threatSignatureSchema));
 	},
 });
 const _repoBlobRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.admin.defs#repoBlobRef')),
-	did: /*#__PURE__*/ v.didString(),
 	cid: /*#__PURE__*/ v.cidString(),
+	did: /*#__PURE__*/ v.didString(),
 	recordUri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _repoRefSchema = /*#__PURE__*/ v.object({

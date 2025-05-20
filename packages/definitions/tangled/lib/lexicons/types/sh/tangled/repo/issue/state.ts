@@ -9,7 +9,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		issue: /*#__PURE__*/ v.resourceUriString(),
 		state: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<
-				'sh.tangled.repo.issue.state.open' | 'sh.tangled.repo.issue.state.closed' | (string & {})
+				'sh.tangled.repo.issue.state.closed' | 'sh.tangled.repo.issue.state.open' | (string & {})
 			>(),
 			'sh.tangled.repo.issue.state.open',
 		),

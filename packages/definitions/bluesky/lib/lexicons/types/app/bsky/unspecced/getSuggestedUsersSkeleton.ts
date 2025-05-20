@@ -4,12 +4,12 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsersSkeleton', {
 	params: /*#__PURE__*/ v.object({
-		viewer: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		category: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 50)]),
 			25,
 		),
+		viewer: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	}),
 	output: {
 		type: 'lex',

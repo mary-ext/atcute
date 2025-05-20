@@ -9,17 +9,17 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.updateSubjectSt
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			get deactivated() {
+				return /*#__PURE__*/ v.optional(ComAtprotoAdminDefs.statusAttrSchema);
+			},
 			get subject() {
 				return /*#__PURE__*/ v.variant([
+					ComAtprotoAdminDefs.repoBlobRefSchema,
 					ComAtprotoAdminDefs.repoRefSchema,
 					ComAtprotoRepoStrongRef.mainSchema,
-					ComAtprotoAdminDefs.repoBlobRefSchema,
 				]);
 			},
 			get takedown() {
-				return /*#__PURE__*/ v.optional(ComAtprotoAdminDefs.statusAttrSchema);
-			},
-			get deactivated() {
 				return /*#__PURE__*/ v.optional(ComAtprotoAdminDefs.statusAttrSchema);
 			},
 		}),
@@ -29,9 +29,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.updateSubjectSt
 		schema: /*#__PURE__*/ v.object({
 			get subject() {
 				return /*#__PURE__*/ v.variant([
+					ComAtprotoAdminDefs.repoBlobRefSchema,
 					ComAtprotoAdminDefs.repoRefSchema,
 					ComAtprotoRepoStrongRef.mainSchema,
-					ComAtprotoAdminDefs.repoBlobRefSchema,
 				]);
 			},
 			get takedown() {

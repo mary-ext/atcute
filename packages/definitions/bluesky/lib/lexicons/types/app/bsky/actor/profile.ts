@@ -8,30 +8,30 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.literal('self'),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.actor.profile'),
-		displayName: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-				/*#__PURE__*/ v.stringLength(0, 640),
-				/*#__PURE__*/ v.stringGraphemes(0, 64),
-			]),
-		),
+		avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		banner: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 2560),
 				/*#__PURE__*/ v.stringGraphemes(0, 256),
 			]),
 		),
-		avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
-		banner: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
-		get labels() {
-			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
-		},
+		displayName: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+				/*#__PURE__*/ v.stringLength(0, 640),
+				/*#__PURE__*/ v.stringGraphemes(0, 64),
+			]),
+		),
 		get joinedViaStarterPack() {
 			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
+		},
+		get labels() {
+			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
 		get pinnedPost() {
 			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
 		},
-		createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	}),
 );
 

@@ -6,16 +6,16 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.pull'),
-		targetRepo: /*#__PURE__*/ v.resourceUriString(),
-		targetBranch: /*#__PURE__*/ v.string(),
-		pullId: /*#__PURE__*/ v.integer(),
-		title: /*#__PURE__*/ v.string(),
 		body: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		patch: /*#__PURE__*/ v.string(),
+		pullId: /*#__PURE__*/ v.integer(),
 		get source() {
 			return /*#__PURE__*/ v.optional(sourceSchema);
 		},
-		createdAt: /*#__PURE__*/ v.datetimeString(),
+		targetBranch: /*#__PURE__*/ v.string(),
+		targetRepo: /*#__PURE__*/ v.resourceUriString(),
+		title: /*#__PURE__*/ v.string(),
 	}),
 );
 const _sourceSchema = /*#__PURE__*/ v.object({

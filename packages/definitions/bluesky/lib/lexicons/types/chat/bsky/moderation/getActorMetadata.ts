@@ -9,13 +9,13 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.moderation.getActorMetadata
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			get all() {
+				return metadataSchema;
+			},
 			get day() {
 				return metadataSchema;
 			},
 			get month() {
-				return metadataSchema;
-			},
-			get all() {
 				return metadataSchema;
 			},
 		}),
@@ -23,10 +23,10 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.moderation.getActorMetadata
 });
 const _metadataSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.moderation.getActorMetadata#metadata')),
-	messagesSent: /*#__PURE__*/ v.integer(),
-	messagesReceived: /*#__PURE__*/ v.integer(),
 	convos: /*#__PURE__*/ v.integer(),
 	convosStarted: /*#__PURE__*/ v.integer(),
+	messagesReceived: /*#__PURE__*/ v.integer(),
+	messagesSent: /*#__PURE__*/ v.integer(),
 });
 
 type main$schematype = typeof _mainSchema;

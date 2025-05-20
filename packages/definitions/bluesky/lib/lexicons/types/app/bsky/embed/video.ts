@@ -4,32 +4,29 @@ import * as AppBskyEmbedDefs from './defs.js';
 
 const _captionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.video#caption')),
-	lang: /*#__PURE__*/ v.languageCodeString(),
 	file: /*#__PURE__*/ v.blob(),
+	lang: /*#__PURE__*/ v.languageCodeString(),
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.video')),
-	video: /*#__PURE__*/ v.blob(),
+	alt: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+			/*#__PURE__*/ v.stringLength(0, 10000),
+			/*#__PURE__*/ v.stringGraphemes(0, 1000),
+		]),
+	),
+	get aspectRatio() {
+		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
+	},
 	get captions() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(captionSchema), [/*#__PURE__*/ v.arrayLength(0, 20)]),
 		);
 	},
-	alt: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-			/*#__PURE__*/ v.stringLength(0, 10000),
-			/*#__PURE__*/ v.stringGraphemes(0, 1000),
-		]),
-	),
-	get aspectRatio() {
-		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
-	},
+	video: /*#__PURE__*/ v.blob(),
 });
 const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.video#view')),
-	cid: /*#__PURE__*/ v.cidString(),
-	playlist: /*#__PURE__*/ v.genericUriString(),
-	thumbnail: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	alt: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 10000),
@@ -39,6 +36,9 @@ const _viewSchema = /*#__PURE__*/ v.object({
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
+	cid: /*#__PURE__*/ v.cidString(),
+	playlist: /*#__PURE__*/ v.genericUriString(),
+	thumbnail: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 });
 
 type caption$schematype = typeof _captionSchema;

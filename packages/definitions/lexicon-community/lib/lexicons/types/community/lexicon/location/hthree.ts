@@ -3,8 +3,8 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('community.lexicon.location.hthree')),
-	value: /*#__PURE__*/ v.string(),
 	name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	value: /*#__PURE__*/ v.string(),
 });
 
 type main$schematype = typeof _mainSchema;

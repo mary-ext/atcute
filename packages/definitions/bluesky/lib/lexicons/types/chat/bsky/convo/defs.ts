@@ -7,18 +7,18 @@ import * as ChatBskyActorDefs from '../actor/defs.js';
 const _convoViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#convoView')),
 	id: /*#__PURE__*/ v.string(),
-	rev: /*#__PURE__*/ v.string(),
-	get members() {
-		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
-	},
 	get lastMessage() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([messageViewSchema, deletedMessageViewSchema]));
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([deletedMessageViewSchema, messageViewSchema]));
 	},
 	get lastReaction() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([messageAndReactionViewSchema]));
 	},
+	get members() {
+		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
+	},
 	muted: /*#__PURE__*/ v.boolean(),
-	status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'request' | 'accepted' | (string & {})>()),
+	rev: /*#__PURE__*/ v.string(),
+	status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'accepted' | 'request' | (string & {})>()),
 	unreadCount: /*#__PURE__*/ v.integer(),
 });
 const _deletedMessageViewSchema = /*#__PURE__*/ v.object({
@@ -32,74 +32,74 @@ const _deletedMessageViewSchema = /*#__PURE__*/ v.object({
 });
 const _logAcceptConvoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logAcceptConvo')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
+	rev: /*#__PURE__*/ v.string(),
 });
 const _logAddReactionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logAddReaction')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
 	get message() {
-		return /*#__PURE__*/ v.variant([messageViewSchema, deletedMessageViewSchema]);
+		return /*#__PURE__*/ v.variant([deletedMessageViewSchema, messageViewSchema]);
 	},
 	get reaction() {
 		return reactionViewSchema;
 	},
+	rev: /*#__PURE__*/ v.string(),
 });
 const _logBeginConvoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logBeginConvo')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
+	rev: /*#__PURE__*/ v.string(),
 });
 const _logCreateMessageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logCreateMessage')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
 	get message() {
-		return /*#__PURE__*/ v.variant([messageViewSchema, deletedMessageViewSchema]);
+		return /*#__PURE__*/ v.variant([deletedMessageViewSchema, messageViewSchema]);
 	},
+	rev: /*#__PURE__*/ v.string(),
 });
 const _logDeleteMessageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logDeleteMessage')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
 	get message() {
-		return /*#__PURE__*/ v.variant([messageViewSchema, deletedMessageViewSchema]);
+		return /*#__PURE__*/ v.variant([deletedMessageViewSchema, messageViewSchema]);
 	},
+	rev: /*#__PURE__*/ v.string(),
 });
 const _logLeaveConvoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logLeaveConvo')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
+	rev: /*#__PURE__*/ v.string(),
 });
 const _logMuteConvoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logMuteConvo')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
+	rev: /*#__PURE__*/ v.string(),
 });
 const _logReadMessageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logReadMessage')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
 	get message() {
-		return /*#__PURE__*/ v.variant([messageViewSchema, deletedMessageViewSchema]);
+		return /*#__PURE__*/ v.variant([deletedMessageViewSchema, messageViewSchema]);
 	},
+	rev: /*#__PURE__*/ v.string(),
 });
 const _logRemoveReactionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logRemoveReaction')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
 	get message() {
-		return /*#__PURE__*/ v.variant([messageViewSchema, deletedMessageViewSchema]);
+		return /*#__PURE__*/ v.variant([deletedMessageViewSchema, messageViewSchema]);
 	},
 	get reaction() {
 		return reactionViewSchema;
 	},
+	rev: /*#__PURE__*/ v.string(),
 });
 const _logUnmuteConvoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logUnmuteConvo')),
-	rev: /*#__PURE__*/ v.string(),
 	convoId: /*#__PURE__*/ v.string(),
+	rev: /*#__PURE__*/ v.string(),
 });
 const _messageAndReactionViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageAndReactionView')),
@@ -112,44 +112,44 @@ const _messageAndReactionViewSchema = /*#__PURE__*/ v.object({
 });
 const _messageInputSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageInput')),
+	get embed() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedRecord.mainSchema]));
+	},
+	get facets() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
+	},
 	text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 10000),
 		/*#__PURE__*/ v.stringGraphemes(0, 1000),
 	]),
-	get facets() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
-	},
-	get embed() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedRecord.mainSchema]));
-	},
 });
 const _messageRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageRef')),
-	did: /*#__PURE__*/ v.didString(),
 	convoId: /*#__PURE__*/ v.string(),
+	did: /*#__PURE__*/ v.didString(),
 	messageId: /*#__PURE__*/ v.string(),
 });
 const _messageViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageView')),
-	id: /*#__PURE__*/ v.string(),
-	rev: /*#__PURE__*/ v.string(),
-	text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-		/*#__PURE__*/ v.stringLength(0, 10000),
-		/*#__PURE__*/ v.stringGraphemes(0, 1000),
-	]),
-	get facets() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
-	},
 	get embed() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedRecord.viewSchema]));
 	},
+	get facets() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
+	},
+	id: /*#__PURE__*/ v.string(),
 	get reactions() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(reactionViewSchema));
 	},
+	rev: /*#__PURE__*/ v.string(),
 	get sender() {
 		return messageViewSenderSchema;
 	},
 	sentAt: /*#__PURE__*/ v.datetimeString(),
+	text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+		/*#__PURE__*/ v.stringLength(0, 10000),
+		/*#__PURE__*/ v.stringGraphemes(0, 1000),
+	]),
 });
 const _messageViewSenderSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageViewSender')),
@@ -157,11 +157,11 @@ const _messageViewSenderSchema = /*#__PURE__*/ v.object({
 });
 const _reactionViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#reactionView')),
-	value: /*#__PURE__*/ v.string(),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
 	get sender() {
 		return reactionViewSenderSchema;
 	},
-	createdAt: /*#__PURE__*/ v.datetimeString(),
+	value: /*#__PURE__*/ v.string(),
 });
 const _reactionViewSenderSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#reactionViewSender')),

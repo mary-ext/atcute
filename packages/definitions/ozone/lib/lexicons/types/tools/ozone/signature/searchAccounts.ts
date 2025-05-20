@@ -5,20 +5,20 @@ import * as ComAtprotoAdminDefs from '@atcute/atproto/types/admin/defs';
 
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.signature.searchAccounts', {
 	params: /*#__PURE__*/ v.object({
-		values: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
+		values: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get accounts() {
 				return /*#__PURE__*/ v.array(ComAtprotoAdminDefs.accountViewSchema);
 			},
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},
 });

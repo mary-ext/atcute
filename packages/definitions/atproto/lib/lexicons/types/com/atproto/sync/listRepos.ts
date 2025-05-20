@@ -4,11 +4,11 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listRepos', {
 	params: /*#__PURE__*/ v.object({
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 1000)]),
 			500,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),
 	output: {
 		type: 'lex',
@@ -22,13 +22,13 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listRepos', {
 });
 const _repoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.listRepos#repo')),
+	active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	did: /*#__PURE__*/ v.didString(),
 	head: /*#__PURE__*/ v.cidString(),
 	rev: /*#__PURE__*/ v.tidString(),
-	active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	status: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.string<
-			'takendown' | 'suspended' | 'deleted' | 'deactivated' | 'desynchronized' | 'throttled' | (string & {})
+			'deactivated' | 'deleted' | 'desynchronized' | 'suspended' | 'takendown' | 'throttled' | (string & {})
 		>(),
 	),
 });

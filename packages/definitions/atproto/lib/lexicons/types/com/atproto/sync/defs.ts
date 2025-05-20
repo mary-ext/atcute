@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
 const _hostStatusSchema = /*#__PURE__*/ v.string<
-	'active' | 'idle' | 'offline' | 'throttled' | 'banned' | (string & {})
+	'active' | 'banned' | 'idle' | 'offline' | 'throttled' | (string & {})
 >();
 
 type hostStatus$schematype = typeof _hostStatusSchema;

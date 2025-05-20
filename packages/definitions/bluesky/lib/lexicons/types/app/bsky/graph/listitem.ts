@@ -6,9 +6,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.graph.listitem'),
-		subject: /*#__PURE__*/ v.didString(),
-		list: /*#__PURE__*/ v.resourceUriString(),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		list: /*#__PURE__*/ v.resourceUriString(),
+		subject: /*#__PURE__*/ v.didString(),
 	}),
 );
 

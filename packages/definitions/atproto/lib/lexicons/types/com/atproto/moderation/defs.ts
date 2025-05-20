@@ -8,17 +8,17 @@ const _reasonRudeSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#r
 const _reasonSexualSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonSexual');
 const _reasonSpamSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonSpam');
 const _reasonTypeSchema = /*#__PURE__*/ v.string<
+	| 'com.atproto.moderation.defs#reasonAppeal'
+	| 'com.atproto.moderation.defs#reasonMisleading'
+	| 'com.atproto.moderation.defs#reasonOther'
+	| 'com.atproto.moderation.defs#reasonRude'
+	| 'com.atproto.moderation.defs#reasonSexual'
 	| 'com.atproto.moderation.defs#reasonSpam'
 	| 'com.atproto.moderation.defs#reasonViolation'
-	| 'com.atproto.moderation.defs#reasonMisleading'
-	| 'com.atproto.moderation.defs#reasonSexual'
-	| 'com.atproto.moderation.defs#reasonRude'
-	| 'com.atproto.moderation.defs#reasonOther'
-	| 'com.atproto.moderation.defs#reasonAppeal'
 	| (string & {})
 >();
 const _reasonViolationSchema = /*#__PURE__*/ v.literal('com.atproto.moderation.defs#reasonViolation');
-const _subjectTypeSchema = /*#__PURE__*/ v.string<'account' | 'record' | 'chat' | (string & {})>();
+const _subjectTypeSchema = /*#__PURE__*/ v.string<'account' | 'chat' | 'record' | (string & {})>();
 
 type reasonAppeal$schematype = typeof _reasonAppealSchema;
 type reasonMisleading$schematype = typeof _reasonMisleadingSchema;

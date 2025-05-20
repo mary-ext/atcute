@@ -7,10 +7,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('community.lexicon.interaction.like'),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		get subject() {
 			return ComAtprotoRepoStrongRef.mainSchema;
 		},
-		createdAt: /*#__PURE__*/ v.datetimeString(),
 	}),
 );
 

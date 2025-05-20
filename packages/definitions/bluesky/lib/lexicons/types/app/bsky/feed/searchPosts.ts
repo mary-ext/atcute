@@ -5,15 +5,18 @@ import * as AppBskyFeedDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.searchPosts', {
 	params: /*#__PURE__*/ v.object({
-		q: /*#__PURE__*/ v.string(),
-		sort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'top' | 'latest' | (string & {})>(), 'latest'),
-		since: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		until: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		mentions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.actorIdentifierString()),
 		author: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.actorIdentifierString()),
-		lang: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.languageCodeString()),
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		domain: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		url: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+		lang: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.languageCodeString()),
+		limit: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
+			25,
+		),
+		mentions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.actorIdentifierString()),
+		q: /*#__PURE__*/ v.string(),
+		since: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		sort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'latest' | 'top' | (string & {})>(), 'latest'),
 		tag: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.array(
 				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
@@ -22,11 +25,8 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.searchPosts', {
 				]),
 			),
 		),
-		limit: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
-			25,
-		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		until: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		url: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	}),
 	output: {
 		type: 'lex',

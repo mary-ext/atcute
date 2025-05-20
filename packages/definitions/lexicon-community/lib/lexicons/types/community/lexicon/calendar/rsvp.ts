@@ -9,18 +9,18 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('community.lexicon.calendar.rsvp'),
-		get subject() {
-			return ComAtprotoRepoStrongRef.mainSchema;
-		},
 		status: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<
-				| 'community.lexicon.calendar.rsvp#interested'
 				| 'community.lexicon.calendar.rsvp#going'
+				| 'community.lexicon.calendar.rsvp#interested'
 				| 'community.lexicon.calendar.rsvp#notgoing'
 				| (string & {})
 			>(),
 			'community.lexicon.calendar.rsvp#going',
 		),
+		get subject() {
+			return ComAtprotoRepoStrongRef.mainSchema;
+		},
 	}),
 );
 const _notgoingSchema = /*#__PURE__*/ v.literal('community.lexicon.calendar.rsvp#notgoing');

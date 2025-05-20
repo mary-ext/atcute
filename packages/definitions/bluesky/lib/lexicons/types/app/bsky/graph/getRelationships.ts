@@ -19,8 +19,8 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getRelationships', {
 			get relationships() {
 				return /*#__PURE__*/ v.array(
 					/*#__PURE__*/ v.variant([
-						AppBskyGraphDefs.relationshipSchema,
 						AppBskyGraphDefs.notFoundActorSchema,
+						AppBskyGraphDefs.relationshipSchema,
 					]),
 				);
 			},

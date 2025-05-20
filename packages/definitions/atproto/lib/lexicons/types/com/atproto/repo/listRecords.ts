@@ -4,13 +4,13 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.listRecords', {
 	params: /*#__PURE__*/ v.object({
-		repo: /*#__PURE__*/ v.actorIdentifierString(),
 		collection: /*#__PURE__*/ v.nsidString(),
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		repo: /*#__PURE__*/ v.actorIdentifierString(),
 		reverse: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	}),
 	output: {
@@ -25,8 +25,8 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.listRecords', {
 });
 const _recordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.listRecords#record')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.cidString(),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 	value: /*#__PURE__*/ v.unknown(),
 });
 

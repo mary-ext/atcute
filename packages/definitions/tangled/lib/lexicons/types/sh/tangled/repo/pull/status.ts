@@ -9,9 +9,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		pull: /*#__PURE__*/ v.resourceUriString(),
 		status: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<
-				| 'sh.tangled.repo.pull.status.open'
 				| 'sh.tangled.repo.pull.status.closed'
 				| 'sh.tangled.repo.pull.status.merged'
+				| 'sh.tangled.repo.pull.status.open'
 				| (string & {})
 			>(),
 			'sh.tangled.repo.pull.status.open',

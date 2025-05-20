@@ -9,13 +9,13 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.refreshSession
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			accessJwt: /*#__PURE__*/ v.string(),
-			refreshJwt: /*#__PURE__*/ v.string(),
-			handle: /*#__PURE__*/ v.handleString(),
+			active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			did: /*#__PURE__*/ v.didString(),
 			didDoc: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
-			active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			handle: /*#__PURE__*/ v.handleString(),
+			refreshJwt: /*#__PURE__*/ v.string(),
 			status: /*#__PURE__*/ v.optional(
-				/*#__PURE__*/ v.string<'takendown' | 'suspended' | 'deactivated' | (string & {})>(),
+				/*#__PURE__*/ v.string<'deactivated' | 'suspended' | 'takendown' | (string & {})>(),
 			),
 		}),
 	},

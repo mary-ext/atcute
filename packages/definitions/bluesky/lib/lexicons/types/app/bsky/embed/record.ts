@@ -21,64 +21,64 @@ const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.record#view')),
 	get record() {
 		return /*#__PURE__*/ v.variant([
-			viewRecordSchema,
-			viewNotFoundSchema,
 			viewBlockedSchema,
 			viewDetachedSchema,
+			viewNotFoundSchema,
+			viewRecordSchema,
 			AppBskyFeedDefs.generatorViewSchema,
 			AppBskyGraphDefs.listViewSchema,
-			AppBskyLabelerDefs.labelerViewSchema,
 			AppBskyGraphDefs.starterPackViewBasicSchema,
+			AppBskyLabelerDefs.labelerViewSchema,
 		]);
 	},
 });
 const _viewBlockedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.record#viewBlocked')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
-	blocked: /*#__PURE__*/ v.literal(true),
 	get author() {
 		return AppBskyFeedDefs.blockedAuthorSchema;
 	},
+	blocked: /*#__PURE__*/ v.literal(true),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _viewDetachedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.record#viewDetached')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	detached: /*#__PURE__*/ v.literal(true),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _viewNotFoundSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.record#viewNotFound')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	notFound: /*#__PURE__*/ v.literal(true),
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _viewRecordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.record#viewRecord')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
-	cid: /*#__PURE__*/ v.cidString(),
 	get author() {
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
-	value: /*#__PURE__*/ v.unknown(),
-	get labels() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
-	},
-	replyCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	repostCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	quoteCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	cid: /*#__PURE__*/ v.cidString(),
 	get embeds() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.array(
 				/*#__PURE__*/ v.variant([
-					AppBskyEmbedImages.viewSchema,
-					AppBskyEmbedVideo.viewSchema,
-					AppBskyEmbedExternal.viewSchema,
 					viewSchema,
+					AppBskyEmbedExternal.viewSchema,
+					AppBskyEmbedImages.viewSchema,
 					AppBskyEmbedRecordWithMedia.viewSchema,
+					AppBskyEmbedVideo.viewSchema,
 				]),
 			),
 		);
 	},
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
+	get labels() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
+	},
+	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	quoteCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	replyCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	repostCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	uri: /*#__PURE__*/ v.resourceUriString(),
+	value: /*#__PURE__*/ v.unknown(),
 });
 
 type main$schematype = typeof _mainSchema;

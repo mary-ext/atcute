@@ -20,6 +20,11 @@ const _bskyAppStatePrefSchema = /*#__PURE__*/ v.object({
 	get activeProgressGuide() {
 		return /*#__PURE__*/ v.optional(bskyAppProgressGuideSchema);
 	},
+	get nuxs() {
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(nuxSchema), [/*#__PURE__*/ v.arrayLength(0, 100)]),
+		);
+	},
 	queuedNudges: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(
 			/*#__PURE__*/ v.array(
@@ -28,26 +33,21 @@ const _bskyAppStatePrefSchema = /*#__PURE__*/ v.object({
 			[/*#__PURE__*/ v.arrayLength(0, 1000)],
 		),
 	),
-	get nuxs() {
-		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(nuxSchema), [/*#__PURE__*/ v.arrayLength(0, 100)]),
-		);
-	},
 });
 const _contentLabelPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#contentLabelPref')),
-	labelerDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	label: /*#__PURE__*/ v.string(),
-	visibility: /*#__PURE__*/ v.string<'ignore' | 'show' | 'warn' | 'hide' | (string & {})>(),
+	labelerDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+	visibility: /*#__PURE__*/ v.string<'hide' | 'ignore' | 'show' | 'warn' | (string & {})>(),
 });
 const _feedViewPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#feedViewPref')),
 	feed: /*#__PURE__*/ v.string(),
-	hideReplies: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-	hideRepliesByUnfollowed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
-	hideRepliesByLikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	hideReposts: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	hideQuotePosts: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	hideReplies: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	hideRepliesByLikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	hideRepliesByUnfollowed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+	hideReposts: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 const _hiddenPostsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#hiddenPostsPref')),
@@ -86,19 +86,19 @@ const _labelersPrefSchema = /*#__PURE__*/ v.object({
 });
 const _mutedWordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#mutedWord')),
-	id: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	value: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-		/*#__PURE__*/ v.stringLength(0, 10000),
-		/*#__PURE__*/ v.stringGraphemes(0, 1000),
-	]),
-	get targets() {
-		return /*#__PURE__*/ v.array(mutedWordTargetSchema);
-	},
 	actorTarget: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.string<'all' | 'exclude-following' | (string & {})>(),
 		'all',
 	),
 	expiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	id: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	get targets() {
+		return /*#__PURE__*/ v.array(mutedWordTargetSchema);
+	},
+	value: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+		/*#__PURE__*/ v.stringLength(0, 10000),
+		/*#__PURE__*/ v.stringGraphemes(0, 1000),
+	]),
 });
 const _mutedWordTargetSchema = /*#__PURE__*/ v.constrain(
 	/*#__PURE__*/ v.string<'content' | 'tag' | (string & {})>(),
@@ -112,7 +112,6 @@ const _mutedWordsPrefSchema = /*#__PURE__*/ v.object({
 });
 const _nuxSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#nux')),
-	id: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 	completed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	data: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
@@ -121,6 +120,7 @@ const _nuxSchema = /*#__PURE__*/ v.object({
 		]),
 	),
 	expiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	id: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 });
 const _personalDetailsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#personalDetailsPref')),
@@ -128,21 +128,6 @@ const _personalDetailsPrefSchema = /*#__PURE__*/ v.object({
 });
 const _postInteractionSettingsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#postInteractionSettingsPref')),
-	get threadgateAllowRules() {
-		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(
-				/*#__PURE__*/ v.array(
-					/*#__PURE__*/ v.variant([
-						AppBskyFeedThreadgate.mentionRuleSchema,
-						AppBskyFeedThreadgate.followerRuleSchema,
-						AppBskyFeedThreadgate.followingRuleSchema,
-						AppBskyFeedThreadgate.listRuleSchema,
-					]),
-				),
-				[/*#__PURE__*/ v.arrayLength(0, 5)],
-			),
-		);
-	},
 	get postgateEmbeddingRules() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(
@@ -151,133 +136,144 @@ const _postInteractionSettingsPrefSchema = /*#__PURE__*/ v.object({
 			),
 		);
 	},
+	get threadgateAllowRules() {
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(
+				/*#__PURE__*/ v.array(
+					/*#__PURE__*/ v.variant([
+						AppBskyFeedThreadgate.followerRuleSchema,
+						AppBskyFeedThreadgate.followingRuleSchema,
+						AppBskyFeedThreadgate.listRuleSchema,
+						AppBskyFeedThreadgate.mentionRuleSchema,
+					]),
+				),
+				[/*#__PURE__*/ v.arrayLength(0, 5)],
+			),
+		);
+	},
 });
 const _preferencesSchema = /*#__PURE__*/ v.array(() => {
 	return /*#__PURE__*/ v.variant([
 		adultContentPrefSchema,
+		bskyAppStatePrefSchema,
 		contentLabelPrefSchema,
+		feedViewPrefSchema,
+		hiddenPostsPrefSchema,
+		interestsPrefSchema,
+		labelersPrefSchema,
+		mutedWordsPrefSchema,
+		personalDetailsPrefSchema,
+		postInteractionSettingsPrefSchema,
 		savedFeedsPrefSchema,
 		savedFeedsPrefV2Schema,
-		personalDetailsPrefSchema,
-		feedViewPrefSchema,
 		threadViewPrefSchema,
-		interestsPrefSchema,
-		mutedWordsPrefSchema,
-		hiddenPostsPrefSchema,
-		bskyAppStatePrefSchema,
-		labelersPrefSchema,
-		postInteractionSettingsPrefSchema,
 		verificationPrefsSchema,
 	]);
 });
 const _profileAssociatedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileAssociated')),
-	lists: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	feedgens: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	starterPacks: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	labeler: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	get chat() {
 		return /*#__PURE__*/ v.optional(profileAssociatedChatSchema);
 	},
+	feedgens: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	labeler: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	lists: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	starterPacks: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _profileAssociatedChatSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileAssociatedChat')),
-	allowIncoming: /*#__PURE__*/ v.string<'all' | 'none' | 'following' | (string & {})>(),
+	allowIncoming: /*#__PURE__*/ v.string<'all' | 'following' | 'none' | (string & {})>(),
 });
 const _profileViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileView')),
-	did: /*#__PURE__*/ v.didString(),
-	handle: /*#__PURE__*/ v.handleString(),
-	displayName: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-			/*#__PURE__*/ v.stringLength(0, 640),
-			/*#__PURE__*/ v.stringGraphemes(0, 64),
-		]),
-	),
+	get associated() {
+		return /*#__PURE__*/ v.optional(profileAssociatedSchema);
+	},
+	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 2560),
 			/*#__PURE__*/ v.stringGraphemes(0, 256),
 		]),
 	),
-	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-	get associated() {
-		return /*#__PURE__*/ v.optional(profileAssociatedSchema);
-	},
+	did: /*#__PURE__*/ v.didString(),
+	displayName: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+			/*#__PURE__*/ v.stringLength(0, 640),
+			/*#__PURE__*/ v.stringGraphemes(0, 64),
+		]),
+	),
+	handle: /*#__PURE__*/ v.handleString(),
 	indexedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	get viewer() {
-		return /*#__PURE__*/ v.optional(viewerStateSchema);
-	},
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
+	},
+	get status() {
+		return /*#__PURE__*/ v.optional(statusViewSchema);
 	},
 	get verification() {
 		return /*#__PURE__*/ v.optional(verificationStateSchema);
 	},
-	get status() {
-		return /*#__PURE__*/ v.optional(statusViewSchema);
+	get viewer() {
+		return /*#__PURE__*/ v.optional(viewerStateSchema);
 	},
 });
 const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileViewBasic')),
+	get associated() {
+		return /*#__PURE__*/ v.optional(profileAssociatedSchema);
+	},
+	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	did: /*#__PURE__*/ v.didString(),
-	handle: /*#__PURE__*/ v.handleString(),
 	displayName: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 640),
 			/*#__PURE__*/ v.stringGraphemes(0, 64),
 		]),
 	),
-	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-	get associated() {
-		return /*#__PURE__*/ v.optional(profileAssociatedSchema);
-	},
-	get viewer() {
-		return /*#__PURE__*/ v.optional(viewerStateSchema);
-	},
+	handle: /*#__PURE__*/ v.handleString(),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
-	},
-	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	get verification() {
-		return /*#__PURE__*/ v.optional(verificationStateSchema);
 	},
 	get status() {
 		return /*#__PURE__*/ v.optional(statusViewSchema);
 	},
+	get verification() {
+		return /*#__PURE__*/ v.optional(verificationStateSchema);
+	},
+	get viewer() {
+		return /*#__PURE__*/ v.optional(viewerStateSchema);
+	},
 });
 const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileViewDetailed')),
-	did: /*#__PURE__*/ v.didString(),
-	handle: /*#__PURE__*/ v.handleString(),
-	displayName: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-			/*#__PURE__*/ v.stringLength(0, 640),
-			/*#__PURE__*/ v.stringGraphemes(0, 64),
-		]),
-	),
+	get associated() {
+		return /*#__PURE__*/ v.optional(profileAssociatedSchema);
+	},
+	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	banner: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 2560),
 			/*#__PURE__*/ v.stringGraphemes(0, 256),
 		]),
 	),
-	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-	banner: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	did: /*#__PURE__*/ v.didString(),
+	displayName: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+			/*#__PURE__*/ v.stringLength(0, 640),
+			/*#__PURE__*/ v.stringGraphemes(0, 64),
+		]),
+	),
 	followersCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	followsCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	postsCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	get associated() {
-		return /*#__PURE__*/ v.optional(profileAssociatedSchema);
-	},
+	handle: /*#__PURE__*/ v.handleString(),
+	indexedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	get joinedViaStarterPack() {
 		return /*#__PURE__*/ v.optional(AppBskyGraphDefs.starterPackViewBasicSchema);
-	},
-	indexedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	get viewer() {
-		return /*#__PURE__*/ v.optional(viewerStateSchema);
 	},
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
@@ -285,19 +281,23 @@ const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 	get pinnedPost() {
 		return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
 	},
+	postsCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	get status() {
+		return /*#__PURE__*/ v.optional(statusViewSchema);
+	},
 	get verification() {
 		return /*#__PURE__*/ v.optional(verificationStateSchema);
 	},
-	get status() {
-		return /*#__PURE__*/ v.optional(statusViewSchema);
+	get viewer() {
+		return /*#__PURE__*/ v.optional(viewerStateSchema);
 	},
 });
 const _savedFeedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#savedFeed')),
 	id: /*#__PURE__*/ v.string(),
+	pinned: /*#__PURE__*/ v.boolean(),
 	type: /*#__PURE__*/ v.string<'feed' | 'list' | 'timeline' | (string & {})>(),
 	value: /*#__PURE__*/ v.string(),
-	pinned: /*#__PURE__*/ v.boolean(),
 });
 const _savedFeedsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#savedFeedsPref')),
@@ -313,20 +313,20 @@ const _savedFeedsPrefV2Schema = /*#__PURE__*/ v.object({
 });
 const _statusViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#statusView')),
-	status: /*#__PURE__*/ v.string<'app.bsky.actor.status#live' | (string & {})>(),
-	record: /*#__PURE__*/ v.unknown(),
 	get embed() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedExternal.viewSchema]));
 	},
 	expiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	isActive: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	record: /*#__PURE__*/ v.unknown(),
+	status: /*#__PURE__*/ v.string<'app.bsky.actor.status#live' | (string & {})>(),
 });
 const _threadViewPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#threadViewPref')),
-	sort: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.string<'oldest' | 'newest' | 'most-likes' | 'random' | 'hotness' | (string & {})>(),
-	),
 	prioritizeFollowedUsers: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	sort: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<'hotness' | 'most-likes' | 'newest' | 'oldest' | 'random' | (string & {})>(),
+	),
 });
 const _verificationPrefsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#verificationPrefs')),
@@ -334,34 +334,34 @@ const _verificationPrefsSchema = /*#__PURE__*/ v.object({
 });
 const _verificationStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#verificationState')),
+	trustedVerifierStatus: /*#__PURE__*/ v.string<'invalid' | 'none' | 'valid' | (string & {})>(),
 	get verifications() {
 		return /*#__PURE__*/ v.array(verificationViewSchema);
 	},
-	verifiedStatus: /*#__PURE__*/ v.string<'valid' | 'invalid' | 'none' | (string & {})>(),
-	trustedVerifierStatus: /*#__PURE__*/ v.string<'valid' | 'invalid' | 'none' | (string & {})>(),
+	verifiedStatus: /*#__PURE__*/ v.string<'invalid' | 'none' | 'valid' | (string & {})>(),
 });
 const _verificationViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#verificationView')),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
+	isValid: /*#__PURE__*/ v.boolean(),
 	issuer: /*#__PURE__*/ v.didString(),
 	uri: /*#__PURE__*/ v.resourceUriString(),
-	isValid: /*#__PURE__*/ v.boolean(),
-	createdAt: /*#__PURE__*/ v.datetimeString(),
 });
 const _viewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#viewerState')),
-	muted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-	get mutedByList() {
-		return /*#__PURE__*/ v.optional(AppBskyGraphDefs.listViewBasicSchema);
-	},
 	blockedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	blocking: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	get blockingByList() {
 		return /*#__PURE__*/ v.optional(AppBskyGraphDefs.listViewBasicSchema);
 	},
-	following: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	followedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	following: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	get knownFollowers() {
 		return /*#__PURE__*/ v.optional(knownFollowersSchema);
+	},
+	muted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	get mutedByList() {
+		return /*#__PURE__*/ v.optional(AppBskyGraphDefs.listViewBasicSchema);
 	},
 });
 

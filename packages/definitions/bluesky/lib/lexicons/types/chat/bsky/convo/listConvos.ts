@@ -5,21 +5,21 @@ import * as ChatBskyConvoDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.listConvos', {
 	params: /*#__PURE__*/ v.object({
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		readState: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'unread' | (string & {})>()),
-		status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'request' | 'accepted' | (string & {})>()),
+		status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'accepted' | 'request' | (string & {})>()),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get convos() {
 				return /*#__PURE__*/ v.array(ChatBskyConvoDefs.convoViewSchema);
 			},
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},
 });

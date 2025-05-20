@@ -17,9 +17,9 @@ const _suggestionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('app.bsky.unspecced.getTaggedSuggestions#suggestion'),
 	),
-	tag: /*#__PURE__*/ v.string(),
-	subjectType: /*#__PURE__*/ v.string<'actor' | 'feed' | (string & {})>(),
 	subject: /*#__PURE__*/ v.genericUriString(),
+	subjectType: /*#__PURE__*/ v.string<'actor' | 'feed' | (string & {})>(),
+	tag: /*#__PURE__*/ v.string(),
 });
 
 type main$schematype = typeof _mainSchema;

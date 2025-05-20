@@ -3,10 +3,10 @@ import * as v from '@atcute/lexicons/validations';
 
 const _externalSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.external#external')),
-	uri: /*#__PURE__*/ v.genericUriString(),
-	title: /*#__PURE__*/ v.string(),
 	description: /*#__PURE__*/ v.string(),
 	thumb: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+	title: /*#__PURE__*/ v.string(),
+	uri: /*#__PURE__*/ v.genericUriString(),
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.external')),
@@ -22,10 +22,10 @@ const _viewSchema = /*#__PURE__*/ v.object({
 });
 const _viewExternalSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.external#viewExternal')),
-	uri: /*#__PURE__*/ v.genericUriString(),
-	title: /*#__PURE__*/ v.string(),
 	description: /*#__PURE__*/ v.string(),
 	thumb: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	title: /*#__PURE__*/ v.string(),
+	uri: /*#__PURE__*/ v.genericUriString(),
 });
 
 type external$schematype = typeof _externalSchema;

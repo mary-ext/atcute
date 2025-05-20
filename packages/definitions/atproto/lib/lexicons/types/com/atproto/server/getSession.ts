@@ -7,15 +7,15 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.getSession', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			handle: /*#__PURE__*/ v.handleString(),
-			did: /*#__PURE__*/ v.didString(),
-			email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			emailConfirmed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			emailAuthFactor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			didDoc: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 			active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			did: /*#__PURE__*/ v.didString(),
+			didDoc: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+			email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			emailAuthFactor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			emailConfirmed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			handle: /*#__PURE__*/ v.handleString(),
 			status: /*#__PURE__*/ v.optional(
-				/*#__PURE__*/ v.string<'takendown' | 'suspended' | 'deactivated' | (string & {})>(),
+				/*#__PURE__*/ v.string<'deactivated' | 'suspended' | 'takendown' | (string & {})>(),
 			),
 		}),
 	},

@@ -4,24 +4,24 @@ import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 
 const _formats_v0Schema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.richtext.facet#formats_v0')),
+	apng_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+	gif_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+	lottie: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	png_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	webp_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
-	gif_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
-	apng_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
-	lottie: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.richtext.facet')),
-	did: /*#__PURE__*/ v.string(),
-	name: /*#__PURE__*/ v.string(),
-	alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
-	get labels() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
-	},
+	alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	did: /*#__PURE__*/ v.string(),
 	get formats() {
 		return /*#__PURE__*/ v.variant([formats_v0Schema]);
 	},
+	get labels() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
+	},
+	name: /*#__PURE__*/ v.string(),
 });
 
 type formats_v0$schematype = typeof _formats_v0Schema;

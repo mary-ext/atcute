@@ -8,8 +8,8 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.temp.checkSignupQueue', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			activated: /*#__PURE__*/ v.boolean(),
-			placeInQueue: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 			estimatedTimeMs: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+			placeInQueue: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		}),
 	},
 });

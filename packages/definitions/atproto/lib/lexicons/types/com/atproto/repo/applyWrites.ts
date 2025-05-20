@@ -13,9 +13,9 @@ const _createSchema = /*#__PURE__*/ v.object({
 });
 const _createResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#createResult')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.cidString(),
-	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
+	uri: /*#__PURE__*/ v.resourceUriString(),
+	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'unknown' | 'valid' | (string & {})>()),
 });
 const _deleteSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#delete')),
@@ -31,13 +31,13 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.applyWrites', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			repo: /*#__PURE__*/ v.actorIdentifierString(),
+			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			get writes() {
 				return /*#__PURE__*/ v.array(
-					/*#__PURE__*/ v.variant([createSchema, updateSchema, deleteSchema], true),
+					/*#__PURE__*/ v.variant([createSchema, deleteSchema, updateSchema], true),
 				);
 			},
-			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		}),
 	},
 	output: {
@@ -49,7 +49,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.applyWrites', {
 			get results() {
 				return /*#__PURE__*/ v.optional(
 					/*#__PURE__*/ v.array(
-						/*#__PURE__*/ v.variant([createResultSchema, updateResultSchema, deleteResultSchema], true),
+						/*#__PURE__*/ v.variant([createResultSchema, deleteResultSchema, updateResultSchema], true),
 					),
 				);
 			},
@@ -64,9 +64,9 @@ const _updateSchema = /*#__PURE__*/ v.object({
 });
 const _updateResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#updateResult')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.cidString(),
-	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>()),
+	uri: /*#__PURE__*/ v.resourceUriString(),
+	validationStatus: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'unknown' | 'valid' | (string & {})>()),
 });
 
 type create$schematype = typeof _createSchema;

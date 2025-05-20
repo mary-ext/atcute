@@ -4,17 +4,17 @@ import * as AppBskyActorDefs from '@atcute/bluesky/types/app/actor/defs';
 
 const _memberSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.team.defs#member')),
+	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	did: /*#__PURE__*/ v.didString(),
 	disabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	lastUpdatedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	get profile() {
 		return /*#__PURE__*/ v.optional(AppBskyActorDefs.profileViewDetailedSchema);
 	},
-	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	updatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	lastUpdatedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	role: /*#__PURE__*/ v.string<
 		'#roleAdmin' | '#roleModerator' | '#roleTriage' | '#roleVerifier' | (string & {})
 	>(),
+	updatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _roleAdminSchema = /*#__PURE__*/ v.literal('tools.ozone.team.defs#roleAdmin');
 const _roleModeratorSchema = /*#__PURE__*/ v.literal('tools.ozone.team.defs#roleModerator');

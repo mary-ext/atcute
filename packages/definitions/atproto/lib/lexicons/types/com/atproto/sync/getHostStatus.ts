@@ -10,9 +10,9 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getHostStatus', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			accountCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 			hostname: /*#__PURE__*/ v.string(),
 			seq: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-			accountCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 			get status() {
 				return /*#__PURE__*/ v.optional(ComAtprotoSyncDefs.hostStatusSchema);
 			},

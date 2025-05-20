@@ -7,7 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.convo.updateAllRead', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'request' | 'accepted' | (string & {})>()),
+			status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'accepted' | 'request' | (string & {})>()),
 		}),
 	},
 	output: {

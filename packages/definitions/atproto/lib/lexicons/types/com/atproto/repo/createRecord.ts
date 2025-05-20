@@ -8,26 +8,26 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.createRecord', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			repo: /*#__PURE__*/ v.actorIdentifierString(),
 			collection: /*#__PURE__*/ v.nsidString(),
+			record: /*#__PURE__*/ v.unknown(),
+			repo: /*#__PURE__*/ v.actorIdentifierString(),
 			rkey: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.recordKeyString(), [/*#__PURE__*/ v.stringLength(0, 512)]),
 			),
-			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			record: /*#__PURE__*/ v.unknown(),
 			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		}),
 	},
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			uri: /*#__PURE__*/ v.resourceUriString(),
 			cid: /*#__PURE__*/ v.cidString(),
 			get commit() {
 				return /*#__PURE__*/ v.optional(ComAtprotoRepoDefs.commitMetaSchema);
 			},
+			uri: /*#__PURE__*/ v.resourceUriString(),
 			validationStatus: /*#__PURE__*/ v.optional(
-				/*#__PURE__*/ v.string<'valid' | 'unknown' | (string & {})>(),
+				/*#__PURE__*/ v.string<'unknown' | 'valid' | (string & {})>(),
 			),
 		}),
 	},

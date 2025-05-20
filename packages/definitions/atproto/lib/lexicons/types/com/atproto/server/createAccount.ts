@@ -7,25 +7,25 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.createAccount'
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			did: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 			email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			handle: /*#__PURE__*/ v.handleString(),
-			did: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 			inviteCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			password: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			plcOp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+			recoveryKey: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			verificationCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			verificationPhone: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			password: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			recoveryKey: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			plcOp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 		}),
 	},
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			accessJwt: /*#__PURE__*/ v.string(),
-			refreshJwt: /*#__PURE__*/ v.string(),
-			handle: /*#__PURE__*/ v.handleString(),
 			did: /*#__PURE__*/ v.didString(),
 			didDoc: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+			handle: /*#__PURE__*/ v.handleString(),
+			refreshJwt: /*#__PURE__*/ v.string(),
 		}),
 	},
 });

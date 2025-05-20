@@ -7,23 +7,23 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('com.whtwnd.blog.entry'),
-		content: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100000)]),
-		createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-		title: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 1000)]),
-		),
-		subtitle: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 1000)]),
-		),
-		get ogp() {
-			return /*#__PURE__*/ v.optional(ComWhtwndBlogDefs.ogpSchema);
-		},
-		theme: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['github-light'])),
 		get blobs() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComWhtwndBlogDefs.blobMetadataSchema));
 		},
+		content: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100000)]),
+		createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		isDraft: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-		visibility: /*#__PURE__*/ v.literalEnum(['public', 'url', 'author']),
+		get ogp() {
+			return /*#__PURE__*/ v.optional(ComWhtwndBlogDefs.ogpSchema);
+		},
+		subtitle: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 1000)]),
+		),
+		theme: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['github-light'])),
+		title: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 1000)]),
+		),
+		visibility: /*#__PURE__*/ v.literalEnum(['author', 'public', 'url']),
 	}),
 );
 

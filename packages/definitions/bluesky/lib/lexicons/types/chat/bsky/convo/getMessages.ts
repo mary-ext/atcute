@@ -6,11 +6,11 @@ import * as ChatBskyConvoDefs from './defs.js';
 const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getMessages', {
 	params: /*#__PURE__*/ v.object({
 		convoId: /*#__PURE__*/ v.string(),
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),
 	output: {
 		type: 'lex',
@@ -19,8 +19,8 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getMessages', {
 			get messages() {
 				return /*#__PURE__*/ v.array(
 					/*#__PURE__*/ v.variant([
-						ChatBskyConvoDefs.messageViewSchema,
 						ChatBskyConvoDefs.deletedMessageViewSchema,
+						ChatBskyConvoDefs.messageViewSchema,
 					]),
 				);
 			},

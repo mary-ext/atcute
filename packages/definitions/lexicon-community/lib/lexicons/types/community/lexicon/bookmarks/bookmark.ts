@@ -6,8 +6,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('community.lexicon.bookmarks.bookmark'),
-		subject: /*#__PURE__*/ v.genericUriString(),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		subject: /*#__PURE__*/ v.genericUriString(),
 		tags: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 	}),
 );

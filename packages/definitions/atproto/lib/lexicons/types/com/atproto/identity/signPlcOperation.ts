@@ -7,11 +7,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.identity.signPlcOpera
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			token: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			rotationKeys: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			alsoKnownAs: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
-			verificationMethods: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+			rotationKeys: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			services: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+			token: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			verificationMethods: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 		}),
 	},
 	output: {

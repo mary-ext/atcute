@@ -6,12 +6,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.issue'),
-		repo: /*#__PURE__*/ v.resourceUriString(),
-		issueId: /*#__PURE__*/ v.integer(),
-		owner: /*#__PURE__*/ v.didString(),
-		title: /*#__PURE__*/ v.string(),
 		body: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		issueId: /*#__PURE__*/ v.integer(),
+		owner: /*#__PURE__*/ v.didString(),
+		repo: /*#__PURE__*/ v.resourceUriString(),
+		title: /*#__PURE__*/ v.string(),
 	}),
 );
 

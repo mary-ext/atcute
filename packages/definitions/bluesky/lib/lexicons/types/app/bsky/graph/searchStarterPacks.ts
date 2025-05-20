@@ -5,12 +5,12 @@ import * as AppBskyGraphDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.searchStarterPacks', {
 	params: /*#__PURE__*/ v.object({
-		q: /*#__PURE__*/ v.string(),
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			25,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		q: /*#__PURE__*/ v.string(),
 	}),
 	output: {
 		type: 'lex',

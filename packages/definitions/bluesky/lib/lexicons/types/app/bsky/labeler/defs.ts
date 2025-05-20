@@ -6,54 +6,54 @@ import * as ComAtprotoModerationDefs from '@atcute/atproto/types/moderation/defs
 
 const _labelerPoliciesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.labeler.defs#labelerPolicies')),
-	get labelValues() {
-		return /*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelValueSchema);
-	},
 	get labelValueDefinitions() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelValueDefinitionSchema));
+	},
+	get labelValues() {
+		return /*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelValueSchema);
 	},
 });
 const _labelerViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.labeler.defs#labelerView')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.cidString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
-	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	get viewer() {
-		return /*#__PURE__*/ v.optional(labelerViewerStateSchema);
-	},
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
+	},
+	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	uri: /*#__PURE__*/ v.resourceUriString(),
+	get viewer() {
+		return /*#__PURE__*/ v.optional(labelerViewerStateSchema);
 	},
 });
 const _labelerViewDetailedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.labeler.defs#labelerViewDetailed')),
-	uri: /*#__PURE__*/ v.resourceUriString(),
 	cid: /*#__PURE__*/ v.cidString(),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
-	},
-	get policies() {
-		return labelerPoliciesSchema;
-	},
-	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	get viewer() {
-		return /*#__PURE__*/ v.optional(labelerViewerStateSchema);
 	},
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	get policies() {
+		return labelerPoliciesSchema;
+	},
 	get reasonTypes() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoModerationDefs.reasonTypeSchema));
 	},
+	subjectCollections: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString())),
 	get subjectTypes() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoModerationDefs.subjectTypeSchema));
 	},
-	subjectCollections: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString())),
+	uri: /*#__PURE__*/ v.resourceUriString(),
+	get viewer() {
+		return /*#__PURE__*/ v.optional(labelerViewerStateSchema);
+	},
 });
 const _labelerViewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.labeler.defs#labelerViewerState')),

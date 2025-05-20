@@ -5,11 +5,11 @@ import * as AppBskyFeedDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getSuggestedFeeds', {
 	params: /*#__PURE__*/ v.object({
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),
 	output: {
 		type: 'lex',

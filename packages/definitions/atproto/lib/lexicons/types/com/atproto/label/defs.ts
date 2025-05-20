@@ -3,59 +3,59 @@ import * as v from '@atcute/lexicons/validations';
 
 const _labelSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.defs#label')),
-	ver: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	src: /*#__PURE__*/ v.didString(),
-	uri: /*#__PURE__*/ v.genericUriString(),
 	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
-	val: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 128)]),
-	neg: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	cts: /*#__PURE__*/ v.datetimeString(),
 	exp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	neg: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	sig: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.bytes()),
+	src: /*#__PURE__*/ v.didString(),
+	uri: /*#__PURE__*/ v.genericUriString(),
+	val: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 128)]),
+	ver: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _labelValueSchema = /*#__PURE__*/ v.string<
 	| '!hide'
 	| '!no-promote'
-	| '!warn'
 	| '!no-unauthenticated'
+	| '!warn'
 	| 'dmca-violation'
 	| 'doxxing'
+	| 'gore'
+	| 'nsfl'
+	| 'nudity'
 	| 'porn'
 	| 'sexual'
-	| 'nudity'
-	| 'nsfl'
-	| 'gore'
 	| (string & {})
 >();
 const _labelValueDefinitionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.label.defs#labelValueDefinition')),
+	adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	blurs: /*#__PURE__*/ v.string<'content' | 'media' | 'none' | (string & {})>(),
+	defaultSetting: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<'hide' | 'ignore' | 'warn' | (string & {})>(),
+		'warn',
+	),
 	identifier: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 100),
 		/*#__PURE__*/ v.stringGraphemes(0, 100),
 	]),
-	severity: /*#__PURE__*/ v.string<'inform' | 'alert' | 'none' | (string & {})>(),
-	blurs: /*#__PURE__*/ v.string<'content' | 'media' | 'none' | (string & {})>(),
-	defaultSetting: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.string<'ignore' | 'warn' | 'hide' | (string & {})>(),
-		'warn',
-	),
-	adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	get locales() {
 		return /*#__PURE__*/ v.array(labelValueDefinitionStringsSchema);
 	},
+	severity: /*#__PURE__*/ v.string<'alert' | 'inform' | 'none' | (string & {})>(),
 });
 const _labelValueDefinitionStringsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('com.atproto.label.defs#labelValueDefinitionStrings'),
 	),
+	description: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+		/*#__PURE__*/ v.stringLength(0, 100000),
+		/*#__PURE__*/ v.stringGraphemes(0, 10000),
+	]),
 	lang: /*#__PURE__*/ v.languageCodeString(),
 	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 640),
 		/*#__PURE__*/ v.stringGraphemes(0, 64),
-	]),
-	description: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-		/*#__PURE__*/ v.stringLength(0, 100000),
-		/*#__PURE__*/ v.stringGraphemes(0, 10000),
 	]),
 });
 const _selfLabelSchema = /*#__PURE__*/ v.object({

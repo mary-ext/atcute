@@ -10,19 +10,19 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.server.getConfig', {
 			get appview() {
 				return /*#__PURE__*/ v.optional(serviceConfigSchema);
 			},
-			get pds() {
-				return /*#__PURE__*/ v.optional(serviceConfigSchema);
-			},
 			get blobDivert() {
 				return /*#__PURE__*/ v.optional(serviceConfigSchema);
 			},
 			get chat() {
 				return /*#__PURE__*/ v.optional(serviceConfigSchema);
 			},
+			get pds() {
+				return /*#__PURE__*/ v.optional(serviceConfigSchema);
+			},
+			verifierDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 			get viewer() {
 				return /*#__PURE__*/ v.optional(viewerConfigSchema);
 			},
-			verifierDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		}),
 	},
 });

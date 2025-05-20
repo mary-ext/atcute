@@ -5,16 +5,16 @@ import * as BlueMojiCollectionItem from './item.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('blue.moji.collection.getItem', {
 	params: /*#__PURE__*/ v.object({
-		repo: /*#__PURE__*/ v.actorIdentifierString(),
 		name: /*#__PURE__*/ v.string(),
+		repo: /*#__PURE__*/ v.actorIdentifierString(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			uri: /*#__PURE__*/ v.resourceUriString(),
 			get item() {
 				return BlueMojiCollectionItem.itemViewSchema;
 			},
+			uri: /*#__PURE__*/ v.resourceUriString(),
 		}),
 	},
 });

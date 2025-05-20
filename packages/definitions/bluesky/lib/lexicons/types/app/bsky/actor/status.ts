@@ -8,14 +8,14 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.literal('self'),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.actor.status'),
-		status: /*#__PURE__*/ v.string<'app.bsky.actor.status#live' | (string & {})>(),
-		get embed() {
-			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedExternal.mainSchema]));
-		},
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		durationMinutes: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1)]),
 		),
-		createdAt: /*#__PURE__*/ v.datetimeString(),
+		get embed() {
+			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedExternal.mainSchema]));
+		},
+		status: /*#__PURE__*/ v.string<'app.bsky.actor.status#live' | (string & {})>(),
 	}),
 );
 

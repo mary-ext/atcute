@@ -4,68 +4,68 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _accountSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#account')),
-	seq: /*#__PURE__*/ v.integer(),
-	did: /*#__PURE__*/ v.didString(),
-	time: /*#__PURE__*/ v.datetimeString(),
 	active: /*#__PURE__*/ v.boolean(),
+	did: /*#__PURE__*/ v.didString(),
+	seq: /*#__PURE__*/ v.integer(),
 	status: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.string<
-			'takendown' | 'suspended' | 'deleted' | 'deactivated' | 'desynchronized' | 'throttled' | (string & {})
+			'deactivated' | 'deleted' | 'desynchronized' | 'suspended' | 'takendown' | 'throttled' | (string & {})
 		>(),
 	),
+	time: /*#__PURE__*/ v.datetimeString(),
 });
 const _commitSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#commit')),
-	seq: /*#__PURE__*/ v.integer(),
-	rebase: /*#__PURE__*/ v.boolean(),
-	tooBig: /*#__PURE__*/ v.boolean(),
-	repo: /*#__PURE__*/ v.didString(),
-	commit: /*#__PURE__*/ v.cidLink(),
-	rev: /*#__PURE__*/ v.tidString(),
-	since: /*#__PURE__*/ v.nullable(/*#__PURE__*/ v.tidString()),
+	blobs: /*#__PURE__*/ v.array(/*#__PURE__*/ v.cidLink()),
 	blocks: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.bytes(), [/*#__PURE__*/ v.bytesSize(0, 2000000)]),
+	commit: /*#__PURE__*/ v.cidLink(),
 	get ops() {
 		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(repoOpSchema), [
 			/*#__PURE__*/ v.arrayLength(0, 200),
 		]);
 	},
-	blobs: /*#__PURE__*/ v.array(/*#__PURE__*/ v.cidLink()),
 	prevData: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidLink()),
+	rebase: /*#__PURE__*/ v.boolean(),
+	repo: /*#__PURE__*/ v.didString(),
+	rev: /*#__PURE__*/ v.tidString(),
+	seq: /*#__PURE__*/ v.integer(),
+	since: /*#__PURE__*/ v.nullable(/*#__PURE__*/ v.tidString()),
 	time: /*#__PURE__*/ v.datetimeString(),
+	tooBig: /*#__PURE__*/ v.boolean(),
 });
 const _identitySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#identity')),
-	seq: /*#__PURE__*/ v.integer(),
 	did: /*#__PURE__*/ v.didString(),
-	time: /*#__PURE__*/ v.datetimeString(),
 	handle: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.handleString()),
+	seq: /*#__PURE__*/ v.integer(),
+	time: /*#__PURE__*/ v.datetimeString(),
 });
 const _infoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#info')),
-	name: /*#__PURE__*/ v.string<'OutdatedCursor' | (string & {})>(),
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	name: /*#__PURE__*/ v.string<'OutdatedCursor' | (string & {})>(),
 });
 const _mainSchema = /*#__PURE__*/ v.subscription('com.atproto.sync.subscribeRepos', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	}),
 	get message() {
-		return /*#__PURE__*/ v.variant([commitSchema, syncSchema, identitySchema, accountSchema, infoSchema]);
+		return /*#__PURE__*/ v.variant([accountSchema, commitSchema, identitySchema, infoSchema, syncSchema]);
 	},
 });
 const _repoOpSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#repoOp')),
-	action: /*#__PURE__*/ v.string<'create' | 'update' | 'delete' | (string & {})>(),
-	path: /*#__PURE__*/ v.string(),
+	action: /*#__PURE__*/ v.string<'create' | 'delete' | 'update' | (string & {})>(),
 	cid: /*#__PURE__*/ v.nullable(/*#__PURE__*/ v.cidLink()),
+	path: /*#__PURE__*/ v.string(),
 	prev: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidLink()),
 });
 const _syncSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.subscribeRepos#sync')),
-	seq: /*#__PURE__*/ v.integer(),
-	did: /*#__PURE__*/ v.didString(),
 	blocks: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.bytes(), [/*#__PURE__*/ v.bytesSize(0, 10000)]),
+	did: /*#__PURE__*/ v.didString(),
 	rev: /*#__PURE__*/ v.string(),
+	seq: /*#__PURE__*/ v.integer(),
 	time: /*#__PURE__*/ v.datetimeString(),
 });
 

@@ -22,37 +22,34 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.feed.post'),
-		text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-			/*#__PURE__*/ v.stringLength(0, 3000),
-			/*#__PURE__*/ v.stringGraphemes(0, 300),
-		]),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
+		get embed() {
+			return /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.variant([
+					AppBskyEmbedExternal.mainSchema,
+					AppBskyEmbedImages.mainSchema,
+					AppBskyEmbedRecord.mainSchema,
+					AppBskyEmbedRecordWithMedia.mainSchema,
+					AppBskyEmbedVideo.mainSchema,
+				]),
+			);
+		},
 		get entities() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(entitySchema));
 		},
 		get facets() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 		},
-		get reply() {
-			return /*#__PURE__*/ v.optional(replyRefSchema);
-		},
-		get embed() {
-			return /*#__PURE__*/ v.optional(
-				/*#__PURE__*/ v.variant([
-					AppBskyEmbedImages.mainSchema,
-					AppBskyEmbedVideo.mainSchema,
-					AppBskyEmbedExternal.mainSchema,
-					AppBskyEmbedRecord.mainSchema,
-					AppBskyEmbedRecordWithMedia.mainSchema,
-				]),
-			);
+		get labels() {
+			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
 		langs: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.languageCodeString()), [
 				/*#__PURE__*/ v.arrayLength(0, 3),
 			]),
 		),
-		get labels() {
-			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
+		get reply() {
+			return /*#__PURE__*/ v.optional(replyRefSchema);
 		},
 		tags: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(
@@ -65,22 +62,25 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				[/*#__PURE__*/ v.arrayLength(0, 8)],
 			),
 		),
-		createdAt: /*#__PURE__*/ v.datetimeString(),
+		text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+			/*#__PURE__*/ v.stringLength(0, 3000),
+			/*#__PURE__*/ v.stringGraphemes(0, 300),
+		]),
 	}),
 );
 const _replyRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.post#replyRef')),
-	get root() {
+	get parent() {
 		return ComAtprotoRepoStrongRef.mainSchema;
 	},
-	get parent() {
+	get root() {
 		return ComAtprotoRepoStrongRef.mainSchema;
 	},
 });
 const _textSliceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.post#textSlice')),
-	start: /*#__PURE__*/ v.integer(),
 	end: /*#__PURE__*/ v.integer(),
+	start: /*#__PURE__*/ v.integer(),
 });
 
 type entity$schematype = typeof _entitySchema;

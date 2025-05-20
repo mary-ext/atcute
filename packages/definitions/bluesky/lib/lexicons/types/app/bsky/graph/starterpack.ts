@@ -11,10 +11,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.graph.starterpack'),
-		name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-			/*#__PURE__*/ v.stringLength(1, 500),
-			/*#__PURE__*/ v.stringGraphemes(0, 50),
-		]),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 3000),
@@ -24,13 +21,16 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get descriptionFacets() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 		},
-		list: /*#__PURE__*/ v.resourceUriString(),
 		get feeds() {
 			return /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(feedItemSchema), [/*#__PURE__*/ v.arrayLength(0, 3)]),
 			);
 		},
-		createdAt: /*#__PURE__*/ v.datetimeString(),
+		list: /*#__PURE__*/ v.resourceUriString(),
+		name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+			/*#__PURE__*/ v.stringLength(1, 500),
+			/*#__PURE__*/ v.stringGraphemes(0, 50),
+		]),
 	}),
 );
 

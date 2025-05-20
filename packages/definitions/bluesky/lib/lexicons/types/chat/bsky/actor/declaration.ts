@@ -6,7 +6,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.literal('self'),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('chat.bsky.actor.declaration'),
-		allowIncoming: /*#__PURE__*/ v.string<'all' | 'none' | 'following' | (string & {})>(),
+		allowIncoming: /*#__PURE__*/ v.string<'all' | 'following' | 'none' | (string & {})>(),
 	}),
 );
 

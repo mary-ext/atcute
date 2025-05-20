@@ -9,20 +9,20 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.literal('self'),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.labeler.service'),
-		get policies() {
-			return AppBskyLabelerDefs.labelerPoliciesSchema;
-		},
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
-		createdAt: /*#__PURE__*/ v.datetimeString(),
+		get policies() {
+			return AppBskyLabelerDefs.labelerPoliciesSchema;
+		},
 		get reasonTypes() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoModerationDefs.reasonTypeSchema));
 		},
+		subjectCollections: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString())),
 		get subjectTypes() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoModerationDefs.subjectTypeSchema));
 		},
-		subjectCollections: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString())),
 	}),
 );
 

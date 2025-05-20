@@ -8,10 +8,10 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.video.getUploadLimits', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			canUpload: /*#__PURE__*/ v.boolean(),
-			remainingDailyVideos: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-			remainingDailyBytes: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-			message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			error: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			remainingDailyBytes: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+			remainingDailyVideos: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		}),
 	},
 });

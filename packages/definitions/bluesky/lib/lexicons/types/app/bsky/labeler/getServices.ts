@@ -5,8 +5,8 @@ import * as AppBskyLabelerDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.labeler.getServices', {
 	params: /*#__PURE__*/ v.object({
-		dids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
 		detailed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+		dids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
 	}),
 	output: {
 		type: 'lex',
