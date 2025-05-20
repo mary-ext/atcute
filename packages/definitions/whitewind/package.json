@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/whitewind",
-	"version": "3.0.1",
+	"version": "3.0.2",
 	"description": "WhiteWind (com.whtwnd.*) schema definitions",
 	"keywords": [
 		"atcute",

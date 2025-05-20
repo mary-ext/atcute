@@ -1,5 +1,13 @@
 # @atcute/client
 
+## 4.0.2
+
+### Patch Changes
+
+- Updated dependencies [61b0fd1]
+  - @atcute/lexicons@1.0.2
+  - @atcute/identity@1.0.2
+
 ## 4.0.1
 
 ### Patch Changes

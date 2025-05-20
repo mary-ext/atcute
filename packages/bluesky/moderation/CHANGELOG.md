@@ -1,5 +1,12 @@
 # @atcute/bluesky-moderation
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [61b0fd1]
+  - @atcute/lexicons@1.0.2
+
 ## 2.0.1
 
 ### Patch Changes

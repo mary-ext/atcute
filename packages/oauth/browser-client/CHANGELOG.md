@@ -1,5 +1,14 @@
 # @atcute/oauth-browser-client
 
+## 1.0.21
+
+### Patch Changes
+
+- Updated dependencies [61b0fd1]
+  - @atcute/lexicons@1.0.2
+  - @atcute/client@4.0.2
+  - @atcute/identity@1.0.2
+
 ## 1.0.20
 
 ### Patch Changes

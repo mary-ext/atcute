@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/lexicon-community",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Lexicon Community (community.lexicon.*) schema definitions",
 	"license": "MIT",
 	"repository": {

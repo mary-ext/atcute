@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 1.0.2
+
+### Patch Changes
+
+- 61b0fd1: remove pure annotation from isArray
+
 ## 1.0.1
 
 ### Patch Changes

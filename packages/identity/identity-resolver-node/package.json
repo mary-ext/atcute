@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/identity-resolver-node",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "additional atproto identity resolvers for Node.js",
 	"keywords": [
 		"atproto",

@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/bluesky-richtext-builder",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"description": "builder pattern for Bluesky's rich text facets",
 	"license": "MIT",
 	"repository": {

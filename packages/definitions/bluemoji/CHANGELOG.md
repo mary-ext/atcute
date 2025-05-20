@@ -1,5 +1,20 @@
 # @atcute/bluemoji
 
+## 3.0.2
+
+### Patch Changes
+
+- 1b1bd64: CID-formatted strings should be validated
+
+  somehow missed this
+
+- Updated dependencies [e2d3d00]
+- Updated dependencies [1b1bd64]
+- Updated dependencies [61b0fd1]
+  - @atcute/atproto@3.0.2
+  - @atcute/bluesky@3.0.2
+  - @atcute/lexicons@1.0.2
+
 ## 3.0.1
 
 ### Patch Changes
