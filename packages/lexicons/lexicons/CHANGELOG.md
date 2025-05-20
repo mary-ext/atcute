@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 1.0.3
+
+### Patch Changes
+
+- 76ced03: fix development-only assertion
+
 ## 1.0.2
 
 ### Patch Changes
