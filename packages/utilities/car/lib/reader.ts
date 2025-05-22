@@ -16,25 +16,29 @@ export const getStreamedCarReader = (stream: ReadableStream<Uint8Array>): Stream
 	return createStreamedCarReader(stream);
 };
 
-export const readCarStream = (stream: ReadableStream<Uint8Array>): ReadableStream<CarEntry> => {
-	const reader = createStreamedCarReader(stream);
+export const getCarTransform = (): ReadableWritablePair<CarEntry, Uint8Array> => {
+	const internalTransform = new TransformStream();
+	const reader = createStreamedCarReader(internalTransform.readable);
 	const iterator = reader[Symbol.asyncIterator]();
 
-	return new ReadableStream<CarEntry>({
-		async pull(controller) {
-			try {
-				const entry = await iterator.next();
-				if (entry.done) {
-					controller.close();
-				} else {
-					controller.enqueue(entry.value);
+	return {
+		writable: internalTransform.writable,
+		readable: new ReadableStream<CarEntry>({
+			async pull(controller) {
+				try {
+					const entry = await iterator.next();
+					if (entry.done) {
+						controller.close();
+					} else {
+						controller.enqueue(entry.value);
+					}
+				} catch (error) {
+					controller.error(error);
 				}
-			} catch (error) {
-				controller.error(error);
-			}
-		},
-		async cancel() {
-			await reader[Symbol.asyncDispose]();
-		},
-	});
+			},
+			async cancel() {
+				await reader[Symbol.asyncDispose]();
+			},
+		}),
+	};
 };

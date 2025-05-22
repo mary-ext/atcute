@@ -3,7 +3,7 @@ import { describe, expect, it } from 'bun:test';
 import { fromString, toCidLink } from '@atcute/cid';
 import { fromBase64 } from '@atcute/multibase';
 
-import { readCar, getStreamedCarReader, readCarStream } from './reader.js';
+import { readCar, getStreamedCarReader, getCarTransform } from './reader.js';
 
 describe('readCar', () => {
 	it('reads car files', () => {
@@ -243,7 +243,7 @@ describe('readCarStream', () => {
 		const blob = new Blob([buf]);
 		const stream = blob.stream();
 
-		const carReadable = readCarStream(stream);
+		const carReadable = stream.pipeThrough(getCarTransform());
 
 		const reader = carReadable.getReader();
 		const entries = [];
