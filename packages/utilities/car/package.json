@@ -35,6 +35,7 @@
 	"dependencies": {
 		"@atcute/cbor": "workspace:^",
 		"@atcute/cid": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
 		"@atcute/varint": "workspace:^"
 	}
 }

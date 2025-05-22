@@ -514,6 +514,9 @@ importers:
       '@atcute/cid':
         specifier: workspace:^
         version: link:../cid
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../uint8array
       '@atcute/varint':
         specifier: workspace:^
         version: link:../varint
