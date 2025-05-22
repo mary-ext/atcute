@@ -1,3 +1,4 @@
+import type { CarEntry } from './utilities/car.js';
 import { createStreamedCarReader, type StreamedCarReader } from './utilities/stream-car-reader.js';
 import { createUint8Reader } from './utilities/sync-byte-reader.js';
 import { createCarReader, type SyncCarReader } from './utilities/sync-car-reader.js';
@@ -11,6 +12,29 @@ export const readCar = (buffer: Uint8Array): SyncCarReader => {
 	return createCarReader(reader);
 };
 
-export const readCarStream = (stream: ReadableStream<Uint8Array>): StreamedCarReader => {
+export const getStreamedCarReader = (stream: ReadableStream<Uint8Array>): StreamedCarReader => {
 	return createStreamedCarReader(stream);
+};
+
+export const readCarStream = (stream: ReadableStream<Uint8Array>): ReadableStream<CarEntry> => {
+	const reader = createStreamedCarReader(stream);
+	const iterator = reader[Symbol.asyncIterator]();
+
+	return new ReadableStream<CarEntry>({
+		async pull(controller) {
+			try {
+				const entry = await iterator.next();
+				if (entry.done) {
+					controller.close();
+				} else {
+					controller.enqueue(entry.value);
+				}
+			} catch (error) {
+				controller.error(error);
+			}
+		},
+		async cancel() {
+			await reader[Symbol.asyncDispose]();
+		},
+	});
 };
