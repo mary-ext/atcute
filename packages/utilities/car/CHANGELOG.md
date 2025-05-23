@@ -1,5 +1,121 @@
 # @atcute/car
 
+## 3.1.0
+
+### Minor Changes
+
+- 7324d11: reorganized the exported functions, the new exports should be inline with other utility
+  packages from atcute.
+
+  normally this would be considered a breaking change, but because the change doesn't exactly change
+  any of the API, I've decided to turn this into a minor change.
+
+  to migrate, you'd need to change your imports from `@atcute/car` to `@atcute/car/v4` subpath.
+
+  ```ts
+  // before (v3)
+  import { readCar, iterateAtpRepo } from '@atcute/car';
+
+  // read AT Protocol repository exports
+  for (const entry of iterateAtpRepo(buffer)) {
+  	entry;
+  	// ^? RepoEntry { ... }
+  }
+
+  // read generic CAR archives
+  {
+  	const car = readCar(buffer);
+  	const header = car.header;
+
+  	for (const entry of car.iterate()) {
+  		entry;
+  		// ^? CarEntry { ... }
+  	}
+  }
+  ```
+
+  ```ts
+  // after (v4)
+  import { CarReader, RepoReader } from '@atcute/car/v4';
+
+  // alternatively
+  import * as CarReader from '@atcute/car/v4/car-reader';
+  import * as RepoReader from '@atcute/car/v4/repo-reader';
+
+  // read AT Protocol repository exports
+  {
+  	for (const entry of RepoReader.fromUint8Array(buffer)) {
+  		entry;
+  		// ^? RepoEntry { ... }
+  	}
+  }
+
+  // read generic CAR archives
+  {
+  	const car = CarReader.fromUint8Array(buffer);
+  	const header = car.header;
+
+  	// use for..of on `car` directly, `.iterate()` is deprecated
+  	for (const entry of car) {
+  		entry;
+  		// ^? CarEntry { ... }
+  	}
+  }
+  ```
+
+- 150edc2: add streaming support for `CarReader` and `RepoReader`, which should allow for efficient
+  reading of CAR archives.
+
+  ```ts
+  import { CarReader, RepoReader } from '@atcute/car/v4';
+
+  // read AT Protocol repository exports
+  {
+  	await using repo = RepoReader.fromStream(stream);
+
+  	for await (const entry of repo) {
+  		entry;
+  		// ^? RepoEntry { collection: 'app.bsky.feed.post', rkey: '3lprcc55bb222', ... }
+  	}
+
+  	repo.missingBlocks;
+  	//   ^? []
+  }
+
+  // read generic CAR archives
+  {
+  	await using car = CarReader.fromStream(stream);
+
+  	const roots = await car.roots();
+
+  	for await (const entry of car) {
+  		entry;
+  		// ^? CarEntry { cid: CidLink {}, bytes: Uint8Array {}, ... }
+  	}
+  }
+  ```
+
+  please note that the reference PDS implementation does not yet support the Sync v1.1 proposal,
+  which would enable more efficient streaming. additionally, some PDSes may send valid but heavily
+  out-of-order archives that could impact streaming performance.
+
+- 074a818: adds `RepoReader.repoEntryTransform` and `CarReader.carEntryTransform` functions for
+  conveniently piping a readable stream into archive entries.
+
+  ```ts
+  import { RepoReader } from '@atcute/car/v4';
+
+  const response = await fetch('https://example.com/xrpc/com.atproto.sync.getRepo?did=...');
+
+  const entries = response.body!.pipeThrough(RepoReader.repoEntryTransform());
+  for await (const entry of entries) {
+  	entry;
+  	// ^? RepoEntry { ... }
+  }
+  ```
+
+  thanks [@nperez0111](https://github.com/nperez0111) for this contribution!
+
 ## 3.0.5
 
 ### Patch Changes
