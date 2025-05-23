@@ -46,6 +46,37 @@ export interface StreamedRepoReader {
 	[Symbol.asyncIterator](): AsyncIterator<RepoEntry>;
 }
 
+export const repoEntryTransform = (): ReadableWritablePair<RepoEntry, Uint8Array> => {
+	const transform = new TransformStream<Uint8Array, Uint8Array>();
+	let repo: StreamedRepoReader | undefined;
+
+	return {
+		readable: new ReadableStream({
+			async start(controller) {
+				repo = fromStream(transform.readable);
+
+				try {
+					for await (const entry of repo) {
+						controller.enqueue(entry);
+					}
+
+					await repo.dispose();
+
+					controller.close();
+				} catch (err) {
+					controller.error(err);
+				}
+			},
+			async cancel() {
+				if (repo !== undefined) {
+					await repo.dispose();
+				}
+			},
+		}),
+		writable: transform.writable,
+	};
+};
+
 export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoReader => {
 	let missingBlocks: MissingBlockEntry[] = [];
 

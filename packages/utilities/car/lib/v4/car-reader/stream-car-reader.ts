@@ -14,6 +14,37 @@ export interface StreamedCarReader {
 	[Symbol.asyncIterator](): AsyncIterator<CarEntry>;
 }
 
+export const carEntryTransform = (): ReadableWritablePair<CarEntry, Uint8Array> => {
+	const transform = new TransformStream<Uint8Array, Uint8Array>();
+	let car: StreamedCarReader | undefined;
+
+	return {
+		readable: new ReadableStream({
+			async start(controller) {
+				car = fromStream(transform.readable);
+
+				try {
+					for await (const entry of car) {
+						controller.enqueue(entry);
+					}
+
+					await car.dispose();
+
+					controller.close();
+				} catch (err) {
+					controller.error(err);
+				}
+			},
+			async cancel() {
+				if (car !== undefined) {
+					await car.dispose();
+				}
+			},
+		}),
+		writable: transform.writable,
+	};
+};
+
 export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReader => {
 	let chunk = new Uint8Array(0) as Uint8Array; // annoying!
 	let offset = 0;
