@@ -26,7 +26,7 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 
 	const constructPayload = (
 		method: string,
-		url: string,
+		htu: string,
 		nonce: string | undefined,
 		ath: string | undefined,
 	) => {
@@ -35,7 +35,7 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 			iat: Math.floor(Date.now() / 1_000),
 			jti: generateJti(),
 			htm: method,
-			htu: url,
+			htu: htu,
 			nonce: nonce,
 			ath: ath,
 		};
@@ -43,8 +43,8 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 		return toBase64Url(encoder.encode(JSON.stringify(payload)));
 	};
 
-	return async (method: string, url: string, nonce: string | undefined, ath: string | undefined) => {
-		const payloadString = constructPayload(method, url, nonce, ath);
+	return async (method: string, htu: string, nonce: string | undefined, ath: string | undefined) => {
+		const payloadString = constructPayload(method, htu, nonce, ath);
 
 		const signed = await crypto.subtle.sign(
 			{ name: 'ECDSA', hash: { name: 'SHA-256' } },
@@ -73,7 +73,9 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 			: undefined;
 
 		const { method, url } = request;
-		const { origin } = new URL(url);
+		const { origin, pathname } = new URL(url);
+
+		const htu = origin + pathname;
 
 		// See if we have a pending promise for this origin, we'll await before
 		// proceeding with this request, next comment describes what the promise
@@ -118,7 +120,7 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 
 		let nextNonce: string | null;
 		try {
-			const initProof = await sign(method, url, initNonce, ath);
+			const initProof = await sign(method, htu, initNonce, ath);
 			request.headers.set('dpop', initProof);
 
 			const initResponse = await fetch(request);
@@ -164,7 +166,7 @@ export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?:
 		// We got here because we were asked to retry the request (due to missing
 		// nonce value in the first request), let's do just that.
 		{
-			const nextProof = await sign(method, url, nextNonce, ath);
+			const nextProof = await sign(method, htu, nextNonce, ath);
 			const nextRequest = new Request(input, init);
 			nextRequest.headers.set('dpop', nextProof);
 
