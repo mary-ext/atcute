@@ -1,5 +1,11 @@
 # @atcute/oauth-browser-client
 
+## 1.0.22
+
+### Patch Changes
+
+- a3f9e9b: only include URL origin and pathname in `htu` when signing DPoP requests
+
 ## 1.0.21
 
 ### Patch Changes
