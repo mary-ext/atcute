@@ -2,17 +2,19 @@ import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 import { concat } from '@atcute/uint8array';
 
-import { isCarV1Header, type CarEntry, type CarHeader } from './car.js';
+import { isCarV1Header, type CarEntry, type CarHeader } from './types.js';
 
 export interface StreamedCarReader {
 	header(): Promise<CarHeader>;
 	roots(): Promise<CBOR.CidLink[]>;
 
+	dispose(): Promise<void>;
+
 	[Symbol.asyncDispose](): Promise<void>;
 	[Symbol.asyncIterator](): AsyncIterator<CarEntry>;
 }
 
-export const createStreamedCarReader = (stream: ReadableStream<Uint8Array>): StreamedCarReader => {
+export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReader => {
 	let chunk = new Uint8Array(0) as Uint8Array; // annoying!
 	let offset = 0;
 
@@ -119,7 +121,11 @@ export const createStreamedCarReader = (stream: ReadableStream<Uint8Array>): Str
 	};
 
 	return {
-		async [Symbol.asyncDispose]() {
+		[Symbol.asyncDispose]() {
+			return this.dispose();
+		},
+
+		async dispose() {
 			await reader.cancel();
 		},
 

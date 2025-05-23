@@ -3,9 +3,10 @@ import { describe, expect, it } from 'bun:test';
 import { fromString, toCidLink } from '@atcute/cid';
 import { fromBase64 } from '@atcute/multibase';
 
-import { readCar, readCarStream } from './reader.js';
+import { fromStream } from './stream-car-reader.js';
+import { fromUint8Array } from './sync-car-reader.js';
 
-describe('readCar', () => {
+describe('fromUint8Array', () => {
 	it('reads car files', () => {
 		const buf = fromBase64(
 			'OqJlcm9vdHOB2CpYJQABcRIgkD8I0DL+GsJ3OKREpf9k73yHguuSEYzEiXPGueoJg8FndmVy' +
@@ -29,8 +30,10 @@ describe('readCar', () => {
 				'ZXQjbWVudGlvbmljcmVhdGVkQXR4GDIwMjQtMDItMjRUMTI6MTY6MjAuNjM3Wg',
 		);
 
-		const { header, iterate } = readCar(buf);
-		const entries = Array.from(iterate());
+		const car = fromUint8Array(buf);
+
+		const header = car.header;
+		const entries = Array.from(car);
 
 		expect(header).toEqual({
 			data: {
@@ -108,7 +111,7 @@ describe('readCar', () => {
 	});
 });
 
-describe('readCarStream', () => {
+describe('fromStream', () => {
 	it('reads car files', async () => {
 		const buf = fromBase64(
 			'OqJlcm9vdHOB2CpYJQABcRIgkD8I0DL+GsJ3OKREpf9k73yHguuSEYzEiXPGueoJg8FndmVy' +
@@ -135,7 +138,7 @@ describe('readCarStream', () => {
 		const blob = new Blob([buf]);
 		const stream = blob.stream();
 
-		await using car = readCarStream(stream);
+		await using car = fromStream(stream);
 
 		const header = await car.header();
 		const entries = await Array.fromAsync(car);

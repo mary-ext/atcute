@@ -18,6 +18,7 @@
 		"module": "NodeNext",
 		"sourceMap": true,
 		"declaration": true,
+		"stripInternal": true,
 	},
 	"include": ["lib"],
 }

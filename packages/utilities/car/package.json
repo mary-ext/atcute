@@ -20,7 +20,10 @@
 		"!lib/**/*.test.ts"
 	],
 	"exports": {
-		".": "./dist/index.js"
+		".": "./dist/v3/index.js",
+		"./v4": "./dist/v4/index.js",
+		"./v4/car-reader": "./dist/v4/car-reader/index.js",
+		"./v4/repo-reader": "./dist/v4/repo-reader/index.js"
 	},
 	"sideEffects": false,
 	"scripts": {
@@ -36,6 +39,7 @@
 		"@atcute/cbor": "workspace:^",
 		"@atcute/cid": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"@atcute/varint": "workspace:^"
+		"@atcute/varint": "workspace:^",
+		"yocto-queue": "^1.2.1"
 	}
 }

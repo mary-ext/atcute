@@ -1,9 +1,9 @@
-# @atcute/car
+---
+'@atcute/car': minor
+---
 
-lightweight [DASL CAR (content-addressable archives)][dasl-car] and atproto repository decoder
-library for AT Protocol.
-
-[dasl-car]: https://dasl.ing/car.html
+add streaming support for `CarReader` and `RepoReader`, which should allow for efficient reading of
+CAR archives.
 
 ```ts
 import { CarReader, RepoReader } from '@atcute/car/v4';
@@ -33,3 +33,7 @@ import { CarReader, RepoReader } from '@atcute/car/v4';
 	}
 }
 ```
+
+please note that the reference PDS implementation does not yet support the Sync v1.1 proposal, which
+would enable more efficient streaming. additionally, some PDSes may send valid but heavily
+out-of-order archives that could impact streaming performance.

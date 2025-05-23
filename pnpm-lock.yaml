@@ -520,6 +520,9 @@ importers:
       '@atcute/varint':
         specifier: workspace:^
         version: link:../varint
+      yocto-queue:
+        specifier: ^1.2.1
+        version: 1.2.1
     devDependencies:
       '@atcute/multibase':
         specifier: workspace:^
