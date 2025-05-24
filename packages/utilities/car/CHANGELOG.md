@@ -1,5 +1,12 @@
 # @atcute/car
 
+## 3.1.1
+
+### Patch Changes
+
+- bea36b2: allow `RepoReader.fromStream` to work even if `await using` is not supported by host
+  environment.
+
 ## 3.1.0
 
 ### Minor Changes
