@@ -93,112 +93,117 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 			return this.dispose();
 		},
 		async *[Symbol.asyncIterator]() {
-			await using car = CarReader.fromStream(stream);
+			// await using car = CarReader.fromStream(stream);
+			const car = CarReader.fromStream(stream);
 
-			const pending = new Map<string, EntryMeta>();
-			const strays = new Map<string, CarReader.CarEntry>();
+			try {
+				const pending = new Map<string, EntryMeta>();
+				const strays = new Map<string, CarReader.CarEntry>();
 
-			const queue = new Queue<Task>();
+				const queue = new Queue<Task>();
 
-			const request = (cid: string, meta: EntryMeta): void => {
-				const entry = strays.get(cid);
+				const request = (cid: string, meta: EntryMeta): void => {
+					const entry = strays.get(cid);
 
-				if (entry !== undefined) {
-					strays.delete(cid);
-					queue.enqueue({ c: cid, e: entry, m: meta });
-				} else {
-					pending.set(cid, meta);
-				}
-			};
-
-			{
-				const roots = await car.roots();
-				assert(roots.length === 1, `expected only 1 root in the car archive; got=${roots.length}`);
-
-				const rootCid = roots[0].$link;
-				request(rootCid, { t: 0 });
-			}
-
-			for await (const entry of car) {
-				const cid = CID.toString(entry.cid);
-
-				{
-					const meta = pending.get(cid);
-
-					if (meta !== undefined) {
-						pending.delete(cid);
+					if (entry !== undefined) {
+						strays.delete(cid);
 						queue.enqueue({ c: cid, e: entry, m: meta });
 					} else {
-						strays.set(cid, entry);
+						pending.set(cid, meta);
+					}
+				};
+
+				{
+					const roots = await car.roots();
+					assert(roots.length === 1, `expected only 1 root in the car archive; got=${roots.length}`);
+
+					const rootCid = roots[0].$link;
+					request(rootCid, { t: 0 });
+				}
+
+				for await (const entry of car) {
+					const cid = CID.toString(entry.cid);
+
+					{
+						const meta = pending.get(cid);
+
+						if (meta !== undefined) {
+							pending.delete(cid);
+							queue.enqueue({ c: cid, e: entry, m: meta });
+						} else {
+							strays.set(cid, entry);
+						}
+					}
+
+					let task: Task | undefined;
+					while ((task = queue.dequeue())) {
+						const { c: cid, e: entry, m: meta } = task;
+
+						switch (meta.t) {
+							case 0: {
+								const commit = CBOR.decode(entry.bytes);
+								assert(isCommit(commit), `expected commit block; cid=${cid}`);
+
+								request(commit.data.$link, { t: 1 });
+								break;
+							}
+							case 1: {
+								const node = CBOR.decode(entry.bytes);
+								assert(isMstNode(node), `expected mst node block; cid=${cid}`);
+
+								const entries = node.e;
+								const left = node.l;
+
+								let lastKey = '';
+
+								if (left !== null) {
+									request(left.$link, meta);
+								}
+
+								for (let i = 0, il = entries.length; i < il; i++) {
+									const entry = entries[i];
+									const next = entry.t;
+
+									const key_str = decodeUtf8From(CBOR.fromBytes(entry.k));
+									const key = lastKey.slice(0, entry.p) + key_str;
+
+									lastKey = key;
+
+									request(entry.v.$link, { t: 2, k: key });
+
+									if (next !== null) {
+										request(next.$link, { t: 1 });
+									}
+								}
+
+								break;
+							}
+							case 2: {
+								const [collection, rkey] = meta.k.split('/');
+
+								yield new RepoEntry(collection, rkey, CID.toCidLink(entry.cid), entry);
+								break;
+							}
+						}
 					}
 				}
 
-				let task: Task | undefined;
-				while ((task = queue.dequeue())) {
-					const { c: cid, e: entry, m: meta } = task;
-
+				missingBlocks = Array.from(pending, ([cid, meta]): MissingBlockEntry => {
 					switch (meta.t) {
 						case 0: {
-							const commit = CBOR.decode(entry.bytes);
-							assert(isCommit(commit), `expected commit block; cid=${cid}`);
-
-							request(commit.data.$link, { t: 1 });
-							break;
+							return { cid, type: 'commit' };
 						}
 						case 1: {
-							const node = CBOR.decode(entry.bytes);
-							assert(isMstNode(node), `expected mst node block; cid=${cid}`);
-
-							const entries = node.e;
-							const left = node.l;
-
-							let lastKey = '';
-
-							if (left !== null) {
-								request(left.$link, meta);
-							}
-
-							for (let i = 0, il = entries.length; i < il; i++) {
-								const entry = entries[i];
-								const next = entry.t;
-
-								const key_str = decodeUtf8From(CBOR.fromBytes(entry.k));
-								const key = lastKey.slice(0, entry.p) + key_str;
-
-								lastKey = key;
-
-								request(entry.v.$link, { t: 2, k: key });
-
-								if (next !== null) {
-									request(next.$link, { t: 1 });
-								}
-							}
-
-							break;
+							return { cid, type: 'mst-node' };
 						}
 						case 2: {
-							const [collection, rkey] = meta.k.split('/');
-
-							yield new RepoEntry(collection, rkey, CID.toCidLink(entry.cid), entry);
-							break;
+							return { cid, type: 'record', key: meta.k };
 						}
 					}
-				}
+				});
+			} finally {
+				await car.dispose();
 			}
-
-			missingBlocks = Array.from(pending, ([cid, meta]): MissingBlockEntry => {
-				switch (meta.t) {
-					case 0: {
-						return { cid, type: 'commit' };
-					}
-					case 1: {
-						return { cid, type: 'mst-node' };
-					}
-					case 2: {
-						return { cid, type: 'record', key: meta.k };
-					}
-				}
-			});
 		},
 	};
 };
