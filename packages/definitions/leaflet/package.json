@@ -1,0 +1,40 @@
+{
+	"type": "module",
+	"name": "@atcute/leaflet",
+	"version": "1.0.0",
+	"description": "Leaflet (pub.leaflet.*) schema definitions",
+	"keywords": [
+		"atcute",
+		"atproto",
+		"leaflet"
+	],
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/definitions/leaflet"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js",
+		"./types/*": "./dist/lexicons/types/pub/leaflet/*.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"test": "vitest",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/lexicons": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/leaflet": "file:",
+		"@atcute/lex-cli": "workspace:^",
+		"vitest": "^3.1.3"
+	}
+}

@@ -247,6 +247,22 @@ importers:
         specifier: ^3.1.3
         version: 3.1.3(@types/node@22.15.17)
 
+  packages/definitions/leaflet:
+    dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+    devDependencies:
+      '@atcute/leaflet':
+        specifier: 'file:'
+        version: file:packages/definitions/leaflet
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../../lexicons/lex-cli
+      vitest:
+        specifier: ^3.1.3
+        version: 3.1.3(@types/node@22.15.17)
+
   packages/definitions/lexicon-community:
     dependencies:
       '@atcute/atproto':
@@ -636,6 +652,9 @@ packages:
 
   '@atcute/frontpage@file:packages/definitions/frontpage':
     resolution: {directory: packages/definitions/frontpage, type: directory}
+
+  '@atcute/leaflet@file:packages/definitions/leaflet':
+    resolution: {directory: packages/definitions/leaflet, type: directory}
 
   '@atcute/lexicon-community@file:packages/definitions/lexicon-community':
     resolution: {directory: packages/definitions/lexicon-community, type: directory}
@@ -3373,6 +3392,10 @@ snapshots:
   '@atcute/frontpage@file:packages/definitions/frontpage':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/lexicons': link:packages/lexicons/lexicons
+
+  '@atcute/leaflet@file:packages/definitions/leaflet':
+    dependencies:
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atcute/lexicon-community@file:packages/definitions/lexicon-community':

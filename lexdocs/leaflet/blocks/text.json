@@ -1,0 +1,22 @@
+{
+	"lexicon": 1,
+	"id": "pub.leaflet.blocks.text",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["plaintext"],
+			"properties": {
+				"plaintext": {
+					"type": "string"
+				},
+				"facets": {
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "pub.leaflet.richtext.facet"
+					}
+				}
+			}
+		}
+	}
+}
