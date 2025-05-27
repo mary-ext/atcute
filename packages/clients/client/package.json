@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/client",
-	"version": "4.0.2",
+	"version": "4.0.3",
 	"description": "lightweight and cute API client for AT Protocol",
 	"license": "MIT",
 	"repository": {

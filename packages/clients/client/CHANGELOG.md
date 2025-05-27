@@ -1,5 +1,11 @@
 # @atcute/client
 
+## 4.0.3
+
+### Patch Changes
+
+- bd446e4: `ok()` shouldn't error on requests with `as: null`
+
 ## 4.0.2
 
 ### Patch Changes

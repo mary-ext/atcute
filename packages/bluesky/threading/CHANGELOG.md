@@ -1,5 +1,12 @@
 # @atcute/bluesky-threading
 
+## 5.0.3
+
+### Patch Changes
+
+- Updated dependencies [bd446e4]
+  - @atcute/client@4.0.3
+
 ## 5.0.2
 
 ### Patch Changes
