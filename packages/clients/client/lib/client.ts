@@ -141,6 +141,11 @@ export type FailedClientResponse = BaseClientResponse & {
 /** represents a response returned by the client */
 export type ClientResponse<TDef, TInit> = SuccessClientResponse<TDef, TInit> | FailedClientResponse;
 
+type UnknownClientResponse = { status: number; headers: Headers } & (
+	| { ok: true; data: unknown }
+	| { ok: false; data: XRPCErrorPayload }
+);
+
 // #endregion
 
 // #region Client
@@ -399,7 +404,7 @@ export const isXRPCErrorPayload = (input: any): input is XRPCErrorPayload => {
 // #endregion
 
 // #region Optimistic response helper
-type SuccessData<R> = R extends { ok: true; data: infer D } ? D : never;
+type ExtractSuccessData<R> = R extends { ok: true; data: infer D } ? D : never;
 
 /**
  * takes in the response returned by the client, and either returns the data if
@@ -412,9 +417,9 @@ type SuccessData<R> = R extends { ok: true; data: infer D } ? D : never;
  * //    ^? ComAtprotoServerDescribeServer.Output
  */
 export const ok: {
-	<T extends Promise<ClientResponse<any, any>>>(promise: T): Promise<SuccessData<Awaited<T>>>;
-	<T extends ClientResponse<any, any>>(response: T): SuccessData<T>;
-} = (input: Promise<ClientResponse<any, any>> | ClientResponse<any, any>): any => {
+	<T extends Promise<UnknownClientResponse>>(promise: T): Promise<ExtractSuccessData<Awaited<T>>>;
+	<T extends UnknownClientResponse>(response: T): ExtractSuccessData<T>;
+} = (input: Promise<UnknownClientResponse> | UnknownClientResponse): any => {
 	if (input instanceof Promise) {
 		return input.then(ok);
 	}
