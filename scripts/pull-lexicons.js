@@ -5,9 +5,9 @@ import { untar } from '@mary/tar';
 import prettier from 'prettier';
 
 const config = {
-	repo: `aendra-rininsland/bluemoji`,
-	path: `schema/`,
-	out: `lexdocs/bluemoji/`,
+	repo: `bluesky-social/atproto`,
+	path: `lexicons/`,
+	out: `lexdocs/bluesky/`,
 };
 
 async function main() {
