@@ -11,6 +11,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get subject() {
 			return ComAtprotoRepoStrongRef.mainSchema;
 		},
+		get via() {
+			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
+		},
 	}),
 );
 

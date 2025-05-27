@@ -45,6 +45,9 @@ const _feedViewPostSchema = /*#__PURE__*/ v.object({
 	get reply() {
 		return /*#__PURE__*/ v.optional(replyRefSchema);
 	},
+	reqId: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+	),
 });
 const _generatorViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#generatorView')),
@@ -107,6 +110,9 @@ const _interactionSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 	),
 	item: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	reqId: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+	),
 });
 const _interactionLikeSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionLike');
 const _interactionQuoteSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionQuote');
@@ -161,7 +167,9 @@ const _reasonRepostSchema = /*#__PURE__*/ v.object({
 	get by() {
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
+	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
+	uri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _replyRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#replyRef')),

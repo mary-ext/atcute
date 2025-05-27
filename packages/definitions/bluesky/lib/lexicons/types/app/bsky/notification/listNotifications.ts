@@ -43,10 +43,12 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 	reason: /*#__PURE__*/ v.string<
 		| 'follow'
 		| 'like'
+		| 'like-via-repost'
 		| 'mention'
 		| 'quote'
 		| 'reply'
 		| 'repost'
+		| 'repost-via-repost'
 		| 'starterpack-joined'
 		| 'unverified'
 		| 'verified'
