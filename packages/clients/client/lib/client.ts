@@ -417,7 +417,7 @@ type ExtractSuccessData<R> = R extends { ok: true; data: infer D } ? D : never;
  * //    ^? ComAtprotoServerDescribeServer.Output
  */
 export const ok: {
-	<T extends Promise<UnknownClientResponse>>(promise: T): Promise<ExtractSuccessData<Awaited<T>>>;
+	<T extends UnknownClientResponse>(promise: Promise<T>): Promise<ExtractSuccessData<T>>;
 	<T extends UnknownClientResponse>(response: T): ExtractSuccessData<T>;
 } = (input: Promise<UnknownClientResponse> | UnknownClientResponse): any => {
 	if (input instanceof Promise) {
