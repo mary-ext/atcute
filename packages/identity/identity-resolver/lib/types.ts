@@ -6,7 +6,7 @@ export interface ResolveDidDocumentOptions {
 	noCache?: boolean;
 }
 
-export interface DidDocumentResolver<TMethod extends string> {
+export interface DidDocumentResolver<TMethod extends string = string> {
 	resolve(did: Did<TMethod>, options?: ResolveDidDocumentOptions): Promise<DidDocument>;
 }
 

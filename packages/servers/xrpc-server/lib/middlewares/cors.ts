@@ -1,0 +1,68 @@
+import type { FetchMiddleware } from '../main/router.js';
+
+export interface CORSOptions {
+	/** Additional headers to expose to the client */
+	exposedHeaders?: string[];
+	/** Additional headers to allow */
+	allowedHeaders?: string[];
+}
+
+const DEFAULT_EXPOSED_HEADERS = [
+	'dpop-nonce',
+	'www-authenticate',
+
+	'ratelimit-limit',
+	'ratelimit-policy',
+	'ratelimit-remaining',
+	'ratelimit-reset',
+];
+
+const DEFAULT_ALLOWED_HEADERS = [
+	'content-type',
+
+	'authorization',
+	'dpop',
+
+	'atproto-accept-labelers',
+	'atproto-proxy',
+];
+
+export const cors = (options: CORSOptions = {}): FetchMiddleware => {
+	const exposedHeaders = Array.from(
+		new Set([...DEFAULT_EXPOSED_HEADERS, ...(options.exposedHeaders?.map((h) => h.toLowerCase()) || [])]),
+	).sort();
+
+	const allowedHeaders = Array.from(
+		new Set([...DEFAULT_ALLOWED_HEADERS, ...(options.allowedHeaders?.map((h) => h.toLowerCase()) || [])]),
+	)
+		.sort()
+		.join(',');
+
+	return async (request, next) => {
+		const origin = request.headers.get('origin') || '*';
+
+		// Handle preflight requests
+		if (request.method === 'OPTIONS') {
+			const headers = new Headers();
+			headers.set('access-control-max-age', '86400');
+			headers.set('access-control-allow-origin', origin);
+
+			if (allowedHeaders) {
+				headers.set('access-control-allow-headers', allowedHeaders);
+			}
+
+			return new Response(null, { status: 204, headers: headers });
+		}
+
+		const response = await next(request);
+
+		const expose = exposedHeaders.filter((h) => response.headers.has(h)).join(',');
+
+		response.headers.set('access-control-allow-origin', origin);
+		if (expose.length > 0) {
+			response.headers.append('access-control-expose-headers', expose);
+		}
+
+		return response;
+	};
+};

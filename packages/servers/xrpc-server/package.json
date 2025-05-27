@@ -1,0 +1,43 @@
+{
+	"type": "module",
+	"name": "@atcute/xrpc-server",
+	"version": "1.0.0",
+	"description": "xrpc server",
+	"license": "MIT",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/servers/xrpc-server"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/main/index.js",
+		"./auth": "./dist/auth/index.js",
+		"./middlewares/cors": "./dist/middlewares/cors.js"
+	},
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "vitest run --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/crypto": "workspace:^",
+		"@atcute/identity": "workspace:^",
+		"@atcute/identity-resolver": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
+		"@atcute/multibase": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
+		"@badrap/valita": "^0.4.4"
+	},
+	"devDependencies": {
+		"@atcute/atproto": "workspace:^",
+		"@atcute/bluesky": "workspace:^",
+		"@atcute/xrpc-server": "file:",
+		"@vitest/coverage-v8": "^3.0.4",
+		"vitest": "^3.0.4"
+	}
+}

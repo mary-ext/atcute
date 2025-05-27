@@ -7,4 +7,5 @@ packages:
   - packages/lexicons/*
   - packages/misc/*
   - packages/oauth/*
+  - packages/servers/*
   - packages/utilities/*
