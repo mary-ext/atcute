@@ -1341,21 +1341,19 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 
 					const r = entry.schema['~run'](value, flags);
 
-					if (r === undefined) {
-						if (output !== undefined) {
-							/*#__INLINE__*/ set(output, key, value);
-						}
-					} else if (r.ok) {
-						if (output === undefined) {
-							output = { ...input };
-						}
+					if (r !== undefined) {
+						if (r.ok) {
+							if (output === undefined) {
+								output = { ...input };
+							}
 
-						/*#__INLINE__*/ set(output, key, value);
-					} else {
-						issues = joinIssues(issues, prependPath(key, r));
+							/*#__INLINE__*/ set(output, key, r.value);
+						} else {
+							issues = joinIssues(issues, prependPath(key, r));
 
-						if (flags & FLAG_ABORT_EARLY) {
-							return issues;
+							if (flags & FLAG_ABORT_EARLY) {
+								return issues;
+							}
 						}
 					}
 				}

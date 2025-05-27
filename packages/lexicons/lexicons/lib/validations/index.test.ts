@@ -1,4 +1,4 @@
-import { it } from 'vitest';
+import { expect, it } from 'vitest';
 
 import * as v from './index.js';
 
@@ -67,4 +67,12 @@ it('performs validation', () => {
 	};
 
 	v.parse(recordSchema, res);
+});
+
+it.only('sets optional defaults', () => {
+	const objectSchema = v.object({
+		foo: v.optional(v.integer(), 123),
+	});
+
+	expect(v.parse(objectSchema, {})).toEqual({ foo: 123 });
 });
