@@ -81,6 +81,8 @@ export * as AppBskyRichtextFacet from './types/app/bsky/richtext/facet.js';
 export * as AppBskyUnspeccedDefs from './types/app/bsky/unspecced/defs.js';
 export * as AppBskyUnspeccedGetConfig from './types/app/bsky/unspecced/getConfig.js';
 export * as AppBskyUnspeccedGetPopularFeedGenerators from './types/app/bsky/unspecced/getPopularFeedGenerators.js';
+export * as AppBskyUnspeccedGetPostThreadHiddenV2 from './types/app/bsky/unspecced/getPostThreadHiddenV2.js';
+export * as AppBskyUnspeccedGetPostThreadV2 from './types/app/bsky/unspecced/getPostThreadV2.js';
 export * as AppBskyUnspeccedGetSuggestedFeeds from './types/app/bsky/unspecced/getSuggestedFeeds.js';
 export * as AppBskyUnspeccedGetSuggestedFeedsSkeleton from './types/app/bsky/unspecced/getSuggestedFeedsSkeleton.js';
 export * as AppBskyUnspeccedGetSuggestedStarterPacks from './types/app/bsky/unspecced/getSuggestedStarterPacks.js';
