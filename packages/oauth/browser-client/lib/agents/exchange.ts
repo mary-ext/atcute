@@ -1,10 +1,12 @@
+import { nanoid } from 'nanoid';
+
 import { createES256Key } from '../dpop.js';
 import { CLIENT_ID, database, REDIRECT_URI } from '../environment.js';
 import { AuthorizationError, LoginError } from '../errors.js';
 import type { IdentityMetadata } from '../types/identity.js';
 import type { AuthorizationServerMetadata } from '../types/server.js';
 import type { Session } from '../types/token.js';
-import { generatePKCE, generateState } from '../utils/runtime.js';
+import { generatePKCE } from '../utils/runtime.js';
 
 import { OAuthServerAgent } from './server-agent.js';
 import { storeSession } from './sessions.js';
@@ -25,7 +27,7 @@ export const createAuthorizationUrl = async ({
 	identity,
 	scope,
 }: AuthorizeOptions): Promise<URL> => {
-	const state = generateState();
+	const state = nanoid(16);
 
 	const pkce = await generatePKCE();
 	const dpopKey = await createES256Key();

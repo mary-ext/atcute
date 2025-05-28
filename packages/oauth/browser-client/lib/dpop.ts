@@ -1,9 +1,12 @@
 import { fromBase64Url, toBase64Url } from '@atcute/multibase';
+import { encodeUtf8 } from '@atcute/uint8array';
+
+import { nanoid } from 'nanoid';
 
 import { database } from './environment.js';
 import type { DPoPKey } from './types/dpop.js';
 import { extractContentType } from './utils/response.js';
-import { encoder, generateJti, stringToSha256 } from './utils/runtime.js';
+import { stringToSha256 } from './utils/runtime.js';
 
 const ES256_ALG = { name: 'ECDSA', namedCurve: 'P-256' } as const;
 
@@ -16,7 +19,7 @@ export const createES256Key = async (): Promise<DPoPKey> => {
 	return {
 		typ: 'ES256',
 		key: toBase64Url(new Uint8Array(key)),
-		jwt: toBase64Url(encoder.encode(JSON.stringify({ typ: 'dpop+jwt', alg: 'ES256', jwk: jwk }))),
+		jwt: toBase64Url(encodeUtf8(JSON.stringify({ typ: 'dpop+jwt', alg: 'ES256', jwk: jwk }))),
 	};
 };
 
@@ -33,14 +36,14 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 		const payload = {
 			iss: issuer,
 			iat: Math.floor(Date.now() / 1_000),
-			jti: generateJti(),
+			jti: nanoid(24),
 			htm: method,
 			htu: htu,
 			nonce: nonce,
 			ath: ath,
 		};
 
-		return toBase64Url(encoder.encode(JSON.stringify(payload)));
+		return toBase64Url(encodeUtf8(JSON.stringify(payload)));
 	};
 
 	return async (method: string, htu: string, nonce: string | undefined, ath: string | undefined) => {
@@ -49,7 +52,7 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 		const signed = await crypto.subtle.sign(
 			{ name: 'ECDSA', hash: { name: 'SHA-256' } },
 			await keyPromise,
-			encoder.encode(headerString + '.' + payloadString),
+			encodeUtf8(headerString + '.' + payloadString),
 		);
 
 		const signatureString = toBase64Url(new Uint8Array(signed));
