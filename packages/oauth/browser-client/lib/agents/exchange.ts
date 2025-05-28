@@ -27,7 +27,7 @@ export const createAuthorizationUrl = async ({
 	identity,
 	scope,
 }: AuthorizeOptions): Promise<URL> => {
-	const state = nanoid(16);
+	const state = nanoid(24);
 
 	const pkce = await generatePKCE();
 	const dpopKey = await createES256Key();

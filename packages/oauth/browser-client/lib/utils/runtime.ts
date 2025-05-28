@@ -13,7 +13,7 @@ export const stringToSha256 = async (input: string): Promise<string> => {
 };
 
 export const generatePKCE = async (): Promise<{ verifier: string; challenge: string; method: string }> => {
-	const verifier = nanoid(32);
+	const verifier = nanoid(64);
 
 	return {
 		verifier: verifier,
