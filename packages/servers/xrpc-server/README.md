@@ -68,7 +68,7 @@ and generate the TypeScript schemas:
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['./lexicons/**/*.json'],
+	files: ['lexicons/**/*.json'],
 	outdir: 'src/lexicons/',
 });
 ```
@@ -84,6 +84,7 @@ npm exec lex-cli generate -c ./lex.config.js
 now we can build a server using the generated schemas:
 
 ```ts
+// file: src/index.js
 import { XRPCRouter, json } from '@atcute/xrpc-server';
 import { cors } from '@atucte/xrpc-server/middlewares/cors';
 
@@ -109,6 +110,7 @@ with standard Web Request/Response:
 [hono-node-server]: https://github.com/honojs/node-server
 
 ```ts
+// file: src/index.js
 import { XRPCRouter } from '@atcute/xrpc-server';
 import { serve } from '@hono/node-server';
 
