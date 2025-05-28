@@ -1,4 +1,5 @@
 {
+	"private": true,
 	"type": "module",
 	"name": "@atcute/xrpc-server",
 	"version": "1.0.0",
