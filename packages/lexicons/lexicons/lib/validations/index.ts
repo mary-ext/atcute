@@ -206,7 +206,7 @@ const formatRangeMessage = (
 	min: number,
 	max: number,
 ): string => {
-	let message = `${type} `;
+	let message = `expected ${type} `;
 
 	if (min > 0) {
 		if (max === min) {
