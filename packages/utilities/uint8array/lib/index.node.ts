@@ -4,6 +4,7 @@ import { hash as _hash, timingSafeEqual as _timingSafeEqual } from 'node:crypto'
 const _alloc = /*#__PURE__*/ NodeBuffer.alloc;
 const _allocUnsafe = /*#__PURE__*/ NodeBuffer.allocUnsafe;
 const _concat = /*#__PURE__*/ NodeBuffer.concat;
+const _from = /*#__PURE__*/ NodeBuffer.from;
 
 const _compare = /*#__PURE__*/ NodeBuffer.prototype.compare;
 const _equals = /*#__PURE__*/ NodeBuffer.prototype.equals;
@@ -36,6 +37,10 @@ export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
 
 export const concat = (arrays: Uint8Array[], size?: number): Uint8Array => {
 	return toUint8Array(_concat(arrays, size));
+};
+
+export const encodeUtf8 = (str: string): Uint8Array => {
+	return toUint8Array(_from(str, 'utf8'));
 };
 
 export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, length?: number): number => {

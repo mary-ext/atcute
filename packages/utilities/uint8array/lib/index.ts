@@ -110,7 +110,14 @@ export const concat = (arrays: Uint8Array[], size?: number): Uint8Array => {
 };
 
 /**
- * encodes a UTF-8 string into the buffer
+ * encodes a UTF-8 string
+ */
+export const encodeUtf8 = (str: string): Uint8Array => {
+	return textEncoder.encode(str);
+};
+
+/**
+ * encodes a UTF-8 string into a given buffer
  */
 export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, length?: number): number => {
 	let buffer: Uint8Array;
@@ -131,7 +138,7 @@ export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, len
 const fromCharCode = String.fromCharCode;
 
 /**
- * decodes a UTF-8 string from a buffer
+ * decodes a UTF-8 string from a given buffer
  */
 export const decodeUtf8From = (from: Uint8Array, offset?: number, length?: number): string => {
 	let buffer: Uint8Array;
