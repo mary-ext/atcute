@@ -103,8 +103,8 @@ export default router;
 on Deno, Bun or Cloudflare Workers, you can export the router directly and expect it to work out of
 the box.
 
-but for Node.js, you'll need the [`@hono/node-server`][hono-node-server] as the router works with
-standard Web Request/Response:
+but for Node.js, you'll need the [`@hono/node-server`][hono-node-server] adapter as the router works
+with standard Web Request/Response:
 
 [hono-node-server]: https://github.com/honojs/node-server
 
