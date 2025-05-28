@@ -6,7 +6,7 @@ import * as ToolsOzoneModerationDefs from './defs.js';
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.getReporterStats', {
 	params: /*#__PURE__*/ v.object({
 		dids: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
-			/*#__PURE__*/ v.arrayLength(0, 100),
+			/*#__PURE__*/ v.arrayLength(1, 100),
 		]),
 	}),
 	output: {

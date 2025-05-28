@@ -6,7 +6,7 @@ import * as AppBskyGraphDefs from './defs.js';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getStarterPacks', {
 	params: /*#__PURE__*/ v.object({
 		uris: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
-			/*#__PURE__*/ v.arrayLength(0, 25),
+			/*#__PURE__*/ v.arrayLength(1, 25),
 		]),
 	}),
 	output: {

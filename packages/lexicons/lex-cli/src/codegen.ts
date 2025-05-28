@@ -392,11 +392,34 @@ const generateXrpcParameters = (
 		return `null`;
 	}
 
+	const requiredProps = spec.required;
+	const originalProperties = spec.properties;
+	let transformedProperties: LexXrpcParameters['properties'] | undefined;
+
+	if (originalProperties) {
+		for (const [prop, propSpec] of Object.entries(originalProperties)) {
+			if (propSpec.type === 'array') {
+				if (!requiredProps?.includes(prop)) {
+					continue;
+				}
+
+				if (transformedProperties === undefined) {
+					transformedProperties = { ...originalProperties };
+				}
+
+				transformedProperties[prop] = {
+					...propSpec,
+					minLength: Math.max(propSpec.minLength ?? 0, 1),
+				};
+			}
+		}
+	}
+
 	const mask: LexObject = {
 		type: 'object',
 		description: spec.description,
 		required: spec.required,
-		properties: spec.properties,
+		properties: transformedProperties ?? originalProperties,
 	};
 
 	return generateObject(imports, defUri, mask, 'none');

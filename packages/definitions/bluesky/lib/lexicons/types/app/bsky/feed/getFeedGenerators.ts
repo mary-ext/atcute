@@ -5,7 +5,9 @@ import * as AppBskyFeedDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getFeedGenerators', {
 	params: /*#__PURE__*/ v.object({
-		feeds: /*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()),
+		feeds: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
+			/*#__PURE__*/ v.arrayLength(1),
+		]),
 	}),
 	output: {
 		type: 'lex',

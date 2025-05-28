@@ -4,7 +4,9 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getBlocks', {
 	params: /*#__PURE__*/ v.object({
-		cids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.cidString()),
+		cids: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.cidString()), [
+			/*#__PURE__*/ v.arrayLength(1),
+		]),
 		did: /*#__PURE__*/ v.didString(),
 	}),
 	output: {

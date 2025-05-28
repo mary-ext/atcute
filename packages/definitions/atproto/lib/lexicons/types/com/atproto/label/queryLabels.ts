@@ -11,7 +11,9 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.label.queryLabels', {
 			50,
 		),
 		sources: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
-		uriPatterns: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
+		uriPatterns: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
+			/*#__PURE__*/ v.arrayLength(1),
+		]),
 	}),
 	output: {
 		type: 'lex',

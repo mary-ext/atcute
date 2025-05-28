@@ -6,7 +6,7 @@ import * as AppBskyActorDefs from './defs.js';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.actor.getProfiles', {
 	params: /*#__PURE__*/ v.object({
 		actors: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.actorIdentifierString()), [
-			/*#__PURE__*/ v.arrayLength(0, 25),
+			/*#__PURE__*/ v.arrayLength(1, 25),
 		]),
 	}),
 	output: {
