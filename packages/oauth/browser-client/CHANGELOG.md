@@ -1,5 +1,11 @@
 # @atcute/oauth-browser-client
 
+## 1.0.25
+
+### Patch Changes
+
+- 6dcb891: increase random string length for PKCE challenge
+
 ## 1.0.24
 
 ### Patch Changes
