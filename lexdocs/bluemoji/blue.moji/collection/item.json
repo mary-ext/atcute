@@ -29,7 +29,7 @@
 						"refs": ["com.atproto.label.defs#selfLabels"]
 					},
 					"copyOf": { "type": "string", "format": "at-uri" },
-					"fallbackText": { "type": "string", "maxLength": 1, "default": "◌" }
+					"fallbackText": { "type": "string", "maxLength": 10, "maxGraphemes": 1, "default": "◌" }
 				}
 			}
 		},

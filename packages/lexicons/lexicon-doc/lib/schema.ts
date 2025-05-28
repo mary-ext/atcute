@@ -1,5 +1,7 @@
 import * as v from '@badrap/valita';
 
+import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './utils.js';
+
 // tsc dislikes this schema with the amount of type expansion that happens here.
 // the interface declaration allows tsc to just reference it instead of
 // expanding on every type reference.
@@ -32,15 +34,86 @@ export declare namespace lexBoolean {
 	export interface $schema extends $schematype {}
 }
 
-const _lexInteger = v.object({
-	type: v.literal('integer'),
-	description: v.string().optional(),
-	default: integer.optional(),
-	minimum: integer.optional(),
-	maximum: integer.optional(),
-	enum: v.array(integer).optional(),
-	const: integer.optional(),
-});
+const _lexInteger = v
+	.object({
+		type: v.literal('integer'),
+		description: v.string().optional(),
+		default: integer.optional(),
+		minimum: integer.optional(),
+		maximum: integer.optional(),
+		enum: v.array(integer).optional(),
+		const: integer.optional(),
+	})
+	.chain((input) => {
+		const {
+			minimum = 0,
+			maximum = Infinity,
+			const: constValue,
+			default: defaultValue,
+			enum: enumValues,
+		} = input;
+
+		if (minimum > maximum) {
+			return v.err({
+				message: `minimum value can't be greater than maximum value`,
+				path: ['minimum'],
+			});
+		}
+
+		if (defaultValue !== undefined) {
+			if (defaultValue < minimum) {
+				return v.err({
+					message: `default value can't be lower than minimum value`,
+					path: ['default'],
+				});
+			}
+
+			if (defaultValue > maximum) {
+				return v.err({
+					message: `default value can't be greater than maximum value`,
+					path: ['default'],
+				});
+			}
+		}
+
+		if (constValue !== undefined) {
+			if (constValue < minimum) {
+				return v.err({
+					message: `const value can't be lower than minimum value`,
+					path: ['const'],
+				});
+			}
+
+			if (constValue > maximum) {
+				return v.err({
+					message: `const value can't be greater than maximum value`,
+					path: ['const'],
+				});
+			}
+		}
+
+		if (enumValues !== undefined) {
+			for (let idx = 0, len = enumValues.length; idx < len; idx++) {
+				const enumValue = enumValues[idx];
+
+				if (enumValue < minimum) {
+					return v.err({
+						message: `enum value can't be lower than minimum value`,
+						path: ['enum', idx],
+					});
+				}
+
+				if (enumValue > maximum) {
+					return v.err({
+						message: `enum value can't be greater than maximum value`,
+						path: ['enum', idx],
+					});
+				}
+			}
+		}
+
+		return v.ok(input);
+	});
 
 export const lexInteger = _lexInteger as lexInteger.$schema;
 export interface LexInteger extends v.Infer<typeof lexInteger> {}
@@ -74,19 +147,208 @@ export declare namespace lexStringFormat {
 	export interface $schema extends $schematype {}
 }
 
-const _lexString = v.object({
-	type: v.literal('string'),
-	format: lexStringFormat.optional(),
-	description: v.string().optional(),
-	default: v.string().optional(),
-	minLength: integer.optional(),
-	maxLength: integer.optional(),
-	minGraphemes: integer.optional(),
-	maxGraphemes: integer.optional(),
-	enum: v.array(v.string()).optional(),
-	const: v.string().optional(),
-	knownValues: v.array(v.string()).optional(),
-});
+const _lexString = v
+	.object({
+		type: v.literal('string'),
+		format: lexStringFormat.optional(),
+		description: v.string().optional(),
+		default: v.string().optional(),
+		minLength: integer.optional(),
+		maxLength: integer.optional(),
+		minGraphemes: integer.optional(),
+		maxGraphemes: integer.optional(),
+		enum: v.array(v.string()).optional(),
+		const: v.string().optional(),
+		knownValues: v.array(v.string()).optional(),
+	})
+	.chain((input) => {
+		const {
+			minLength = 0,
+			maxLength = Infinity,
+			minGraphemes = 0,
+			maxGraphemes = Infinity,
+			const: constValue,
+			default: defaultValue,
+			enum: enumValues,
+			knownValues,
+		} = input;
+
+		if (minLength > maxLength) {
+			return v.err({
+				message: `minimum string length can't be greater than maximum string length`,
+				path: ['minLength'],
+			});
+		}
+
+		if (minGraphemes > maxGraphemes) {
+			return v.err({
+				message: `minimum grapheme count can't be greater than maximum grapheme count`,
+				path: ['minGraphemes'],
+			});
+		}
+
+		if (defaultValue !== undefined) {
+			{
+				const bound = isWithinUtf8Bounds(defaultValue, minLength, maxLength);
+
+				if (bound === 'min') {
+					return v.err({
+						message: `default value can't be shorter than minimum string length`,
+						path: ['default'],
+					});
+				}
+
+				if (bound === 'max') {
+					return v.err({
+						message: `default value can't be longer than maximum string length`,
+						path: ['default'],
+					});
+				}
+			}
+
+			{
+				const bound = isWithinGraphemeBounds(defaultValue, minLength, maxLength);
+
+				if (bound === 'min') {
+					return v.err({
+						message: `default value can't be shorter than minimum grapheme count`,
+						path: ['default'],
+					});
+				}
+
+				if (bound === 'max') {
+					return v.err({
+						message: `default value can't be longer than minimum grapheme count`,
+						path: ['default'],
+					});
+				}
+			}
+		}
+
+		if (constValue !== undefined) {
+			{
+				const bound = isWithinUtf8Bounds(constValue, minLength, maxLength);
+
+				if (bound === 'min') {
+					return v.err({
+						message: `const value can't be shorter than minimum string length`,
+						path: ['const'],
+					});
+				}
+
+				if (bound === 'max') {
+					return v.err({
+						message: `const value can't be longer than maximum string length`,
+						path: ['const'],
+					});
+				}
+			}
+
+			{
+				const bound = isWithinGraphemeBounds(constValue, minLength, maxLength);
+
+				if (bound === 'min') {
+					return v.err({
+						message: `const value can't be shorter than minimum grapheme count`,
+						path: ['const'],
+					});
+				}
+
+				if (bound === 'max') {
+					return v.err({
+						message: `const value can't be longer than minimum grapheme count`,
+						path: ['const'],
+					});
+				}
+			}
+		}
+
+		if (enumValues !== undefined) {
+			for (let idx = 0, len = enumValues.length; idx < len; idx++) {
+				const enumValue = enumValues[idx];
+
+				{
+					const bound = isWithinUtf8Bounds(enumValue, minLength, maxLength);
+
+					if (bound === 'min') {
+						return v.err({
+							message: `enum value can't be shorter than minimum string length`,
+							path: ['enum', idx],
+						});
+					}
+
+					if (bound === 'max') {
+						return v.err({
+							message: `enum value can't be longer than maximum string length`,
+							path: ['enum', idx],
+						});
+					}
+				}
+
+				{
+					const bound = isWithinGraphemeBounds(enumValue, minGraphemes, maxGraphemes);
+
+					if (bound === 'min') {
+						return v.err({
+							message: `enum value can't have fewer graphemes than minimum grapheme count`,
+							path: ['enum', idx],
+						});
+					}
+
+					if (bound === 'max') {
+						return v.err({
+							message: `enum value can't have more graphemes than maximum grapheme count`,
+							path: ['enum', idx],
+						});
+					}
+				}
+			}
+		}
+
+		if (knownValues !== undefined) {
+			for (let idx = 0, len = knownValues.length; idx < len; idx++) {
+				const knownValue = knownValues[idx];
+
+				{
+					const bound = isWithinUtf8Bounds(knownValue, minLength, maxLength);
+
+					if (bound === 'min') {
+						return v.err({
+							message: `known value can't be shorter than minimum string length`,
+							path: ['known', idx],
+						});
+					}
+
+					if (bound === 'max') {
+						return v.err({
+							message: `known value can't be longer than maximum string length`,
+							path: ['known', idx],
+						});
+					}
+				}
+
+				{
+					const bound = isWithinGraphemeBounds(knownValue, minGraphemes, maxGraphemes);
+
+					if (bound === 'min') {
+						return v.err({
+							message: `known value can't have fewer graphemes than minimum grapheme count`,
+							path: ['known', idx],
+						});
+					}
+
+					if (bound === 'max') {
+						return v.err({
+							message: `known value can't have more graphemes than maximum grapheme count`,
+							path: ['known', idx],
+						});
+					}
+				}
+			}
+		}
+
+		return v.ok(input);
+	});
 
 export const lexString = _lexString as lexString.$schema;
 export interface LexString extends v.Infer<typeof lexString> {}
@@ -122,12 +384,25 @@ export declare namespace lexPrimitive {
 	export interface $schema extends $schematype {}
 }
 
-const _lexBytes = v.object({
-	type: v.literal('bytes'),
-	description: v.string().optional(),
-	minLength: integer.optional(),
-	maxLength: integer.optional(),
-});
+const _lexBytes = v
+	.object({
+		type: v.literal('bytes'),
+		description: v.string().optional(),
+		minLength: integer.optional(),
+		maxLength: integer.optional(),
+	})
+	.chain((input) => {
+		const { minLength = 0, maxLength = Infinity } = input;
+
+		if (minLength > maxLength) {
+			return v.err({
+				message: `minimum byte length can't be greater than maximum byte length`,
+				path: ['minLength'],
+			});
+		}
+
+		return v.ok(input);
+	});
 
 export const lexBytes = _lexBytes as lexBytes.$schema;
 export interface LexBytes extends v.Infer<typeof lexBytes> {}
@@ -226,13 +501,26 @@ export declare namespace lexBlob {
 	export interface $schema extends $schematype {}
 }
 
-const _lexArray = v.object({
-	type: v.literal('array'),
-	description: v.string().optional(),
-	items: v.union(lexPrimitive, lexIpldType, lexRefVariant, lexBlob),
-	minLength: integer.optional(),
-	maxLength: integer.optional(),
-});
+const _lexArray = v
+	.object({
+		type: v.literal('array'),
+		description: v.string().optional(),
+		items: v.union(lexPrimitive, lexIpldType, lexRefVariant, lexBlob),
+		minLength: integer.optional(),
+		maxLength: integer.optional(),
+	})
+	.chain((input) => {
+		const { minLength = 0, maxLength = Infinity } = input;
+
+		if (minLength > maxLength) {
+			return v.err({
+				message: `minimum array length can't be greater than maximum array length`,
+				path: ['minLength'],
+			});
+		}
+
+		return v.ok(input);
+	});
 
 export const lexArray = _lexArray as lexArray.$schema;
 export interface LexArray extends v.Infer<typeof lexArray> {}
@@ -243,9 +531,26 @@ export declare namespace lexArray {
 	export interface $schema extends $schematype {}
 }
 
-const _lexPrimitiveArray = lexArray.extend({
-	items: lexPrimitive,
-});
+const _lexPrimitiveArray = v
+	.object({
+		type: v.literal('array'),
+		description: v.string().optional(),
+		items: lexPrimitive,
+		minLength: integer.optional(),
+		maxLength: integer.optional(),
+	})
+	.chain((input) => {
+		const { minLength = 0, maxLength = Infinity } = input;
+
+		if (minLength > maxLength) {
+			return v.err({
+				message: `minimum array length can't be greater than maximum array length`,
+				path: ['minLength'],
+			});
+		}
+
+		return v.ok(input);
+	});
 
 export const lexPrimitiveArray = _lexPrimitiveArray as lexPrimitiveArray.$schema;
 export interface LexPrimitiveArray extends v.Infer<typeof lexPrimitiveArray> {}

@@ -45,7 +45,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		copyOf: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		fallbackText: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 1)]),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+				/*#__PURE__*/ v.stringLength(0, 10),
+				/*#__PURE__*/ v.stringGraphemes(0, 1),
+			]),
 			'◌',
 		),
 		get formats() {
