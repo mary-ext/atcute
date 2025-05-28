@@ -1,14 +1,12 @@
 import * as v from '@badrap/valita';
 
 import { isDid, isNsid } from '@atcute/lexicons/syntax';
-import { fromBase64 } from '@atcute/multibase';
-import { decodeUtf8From } from '@atcute/uint8array';
+import { fromBase64Url } from '@atcute/multibase';
+import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
 
 import type { Result } from '../types/misc.js';
 
 import type { AuthError } from './types.js';
-
-const encoder = new TextEncoder();
 
 const didString = v.string().assert(isDid, `must be a did`);
 const nsidString = v.string().assert(isNsid, `must be an nsid`);
@@ -24,11 +22,17 @@ export interface JwtHeader extends v.Infer<typeof jwtHeader> {}
 
 const jwtPayload = v
 	.object({
+		/** issuer */
 		iss: didString,
+		/** target audience */
 		aud: didString,
+		/** expiration time */
 		exp: integer,
+		/** creation time */
 		iat: integer.optional(),
+		/** xrpc operation being invoked */
 		lxm: nsidString.optional(),
+		/** unique identifier */
 		jti: v.string().optional(),
 	})
 	.assert(({ iat, exp }) => iat === undefined || exp > iat, {
@@ -47,7 +51,7 @@ export interface ParsedJwt {
 
 const readJwtPortion = <T>(schema: v.Type<T>, input: string): Result<T, AuthError> => {
 	try {
-		const raw = decodeUtf8From(fromBase64(input));
+		const raw = decodeUtf8From(fromBase64Url(input));
 		const json = JSON.parse(raw);
 
 		const result = schema.try(json);
@@ -67,7 +71,7 @@ const readJwtPortion = <T>(schema: v.Type<T>, input: string): Result<T, AuthErro
 
 const readJwtSignature = (input: string): Result<Uint8Array, AuthError> => {
 	try {
-		return { ok: true, value: fromBase64(input) };
+		return { ok: true, value: fromBase64Url(input) };
 	} catch {}
 
 	return {
@@ -113,7 +117,7 @@ export const parseJwt = (jwtString: string): Result<ParsedJwt, AuthError> => {
 		value: {
 			header: header.value,
 			payload: payload.value,
-			message: encoder.encode(`${headerString}.${payloadString}`),
+			message: encodeUtf8(`${headerString}.${payloadString}`),
 			signature: signature.value,
 		},
 	};

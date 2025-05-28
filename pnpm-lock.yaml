@@ -517,6 +517,9 @@ importers:
       '@atcute/uint8array':
         specifier: workspace:^
         version: link:../../utilities/uint8array
+      nanoid:
+        specifier: ^5.1.5
+        version: 5.1.5
     devDependencies:
       '@atcute/atproto':
         specifier: workspace:^
@@ -545,6 +548,9 @@ importers:
       '@badrap/valita':
         specifier: ^0.4.4
         version: 0.4.4
+      nanoid:
+        specifier: ^5.1.5
+        version: 5.1.5
     devDependencies:
       '@atcute/atproto':
         specifier: workspace:^
@@ -2663,6 +2669,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@5.1.5:
+    resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   napi-build-utils@2.0.0:
     resolution: {integrity: sha512-GEbrYkbfF7MoNaoh2iGG84Mnf/WZfB0GdGEsM8wz7Expx/LlWf5U8t9nvJKXSp3qr5IsEbK04cBGhol/KwOsWA==}
 
@@ -3475,6 +3486,7 @@ snapshots:
       '@atcute/multibase': link:packages/utilities/multibase
       '@atcute/uint8array': link:packages/utilities/uint8array
       '@badrap/valita': 0.4.4
+      nanoid: 5.1.5
 
   '@atproto-labs/fetch-node@0.1.8':
     dependencies:
@@ -6103,6 +6115,8 @@ snapshots:
   multiformats@9.9.0: {}
 
   nanoid@3.3.11: {}
+
+  nanoid@5.1.5: {}
 
   napi-build-utils@2.0.0: {}
 

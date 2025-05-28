@@ -20,6 +20,7 @@ export interface VerifyJwtOptions {
 
 export interface VerifiedJwt {
 	issuer: Did;
+	audience: Did;
 	lxm: string | undefined;
 }
 
@@ -206,6 +207,7 @@ export class ServiceJwtVerifier {
 			ok: true,
 			value: {
 				issuer: payload.iss,
+				audience: payload.aud,
 				lxm: payload.lxm,
 			},
 		};
