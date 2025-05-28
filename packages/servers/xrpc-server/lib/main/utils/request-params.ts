@@ -9,6 +9,8 @@ import {
 
 import type { Literal } from '../../types/misc.js';
 
+type MaybeArray<T> = T | T[];
+
 const isArraySchema = (schema: BaseSchema): schema is ArraySchema => {
 	return schema.type === 'array';
 };
@@ -25,8 +27,15 @@ const unwrapArray = (schema: BaseSchema): BaseSchema => {
 	return isArraySchema(schema) ? schema.item : schema;
 };
 
-const coerceBoolean = (str: string): boolean => {
-	return str === 'true';
+const coerceBoolean = (str: string): boolean | null => {
+	switch (str) {
+		case 'true':
+			return true;
+		case 'false':
+			return false;
+	}
+
+	return null;
 };
 
 const coerceInteger = (str: string): number => {
@@ -38,7 +47,7 @@ export const constructParamsHandler = <TSchema extends ObjectSchema>(schema: TSc
 		const nonnullable = unwrapOptional(schema);
 		const singular = unwrapArray(nonnullable);
 
-		let coerce: ((x: string) => Literal) | undefined;
+		let coerce: ((x: string) => Literal | null) | undefined;
 		switch (singular.type) {
 			case 'boolean': {
 				coerce = coerceBoolean;
@@ -54,14 +63,14 @@ export const constructParamsHandler = <TSchema extends ObjectSchema>(schema: TSc
 			key: key,
 			coerce: coerce,
 			multiple: isArraySchema(nonnullable),
-			optional: isOptionalSchema(schema),
+			optional: isOptionalSchema(schema) && schema.default === undefined,
 		};
 	});
 
 	const len = entries.length;
 
-	return (searchParams: URLSearchParams): ValidationResult<Record<string, Literal | Literal[]>> => {
-		const input: Record<string, Literal | Literal[]> = {};
+	return (searchParams: URLSearchParams): ValidationResult<Record<string, MaybeArray<Literal>>> => {
+		const input: Record<string, MaybeArray<Literal | null>> = {};
 
 		for (let idx = 0; idx < len; idx++) {
 			const entry = entries[idx];
@@ -71,13 +80,9 @@ export const constructParamsHandler = <TSchema extends ObjectSchema>(schema: TSc
 			const raw = searchParams.getAll(key);
 			const count = raw.length;
 
-			let value: Literal | Literal[];
+			let value: MaybeArray<Literal | null>;
 
-			if (entry.multiple) {
-				if (count === 0 && entry.optional) {
-					continue;
-				}
-
+			if (entry.multiple || count > 1) {
 				value = coerce !== undefined ? raw.map(coerce) : raw;
 			} else {
 				if (count === 0) {

@@ -4,12 +4,11 @@ import type { Literal, Promisable } from '../types/misc.js';
 
 import type { ProcedureConfig, QueryConfig, UnknownOperationContext } from './types/operation.js';
 import { createAsyncMiddlewareRunner, type Middleware } from './utils/middlewares.js';
+import { constructMimeValidator } from './utils/request-input.js';
 import { constructParamsHandler } from './utils/request-params.js';
 import { invalidRequest, validationError } from './utils/response.js';
 
 import { XRPCError } from './xrpc-error.js';
-
-const JSON_TYPE_RE = /^\s*application\/json\s*(?:$|;)/i;
 
 type InternalRequestContext = {
 	url: URL;
@@ -162,6 +161,7 @@ export class XRPCRouter {
 		config: ProcedureConfig<TProcedure>,
 	): void {
 		const handleParams = procedure.params ? constructParamsHandler(procedure.params) : null;
+		const validateInputType = procedure.input ? constructMimeValidator(procedure.input) : null;
 
 		const requiresInput = procedure.input !== null;
 		const inputSchema = procedure.input?.type === 'lex' ? procedure.input.schema : null;
@@ -185,24 +185,19 @@ export class XRPCRouter {
 					params = {};
 				}
 
-				const headers = request.headers;
 				if (requiresInput) {
-					if (!isBodyPresent(headers)) {
+					if (request.body === null) {
 						return invalidRequest(`request body is expected but none was provided`);
 					}
 
-					if (inputSchema !== null) {
-						{
-							const type = headers.get('content-type');
-							if (type === null) {
-								return invalidRequest(`request encoding not provided`);
-							}
-
-							if (!JSON_TYPE_RE.test(type)) {
-								return invalidRequest(`invalid request encoding (expected application/json)`);
-							}
+					if (validateInputType !== null) {
+						const result = validateInputType(request);
+						if (!result.ok) {
+							return invalidRequest(result.error);
 						}
+					}
 
+					if (inputSchema !== null) {
 						let raw: any;
 						try {
 							raw = await request.json();
@@ -218,7 +213,7 @@ export class XRPCRouter {
 						input = result.value;
 					}
 				} else {
-					if (isBodyPresent(headers)) {
+					if (request.body !== null) {
 						return invalidRequest(`request body is provided when none was expected`);
 					}
 				}
@@ -240,7 +235,3 @@ export class XRPCRouter {
 		};
 	}
 }
-
-const isBodyPresent = (headers: Headers): boolean => {
-	return headers.get('content-length') !== null && headers.get('transfer-encoding') !== null;
-};

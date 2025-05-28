@@ -21,7 +21,7 @@
 	},
 	"scripts": {
 		"build": "tsc --project tsconfig.build.json",
-		"test": "vitest run --coverage",
+		"test": "vitest --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {

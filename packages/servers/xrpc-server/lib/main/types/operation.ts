@@ -1,6 +1,8 @@
 import type {
 	InferOutput,
 	ObjectSchema,
+	XRPCBlobBodyParam,
+	XRPCBodyParam,
 	XRPCLexBodyParam,
 	XRPCProcedureMetadata,
 	XRPCQueryMetadata,
@@ -44,22 +46,32 @@ export type QueryConfig<TQuery extends XRPCQueryMetadata = XRPCQueryMetadata> = 
 
 // #region Procedure
 
-export type ProcedureContext<TProcedure extends XRPCProcedureMetadata> = {
-	request: Request;
-} & (TProcedure['params'] extends ObjectSchema
-	? {
-			params: InferOutput<TProcedure['params']>;
-		}
-	: {
-			// params
-		}) &
-	(TProcedure['input'] extends XRPCLexBodyParam
+export type ProcedureContext<TProcedure extends XRPCProcedureMetadata> =
+	(TProcedure['input'] extends XRPCBlobBodyParam
 		? {
-				input: InferOutput<TProcedure['input']['schema']>;
+				request: Request & { readonly body: ReadableStream<Uint8Array> };
 			}
-		: {
-				// input
-			});
+		: TProcedure['input'] extends XRPCLexBodyParam
+			? {
+					request: Request & { readonly body: null };
+				}
+			: {
+					request: Request;
+				}) &
+		(TProcedure['params'] extends ObjectSchema
+			? {
+					params: InferOutput<TProcedure['params']>;
+				}
+			: {
+					// params
+				}) &
+		(TProcedure['input'] extends XRPCLexBodyParam
+			? {
+					input: InferOutput<TProcedure['input']['schema']>;
+				}
+			: {
+					// input
+				});
 
 export type ProcedureHandler<TProcedure extends XRPCProcedureMetadata> = (
 	context: ProcedureContext<TProcedure>,
