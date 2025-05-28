@@ -1,5 +1,14 @@
 # @atcute/identity-resolver
 
+## 1.1.1
+
+### Patch Changes
+
+- 0b0850c: mark `TMethod` type parameter in DidDocumentResolver as optional
+- Updated dependencies [a2dbb16]
+- Updated dependencies [9ef363f]
+  - @atcute/lexicons@1.0.4
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,5 +1,19 @@
 # @atcute/oauth-browser-client
 
+## 1.0.24
+
+### Patch Changes
+
+- 83c069d: use nanoid again for random string generation
+- Updated dependencies [0e6e5eb]
+- Updated dependencies [a2dbb16]
+- Updated dependencies [9ef363f]
+  - @atcute/uint8array@1.0.3
+  - @atcute/lexicons@1.0.4
+  - @atcute/multibase@1.1.5
+  - @atcute/client@4.0.4
+  - @atcute/identity@1.0.3
+
 ## 1.0.23
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @atcute/lex-cli
 
+## 2.0.3
+
+### Patch Changes
+
+- 30ccef3: set a minimum constraint of 1 array items for XRPC parameters
+- Updated dependencies [3efa702]
+  - @atcute/lexicon-doc@1.0.2
+
 ## 2.0.2
 
 ### Patch Changes

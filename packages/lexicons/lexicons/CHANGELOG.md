@@ -1,5 +1,12 @@
 # @atcute/lexicons
 
+## 1.0.4
+
+### Patch Changes
+
+- a2dbb16: missing `expected` string at the start of constraint validation errors
+- 9ef363f: fix optional defaults not being set properly
+
 ## 1.0.3
 
 ### Patch Changes

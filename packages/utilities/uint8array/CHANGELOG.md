@@ -1,5 +1,11 @@
 # @atcute/uint8array
 
+## 1.0.3
+
+### Patch Changes
+
+- 0e6e5eb: add `encodeUtf8` function, some minor perf optimization
+
 ## 1.0.2
 
 ### Patch Changes

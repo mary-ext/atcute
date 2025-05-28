@@ -1,5 +1,14 @@
 # @atcute/atproto
 
+## 3.0.3
+
+### Patch Changes
+
+- 30ccef3: set a minimum constraint of 1 array items for XRPC parameters
+- Updated dependencies [a2dbb16]
+- Updated dependencies [9ef363f]
+  - @atcute/lexicons@1.0.4
+
 ## 3.0.2
 
 ### Patch Changes
