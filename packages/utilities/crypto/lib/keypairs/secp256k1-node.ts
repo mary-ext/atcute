@@ -56,6 +56,7 @@ const SPKI_PREFIX = Uint8Array.from([
 
 class NodeSecp256k1PublicKey implements PublicKey {
 	readonly type = 'secp256k1';
+	readonly jwtAlg = 'ES256K';
 
 	/** @internal */
 	protected _publicKey: KeyObject;

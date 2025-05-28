@@ -50,6 +50,7 @@ const PKCS8_PRIVATE_KEY_PREFIX = Uint8Array.from([
 
 export class P256PublicKey implements PublicKey {
 	readonly type = 'p256';
+	readonly jwtAlg = 'ES256';
 
 	/** @internal */
 	protected _publicKey: CryptoKey;

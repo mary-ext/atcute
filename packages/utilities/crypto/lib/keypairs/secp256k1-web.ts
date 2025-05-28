@@ -40,6 +40,7 @@ const toJsonWebKey = (publicKey: Uint8Array, privateKey?: Uint8Array): JsonWebKe
 
 export class Secp256k1PublicKey implements PublicKey {
 	readonly type = 'secp256k1';
+	readonly jwtAlg = 'ES256K';
 
 	/** @internal */
 	protected _publicKey: Uint8Array;

@@ -4,6 +4,9 @@ export type DidKeyString = `did:key:${string}`;
  * Represents a public cryptographic key
  */
 export interface PublicKey {
+	readonly type: string;
+	readonly jwtAlg: string;
+
 	/**
 	 * Verifies a signature against a provided data
 	 */
