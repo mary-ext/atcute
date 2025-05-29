@@ -17,14 +17,10 @@ export interface CreateServiceJwtOptions {
 }
 
 export const createServiceJwt = async (options: CreateServiceJwtOptions): Promise<string> => {
-	const {
-		keypair,
-		issuer,
-		audience,
-		lxm,
-		issuedAt = Math.floor(Date.now() / 1_000),
-		expiresIn = 60,
-	} = options;
+	const keypair = options.keypair;
+
+	const issuedAt = Math.floor(options.issuedAt ?? Date.now() / 1_000);
+	const expiresIn = Math.floor(options.expiresIn ?? 60);
 
 	const header: JwtHeader = {
 		typ: 'JWT',
@@ -32,12 +28,12 @@ export const createServiceJwt = async (options: CreateServiceJwtOptions): Promis
 	};
 
 	const payload: JwtPayload = {
-		aud: audience,
+		aud: options.audience,
 		exp: issuedAt + expiresIn,
-		iss: issuer,
 		iat: issuedAt,
+		iss: options.issuer,
 		jti: nanoid(24),
-		lxm: lxm ?? undefined,
+		lxm: options.lxm ?? undefined,
 	};
 
 	const headerB64 = encodeJwtPortion(header);
