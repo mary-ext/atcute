@@ -64,7 +64,9 @@ export class XRPCRouter {
 		handleException = defaultExceptionHandler,
 		handleNotFound = defaultNotFoundHandler,
 	}: XRPCRouterOptions = {}) {
-		this.fetch = createAsyncMiddlewareRunner([...middlewares, (request) => this.#dispatch(request)]);
+		const runner = createAsyncMiddlewareRunner([...middlewares, (request) => this.#dispatch(request)]);
+
+		this.fetch = (request) => runner(request);
 		this.#handleException = handleException;
 		this.#handleNotFound = handleNotFound;
 	}
