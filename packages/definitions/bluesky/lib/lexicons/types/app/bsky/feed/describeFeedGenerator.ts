@@ -42,6 +42,9 @@ export const mainSchema = _mainSchema as mainSchema;
 export interface Feed extends v.InferInput<typeof feedSchema> {}
 export interface Links extends v.InferInput<typeof linksSchema> {}
 
+export interface $params {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'app.bsky.feed.describeFeedGenerator': mainSchema;

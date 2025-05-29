@@ -44,6 +44,10 @@ export const revokeErrorSchema = _revokeErrorSchema as revokeErrorSchema;
 
 export interface RevokeError extends v.InferInput<typeof revokeErrorSchema> {}
 
+export interface $params {}
+export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
 		'tools.ozone.verification.revokeVerifications': mainSchema;

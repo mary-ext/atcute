@@ -33,6 +33,9 @@ export const suggestionSchema = _suggestionSchema as suggestionSchema;
 
 export interface Suggestion extends v.InferInput<typeof suggestionSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'app.bsky.unspecced.getTaggedSuggestions': mainSchema;

@@ -105,6 +105,9 @@ export interface ThreadItemNoUnauthenticated extends v.InferInput<typeof threadI
 export interface ThreadItemNotFound extends v.InferInput<typeof threadItemNotFoundSchema> {}
 export interface ThreadItemPost extends v.InferInput<typeof threadItemPostSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'app.bsky.unspecced.getPostThreadV2': mainSchema;

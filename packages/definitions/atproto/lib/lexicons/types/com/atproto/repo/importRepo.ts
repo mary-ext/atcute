@@ -17,6 +17,9 @@ export interface mainSchema extends main$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
 
+export interface $params {}
+export type $input = v.InferXRPCBodyInput<mainSchema['input']>;
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
 		'com.atproto.repo.importRepo': mainSchema;

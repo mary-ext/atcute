@@ -14,6 +14,8 @@ export interface mainSchema extends main$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
 
+export interface $params {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
 		'com.atproto.server.requestAccountDelete': mainSchema;

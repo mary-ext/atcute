@@ -109,6 +109,9 @@ export interface Event extends v.InferInput<typeof eventSchema> {}
 export interface HandleUpdated extends v.InferInput<typeof handleUpdatedSchema> {}
 export interface PasswordUpdated extends v.InferInput<typeof passwordUpdatedSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'tools.ozone.hosting.getAccountHistory': mainSchema;

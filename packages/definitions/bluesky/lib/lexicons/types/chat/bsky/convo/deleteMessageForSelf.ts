@@ -26,6 +26,10 @@ export interface mainSchema extends main$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
 
+export interface $params {}
+export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
+export type $output = v.InferXRPCBodyInput<mainSchema['output']>;
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
 		'chat.bsky.convo.deleteMessageForSelf': mainSchema;

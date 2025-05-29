@@ -58,6 +58,9 @@ export const viewerConfigSchema = _viewerConfigSchema as viewerConfigSchema;
 export interface ServiceConfig extends v.InferInput<typeof serviceConfigSchema> {}
 export interface ViewerConfig extends v.InferInput<typeof viewerConfigSchema> {}
 
+export interface $params {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'tools.ozone.server.getConfig': mainSchema;

@@ -31,6 +31,9 @@ export const mainSchema = _mainSchema as mainSchema;
 
 export interface LiveNowConfig extends v.InferInput<typeof liveNowConfigSchema> {}
 
+export interface $params {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'app.bsky.unspecced.getConfig': mainSchema;

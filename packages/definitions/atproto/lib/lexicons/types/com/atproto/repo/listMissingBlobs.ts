@@ -37,6 +37,9 @@ export const recordBlobSchema = _recordBlobSchema as recordBlobSchema;
 
 export interface RecordBlob extends v.InferInput<typeof recordBlobSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'com.atproto.repo.listMissingBlobs': mainSchema;

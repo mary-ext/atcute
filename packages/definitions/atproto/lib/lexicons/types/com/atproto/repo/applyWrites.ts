@@ -100,6 +100,10 @@ export interface DeleteResult extends v.InferInput<typeof deleteResultSchema> {}
 export interface Update extends v.InferInput<typeof updateSchema> {}
 export interface UpdateResult extends v.InferInput<typeof updateResultSchema> {}
 
+export interface $params {}
+export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
 		'com.atproto.repo.applyWrites': mainSchema;

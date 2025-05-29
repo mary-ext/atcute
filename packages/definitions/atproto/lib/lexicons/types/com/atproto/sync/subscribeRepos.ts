@@ -100,6 +100,9 @@ export interface Info extends v.InferInput<typeof infoSchema> {}
 export interface RepoOp extends v.InferInput<typeof repoOpSchema> {}
 export interface Sync extends v.InferInput<typeof syncSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export type $message = v.InferInput<mainSchema['message']>;
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCSubscriptions {
 		'com.atproto.sync.subscribeRepos': mainSchema;

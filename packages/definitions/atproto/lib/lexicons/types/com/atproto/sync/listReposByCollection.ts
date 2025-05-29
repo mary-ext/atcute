@@ -37,6 +37,9 @@ export const repoSchema = _repoSchema as repoSchema;
 
 export interface Repo extends v.InferInput<typeof repoSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'com.atproto.sync.listReposByCollection': mainSchema;

@@ -21,6 +21,10 @@ export interface mainSchema extends main$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
 
+export interface $params {}
+export type $input = v.InferXRPCBodyInput<mainSchema['input']>;
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
 		'com.atproto.repo.uploadBlob': mainSchema;

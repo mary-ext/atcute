@@ -45,6 +45,9 @@ export const mainSchema = _mainSchema as mainSchema;
 export interface Contact extends v.InferInput<typeof contactSchema> {}
 export interface Links extends v.InferInput<typeof linksSchema> {}
 
+export interface $params {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'com.atproto.server.describeServer': mainSchema;

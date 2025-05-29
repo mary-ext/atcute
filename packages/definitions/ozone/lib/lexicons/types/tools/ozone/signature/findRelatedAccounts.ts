@@ -46,6 +46,9 @@ export const relatedAccountSchema = _relatedAccountSchema as relatedAccountSchem
 
 export interface RelatedAccount extends v.InferInput<typeof relatedAccountSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'tools.ozone.signature.findRelatedAccounts': mainSchema;

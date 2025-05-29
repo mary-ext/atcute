@@ -52,6 +52,9 @@ export const threadHiddenItemPostSchema = _threadHiddenItemPostSchema as threadH
 export interface ThreadHiddenItem extends v.InferInput<typeof threadHiddenItemSchema> {}
 export interface ThreadHiddenItemPost extends v.InferInput<typeof threadHiddenItemPostSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'app.bsky.unspecced.getPostThreadHiddenV2': mainSchema;

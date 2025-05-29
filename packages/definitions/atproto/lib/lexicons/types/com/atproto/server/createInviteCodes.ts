@@ -40,6 +40,10 @@ export const mainSchema = _mainSchema as mainSchema;
 
 export interface AccountCodes extends v.InferInput<typeof accountCodesSchema> {}
 
+export interface $params {}
+export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
 		'com.atproto.server.createInviteCodes': mainSchema;

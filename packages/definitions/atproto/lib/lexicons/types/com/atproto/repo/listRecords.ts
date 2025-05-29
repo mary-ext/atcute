@@ -41,6 +41,9 @@ export const recordSchema = _recordSchema as recordSchema;
 
 export interface Record extends v.InferInput<typeof recordSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'com.atproto.repo.listRecords': mainSchema;

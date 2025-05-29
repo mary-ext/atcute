@@ -31,6 +31,9 @@ export const mainSchema = _mainSchema as mainSchema;
 
 export interface AppPassword extends v.InferInput<typeof appPasswordSchema> {}
 
+export interface $params {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'com.atproto.server.listAppPasswords': mainSchema;

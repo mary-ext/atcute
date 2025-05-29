@@ -20,6 +20,9 @@ export interface mainSchema extends main$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
 
+export interface $params {}
+export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
 		'com.atproto.admin.disableInviteCodes': mainSchema;

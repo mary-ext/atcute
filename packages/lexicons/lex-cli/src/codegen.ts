@@ -84,6 +84,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 			schemadefs: '',
 			schemas: '',
 			interfaces: '',
+			sinterfaces: '',
 			exports: '',
 			ambients: '',
 		};
@@ -184,6 +185,72 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 			file.exports += `export const ${varname} = _${varname} as ${camelcased}Schema;\n`;
 
 			switch (def.type) {
+				case 'query': {
+					if (def.parameters) {
+						file.sinterfaces += `export interface $params extends v.InferInput<${camelcased}Schema['params']> {}\n`;
+					} else {
+						file.sinterfaces += `export interface $params {}\n`;
+					}
+
+					if (def.output?.schema) {
+						if (def.output?.schema.type === 'object') {
+							file.sinterfaces += `export interface $output extends v.InferXRPCBodyInput<${camelcased}Schema['output']> {}\n`;
+						} else {
+							file.sinterfaces += `export type $output = v.InferXRPCBodyInput<${camelcased}Schema['output']>;\n`;
+						}
+					} else if (def.output) {
+						file.sinterfaces += `export type $output = v.InferXRPCBodyInput<${camelcased}Schema['output']>;\n`;
+					}
+
+					break;
+				}
+				case 'procedure': {
+					if (def.parameters) {
+						file.sinterfaces += `export interface $params extends v.InferInput<${camelcased}Schema['params']> {}\n`;
+					} else {
+						file.sinterfaces += `export interface $params {}\n`;
+					}
+
+					if (def.input?.schema) {
+						if (def.input?.schema.type === 'object') {
+							file.sinterfaces += `export interface $input extends v.InferXRPCBodyInput<${camelcased}Schema['input']> {}\n`;
+						} else {
+							file.sinterfaces += `export type $input = v.InferXRPCBodyInput<${camelcased}Schema['input']>;\n`;
+						}
+					} else if (def.input) {
+						file.sinterfaces += `export type $input = v.InferXRPCBodyInput<${camelcased}Schema['input']>;\n`;
+					}
+
+					if (def.output?.schema) {
+						if (def.output?.schema.type === 'object') {
+							file.sinterfaces += `export interface $output extends v.InferXRPCBodyInput<${camelcased}Schema['output']> {}\n`;
+						} else {
+							file.sinterfaces += `export type $output = v.InferXRPCBodyInput<${camelcased}Schema['output']>;\n`;
+						}
+					} else if (def.output) {
+						file.sinterfaces += `export type $output = v.InferXRPCBodyInput<${camelcased}Schema['output']>;\n`;
+					}
+
+					break;
+				}
+				case 'subscription': {
+					if (def.parameters) {
+						file.sinterfaces += `export interface $params extends v.InferInput<${camelcased}Schema['params']> {}\n`;
+					} else {
+						file.sinterfaces += `export interface $params {}\n`;
+					}
+
+					if (def.message?.schema) {
+						if (def.message?.schema.type === 'object') {
+							file.sinterfaces += `export interface $message extends v.InferInput<${camelcased}Schema['message']> {}\n`;
+						} else {
+							file.sinterfaces += `export type $message = v.InferInput<${camelcased}Schema['message']>;\n`;
+						}
+					}
+
+					break;
+				}
+
 				case 'array':
 				case 'object':
 				case 'record':
@@ -269,6 +336,8 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 				file.exports +
 				`\n\n` +
 				file.interfaces +
+				`\n\n` +
+				file.sinterfaces +
 				`\n\n` +
 				file.ambients,
 		});

@@ -22,6 +22,9 @@ export interface mainSchema extends main$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export type $output = v.InferXRPCBodyInput<mainSchema['output']>;
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
 		'tools.ozone.moderation.getRecord': mainSchema;

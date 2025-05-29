@@ -59,6 +59,10 @@ export const verificationInputSchema = _verificationInputSchema as verificationI
 export interface GrantError extends v.InferInput<typeof grantErrorSchema> {}
 export interface VerificationInput extends v.InferInput<typeof verificationInputSchema> {}
 
+export interface $params {}
+export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
 		'tools.ozone.verification.grantVerifications': mainSchema;

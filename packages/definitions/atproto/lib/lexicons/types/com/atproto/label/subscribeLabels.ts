@@ -39,6 +39,9 @@ export const mainSchema = _mainSchema as mainSchema;
 export interface Info extends v.InferInput<typeof infoSchema> {}
 export interface Labels extends v.InferInput<typeof labelsSchema> {}
 
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export type $message = v.InferInput<mainSchema['message']>;
+
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCSubscriptions {
 		'com.atproto.label.subscribeLabels': mainSchema;
