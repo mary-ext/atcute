@@ -2,7 +2,6 @@ import type {
 	InferOutput,
 	ObjectSchema,
 	XRPCBlobBodyParam,
-	XRPCBodyParam,
 	XRPCLexBodyParam,
 	XRPCProcedureMetadata,
 	XRPCQueryMetadata,
