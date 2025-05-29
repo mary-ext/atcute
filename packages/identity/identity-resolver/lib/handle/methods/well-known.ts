@@ -27,8 +27,12 @@ export class WellKnownHandleResolver implements HandleResolver {
 			const response = await (0, this.#fetch)(url, {
 				signal: options?.signal,
 				cache: options?.noCache ? 'no-cache' : undefined,
-				redirect: 'error',
+				redirect: 'manual',
 			});
+
+			if (response.status >= 300 && response.status < 400) {
+				throw new TypeError(`unexpected redirect`);
+			}
 
 			const handled = await fetchWellKnownHandler(response);
 

@@ -37,9 +37,13 @@ export class PlcDidDocumentResolver implements DidDocumentResolver<'plc'> {
 			const response = await (0, this.#fetch)(url, {
 				signal: options?.signal,
 				cache: options?.noCache ? 'no-cache' : undefined,
-				redirect: 'error',
+				redirect: 'manual',
 				headers: { accept: 'application/did+ld+json,application/json' },
 			});
+
+			if (response.status >= 300 && response.status < 400) {
+				throw new TypeError(`unexpected redirect`);
+			}
 
 			const handled = await fetchDocHandler(response);
 
