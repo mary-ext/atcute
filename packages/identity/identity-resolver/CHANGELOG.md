@@ -1,5 +1,13 @@
 # @atcute/identity-resolver
 
+## 1.1.2
+
+### Patch Changes
+
+- 90f7504: set `cache` to undefined instead of default
+
+  for some reason, Cloudflare Workers complains about this, fine, have it your way.
+
 ## 1.1.1
 
 ### Patch Changes
