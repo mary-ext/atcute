@@ -1,6 +1,5 @@
 import { getPdsEndpoint, type DidDocument } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons';
-import type { InferXRPCBodyOutput } from '@atcute/lexicons/validations';
 
 import type { ComAtprotoServerCreateSession } from '@atcute/atproto';
 
@@ -203,9 +202,7 @@ export class CredentialManager implements FetchHandlerObject {
 		this.#onRefresh?.(this.session!);
 	}
 
-	#updateSession(
-		raw: InferXRPCBodyOutput<ComAtprotoServerCreateSession.mainSchema['output']>,
-	): AtpSessionData {
+	#updateSession(raw: ComAtprotoServerCreateSession.$output): AtpSessionData {
 		const didDoc = raw.didDoc as DidDocument | undefined;
 
 		let pdsUri: string | undefined;
