@@ -1,6 +1,6 @@
 import type { ComAtprotoIdentityResolveHandle } from '@atcute/atproto';
 import { type DidDocument, getPdsEndpoint } from '@atcute/identity';
-import type { Did, InferXRPCBodyOutput } from '@atcute/lexicons';
+import type { Did } from '@atcute/lexicons';
 import { isDid } from '@atcute/lexicons/syntax';
 
 import { DEFAULT_APPVIEW_URL } from './constants.js';
@@ -28,9 +28,8 @@ export const resolveHandle = async (handle: string): Promise<Did> => {
 		throw new ResolverError(`directory is unreachable`);
 	}
 
-	const json = (await response.json()) as InferXRPCBodyOutput<
-		ComAtprotoIdentityResolveHandle.mainSchema['output']
-	>;
+	const json = (await response.json()) as ComAtprotoIdentityResolveHandle.$output;
+
 	return json.did;
 };
 
