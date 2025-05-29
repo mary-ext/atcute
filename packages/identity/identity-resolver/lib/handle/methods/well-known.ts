@@ -26,7 +26,7 @@ export class WellKnownHandleResolver implements HandleResolver {
 
 			const response = await (0, this.#fetch)(url, {
 				signal: options?.signal,
-				cache: options?.noCache ? 'no-cache' : 'default',
+				cache: options?.noCache ? 'no-cache' : undefined,
 				redirect: 'error',
 			});
 

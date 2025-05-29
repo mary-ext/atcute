@@ -30,7 +30,7 @@ export class WebDidDocumentResolver implements DidDocumentResolver<'web'> {
 
 			const response = await (0, this.#fetch)(url, {
 				signal: options?.signal,
-				cache: options?.noCache ? 'no-cache' : 'default',
+				cache: options?.noCache ? 'no-cache' : undefined,
 				redirect: 'error',
 				headers: { accept: 'application/did+ld+json,application/json' },
 			});
@@ -75,7 +75,7 @@ export class AtprotoWebDidDocumentResolver implements DidDocumentResolver<'web'>
 		try {
 			const response = await (0, this.#fetch)(url, {
 				signal: options?.signal,
-				cache: options?.noCache ? 'no-cache' : 'default',
+				cache: options?.noCache ? 'no-cache' : undefined,
 				redirect: 'error',
 				headers: { accept: 'application/did+ld+json,application/json' },
 			});

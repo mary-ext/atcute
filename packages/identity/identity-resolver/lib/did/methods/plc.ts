@@ -36,7 +36,7 @@ export class PlcDidDocumentResolver implements DidDocumentResolver<'plc'> {
 
 			const response = await (0, this.#fetch)(url, {
 				signal: options?.signal,
-				cache: options?.noCache ? 'no-cache' : 'default',
+				cache: options?.noCache ? 'no-cache' : undefined,
 				redirect: 'error',
 				headers: { accept: 'application/did+ld+json,application/json' },
 			});

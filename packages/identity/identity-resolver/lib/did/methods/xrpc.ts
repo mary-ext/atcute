@@ -42,7 +42,7 @@ export class XrpcDidDocumentResolver implements DidDocumentResolver<string> {
 
 			const response = await (0, this.#fetch)(url, {
 				signal: options?.signal,
-				cache: options?.noCache ? 'no-cache' : 'default',
+				cache: options?.noCache ? 'no-cache' : undefined,
 				headers: { accept: 'application/json' },
 			});
 
