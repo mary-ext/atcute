@@ -411,7 +411,11 @@ const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 		return subjectReviewStateSchema;
 	},
 	get subject() {
-		return /*#__PURE__*/ v.variant([ComAtprotoAdminDefs.repoRefSchema, ComAtprotoRepoStrongRef.mainSchema]);
+		return /*#__PURE__*/ v.variant([
+			ChatBskyConvoDefs.messageRefSchema,
+			ComAtprotoAdminDefs.repoRefSchema,
+			ComAtprotoRepoStrongRef.mainSchema,
+		]);
 	},
 	subjectBlobCids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.cidString())),
 	subjectRepoHandle: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

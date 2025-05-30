@@ -6,6 +6,7 @@ import * as AppBskyFeedDefs from '../feed/defs.js';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadHiddenV2', {
 	params: /*#__PURE__*/ v.object({
 		anchor: /*#__PURE__*/ v.resourceUriString(),
+		prioritizeFollowedUsers: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	}),
 	output: {
 		type: 'lex',

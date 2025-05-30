@@ -38,7 +38,7 @@ const _verificationInputSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.verification.grantVerifications#verificationInput'),
 	),
-	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	displayName: /*#__PURE__*/ v.string(),
 	handle: /*#__PURE__*/ v.handleString(),
 	subject: /*#__PURE__*/ v.didString(),
