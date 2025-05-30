@@ -35,6 +35,8 @@ of atcute.
 | **Client packages**                                                                                                    |
 | [`client`](./packages/clients/client): API client library                                                              |
 | [`jetstream`](./packages/clients/jetstream): Jetstream client                                                          |
+| **Server packages**                                                                                                    |
+| [`xrpc-server`](./packages/servers/xrpc-server): web framework                                                         |
 | **OAuth packages**                                                                                                     |
 | [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth browser client implementation                 |
 | **Lexicon packages**                                                                                                   |
