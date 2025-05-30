@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@atcute/xrpc-server",
 	"version": "0.1.1",
-	"description": "xrpc server",
+	"description": "a small web framework for handling XRPC operations",
 	"license": "MIT",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
