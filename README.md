@@ -124,7 +124,3 @@ pnpm pkg-size-report --compare
 # Will be left in /tmp/[...]--[pkgname]--[random]
 pnpm pkg-size-report --keep-builds
 ```
-
----
-
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/mary-ext/atcute)
