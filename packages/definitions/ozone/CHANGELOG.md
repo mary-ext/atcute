@@ -1,5 +1,14 @@
 # @atcute/ozone
 
+## 3.1.1
+
+### Patch Changes
+
+- ad6d90b: pull latest Bluesky lexicons
+- Updated dependencies [e88a976]
+- Updated dependencies [ad6d90b]
+  - @atcute/bluesky@3.1.1
+
 ## 3.1.0
 
 ### Minor Changes
