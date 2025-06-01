@@ -3,7 +3,7 @@
 	"name": "@atcute/client",
 	"version": "4.0.3",
 	"description": "lightweight and cute API client for AT Protocol",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/clients/client"

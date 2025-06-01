@@ -3,7 +3,7 @@
 	"name": "@atcute/bluesky-search-parser",
 	"version": "0.1.0",
 	"description": "parse Bluesky's search syntax",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/bluesky/search-parser"

@@ -3,7 +3,7 @@
 	"name": "@atcute/jetstream",
 	"version": "1.0.2",
 	"description": "lightweight and cute Jetstream subscriber for AT Protocol",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/clients/jetstream"

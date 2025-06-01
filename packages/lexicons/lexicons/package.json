@@ -3,7 +3,7 @@
 	"name": "@atcute/lexicons",
 	"version": "1.0.4",
 	"description": "AT Protocol core lexicon types and schema validations",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/lexicons/lexicons"

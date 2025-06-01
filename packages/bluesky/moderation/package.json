@@ -3,7 +3,7 @@
 	"name": "@atcute/bluesky-moderation",
 	"version": "2.0.2",
 	"description": "interprets Bluesky's content moderation labels",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/bluesky/moderation"

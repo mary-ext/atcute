@@ -3,7 +3,7 @@
 	"name": "@atcute/bluesky-threading",
 	"version": "5.0.3",
 	"description": "create Bluesky threads containing multiple posts with one write",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/bluesky/threading"

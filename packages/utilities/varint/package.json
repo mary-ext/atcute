@@ -3,7 +3,7 @@
 	"name": "@atcute/varint",
 	"version": "1.0.2",
 	"description": "protobuf-style LEB128 varint codec library",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/varint"

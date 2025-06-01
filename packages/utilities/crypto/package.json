@@ -11,7 +11,7 @@
 		"k256",
 		"secp256k1"
 	],
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/crypto"

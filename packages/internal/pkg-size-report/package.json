@@ -4,7 +4,7 @@
 	"name": "pkg-size-report",
 	"version": "1.0.1",
 	"description": "cli tool to compute and analyze package sizes",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/internal/pkg-size-report"

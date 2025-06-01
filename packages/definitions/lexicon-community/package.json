@@ -3,7 +3,7 @@
 	"name": "@atcute/lexicon-community",
 	"version": "1.1.0",
 	"description": "Lexicon Community (community.lexicon.*) schema definitions",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/lexicon-community"

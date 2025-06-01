@@ -3,7 +3,7 @@
 	"name": "@atcute/lexicon-doc",
 	"version": "1.0.2",
 	"description": "type definitions and schemas for atproto lexicon documents",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/lexicons/lexicon-doc"

@@ -3,7 +3,7 @@
 	"name": "@atcute/lex-cli",
 	"version": "2.1.0",
 	"description": "cli tool to generate type definitions for atcute",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/lexicons/lex-cli"

@@ -3,7 +3,7 @@
 	"name": "@atcute/oauth-browser-client",
 	"version": "1.0.25",
 	"description": "minimal OAuth browser client implementation for AT Protocol",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/oauth/browser-client"

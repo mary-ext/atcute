@@ -3,7 +3,7 @@
 	"name": "@atcute/uint8array",
 	"version": "1.0.3",
 	"description": "uint8array utilities",
-	"license": "MIT",
+	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/uint8array"
