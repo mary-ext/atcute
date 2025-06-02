@@ -22,3 +22,5 @@ then run the tool:
 ```
 npm exec lex-cli generate -c ./lex.config.js
 ```
+
+highly recommend packaging the generated schemas as a publishable library for others to use.
