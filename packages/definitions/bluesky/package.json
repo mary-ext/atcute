@@ -37,7 +37,7 @@
 	"devDependencies": {
 		"@atcute/bluesky": "file:",
 		"@atcute/lex-cli": "workspace:^",
-		"@atproto/api": "^0.15.6",
-		"vitest": "^3.1.3"
+		"@atproto/api": "^0.15.12",
+		"vitest": "^3.1.4"
 	}
 }

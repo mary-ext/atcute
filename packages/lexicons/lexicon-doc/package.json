@@ -23,6 +23,6 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"@badrap/valita": "^0.4.4"
+		"@badrap/valita": "^0.4.5"
 	}
 }
