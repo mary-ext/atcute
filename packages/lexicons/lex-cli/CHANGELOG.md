@@ -1,5 +1,11 @@
 # @atcute/lex-cli
 
+## 2.1.1
+
+### Patch Changes
+
+- 43e5d06: use file protocol when importing config files
+
 ## 2.1.0
 
 ### Minor Changes
