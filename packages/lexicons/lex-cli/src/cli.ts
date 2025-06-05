@@ -1,5 +1,6 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
+import * as url from 'node:url';
 
 import { Builtins, Command, Option, Program } from '@externdefs/collider';
 import pc from 'picocolors';
@@ -32,8 +33,9 @@ program.register(
 
 			let config: LexiconConfig;
 			try {
-				const mod = (await import(path.resolve(configFilename))) as { default: LexiconConfig };
-				config = mod.default;
+				const configURL = url.pathToFileURL(configFilename);
+				const configMod = (await import(configURL.href)) as { default: LexiconConfig };
+				config = configMod.default;
 			} catch (err) {
 				console.error(pc.bold(pc.red(`failed to import config:`)));
 				console.error(err);
