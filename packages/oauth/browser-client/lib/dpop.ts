@@ -62,7 +62,7 @@ export const createDPoPFetch = (dpopKey: DPoPKey, isAuthServer?: boolean): typeo
 	const sign = createDPoPSignage(dpopKey);
 
 	return async (input, init) => {
-		const request: Request = init == null && input instanceof Request ? input : new Request(input, init);
+		const request = new Request(input, init);
 
 		const authorizationHeader = request.headers.get('authorization');
 		const ath = authorizationHeader?.startsWith('DPoP ')
