@@ -27,19 +27,14 @@ export const createDPoPSignage = (dpopKey: DPoPKey) => {
 	const headerString = dpopKey.jwt;
 	const keyPromise = crypto.subtle.importKey('pkcs8', fromBase64Url(dpopKey.key), ES256_ALG, true, ['sign']);
 
-	const constructPayload = (
-		method: string,
-		htu: string,
-		nonce: string | undefined,
-		ath: string | undefined,
-	) => {
+	const constructPayload = (htm: string, htu: string, nonce: string | undefined, ath: string | undefined) => {
 		const payload = {
+			ath: ath,
+			htm: htm,
+			htu: htu,
 			iat: Math.floor(Date.now() / 1_000),
 			jti: nanoid(24),
-			htm: method,
-			htu: htu,
 			nonce: nonce,
-			ath: ath,
 		};
 
 		return toBase64Url(encodeUtf8(JSON.stringify(payload)));
