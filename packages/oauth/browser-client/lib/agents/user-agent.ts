@@ -2,7 +2,6 @@ import type { FetchHandlerObject } from '@atcute/client';
 import type { Did } from '@atcute/lexicons';
 
 import { createDPoPFetch } from '../dpop.js';
-import { CLIENT_ID } from '../environment.js';
 import type { Session } from '../types/token.js';
 
 import { OAuthServerAgent } from './server-agent.js';
@@ -13,7 +12,7 @@ export class OAuthUserAgent implements FetchHandlerObject {
 	#getSessionPromise: Promise<Session> | undefined;
 
 	constructor(public session: Session) {
-		this.#fetch = createDPoPFetch(CLIENT_ID, session.dpopKey, false);
+		this.#fetch = createDPoPFetch(session.dpopKey, false);
 	}
 
 	get sub(): Did {

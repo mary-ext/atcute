@@ -23,7 +23,7 @@ export const createES256Key = async (): Promise<DPoPKey> => {
 	};
 };
 
-export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
+export const createDPoPSignage = (dpopKey: DPoPKey) => {
 	const headerString = dpopKey.jwt;
 	const keyPromise = crypto.subtle.importKey('pkcs8', fromBase64Url(dpopKey.key), ES256_ALG, true, ['sign']);
 
@@ -34,7 +34,6 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 		ath: string | undefined,
 	) => {
 		const payload = {
-			iss: issuer,
 			iat: Math.floor(Date.now() / 1_000),
 			jti: nanoid(24),
 			htm: method,
@@ -61,11 +60,11 @@ export const createDPoPSignage = (issuer: string, dpopKey: DPoPKey) => {
 	};
 };
 
-export const createDPoPFetch = (issuer: string, dpopKey: DPoPKey, isAuthServer?: boolean): typeof fetch => {
+export const createDPoPFetch = (dpopKey: DPoPKey, isAuthServer?: boolean): typeof fetch => {
 	const nonces = database.dpopNonces;
 	const pending = database.inflightDpop;
 
-	const sign = createDPoPSignage(issuer, dpopKey);
+	const sign = createDPoPSignage(dpopKey);
 
 	return async (input, init) => {
 		const request: Request = init == null && input instanceof Request ? input : new Request(input, init);

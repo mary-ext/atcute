@@ -17,7 +17,7 @@ export class OAuthServerAgent {
 
 	constructor(metadata: PersistedAuthorizationServerMetadata, dpopKey: DPoPKey) {
 		this.#metadata = metadata;
-		this.#fetch = createDPoPFetch(CLIENT_ID, dpopKey, true);
+		this.#fetch = createDPoPFetch(dpopKey, true);
 	}
 
 	async request(
