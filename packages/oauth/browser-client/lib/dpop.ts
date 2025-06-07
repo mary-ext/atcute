@@ -167,7 +167,19 @@ export const createDPoPFetch = (dpopKey: DPoPKey, isAuthServer?: boolean): typeo
 			const nextRequest = new Request(input, init);
 			nextRequest.headers.set('dpop', nextProof);
 
-			return await fetch(nextRequest);
+			const retryResponse = await fetch(nextRequest);
+
+			// Check if the server returned another new nonce in the retry response
+			const retryNonce = retryResponse.headers.get('dpop-nonce');
+			if (retryNonce !== null && retryNonce !== nextNonce) {
+				try {
+					nonces.set(origin, retryNonce);
+				} catch {
+					// Ignore write errors
+				}
+			}
+
+			return retryResponse;
 		}
 	};
 };
