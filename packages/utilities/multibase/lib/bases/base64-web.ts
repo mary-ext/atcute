@@ -1,92 +1,42 @@
-import { createRfc4648Decode, createRfc4648Encode } from '../utils.js';
+import {
+	fromBase64 as fromBase64Native,
+	fromBase64Pad as fromBase64PadNative,
+	fromBase64Url as fromBase64UrlNative,
+	fromBase64UrlPad as fromBase64UrlPadNative,
+	toBase64 as toBase64Native,
+	toBase64Pad as toBase64PadNative,
+	toBase64Url as toBase64UrlNative,
+	toBase64UrlPad as toBase64UrlPadNative,
+} from './base64-web-native.js';
+import {
+	fromBase64Pad as fromBase64PadPolyfill,
+	fromBase64 as fromBase64Polyfill,
+	fromBase64UrlPad as fromBase64UrlPadPolyfill,
+	fromBase64Url as fromBase64UrlPolyfill,
+	toBase64Pad as toBase64PadPolyfill,
+	toBase64 as toBase64Polyfill,
+	toBase64UrlPad as toBase64UrlPadPolyfill,
+	toBase64Url as toBase64UrlPolyfill,
+} from './base64-web-polyfill.js';
 
-const HAS_UINT8_BASE64_SUPPORT = 'fromBase64' in Uint8Array;
-
-const BASE64_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-const BASE64URL_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+const HAS_NATIVE_SUPPORT = 'fromBase64' in Uint8Array;
 
 // #region base64
-/** @internal */
-export const _fromBase64Polyfill = /*#__PURE__*/ createRfc4648Decode(BASE64_CHARSET, 6, false);
-/** @internal */
-export const _toBase64Polyfill = /*#__PURE__*/ createRfc4648Encode(BASE64_CHARSET, 6, false);
-
-/** @internal */
-export const _fromBase64Native = (str: string): Uint8Array => {
-	return Uint8Array.fromBase64(str, { alphabet: 'base64', lastChunkHandling: 'loose' });
-};
-
-/** @internal */
-export const _toBase64Native = (bytes: Uint8Array): string => {
-	return bytes.toBase64({ alphabet: 'base64', omitPadding: true });
-};
-
-export const fromBase64 = !HAS_UINT8_BASE64_SUPPORT ? _fromBase64Polyfill : _fromBase64Native;
-
-export const toBase64 = !HAS_UINT8_BASE64_SUPPORT ? _toBase64Polyfill : _toBase64Native;
+export const fromBase64 = !HAS_NATIVE_SUPPORT ? fromBase64Polyfill : fromBase64Native;
+export const toBase64 = !HAS_NATIVE_SUPPORT ? toBase64Polyfill : toBase64Native;
 // #endregion
 
 // #region base64pad
-/** @internal */
-export const _fromBase64PadPolyfill = /*#__PURE__*/ createRfc4648Decode(BASE64_CHARSET, 6, true);
-/** @internal */
-export const _toBase64PadPolyfill = /*#__PURE__*/ createRfc4648Encode(BASE64_CHARSET, 6, true);
-
-/** @internal */
-export const _fromBase64PadNative = (str: string): Uint8Array => {
-	return Uint8Array.fromBase64(str, { alphabet: 'base64', lastChunkHandling: 'strict' });
-};
-
-/** @internal */
-export const _toBase64PadNative = (bytes: Uint8Array): string => {
-	return bytes.toBase64({ alphabet: 'base64', omitPadding: false });
-};
-
-export const fromBase64Pad = !HAS_UINT8_BASE64_SUPPORT ? _fromBase64PadPolyfill : _fromBase64PadNative;
-
-export const toBase64Pad = !HAS_UINT8_BASE64_SUPPORT ? _toBase64PadPolyfill : _toBase64PadNative;
+export const fromBase64Pad = !HAS_NATIVE_SUPPORT ? fromBase64PadPolyfill : fromBase64PadNative;
+export const toBase64Pad = !HAS_NATIVE_SUPPORT ? toBase64PadPolyfill : toBase64PadNative;
 // #endregion
 
 // #region base64url
-/** @internal */
-export const _fromBase64UrlPolyfill = /*#__PURE__*/ createRfc4648Decode(BASE64URL_CHARSET, 6, false);
-/** @internal */
-export const _toBase64UrlPolyfill = /*#__PURE__*/ createRfc4648Encode(BASE64URL_CHARSET, 6, false);
-
-/** @internal */
-export const _fromBase64UrlNative = (str: string): Uint8Array => {
-	return Uint8Array.fromBase64(str, { alphabet: 'base64url', lastChunkHandling: 'loose' });
-};
-
-/** @internal */
-export const _toBase64UrlNative = (bytes: Uint8Array): string => {
-	return bytes.toBase64({ alphabet: 'base64url', omitPadding: true });
-};
-
-export const fromBase64Url = !HAS_UINT8_BASE64_SUPPORT ? _fromBase64UrlPolyfill : _fromBase64UrlNative;
-
-export const toBase64Url = !HAS_UINT8_BASE64_SUPPORT ? _toBase64UrlPolyfill : _toBase64UrlNative;
+export const fromBase64Url = !HAS_NATIVE_SUPPORT ? fromBase64UrlPolyfill : fromBase64UrlNative;
+export const toBase64Url = !HAS_NATIVE_SUPPORT ? toBase64UrlPolyfill : toBase64UrlNative;
 // #endregion
 
 // #region base64urlpad
-/** @internal */
-export const _fromBase64UrlPadPolyfill = /*#__PURE__*/ createRfc4648Decode(BASE64URL_CHARSET, 6, true);
-/** @internal */
-export const _toBase64UrlPadPolyfill = /*#__PURE__*/ createRfc4648Encode(BASE64URL_CHARSET, 6, true);
-
-/** @internal */
-export const _fromBase64UrlPadNative = (str: string): Uint8Array => {
-	return Uint8Array.fromBase64(str, { alphabet: 'base64url', lastChunkHandling: 'strict' });
-};
-
-/** @internal */
-export const _toBase64UrlPadNative = (bytes: Uint8Array): string => {
-	return bytes.toBase64({ alphabet: 'base64url', omitPadding: false });
-};
-
-export const fromBase64UrlPad = !HAS_UINT8_BASE64_SUPPORT
-	? _fromBase64UrlPadPolyfill
-	: _fromBase64UrlPadNative;
-
-export const toBase64UrlPad = !HAS_UINT8_BASE64_SUPPORT ? _toBase64UrlPadPolyfill : _toBase64UrlPadNative;
+export const fromBase64UrlPad = !HAS_NATIVE_SUPPORT ? fromBase64UrlPadPolyfill : fromBase64UrlPadNative;
+export const toBase64UrlPad = !HAS_NATIVE_SUPPORT ? toBase64UrlPadPolyfill : toBase64UrlPadNative;
 // #endregion

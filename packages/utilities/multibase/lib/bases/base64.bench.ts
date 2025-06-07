@@ -1,19 +1,20 @@
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
-import { fromBase64 as _fromBase64Node, toBase64 as _toBase64Node } from './base64-node.js';
-import { _fromBase64Native, _fromBase64Polyfill, _toBase64Native, _toBase64Polyfill } from './base64-web.js';
+import { fromBase64 as fromBase64Node, toBase64 as toBase64Node } from './base64-node.js';
+import { fromBase64 as fromBase64Native, toBase64 as toBase64Native } from './base64-web-native.js';
+import { fromBase64 as fromBase64Polyfill, toBase64 as toBase64Polyfill } from './base64-web-polyfill.js';
 
 summary(() => {
 	bench('Uint8Array.fromBase64', () => {
-		return do_not_optimize(_fromBase64Native('RGVjZW50cmFsaXplIGV2ZXJ5dGhpbmch'));
+		return do_not_optimize(fromBase64Native('RGVjZW50cmFsaXplIGV2ZXJ5dGhpbmch'));
 	});
 
 	bench('Node.js Buffer#from', () => {
-		return do_not_optimize(_fromBase64Node('RGVjZW50cmFsaXplIGV2ZXJ5dGhpbmch'));
+		return do_not_optimize(fromBase64Node('RGVjZW50cmFsaXplIGV2ZXJ5dGhpbmch'));
 	});
 
 	bench('fromBase64 polyfill', () => {
-		return do_not_optimize(_fromBase64Polyfill('RGVjZW50cmFsaXplIGV2ZXJ5dGhpbmch'));
+		return do_not_optimize(fromBase64Polyfill('RGVjZW50cmFsaXplIGV2ZXJ5dGhpbmch'));
 	});
 });
 
@@ -27,7 +28,7 @@ summary(() => {
 				]);
 			},
 			bench(bytes: Uint8Array) {
-				return do_not_optimize(_toBase64Native(bytes));
+				return do_not_optimize(toBase64Native(bytes));
 			},
 		};
 	});
@@ -41,7 +42,7 @@ summary(() => {
 				]);
 			},
 			bench(bytes: Uint8Array) {
-				return do_not_optimize(_toBase64Node(bytes));
+				return do_not_optimize(toBase64Node(bytes));
 			},
 		};
 	});
@@ -55,7 +56,7 @@ summary(() => {
 				]);
 			},
 			bench(bytes: Uint8Array) {
-				return do_not_optimize(_toBase64Polyfill(bytes));
+				return do_not_optimize(toBase64Polyfill(bytes));
 			},
 		};
 	});
