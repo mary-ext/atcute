@@ -1,7 +1,8 @@
 import { expect, it, mock } from 'bun:test';
 
-import { fromBase16 as _fromBase16Node, toBase16 as _toBase16Node } from './base16-node.js';
-import { _fromBase16Native, _fromBase16Polyfill, _toBase16Native, _toBase16Polyfill } from './base16-web.js';
+import { fromBase16 as fromBase16Node, toBase16 as toBase16Node } from './base16-node.js';
+import { fromBase16 as fromBase16Native, toBase16 as toBase16Native } from './base16-web-native.js';
+import { fromBase16 as fromBase16Polyfill, toBase16 as toBase16Polyfill } from './base16-web-polyfill.js';
 
 const inputs = [
 	{
@@ -39,16 +40,16 @@ mock.module('@atcute/uint8array', () => {
 
 it('can encode', () => {
 	for (const { buffer, encoded } of inputs) {
-		expect(_toBase16Polyfill(buffer)).toEqual(encoded);
-		expect(_toBase16Node(buffer)).toEqual(encoded);
-		expect(_toBase16Native(buffer)).toEqual(encoded);
+		expect(toBase16Polyfill(buffer)).toEqual(encoded);
+		expect(toBase16Node(buffer)).toEqual(encoded);
+		expect(toBase16Native(buffer)).toEqual(encoded);
 	}
 });
 
 it('can decode', () => {
 	for (const { buffer, encoded } of inputs) {
-		expect(_fromBase16Polyfill(encoded)).toEqual(buffer);
-		expect(_fromBase16Node(encoded)).toEqual(buffer);
-		expect(_fromBase16Native(encoded)).toEqual(buffer);
+		expect(fromBase16Polyfill(encoded)).toEqual(buffer);
+		expect(fromBase16Node(encoded)).toEqual(buffer);
+		expect(fromBase16Native(encoded)).toEqual(buffer);
 	}
 });
