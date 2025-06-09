@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyUnspeccedDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadHiddenV2', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadOtherV2', {
 	params: /*#__PURE__*/ v.object({
 		anchor: /*#__PURE__*/ v.resourceUriString(),
 		prioritizeFollowedUsers: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
@@ -12,14 +12,14 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadHidde
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			get thread() {
-				return /*#__PURE__*/ v.array(threadHiddenItemSchema);
+				return /*#__PURE__*/ v.array(threadItemSchema);
 			},
 		}),
 	},
 });
-const _threadHiddenItemSchema = /*#__PURE__*/ v.object({
+const _threadItemSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.literal('app.bsky.unspecced.getPostThreadHiddenV2#threadHiddenItem'),
+		/*#__PURE__*/ v.literal('app.bsky.unspecced.getPostThreadOtherV2#threadItem'),
 	),
 	depth: /*#__PURE__*/ v.integer(),
 	uri: /*#__PURE__*/ v.resourceUriString(),
@@ -29,21 +29,21 @@ const _threadHiddenItemSchema = /*#__PURE__*/ v.object({
 });
 
 type main$schematype = typeof _mainSchema;
-type threadHiddenItem$schematype = typeof _threadHiddenItemSchema;
+type threadItem$schematype = typeof _threadItemSchema;
 
 export interface mainSchema extends main$schematype {}
-export interface threadHiddenItemSchema extends threadHiddenItem$schematype {}
+export interface threadItemSchema extends threadItem$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
-export const threadHiddenItemSchema = _threadHiddenItemSchema as threadHiddenItemSchema;
+export const threadItemSchema = _threadItemSchema as threadItemSchema;
 
-export interface ThreadHiddenItem extends v.InferInput<typeof threadHiddenItemSchema> {}
+export interface ThreadItem extends v.InferInput<typeof threadItemSchema> {}
 
 export interface $params extends v.InferInput<mainSchema['params']> {}
 export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'app.bsky.unspecced.getPostThreadHiddenV2': mainSchema;
+		'app.bsky.unspecced.getPostThreadOtherV2': mainSchema;
 	}
 }

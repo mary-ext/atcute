@@ -25,7 +25,7 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadV2', 
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			hasHiddenReplies: /*#__PURE__*/ v.boolean(),
+			hasOtherReplies: /*#__PURE__*/ v.boolean(),
 			get thread() {
 				return /*#__PURE__*/ v.array(threadItemSchema);
 			},
