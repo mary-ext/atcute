@@ -4,5 +4,6 @@ export * from './types.js';
 export * from './utils.js';
 
 export * from './did.js';
+export * from './methods/key.js';
 export * from './methods/plc.js';
 export * from './methods/web.js';
