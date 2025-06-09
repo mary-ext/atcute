@@ -1,5 +1,6 @@
 import type { Did } from '@atcute/lexicons/syntax';
 
+/** @deprecated use `isPlcDid` instead */
 export const PLC_DID_RE = /^did:plc:([a-z2-7]{24})$/;
 
 /**

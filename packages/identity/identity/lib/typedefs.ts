@@ -4,7 +4,9 @@ import { isDid } from '@atcute/lexicons/syntax';
 
 import * as t from './types.js';
 
+/** @deprecated */
 export const FRAGMENT_RE = /^#[^#]+$/;
+/** @deprecated */
 export const MULTIBASE_RE = /^z[a-km-zA-HJ-NP-Z1-9]+$/;
 
 export const rfc3968UriSchema = v.string().assert((input) => {
