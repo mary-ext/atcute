@@ -2,15 +2,14 @@ import * as v from '@badrap/valita';
 
 import * as CID from '@atcute/cid';
 import { parseDidKey } from '@atcute/crypto';
+import { isKeyDid, isPlcDid } from '@atcute/identity';
 
 import * as t from './types.js';
 
 // #region Strings
-const DID_PLC_RE = /^did:plc:([a-z2-7]{24})$/;
+export const didPlcString = v.string().assert(isPlcDid, `must be a did:plc`);
 
-export const didPlcString = v
-	.string()
-	.assert((input): input is t.DidPlcString => DID_PLC_RE.test(input), `must be a did:plc`);
+export const permissiveDidKeyString = v.string().assert(isKeyDid, `must be a did:key`);
 
 export const didKeyString = v.string().chain((input) => {
 	try {
@@ -92,7 +91,7 @@ const _unsignedOperation = v.object({
 
 		return v.ok(input);
 	}),
-	verificationMethods: v.record(didKeyString).chain((input) => {
+	verificationMethods: v.record(permissiveDidKeyString).chain((input) => {
 		for (const id in input) {
 			if (id.length > 32) {
 				return v.err({

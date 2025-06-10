@@ -1,6 +1,8 @@
-export type DidPlcString = `did:plc:${string}`;
+import type { Did } from '@atcute/lexicons/syntax';
 
-export type DidKeyString = `did:key:${string}`;
+export type DidPlcString = Did<'plc'>;
+
+export type DidKeyString = Did<'key'>;
 
 export interface UnsignedLegacyCreateOperation {
 	type: 'create';

@@ -249,6 +249,9 @@ importers:
 
   packages/definitions/leaflet:
     dependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../atproto
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons
@@ -341,6 +344,12 @@ importers:
       '@atcute/crypto':
         specifier: workspace:^
         version: link:../../utilities/crypto
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../identity
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
       '@atcute/multibase':
         specifier: workspace:^
         version: link:../../utilities/multibase

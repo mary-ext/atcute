@@ -35,6 +35,8 @@
 		"@atcute/cbor": "workspace:^",
 		"@atcute/cid": "workspace:^",
 		"@atcute/crypto": "workspace:^",
+		"@atcute/identity": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
 		"@badrap/valita": "^0.4.5"
