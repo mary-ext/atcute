@@ -1,5 +1,15 @@
 # @atcute/did-plc
 
+## 0.1.6
+
+### Patch Changes
+
+- 1bdc0bd: add new limits for verificationMethods
+- 1f7e06e: allow did:key using other key types for verificationMethods
+- Updated dependencies [2fe5658]
+- Updated dependencies [c1582e0]
+  - @atcute/identity@1.0.3
+
 ## 0.1.5
 
 ### Patch Changes

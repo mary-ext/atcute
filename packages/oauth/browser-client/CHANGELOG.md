@@ -1,5 +1,20 @@
 # @atcute/oauth-browser-client
 
+## 1.0.26
+
+### Patch Changes
+
+- 691f5cc: remove `iss` field from dpop jwt tokens
+- 1fd2796: remove redundant check before request instantiation
+- 9870d55: check if retried request returns a new nonce
+
+  in case the authorization server is set up to always return a new nonce every request.
+
+- Updated dependencies [2fe5658]
+- Updated dependencies [c1582e0]
+  - @atcute/identity@1.0.3
+  - @atcute/client@4.0.4
+
 ## 1.0.25
 
 ### Patch Changes

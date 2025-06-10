@@ -1,5 +1,12 @@
 # @atcute/identity
 
+## 1.0.3
+
+### Patch Changes
+
+- 2fe5658: introduce `isKeyDid` for checking did:key identifiers
+- c1582e0: mark the regex exports as deprecated
+
 ## 1.0.2
 
 ### Patch Changes
