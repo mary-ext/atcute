@@ -92,10 +92,25 @@ const _unsignedOperation = v.object({
 		return v.ok(input);
 	}),
 	verificationMethods: v.record(permissiveDidKeyString).chain((input) => {
+		const length = Object.keys(input).length;
+
+		if (length > 10) {
+			return v.err(`too many verification method entries (max 10)`);
+		}
+
 		for (const id in input) {
+			const key = input[id];
+
 			if (id.length > 32) {
 				return v.err({
 					message: `verification method id too long (max 32 characters)`,
+					path: [id],
+				});
+			}
+
+			if (key.length > 256) {
+				return v.err({
+					message: `verification method key too long (max 256 characters)`,
 					path: [id],
 				});
 			}
