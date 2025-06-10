@@ -30,6 +30,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
+		"@atcute/atproto": "workspace:^",
 		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {

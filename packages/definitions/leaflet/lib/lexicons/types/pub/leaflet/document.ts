@@ -1,6 +1,7 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
+import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import * as PubLeafletPagesLinearDocument from './pages/linearDocument.js';
 
 const _mainSchema = /*#__PURE__*/ v.record(
@@ -16,6 +17,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		),
 		get pages() {
 			return /*#__PURE__*/ v.array(/*#__PURE__*/ v.variant([PubLeafletPagesLinearDocument.mainSchema]));
+		},
+		get postRef() {
+			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
 		},
 		publication: /*#__PURE__*/ v.resourceUriString(),
 		publishedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
