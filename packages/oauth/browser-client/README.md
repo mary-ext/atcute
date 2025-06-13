@@ -26,7 +26,7 @@ import { configureOAuth } from '@atcute/oauth-browser-client';
 
 configureOAuth({
 	metadata: {
-		client_id: 'https://example.com/oauth/client-metadata.json',
+		client_id: 'https://example.com/oauth-client-metadata.json',
 		redirect_uri: 'https://example.com/oauth/callback',
 	},
 });
@@ -203,7 +203,7 @@ adding a plugin that'll inject the necessary values for you through environment 
 
 ```ts
 /// vite.config.ts
-import metadata from './public/oauth/client-metadata.json' with { type: 'json' };
+import metadata from './public/oauth-client-metadata.json' with { type: 'json' };
 
 export default defineConfig({
 	// ...
