@@ -116,7 +116,7 @@ export const FLAG_EMPTY = 0;
 export const FLAG_ABORT_EARLY = 1 << 0;
 
 type MatcherResult = undefined | Ok<unknown> | IssueTree;
-type Matcher = (this: void, input: unknown, flags: number) => MatcherResult;
+type Matcher = (input: unknown, flags: number) => MatcherResult;
 
 export interface BaseSchema<TInput = unknown, TOutput = TInput> {
 	readonly kind: 'schema';
@@ -1423,14 +1423,8 @@ export const record = <TKey extends RecordKeySchema, TObject extends ObjectSchem
 		get object() {
 			return lazyProperty(this, 'object', validatedObject.value);
 		},
-		get '~run'() {
-			const object = validatedObject.value;
-
-			const matcher: Matcher = (input, flags) => {
-				return object['~run'](input, flags);
-			};
-
-			return lazyProperty(this, '~run', matcher);
+		'~run'(input, flags) {
+			return lazyProperty(this, '~run', validatedObject.value['~run'])(input, flags);
 		},
 	};
 };
