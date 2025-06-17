@@ -16,6 +16,8 @@ it('performs validation', () => {
 		array: v.array(v.string()),
 		boolean: v.boolean(),
 		integer: v.integer(),
+		integerWithDefault: v.optional(v.integer(), 42),
+		integerWithDefaultFn: v.optional(v.integer(), () => 421),
 		string: v.string(),
 	});
 
@@ -69,7 +71,7 @@ it('performs validation', () => {
 	v.parse(recordSchema, res);
 });
 
-it.only('sets optional defaults', () => {
+it('sets optional defaults', () => {
 	const objectSchema = v.object({
 		foo: v.optional(v.integer(), 123),
 	});

@@ -7,7 +7,15 @@ import type { $type } from '../types/brand.js';
 
 import { assert } from '../utils.js';
 
-import { getGraphemeLength, getUtf8Length, isArray, isObject, lazy, lazyProperty } from './utils.js';
+import {
+	allowsEval,
+	getGraphemeLength,
+	getUtf8Length,
+	isArray,
+	isObject,
+	lazy,
+	lazyProperty,
+} from './utils.js';
 
 type Identity<T> = T;
 type Flatten<T> = Identity<{ [K in keyof T]: T[K] }>;
@@ -1314,6 +1322,83 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 		get '~run'() {
 			const shape = resolvedEntries.value;
 			const len = shape.length;
+
+			const generateFastpass = (): Matcher => {
+				const fields: [string, any][] = [
+					['$joinIssues', joinIssues],
+					['$prependPath', prependPath],
+				];
+
+				let doc = `let $iss,$out;`;
+
+				for (let idx = 0; idx < len; idx++) {
+					const entry = shape[idx];
+
+					const key = entry.key;
+					const esckey = JSON.stringify(key);
+
+					const id = `_${idx}`;
+
+					doc += `{const $val=$in[${esckey}];`;
+
+					if (entry.optional) {
+						doc += `if($val!==undefined){`;
+					} else {
+						doc += `if($val!==undefined||${esckey} in $in){`;
+					}
+
+					doc += `const $res=${id}$schema["~run"]($val,$flags);if($res!==undefined)if($res.ok)${key !== '__proto__' ? `($out??={...$in})[${esckey}]=$res.value` : `Object.defineProperty($out??={...$in},${esckey},{value:$res.value})`};else if((($iss=$joinIssues($iss,$prependPath(${esckey},$res))),$flags&FLAG_ABORT_EARLY))return $iss;}`;
+
+					if (entry.optional) {
+						const schema = entry.schema as OptionalSchema;
+						const innerSchema = schema.wrapped;
+						const defaultValue = schema.default;
+
+						fields.push([`${id}$schema`, innerSchema]);
+
+						if (defaultValue !== undefined) {
+							const calls = typeof defaultValue === 'function' ? `${id}$default()` : `${id}$default`;
+
+							fields.push([`${id}$default`, defaultValue]);
+
+							doc +=
+								key !== '__proto__'
+									? `else($out??={...$in})[${esckey}]=${calls};`
+									: `else Object.defineProperty($out??={...$in},${esckey},{value:${calls}});`;
+						}
+					} else {
+						fields.push([`${id}$schema`, entry.schema]);
+						fields.push([`${id}$missing`, entry.missing]);
+
+						doc += `else if((($iss=$joinIssues($iss,${id}$missing)),$flags&${FLAG_ABORT_EARLY}))return $iss;`;
+					}
+
+					doc += `}`;
+				}
+
+				doc += `if($iss!==undefined)return $iss;if($out!==undefined)return{ok:true,value:$out};`;
+
+				const fn = new Function(
+					`[${fields.map(([id]) => id).join(',')}]`,
+					`return function matcher($in,$flags){${doc}}`,
+				);
+
+				return fn(fields.map(([, field]) => field));
+			};
+
+			if (allowsEval.value) {
+				const fastpass = generateFastpass();
+
+				const matcher: Matcher = (input, flags) => {
+					if (!isObject(input)) {
+						return ISSUE_TYPE_OBJECT;
+					}
+
+					return fastpass(input, flags);
+				};
+
+				return lazyProperty(this, '~run', matcher);
+			}
 
 			const matcher: Matcher = (input, flags) => {
 				if (!isObject(input)) {

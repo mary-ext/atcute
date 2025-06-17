@@ -92,3 +92,17 @@ export const isArray = Array.isArray;
 export const isObject = (input: unknown): input is Record<string, unknown> => {
 	return typeof input === 'object' && input !== null && !isArray(input);
 };
+
+export const allowsEval = /*#__PURE__*/ lazy((): boolean => {
+	if (typeof navigator !== 'undefined' && navigator?.userAgent?.includes('Cloudflare')) {
+		return false;
+	}
+
+	try {
+		const F = Function;
+		new F('');
+		return true;
+	} catch (_) {
+		return false;
+	}
+});
