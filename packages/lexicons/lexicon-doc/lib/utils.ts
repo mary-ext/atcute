@@ -1,15 +1,16 @@
 const segmenter = new Intl.Segmenter();
 
 export const isWithinUtf8Bounds = (input: string, min = 0, max = Infinity): 'max' | 'min' | undefined => {
-	const maybeUtf8Len = input.length * 3;
+	const utf16Len = input.length;
+	const maybeUtf8Len = utf16Len * 3;
 
-	// fail early if we're still less than minimum length
+	// fail early if estimated upper bound is too small
 	if (maybeUtf8Len < min) {
 		return 'min';
 	}
 
-	// skip if we're still within maximum length
-	if (maybeUtf8Len <= max) {
+	// skip if UTF-16 length already satisfies both constraints
+	if (utf16Len >= min && maybeUtf8Len <= max) {
 		return undefined;
 	}
 
@@ -32,13 +33,14 @@ export const isWithinGraphemeBounds = (input: string, min = 0, max = Infinity): 
 
 	const utf16Len = input.length;
 
-	// fail early if UTF-16 length is less than grapheme length
+	// fail early if UTF-16 length is too small
 	if (utf16Len < min) {
 		return 'min';
 	}
 
-	// skip if we're still within maximum constraint
-	if (utf16Len <= max) {
+	// if there is no minimum bounds, we can safely skip when UTF-16 is
+	// within the maximum bounds.
+	if (min === 0 && utf16Len <= max) {
 		return undefined;
 	}
 
