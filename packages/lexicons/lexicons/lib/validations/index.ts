@@ -761,15 +761,16 @@ export const stringLength: {
 			// UTF-8 conversion can be expensive, so we're going to do some safe naive
 			// checks where we assume an upper-bound of the UTF-16 to UTF-8 conversion
 
-			const maybeUtf8Len = input.length * 3;
+			const utf16Len = input.length;
+			const maybeUtf8Len = utf16Len * 3;
 
-			// fail early if we're still less than minimum length
+			// fail early if estimated upper bound is too small
 			if (maybeUtf8Len < minLength) {
 				return issue;
 			}
 
-			// skip if we're still within maximum length
-			if (maybeUtf8Len <= maxLength) {
+			// skip calculation if UTF-16 length already satisfies both constraints
+			if (utf16Len >= minLength && maybeUtf8Len <= maxLength) {
 				return undefined;
 			}
 
@@ -822,13 +823,14 @@ export const stringGraphemes: {
 
 			const utf16Len = input.length;
 
-			// fail early if UTF-16 length is less than grapheme length
+			// fail early if UTF-16 length is too small
 			if (utf16Len < minGraphemes) {
 				return issue;
 			}
 
-			// skip if we're still within maximum constraint
-			if (utf16Len <= maxGraphemes) {
+			// if there is no minimum bounds, we can safely skip when UTF-16 is
+			// within the maximum bounds.
+			if (minGraphemes === 0 && utf16Len <= maxGraphemes) {
 				return undefined;
 			}
 
