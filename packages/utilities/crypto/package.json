@@ -42,8 +42,8 @@
 	"devDependencies": {
 		"@noble/curves": "^1.9.1",
 		"@types/bun": "^1.2.15",
-		"@vitest/coverage-v8": "^3.1.4",
-		"vitest": "^3.1.4"
+		"@vitest/coverage-v8": "^3.2.4",
+		"vitest": "^3.2.4"
 	},
 	"dependencies": {
 		"@atcute/multibase": "workspace:^",

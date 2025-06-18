@@ -36,6 +36,6 @@
 	"devDependencies": {
 		"@atcute/lex-cli": "workspace:^",
 		"@atcute/tangled": "file:",
-		"vitest": "^3.1.4"
+		"vitest": "^3.2.4"
 	}
 }
