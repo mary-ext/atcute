@@ -3,12 +3,12 @@ import * as v from '@atcute/lexicons/validations';
 
 const _chatPreferenceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.notification.defs#chatPreference')),
-	filter: /*#__PURE__*/ v.string<'accepted' | 'all' | (string & {})>(),
+	include: /*#__PURE__*/ v.string<'accepted' | 'all' | (string & {})>(),
 	push: /*#__PURE__*/ v.boolean(),
 });
 const _filterablePreferenceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.notification.defs#filterablePreference')),
-	filter: /*#__PURE__*/ v.string<'all' | 'follows' | (string & {})>(),
+	include: /*#__PURE__*/ v.string<'all' | 'follows' | (string & {})>(),
 	list: /*#__PURE__*/ v.boolean(),
 	push: /*#__PURE__*/ v.boolean(),
 });
