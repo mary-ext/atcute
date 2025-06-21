@@ -1598,7 +1598,7 @@ export const variant: {
 				}
 
 				if (typeof type !== 'string') {
-					return ISSUE_VARIANT_TYPE;
+					return closed ? issue : ISSUE_VARIANT_TYPE;
 				}
 
 				const schema = map[type];
