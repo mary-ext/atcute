@@ -41,5 +41,9 @@ const isBase64 = (input: unknown): input is string => {
 export const isBytes = (input: unknown): input is Bytes => {
 	const v = input as any;
 
-	return typeof v === 'object' && v !== null && (BYTES_SYMBOL in v || isBase64(v.$bytes));
+	return (
+		typeof v === 'object' &&
+		v !== null &&
+		(BYTES_SYMBOL in v || (isBase64(v.$bytes) && Object.keys(v).length === 1))
+	);
 };

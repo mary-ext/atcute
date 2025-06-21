@@ -492,6 +492,12 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
     devDependencies:
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../../utilities/cbor
+      '@atcute/multibase':
+        specifier: workspace:^
+        version: link:../../utilities/multibase
       '@vitest/coverage-v8':
         specifier: ^3.2.4
         version: 3.2.4(vitest@3.2.4(@types/node@22.15.29)(yaml@2.8.0))

@@ -81,7 +81,11 @@ export type ParsedCanonicalResourceUri = {
 };
 
 // #__NO_SIDE_EFFECTS__
-export const isCanonicalResourceUri = (input: string): input is CanonicalResourceUri => {
+export const isCanonicalResourceUri = (input: unknown): input is CanonicalResourceUri => {
+	if (typeof input !== 'string') {
+		return false;
+	}
+
 	const match = ATURI_RE.exec(input);
 	if (match === null) {
 		return false;
