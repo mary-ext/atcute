@@ -4,6 +4,7 @@ import * as PubLeafletBlocksHeader from '../blocks/header.js';
 import * as PubLeafletBlocksImage from '../blocks/image.js';
 import * as PubLeafletBlocksText from '../blocks/text.js';
 import * as PubLeafletBlocksUnorderedList from '../blocks/unorderedList.js';
+import * as PubLeafletBlocksWebsite from '../blocks/website.js';
 
 const _blockSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.linearDocument#block')),
@@ -16,6 +17,7 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksImage.mainSchema,
 			PubLeafletBlocksText.mainSchema,
 			PubLeafletBlocksUnorderedList.mainSchema,
+			PubLeafletBlocksWebsite.mainSchema,
 		]);
 	},
 });
