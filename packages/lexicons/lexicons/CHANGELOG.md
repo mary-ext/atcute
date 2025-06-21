@@ -1,5 +1,26 @@
 # @atcute/lexicons
 
+## 1.1.0
+
+### Minor Changes
+
+- 5383f0c: JIT-compiled object validation
+
+  this doesn't eek out as much performance as I hoped, but the added code was small enough that it
+  seemed okay to add.
+
+  this optimization requires the runtime environment to allow the use of `eval()`/`new Function()`,
+  and generates an unrolled validation loop.
+
+### Patch Changes
+
+- dee1e70: fix faulty UTF-16 fast-path constraint validation
+- cfbbc3e: fix handle syntax conformance
+- c061b2a: slight perf optimization to record validation
+- 7b590bd: mark generic URIs over 8192 UTF-8 characters as invalid
+- 19731f4: fix missing root path on validation errors
+- aafe153: return literal enum error if variant is closed
+
 ## 1.0.4
 
 ### Patch Changes
