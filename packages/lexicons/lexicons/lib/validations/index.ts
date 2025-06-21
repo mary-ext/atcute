@@ -1349,7 +1349,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 						doc += `if($val!==undefined||${esckey} in $in){`;
 					}
 
-					doc += `const $res=${id}$schema["~run"]($val,$flags);if($res!==undefined)if($res.ok)${key !== '__proto__' ? `($out??={...$in})[${esckey}]=$res.value` : `Object.defineProperty($out??={...$in},${esckey},{value:$res.value})`};else if((($iss=$joinIssues($iss,$prependPath(${esckey},$res))),$flags&FLAG_ABORT_EARLY))return $iss;}`;
+					doc += `const $res=${id}$schema["~run"]($val,$flags);if($res!==undefined)if($res.ok)${key !== '__proto__' ? `($out??={...$in})[${esckey}]=$res.value` : `Object.defineProperty($out??={...$in},${esckey},{value:$res.value})`};else if((($iss=$joinIssues($iss,$prependPath(${esckey},$res))),$flags&${FLAG_ABORT_EARLY}))return $iss;}`;
 
 					if (entry.optional) {
 						const schema = entry.schema as OptionalSchema;
