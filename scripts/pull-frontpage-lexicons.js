@@ -7,7 +7,7 @@ import prettier from 'prettier';
 const config = {
 	repo: `likeandscribe/frontpage`,
 	path: `lexicons/fyi/unravel/frontpage/`,
-	out: `lexdocs/frontpage/`
+	out: `lexdocs/frontpage/`,
 };
 
 async function main() {

@@ -35,7 +35,6 @@
   this change is pretty big, where it used to be that `@atcute/client` would ship type definitions
   for core lexicon types (`At.Did`, `At.ResourceUri`, `At.CidLink` and so on) and `com.atproto.*`
   interfaces, they're now decoupled into their own packages:
-
   - `@atcute/lexicons` for core lexicon types
   - `@atcute/atproto` for `com.atproto.*` interfaces
 
@@ -43,7 +42,6 @@
   from `com.atproto.*`, then you'd need to install `@atcute/atproto` as well.
 
   migration notes:
-
   - the `At` namespace is gone, you can import `Did`, `ResourceUri` and many other core types
     directly from `@atcute/lexicons`
 
@@ -98,12 +96,7 @@
     get them.
 
     ```ts
-    import type {
-    	InferInput,
-    	InferOutput,
-    	InferXRPCBodyInput,
-    	InferXRPCBodyOutput,
-    } from '@atcute/lexicons';
+    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 
@@ -184,7 +177,6 @@
 - 49028fb: a new Client class for making API requests, replacing the previous `XRPC` class.
 
   key changes include:
-
   - **explicit error handling**: the new `Client` class returns an object of `{ ok, data }` instead
     of throwing on non-successful responses. this should make it easier to handle these exceptional
     cases without needing to wrap the request in a try-catch block.
@@ -242,7 +234,6 @@
 
   - **configurable response format**: the `as` field can be used to configure how the response body
     should be returned:
-
     - `"json"` parsed as JSON
     - `"blob"` returns a Blob
     - `"bytes"` returns a Uint8Array
@@ -253,7 +244,6 @@
     return a JSON response. (e.g. `com.atproto.sync.getBlob`)
 
   - **clearer naming**:
-
     - `.call()` method is renamed to `.post()` to better reflect that it makes an HTTP POST request.
     - configuring service proxying should be less confusing.
 
@@ -286,7 +276,6 @@ this version contains breaking changes to the lexicon type definitions.
 - d3fbc7e: consistent casing on types and interfaces
 
   no more capitalized/pascalcase mixing, these following types are renamed:
-
   - `At.CID` → `At.Cid`
   - `At.CIDLink` → `At.CidLink`
   - `At.DID` → `At.Did`

@@ -22,7 +22,6 @@
   but clearly these convenient interfaces are still worth having, so while it now exists, the
   compromise is that these interfaces now have been renamed to ensure they don't conflict with any
   definitions ever:
-
   - `Params` to `$params`, for query parameters
   - `Input` to `$input`, for request body
   - `Output` to `$output`, for response body
@@ -97,7 +96,6 @@
 - d3fbc7e: consistent casing on types and interfaces
 
   no more capitalized/pascalcase mixing, these following types are renamed:
-
   - `At.CID` → `At.Cid`
   - `At.CIDLink` → `At.CidLink`
   - `At.DID` → `At.Did`

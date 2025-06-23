@@ -21,8 +21,8 @@
 		"stripInternal": true,
 		"paths": {
 			"#bases/base16": ["./lib/bases/base16-web.ts"],
-			"#bases/base64": ["./lib/bases/base64-web.ts"],
-		},
+			"#bases/base64": ["./lib/bases/base64-web.ts"]
+		}
 	},
-	"include": ["lib"],
+	"include": ["lib"]
 }

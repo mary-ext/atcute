@@ -354,9 +354,7 @@ const resolveHandleViaDoH = async (handle: string): Promise<At.DID> => {
 
 	const type = response.headers.get('content-type')?.trim();
 	if (!response.ok) {
-		const message = type?.startsWith('text/plain')
-			? await response.text()
-			: `failed to resolve ${handle}`;
+		const message = type?.startsWith('text/plain') ? await response.text() : `failed to resolve ${handle}`;
 
 		throw new ResolverError(message);
 	}
@@ -440,8 +438,7 @@ const extractTxtData = (answer: AnswerTxt): string => {
 };
 ```
 
-[cf-resolver-firefox-privacy]:
-	https://developers.cloudflare.com/1.1.1.1/privacy/cloudflare-resolver-firefox/
+[cf-resolver-firefox-privacy]: https://developers.cloudflare.com/1.1.1.1/privacy/cloudflare-resolver-firefox/
 
 #### using your PDS for handle resolution
 

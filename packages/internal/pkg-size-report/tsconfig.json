@@ -16,7 +16,7 @@
 		"noFallthroughCasesInSwitch": true,
 		"module": "NodeNext",
 		"sourceMap": true,
-		"declaration": true,
+		"declaration": true
 	},
-	"include": ["src"],
+	"include": ["src"]
 }

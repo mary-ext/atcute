@@ -4,12 +4,7 @@ interprets Bluesky's content moderation labels.
 
 ```ts
 import type { XRPC } from '@atcute/client';
-import type {
-	AppBskyActorDefs,
-	AppBskyFeedDefs,
-	AppBskyLabelerDefs,
-	At,
-} from '@atcute/client/lexicons';
+import type { AppBskyActorDefs, AppBskyFeedDefs, AppBskyLabelerDefs, At } from '@atcute/client/lexicons';
 
 import {
 	DisplayContext,
@@ -118,9 +113,7 @@ let labelers: AppBskyLabelerDefs.LabelerViewDetailed[] = [];
 		},
 	});
 
-	labelers = data.views.filter(
-		(view) => view.$type === 'app.bsky.labeler.defs#labelerViewDetailed',
-	);
+	labelers = data.views.filter((view) => view.$type === 'app.bsky.labeler.defs#labelerViewDetailed');
 }
 
 // interpret the labeler's definitions into something the library can understand

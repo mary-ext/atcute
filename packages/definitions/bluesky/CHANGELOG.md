@@ -44,7 +44,6 @@
   but clearly these convenient interfaces are still worth having, so while it now exists, the
   compromise is that these interfaces now have been renamed to ensure they don't conflict with any
   definitions ever:
-
   - `Params` to `$params`, for query parameters
   - `Input` to `$input`, for request body
   - `Output` to `$output`, for response body
@@ -112,7 +111,6 @@
   this change is pretty big, where it used to be that `@atcute/client` would ship type definitions
   for core lexicon types (`At.Did`, `At.ResourceUri`, `At.CidLink` and so on) and `com.atproto.*`
   interfaces, they're now decoupled into their own packages:
-
   - `@atcute/lexicons` for core lexicon types
   - `@atcute/atproto` for `com.atproto.*` interfaces
 
@@ -120,7 +118,6 @@
   from `com.atproto.*`, then you'd need to install `@atcute/atproto` as well.
 
   migration notes:
-
   - the `At` namespace is gone, you can import `Did`, `ResourceUri` and many other core types
     directly from `@atcute/lexicons`
 
@@ -175,12 +172,7 @@
     get them.
 
     ```ts
-    import type {
-    	InferInput,
-    	InferOutput,
-    	InferXRPCBodyInput,
-    	InferXRPCBodyOutput,
-    } from '@atcute/lexicons';
+    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 
@@ -278,7 +270,6 @@
 - d3fbc7e: consistent casing on types and interfaces
 
   no more capitalized/pascalcase mixing, these following types are renamed:
-
   - `At.CID` → `At.Cid`
   - `At.CIDLink` → `At.CidLink`
   - `At.DID` → `At.Did`
