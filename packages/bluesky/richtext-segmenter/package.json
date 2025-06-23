@@ -28,6 +28,6 @@
 		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.2.15"
+		"@types/bun": "^1.2.17"
 	}
 }

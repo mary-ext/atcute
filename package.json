@@ -12,12 +12,12 @@
 		"fmt": "prettier --cache --write ."
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.29.4",
-		"@mary/tar": "npm:@jsr/mary__tar@^0.2.4",
+		"@changesets/cli": "^2.29.5",
+		"@mary/tar": "jsr:^0.3.1",
 		"@mitata/counters": "^0.0.8",
 		"mitata": "^1.0.34",
 		"pkg-size-report": "workspace:^",
-		"prettier": "^3.5.3",
+		"prettier": "^3.6.0",
 		"typescript": "~5.8.3"
 	}
 }
