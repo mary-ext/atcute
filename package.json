@@ -9,7 +9,7 @@
 		"pull:lexcom": "node ./scripts/pull-lexcom-lexicons.js",
 		"pull:tangled": "node ./scripts/pull-tangled-lexicons.js",
 		"pull:whtwnd": "node ./scripts/pull-whtwnd-lexicons.js",
-		"fmt": "prettier --cache --write ."
+		"fmt": "PRETTIER_EXPERIMENTAL_CLI=1 prettier --cache --write ."
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.29.5",
