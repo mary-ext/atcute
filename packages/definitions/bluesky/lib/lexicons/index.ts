@@ -71,10 +71,13 @@ export * as AppBskyGraphVerification from './types/app/bsky/graph/verification.j
 export * as AppBskyLabelerDefs from './types/app/bsky/labeler/defs.js';
 export * as AppBskyLabelerGetServices from './types/app/bsky/labeler/getServices.js';
 export * as AppBskyLabelerService from './types/app/bsky/labeler/service.js';
+export * as AppBskyNotificationDeclaration from './types/app/bsky/notification/declaration.js';
 export * as AppBskyNotificationDefs from './types/app/bsky/notification/defs.js';
 export * as AppBskyNotificationGetPreferences from './types/app/bsky/notification/getPreferences.js';
 export * as AppBskyNotificationGetUnreadCount from './types/app/bsky/notification/getUnreadCount.js';
+export * as AppBskyNotificationListActivitySubscriptions from './types/app/bsky/notification/listActivitySubscriptions.js';
 export * as AppBskyNotificationListNotifications from './types/app/bsky/notification/listNotifications.js';
+export * as AppBskyNotificationPutActivitySubscription from './types/app/bsky/notification/putActivitySubscription.js';
 export * as AppBskyNotificationPutPreferences from './types/app/bsky/notification/putPreferences.js';
 export * as AppBskyNotificationPutPreferencesV2 from './types/app/bsky/notification/putPreferencesV2.js';
 export * as AppBskyNotificationRegisterPush from './types/app/bsky/notification/registerPush.js';

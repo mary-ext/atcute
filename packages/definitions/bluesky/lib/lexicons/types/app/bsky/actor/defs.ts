@@ -4,6 +4,7 @@ import * as AppBskyEmbedExternal from '../embed/external.js';
 import * as AppBskyFeedPostgate from '../feed/postgate.js';
 import * as AppBskyFeedThreadgate from '../feed/threadgate.js';
 import * as AppBskyGraphDefs from '../graph/defs.js';
+import * as AppBskyNotificationDefs from '../notification/defs.js';
 import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 
@@ -172,6 +173,9 @@ const _preferencesSchema = /*#__PURE__*/ v.array(() => {
 });
 const _profileAssociatedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileAssociated')),
+	get activitySubscription() {
+		return /*#__PURE__*/ v.optional(profileAssociatedActivitySubscriptionSchema);
+	},
 	get chat() {
 		return /*#__PURE__*/ v.optional(profileAssociatedChatSchema);
 	},
@@ -179,6 +183,12 @@ const _profileAssociatedSchema = /*#__PURE__*/ v.object({
 	labeler: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	lists: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	starterPacks: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+});
+const _profileAssociatedActivitySubscriptionSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileAssociatedActivitySubscription'),
+	),
+	allowSubscriptions: /*#__PURE__*/ v.string<'followers' | 'mutuals' | 'none' | (string & {})>(),
 });
 const _profileAssociatedChatSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileAssociatedChat')),
@@ -349,6 +359,9 @@ const _verificationViewSchema = /*#__PURE__*/ v.object({
 });
 const _viewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#viewerState')),
+	get activitySubscription() {
+		return /*#__PURE__*/ v.optional(AppBskyNotificationDefs.activitySubscriptionSchema);
+	},
 	blockedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	blocking: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	get blockingByList() {
@@ -383,6 +396,7 @@ type personalDetailsPref$schematype = typeof _personalDetailsPrefSchema;
 type postInteractionSettingsPref$schematype = typeof _postInteractionSettingsPrefSchema;
 type preferences$schematype = typeof _preferencesSchema;
 type profileAssociated$schematype = typeof _profileAssociatedSchema;
+type profileAssociatedActivitySubscription$schematype = typeof _profileAssociatedActivitySubscriptionSchema;
 type profileAssociatedChat$schematype = typeof _profileAssociatedChatSchema;
 type profileView$schematype = typeof _profileViewSchema;
 type profileViewBasic$schematype = typeof _profileViewBasicSchema;
@@ -415,6 +429,8 @@ export interface personalDetailsPrefSchema extends personalDetailsPref$schematyp
 export interface postInteractionSettingsPrefSchema extends postInteractionSettingsPref$schematype {}
 export interface preferencesSchema extends preferences$schematype {}
 export interface profileAssociatedSchema extends profileAssociated$schematype {}
+export interface profileAssociatedActivitySubscriptionSchema
+	extends profileAssociatedActivitySubscription$schematype {}
 export interface profileAssociatedChatSchema extends profileAssociatedChat$schematype {}
 export interface profileViewSchema extends profileView$schematype {}
 export interface profileViewBasicSchema extends profileViewBasic$schematype {}
@@ -448,6 +464,8 @@ export const postInteractionSettingsPrefSchema =
 	_postInteractionSettingsPrefSchema as postInteractionSettingsPrefSchema;
 export const preferencesSchema = _preferencesSchema as preferencesSchema;
 export const profileAssociatedSchema = _profileAssociatedSchema as profileAssociatedSchema;
+export const profileAssociatedActivitySubscriptionSchema =
+	_profileAssociatedActivitySubscriptionSchema as profileAssociatedActivitySubscriptionSchema;
 export const profileAssociatedChatSchema = _profileAssociatedChatSchema as profileAssociatedChatSchema;
 export const profileViewSchema = _profileViewSchema as profileViewSchema;
 export const profileViewBasicSchema = _profileViewBasicSchema as profileViewBasicSchema;
@@ -480,6 +498,8 @@ export interface PersonalDetailsPref extends v.InferInput<typeof personalDetails
 export interface PostInteractionSettingsPref extends v.InferInput<typeof postInteractionSettingsPrefSchema> {}
 export interface Preferences extends v.InferInput<typeof preferencesSchema> {}
 export interface ProfileAssociated extends v.InferInput<typeof profileAssociatedSchema> {}
+export interface ProfileAssociatedActivitySubscription
+	extends v.InferInput<typeof profileAssociatedActivitySubscriptionSchema> {}
 export interface ProfileAssociatedChat extends v.InferInput<typeof profileAssociatedChatSchema> {}
 export interface ProfileView extends v.InferInput<typeof profileViewSchema> {}
 export interface ProfileViewBasic extends v.InferInput<typeof profileViewBasicSchema> {}
