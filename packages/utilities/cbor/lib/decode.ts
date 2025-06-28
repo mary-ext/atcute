@@ -1,4 +1,4 @@
-import { CidLinkWrapper, type CidLink } from '@atcute/cid';
+import { CidLinkWrapper, fromBinary, type CidLink } from '@atcute/cid';
 import { decodeUtf8From } from '@atcute/uint8array';
 
 import { toBytes, type Bytes } from './bytes.js';
@@ -115,10 +115,9 @@ const readBytes = (state: State, length: number): Bytes => {
 };
 
 const readCid = (state: State, length: number): CidLink => {
-	// CID bytes are prefixed with 0x00 for historical reasons, apparently.
-	const slice = state.b.subarray(state.p + 1, (state.p += length));
+	const cid = fromBinary(state.b.subarray(state.p, (state.p += length)));
 
-	return new CidLinkWrapper(slice);
+	return new CidLinkWrapper(cid.bytes);
 };
 
 const decodeStringKey = (state: State): string => {
