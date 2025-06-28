@@ -45,7 +45,7 @@ const readArgument = (state: State, info: number): number => {
 			break;
 		}
 		default: {
-	throw new Error(`invalid argument encoding; got ${info}`);
+			throw new Error(`invalid argument encoding; got ${info}`);
 		}
 	}
 	return arg;
@@ -118,6 +118,10 @@ const readCid = (state: State, length: number): CidLink => {
 	const cid = fromBinary(state.b.subarray(state.p, (state.p += length)));
 
 	return new CidLinkWrapper(cid.bytes);
+};
+
+const compareKeys = (a: string, b: string): number => {
+	return a.length - b.length || (a < b ? -1 : a > b ? 1 : 0);
 };
 
 const decodeStringKey = (state: State): string => {
@@ -302,7 +306,14 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 
 				if (stack.t === 0) {
 					// Read the key of the next map item
-					stack.k = decodeStringKey(state);
+					const prevKey = stack.k;
+					const nextKey = decodeStringKey(state);
+
+					if (compareKeys(nextKey, prevKey) <= 0) {
+						throw new TypeError(`map keys are not in canonical order or contain duplicates`);
+					}
+
+					stack.k = nextKey;
 				}
 
 				continue jump;
