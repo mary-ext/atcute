@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/cbor",
-	"version": "2.2.4",
+	"version": "2.2.5",
 	"description": "lightweight DASL dCBOR42 codec library for AT Protocol",
 	"keywords": [
 		"atproto",

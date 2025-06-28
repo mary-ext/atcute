@@ -1,5 +1,13 @@
 # @atcute/cbor
 
+## 2.2.5
+
+### Patch Changes
+
+- 827a34a: throw on non-canonical map encoding
+- ad2821f: throw on non-canonical argument encoding
+- 04fca43: throw on improper CID
+
 ## 2.2.4
 
 ### Patch Changes
