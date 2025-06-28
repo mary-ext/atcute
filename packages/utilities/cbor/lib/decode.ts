@@ -14,22 +14,41 @@ const readArgument = (state: State, info: number): number => {
 		return info;
 	}
 
+	let arg: number;
 	switch (info) {
 		case 24: {
-			return readUint8(state);
+			arg = readUint8(state);
+			if (arg < 24) {
+				throw new TypeError(`non-canonical argument encoding`);
+			}
+			break;
 		}
 		case 25: {
-			return readUint16(state);
+			arg = readUint16(state);
+			if (arg < 0x100) {
+				throw new TypeError(`non-canonical argument encoding`);
+			}
+			break;
 		}
 		case 26: {
-			return readUint32(state);
+			arg = readUint32(state);
+			if (arg < 0x10000) {
+				throw new TypeError(`non-canonical argument encoding`);
+			}
+			break;
 		}
 		case 27: {
-			return readUint53(state);
+			arg = readUint53(state);
+			if (arg < 0x100000000) {
+				throw new TypeError(`non-canonical argument encoding`);
+			}
+			break;
+		}
+		default: {
+	throw new Error(`invalid argument encoding; got ${info}`);
 		}
 	}
-
-	throw new Error(`invalid argument encoding; got ${info}`);
+	return arg;
 };
 
 const readFloat64 = (state: State): number => {
