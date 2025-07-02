@@ -50,6 +50,7 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 		| 'repost'
 		| 'repost-via-repost'
 		| 'starterpack-joined'
+		| 'subscribed-post'
 		| 'unverified'
 		| 'verified'
 		| (string & {})
