@@ -1,5 +1,14 @@
 # @atcute/bluesky
 
+## 3.1.5
+
+### Patch Changes
+
+- fa6146b: pull latest Bluesky lexicons
+- 8d0b416: pull latest Bluesky lexicons
+- Updated dependencies [fa6146b]
+  - @atcute/atproto@3.1.1
+
 ## 3.1.4
 
 ### Patch Changes

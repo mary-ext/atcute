@@ -1,5 +1,15 @@
 # @atcute/ozone
 
+## 3.1.2
+
+### Patch Changes
+
+- fa6146b: pull latest Bluesky lexicons
+- Updated dependencies [fa6146b]
+- Updated dependencies [8d0b416]
+  - @atcute/atproto@3.1.1
+  - @atcute/bluesky@3.1.5
+
 ## 3.1.1
 
 ### Patch Changes
@@ -150,7 +160,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 
