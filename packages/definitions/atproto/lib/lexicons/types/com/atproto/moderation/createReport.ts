@@ -10,6 +10,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.moderation.createRepo
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			get modTool() {
+				return /*#__PURE__*/ v.optional(modToolSchema);
+			},
 			reason: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 					/*#__PURE__*/ v.stringLength(0, 20000),
@@ -51,12 +54,22 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.moderation.createRepo
 		}),
 	},
 });
+const _modToolSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.moderation.createReport#modTool')),
+	meta: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+	name: /*#__PURE__*/ v.string(),
+});
 
 type main$schematype = typeof _mainSchema;
+type modTool$schematype = typeof _modToolSchema;
 
 export interface mainSchema extends main$schematype {}
+export interface modToolSchema extends modTool$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
+export const modToolSchema = _modToolSchema as modToolSchema;
+
+export interface ModTool extends v.InferInput<typeof modToolSchema> {}
 
 export interface $params {}
 export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}

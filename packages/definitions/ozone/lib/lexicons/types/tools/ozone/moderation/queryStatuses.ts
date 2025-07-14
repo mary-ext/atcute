@@ -5,6 +5,9 @@ import * as ToolsOzoneModerationDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryStatuses', {
 	params: /*#__PURE__*/ v.object({
+		ageAssuranceState: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.string<'assured' | 'blocked' | 'pending' | 'reset' | 'unknown' | (string & {})>(),
+		),
 		appealed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		collections: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString()), [

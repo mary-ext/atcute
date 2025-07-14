@@ -37,6 +37,23 @@ const _accountStatsSchema = /*#__PURE__*/ v.object({
 	suspendCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	takedownCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
+const _ageAssuranceEventSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#ageAssuranceEvent')),
+	attemptId: /*#__PURE__*/ v.string(),
+	completeIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	completeUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
+	initIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	initUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	status: /*#__PURE__*/ v.string<'assured' | 'pending' | 'unknown' | (string & {})>(),
+});
+const _ageAssuranceOverrideEventSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#ageAssuranceOverrideEvent'),
+	),
+	comment: /*#__PURE__*/ v.string(),
+	status: /*#__PURE__*/ v.string<'assured' | 'blocked' | 'reset' | (string & {})>(),
+});
 const _blobViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#blobView')),
 	cid: /*#__PURE__*/ v.cidString(),
@@ -168,6 +185,8 @@ const _modEventViewSchema = /*#__PURE__*/ v.object({
 	get event() {
 		return /*#__PURE__*/ v.variant([
 			accountEventSchema,
+			ageAssuranceEventSchema,
+			ageAssuranceOverrideEventSchema,
 			identityEventSchema,
 			modEventAcknowledgeSchema,
 			modEventCommentSchema,
@@ -189,6 +208,9 @@ const _modEventViewSchema = /*#__PURE__*/ v.object({
 		]);
 	},
 	id: /*#__PURE__*/ v.integer(),
+	get modTool() {
+		return /*#__PURE__*/ v.optional(modToolSchema);
+	},
 	get subject() {
 		return /*#__PURE__*/ v.variant([
 			ChatBskyConvoDefs.messageRefSchema,
@@ -206,6 +228,8 @@ const _modEventViewDetailSchema = /*#__PURE__*/ v.object({
 	get event() {
 		return /*#__PURE__*/ v.variant([
 			accountEventSchema,
+			ageAssuranceEventSchema,
+			ageAssuranceOverrideEventSchema,
 			identityEventSchema,
 			modEventAcknowledgeSchema,
 			modEventCommentSchema,
@@ -227,6 +251,9 @@ const _modEventViewDetailSchema = /*#__PURE__*/ v.object({
 		]);
 	},
 	id: /*#__PURE__*/ v.integer(),
+	get modTool() {
+		return /*#__PURE__*/ v.optional(modToolSchema);
+	},
 	get subject() {
 		return /*#__PURE__*/ v.variant([
 			recordViewSchema,
@@ -238,6 +265,11 @@ const _modEventViewDetailSchema = /*#__PURE__*/ v.object({
 	get subjectBlobs() {
 		return /*#__PURE__*/ v.array(blobViewSchema);
 	},
+});
+const _modToolSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modTool')),
+	meta: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+	name: /*#__PURE__*/ v.string(),
 });
 const _moderationSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#moderation')),
@@ -388,6 +420,10 @@ const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 	get accountStats() {
 		return /*#__PURE__*/ v.optional(accountStatsSchema);
 	},
+	ageAssuranceState: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<'assured' | 'blocked' | 'pending' | 'reset' | 'unknown' | (string & {})>(),
+	),
+	ageAssuranceUpdatedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'admin' | 'user' | (string & {})>()),
 	appealed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
@@ -453,6 +489,8 @@ const _videoDetailsSchema = /*#__PURE__*/ v.object({
 type accountEvent$schematype = typeof _accountEventSchema;
 type accountHosting$schematype = typeof _accountHostingSchema;
 type accountStats$schematype = typeof _accountStatsSchema;
+type ageAssuranceEvent$schematype = typeof _ageAssuranceEventSchema;
+type ageAssuranceOverrideEvent$schematype = typeof _ageAssuranceOverrideEventSchema;
 type blobView$schematype = typeof _blobViewSchema;
 type identityEvent$schematype = typeof _identityEventSchema;
 type imageDetails$schematype = typeof _imageDetailsSchema;
@@ -474,6 +512,7 @@ type modEventUnmute$schematype = typeof _modEventUnmuteSchema;
 type modEventUnmuteReporter$schematype = typeof _modEventUnmuteReporterSchema;
 type modEventView$schematype = typeof _modEventViewSchema;
 type modEventViewDetail$schematype = typeof _modEventViewDetailSchema;
+type modTool$schematype = typeof _modToolSchema;
 type moderation$schematype = typeof _moderationSchema;
 type moderationDetail$schematype = typeof _moderationDetailSchema;
 type recordEvent$schematype = typeof _recordEventSchema;
@@ -498,6 +537,8 @@ type videoDetails$schematype = typeof _videoDetailsSchema;
 export interface accountEventSchema extends accountEvent$schematype {}
 export interface accountHostingSchema extends accountHosting$schematype {}
 export interface accountStatsSchema extends accountStats$schematype {}
+export interface ageAssuranceEventSchema extends ageAssuranceEvent$schematype {}
+export interface ageAssuranceOverrideEventSchema extends ageAssuranceOverrideEvent$schematype {}
 export interface blobViewSchema extends blobView$schematype {}
 export interface identityEventSchema extends identityEvent$schematype {}
 export interface imageDetailsSchema extends imageDetails$schematype {}
@@ -519,6 +560,7 @@ export interface modEventUnmuteSchema extends modEventUnmute$schematype {}
 export interface modEventUnmuteReporterSchema extends modEventUnmuteReporter$schematype {}
 export interface modEventViewSchema extends modEventView$schematype {}
 export interface modEventViewDetailSchema extends modEventViewDetail$schematype {}
+export interface modToolSchema extends modTool$schematype {}
 export interface moderationSchema extends moderation$schematype {}
 export interface moderationDetailSchema extends moderationDetail$schematype {}
 export interface recordEventSchema extends recordEvent$schematype {}
@@ -543,6 +585,9 @@ export interface videoDetailsSchema extends videoDetails$schematype {}
 export const accountEventSchema = _accountEventSchema as accountEventSchema;
 export const accountHostingSchema = _accountHostingSchema as accountHostingSchema;
 export const accountStatsSchema = _accountStatsSchema as accountStatsSchema;
+export const ageAssuranceEventSchema = _ageAssuranceEventSchema as ageAssuranceEventSchema;
+export const ageAssuranceOverrideEventSchema =
+	_ageAssuranceOverrideEventSchema as ageAssuranceOverrideEventSchema;
 export const blobViewSchema = _blobViewSchema as blobViewSchema;
 export const identityEventSchema = _identityEventSchema as identityEventSchema;
 export const imageDetailsSchema = _imageDetailsSchema as imageDetailsSchema;
@@ -564,6 +609,7 @@ export const modEventUnmuteSchema = _modEventUnmuteSchema as modEventUnmuteSchem
 export const modEventUnmuteReporterSchema = _modEventUnmuteReporterSchema as modEventUnmuteReporterSchema;
 export const modEventViewSchema = _modEventViewSchema as modEventViewSchema;
 export const modEventViewDetailSchema = _modEventViewDetailSchema as modEventViewDetailSchema;
+export const modToolSchema = _modToolSchema as modToolSchema;
 export const moderationSchema = _moderationSchema as moderationSchema;
 export const moderationDetailSchema = _moderationDetailSchema as moderationDetailSchema;
 export const recordEventSchema = _recordEventSchema as recordEventSchema;
@@ -588,6 +634,8 @@ export const videoDetailsSchema = _videoDetailsSchema as videoDetailsSchema;
 export interface AccountEvent extends v.InferInput<typeof accountEventSchema> {}
 export interface AccountHosting extends v.InferInput<typeof accountHostingSchema> {}
 export interface AccountStats extends v.InferInput<typeof accountStatsSchema> {}
+export interface AgeAssuranceEvent extends v.InferInput<typeof ageAssuranceEventSchema> {}
+export interface AgeAssuranceOverrideEvent extends v.InferInput<typeof ageAssuranceOverrideEventSchema> {}
 export interface BlobView extends v.InferInput<typeof blobViewSchema> {}
 export interface IdentityEvent extends v.InferInput<typeof identityEventSchema> {}
 export interface ImageDetails extends v.InferInput<typeof imageDetailsSchema> {}
@@ -609,6 +657,7 @@ export interface ModEventUnmute extends v.InferInput<typeof modEventUnmuteSchema
 export interface ModEventUnmuteReporter extends v.InferInput<typeof modEventUnmuteReporterSchema> {}
 export interface ModEventView extends v.InferInput<typeof modEventViewSchema> {}
 export interface ModEventViewDetail extends v.InferInput<typeof modEventViewDetailSchema> {}
+export interface ModTool extends v.InferInput<typeof modToolSchema> {}
 export interface Moderation extends v.InferInput<typeof moderationSchema> {}
 export interface ModerationDetail extends v.InferInput<typeof moderationDetailSchema> {}
 export interface RecordEvent extends v.InferInput<typeof recordEventSchema> {}

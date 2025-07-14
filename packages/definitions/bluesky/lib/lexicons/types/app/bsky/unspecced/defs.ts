@@ -3,6 +3,22 @@ import * as v from '@atcute/lexicons/validations';
 import * as AppBskyActorDefs from '../actor/defs.js';
 import * as AppBskyFeedDefs from '../feed/defs.js';
 
+const _ageAssuranceEventSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.unspecced.defs#ageAssuranceEvent')),
+	attemptId: /*#__PURE__*/ v.string(),
+	completeIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	completeUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
+	email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	initIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	initUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	status: /*#__PURE__*/ v.string<'assured' | 'pending' | 'unknown' | (string & {})>(),
+});
+const _ageAssuranceStateSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.unspecced.defs#ageAssuranceState')),
+	lastInitiatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	status: /*#__PURE__*/ v.string<'assured' | 'blocked' | 'pending' | 'unknown' | (string & {})>(),
+});
 const _skeletonSearchActorSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.unspecced.defs#skeletonSearchActor')),
 	did: /*#__PURE__*/ v.didString(),
@@ -74,6 +90,8 @@ const _trendingTopicSchema = /*#__PURE__*/ v.object({
 	topic: /*#__PURE__*/ v.string(),
 });
 
+type ageAssuranceEvent$schematype = typeof _ageAssuranceEventSchema;
+type ageAssuranceState$schematype = typeof _ageAssuranceStateSchema;
 type skeletonSearchActor$schematype = typeof _skeletonSearchActorSchema;
 type skeletonSearchPost$schematype = typeof _skeletonSearchPostSchema;
 type skeletonSearchStarterPack$schematype = typeof _skeletonSearchStarterPackSchema;
@@ -85,6 +103,8 @@ type threadItemPost$schematype = typeof _threadItemPostSchema;
 type trendView$schematype = typeof _trendViewSchema;
 type trendingTopic$schematype = typeof _trendingTopicSchema;
 
+export interface ageAssuranceEventSchema extends ageAssuranceEvent$schematype {}
+export interface ageAssuranceStateSchema extends ageAssuranceState$schematype {}
 export interface skeletonSearchActorSchema extends skeletonSearchActor$schematype {}
 export interface skeletonSearchPostSchema extends skeletonSearchPost$schematype {}
 export interface skeletonSearchStarterPackSchema extends skeletonSearchStarterPack$schematype {}
@@ -96,6 +116,8 @@ export interface threadItemPostSchema extends threadItemPost$schematype {}
 export interface trendViewSchema extends trendView$schematype {}
 export interface trendingTopicSchema extends trendingTopic$schematype {}
 
+export const ageAssuranceEventSchema = _ageAssuranceEventSchema as ageAssuranceEventSchema;
+export const ageAssuranceStateSchema = _ageAssuranceStateSchema as ageAssuranceStateSchema;
 export const skeletonSearchActorSchema = _skeletonSearchActorSchema as skeletonSearchActorSchema;
 export const skeletonSearchPostSchema = _skeletonSearchPostSchema as skeletonSearchPostSchema;
 export const skeletonSearchStarterPackSchema =
@@ -109,6 +131,8 @@ export const threadItemPostSchema = _threadItemPostSchema as threadItemPostSchem
 export const trendViewSchema = _trendViewSchema as trendViewSchema;
 export const trendingTopicSchema = _trendingTopicSchema as trendingTopicSchema;
 
+export interface AgeAssuranceEvent extends v.InferInput<typeof ageAssuranceEventSchema> {}
+export interface AgeAssuranceState extends v.InferInput<typeof ageAssuranceStateSchema> {}
 export interface SkeletonSearchActor extends v.InferInput<typeof skeletonSearchActorSchema> {}
 export interface SkeletonSearchPost extends v.InferInput<typeof skeletonSearchPostSchema> {}
 export interface SkeletonSearchStarterPack extends v.InferInput<typeof skeletonSearchStarterPackSchema> {}

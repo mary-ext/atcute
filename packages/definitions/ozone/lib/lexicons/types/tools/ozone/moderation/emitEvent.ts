@@ -14,6 +14,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 			get event() {
 				return /*#__PURE__*/ v.variant([
 					ToolsOzoneModerationDefs.accountEventSchema,
+					ToolsOzoneModerationDefs.ageAssuranceEventSchema,
+					ToolsOzoneModerationDefs.ageAssuranceOverrideEventSchema,
 					ToolsOzoneModerationDefs.identityEventSchema,
 					ToolsOzoneModerationDefs.modEventAcknowledgeSchema,
 					ToolsOzoneModerationDefs.modEventCommentSchema,
@@ -33,6 +35,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 					ToolsOzoneModerationDefs.modEventUnmuteReporterSchema,
 					ToolsOzoneModerationDefs.recordEventSchema,
 				]);
+			},
+			get modTool() {
+				return /*#__PURE__*/ v.optional(ToolsOzoneModerationDefs.modToolSchema);
 			},
 			get subject() {
 				return /*#__PURE__*/ v.variant([
