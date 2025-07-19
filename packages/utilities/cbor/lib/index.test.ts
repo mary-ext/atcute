@@ -342,7 +342,7 @@ it('throws on non-canonically sorted map keys', () => {
 	// manually craft CBOR with keys in wrong order: {"bb": 1, "a": 2}
 	// map with 2 items (0xa2), "bb" (0x62 0x62 0x62), 1 (0x01), "a" (0x61 0x61), 2 (0x02)
 	const malformedCbor = new Uint8Array([0xa2, 0x62, 0x62, 0x62, 0x01, 0x61, 0x61, 0x02]);
-	
+
 	expect(() => decode(malformedCbor)).toThrow('map keys are not in canonical order or contain duplicates');
 });
 
@@ -350,7 +350,7 @@ it('throws on duplicate map keys', () => {
 	// manually craft CBOR with duplicate keys: {"a": 1, "a": 2}
 	// map with 2 items (0xa2), "a" (0x61 0x61), 1 (0x01), "a" (0x61 0x61), 2 (0x02)
 	const malformedCbor = new Uint8Array([0xa2, 0x61, 0x61, 0x01, 0x61, 0x61, 0x02]);
-	
+
 	expect(() => decode(malformedCbor)).toThrow('map keys are not in canonical order or contain duplicates');
 });
 
