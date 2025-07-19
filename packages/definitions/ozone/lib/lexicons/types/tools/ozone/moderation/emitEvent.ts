@@ -36,6 +36,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 					ToolsOzoneModerationDefs.recordEventSchema,
 				]);
 			},
+			externalId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get modTool() {
 				return /*#__PURE__*/ v.optional(ToolsOzoneModerationDefs.modToolSchema);
 			},
