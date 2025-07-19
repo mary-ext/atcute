@@ -28,10 +28,10 @@
 		"@badrap/valita": "^0.4.5",
 		"@externdefs/collider": "^0.3.0",
 		"picocolors": "^1.1.1",
-		"prettier": "^3.6.0"
+		"prettier": "^3.6.2"
 	},
 	"devDependencies": {
 		"@atcute/lexicons": "workspace:^",
-		"@types/node": "^22.15.32"
+		"@types/node": "^22.16.5"
 	}
 }

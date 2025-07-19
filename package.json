@@ -17,7 +17,7 @@
 		"@mitata/counters": "^0.0.8",
 		"mitata": "^1.0.34",
 		"pkg-size-report": "workspace:^",
-		"prettier": "^3.6.0",
+		"prettier": "^3.6.2",
 		"typescript": "~5.8.3"
 	}
 }
