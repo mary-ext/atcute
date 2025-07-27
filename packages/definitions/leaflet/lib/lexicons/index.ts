@@ -1,5 +1,7 @@
+export * as PubLeafletBlocksCode from './types/pub/leaflet/blocks/code.js';
 export * as PubLeafletBlocksHeader from './types/pub/leaflet/blocks/header.js';
 export * as PubLeafletBlocksImage from './types/pub/leaflet/blocks/image.js';
+export * as PubLeafletBlocksMath from './types/pub/leaflet/blocks/math.js';
 export * as PubLeafletBlocksText from './types/pub/leaflet/blocks/text.js';
 export * as PubLeafletBlocksUnorderedList from './types/pub/leaflet/blocks/unorderedList.js';
 export * as PubLeafletBlocksWebsite from './types/pub/leaflet/blocks/website.js';
@@ -8,3 +10,5 @@ export * as PubLeafletGraphSubscription from './types/pub/leaflet/graph/subscrip
 export * as PubLeafletPagesLinearDocument from './types/pub/leaflet/pages/linearDocument.js';
 export * as PubLeafletPublication from './types/pub/leaflet/publication.js';
 export * as PubLeafletRichtextFacet from './types/pub/leaflet/richtext/facet.js';
+export * as PubLeafletThemeBackgroundImage from './types/pub/leaflet/theme/backgroundImage.js';
+export * as PubLeafletThemeColor from './types/pub/leaflet/theme/color.js';
