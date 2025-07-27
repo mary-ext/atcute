@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/ozone",
-	"version": "3.1.2",
+	"version": "3.1.3",
 	"description": "Ozone (tools.ozone.*) scheam definitions",
 	"keywords": [
 		"atcute",

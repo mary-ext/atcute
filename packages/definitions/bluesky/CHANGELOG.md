@@ -1,5 +1,16 @@
 # @atcute/bluesky
 
+## 3.2.0
+
+### Minor Changes
+
+- 037d155: add `AnyListView`, `AnyProfileView` and `AnyStarterPackView` for convenience
+
+### Patch Changes
+
+- 730e3e9: add missing JSDoc annotations for exported embed types
+- 66ea1a9: pull latest Bluesky lexicons
+
 ## 3.1.5
 
 ### Patch Changes
@@ -187,7 +198,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 
