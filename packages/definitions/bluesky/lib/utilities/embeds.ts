@@ -5,12 +5,21 @@ import type * as AppBskyEmbedRecordWithMedia from '../lexicons/types/app/bsky/em
 import type * as AppBskyFeedDefs from '../lexicons/types/app/bsky/feed/defs.js';
 import type * as AppBskyFeedPost from '../lexicons/types/app/bsky/feed/post.js';
 
+/**
+ * a union type of all possible raw embeds.
+ */
 export interface RawEmbeds {
 	media?: AppBskyEmbedRecordWithMedia.Main['media'];
 	record?: AppBskyEmbedRecordWithMedia.Main['record'];
 }
 
+/**
+ * a raw media embed.
+ */
 export type RawMediaEmbed = NonNullable<RawEmbeds['media']>;
+/**
+ * a raw record embed.
+ */
 export type RawRecordEmbed = NonNullable<RawEmbeds['record']>;
 
 /**
@@ -56,12 +65,21 @@ export const unwrapRawEmbed = (embed: AppBskyFeedPost.Main['embed']): RawEmbeds 
 	};
 };
 
+/**
+ * a union type of all possible embeds.
+ */
 export interface Embeds {
 	media?: AppBskyEmbedRecordWithMedia.View['media'];
 	record?: AppBskyEmbedRecordWithMedia.View['record']['record'];
 }
 
+/**
+ * a media embed.
+ */
 export type MediaEmbed = NonNullable<Embeds['media']>;
+/**
+ * a record embed.
+ */
 export type RecordEmbed = NonNullable<Embeds['record']>;
 
 /**
@@ -107,6 +125,9 @@ export const unwrapEmbed = (embed: AppBskyFeedDefs.PostView['embed']): Embeds =>
 	};
 };
 
+/**
+ * a quote embed.
+ */
 export type QuoteEmbed = $type.enforce<
 	| AppBskyEmbedRecord.ViewBlocked
 	| AppBskyEmbedRecord.ViewDetached
