@@ -1,7 +1,5 @@
 import { DEV } from 'esm-env';
 
-export type Result<T, E> = { ok: true; value: T } | { ok: false; error: E };
-
 export const assert: { (condition: any, message?: string): asserts condition } = (condition, message) => {
 	if (!condition) {
 		if (DEV) {

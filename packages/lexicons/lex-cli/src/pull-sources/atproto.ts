@@ -71,12 +71,13 @@ const discoverLexiconsForAuthority = async (
 
 		// extract NSIDs from record keys (the rkey in at://did/collection/rkey)
 		for (const record of data.records) {
-			const r = parseCanonicalResourceUri(record.uri);
-			if (!r.ok) {
+			let nsid: string;
+			try {
+				nsid = parseCanonicalResourceUri(record.uri).rkey;
+			} catch {
 				continue;
 			}
 
-			const nsid = r.value.rkey;
 			if (!isNsid(nsid)) {
 				continue;
 			}

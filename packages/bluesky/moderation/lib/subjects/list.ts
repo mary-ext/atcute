@@ -20,12 +20,7 @@ export const moderateList = (subject: ListSubject, opts: ModerationOptions): Mod
 
 		return mergeModerationDecisions(decision, moderateProfile(creator, opts));
 	} else {
-		const uri = parseCanonicalResourceUri(subject.uri);
-		if (!uri.ok) {
-			throw new Error(`can't parse at-uri from user list (${uri.error})`);
-		}
-
-		const creatorDid = uri.value.repo;
+		const creatorDid = parseCanonicalResourceUri(subject.uri).repo;
 
 		const decision = createModerationDecision(creatorDid, opts);
 		considerLabels(decision, LabelTarget.Content, subject.labels, opts);

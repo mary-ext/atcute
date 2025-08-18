@@ -1,10 +1,10 @@
-import { assert, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import {
-	isResourceUri,
-	parseResourceUri,
 	isCanonicalResourceUri,
+	isResourceUri,
 	parseCanonicalResourceUri,
+	parseResourceUri,
 } from './at-uri.ts';
 
 describe('resourceUri validation', () => {
@@ -47,8 +47,7 @@ describe('resourceUri validation', () => {
 		];
 		for (const str of validCases) {
 			expect(isResourceUri(str), str).toBe(true);
-
-			expect(parseResourceUri(str).ok, str).toBe(true);
+			expect(() => parseResourceUri(str), str).not.toThrow();
 		}
 
 		const invalidCases = [
@@ -106,8 +105,7 @@ describe('resourceUri validation', () => {
 		];
 		for (const str of invalidCases) {
 			expect(isResourceUri(str), str).toBe(false);
-
-			expect(parseResourceUri(str).ok, str).toBe(false);
+			expect(() => parseResourceUri(str), str).toThrow();
 		}
 
 		expect(isResourceUri(null)).toBe(false);
@@ -116,8 +114,7 @@ describe('resourceUri validation', () => {
 	it('parses valid at-uris', () => {
 		const result = parseResourceUri('at://did:plc:asdf123/com.atproto.feed.post/record');
 
-		assert(result.ok);
-		expect(result.value).toEqual({
+		expect(result).toEqual({
 			repo: 'did:plc:asdf123',
 			collection: 'com.atproto.feed.post',
 			rkey: 'record',
@@ -127,8 +124,8 @@ describe('resourceUri validation', () => {
 
 	it('parses at-uri with fragment', () => {
 		const result = parseResourceUri('at://did:plc:asdf123/com.atproto.feed.post/record#/fragment');
-		assert(result.ok);
-		expect(result.value).toEqual({
+
+		expect(result).toEqual({
 			repo: 'did:plc:asdf123',
 			collection: 'com.atproto.feed.post',
 			rkey: 'record',
@@ -137,9 +134,9 @@ describe('resourceUri validation', () => {
 	});
 
 	it('returns error for invalid at-uri', () => {
-		const result = parseResourceUri('invalid-uri');
-		assert(!result.ok);
-		expect(result.error).toContain('invalid at-uri');
+		expect(() => parseResourceUri('invalid-uri')).toThrowErrorMatchingInlineSnapshot(
+			`[SyntaxError: invalid at-uri: invalid-uri]`,
+		);
 	});
 });
 
@@ -152,7 +149,7 @@ describe('canonicalResourceUri validation', () => {
 		for (const str of validCases) {
 			expect(isCanonicalResourceUri(str), str).toBe(true);
 
-			expect(parseCanonicalResourceUri(str).ok, str).toBe(true);
+			expect(() => parseCanonicalResourceUri(str), str).not.toThrow();
 		}
 
 		const invalidCases = [
@@ -164,7 +161,7 @@ describe('canonicalResourceUri validation', () => {
 		for (const str of invalidCases) {
 			expect(isCanonicalResourceUri(str), str).toBe(false);
 
-			expect(parseCanonicalResourceUri(str).ok, str).toBe(false);
+			expect(() => parseCanonicalResourceUri(str), str).toThrow();
 		}
 
 		expect(isCanonicalResourceUri(null)).toBe(false);
@@ -172,8 +169,8 @@ describe('canonicalResourceUri validation', () => {
 
 	it('parses valid canonical at-uris', () => {
 		const result = parseCanonicalResourceUri('at://did:plc:asdf123/com.atproto.feed.post/record');
-		assert(result.ok);
-		expect(result.value).toEqual({
+
+		expect(result).toEqual({
 			repo: 'did:plc:asdf123',
 			collection: 'com.atproto.feed.post',
 			rkey: 'record',
@@ -182,8 +179,10 @@ describe('canonicalResourceUri validation', () => {
 	});
 
 	it('returns error for invalid canonical at-uri', () => {
-		const result = parseCanonicalResourceUri('at://user.bsky.social/com.atproto.feed.post/record');
-		assert(!result.ok);
-		expect(result.error).toContain('invalid repo in canonical-at-uri');
+		expect(() => {
+			return parseCanonicalResourceUri('at://user.bsky.social/com.atproto.feed.post/record');
+		}).toThrowErrorMatchingInlineSnapshot(
+			`[SyntaxError: invalid repo in canonical-at-uri: user.bsky.social]`,
+		);
 	});
 });

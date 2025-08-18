@@ -1,5 +1,3 @@
-import { type Result } from '../utils.ts';
-
 import { isActorIdentifier, type ActorIdentifier } from './at-identifier.ts';
 import { isDid, type Did } from './did.ts';
 import { isNsid, type Nsid } from './nsid.ts';
@@ -147,32 +145,32 @@ export const isResourceUri = (input: unknown): input is ResourceUri => {
 };
 
 // #__NO_SIDE_EFFECTS__
-export const parseResourceUri = (input: string): Result<ParsedResourceUri, string> => {
+export const parseResourceUri = (input: string): ParsedResourceUri => {
 	const len = input.length;
 	if (len < AT_URI_MIN_LENGTH || len > AT_URI_MAX_LENGTH) {
-		return { ok: false, error: `invalid at-uri: ${input}` };
+		throw new SyntaxError(`invalid at-uri: ${input}`);
 	}
 
 	const match = ATURI_RE.exec(input);
 	if (match === null) {
-		return { ok: false, error: `invalid at-uri: ${input}` };
+		throw new SyntaxError(`invalid at-uri: ${input}`);
 	}
 
 	const [, r, c, k, f] = match;
 
 	if (!isActorIdentifier(r)) {
-		return { ok: false, error: `invalid repo in at-uri: ${r}` };
+		throw new SyntaxError(`invalid repo in at-uri: ${r}`);
 	}
 
 	if (c !== undefined && !isNsid(c)) {
-		return { ok: false, error: `invalid collection in at-uri: ${c}` };
+		throw new SyntaxError(`invalid collection in at-uri: ${c}`);
 	}
 
 	if (k !== undefined && !isRecordKey(k)) {
-		return { ok: false, error: `invalid rkey in at-uri: ${k}` };
+		throw new SyntaxError(`invalid rkey in at-uri: ${k}`);
 	}
 
-	return { ok: true, value: { repo: r, collection: c, rkey: k, fragment: f } };
+	return { repo: r, collection: c, rkey: k, fragment: f };
 };
 
 /**
@@ -234,30 +232,30 @@ export const isCanonicalResourceUri = (input: unknown): input is CanonicalResour
 };
 
 // #__NO_SIDE_EFFECTS__
-export const parseCanonicalResourceUri = (input: string): Result<ParsedCanonicalResourceUri, string> => {
+export const parseCanonicalResourceUri = (input: string): ParsedCanonicalResourceUri => {
 	const len = input.length;
 	if (len < CANONICAL_AT_URI_MIN_LENGTH || len > AT_URI_MAX_LENGTH) {
-		return { ok: false, error: `invalid canonical-at-uri: ${input}` };
+		throw new SyntaxError(`invalid canonical-at-uri: ${input}`);
 	}
 
 	const match = ATURI_RE.exec(input);
 	if (match === null) {
-		return { ok: false, error: `invalid canonical-at-uri: ${input}` };
+		throw new SyntaxError(`invalid canonical-at-uri: ${input}`);
 	}
 
 	const [, r, c, k, f] = match;
 
 	if (!isDid(r)) {
-		return { ok: false, error: `invalid repo in canonical-at-uri: ${r}` };
+		throw new SyntaxError(`invalid repo in canonical-at-uri: ${r}`);
 	}
 
 	if (!isNsid(c)) {
-		return { ok: false, error: `invalid collection in canonical-at-uri: ${c}` };
+		throw new SyntaxError(`invalid collection in canonical-at-uri: ${c}`);
 	}
 
 	if (!isRecordKey(k)) {
-		return { ok: false, error: `invalid rkey in canonical-at-uri: ${k}` };
+		throw new SyntaxError(`invalid rkey in canonical-at-uri: ${k}`);
 	}
 
-	return { ok: true, value: { repo: r, collection: c, rkey: k, fragment: f } };
+	return { repo: r, collection: c, rkey: k, fragment: f };
 };
