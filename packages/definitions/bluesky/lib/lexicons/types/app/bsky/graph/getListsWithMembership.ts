@@ -3,7 +3,18 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 import * as AppBskyGraphDefs from './defs.js';
 
-const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getLists', {
+const _listWithMembershipSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.graph.getListsWithMembership#listWithMembership'),
+	),
+	get list() {
+		return AppBskyGraphDefs.listViewSchema;
+	},
+	get listItem() {
+		return /*#__PURE__*/ v.optional(AppBskyGraphDefs.listItemViewSchema);
+	},
+});
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getListsWithMembership', {
 	params: /*#__PURE__*/ v.object({
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
@@ -19,24 +30,29 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getLists', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			get lists() {
-				return /*#__PURE__*/ v.array(AppBskyGraphDefs.listViewSchema);
+			get listsWithMembership() {
+				return /*#__PURE__*/ v.array(listWithMembershipSchema);
 			},
 		}),
 	},
 });
 
+type listWithMembership$schematype = typeof _listWithMembershipSchema;
 type main$schematype = typeof _mainSchema;
 
+export interface listWithMembershipSchema extends listWithMembership$schematype {}
 export interface mainSchema extends main$schematype {}
 
+export const listWithMembershipSchema = _listWithMembershipSchema as listWithMembershipSchema;
 export const mainSchema = _mainSchema as mainSchema;
+
+export interface ListWithMembership extends v.InferInput<typeof listWithMembershipSchema> {}
 
 export interface $params extends v.InferInput<mainSchema['params']> {}
 export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'app.bsky.graph.getLists': mainSchema;
+		'app.bsky.graph.getListsWithMembership': mainSchema;
 	}
 }

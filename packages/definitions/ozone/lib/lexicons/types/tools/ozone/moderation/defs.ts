@@ -479,6 +479,15 @@ const _subjectViewSchema = /*#__PURE__*/ v.object({
 		return ComAtprotoModerationDefs.subjectTypeSchema;
 	},
 });
+const _timelineEventPlcCreateSchema = /*#__PURE__*/ v.literal(
+	'tools.ozone.moderation.defs#timelineEventPlcCreate',
+);
+const _timelineEventPlcOperationSchema = /*#__PURE__*/ v.literal(
+	'tools.ozone.moderation.defs#timelineEventPlcOperation',
+);
+const _timelineEventPlcTombstoneSchema = /*#__PURE__*/ v.literal(
+	'tools.ozone.moderation.defs#timelineEventPlcTombstone',
+);
 const _videoDetailsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#videoDetails')),
 	height: /*#__PURE__*/ v.integer(),
@@ -532,6 +541,9 @@ type reviewOpen$schematype = typeof _reviewOpenSchema;
 type subjectReviewState$schematype = typeof _subjectReviewStateSchema;
 type subjectStatusView$schematype = typeof _subjectStatusViewSchema;
 type subjectView$schematype = typeof _subjectViewSchema;
+type timelineEventPlcCreate$schematype = typeof _timelineEventPlcCreateSchema;
+type timelineEventPlcOperation$schematype = typeof _timelineEventPlcOperationSchema;
+type timelineEventPlcTombstone$schematype = typeof _timelineEventPlcTombstoneSchema;
 type videoDetails$schematype = typeof _videoDetailsSchema;
 
 export interface accountEventSchema extends accountEvent$schematype {}
@@ -580,6 +592,9 @@ export interface reviewOpenSchema extends reviewOpen$schematype {}
 export interface subjectReviewStateSchema extends subjectReviewState$schematype {}
 export interface subjectStatusViewSchema extends subjectStatusView$schematype {}
 export interface subjectViewSchema extends subjectView$schematype {}
+export interface timelineEventPlcCreateSchema extends timelineEventPlcCreate$schematype {}
+export interface timelineEventPlcOperationSchema extends timelineEventPlcOperation$schematype {}
+export interface timelineEventPlcTombstoneSchema extends timelineEventPlcTombstone$schematype {}
 export interface videoDetailsSchema extends videoDetails$schematype {}
 
 export const accountEventSchema = _accountEventSchema as accountEventSchema;
@@ -629,6 +644,11 @@ export const reviewOpenSchema = _reviewOpenSchema as reviewOpenSchema;
 export const subjectReviewStateSchema = _subjectReviewStateSchema as subjectReviewStateSchema;
 export const subjectStatusViewSchema = _subjectStatusViewSchema as subjectStatusViewSchema;
 export const subjectViewSchema = _subjectViewSchema as subjectViewSchema;
+export const timelineEventPlcCreateSchema = _timelineEventPlcCreateSchema as timelineEventPlcCreateSchema;
+export const timelineEventPlcOperationSchema =
+	_timelineEventPlcOperationSchema as timelineEventPlcOperationSchema;
+export const timelineEventPlcTombstoneSchema =
+	_timelineEventPlcTombstoneSchema as timelineEventPlcTombstoneSchema;
 export const videoDetailsSchema = _videoDetailsSchema as videoDetailsSchema;
 
 export interface AccountEvent extends v.InferInput<typeof accountEventSchema> {}
@@ -677,4 +697,7 @@ export type ReviewOpen = v.InferInput<typeof reviewOpenSchema>;
 export type SubjectReviewState = v.InferInput<typeof subjectReviewStateSchema>;
 export interface SubjectStatusView extends v.InferInput<typeof subjectStatusViewSchema> {}
 export interface SubjectView extends v.InferInput<typeof subjectViewSchema> {}
+export type TimelineEventPlcCreate = v.InferInput<typeof timelineEventPlcCreateSchema>;
+export type TimelineEventPlcOperation = v.InferInput<typeof timelineEventPlcOperationSchema>;
+export type TimelineEventPlcTombstone = v.InferInput<typeof timelineEventPlcTombstoneSchema>;
 export interface VideoDetails extends v.InferInput<typeof videoDetailsSchema> {}

@@ -6,6 +6,7 @@ export * as ToolsOzoneCommunicationUpdateTemplate from './types/tools/ozone/comm
 export * as ToolsOzoneHostingGetAccountHistory from './types/tools/ozone/hosting/getAccountHistory.js';
 export * as ToolsOzoneModerationDefs from './types/tools/ozone/moderation/defs.js';
 export * as ToolsOzoneModerationEmitEvent from './types/tools/ozone/moderation/emitEvent.js';
+export * as ToolsOzoneModerationGetAccountTimeline from './types/tools/ozone/moderation/getAccountTimeline.js';
 export * as ToolsOzoneModerationGetEvent from './types/tools/ozone/moderation/getEvent.js';
 export * as ToolsOzoneModerationGetRecord from './types/tools/ozone/moderation/getRecord.js';
 export * as ToolsOzoneModerationGetRecords from './types/tools/ozone/moderation/getRecords.js';

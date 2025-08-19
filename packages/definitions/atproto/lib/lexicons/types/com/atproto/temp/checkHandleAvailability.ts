@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
-const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.checkHandleAvailability', {
+const _mainSchema = /*#__PURE__*/ v.query('com.atproto.temp.checkHandleAvailability', {
 	params: /*#__PURE__*/ v.object({
 		birthDate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
@@ -20,12 +20,12 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.checkHandleAvailab
 });
 const _resultAvailableSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.literal('app.bsky.unspecced.checkHandleAvailability#resultAvailable'),
+		/*#__PURE__*/ v.literal('com.atproto.temp.checkHandleAvailability#resultAvailable'),
 	),
 });
 const _resultUnavailableSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.literal('app.bsky.unspecced.checkHandleAvailability#resultUnavailable'),
+		/*#__PURE__*/ v.literal('com.atproto.temp.checkHandleAvailability#resultUnavailable'),
 	),
 	get suggestions() {
 		return /*#__PURE__*/ v.array(suggestionSchema);
@@ -33,7 +33,7 @@ const _resultUnavailableSchema = /*#__PURE__*/ v.object({
 });
 const _suggestionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.literal('app.bsky.unspecced.checkHandleAvailability#suggestion'),
+		/*#__PURE__*/ v.literal('com.atproto.temp.checkHandleAvailability#suggestion'),
 	),
 	handle: /*#__PURE__*/ v.handleString(),
 	method: /*#__PURE__*/ v.string(),
@@ -63,6 +63,6 @@ export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'app.bsky.unspecced.checkHandleAvailability': mainSchema;
+		'com.atproto.temp.checkHandleAvailability': mainSchema;
 	}
 }
