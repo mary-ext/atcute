@@ -1,7 +1,10 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+import * as PubLeafletBlocksBlockquote from '../blocks/blockquote.js';
+import * as PubLeafletBlocksBskyPost from '../blocks/bskyPost.js';
 import * as PubLeafletBlocksCode from '../blocks/code.js';
 import * as PubLeafletBlocksHeader from '../blocks/header.js';
+import * as PubLeafletBlocksHorizontalRule from '../blocks/horizontalRule.js';
 import * as PubLeafletBlocksImage from '../blocks/image.js';
 import * as PubLeafletBlocksMath from '../blocks/math.js';
 import * as PubLeafletBlocksText from '../blocks/text.js';
@@ -15,8 +18,11 @@ const _blockSchema = /*#__PURE__*/ v.object({
 	),
 	get block() {
 		return /*#__PURE__*/ v.variant([
+			PubLeafletBlocksBlockquote.mainSchema,
+			PubLeafletBlocksBskyPost.mainSchema,
 			PubLeafletBlocksCode.mainSchema,
 			PubLeafletBlocksHeader.mainSchema,
+			PubLeafletBlocksHorizontalRule.mainSchema,
 			PubLeafletBlocksImage.mainSchema,
 			PubLeafletBlocksMath.mainSchema,
 			PubLeafletBlocksText.mainSchema,

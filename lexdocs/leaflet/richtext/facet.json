@@ -15,7 +15,16 @@
 					"type": "array",
 					"items": {
 						"type": "union",
-						"refs": ["#link", "#highlight", "#underline", "#strikethrough", "#bold", "#italic"]
+						"refs": [
+							"#link",
+							"#code",
+							"#highlight",
+							"#underline",
+							"#strikethrough",
+							"#id",
+							"#bold",
+							"#italic"
+						]
 					}
 				}
 			}
@@ -46,6 +55,12 @@
 				}
 			}
 		},
+		"code": {
+			"type": "object",
+			"description": "Facet feature for inline code.",
+			"required": [],
+			"properties": {}
+		},
 		"highlight": {
 			"type": "object",
 			"description": "Facet feature for highlighted text.",
@@ -63,6 +78,16 @@
 			"description": "Facet feature for strikethrough markup",
 			"required": [],
 			"properties": {}
+		},
+		"id": {
+			"type": "object",
+			"description": "Facet feature for an identifier. Used for linking to a segment",
+			"required": [],
+			"properties": {
+				"id": {
+					"type": "string"
+				}
+			}
 		},
 		"bold": {
 			"type": "object",

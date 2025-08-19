@@ -1,5 +1,8 @@
+export * as PubLeafletBlocksBlockquote from './types/pub/leaflet/blocks/blockquote.js';
+export * as PubLeafletBlocksBskyPost from './types/pub/leaflet/blocks/bskyPost.js';
 export * as PubLeafletBlocksCode from './types/pub/leaflet/blocks/code.js';
 export * as PubLeafletBlocksHeader from './types/pub/leaflet/blocks/header.js';
+export * as PubLeafletBlocksHorizontalRule from './types/pub/leaflet/blocks/horizontalRule.js';
 export * as PubLeafletBlocksImage from './types/pub/leaflet/blocks/image.js';
 export * as PubLeafletBlocksMath from './types/pub/leaflet/blocks/math.js';
 export * as PubLeafletBlocksText from './types/pub/leaflet/blocks/text.js';
