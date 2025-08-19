@@ -1,0 +1,30 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.spindle.member",
+	"needsCbor": true,
+	"needsType": true,
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["subject", "instance", "createdAt"],
+				"properties": {
+					"subject": {
+						"type": "string",
+						"format": "did"
+					},
+					"instance": {
+						"type": "string",
+						"description": "spindle instance that the subject is now a member of"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	}
+}

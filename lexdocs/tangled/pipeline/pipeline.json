@@ -1,0 +1,171 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.pipeline",
+	"needsCbor": true,
+	"needsType": true,
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["triggerMetadata", "workflows"],
+				"properties": {
+					"triggerMetadata": {
+						"type": "ref",
+						"ref": "#triggerMetadata"
+					},
+					"workflows": {
+						"type": "array",
+						"items": {
+							"type": "ref",
+							"ref": "#workflow"
+						}
+					}
+				}
+			}
+		},
+		"triggerMetadata": {
+			"type": "object",
+			"required": ["kind", "repo"],
+			"properties": {
+				"kind": {
+					"type": "string",
+					"enum": ["push", "pull_request", "manual"]
+				},
+				"repo": {
+					"type": "ref",
+					"ref": "#triggerRepo"
+				},
+				"push": {
+					"type": "ref",
+					"ref": "#pushTriggerData"
+				},
+				"pullRequest": {
+					"type": "ref",
+					"ref": "#pullRequestTriggerData"
+				},
+				"manual": {
+					"type": "ref",
+					"ref": "#manualTriggerData"
+				}
+			}
+		},
+		"triggerRepo": {
+			"type": "object",
+			"required": ["knot", "did", "repo", "defaultBranch"],
+			"properties": {
+				"knot": {
+					"type": "string"
+				},
+				"did": {
+					"type": "string",
+					"format": "did"
+				},
+				"repo": {
+					"type": "string"
+				},
+				"defaultBranch": {
+					"type": "string"
+				}
+			}
+		},
+		"pushTriggerData": {
+			"type": "object",
+			"required": ["ref", "newSha", "oldSha"],
+			"properties": {
+				"ref": {
+					"type": "string"
+				},
+				"newSha": {
+					"type": "string",
+					"minLength": 40,
+					"maxLength": 40
+				},
+				"oldSha": {
+					"type": "string",
+					"minLength": 40,
+					"maxLength": 40
+				}
+			}
+		},
+		"pullRequestTriggerData": {
+			"type": "object",
+			"required": ["sourceBranch", "targetBranch", "sourceSha", "action"],
+			"properties": {
+				"sourceBranch": {
+					"type": "string"
+				},
+				"targetBranch": {
+					"type": "string"
+				},
+				"sourceSha": {
+					"type": "string",
+					"minLength": 40,
+					"maxLength": 40
+				},
+				"action": {
+					"type": "string"
+				}
+			}
+		},
+		"manualTriggerData": {
+			"type": "object",
+			"properties": {
+				"inputs": {
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "#pair"
+					}
+				}
+			}
+		},
+		"workflow": {
+			"type": "object",
+			"required": ["name", "engine", "clone", "raw"],
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"engine": {
+					"type": "string"
+				},
+				"clone": {
+					"type": "ref",
+					"ref": "#cloneOpts"
+				},
+				"raw": {
+					"type": "string"
+				}
+			}
+		},
+		"cloneOpts": {
+			"type": "object",
+			"required": ["skip", "depth", "submodules"],
+			"properties": {
+				"skip": {
+					"type": "boolean"
+				},
+				"depth": {
+					"type": "integer"
+				},
+				"submodules": {
+					"type": "boolean"
+				}
+			}
+		},
+		"pair": {
+			"type": "object",
+			"required": ["key", "value"],
+			"properties": {
+				"key": {
+					"type": "string"
+				},
+				"value": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

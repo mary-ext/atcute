@@ -23,6 +23,10 @@
 						"type": "string",
 						"description": "knot where the repo was created"
 					},
+					"spindle": {
+						"type": "string",
+						"description": "CI runner to send jobs to and receive results from"
+					},
 					"description": {
 						"type": "string",
 						"format": "datetime",
