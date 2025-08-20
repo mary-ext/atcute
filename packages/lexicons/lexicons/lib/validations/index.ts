@@ -423,6 +423,7 @@ export type SchemaWithConstraint<
 	readonly constraints: TConstraints;
 };
 
+// #__NO_SIDE_EFFECTS__
 export const constrain = <
 	TItem extends BaseSchema,
 	const TConstraints extends ConstraintTuple<InferOutput<TItem>>,
@@ -798,6 +799,7 @@ export interface StringGraphemesConstraint<
 	readonly maxGraphemes: TMaxGraphemes;
 }
 
+// #__NO_SIDE_EFFECTS__
 export const stringGraphemes: {
 	<const TMinGraphemes extends number>(min: TMinGraphemes): StringGraphemesConstraint<TMinGraphemes>;
 	<const TMinGraphemes extends number, const TMaxGraphemes extends number>(
