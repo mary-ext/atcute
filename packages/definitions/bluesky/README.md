@@ -40,7 +40,7 @@ is(AppBskyFeedPost.mainSchema, record);
 pick either one of these 3 options to register the ambient declarations
 
 ```jsonc
-// tsconfig.json
+// file: tsconfig.json
 {
 	"compilerOptions": {
 		"types": ["@atcute/bluesky"],
@@ -49,12 +49,12 @@ pick either one of these 3 options to register the ambient declarations
 ```
 
 ```ts
-// env.d.ts
+// file: env.d.ts
 /// <reference types="@atcute/bluesky" />
 ```
 
 ```ts
-// index.ts
+// file: index.ts
 import type {} from '@atcute/bluesky';
 ```
 
@@ -73,4 +73,35 @@ const response = await client.get('app.bsky.actor.getProfile', {
 	},
 });
 // ...
+```
+
+## with `@atcute/lex-cli`
+
+when building your own lexicons that reference Bluesky types, configure lex-cli to import from this
+package:
+
+```ts
+// file: lex.config.js
+import { defineLexiconConfig } from '@atcute/lex-cli';
+
+export default defineLexiconConfig({
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
+	mappings: [
+		{
+			nsid: ['app.bsky.*'],
+			imports: (nsid) => {
+				const specifier = nsid.slice('app.bsky.'.length).replaceAll('.', '/');
+				return { type: 'namespace', from: `@atcute/bluesky/types/app/${specifier}` };
+			},
+		},
+		{
+			nsid: ['chat.bsky.*'],
+			imports: (nsid) => {
+				const specifier = nsid.slice('chat.bsky.'.length).replaceAll('.', '/');
+				return { type: 'namespace', from: `@atcute/bluesky/types/chat/${specifier}` };
+			},
+		},
+	],
+});
 ```

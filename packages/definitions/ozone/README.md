@@ -69,3 +69,27 @@ const response = await client.post('tools.ozone.moderation.emitEvent', {
 });
 // ...
 ```
+
+## with `@atcute/lex-cli`
+
+when building your own lexicons that reference Ozone types, configure lex-cli to import from this
+package:
+
+```ts
+// file: lex.config.js
+import { defineLexiconConfig } from '@atcute/lex-cli';
+
+export default defineLexiconConfig({
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
+	mappings: [
+		{
+			nsid: ['tools.ozone.*'],
+			imports: (nsid) => {
+				const specifier = nsid.slice('tools.ozone.'.length).replaceAll('.', '/');
+				return { type: 'namespace', from: `@atcute/ozone/types/${specifier}` };
+			},
+		},
+	],
+});
+```

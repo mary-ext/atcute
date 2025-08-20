@@ -43,3 +43,27 @@ import type {} from '@atcute/frontpage';
 ```
 
 now all the XRPC operations should be visible in the client
+
+## with `@atcute/lex-cli`
+
+when building your own lexicons that reference Frontpage types, configure lex-cli to import from
+this package:
+
+```ts
+// file: lex.config.js
+import { defineLexiconConfig } from '@atcute/lex-cli';
+
+export default defineLexiconConfig({
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
+	mappings: [
+		{
+			nsid: ['fyi.unravel.frontpage.*'],
+			imports: (nsid) => {
+				const specifier = nsid.slice('fyi.unravel.frontpage.'.length).replaceAll('.', '/');
+				return { type: 'namespace', from: `@atcute/frontpage/types/${specifier}` };
+			},
+		},
+	],
+});
+```

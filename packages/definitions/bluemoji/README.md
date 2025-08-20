@@ -70,3 +70,27 @@ import type {} from '@atcute/bluemoji';
 ```
 
 now all the XRPC operations should be visible in the client
+
+## with `@atcute/lex-cli`
+
+when building your own lexicons that reference Bluemoji types, configure lex-cli to import from this
+package:
+
+```ts
+// file: lex.config.js
+import { defineLexiconConfig } from '@atcute/lex-cli';
+
+export default defineLexiconConfig({
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
+	mappings: [
+		{
+			nsid: ['blue.moji.*'],
+			imports: (nsid) => {
+				const specifier = nsid.slice('blue.moji.'.length).replaceAll('.', '/');
+				return { type: 'namespace', from: `@atcute/bluemoji/types/${specifier}` };
+			},
+		},
+	],
+});
+```

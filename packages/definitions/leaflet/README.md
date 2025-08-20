@@ -106,3 +106,27 @@ import type {} from '@atcute/leaflet';
 ```
 
 now all the XRPC operations should be visible in the client
+
+## with `@atcute/lex-cli`
+
+when building your own lexicons that reference Leaflet types, configure lex-cli to import from this
+package:
+
+```ts
+// file: lex.config.js
+import { defineLexiconConfig } from '@atcute/lex-cli';
+
+export default defineLexiconConfig({
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
+	mappings: [
+		{
+			nsid: ['pub.leaflet.*'],
+			imports: (nsid) => {
+				const specifier = nsid.slice('pub.leaflet.'.length).replaceAll('.', '/');
+				return { type: 'namespace', from: `@atcute/leaflet/types/${specifier}` };
+			},
+		},
+	],
+});
+```

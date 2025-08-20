@@ -26,7 +26,7 @@ is(ComAtprotoLabelDefs.labelSchema, label);
 pick either one of these 3 options to register the ambient declarations
 
 ```jsonc
-// tsconfig.json
+// file: tsconfig.json
 {
 	"compilerOptions": {
 		"types": ["@atcute/atproto"],
@@ -35,12 +35,12 @@ pick either one of these 3 options to register the ambient declarations
 ```
 
 ```ts
-// env.d.ts
+// file: env.d.ts
 /// <reference types="@atcute/atproto" />
 ```
 
 ```ts
-// index.ts
+// file: index.ts
 import type {} from '@atcute/atproto';
 ```
 
@@ -53,4 +53,28 @@ const client = new Client({ handler: simpleFetchHandler({ service: 'https://bsky
 
 const response = await client.get('com.atproto.server.describeServer');
 // ...
+```
+
+## with `@atcute/lex-cli`
+
+when building your own lexicons that reference AT Protocol types, configure lex-cli to import from
+this package:
+
+```ts
+// file: lex.config.js
+import { defineLexiconConfig } from '@atcute/lex-cli';
+
+export default defineLexiconConfig({
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
+	mappings: [
+		{
+			nsid: ['com.atproto.*'],
+			imports: (nsid) => {
+				const specifier = nsid.slice('com.atproto.'.length).replaceAll('.', '/');
+				return { type: 'namespace', from: `@atcute/atproto/types/${specifier}` };
+			},
+		},
+	],
+});
 ```
