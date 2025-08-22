@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 1.1.1
+
+### Patch Changes
+
+- 394080c: fix missing NO_SIDE_EFFECTS marker on some validation exports
+
 ## 1.1.0
 
 ### Minor Changes
