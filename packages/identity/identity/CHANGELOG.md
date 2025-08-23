@@ -1,5 +1,11 @@
 # @atcute/identity
 
+## 1.1.0
+
+### Minor Changes
+
+- b2dbfc0: add getAtprotoHandle utility function
+
 ## 1.0.3
 
 ### Patch Changes
