@@ -1,3 +1,6 @@
+import type { Handle } from '@atcute/lexicons';
+import { isHandle } from '@atcute/lexicons/syntax';
+
 import * as t from './types.js';
 
 export interface VerificationMaterial {
@@ -60,6 +63,33 @@ export const getAtprotoLabelerVerificationMaterial = (
 	doc: t.DidDocument,
 ): VerificationMaterial | undefined => {
 	return getVerificationMaterial(doc, '#atproto_label');
+};
+
+export const getAtprotoHandle = (doc: t.DidDocument): Handle | null | undefined => {
+	const alsoKnownAs = doc.alsoKnownAs;
+	if (!alsoKnownAs) {
+		return null;
+	}
+
+	const PREFIX = 'at://';
+
+	for (let idx = 0, len = alsoKnownAs.length; idx < len; idx++) {
+		const aka = alsoKnownAs[idx];
+
+		if (!aka.startsWith(PREFIX)) {
+			continue;
+		}
+
+		const raw = aka.slice(PREFIX.length);
+
+		if (!isHandle(raw)) {
+			return undefined;
+		}
+
+		return raw;
+	}
+
+	return null;
 };
 
 export const getAtprotoServiceEndpoint = (
