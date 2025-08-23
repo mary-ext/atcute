@@ -84,6 +84,7 @@ program.register(
 			const result = await generateLexiconApi({
 				documents: documents,
 				mappings: config.mappings ?? [],
+				ts: config.tsImports ?? false,
 				prettier: {},
 			});
 

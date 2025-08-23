@@ -31,6 +31,7 @@ export interface ImportMapping {
 export interface LexiconApiOptions {
 	documents: LexiconDoc[];
 	mappings: ImportMapping[];
+	ts?: boolean;
 	prettier?: {
 		cwd?: string;
 	};
@@ -289,7 +290,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 				const local = map.get(ns);
 
 				if (local) {
-					const target = `types/${ns.replaceAll('.', '/')}.js`;
+					const target = `types/${ns.replaceAll('.', '/')}.${opts.ts ? "ts" : "js"}`;
 
 					let relative = getRelativePath(dirname, target);
 					if (!relative.startsWith('.')) {
@@ -347,7 +348,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 		let code = ``;
 
 		for (const doc of map.values()) {
-			code += `export * as ${toTitleCase(doc.id)} from ${lit(`./types/${doc.id.replaceAll('.', '/')}.js`)};\n`;
+			code += `export * as ${toTitleCase(doc.id)} from ${lit(`./types/${doc.id.replaceAll('.', '/')}.${opts.ts ? "ts" : "js"}`)};\n`;
 		}
 
 		files.push({

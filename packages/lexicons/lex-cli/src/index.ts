@@ -4,6 +4,7 @@ export interface LexiconConfig {
 	outdir: string;
 	files: string[];
 	mappings?: ImportMapping[];
+	tsImports?: boolean;
 }
 
 export const defineLexiconConfig = (config: LexiconConfig): LexiconConfig => {
