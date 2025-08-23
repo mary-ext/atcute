@@ -523,6 +523,9 @@ importers:
       '@atcute/identity':
         specifier: workspace:^
         version: link:../../identity/identity
+      '@atcute/identity-resolver':
+        specifier: workspace:^
+        version: link:../../identity/identity-resolver
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons

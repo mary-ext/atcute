@@ -1,5 +1,7 @@
 import { nanoid } from 'nanoid';
 
+import type { ActorIdentifier } from '@atcute/lexicons';
+
 import { createES256Key } from '../dpop.js';
 import { CLIENT_ID, database, REDIRECT_URI } from '../environment.js';
 import { AuthorizationError, LoginError } from '../errors.js';
@@ -8,12 +10,16 @@ import type { AuthorizationServerMetadata } from '../types/server.js';
 import type { Session } from '../types/token.js';
 import { generatePKCE } from '../utils/runtime.js';
 
+import { resolveFromIdentifier, resolveFromService } from '../resolvers.js';
 import { OAuthServerAgent } from './server-agent.js';
 import { storeSession } from './sessions.js';
 
+export type AuthorizeTargetOptions =
+	| { type: 'account'; identifier: ActorIdentifier }
+	| { type: 'pds'; serviceUrl: string };
+
 export interface AuthorizeOptions {
-	metadata: AuthorizationServerMetadata;
-	identity?: IdentityMetadata;
+	target: AuthorizeTargetOptions;
 	scope: string;
 }
 
@@ -22,11 +28,20 @@ export interface AuthorizeOptions {
  * @param options
  * @returns URL to redirect the user for authorization
  */
-export const createAuthorizationUrl = async ({
-	metadata,
-	identity,
-	scope,
-}: AuthorizeOptions): Promise<URL> => {
+export const createAuthorizationUrl = async ({ target, scope }: AuthorizeOptions): Promise<URL> => {
+	let resolved: { identity?: IdentityMetadata; metadata: AuthorizationServerMetadata };
+	switch (target.type) {
+		case 'account': {
+			resolved = await resolveFromIdentifier(target.identifier);
+			break;
+		}
+		case 'pds': {
+			resolved = await resolveFromService(target.serviceUrl);
+		}
+	}
+
+	const { identity, metadata } = resolved;
+
 	const state = nanoid(24);
 
 	const pkce = await generatePKCE();

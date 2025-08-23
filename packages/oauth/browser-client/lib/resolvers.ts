@@ -1,91 +1,61 @@
-import type { ComAtprotoIdentityResolveHandle } from '@atcute/atproto';
-import { type DidDocument, getPdsEndpoint } from '@atcute/identity';
-import type { Did } from '@atcute/lexicons';
+import { getPdsEndpoint } from '@atcute/identity';
+import type { ActorIdentifier, Did } from '@atcute/lexicons';
 import { isDid } from '@atcute/lexicons/syntax';
 
-import { DEFAULT_APPVIEW_URL } from './constants.js';
+import { didDocumentResolver, handleResolver } from './environment.js';
 import { ResolverError } from './errors.js';
 import type { IdentityMetadata } from './types/identity.js';
 import type { AuthorizationServerMetadata, ProtectedResourceMetadata } from './types/server.js';
 import { extractContentType } from './utils/response.js';
 import { isValidUrl } from './utils/strings.js';
 
-const DID_WEB_RE = /^([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,}))$/;
-
-/**
- * Resolves domain handles into DID identifiers, by requesting Bluesky's AppView
- * for identity resolution.
- * @param handle Domain handle to resolve
- * @returns DID identifier resolved from the domain handle
- */
-export const resolveHandle = async (handle: string): Promise<Did> => {
-	const url = DEFAULT_APPVIEW_URL + `/xrpc/com.atproto.identity.resolveHandle` + `?handle=${handle}`;
-
-	const response = await fetch(url);
-	if (response.status === 400) {
-		throw new ResolverError(`domain handle not found`);
-	} else if (!response.ok) {
-		throw new ResolverError(`directory is unreachable`);
-	}
-
-	const json = (await response.json()) as ComAtprotoIdentityResolveHandle.$output;
-
-	return json.did;
-};
-
-/**
- * Get DID documents of did:plc (via plc.directory) and did:web identifiers
- * @param did DID identifier we're seeking DID doc from
- * @returns Retrieved DID document
- */
-export const getDidDocument = async (did: Did): Promise<DidDocument> => {
-	const colon_index = did.indexOf(':', 4);
-
-	const type = did.slice(4, colon_index);
-	const ident = did.slice(colon_index + 1);
-
-	// 2. retrieve their DID documents
-	let doc: DidDocument;
-
-	if (type === 'plc') {
-		const response = await fetch(`https://plc.directory/${did}`);
-
-		if (response.status === 404) {
-			throw new ResolverError(`did not found in directory`);
-		} else if (!response.ok) {
-			throw new ResolverError(`directory is unreachable`);
-		}
-
-		const json = await response.json();
-
-		doc = json as DidDocument;
-	} else if (type === 'web') {
-		if (!DID_WEB_RE.test(ident)) {
-			throw new ResolverError(`invalid identifier`);
-		}
-
-		const response = await fetch(`https://${ident}/.well-known/did.json`);
-
-		if (!response.ok) {
-			throw new ResolverError(`did document is unreachable`);
-		}
-
-		const json = await response.json();
-
-		doc = json as DidDocument;
+export const resolveFromIdentifier = async (
+	ident: ActorIdentifier,
+): Promise<{ identity: IdentityMetadata; metadata: AuthorizationServerMetadata }> => {
+	let did: Did;
+	if (isDid(ident)) {
+		did = ident;
 	} else {
-		throw new ResolverError(`unsupported did method`);
+		const resolved = await handleResolver.resolve(ident);
+		did = resolved;
 	}
 
-	return doc;
+	const doc = await didDocumentResolver.resolve(did);
+	const pds = getPdsEndpoint(doc);
+
+	if (!pds) {
+		throw new ResolverError(`missing pds endpoint`);
+	}
+
+	return {
+		identity: {
+			id: did,
+			raw: ident,
+			pds: new URL(pds),
+		},
+		metadata: await getMetadataFromResourceServer(pds),
+	};
 };
 
-/**
- * Get OAuth protected resource metadata from a host
- * @param host URL of the host
- * @returns Retrieved protected resource metadata
- */
-export const getProtectedResourceMetadata = async (host: string): Promise<ProtectedResourceMetadata> => {
+export const resolveFromService = async (
+	host: string,
+): Promise<{ metadata: AuthorizationServerMetadata }> => {
+	try {
+		const metadata = await getMetadataFromResourceServer(host);
+		return { metadata };
+	} catch (err) {
+		if (err instanceof ResolverError) {
+			try {
+				const metadata = await getAuthorizationServerMetadata(host);
+				return { metadata };
+			} catch {}
+		}
+
+		throw err;
+	}
+};
+
+const getProtectedResourceMetadata = async (host: string): Promise<ProtectedResourceMetadata> => {
 	const url = new URL(`/.well-known/oauth-protected-resource`, host);
 	const response = await fetch(url, {
 		redirect: 'manual',
@@ -106,12 +76,7 @@ export const getProtectedResourceMetadata = async (host: string): Promise<Protec
 	return metadata;
 };
 
-/**
- * Get OAuth authorization server metadata from a host
- * @param host URL of the host
- * @returns Retrieved authorization server metadata
- */
-export const getAuthorizationServerMetadata = async (host: string): Promise<AuthorizationServerMetadata> => {
+const getAuthorizationServerMetadata = async (host: string): Promise<AuthorizationServerMetadata> => {
 	const url = new URL(`/.well-known/oauth-authorization-server`, host);
 	const response = await fetch(url, {
 		redirect: 'manual',
@@ -146,68 +111,7 @@ export const getAuthorizationServerMetadata = async (host: string): Promise<Auth
 	return metadata;
 };
 
-/**
- * Resolve handle domains or DID identifiers to get their PDS and its authorization server metadata
- * @param ident Handle domain or DID identifier to resolve
- * @returns Resolved PDS and authorization server metadata
- */
-export const resolveFromIdentity = async (
-	ident: string,
-): Promise<{ identity: IdentityMetadata; metadata: AuthorizationServerMetadata }> => {
-	let did: Did;
-	if (isDid(ident)) {
-		did = ident;
-	} else {
-		const resolved = await resolveHandle(ident);
-		did = resolved;
-	}
-
-	const doc = await getDidDocument(did);
-	const pds = getPdsEndpoint(doc);
-
-	if (!pds) {
-		throw new ResolverError(`missing pds endpoint`);
-	}
-
-	return {
-		identity: {
-			id: did,
-			raw: ident,
-			pds: new URL(pds),
-		},
-		metadata: await getMetadataFromResourceServer(pds),
-	};
-};
-
-/**
- * Request authorization server metadata from a PDS
- * @param host URL of the host
- * @returns Resolved authorization server metadata
- */
-export const resolveFromService = async (
-	host: string,
-): Promise<{ metadata: AuthorizationServerMetadata }> => {
-	try {
-		const metadata = await getMetadataFromResourceServer(host);
-		return { metadata };
-	} catch (err) {
-		if (err instanceof ResolverError) {
-			try {
-				const metadata = await getAuthorizationServerMetadata(host);
-				return { metadata };
-			} catch {}
-		}
-
-		throw err;
-	}
-};
-
-/**
- * Request authorization server metadata from its protected resource metadata
- * @param input URL of the host whose authorization server is delegated
- * @returns Resolved authorization server metadata
- */
-export const getMetadataFromResourceServer = async (input: string) => {
+const getMetadataFromResourceServer = async (input: string) => {
 	const rs_metadata = await getProtectedResourceMetadata(input);
 
 	if (rs_metadata.authorization_servers?.length !== 1) {
