@@ -25,7 +25,13 @@ export const createES256Key = async (): Promise<DPoPKey> => {
 
 export const createDPoPSignage = (dpopKey: DPoPKey) => {
 	const headerString = dpopKey.jwt;
-	const keyPromise = crypto.subtle.importKey('pkcs8', fromBase64Url(dpopKey.key), ES256_ALG, true, ['sign']);
+	const keyPromise = crypto.subtle.importKey(
+		'pkcs8',
+		fromBase64Url(dpopKey.key) as Uint8Array<ArrayBuffer>,
+		ES256_ALG,
+		true,
+		['sign'],
+	);
 
 	const constructPayload = (htm: string, htu: string, nonce: string | undefined, ath: string | undefined) => {
 		const payload = {
@@ -46,7 +52,7 @@ export const createDPoPSignage = (dpopKey: DPoPKey) => {
 		const signed = await crypto.subtle.sign(
 			{ name: 'ECDSA', hash: { name: 'SHA-256' } },
 			await keyPromise,
-			encodeUtf8(headerString + '.' + payloadString),
+			encodeUtf8(headerString + '.' + payloadString) as Uint8Array<ArrayBuffer>,
 		);
 
 		const signatureString = toBase64Url(new Uint8Array(signed));

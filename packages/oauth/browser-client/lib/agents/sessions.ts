@@ -14,7 +14,7 @@ export interface SessionGetOptions {
 }
 
 type PendingItem<V> = Promise<{ value: V; isFresh: boolean }>;
-const pending = new Map<Did, PendingItem<Session>>();
+const pending = new Map<Did, Promise<PendingItem<Session>>>();
 
 export const getSession = async (sub: Did, options?: SessionGetOptions): Promise<Session> => {
 	options?.signal?.throwIfAborted();
@@ -32,7 +32,7 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 	// pending.set() call. Because of the "single threaded" nature of
 	// JavaScript, the pending item will be set before the next iteration of the
 	// while loop.
-	let previousExecutionFlow: PendingItem<Session> | undefined;
+	let previousExecutionFlow: Promise<PendingItem<Session>> | undefined;
 	while ((previousExecutionFlow = pending.get(sub))) {
 		try {
 			const { isFresh, value } = await previousExecutionFlow;
@@ -48,7 +48,7 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 		options?.signal?.throwIfAborted();
 	}
 
-	const run = async (): PendingItem<Session> => {
+	const run = async (): Promise<PendingItem<Session>> => {
 		const storedSession = database.sessions.get(sub);
 
 		if (storedSession && allowStored(storedSession)) {
@@ -65,10 +65,10 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 		return { isFresh: true, value: newSession };
 	};
 
-	let promise: PendingItem<Session>;
+	let promise: Promise<PendingItem<Session>>;
 
 	if (locks) {
-		promise = locks.request(`atcute-oauth:${sub}`, run);
+		promise = locks.request<PendingItem<Session>>(`atcute-oauth:${sub}`, run as any);
 	} else {
 		promise = run();
 	}
