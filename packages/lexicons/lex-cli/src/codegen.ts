@@ -31,11 +31,11 @@ export interface ImportMapping {
 export interface LexiconApiOptions {
 	documents: LexiconDoc[];
 	mappings: ImportMapping[];
-	modules?: {
-		importSuffix?: string;
+	modules: {
+		importSuffix: string;
 	};
-	prettier?: {
-		cwd?: string;
+	prettier: {
+		cwd: string;
 	};
 }
 
@@ -65,7 +65,7 @@ const resolveExternalImport = (nsid: string, mappings: ImportMapping[]): ImportM
 const PURE = `/*#__PURE__*/`;
 
 export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<LexiconApiResult> => {
-	const importExt = opts.modules?.importSuffix ?? '.js';
+	const importExt = opts.modules?.importSuffix;
 
 	const documents = opts.documents.toSorted((a, b) => {
 		if (a.id < b.id) {
@@ -362,7 +362,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 	}
 
 	if (opts.prettier) {
-		const config = await prettier.resolveConfig(opts.prettier.cwd ?? process.cwd(), { editorconfig: true });
+		const config = await prettier.resolveConfig(opts.prettier.cwd, { editorconfig: true });
 
 		for (const file of files) {
 			const formatted = await prettier.format(file.code, { ...config, parser: 'typescript' });

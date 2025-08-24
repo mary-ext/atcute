@@ -85,7 +85,10 @@ program.register(
 				documents: documents,
 				mappings: config.mappings ?? [],
 				modules: {
-					importSuffix: config.modules?.importSuffix,
+					importSuffix: config.modules?.importSuffix ?? '.js',
+				},
+				prettier: {
+					cwd: process.cwd(),
 				},
 			});
 
