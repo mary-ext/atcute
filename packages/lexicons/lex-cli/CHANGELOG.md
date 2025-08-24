@@ -1,5 +1,25 @@
 # @atcute/lex-cli
 
+## 2.2.0
+
+### Minor Changes
+
+- 3a5bc47: you can now configure the import suffix that the codegen will generate.
+
+  by default, it will continue to use `.js` as the suffix. you can also pass in an empty string for
+  no suffix at all.
+
+  ```ts
+  import { defineLexiconConfig } from '@atcute/lex-cli';
+
+  export default defineLexiconConfig({
+  	// ... existing config
+  	modules: {
+  		importSuffix: '.ts',
+  	},
+  });
+  ```
+
 ## 2.1.1
 
 ### Patch Changes
