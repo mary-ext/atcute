@@ -84,7 +84,9 @@ program.register(
 			const result = await generateLexiconApi({
 				documents: documents,
 				mappings: config.mappings ?? [],
-				prettier: {},
+				modules: {
+					importSuffix: config.modules?.importSuffix,
+				},
 			});
 
 			const outdir = path.join(configDirname, config.outdir);

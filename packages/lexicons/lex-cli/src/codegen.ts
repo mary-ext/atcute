@@ -31,6 +31,9 @@ export interface ImportMapping {
 export interface LexiconApiOptions {
 	documents: LexiconDoc[];
 	mappings: ImportMapping[];
+	modules?: {
+		importSuffix?: string;
+	};
 	prettier?: {
 		cwd?: string;
 	};
@@ -62,6 +65,8 @@ const resolveExternalImport = (nsid: string, mappings: ImportMapping[]): ImportM
 const PURE = `/*#__PURE__*/`;
 
 export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<LexiconApiResult> => {
+	const importExt = opts.modules?.importSuffix ?? '.js';
+
 	const documents = opts.documents.toSorted((a, b) => {
 		if (a.id < b.id) {
 			return -1;
@@ -289,7 +294,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 				const local = map.get(ns);
 
 				if (local) {
-					const target = `types/${ns.replaceAll('.', '/')}.js`;
+					const target = `types/${ns.replaceAll('.', '/')}${importExt}`;
 
 					let relative = getRelativePath(dirname, target);
 					if (!relative.startsWith('.')) {
@@ -347,7 +352,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 		let code = ``;
 
 		for (const doc of map.values()) {
-			code += `export * as ${toTitleCase(doc.id)} from ${lit(`./types/${doc.id.replaceAll('.', '/')}.js`)};\n`;
+			code += `export * as ${toTitleCase(doc.id)} from ${lit(`./types/${doc.id.replaceAll('.', '/')}${importExt}`)};\n`;
 		}
 
 		files.push({
