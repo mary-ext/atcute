@@ -40,5 +40,7 @@
     "@atcute/uint8array": "1.0.3",
     "@atcute/varint": "1.0.2"
   },
-  "changesets": []
+  "changesets": [
+    "puny-areas-warn"
+  ]
 }
