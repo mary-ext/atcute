@@ -3,12 +3,10 @@ import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.record(
-	/*#__PURE__*/ v.tidString(),
+	/*#__PURE__*/ v.string(),
 	/*#__PURE__*/ v.object({
-		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.pull.comment'),
-		body: /*#__PURE__*/ v.string(),
+		$type: /*#__PURE__*/ v.literal('sh.tangled.knot'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		pull: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );
 
@@ -22,6 +20,6 @@ export interface Main extends v.InferInput<typeof mainSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface Records {
-		'sh.tangled.repo.pull.comment': mainSchema;
+		'sh.tangled.knot': mainSchema;
 	}
 }

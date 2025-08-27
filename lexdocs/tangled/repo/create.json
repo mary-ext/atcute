@@ -1,0 +1,31 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.create",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Create a new repository",
+			"input": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["rkey"],
+					"properties": {
+						"rkey": {
+							"type": "string",
+							"description": "Rkey of the repository record"
+						},
+						"defaultBranch": {
+							"type": "string",
+							"description": "Default branch to push to"
+						},
+						"source": {
+							"type": "string",
+							"description": "A source URL to clone from, populate this when forking or importing a repository."
+						}
+					}
+				}
+			}
+		}
+	}
+}

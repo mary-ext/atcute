@@ -1,0 +1,32 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.delete",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Delete a repository",
+			"input": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["did", "name", "rkey"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository owner"
+						},
+						"name": {
+							"type": "string",
+							"description": "Name of the repository to delete"
+						},
+						"rkey": {
+							"type": "string",
+							"description": "Rkey of the repository record"
+						}
+					}
+				}
+			}
+		}
+	}
+}

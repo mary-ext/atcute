@@ -1,0 +1,79 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.mergeCheck",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Check if a merge is possible between two branches",
+			"input": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["did", "name", "patch", "branch"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository owner"
+						},
+						"name": {
+							"type": "string",
+							"description": "Name of the repository"
+						},
+						"patch": {
+							"type": "string",
+							"description": "Patch or pull request to check for merge conflicts"
+						},
+						"branch": {
+							"type": "string",
+							"description": "Target branch to merge into"
+						}
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["is_conflicted"],
+					"properties": {
+						"is_conflicted": {
+							"type": "boolean",
+							"description": "Whether the merge has conflicts"
+						},
+						"conflicts": {
+							"type": "array",
+							"description": "List of files with merge conflicts",
+							"items": {
+								"type": "ref",
+								"ref": "#conflictInfo"
+							}
+						},
+						"message": {
+							"type": "string",
+							"description": "Additional message about the merge check"
+						},
+						"error": {
+							"type": "string",
+							"description": "Error message if check failed"
+						}
+					}
+				}
+			}
+		},
+		"conflictInfo": {
+			"type": "object",
+			"required": ["filename", "reason"],
+			"properties": {
+				"filename": {
+					"type": "string",
+					"description": "Name of the conflicted file"
+				},
+				"reason": {
+					"type": "string",
+					"description": "Reason for the conflict"
+				}
+			}
+		}
+	}
+}

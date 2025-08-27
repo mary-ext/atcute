@@ -1,0 +1,52 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.merge",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Merge a patch into a repository branch",
+			"input": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["did", "name", "patch", "branch"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository owner"
+						},
+						"name": {
+							"type": "string",
+							"description": "Name of the repository"
+						},
+						"patch": {
+							"type": "string",
+							"description": "Patch content to merge"
+						},
+						"branch": {
+							"type": "string",
+							"description": "Target branch to merge into"
+						},
+						"authorName": {
+							"type": "string",
+							"description": "Author name for the merge commit"
+						},
+						"authorEmail": {
+							"type": "string",
+							"description": "Author email for the merge commit"
+						},
+						"commitBody": {
+							"type": "string",
+							"description": "Additional commit message body"
+						},
+						"commitMessage": {
+							"type": "string",
+							"description": "Merge commit message"
+						}
+					}
+				}
+			}
+		}
+	}
+}

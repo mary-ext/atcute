@@ -9,12 +9,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		body: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		patch: /*#__PURE__*/ v.string(),
-		pullId: /*#__PURE__*/ v.integer(),
 		get source() {
 			return /*#__PURE__*/ v.optional(sourceSchema);
 		},
-		targetBranch: /*#__PURE__*/ v.string(),
-		targetRepo: /*#__PURE__*/ v.resourceUriString(),
+		get target() {
+			return targetSchema;
+		},
 		title: /*#__PURE__*/ v.string(),
 	}),
 );
@@ -24,18 +24,27 @@ const _sourceSchema = /*#__PURE__*/ v.object({
 	repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	sha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
 });
+const _targetSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.pull#target')),
+	branch: /*#__PURE__*/ v.string(),
+	repo: /*#__PURE__*/ v.resourceUriString(),
+});
 
 type main$schematype = typeof _mainSchema;
 type source$schematype = typeof _sourceSchema;
+type target$schematype = typeof _targetSchema;
 
 export interface mainSchema extends main$schematype {}
 export interface sourceSchema extends source$schematype {}
+export interface targetSchema extends target$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
 export const sourceSchema = _sourceSchema as sourceSchema;
+export const targetSchema = _targetSchema as targetSchema;
 
 export interface Main extends v.InferInput<typeof mainSchema> {}
 export interface Source extends v.InferInput<typeof sourceSchema> {}
+export interface Target extends v.InferInput<typeof targetSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface Records {

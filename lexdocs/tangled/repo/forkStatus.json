@@ -1,0 +1,53 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.forkStatus",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Check fork status relative to upstream source",
+			"input": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["did", "name", "source", "branch", "hiddenRef"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the fork owner"
+						},
+						"name": {
+							"type": "string",
+							"description": "Name of the forked repository"
+						},
+						"source": {
+							"type": "string",
+							"description": "Source repository URL"
+						},
+						"branch": {
+							"type": "string",
+							"description": "Branch to check status for"
+						},
+						"hiddenRef": {
+							"type": "string",
+							"description": "Hidden ref to use for comparison"
+						}
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["status"],
+					"properties": {
+						"status": {
+							"type": "integer",
+							"description": "Fork status: 0=UpToDate, 1=FastForwardable, 2=Conflict, 3=MissingBranch"
+						}
+					}
+				}
+			}
+		}
+	}
+}
