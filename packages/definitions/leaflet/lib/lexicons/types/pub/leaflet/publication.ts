@@ -24,6 +24,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 );
 const _preferencesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.publication#preferences')),
+	showComments: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 	showInDiscover: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 });
 const _themeSchema = /*#__PURE__*/ v.object({
