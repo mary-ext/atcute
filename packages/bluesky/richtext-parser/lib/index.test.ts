@@ -631,3 +631,682 @@ it('emotes', () => {
 		},
 	]);
 });
+
+it('delete', () => {
+	expect(tokenize('~~strike~~')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "~~strike~~",
+	      "tokens": [
+	        {
+	          "raw": "strike",
+	          "text": "strike",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "delete",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('~strike~')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "~strike~",
+	      "text": "~strike~",
+	      "type": "text",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('~~')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "~~",
+	      "text": "~~",
+	      "type": "text",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('~~~~')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "~~~~",
+	      "text": "~~~~",
+	      "type": "text",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('~~ ~~')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "~~ ~~",
+	      "tokens": [
+	        {
+	          "raw": " ",
+	          "text": " ",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "delete",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('foo~~bar~~')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "foo",
+	      "text": "foo",
+	      "type": "text",
+	    },
+	    {
+	      "raw": "~~bar~~",
+	      "tokens": [
+	        {
+	          "raw": "bar",
+	          "text": "bar",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "delete",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('~~ strike~~')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "~~ strike~~",
+	      "tokens": [
+	        {
+	          "raw": " strike",
+	          "text": " strike",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "delete",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('~~~strike~~')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "~~~strike~~",
+	      "tokens": [
+	        {
+	          "raw": "~strike",
+	          "text": "~strike",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "delete",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('~~strike~~~')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "~~strike~~",
+	      "tokens": [
+	        {
+	          "raw": "strike",
+	          "text": "strike",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "delete",
+	    },
+	    {
+	      "raw": "~",
+	      "text": "~",
+	      "type": "text",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('hello ~~@alice.bsky.social~~ @bob.bsky.social!')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "hello ",
+	      "text": "hello ",
+	      "type": "text",
+	    },
+	    {
+	      "raw": "~~@alice.bsky.social~~",
+	      "tokens": [
+	        {
+	          "handle": "alice.bsky.social",
+	          "raw": "@alice.bsky.social",
+	          "type": "mention",
+	        },
+	      ],
+	      "type": "delete",
+	    },
+	    {
+	      "raw": " ",
+	      "text": " ",
+	      "type": "text",
+	    },
+	    {
+	      "handle": "bob.bsky.social",
+	      "raw": "@bob.bsky.social",
+	      "type": "mention",
+	    },
+	    {
+	      "raw": "!",
+	      "text": "!",
+	      "type": "text",
+	    },
+	  ]
+	`);
+});
+
+it('emphasis/strong', () => {
+	expect(tokenize('*emphasized*')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "*emphasized*",
+	      "tokens": [
+	        {
+	          "raw": "emphasized",
+	          "text": "emphasized",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+	expect(tokenize('_emphasized_')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "_emphasized_",
+	      "tokens": [
+	        {
+	          "raw": "emphasized",
+	          "text": "emphasized",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('**boldened**')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "**boldened**",
+	      "tokens": [
+	        {
+	          "raw": "boldened",
+	          "text": "boldened",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "strong",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('***emphasized and boldened***')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "***emphasized and boldened***",
+	      "tokens": [
+	        {
+	          "raw": "**emphasized and boldened**",
+	          "tokens": [
+	            {
+	              "raw": "emphasized and boldened",
+	              "text": "emphasized and boldened",
+	              "type": "text",
+	            },
+	          ],
+	          "type": "strong",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+	expect(tokenize('___emphasized and underlined___')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "___emphasized and underlined___",
+	      "tokens": [
+	        {
+	          "raw": "__emphasized and underlined__",
+	          "tokens": [
+	            {
+	              "raw": "emphasized and underlined",
+	              "text": "emphasized and underlined",
+	              "type": "text",
+	            },
+	          ],
+	          "type": "underline",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('*emphasized **and also boldened***')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "*emphasized **and also boldened***",
+	      "tokens": [
+	        {
+	          "raw": "emphasized ",
+	          "text": "emphasized ",
+	          "type": "text",
+	        },
+	        {
+	          "raw": "**and also boldened**",
+	          "tokens": [
+	            {
+	              "raw": "and also boldened",
+	              "text": "and also boldened",
+	              "type": "text",
+	            },
+	          ],
+	          "type": "strong",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+	expect(tokenize('_emphasized __and underlined___')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "_emphasized __and underlined___",
+	      "tokens": [
+	        {
+	          "raw": "emphasized ",
+	          "text": "emphasized ",
+	          "type": "text",
+	        },
+	        {
+	          "raw": "__and underlined__",
+	          "tokens": [
+	            {
+	              "raw": "and underlined",
+	              "text": "and underlined",
+	              "type": "text",
+	            },
+	          ],
+	          "type": "underline",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('**boldened *and also emphasized***')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "**boldened *and also emphasized***",
+	      "tokens": [
+	        {
+	          "raw": "boldened ",
+	          "text": "boldened ",
+	          "type": "text",
+	        },
+	        {
+	          "raw": "*and also emphasized*",
+	          "tokens": [
+	            {
+	              "raw": "and also emphasized",
+	              "text": "and also emphasized",
+	              "type": "text",
+	            },
+	          ],
+	          "type": "emphasis",
+	        },
+	      ],
+	      "type": "strong",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('__underlined _and also emphasized___')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "__underlined _and also emphasized___",
+	      "tokens": [
+	        {
+	          "raw": "underlined ",
+	          "text": "underlined ",
+	          "type": "text",
+	        },
+	        {
+	          "raw": "_and also emphasized_",
+	          "tokens": [
+	            {
+	              "raw": "and also emphasized",
+	              "text": "and also emphasized",
+	              "type": "text",
+	            },
+	          ],
+	          "type": "emphasis",
+	        },
+	      ],
+	      "type": "underline",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('foo*bar*')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "foo",
+	      "text": "foo",
+	      "type": "text",
+	    },
+	    {
+	      "raw": "*bar*",
+	      "tokens": [
+	        {
+	          "raw": "bar",
+	          "text": "bar",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+	expect(tokenize('foo_bar_')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "foo",
+	      "text": "foo",
+	      "type": "text",
+	    },
+	    {
+	      "raw": "_bar_",
+	      "tokens": [
+	        {
+	          "raw": "bar",
+	          "text": "bar",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('foo*bar*buzz')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "foo",
+	      "text": "foo",
+	      "type": "text",
+	    },
+	    {
+	      "raw": "*bar*",
+	      "tokens": [
+	        {
+	          "raw": "bar",
+	          "text": "bar",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	    {
+	      "raw": "buzz",
+	      "text": "buzz",
+	      "type": "text",
+	    },
+	  ]
+	`);
+	expect(tokenize('foo_bar_buzz')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "foo_bar_buzz",
+	      "text": "foo_bar_buzz",
+	      "type": "text",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('foo*bar *')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "foo",
+	      "text": "foo",
+	      "type": "text",
+	    },
+	    {
+	      "raw": "*bar *",
+	      "tokens": [
+	        {
+	          "raw": "bar ",
+	          "text": "bar ",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+	expect(tokenize('foo_bar _')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "foo",
+	      "text": "foo",
+	      "type": "text",
+	    },
+	    {
+	      "raw": "_bar _",
+	      "tokens": [
+	        {
+	          "raw": "bar ",
+	          "text": "bar ",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('***foo**')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "***foo**",
+	      "tokens": [
+	        {
+	          "raw": "*foo",
+	          "text": "*foo",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "strong",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('* *')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "* *",
+	      "tokens": [
+	        {
+	          "raw": " ",
+	          "text": " ",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+	expect(tokenize('_ _')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "_ _",
+	      "tokens": [
+	        {
+	          "raw": " ",
+	          "text": " ",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('hello **world**!')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "hello ",
+	      "text": "hello ",
+	      "type": "text",
+	    },
+	    {
+	      "raw": "**world**",
+	      "tokens": [
+	        {
+	          "raw": "world",
+	          "text": "world",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "strong",
+	    },
+	    {
+	      "raw": "!",
+	      "text": "!",
+	      "type": "text",
+	    },
+	  ]
+	`);
+});
+
+it('underline', () => {
+	expect(tokenize('__underlined__')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "__underlined__",
+	      "tokens": [
+	        {
+	          "raw": "underlined",
+	          "text": "underlined",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "underline",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('__')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "__",
+	      "text": "__",
+	      "type": "text",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('____')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "____",
+	      "tokens": [
+	        {
+	          "raw": "__",
+	          "text": "__",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "emphasis",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('__ __')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "__ __",
+	      "tokens": [
+	        {
+	          "raw": " ",
+	          "text": " ",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "underline",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('foo__bar__')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "foo",
+	      "text": "foo",
+	      "type": "text",
+	    },
+	    {
+	      "raw": "__bar__",
+	      "tokens": [
+	        {
+	          "raw": "bar",
+	          "text": "bar",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "underline",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('\\__underlined__')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "escaped": "_",
+	      "raw": "\\_",
+	      "type": "escape",
+	    },
+	    {
+	      "raw": "_underlined__",
+	      "text": "_underlined__",
+	      "type": "text",
+	    },
+	  ]
+	`);
+
+	expect(tokenize('foo\\__bar__')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "foo",
+	      "text": "foo",
+	      "type": "text",
+	    },
+	    {
+	      "escaped": "_",
+	      "raw": "\\_",
+	      "type": "escape",
+	    },
+	    {
+	      "raw": "_bar__",
+	      "text": "_bar__",
+	      "type": "text",
+	    },
+	  ]
+	`);
+});

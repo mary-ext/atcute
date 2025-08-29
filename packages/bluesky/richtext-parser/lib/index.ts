@@ -10,8 +10,15 @@ const AUTOLINK_BACKPEDAL_RE = /(?:(?<!\(.*)\))?[.,;]*$/;
 
 const LINK_RE = /^\[((?:\[(?:\\.|[^\[\]\\])*\]|\\.|[^\[\]\\])*?)\]\((.*?)\)/;
 
-const ESCAPE_RE = /^\\([@＠#:\\\[])/;
-const TEXT_RE = /^.+?(?:(?=$|[:\\\[]|https?:\/\/)|(?<=\s|[(){}\/\\\[\]\-|:;'".,=+])(?=[@＠#＃~]))/s;
+const ESCAPE_RE = /^\\([@＠#:\\\[~*_])/;
+
+const EM_RE =
+	/^\b_((?:__|\\[^]|[^\\_])+?)_\b|^\*((?:\*\*|\\[^]|\s+(?:\\[^]|[^\*\\]|\*\*)|[^\*\\])+?)\*(?!\*)/;
+const STRONG_RE = /^\*\*((?:\\[^]|[^\\])+?)\*\*(?!\*)/;
+const UNDERLINE_RE = /^__((?:\\[^]|[^\\])+?)__(?!_)/;
+const DEL_RE = /^~~((?:\\[^]|~(?!~)|[^~\\]|\s(?!~~))+?)~~/;
+
+const TEXT_RE = /^[^]+?(?:(?=$|[~*_:\\\[]|https?:\/\/)|(?<=\s|[(){}\/\\\[\]\-|:;'".,=+])(?=[@＠#＃]))/;
 
 export interface MentionToken {
 	type: 'mention';
@@ -50,6 +57,30 @@ export interface EscapeToken {
 	escaped: string;
 }
 
+export interface EmphasisToken {
+	type: 'emphasis';
+	raw: string;
+	tokens: Token[];
+}
+
+export interface StrongToken {
+	type: 'strong';
+	raw: string;
+	tokens: Token[];
+}
+
+export interface UnderlineToken {
+	type: 'underline';
+	raw: string;
+	tokens: Token[];
+}
+
+export interface DeleteToken {
+	type: 'delete';
+	raw: string;
+	tokens: Token[];
+}
+
 export interface TextToken {
 	type: 'text';
 	raw: string;
@@ -63,6 +94,10 @@ export type Token =
 	| AutolinkToken
 	| LinkToken
 	| EscapeToken
+	| EmphasisToken
+	| StrongToken
+	| UnderlineToken
+	| DeleteToken
 	| TextToken;
 
 const tokenizeMention = (src: string): MentionToken | undefined => {
@@ -138,6 +173,59 @@ const tokenizeEscape = (src: string): EscapeToken | undefined => {
 	}
 };
 
+const tokenizeEm = (src: string): EmphasisToken | undefined => {
+	const match = EM_RE.exec(src);
+	if (match) {
+		const inner = match[1] || match[2];
+
+		return {
+			type: 'emphasis',
+			raw: match[0],
+			tokens: tokenize(inner),
+		};
+	}
+};
+
+const tokenizeStrong = (src: string): StrongToken | undefined => {
+	const match = STRONG_RE.exec(src);
+	if (match) {
+		const innerText = match[1];
+		const innerTokens = tokenize(innerText);
+
+		return {
+			type: 'strong',
+			raw: match[0],
+			tokens: innerTokens,
+		};
+	}
+};
+
+const tokenizeUnderline = (src: string): UnderlineToken | undefined => {
+	const match = UNDERLINE_RE.exec(src);
+	if (match) {
+		const inner = match[1];
+
+		return {
+			type: 'underline',
+			raw: match[0],
+			tokens: tokenize(inner),
+		};
+	}
+};
+
+const tokenizeDelete = (src: string): DeleteToken | undefined => {
+	const match = DEL_RE.exec(src);
+	if (match) {
+		const inner = match[1];
+
+		return {
+			type: 'delete',
+			raw: match[0],
+			tokens: tokenize(inner),
+		};
+	}
+};
+
 const tokenizeText = (src: string): TextToken | undefined => {
 	const match = TEXT_RE.exec(src);
 	if (match) {
@@ -165,7 +253,11 @@ export const tokenize = (src: string): Token[] => {
 				tokenizeMention(src) ||
 				tokenizeTopic(src) ||
 				tokenizeEmote(src) ||
-				tokenizeLink(src))
+				tokenizeLink(src) ||
+				tokenizeEm(src) ||
+				tokenizeStrong(src) ||
+				tokenizeUnderline(src) ||
+				tokenizeDelete(src))
 		) {
 			src = src.slice(token.raw.length);
 			tokens.push(token);
