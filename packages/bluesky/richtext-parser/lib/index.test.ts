@@ -1136,6 +1136,21 @@ it('emphasis/strong', () => {
 	    },
 	  ]
 	`);
+	expect(tokenize('**foo***')).toMatchInlineSnapshot(`
+	  [
+	    {
+	      "raw": "**foo***",
+	      "tokens": [
+	        {
+	          "raw": "foo*",
+	          "text": "foo*",
+	          "type": "text",
+	        },
+	      ],
+	      "type": "strong",
+	    },
+	  ]
+	`);
 
 	expect(tokenize('* *')).toMatchInlineSnapshot(`
 	  [
