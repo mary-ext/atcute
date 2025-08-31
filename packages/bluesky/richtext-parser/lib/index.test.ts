@@ -5,17 +5,17 @@ import { tokenize } from './index.js';
 it('plain', () => {
 	expect(tokenize('hello world')).toEqual([
 		{
-			type: 'text',
+			content: 'hello world',
 			raw: 'hello world',
-			text: 'hello world',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('\n')).toEqual([
 		{
-			type: 'text',
+			content: '\n',
 			raw: '\n',
-			text: '\n',
+			type: 'text',
 		},
 	]);
 });
@@ -23,43 +23,43 @@ it('plain', () => {
 it('escapes', () => {
 	expect(tokenize('\\@bsky.app')).toEqual([
 		{
-			type: 'escape',
-			raw: '\\@',
 			escaped: '@',
+			raw: '\\@',
+			type: 'escape',
 		},
 		{
-			type: 'text',
+			content: 'bsky.app',
 			raw: 'bsky.app',
-			text: 'bsky.app',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('\\＠bsky.app')).toEqual([
 		{
-			type: 'escape',
-			raw: '\\＠',
 			escaped: '＠',
+			raw: '\\＠',
+			type: 'escape',
 		},
 		{
-			type: 'text',
+			content: 'bsky.app',
 			raw: 'bsky.app',
-			text: 'bsky.app',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('\\h')).toEqual([
 		{
-			type: 'text',
+			content: '\\h',
 			raw: '\\h',
-			text: '\\h',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('\\')).toEqual([
 		{
-			type: 'text',
+			content: '\\',
 			raw: '\\',
-			text: '\\',
+			type: 'text',
 		},
 	]);
 });
@@ -67,155 +67,155 @@ it('escapes', () => {
 it('mentions', () => {
 	expect(tokenize('@bsky.app')).toEqual([
 		{
-			type: 'mention',
-			raw: '@bsky.app',
 			handle: 'bsky.app',
+			raw: '@bsky.app',
+			type: 'mention',
 		},
 	]);
 
 	expect(tokenize('＠bsky.app')).toEqual([
 		{
-			type: 'mention',
-			raw: '＠bsky.app',
 			handle: 'bsky.app',
+			raw: '＠bsky.app',
+			type: 'mention',
 		},
 	]);
 
 	expect(tokenize('hello@bsky.app')).toEqual([
 		{
-			type: 'text',
+			content: 'hello@bsky.app',
 			raw: 'hello@bsky.app',
-			text: 'hello@bsky.app',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('hello(@bsky.app')).toEqual([
 		{
-			type: 'text',
+			content: 'hello(',
 			raw: 'hello(',
-			text: 'hello(',
+			type: 'text',
 		},
 		{
-			type: 'mention',
-			raw: '@bsky.app',
 			handle: 'bsky.app',
+			raw: '@bsky.app',
+			type: 'mention',
 		},
 	]);
 
 	expect(tokenize('@bsky.app.')).toEqual([
 		{
-			type: 'mention',
-			raw: '@bsky.app',
 			handle: 'bsky.app',
+			raw: '@bsky.app',
+			type: 'mention',
 		},
 		{
-			type: 'text',
+			content: '.',
 			raw: '.',
-			text: '.',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('@bsky.app@')).toEqual([
 		{
-			type: 'text',
+			content: '@bsky.app@',
 			raw: '@bsky.app@',
-			text: '@bsky.app@',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('@@bsky.app')).toEqual([
 		{
+			content: '@@bsky.app',
 			raw: '@@bsky.app',
-			text: '@@bsky.app',
 			type: 'text',
 		},
 	]);
 
 	expect(tokenize('@@@bsky.app')).toEqual([
 		{
-			type: 'text',
+			content: '@@@bsky.app',
 			raw: '@@@bsky.app',
-			text: '@@@bsky.app',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('@(@bsky.app')).toEqual([
 		{
-			type: 'text',
+			content: '@(',
 			raw: '@(',
-			text: '@(',
+			type: 'text',
 		},
 		{
-			type: 'mention',
-			raw: '@bsky.app',
 			handle: 'bsky.app',
+			raw: '@bsky.app',
+			type: 'mention',
 		},
 	]);
 
 	expect(tokenize('@(@@bsky.app')).toEqual([
 		{
-			type: 'text',
+			content: '@(',
 			raw: '@(@@bsky.app',
-			text: '@(@@bsky.app',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('hello @bsky.app@')).toEqual([
 		{
-			type: 'text',
+			content: 'hello ',
 			raw: 'hello @bsky.app@',
-			text: 'hello @bsky.app@',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('@bsky.app.@')).toEqual([
 		{
-			type: 'mention',
-			raw: '@bsky.app',
 			handle: 'bsky.app',
+			raw: '@bsky.app',
+			type: 'mention',
 		},
 		{
-			type: 'text',
+			content: '.',
 			raw: '.@',
-			text: '.@',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('(@bsky.app)')).toEqual([
 		{
-			type: 'text',
+			content: '(',
 			raw: '(',
-			text: '(',
-		},
-		{
-			type: 'mention',
-			raw: '@bsky.app',
-			handle: 'bsky.app',
-		},
-		{
 			type: 'text',
+		},
+		{
+			handle: 'bsky.app',
+			raw: '@bsky.app',
+			type: 'mention',
+		},
+		{
+			content: ')',
 			raw: ')',
-			text: ')',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('@bsky.app hello')).toEqual([
 		{
-			type: 'mention',
-			raw: '@bsky.app',
 			handle: 'bsky.app',
+			raw: '@bsky.app',
+			type: 'mention',
 		},
 		{
-			type: 'text',
+			content: ' hello',
 			raw: ' hello',
-			text: ' hello',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('hello @bsky.app hello')).toEqual([
 		{
+			content: 'hello ',
 			raw: 'hello ',
-			text: 'hello ',
 			type: 'text',
 		},
 		{
@@ -224,16 +224,16 @@ it('mentions', () => {
 			type: 'mention',
 		},
 		{
+			content: ' hello',
 			raw: ' hello',
-			text: ' hello',
 			type: 'text',
 		},
 	]);
 
 	expect(tokenize('hello @bsky.app')).toEqual([
 		{
+			content: 'hello ',
 			raw: 'hello ',
-			text: 'hello ',
 			type: 'text',
 		},
 		{
@@ -245,19 +245,27 @@ it('mentions', () => {
 
 	expect(tokenize('@abc.com @bca.com')).toEqual([
 		{
-			type: 'mention',
-			raw: '@abc.com',
 			handle: 'abc.com',
-		},
-		{
-			type: 'text',
-			raw: ' ',
-			text: ' ',
-		},
-		{
+			raw: '@abc.com',
 			type: 'mention',
-			raw: '@bca.com',
+		},
+		{
+			content: ' ',
+			raw: ' ',
+			type: 'text',
+		},
+		{
 			handle: 'bca.com',
+			raw: '@bca.com',
+			type: 'mention',
+		},
+	]);
+
+	expect(tokenize('@example.co.id')).toEqual([
+		{
+			handle: 'example.co.id',
+			raw: '@example.co.id',
+			type: 'mention',
 		},
 	]);
 });
@@ -265,124 +273,124 @@ it('mentions', () => {
 it('topics', () => {
 	expect(tokenize('#cool')).toEqual([
 		{
-			type: 'topic',
-			raw: '#cool',
 			name: 'cool',
+			raw: '#cool',
+			type: 'topic',
 		},
 	]);
 
 	expect(tokenize('＃cool')).toEqual([
 		{
-			type: 'topic',
-			raw: '＃cool',
 			name: 'cool',
+			raw: '＃cool',
+			type: 'topic',
 		},
 	]);
 
 	expect(tokenize('#123')).toEqual([
 		{
-			type: 'text',
+			content: '#123',
 			raw: '#123',
-			text: '#123',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('#123cool')).toEqual([
 		{
-			type: 'topic',
-			raw: '#123cool',
 			name: '123cool',
+			raw: '#123cool',
+			type: 'topic',
 		},
 	]);
 
 	expect(tokenize('#cool123')).toEqual([
 		{
-			type: 'topic',
-			raw: '#cool123',
 			name: 'cool123',
+			raw: '#cool123',
+			type: 'topic',
 		},
 	]);
 
 	expect(tokenize('hello#cool')).toEqual([
 		{
-			type: 'text',
+			content: 'hello#cool',
 			raw: 'hello#cool',
-			text: 'hello#cool',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('hello(#cool')).toEqual([
 		{
-			type: 'text',
+			content: 'hello(',
 			raw: 'hello(',
-			text: 'hello(',
+			type: 'text',
 		},
 		{
-			type: 'topic',
-			raw: '#cool',
 			name: 'cool',
+			raw: '#cool',
+			type: 'topic',
 		},
 	]);
 
 	expect(tokenize('#cool.')).toEqual([
 		{
-			type: 'topic',
-			raw: '#cool',
 			name: 'cool',
+			raw: '#cool',
+			type: 'topic',
 		},
 		{
-			type: 'text',
+			content: '.',
 			raw: '.',
-			text: '.',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('#cool#')).toEqual([
 		{
-			type: 'text',
+			content: '#cool#',
 			raw: '#cool#',
-			text: '#cool#',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('hello #cool#')).toEqual([
 		{
-			type: 'text',
+			content: 'hello ',
 			raw: 'hello #cool#',
-			text: 'hello #cool#',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('#cool.#')).toEqual([
 		{
-			type: 'topic',
-			raw: '#cool',
 			name: 'cool',
+			raw: '#cool',
+			type: 'topic',
 		},
 		{
-			type: 'text',
+			content: '.',
 			raw: '.#',
-			text: '.#',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('#cool hello')).toEqual([
 		{
-			type: 'topic',
-			raw: '#cool',
 			name: 'cool',
+			raw: '#cool',
+			type: 'topic',
 		},
 		{
-			type: 'text',
+			content: ' hello',
 			raw: ' hello',
-			text: ' hello',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('hello #cool hello')).toEqual([
 		{
+			content: 'hello ',
 			raw: 'hello ',
-			text: 'hello ',
 			type: 'text',
 		},
 		{
@@ -391,16 +399,16 @@ it('topics', () => {
 			type: 'topic',
 		},
 		{
+			content: ' hello',
 			raw: ' hello',
-			text: ' hello',
 			type: 'text',
 		},
 	]);
 
 	expect(tokenize('hello #cool')).toEqual([
 		{
+			content: 'hello ',
 			raw: 'hello ',
-			text: 'hello ',
 			type: 'text',
 		},
 		{
@@ -412,19 +420,19 @@ it('topics', () => {
 
 	expect(tokenize('#abc #def')).toEqual([
 		{
-			type: 'topic',
-			raw: '#abc',
 			name: 'abc',
-		},
-		{
-			type: 'text',
-			raw: ' ',
-			text: ' ',
-		},
-		{
+			raw: '#abc',
 			type: 'topic',
-			raw: '#def',
+		},
+		{
+			content: ' ',
+			raw: ' ',
+			type: 'text',
+		},
+		{
 			name: 'def',
+			raw: '#def',
+			type: 'topic',
 		},
 	]);
 });
@@ -432,90 +440,90 @@ it('topics', () => {
 it('autolinks', () => {
 	expect(tokenize('https://example.com')).toEqual([
 		{
-			type: 'autolink',
 			raw: 'https://example.com',
 			url: 'https://example.com',
+			type: 'autolink',
 		},
 	]);
 
 	expect(tokenize('https://')).toEqual([
 		{
-			type: 'text',
+			content: 'https',
 			raw: 'https://',
-			text: 'https://',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('https://example.com/.')).toEqual([
 		{
-			type: 'autolink',
 			raw: 'https://example.com/',
 			url: 'https://example.com/',
+			type: 'autolink',
 		},
 		{
-			type: 'text',
+			content: '.',
 			raw: '.',
-			text: '.',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('https://example.com/.)')).toEqual([
 		{
-			type: 'autolink',
 			raw: 'https://example.com/.',
 			url: 'https://example.com/.',
+			type: 'autolink',
 		},
 		{
-			type: 'text',
+			content: ')',
 			raw: ')',
-			text: ')',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('https://example.com/.))')).toEqual([
 		{
-			type: 'autolink',
 			raw: 'https://example.com/.)',
 			url: 'https://example.com/.)',
+			type: 'autolink',
 		},
 		{
-			type: 'text',
+			content: ')',
 			raw: ')',
-			text: ')',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('https://foo.com/thing_cool)')).toEqual([
 		{
-			type: 'autolink',
 			raw: 'https://foo.com/thing_cool',
 			url: 'https://foo.com/thing_cool',
+			type: 'autolink',
 		},
 		{
-			type: 'text',
+			content: ')',
 			raw: ')',
-			text: ')',
+			type: 'text',
 		},
 	]);
 
 	expect(tokenize('https://foo.com/thing_(cool)')).toEqual([
 		{
-			type: 'autolink',
 			raw: 'https://foo.com/thing_(cool)',
 			url: 'https://foo.com/thing_(cool)',
+			type: 'autolink',
 		},
 	]);
 
 	expect(tokenize('abchttps://example.com/')).toEqual([
 		{
-			type: 'text',
+			content: 'abc',
 			raw: 'abc',
-			text: 'abc',
+			type: 'text',
 		},
 		{
-			type: 'autolink',
 			raw: 'https://example.com/',
 			url: 'https://example.com/',
+			type: 'autolink',
 		},
 	]);
 
@@ -525,14 +533,14 @@ it('autolinks', () => {
 		),
 	).toEqual([
 		{
-			type: 'autolink',
 			raw: 'https://github.com/mary-ext/atproto-scraping/commit/',
 			url: 'https://github.com/mary-ext/atproto-scraping/commit/',
+			type: 'autolink',
 		},
 		{
-			type: 'text',
+			content: '\ncaaa495ae654ef8a98f223f3cecfe2ca261d6b4f',
 			raw: '\ncaaa495ae654ef8a98f223f3cecfe2ca261d6b4f',
-			text: '\ncaaa495ae654ef8a98f223f3cecfe2ca261d6b4f',
+			type: 'text',
 		},
 	]);
 });
@@ -540,55 +548,118 @@ it('autolinks', () => {
 it('links', () => {
 	expect(tokenize('[abc](https://google.com)')).toEqual([
 		{
-			type: 'link',
+			children: [
+				{
+					content: 'abc',
+					raw: 'abc',
+					type: 'text',
+				},
+			],
 			raw: '[abc](https://google.com)',
-			text: 'abc',
 			url: 'https://google.com',
+			type: 'link',
 		},
 	]);
 
 	expect(tokenize('[abc](https://google.com)[def](https://google.com)')).toEqual([
 		{
-			type: 'link',
+			children: [
+				{
+					content: 'abc',
+					raw: 'abc',
+					type: 'text',
+				},
+			],
 			raw: '[abc](https://google.com)',
-			text: 'abc',
 			url: 'https://google.com',
+			type: 'link',
 		},
 		{
-			type: 'link',
+			children: [
+				{
+					content: 'def',
+					raw: 'def',
+					type: 'text',
+				},
+			],
 			raw: '[def](https://google.com)',
-			text: 'def',
 			url: 'https://google.com',
+			type: 'link',
 		},
 	]);
 
 	expect(tokenize('[abc[def](example.com)')).toEqual([
 		{
-			type: 'text',
+			content: '[abc',
 			raw: '[abc',
-			text: '[abc',
+			type: 'text',
 		},
 		{
-			type: 'link',
+			children: [
+				{
+					content: 'def',
+					raw: 'def',
+					type: 'text',
+				},
+			],
 			raw: '[def](example.com)',
-			text: 'def',
 			url: 'example.com',
+			type: 'link',
 		},
 	]);
 
 	expect(tokenize('[abc]def](example.com)')).toEqual([
 		{
-			type: 'text',
+			children: [
+				{
+					content: 'abc]def',
+					raw: 'abc]def',
+					type: 'text',
+				},
+			],
 			raw: '[abc]def](example.com)',
-			text: '[abc]def](example.com)',
+			url: 'example.com',
+			type: 'link',
 		},
 	]);
 
 	expect(tokenize('[abc[]def](example.com)')).toEqual([
 		{
-			type: 'link',
+			children: [
+				{
+					content: 'abc',
+					raw: 'abc[]def',
+					type: 'text',
+				},
+			],
 			raw: '[abc[]def](example.com)',
-			text: 'abc[]def',
+			url: 'example.com',
+			type: 'link',
+		},
+	]);
+
+	expect(tokenize('[**mixed** formatting](example.com)')).toEqual([
+		{
+			children: [
+				{
+					children: [
+						{
+							content: 'mixed',
+							raw: 'mixed',
+							type: 'text',
+						},
+					],
+					raw: '**mixed**',
+					type: 'strong',
+				},
+				{
+					content: ' formatting',
+					raw: ' formatting',
+					type: 'text',
+				},
+			],
+			raw: '[**mixed** formatting](example.com)',
+			type: 'link',
 			url: 'example.com',
 		},
 	]);
@@ -597,731 +668,716 @@ it('links', () => {
 it('emotes', () => {
 	expect(tokenize(':foo:')).toEqual([
 		{
-			type: 'emote',
-			raw: ':foo:',
 			name: 'foo',
+			raw: ':foo:',
+			type: 'emote',
 		},
 	]);
 
 	expect(tokenize(':foo::bar:')).toEqual([
 		{
-			type: 'emote',
-			raw: ':foo:',
 			name: 'foo',
+			raw: ':foo:',
+			type: 'emote',
 		},
 		{
-			type: 'emote',
-			raw: ':bar:',
 			name: 'bar',
+			raw: ':bar:',
+			type: 'emote',
 		},
 	]);
 
 	expect(tokenize(':::')).toEqual([
 		{
-			type: 'text',
+			content: ':',
 			raw: ':::',
-			text: ':::',
+			type: 'text',
 		},
 	]);
 	expect(tokenize('::::')).toEqual([
 		{
-			type: 'text',
+			content: ':',
 			raw: '::::',
-			text: '::::',
+			type: 'text',
 		},
 	]);
 });
 
 it('delete', () => {
-	expect(tokenize('~~strike~~')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "~~strike~~",
-	      "tokens": [
-	        {
-	          "raw": "strike",
-	          "text": "strike",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "delete",
-	    },
-	  ]
-	`);
+	expect(tokenize('~~strike~~')).toEqual([
+		{
+			children: [
+				{
+					content: 'strike',
+					raw: 'strike',
+					type: 'text',
+				},
+			],
+			raw: '~~strike~~',
+			type: 'delete',
+		},
+	]);
 
-	expect(tokenize('~strike~')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "~strike~",
-	      "text": "~strike~",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('~strike~')).toEqual([
+		{
+			content: '~strike',
+			raw: '~strike~',
+			type: 'text',
+		},
+	]);
 
-	expect(tokenize('~~')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "~~",
-	      "text": "~~",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('~~')).toEqual([
+		{
+			content: '~',
+			raw: '~~',
+			type: 'text',
+		},
+	]);
 
-	expect(tokenize('~~~~')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "~~~~",
-	      "text": "~~~~",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('~~~~')).toEqual([
+		{
+			content: '~',
+			raw: '~~~~',
+			type: 'text',
+		},
+	]);
 
-	expect(tokenize('~~ ~~')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "~~ ~~",
-	      "tokens": [
-	        {
-	          "raw": " ",
-	          "text": " ",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "delete",
-	    },
-	  ]
-	`);
+	expect(tokenize('~~ ~~')).toEqual([
+		{
+			children: [
+				{
+					content: ' ',
+					raw: ' ',
+					type: 'text',
+				},
+			],
+			raw: '~~ ~~',
+			type: 'delete',
+		},
+	]);
 
-	expect(tokenize('foo~~bar~~')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "foo",
-	      "text": "foo",
-	      "type": "text",
-	    },
-	    {
-	      "raw": "~~bar~~",
-	      "tokens": [
-	        {
-	          "raw": "bar",
-	          "text": "bar",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "delete",
-	    },
-	  ]
-	`);
+	expect(tokenize('foo~~bar~~')).toEqual([
+		{
+			content: 'foo',
+			raw: 'foo',
+			type: 'text',
+		},
+		{
+			children: [
+				{
+					content: 'bar',
+					raw: 'bar',
+					type: 'text',
+				},
+			],
+			raw: '~~bar~~',
+			type: 'delete',
+		},
+	]);
 
-	expect(tokenize('~~ strike~~')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "~~ strike~~",
-	      "tokens": [
-	        {
-	          "raw": " strike",
-	          "text": " strike",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "delete",
-	    },
-	  ]
-	`);
+	expect(tokenize('~~ strike~~')).toEqual([
+		{
+			children: [
+				{
+					content: ' strike',
+					raw: ' strike',
+					type: 'text',
+				},
+			],
+			raw: '~~ strike~~',
+			type: 'delete',
+		},
+	]);
 
-	expect(tokenize('~~~strike~~')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "~~~strike~~",
-	      "tokens": [
-	        {
-	          "raw": "~strike",
-	          "text": "~strike",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "delete",
-	    },
-	  ]
-	`);
+	expect(tokenize('~~~strike~~')).toEqual([
+		{
+			children: [
+				{
+					content: '~strike',
+					raw: '~strike',
+					type: 'text',
+				},
+			],
+			raw: '~~~strike~~',
+			type: 'delete',
+		},
+	]);
 
-	expect(tokenize('~~strike~~~')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "~~strike~~",
-	      "tokens": [
-	        {
-	          "raw": "strike",
-	          "text": "strike",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "delete",
-	    },
-	    {
-	      "raw": "~",
-	      "text": "~",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('~~strike~~~')).toEqual([
+		{
+			children: [
+				{
+					content: 'strike',
+					raw: 'strike',
+					type: 'text',
+				},
+			],
+			raw: '~~strike~~',
+			type: 'delete',
+		},
+		{
+			content: '~',
+			raw: '~',
+			type: 'text',
+		},
+	]);
 
-	expect(tokenize('hello ~~@alice.bsky.social~~ @bob.bsky.social!')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "hello ",
-	      "text": "hello ",
-	      "type": "text",
-	    },
-	    {
-	      "raw": "~~@alice.bsky.social~~",
-	      "tokens": [
-	        {
-	          "handle": "alice.bsky.social",
-	          "raw": "@alice.bsky.social",
-	          "type": "mention",
-	        },
-	      ],
-	      "type": "delete",
-	    },
-	    {
-	      "raw": " ",
-	      "text": " ",
-	      "type": "text",
-	    },
-	    {
-	      "handle": "bob.bsky.social",
-	      "raw": "@bob.bsky.social",
-	      "type": "mention",
-	    },
-	    {
-	      "raw": "!",
-	      "text": "!",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('hello ~~@alice.bsky.social~~ @bob.bsky.social!')).toEqual([
+		{
+			content: 'hello ',
+			raw: 'hello ',
+			type: 'text',
+		},
+		{
+			children: [
+				{
+					handle: 'alice.bsky.social',
+					raw: '@alice.bsky.social',
+					type: 'mention',
+				},
+			],
+			raw: '~~@alice.bsky.social~~',
+			type: 'delete',
+		},
+		{
+			content: ' ',
+			raw: ' ',
+			type: 'text',
+		},
+		{
+			handle: 'bob.bsky.social',
+			raw: '@bob.bsky.social',
+			type: 'mention',
+		},
+		{
+			content: '!',
+			raw: '!',
+			type: 'text',
+		},
+	]);
 });
 
 it('emphasis/strong', () => {
-	expect(tokenize('*emphasized*')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "*emphasized*",
-	      "tokens": [
-	        {
-	          "raw": "emphasized",
-	          "text": "emphasized",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
-	expect(tokenize('_emphasized_')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "_emphasized_",
-	      "tokens": [
-	        {
-	          "raw": "emphasized",
-	          "text": "emphasized",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
+	expect(tokenize('*emphasized*')).toEqual([
+		{
+			children: [
+				{
+					content: 'emphasized',
+					raw: 'emphasized',
+					type: 'text',
+				},
+			],
+			raw: '*emphasized*',
+			type: 'emphasis',
+		},
+	]);
+	expect(tokenize('_emphasized_')).toEqual([
+		{
+			children: [
+				{
+					content: 'emphasized',
+					raw: 'emphasized',
+					type: 'text',
+				},
+			],
+			raw: '_emphasized_',
+			type: 'emphasis',
+		},
+	]);
 
-	expect(tokenize('**boldened**')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "**boldened**",
-	      "tokens": [
-	        {
-	          "raw": "boldened",
-	          "text": "boldened",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "strong",
-	    },
-	  ]
-	`);
+	expect(tokenize('**boldened**')).toEqual([
+		{
+			children: [
+				{
+					content: 'boldened',
+					raw: 'boldened',
+					type: 'text',
+				},
+			],
+			raw: '**boldened**',
+			type: 'strong',
+		},
+	]);
 
-	expect(tokenize('***emphasized and boldened***')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "***emphasized and boldened***",
-	      "tokens": [
-	        {
-	          "raw": "**emphasized and boldened**",
-	          "tokens": [
-	            {
-	              "raw": "emphasized and boldened",
-	              "text": "emphasized and boldened",
-	              "type": "text",
-	            },
-	          ],
-	          "type": "strong",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
-	expect(tokenize('___emphasized and underlined___')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "___emphasized and underlined___",
-	      "tokens": [
-	        {
-	          "raw": "__emphasized and underlined__",
-	          "tokens": [
-	            {
-	              "raw": "emphasized and underlined",
-	              "text": "emphasized and underlined",
-	              "type": "text",
-	            },
-	          ],
-	          "type": "underline",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
+	expect(tokenize('***emphasized and boldened***')).toEqual([
+		{
+			children: [
+				{
+					children: [
+						{
+							content: 'emphasized and boldened',
+							raw: 'emphasized and boldened',
+							type: 'text',
+						},
+					],
+					raw: '**emphasized and boldened**',
+					type: 'strong',
+				},
+			],
+			raw: '***emphasized and boldened***',
+			type: 'emphasis',
+		},
+	]);
 
-	expect(tokenize('*emphasized **and also boldened***')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "*emphasized **and also boldened***",
-	      "tokens": [
-	        {
-	          "raw": "emphasized ",
-	          "text": "emphasized ",
-	          "type": "text",
-	        },
-	        {
-	          "raw": "**and also boldened**",
-	          "tokens": [
-	            {
-	              "raw": "and also boldened",
-	              "text": "and also boldened",
-	              "type": "text",
-	            },
-	          ],
-	          "type": "strong",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
-	expect(tokenize('_emphasized __and underlined___')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "_emphasized __and underlined___",
-	      "tokens": [
-	        {
-	          "raw": "emphasized ",
-	          "text": "emphasized ",
-	          "type": "text",
-	        },
-	        {
-	          "raw": "__and underlined__",
-	          "tokens": [
-	            {
-	              "raw": "and underlined",
-	              "text": "and underlined",
-	              "type": "text",
-	            },
-	          ],
-	          "type": "underline",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
+	expect(tokenize('___emphasized and underlined___')).toEqual([
+		{
+			children: [
+				{
+					children: [
+						{
+							content: 'emphasized and underlined',
+							raw: 'emphasized and underlined',
+							type: 'text',
+						},
+					],
+					raw: '__emphasized and underlined__',
+					type: 'underline',
+				},
+			],
+			raw: '___emphasized and underlined___',
+			type: 'emphasis',
+		},
+	]);
 
-	expect(tokenize('**boldened *and also emphasized***')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "**boldened *and also emphasized***",
-	      "tokens": [
-	        {
-	          "raw": "boldened ",
-	          "text": "boldened ",
-	          "type": "text",
-	        },
-	        {
-	          "raw": "*and also emphasized*",
-	          "tokens": [
-	            {
-	              "raw": "and also emphasized",
-	              "text": "and also emphasized",
-	              "type": "text",
-	            },
-	          ],
-	          "type": "emphasis",
-	        },
-	      ],
-	      "type": "strong",
-	    },
-	  ]
-	`);
+	expect(tokenize('***boldened** but then not*')).toEqual([
+		{
+			children: [
+				{
+					children: [
+						{
+							content: 'boldened',
+							raw: 'boldened',
+							type: 'text',
+						},
+					],
+					raw: '**boldened**',
+					type: 'strong',
+				},
+				{
+					content: ' but then not',
+					raw: ' but then not',
+					type: 'text',
+				},
+			],
+			raw: '***boldened** but then not*',
+			type: 'emphasis',
+		},
+	]);
+	expect(tokenize('___underlined__ but then not_')).toEqual([
+		{
+			children: [
+				{
+					children: [
+						{
+							content: 'underlined',
+							raw: 'underlined',
+							type: 'text',
+						},
+					],
+					raw: '__underlined__',
+					type: 'underline',
+				},
+				{
+					content: ' but then not',
+					raw: ' but then not',
+					type: 'text',
+				},
+			],
+			raw: '___underlined__ but then not_',
+			type: 'emphasis',
+		},
+	]);
 
-	expect(tokenize('__underlined _and also emphasized___')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "__underlined _and also emphasized___",
-	      "tokens": [
-	        {
-	          "raw": "underlined ",
-	          "text": "underlined ",
-	          "type": "text",
-	        },
-	        {
-	          "raw": "_and also emphasized_",
-	          "tokens": [
-	            {
-	              "raw": "and also emphasized",
-	              "text": "and also emphasized",
-	              "type": "text",
-	            },
-	          ],
-	          "type": "emphasis",
-	        },
-	      ],
-	      "type": "underline",
-	    },
-	  ]
-	`);
+	expect(tokenize('*emphasized **and also boldened***')).toEqual([
+		{
+			children: [
+				{
+					content: 'emphasized ',
+					raw: 'emphasized ',
+					type: 'text',
+				},
+				{
+					children: [
+						{
+							content: 'and also boldened',
+							raw: 'and also boldened',
+							type: 'text',
+						},
+					],
+					raw: '**and also boldened**',
+					type: 'strong',
+				},
+			],
+			raw: '*emphasized **and also boldened***',
+			type: 'emphasis',
+		},
+	]);
+	expect(tokenize('_emphasized __and underlined___')).toEqual([
+		{
+			children: [
+				{
+					content: 'emphasized ',
+					raw: 'emphasized ',
+					type: 'text',
+				},
+				{
+					children: [
+						{
+							content: 'and underlined',
+							raw: 'and underlined',
+							type: 'text',
+						},
+					],
+					raw: '__and underlined__',
+					type: 'underline',
+				},
+			],
+			raw: '_emphasized __and underlined___',
+			type: 'emphasis',
+		},
+	]);
 
-	expect(tokenize('foo*bar*')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "foo",
-	      "text": "foo",
-	      "type": "text",
-	    },
-	    {
-	      "raw": "*bar*",
-	      "tokens": [
-	        {
-	          "raw": "bar",
-	          "text": "bar",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
-	expect(tokenize('foo_bar_')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "foo",
-	      "text": "foo",
-	      "type": "text",
-	    },
-	    {
-	      "raw": "_bar_",
-	      "tokens": [
-	        {
-	          "raw": "bar",
-	          "text": "bar",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
+	expect(tokenize('**boldened *and also emphasized***')).toEqual([
+		{
+			children: [
+				{
+					content: 'boldened ',
+					raw: 'boldened ',
+					type: 'text',
+				},
+				{
+					children: [
+						{
+							content: 'and also emphasized',
+							raw: 'and also emphasized',
+							type: 'text',
+						},
+					],
+					raw: '*and also emphasized*',
+					type: 'emphasis',
+				},
+			],
+			raw: '**boldened *and also emphasized***',
+			type: 'strong',
+		},
+	]);
 
-	expect(tokenize('foo*bar*buzz')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "foo",
-	      "text": "foo",
-	      "type": "text",
-	    },
-	    {
-	      "raw": "*bar*",
-	      "tokens": [
-	        {
-	          "raw": "bar",
-	          "text": "bar",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	    {
-	      "raw": "buzz",
-	      "text": "buzz",
-	      "type": "text",
-	    },
-	  ]
-	`);
-	expect(tokenize('foo_bar_buzz')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "foo_bar_buzz",
-	      "text": "foo_bar_buzz",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('__underlined _and also emphasized___')).toEqual([
+		{
+			children: [
+				{
+					content: 'underlined ',
+					raw: 'underlined ',
+					type: 'text',
+				},
+				{
+					children: [
+						{
+							content: 'and also emphasized',
+							raw: 'and also emphasized',
+							type: 'text',
+						},
+					],
+					raw: '_and also emphasized_',
+					type: 'emphasis',
+				},
+			],
+			raw: '__underlined _and also emphasized___',
+			type: 'underline',
+		},
+	]);
 
-	expect(tokenize('foo*bar *')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "foo",
-	      "text": "foo",
-	      "type": "text",
-	    },
-	    {
-	      "raw": "*bar *",
-	      "tokens": [
-	        {
-	          "raw": "bar ",
-	          "text": "bar ",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
-	expect(tokenize('foo_bar _')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "foo",
-	      "text": "foo",
-	      "type": "text",
-	    },
-	    {
-	      "raw": "_bar _",
-	      "tokens": [
-	        {
-	          "raw": "bar ",
-	          "text": "bar ",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
+	expect(tokenize('foo*bar*')).toEqual([
+		{
+			content: 'foo',
+			raw: 'foo',
+			type: 'text',
+		},
+		{
+			children: [
+				{
+					content: 'bar',
+					raw: 'bar',
+					type: 'text',
+				},
+			],
+			raw: '*bar*',
+			type: 'emphasis',
+		},
+	]);
+	expect(tokenize('foo_bar_')).toEqual([
+		{
+			content: 'foo',
+			raw: 'foo',
+			type: 'text',
+		},
+		{
+			children: [
+				{
+					content: 'bar',
+					raw: 'bar',
+					type: 'text',
+				},
+			],
+			raw: '_bar_',
+			type: 'emphasis',
+		},
+	]);
 
-	expect(tokenize('***foo**')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "***foo**",
-	      "tokens": [
-	        {
-	          "raw": "*foo",
-	          "text": "*foo",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "strong",
-	    },
-	  ]
-	`);
-	expect(tokenize('**foo***')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "**foo***",
-	      "tokens": [
-	        {
-	          "raw": "foo*",
-	          "text": "foo*",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "strong",
-	    },
-	  ]
-	`);
+	expect(tokenize('foo*bar*buzz')).toEqual([
+		{
+			content: 'foo',
+			raw: 'foo',
+			type: 'text',
+		},
+		{
+			children: [
+				{
+					content: 'bar',
+					raw: 'bar',
+					type: 'text',
+				},
+			],
+			raw: '*bar*',
+			type: 'emphasis',
+		},
+		{
+			content: 'buzz',
+			raw: 'buzz',
+			type: 'text',
+		},
+	]);
+	expect(tokenize('foo_bar_buzz')).toEqual([
+		{
+			content: 'foo',
+			raw: 'foo_bar_buzz',
+			type: 'text',
+		},
+	]);
 
-	expect(tokenize('* *')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "* *",
-	      "tokens": [
-	        {
-	          "raw": " ",
-	          "text": " ",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
-	expect(tokenize('_ _')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "_ _",
-	      "tokens": [
-	        {
-	          "raw": " ",
-	          "text": " ",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
+	expect(tokenize('foo*bar *')).toEqual([
+		{
+			content: 'foo',
+			raw: 'foo*bar *',
+			type: 'text',
+		},
+	]);
+	expect(tokenize('foo_bar _')).toEqual([
+		{
+			content: 'foo',
+			raw: 'foo',
+			type: 'text',
+		},
+		{
+			children: [
+				{
+					content: 'bar ',
+					raw: 'bar ',
+					type: 'text',
+				},
+			],
+			raw: '_bar _',
+			type: 'emphasis',
+		},
+	]);
 
-	expect(tokenize('hello **world**!')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "hello ",
-	      "text": "hello ",
-	      "type": "text",
-	    },
-	    {
-	      "raw": "**world**",
-	      "tokens": [
-	        {
-	          "raw": "world",
-	          "text": "world",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "strong",
-	    },
-	    {
-	      "raw": "!",
-	      "text": "!",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('***foo**')).toEqual([
+		{
+			children: [
+				{
+					content: '*foo',
+					raw: '*foo',
+					type: 'text',
+				},
+			],
+			raw: '***foo**',
+			type: 'strong',
+		},
+	]);
+	expect(tokenize('**foo***')).toEqual([
+		{
+			children: [
+				{
+					content: 'foo',
+					raw: 'foo*',
+					type: 'text',
+				},
+			],
+			raw: '**foo***',
+			type: 'strong',
+		},
+	]);
+
+	expect(tokenize('* *')).toEqual([
+		{
+			content: '* ',
+			raw: '* *',
+			type: 'text',
+		},
+	]);
+	expect(tokenize('_ _')).toEqual([
+		{
+			children: [
+				{
+					content: ' ',
+					raw: ' ',
+					type: 'text',
+				},
+			],
+			raw: '_ _',
+			type: 'emphasis',
+		},
+	]);
+
+	expect(tokenize('hello **world**!')).toEqual([
+		{
+			content: 'hello ',
+			raw: 'hello ',
+			type: 'text',
+		},
+		{
+			children: [
+				{
+					content: 'world',
+					raw: 'world',
+					type: 'text',
+				},
+			],
+			raw: '**world**',
+			type: 'strong',
+		},
+		{
+			content: '!',
+			raw: '!',
+			type: 'text',
+		},
+	]);
 });
 
 it('underline', () => {
-	expect(tokenize('__underlined__')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "__underlined__",
-	      "tokens": [
-	        {
-	          "raw": "underlined",
-	          "text": "underlined",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "underline",
-	    },
-	  ]
-	`);
+	expect(tokenize('__underlined__')).toEqual([
+		{
+			children: [
+				{
+					content: 'underlined',
+					raw: 'underlined',
+					type: 'text',
+				},
+			],
+			raw: '__underlined__',
+			type: 'underline',
+		},
+	]);
 
-	expect(tokenize('__')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "__",
-	      "text": "__",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('__')).toEqual([
+		{
+			content: '_',
+			raw: '__',
+			type: 'text',
+		},
+	]);
 
-	expect(tokenize('____')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "____",
-	      "tokens": [
-	        {
-	          "raw": "__",
-	          "text": "__",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "emphasis",
-	    },
-	  ]
-	`);
+	expect(tokenize('____')).toEqual([
+		{
+			children: [
+				{
+					content: '_',
+					raw: '__',
+					type: 'text',
+				},
+			],
+			raw: '____',
+			type: 'emphasis',
+		},
+	]);
 
-	expect(tokenize('__ __')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "__ __",
-	      "tokens": [
-	        {
-	          "raw": " ",
-	          "text": " ",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "underline",
-	    },
-	  ]
-	`);
+	expect(tokenize('__ __')).toEqual([
+		{
+			children: [
+				{
+					content: ' ',
+					raw: ' ',
+					type: 'text',
+				},
+			],
+			raw: '__ __',
+			type: 'underline',
+		},
+	]);
 
-	expect(tokenize('foo__bar__')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "foo",
-	      "text": "foo",
-	      "type": "text",
-	    },
-	    {
-	      "raw": "__bar__",
-	      "tokens": [
-	        {
-	          "raw": "bar",
-	          "text": "bar",
-	          "type": "text",
-	        },
-	      ],
-	      "type": "underline",
-	    },
-	  ]
-	`);
+	expect(tokenize('foo__bar__')).toEqual([
+		{
+			content: 'foo',
+			raw: 'foo',
+			type: 'text',
+		},
+		{
+			children: [
+				{
+					content: 'bar',
+					raw: 'bar',
+					type: 'text',
+				},
+			],
+			raw: '__bar__',
+			type: 'underline',
+		},
+	]);
 
-	expect(tokenize('\\__underlined__')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "escaped": "_",
-	      "raw": "\\_",
-	      "type": "escape",
-	    },
-	    {
-	      "raw": "_underlined__",
-	      "text": "_underlined__",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('\\__underlined__')).toEqual([
+		{
+			escaped: '_',
+			raw: '\\_',
+			type: 'escape',
+		},
+		{
+			content: '_underlined',
+			raw: '_underlined__',
+			type: 'text',
+		},
+	]);
 
-	expect(tokenize('foo\\__bar__')).toMatchInlineSnapshot(`
-	  [
-	    {
-	      "raw": "foo",
-	      "text": "foo",
-	      "type": "text",
-	    },
-	    {
-	      "escaped": "_",
-	      "raw": "\\_",
-	      "type": "escape",
-	    },
-	    {
-	      "raw": "_bar__",
-	      "text": "_bar__",
-	      "type": "text",
-	    },
-	  ]
-	`);
+	expect(tokenize('foo\\__bar__')).toEqual([
+		{
+			content: 'foo',
+			raw: 'foo',
+			type: 'text',
+		},
+		{
+			escaped: '_',
+			raw: '\\_',
+			type: 'escape',
+		},
+		{
+			content: '_bar',
+			raw: '_bar__',
+			type: 'text',
+		},
+	]);
+});
+
+it('code', () => {
+	expect(tokenize('`code`')).toEqual([
+		{
+			content: 'code',
+			raw: '`code`',
+			type: 'code',
+		},
+	]);
+
+	expect(tokenize('``code``')).toEqual([
+		{
+			content: 'code',
+			raw: '``code``',
+			type: 'code',
+		},
+	]);
+
+	expect(tokenize('````foo`bar````')).toEqual([
+		{
+			content: 'foo`bar',
+			raw: '````foo`bar````',
+			type: 'code',
+		},
+	]);
 });

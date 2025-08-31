@@ -1,3 +1,5 @@
+const ESCAPE_RE = /^\\([^0-9A-Za-z\s])/;
+
 const MENTION_RE = /^[@＠]([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,}))($|\s|\p{P})/u;
 
 const TOPIC_RE =
@@ -8,17 +10,29 @@ const EMOTE_RE = /^:([\w-]+):/;
 const AUTOLINK_RE = /^https?:\/\/[\S]+/;
 const AUTOLINK_BACKPEDAL_RE = /(?:(?<!\(.*)\))?[.,;]*$/;
 
-const LINK_RE = /^\[((?:\[(?:\\.|[^\[\]\\])*\]|\\.|[^\[\]\\])*?)\]\((.*?)\)/;
+const LINK_RE =
+	/^\[((?:\[[^\]]*\]|[^\[\]]|\](?=[^\[]*\]))*)\]\(\s*<?((?:\([^)]*\)|[^\s\\]|\\.)*?)>?(?:\s+['"]([^]*?)['"])?\s*\)/;
+const UNESCAPE_URL_RE = /\\([^0-9A-Za-z\s])/g;
 
-const ESCAPE_RE = /^\\([@＠#:\\\[~*_])/;
+const EMPHASIS_RE =
+	/^\b_((?:__|\\[^]|[^\\_])+?)_\b|^\*(?=\S)((?:\*\*|\\[^]|\s+(?:\\[^]|[^\s\*\\]|\*\*)|[^\s\*\\])+?)\*(?!\*)/;
 
-const EM_RE =
-	/^\b_((?:__|\\[^]|[^\\_])+?)_\b|^\*((?:\*\*|\\[^]|\s+(?:\\[^]|[^\*\\]|\*\*)|[^\*\\])+?)\*(?!\*)/;
 const STRONG_RE = /^\*\*((?:\\[^]|[^\\])+?)\*\*(?!\*)/;
-const UNDERLINE_RE = /^__((?:\\[^]|[^\\])+?)__(?!_)/;
-const DEL_RE = /^~~((?:\\[^]|~(?!~)|[^~\\]|\s(?!~~))+?)~~/;
 
-const TEXT_RE = /^[^]+?(?:(?=$|[~*_:\\\[]|https?:\/\/)|(?<=\s|[(){}\/\\\[\]\-|:;'".,=+])(?=[@＠#＃]))/;
+const UNDERLINE_RE = /^__((?:\\[^]|[^\\])+?)__(?!_)/;
+
+const DELETE_RE = /^~~((?:\\[^]|~(?!~)|[^~\\]|\s(?!~~))+?)~~/;
+
+const CODE_RE = /^(`+)([^]*?[^`])\1(?!`)/;
+const CODE_ESCAPE_BACKTICKS_RE = /^ (?= *`)|(` *) $/g;
+
+const TEXT_RE = /^[^]+?(?:(?=$|[~*_`:\\\[]|https?:\/\/)|(?<=\s|[(){}\/\\\[\]\-|:;'".,=+])(?=[@＠#＃]))/;
+
+export interface EscapeToken {
+	type: 'escape';
+	raw: string;
+	escaped: string;
+}
 
 export interface MentionToken {
 	type: 'mention';
@@ -47,58 +61,70 @@ export interface AutolinkToken {
 export interface LinkToken {
 	type: 'link';
 	raw: string;
-	text: string;
 	url: string;
-}
-
-export interface EscapeToken {
-	type: 'escape';
-	raw: string;
-	escaped: string;
-}
-
-export interface EmphasisToken {
-	type: 'emphasis';
-	raw: string;
-	tokens: Token[];
-}
-
-export interface StrongToken {
-	type: 'strong';
-	raw: string;
-	tokens: Token[];
+	children: Token[];
 }
 
 export interface UnderlineToken {
 	type: 'underline';
 	raw: string;
-	tokens: Token[];
+	children: Token[];
+}
+
+export interface StrongToken {
+	type: 'strong';
+	raw: string;
+	children: Token[];
+}
+
+export interface EmphasisToken {
+	type: 'emphasis';
+	raw: string;
+	children: Token[];
 }
 
 export interface DeleteToken {
 	type: 'delete';
 	raw: string;
-	tokens: Token[];
+	children: Token[];
+}
+
+export interface CodeToken {
+	type: 'code';
+	raw: string;
+	content: string;
 }
 
 export interface TextToken {
 	type: 'text';
 	raw: string;
-	text: string;
+	content: string;
 }
 
 export type Token =
+	| EscapeToken
 	| MentionToken
 	| TopicToken
 	| EmoteToken
 	| AutolinkToken
 	| LinkToken
-	| EscapeToken
-	| EmphasisToken
 	| StrongToken
+	| EmphasisToken
 	| UnderlineToken
 	| DeleteToken
+	| CodeToken
 	| TextToken;
+
+const tokenizeEscape = (src: string): EscapeToken | undefined => {
+	const match = ESCAPE_RE.exec(src);
+	if (match) {
+		return {
+			type: 'escape',
+			raw: match[0],
+			escaped: match[1],
+		};
+	}
+};
 
 const tokenizeMention = (src: string): MentionToken | undefined => {
 	const match = MENTION_RE.exec(src);
@@ -156,32 +182,19 @@ const tokenizeLink = (src: string): LinkToken | undefined => {
 		return {
 			type: 'link',
 			raw: match[0],
-			text: match[1],
-			url: match[2],
+			url: match[2].replace(UNESCAPE_URL_RE, '$1'),
+			children: tokenize(match[1]),
 		};
 	}
 };
 
-const tokenizeEscape = (src: string): EscapeToken | undefined => {
-	const match = ESCAPE_RE.exec(src);
+const tokenizeEmphasis = (src: string): EmphasisToken | undefined => {
+	const match = EMPHASIS_RE.exec(src);
 	if (match) {
-		return {
-			type: 'escape',
-			raw: match[0],
-			escaped: match[1],
-		};
-	}
-};
-
-const tokenizeEm = (src: string): EmphasisToken | undefined => {
-	const match = EM_RE.exec(src);
-	if (match) {
-		const inner = match[1] || match[2];
-
 		return {
 			type: 'emphasis',
 			raw: match[0],
-			tokens: tokenize(inner),
+			children: tokenize(match[2] || match[1]),
 		};
 	}
 };
@@ -189,13 +202,10 @@ const tokenizeEm = (src: string): EmphasisToken | undefined => {
 const tokenizeStrong = (src: string): StrongToken | undefined => {
 	const match = STRONG_RE.exec(src);
 	if (match) {
-		const innerText = match[1];
-		const innerTokens = tokenize(innerText);
-
 		return {
 			type: 'strong',
 			raw: match[0],
-			tokens: innerTokens,
+			children: tokenize(match[1]),
 		};
 	}
 };
@@ -203,25 +213,32 @@ const tokenizeStrong = (src: string): StrongToken | undefined => {
 const tokenizeUnderline = (src: string): UnderlineToken | undefined => {
 	const match = UNDERLINE_RE.exec(src);
 	if (match) {
-		const inner = match[1];
-
 		return {
 			type: 'underline',
 			raw: match[0],
-			tokens: tokenize(inner),
+			children: tokenize(match[1]),
 		};
 	}
 };
 
 const tokenizeDelete = (src: string): DeleteToken | undefined => {
-	const match = DEL_RE.exec(src);
+	const match = DELETE_RE.exec(src);
 	if (match) {
-		const inner = match[1];
-
 		return {
 			type: 'delete',
 			raw: match[0],
-			tokens: tokenize(inner),
+			children: tokenize(match[1]),
+		};
+	}
+};
+
+const tokenizeCode = (src: string): CodeToken | undefined => {
+	const match = CODE_RE.exec(src);
+	if (match) {
+		return {
+			type: 'code',
+			raw: match[0],
+			content: match[2].replace(CODE_ESCAPE_BACKTICKS_RE, '$1'),
 		};
 	}
 };
@@ -232,7 +249,7 @@ const tokenizeText = (src: string): TextToken | undefined => {
 		return {
 			type: 'text',
 			raw: match[0],
-			text: match[0],
+			content: match[0],
 		};
 	}
 };
@@ -254,10 +271,11 @@ export const tokenize = (src: string): Token[] => {
 				tokenizeTopic(src) ||
 				tokenizeEmote(src) ||
 				tokenizeLink(src) ||
-				tokenizeEm(src) ||
+				tokenizeEmphasis(src) ||
 				tokenizeStrong(src) ||
 				tokenizeUnderline(src) ||
-				tokenizeDelete(src))
+				tokenizeDelete(src) ||
+				tokenizeCode(src))
 		) {
 			src = src.slice(token.raw.length);
 			tokens.push(token);
@@ -269,7 +287,6 @@ export const tokenize = (src: string): Token[] => {
 
 			if (lastToken && lastToken.type === 'text') {
 				lastToken.raw += token.raw;
-				lastToken.text += token.text;
 				token = lastToken;
 			} else {
 				tokens.push(token);
