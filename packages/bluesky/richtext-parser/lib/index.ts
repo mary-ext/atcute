@@ -350,5 +350,3 @@ export const tokenize = (src: string): Token[] => {
 
 	return tokens;
 };
-
-console.log(rules);
