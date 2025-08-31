@@ -115,190 +115,240 @@ export type Token =
 	| CodeToken
 	| TextToken;
 
-const tokenizeEscape = (src: string): EscapeToken | undefined => {
-	const match = ESCAPE_RE.exec(src);
-	if (match) {
-		return {
-			type: 'escape',
-			raw: match[0],
-			escaped: match[1],
-		};
-	}
-};
+interface Rule {
+	order: number;
+	bonus?: number;
+	exec(src: string): Token | undefined;
+}
 
-const tokenizeMention = (src: string): MentionToken | undefined => {
-	const match = MENTION_RE.exec(src);
-	if (match && match[2] !== '@') {
-		const suffix = match[2].length;
+let order = 0;
 
-		return {
-			type: 'mention',
-			raw: suffix > 0 ? match[0].slice(0, -suffix) : match[0],
-			handle: match[1],
-		};
-	}
-};
+const rules: Rule[] = [
+	{
+		order: ++order,
+		exec(src: string): EscapeToken | undefined {
+			const match = ESCAPE_RE.exec(src);
+			if (match) {
+				return {
+					type: 'escape',
+					raw: match[0],
+					escaped: match[1],
+				};
+			}
+		},
+	},
 
-const tokenizeTopic = (src: string): TopicToken | undefined => {
-	const match = TOPIC_RE.exec(src);
-	if (match && match[2] !== '#') {
-		const suffix = match[2].length;
+	{
+		order: ++order,
+		exec(src: string): MentionToken | undefined {
+			const match = MENTION_RE.exec(src);
+			if (match && match[2] !== '@') {
+				const suffix = match[2].length;
 
-		return {
-			type: 'topic',
-			raw: suffix > 0 ? match[0].slice(0, -suffix) : match[0],
-			name: match[1],
-		};
-	}
-};
+				return {
+					type: 'mention',
+					raw: suffix > 0 ? match[0].slice(0, -suffix) : match[0],
+					handle: match[1],
+				};
+			}
+		},
+	},
 
-const tokenizeEmote = (src: string): EmoteToken | undefined => {
-	const match = EMOTE_RE.exec(src);
-	if (match) {
-		return {
-			type: 'emote',
-			raw: match[0],
-			name: match[1],
-		};
-	}
-};
+	{
+		order: ++order,
+		exec(src: string): TopicToken | undefined {
+			const match = TOPIC_RE.exec(src);
+			if (match && match[2] !== '#') {
+				const suffix = match[2].length;
 
-const tokenizeAutolink = (src: string): AutolinkToken | undefined => {
-	const match = AUTOLINK_RE.exec(src);
-	if (match) {
-		const url = match[0].replace(AUTOLINK_BACKPEDAL_RE, '');
+				return {
+					type: 'topic',
+					raw: suffix > 0 ? match[0].slice(0, -suffix) : match[0],
+					name: match[1],
+				};
+			}
+		},
+	},
 
-		return {
-			type: 'autolink',
-			raw: url,
-			url: url,
-		};
-	}
-};
+	{
+		order: ++order,
+		exec(src: string): EmoteToken | undefined {
+			const match = EMOTE_RE.exec(src);
+			if (match) {
+				return {
+					type: 'emote',
+					raw: match[0],
+					name: match[1],
+				};
+			}
+		},
+	},
 
-const tokenizeLink = (src: string): LinkToken | undefined => {
-	const match = LINK_RE.exec(src);
-	if (match) {
-		return {
-			type: 'link',
-			raw: match[0],
-			url: match[2].replace(UNESCAPE_URL_RE, '$1'),
-			children: tokenize(match[1]),
-		};
-	}
-};
+	{
+		order: ++order,
+		exec(src: string): AutolinkToken | undefined {
+			const match = AUTOLINK_RE.exec(src);
+			if (match) {
+				const url = match[0].replace(AUTOLINK_BACKPEDAL_RE, '');
 
-const tokenizeEmphasis = (src: string): EmphasisToken | undefined => {
-	const match = EMPHASIS_RE.exec(src);
-	if (match) {
-		return {
-			type: 'emphasis',
-			raw: match[0],
-			children: tokenize(match[2] || match[1]),
-		};
-	}
-};
+				return {
+					type: 'autolink',
+					raw: url,
+					url: url,
+				};
+			}
+		},
+	},
 
-const tokenizeStrong = (src: string): StrongToken | undefined => {
-	const match = STRONG_RE.exec(src);
-	if (match) {
-		return {
-			type: 'strong',
-			raw: match[0],
-			children: tokenize(match[1]),
-		};
-	}
-};
+	{
+		order: ++order,
+		exec(src: string): LinkToken | undefined {
+			const match = LINK_RE.exec(src);
+			if (match) {
+				return {
+					type: 'link',
+					raw: match[0],
+					url: match[2].replace(UNESCAPE_URL_RE, '$1'),
+					children: tokenize(match[1]),
+				};
+			}
+		},
+	},
 
-const tokenizeUnderline = (src: string): UnderlineToken | undefined => {
-	const match = UNDERLINE_RE.exec(src);
-	if (match) {
-		return {
-			type: 'underline',
-			raw: match[0],
-			children: tokenize(match[1]),
-		};
-	}
-};
+	{
+		order: ++order,
+		bonus: 0.2,
+		exec(src: string): EmphasisToken | undefined {
+			const match = EMPHASIS_RE.exec(src);
+			if (match) {
+				return {
+					type: 'emphasis',
+					raw: match[0],
+					children: tokenize(match[2] || match[1]),
+				};
+			}
+		},
+	},
 
-const tokenizeDelete = (src: string): DeleteToken | undefined => {
-	const match = DELETE_RE.exec(src);
-	if (match) {
-		return {
-			type: 'delete',
-			raw: match[0],
-			children: tokenize(match[1]),
-		};
-	}
-};
+	{
+		order: order,
+		bonus: 0.1,
+		exec(src: string): StrongToken | undefined {
+			const match = STRONG_RE.exec(src);
+			if (match) {
+				return {
+					type: 'strong',
+					raw: match[0],
+					children: tokenize(match[1]),
+				};
+			}
+		},
+	},
 
-const tokenizeCode = (src: string): CodeToken | undefined => {
-	const match = CODE_RE.exec(src);
-	if (match) {
-		return {
-			type: 'code',
-			raw: match[0],
-			content: match[2].replace(CODE_ESCAPE_BACKTICKS_RE, '$1'),
-		};
-	}
-};
+	{
+		order: order,
+		bonus: 0,
+		exec(src: string): UnderlineToken | undefined {
+			const match = UNDERLINE_RE.exec(src);
+			if (match) {
+				return {
+					type: 'underline',
+					raw: match[0],
+					children: tokenize(match[1]),
+				};
+			}
+		},
+	},
 
-const tokenizeText = (src: string): TextToken | undefined => {
-	const match = TEXT_RE.exec(src);
-	if (match) {
-		return {
-			type: 'text',
-			raw: match[0],
-			content: match[0],
-		};
-	}
-};
+	{
+		order: ++order,
+		exec(src: string): DeleteToken | undefined {
+			const match = DELETE_RE.exec(src);
+			if (match) {
+				return {
+					type: 'delete',
+					raw: match[0],
+					children: tokenize(match[1]),
+				};
+			}
+		},
+	},
+
+	{
+		order: ++order,
+		exec(src: string): CodeToken | undefined {
+			const match = CODE_RE.exec(src);
+			if (match) {
+				return {
+					type: 'code',
+					raw: match[0],
+					content: match[2].replace(CODE_ESCAPE_BACKTICKS_RE, '$1'),
+				};
+			}
+		},
+	},
+
+	{
+		order: ++order,
+		exec(src: string): TextToken | undefined {
+			const match = TEXT_RE.exec(src);
+			if (match) {
+				return {
+					type: 'text',
+					raw: match[0],
+					content: match[0],
+				};
+			}
+		},
+	},
+];
 
 export const tokenize = (src: string): Token[] => {
 	const tokens: Token[] = [];
 
-	let lastToken: Token | undefined;
-	let token: Token | undefined;
-
+	let last: Token | undefined;
 	while (src) {
-		lastToken = token;
+		let best: { token: Token; order: number; score: number } | undefined;
 
-		if (
-			(token =
-				tokenizeEscape(src) ||
-				tokenizeAutolink(src) ||
-				tokenizeMention(src) ||
-				tokenizeTopic(src) ||
-				tokenizeEmote(src) ||
-				tokenizeLink(src) ||
-				tokenizeEmphasis(src) ||
-				tokenizeStrong(src) ||
-				tokenizeUnderline(src) ||
-				tokenizeDelete(src) ||
-				tokenizeCode(src))
-		) {
-			src = src.slice(token.raw.length);
-			tokens.push(token);
-			continue;
-		}
+		for (let idx = 0, len = rules.length; idx < len; idx++) {
+			const rule = rules[idx];
+			const order = rule.order;
 
-		if ((token = tokenizeText(src))) {
-			src = src.slice(token.raw.length);
-
-			if (lastToken && lastToken.type === 'text') {
-				lastToken.raw += token.raw;
-				token = lastToken;
-			} else {
-				tokens.push(token);
+			if (best && best.order !== order) {
+				break;
 			}
 
-			continue;
+			const token = rule.exec(src);
+			if (!token) {
+				continue;
+			}
+
+			const score = token.raw.length + (rule.bonus ?? 0);
+
+			if (!best || score > best.score) {
+				best = { token: token, order: order, score: score };
+			}
 		}
 
-		if (src) {
+		if (!best) {
 			throw new Error(`infinite loop encountered`);
+		}
+
+		{
+			const token = best.token;
+
+			src = src.slice(token.raw.length);
+
+			if (!last || token.type !== 'text' || last.type !== 'text') {
+				last = token;
+				tokens.push(token);
+			} else {
+				last.raw += token.raw;
+			}
 		}
 	}
 
 	return tokens;
 };
+
+console.log(rules);
