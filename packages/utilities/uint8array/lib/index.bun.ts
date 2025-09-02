@@ -13,11 +13,11 @@ const toUint8Array = (buffer: NodeBuffer) => {
 	return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 };
 
-export const alloc = (size: number): Uint8Array => {
+export const alloc = (size: number): Uint8Array<ArrayBuffer> => {
 	return new Uint8Array(size);
 };
 
-export const allocUnsafe: (size: number) => Uint8Array = _allocUnsafe;
+export const allocUnsafe: (size: number) => Uint8Array<ArrayBuffer> = _allocUnsafe;
 
 export const compare = (a: Uint8Array, b: Uint8Array): number => {
 	return _compare.call(a, b);
@@ -31,12 +31,12 @@ export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
 	return _timingSafeEqual(a, b);
 };
 
-export const concat = (arrays: Uint8Array[], size?: number): Uint8Array => {
+export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuffer> => {
 	// Bun's typings is slightly wrong, *you can* pass `size: undefined` with `asUint8Array: true`
 	return _concat(arrays, size as number, true);
 };
 
-export const encodeUtf8: (str: string) => Uint8Array = textEncoder.encode.bind(textEncoder);
+export const encodeUtf8: (str: string) => Uint8Array<ArrayBuffer> = textEncoder.encode.bind(textEncoder);
 
 export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, length?: number): number => {
 	let buffer: Uint8Array;
@@ -106,6 +106,6 @@ export const decodeUtf8From = (from: Uint8Array, offset?: number, length?: numbe
 	}
 };
 
-export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array> => {
-	return toUint8Array(_hash('sha256', buffer, 'buffer'));
+export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuffer>> => {
+	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
 };

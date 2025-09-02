@@ -6,7 +6,7 @@ const subtle = crypto.subtle;
 /**
  * creates an Uint8Array of the requested size, with the contents zeroed
  */
-export const alloc = (size: number): Uint8Array => {
+export const alloc = (size: number): Uint8Array<ArrayBuffer> => {
 	return new Uint8Array(size);
 };
 
@@ -84,7 +84,7 @@ export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
 /**
  * concatenates multiple Uint8Array buffers into one
  */
-export const concat = (arrays: Uint8Array[], size?: number): Uint8Array => {
+export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuffer> => {
 	let written = 0;
 
 	let len = arrays.length;
@@ -112,7 +112,7 @@ export const concat = (arrays: Uint8Array[], size?: number): Uint8Array => {
 /**
  * encodes a UTF-8 string
  */
-export const encodeUtf8 = (str: string): Uint8Array => {
+export const encodeUtf8 = (str: string): Uint8Array<ArrayBuffer> => {
 	return textEncoder.encode(str);
 };
 
@@ -190,6 +190,6 @@ export const decodeUtf8From = (from: Uint8Array, offset?: number, length?: numbe
 /**
  * get a SHA-256 digest of this buffer
  */
-export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array> => {
+export const toSha256 = async (buffer: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> => {
 	return new Uint8Array(await subtle.digest('SHA-256', buffer));
 };
