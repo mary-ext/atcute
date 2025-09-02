@@ -39,7 +39,10 @@ export const isSignatureNormalized = (sig: Uint8Array, curveOrder: bigint): bool
 	return getSignatureS(sig) <= curveOrder >> 1n;
 };
 
-export const normalizeSignature = (sig: Uint8Array<ArrayBuffer>, curveOrder: bigint): Uint8Array<ArrayBuffer> => {
+export const normalizeSignature = (
+	sig: Uint8Array<ArrayBuffer>,
+	curveOrder: bigint,
+): Uint8Array<ArrayBuffer> => {
 	// Reference: [1] Bitcoin BIP 0146 -- https://github.com/bitcoin/bips/blob/665712c/bip-0146.mediawiki#low_s
 	//            [2] SEC 1, ver. 2.0, § 4.1.3 Signing Operation -- https://www.secg.org/sec1-v2.pdf
 
