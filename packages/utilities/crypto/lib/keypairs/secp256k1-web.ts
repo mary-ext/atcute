@@ -70,12 +70,12 @@ export class Secp256k1PublicKey implements PublicKey {
 	exportPublicKey(format: 'did'): Promise<DidKeyString>;
 	exportPublicKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPublicKey(format: 'multikey'): Promise<string>;
-	exportPublicKey(format: 'raw'): Promise<Uint8Array>;
+	exportPublicKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;
 	exportPublicKey(format: 'rawHex'): Promise<string>;
 	async exportPublicKey(
 		format: 'did' | 'jwk' | 'multikey' | 'raw' | 'rawHex',
-	): Promise<DidKeyString | JsonWebKey | Uint8Array | string> {
-		const publicKeyBytes = this._publicKey;
+	): Promise<DidKeyString | JsonWebKey | Uint8Array<ArrayBuffer> | string> {
+		const publicKeyBytes = this._publicKey as Uint8Array<ArrayBuffer>;
 
 		if (format === 'jwk') {
 			return toJsonWebKey(publicKeyBytes);
@@ -123,12 +123,12 @@ export class Secp256k1PrivateKey extends Secp256k1PublicKey implements PrivateKe
 		return keypair;
 	}
 
-	async sign(data: Uint8Array): Promise<Uint8Array> {
+	async sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
 		const hashed = await toSha256(data);
 		const sig = await signAsync(hashed, this._privateKey, { lowS: true });
 
 		// return raw 64 byte sig not DER-encoded
-		return sig.toCompactRawBytes();
+		return sig.toCompactRawBytes() as Uint8Array<ArrayBuffer>;
 	}
 }
 
@@ -142,13 +142,13 @@ export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey implement
 
 	exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPrivateKey(format: 'multikey'): Promise<string>;
-	exportPrivateKey(format: 'raw'): Promise<Uint8Array>;
+	exportPrivateKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;
 	exportPrivateKey(format: 'rawHex'): Promise<string>;
 	async exportPrivateKey(
 		format: 'raw' | 'rawHex' | 'multikey' | 'jwk',
-	): Promise<Uint8Array | string | JsonWebKey> {
-		const privateKeyBytes = this._privateKey;
-		const publicKeyBytes = this._publicKey;
+	): Promise<Uint8Array<ArrayBuffer> | string | JsonWebKey> {
+		const privateKeyBytes = this._privateKey as Uint8Array<ArrayBuffer>;
+		const publicKeyBytes = this._publicKey as Uint8Array<ArrayBuffer>;
 
 		if (format === 'jwk') {
 			return toJsonWebKey(publicKeyBytes, privateKeyBytes);

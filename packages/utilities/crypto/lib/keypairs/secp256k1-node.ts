@@ -88,11 +88,11 @@ class NodeSecp256k1PublicKey implements PublicKey {
 	exportPublicKey(format: 'did'): Promise<DidKeyString>;
 	exportPublicKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPublicKey(format: 'multikey'): Promise<string>;
-	exportPublicKey(format: 'raw'): Promise<Uint8Array>;
+	exportPublicKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;
 	exportPublicKey(format: 'rawHex'): Promise<string>;
 	async exportPublicKey(
 		format: 'did' | 'jwk' | 'multikey' | 'raw' | 'rawHex',
-	): Promise<DidKeyString | JsonWebKey | Uint8Array | string> {
+	): Promise<DidKeyString | JsonWebKey | Uint8Array<ArrayBuffer> | string> {
 		const publicKey = this._publicKey;
 
 		if (format === 'jwk') {
@@ -160,7 +160,7 @@ class NodeSecp256k1PrivateKey extends NodeSecp256k1PublicKey implements PrivateK
 		return keypair;
 	}
 
-	async sign(data: Uint8Array): Promise<Uint8Array> {
+	async sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
 		const sig = sign('SHA256', data, { key: this._privateKey, dsaEncoding: 'ieee-p1363' });
 
 		return normalizeSignature(new Uint8Array(sig), SECP256K1_CURVE_ORDER);
@@ -175,7 +175,7 @@ class NodeSecp256k1PrivateKeyExportable extends NodeSecp256k1PrivateKey implemen
 
 	exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPrivateKey(format: 'multikey'): Promise<string>;
-	exportPrivateKey(format: 'raw'): Promise<Uint8Array>;
+	exportPrivateKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;
 	exportPrivateKey(format: 'rawHex'): Promise<string>;
 	async exportPrivateKey(
 		format: 'raw' | 'rawHex' | 'multikey' | 'jwk',

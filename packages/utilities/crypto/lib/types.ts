@@ -24,7 +24,7 @@ export interface PublicKey {
 	exportPublicKey(format: 'did'): Promise<DidKeyString>;
 	exportPublicKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPublicKey(format: 'multikey'): Promise<string>;
-	exportPublicKey(format: 'raw'): Promise<Uint8Array>;
+	exportPublicKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;
 	exportPublicKey(format: 'rawHex'): Promise<string>;
 }
 
@@ -35,7 +35,7 @@ export interface PrivateKey extends PublicKey {
 	/**
 	 * Signs provided data using the private key
 	 */
-	sign(data: Uint8Array): Promise<Uint8Array>;
+	sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
 }
 
 /**
@@ -52,7 +52,7 @@ export interface PrivateKeyExportable extends PrivateKey {
 	 */
 	exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPrivateKey(format: 'multikey'): Promise<string>;
-	exportPrivateKey(format: 'raw'): Promise<Uint8Array>;
+	exportPrivateKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;
 	exportPrivateKey(format: 'rawHex'): Promise<string>;
 }
 

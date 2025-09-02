@@ -60,8 +60,10 @@ export class P256PublicKey implements PublicKey {
 		this._publicKey = publicKey;
 	}
 
-	static async importRaw(publicKeyBytes: Uint8Array<ArrayBuffer>): Promise<P256PublicKey> {
-		const imported = await crypto.subtle.importKey('raw', publicKeyBytes, ECDSA_ALG, true, ['verify']);
+	static async importRaw(publicKeyBytes: Uint8Array): Promise<P256PublicKey> {
+		const imported = await crypto.subtle.importKey('raw', publicKeyBytes as BufferSource, ECDSA_ALG, true, [
+			'verify',
+		]);
 
 		return new P256PublicKey(imported);
 	}
@@ -75,11 +77,7 @@ export class P256PublicKey implements PublicKey {
 		return new P256PublicKey(publicKey);
 	}
 
-	async verify(
-		sig: Uint8Array<ArrayBuffer>,
-		data: Uint8Array<ArrayBuffer>,
-		options?: VerifyOptions,
-	): Promise<boolean> {
+	async verify(sig: Uint8Array, data: Uint8Array, options?: VerifyOptions): Promise<boolean> {
 		if (sig.length !== 64) {
 			// Invalid signature: must be exactly 64 bits
 			return false;
@@ -90,17 +88,17 @@ export class P256PublicKey implements PublicKey {
 			return false;
 		}
 
-		return await crypto.subtle.verify(ECDSA_ALG, this._publicKey, sig, data);
+		return await crypto.subtle.verify(ECDSA_ALG, this._publicKey, sig as BufferSource, data as BufferSource);
 	}
 
 	exportPublicKey(format: 'did'): Promise<DidKeyString>;
 	exportPublicKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPublicKey(format: 'multikey'): Promise<string>;
-	exportPublicKey(format: 'raw'): Promise<Uint8Array>;
+	exportPublicKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;
 	exportPublicKey(format: 'rawHex'): Promise<string>;
 	async exportPublicKey(
 		format: 'did' | 'jwk' | 'multikey' | 'raw' | 'rawHex',
-	): Promise<DidKeyString | JsonWebKey | Uint8Array | string> {
+	): Promise<DidKeyString | JsonWebKey | Uint8Array<ArrayBuffer> | string> {
 		if (format === 'jwk') {
 			return await crypto.subtle.exportKey('jwk', this._publicKey);
 		}
@@ -142,14 +140,14 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 	}
 
 	static override async importRaw(
-		privateKeyBytes: Uint8Array<ArrayBuffer>,
-		publicKeyBytes?: Uint8Array<ArrayBuffer>,
+		privateKeyBytes: Uint8Array,
+		publicKeyBytes?: Uint8Array,
 	): Promise<P256PrivateKey> {
 		const pkcs8 = concat([PKCS8_PRIVATE_KEY_PREFIX, privateKeyBytes]);
 
 		const privateKey = await crypto.subtle.importKey('pkcs8', pkcs8, ECDSA_ALG, !publicKeyBytes, ['sign']);
 		const publicKey = publicKeyBytes
-			? await crypto.subtle.importKey('raw', publicKeyBytes, ECDSA_ALG, true, ['verify'])
+			? await crypto.subtle.importKey('raw', publicKeyBytes as BufferSource, ECDSA_ALG, true, ['verify'])
 			: await deriveEcPublicKeyFromPrivateKey(privateKey, ['verify']);
 
 		const keypair = new P256PrivateKey(privateKey, publicKey);
@@ -194,8 +192,8 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 		return await this.importCryptoKey(keypair.privateKey, keypair.publicKey);
 	}
 
-	async sign(data: Uint8Array<ArrayBuffer>): Promise<Uint8Array> {
-		const sig = await crypto.subtle.sign(ECDSA_ALG, this._privateKey, data);
+	async sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
+		const sig = await crypto.subtle.sign(ECDSA_ALG, this._privateKey, data as BufferSource);
 		return normalizeSignature(new Uint8Array(sig), P256_CURVE_ORDER);
 	}
 }
@@ -208,11 +206,11 @@ export class P256PrivateKeyExportable extends P256PrivateKey implements PrivateK
 
 	exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPrivateKey(format: 'multikey'): Promise<string>;
-	exportPrivateKey(format: 'raw'): Promise<Uint8Array>;
+	exportPrivateKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;
 	exportPrivateKey(format: 'rawHex'): Promise<string>;
 	async exportPrivateKey(
 		format: 'jwk' | 'multikey' | 'raw' | 'rawHex',
-	): Promise<JsonWebKey | Uint8Array | string> {
+	): Promise<JsonWebKey | Uint8Array<ArrayBuffer> | string> {
 		if (format === 'jwk') {
 			return await crypto.subtle.exportKey('jwk', this._privateKey);
 		}
