@@ -59,13 +59,21 @@ export const normalizeSignature = (sig: Uint8Array<ArrayBuffer>, curveOrder: big
 	return sig;
 };
 
+export const isCompressedPoint = (coords: Uint8Array): boolean => {
+	return coords[0] === 0x02 || coords[0] === 0x03;
+};
+
+export const isUncompressedPoint = (coords: Uint8Array): boolean => {
+	return coords[0] === 0x04;
+};
+
 export const compressPoint = (coords: Uint8Array): Uint8Array<ArrayBuffer> => {
 	// Reference: [1] SEC 1, ver. 2.0, § 2.3.3 Elliptic-Curve-Point-to-Octet-String Conversion -- https://www.secg.org/sec1-v2.pdf
 	// This function creates a copy of the point. If it is already compressed, a TypeError will be thrown.
 
 	// 1. Check if the point is already compressed.
 	//    Value 0x04 comes from [1] Action 3.3.
-	assertType(coords[0] === 0x04, 'unexpected compressed point');
+	assertType(isUncompressedPoint(coords), `not an uncompressed point`);
 
 	// 2. Recover the value of N.
 	//    Given that coords is "0x04 || X || Y" ([1] Action 3.3.), N is equal to `(len(coords) - 1) / 2`.

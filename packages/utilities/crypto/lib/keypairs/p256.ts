@@ -2,12 +2,14 @@ import { toBase16 } from '@atcute/multibase';
 import { concat } from '@atcute/uint8array';
 
 import type { DidKeyString, PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.js';
+import { P256_N, uncompressP256Point } from '../utils-p256.js';
 import {
 	assertType,
 	assertUnreachable,
 	checkKeypairRelationship,
 	compressPoint,
 	deriveEcPublicKeyFromPrivateKey,
+	isCompressedPoint,
 	isSignatureNormalized,
 	normalizeSignature,
 	toMultikey,
@@ -22,9 +24,6 @@ const ECDSA_ALG: EcdsaParams & EcKeyImportParams = {
 	namedCurve: 'P-256',
 	hash: 'SHA-256',
 } as const;
-
-// NIST SP 800-186, § 3.2.1.3. P-256 -- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186.pdf
-const P256_CURVE_ORDER = 0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551n;
 
 // This is a hack, to convert a raw private key to a PKCS#8 wrapped key.
 // Reference: [1] RFC 5958 Asymmetric Key Packages, § 2. Asymmetric Key Package CMS Content Type https://datatracker.ietf.org/doc/html/rfc5958#section-2
@@ -61,9 +60,15 @@ export class P256PublicKey implements PublicKey {
 	}
 
 	static async importRaw(publicKeyBytes: Uint8Array): Promise<P256PublicKey> {
-		const imported = await crypto.subtle.importKey('raw', publicKeyBytes as BufferSource, ECDSA_ALG, true, [
-			'verify',
-		]);
+		const imported = await crypto.subtle.importKey(
+			'raw',
+			isCompressedPoint(publicKeyBytes)
+				? uncompressP256Point(publicKeyBytes)
+				: (publicKeyBytes as BufferSource),
+			ECDSA_ALG,
+			true,
+			['verify'],
+		);
 
 		return new P256PublicKey(imported);
 	}
@@ -83,7 +88,7 @@ export class P256PublicKey implements PublicKey {
 			return false;
 		}
 
-		if (!options?.allowMalleableSig && !isSignatureNormalized(sig, P256_CURVE_ORDER)) {
+		if (!options?.allowMalleableSig && !isSignatureNormalized(sig, P256_N)) {
 			// Invalid signature: not low-S normalized
 			return false;
 		}
@@ -147,7 +152,15 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 
 		const privateKey = await crypto.subtle.importKey('pkcs8', pkcs8, ECDSA_ALG, !publicKeyBytes, ['sign']);
 		const publicKey = publicKeyBytes
-			? await crypto.subtle.importKey('raw', publicKeyBytes as BufferSource, ECDSA_ALG, true, ['verify'])
+			? await crypto.subtle.importKey(
+					'raw',
+					isCompressedPoint(publicKeyBytes)
+						? uncompressP256Point(publicKeyBytes)
+						: (publicKeyBytes as BufferSource),
+					ECDSA_ALG,
+					true,
+					['verify'],
+				)
 			: await deriveEcPublicKeyFromPrivateKey(privateKey, ['verify']);
 
 		const keypair = new P256PrivateKey(privateKey, publicKey);
@@ -194,7 +207,7 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 
 	async sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
 		const sig = await crypto.subtle.sign(ECDSA_ALG, this._privateKey, data as BufferSource);
-		return normalizeSignature(new Uint8Array(sig), P256_CURVE_ORDER);
+		return normalizeSignature(new Uint8Array(sig), P256_N);
 	}
 }
 
