@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"types": ["bun"],
+		"types": ["bun", "@vitest/browser/providers/playwright"],
 		"outDir": "dist/",
 		"esModuleInterop": true,
 		"skipLibCheck": true,
