@@ -31,7 +31,7 @@
 	},
 	"devDependencies": {
 		"@ipld/dag-cbor": "^9.2.4",
-		"@types/bun": "^1.2.18",
+		"@types/bun": "^1.2.21",
 		"cbor-x": "^1.6.0"
 	},
 	"dependencies": {

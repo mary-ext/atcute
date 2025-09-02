@@ -33,10 +33,10 @@
 	"dependencies": {
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
-		"@badrap/valita": "^0.4.5"
+		"@badrap/valita": "^0.4.6"
 	},
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
-		"@types/bun": "^1.2.18"
+		"@types/bun": "^1.2.21"
 	}
 }

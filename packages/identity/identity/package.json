@@ -28,10 +28,10 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.2.18"
+		"@types/bun": "^1.2.21"
 	},
 	"dependencies": {
 		"@atcute/lexicons": "workspace:^",
-		"@badrap/valita": "^0.4.5"
+		"@badrap/valita": "^0.4.6"
 	}
 }

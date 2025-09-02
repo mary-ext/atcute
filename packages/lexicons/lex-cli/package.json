@@ -25,13 +25,13 @@
 	},
 	"dependencies": {
 		"@atcute/lexicon-doc": "workspace:^",
-		"@badrap/valita": "^0.4.5",
+		"@badrap/valita": "^0.4.6",
 		"@externdefs/collider": "^0.3.0",
 		"picocolors": "^1.1.1",
 		"prettier": "^3.6.2"
 	},
 	"devDependencies": {
 		"@atcute/lexicons": "workspace:^",
-		"@types/node": "^22.16.5"
+		"@types/node": "^22.18.0"
 	}
 }

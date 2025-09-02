@@ -14,12 +14,12 @@
 		"build": "tsc"
 	},
 	"dependencies": {
-		"esbuild": "^0.25.7",
+		"esbuild": "^0.25.9",
 		"js-yaml": "^4.1.0",
 		"picocolors": "^1.1.1"
 	},
 	"devDependencies": {
 		"@types/js-yaml": "^4.0.9",
-		"@types/node": "^22.16.5"
+		"@types/node": "^22.18.0"
 	}
 }
