@@ -3,14 +3,14 @@ import { fromBase58Btc } from '@atcute/multibase';
 import { assertSyntax, assertType } from './utils.js';
 
 export type FoundPrivateKey =
-	| { type: 'p256'; privateKeyBytes: Uint8Array }
-	| { type: 'secp256k1'; privateKeyBytes: Uint8Array };
+	| { type: 'p256'; privateKeyBytes: Uint8Array<ArrayBuffer> }
+	| { type: 'secp256k1'; privateKeyBytes: Uint8Array<ArrayBuffer> };
 
 export type FoundPublicKey =
-	| { type: 'p256'; jwtAlg: 'ES256'; publicKeyBytes: Uint8Array }
-	| { type: 'secp256k1'; jwtAlg: 'ES256K'; publicKeyBytes: Uint8Array };
+	| { type: 'p256'; jwtAlg: 'ES256'; publicKeyBytes: Uint8Array<ArrayBuffer> }
+	| { type: 'secp256k1'; jwtAlg: 'ES256K'; publicKeyBytes: Uint8Array<ArrayBuffer> };
 
-const extractMultibase = (key: string): Uint8Array => {
+const extractMultibase = (key: string): Uint8Array<ArrayBuffer> => {
 	assertSyntax(key.length >= 2 && key[0] === 'z', `not a multibase base58btc string`);
 
 	const bytes = fromBase58Btc(key.slice(1));

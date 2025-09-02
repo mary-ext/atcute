@@ -6,8 +6,8 @@ import type { VerifyOptions } from './types.js';
 
 export const verifySig = async (
 	key: FoundPublicKey,
-	sig: Uint8Array,
-	data: Uint8Array,
+	sig: Uint8Array<ArrayBuffer>,
+	data: Uint8Array<ArrayBuffer>,
 	opts?: VerifyOptions,
 ) => {
 	switch (key.type) {
@@ -28,8 +28,8 @@ export interface VerifyWithDidKeyOptions extends VerifyOptions {
 
 export const verifySigWithDidKey = async (
 	didKey: string,
-	sig: Uint8Array,
-	data: Uint8Array,
+	sig: Uint8Array<ArrayBuffer>,
+	data: Uint8Array<ArrayBuffer>,
 	opts?: VerifyWithDidKeyOptions,
 ): Promise<boolean> => {
 	const found = parseDidKey(didKey);
