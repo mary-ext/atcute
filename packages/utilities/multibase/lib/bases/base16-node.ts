@@ -7,7 +7,7 @@ const UPPER_RE = /[A-F]/;
 const _hexSlice = NodeBuffer.prototype.hexSlice;
 const _hexWrite = NodeBuffer.prototype.hexWrite;
 
-export const fromBase16 = (str: string): Uint8Array => {
+export const fromBase16 = (str: string): Uint8Array<ArrayBuffer> => {
 	if (UPPER_RE.test(str)) {
 		throw new SyntaxError(`unexpected uppercase characters in base16 string`);
 	}

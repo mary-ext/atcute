@@ -42,7 +42,7 @@ export const createRfc4648Decode = (alphabet: string, bitsPerChar: number, pad: 
 		codes[alphabet[i]] = i;
 	}
 
-	return (str: string) => {
+	return (str: string): Uint8Array<ArrayBuffer> => {
 		// Count the padding bytes:
 		let end = str.length;
 		while (pad && str[end - 1] === '=') {
@@ -167,7 +167,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 	const LEADER = alphabet.charAt(0);
 	const FACTOR = Math.log(BASE) / Math.log(256); // log(BASE) / log(256), rounded up
 
-	return (source: string): Uint8Array => {
+	return (source: string): Uint8Array<ArrayBuffer> => {
 		if (source.length === 0) {
 			return allocUnsafe(0);
 		}

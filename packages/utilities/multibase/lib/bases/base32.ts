@@ -2,7 +2,7 @@ import { createRfc4648Decode, createRfc4648Encode } from '../utils.js';
 
 const BASE32_CHARSET = 'abcdefghijklmnopqrstuvwxyz234567';
 
-export const fromBase32: (source: string) => Uint8Array = /*#__PURE__*/ createRfc4648Decode(
+export const fromBase32: (source: string) => Uint8Array<ArrayBuffer> = /*#__PURE__*/ createRfc4648Decode(
 	BASE32_CHARSET,
 	5,
 	false,

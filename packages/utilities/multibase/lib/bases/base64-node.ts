@@ -24,7 +24,7 @@ const getBase64ByteLength = (str: string, padded: boolean): number => {
 	return (length * 3) >>> 2;
 };
 
-export const fromBase64 = (str: string): Uint8Array => {
+export const fromBase64 = (str: string): Uint8Array<ArrayBuffer> => {
 	const length = getBase64ByteLength(str, false);
 	const bytes = allocUnsafe(length);
 	const written = _base64Write.call(bytes, str);
@@ -36,7 +36,7 @@ export const toBase64 = (bytes: Uint8Array): string => {
 	return _base64Slice.call(bytes).replaceAll('=', '');
 };
 
-export const fromBase64Pad = (str: string): Uint8Array => {
+export const fromBase64Pad = (str: string): Uint8Array<ArrayBuffer> => {
 	const length = getBase64ByteLength(str, true);
 	const bytes = allocUnsafe(length);
 	const written = _base64Write.call(bytes, str);
@@ -48,7 +48,7 @@ export const toBase64Pad = (bytes: Uint8Array): string => {
 	return _base64Slice.call(bytes);
 };
 
-export const fromBase64Url = (str: string): Uint8Array => {
+export const fromBase64Url = (str: string): Uint8Array<ArrayBuffer> => {
 	const length = getBase64ByteLength(str, false);
 	const bytes = allocUnsafe(length);
 	const written = _base64UrlWrite.call(bytes, str);
@@ -60,7 +60,7 @@ export const toBase64Url = (bytes: Uint8Array): string => {
 	return _base64UrlSlice.call(bytes);
 };
 
-export const fromBase64UrlPad = (str: string): Uint8Array => {
+export const fromBase64UrlPad = (str: string): Uint8Array<ArrayBuffer> => {
 	const length = getBase64ByteLength(str, true);
 	const bytes = allocUnsafe(length);
 	const written = _base64UrlWrite.call(bytes, str);
