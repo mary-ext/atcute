@@ -60,7 +60,7 @@ export class P256PublicKey implements PublicKey {
 		this._publicKey = publicKey;
 	}
 
-	static async importRaw(publicKeyBytes: Uint8Array): Promise<P256PublicKey> {
+	static async importRaw(publicKeyBytes: Uint8Array<ArrayBuffer>): Promise<P256PublicKey> {
 		const imported = await crypto.subtle.importKey('raw', publicKeyBytes, ECDSA_ALG, true, ['verify']);
 
 		return new P256PublicKey(imported);
@@ -75,7 +75,11 @@ export class P256PublicKey implements PublicKey {
 		return new P256PublicKey(publicKey);
 	}
 
-	async verify(sig: Uint8Array, data: Uint8Array, options?: VerifyOptions): Promise<boolean> {
+	async verify(
+		sig: Uint8Array<ArrayBuffer>,
+		data: Uint8Array<ArrayBuffer>,
+		options?: VerifyOptions,
+	): Promise<boolean> {
 		if (sig.length !== 64) {
 			// Invalid signature: must be exactly 64 bits
 			return false;
@@ -138,8 +142,8 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 	}
 
 	static override async importRaw(
-		privateKeyBytes: Uint8Array,
-		publicKeyBytes?: Uint8Array,
+		privateKeyBytes: Uint8Array<ArrayBuffer>,
+		publicKeyBytes?: Uint8Array<ArrayBuffer>,
 	): Promise<P256PrivateKey> {
 		const pkcs8 = concat([PKCS8_PRIVATE_KEY_PREFIX, privateKeyBytes]);
 
@@ -190,7 +194,7 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 		return await this.importCryptoKey(keypair.privateKey, keypair.publicKey);
 	}
 
-	async sign(data: Uint8Array): Promise<Uint8Array> {
+	async sign(data: Uint8Array<ArrayBuffer>): Promise<Uint8Array> {
 		const sig = await crypto.subtle.sign(ECDSA_ALG, this._privateKey, data);
 		return normalizeSignature(new Uint8Array(sig), P256_CURVE_ORDER);
 	}
