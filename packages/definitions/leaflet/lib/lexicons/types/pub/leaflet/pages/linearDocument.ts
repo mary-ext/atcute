@@ -5,6 +5,7 @@ import * as PubLeafletBlocksBskyPost from '../blocks/bskyPost.js';
 import * as PubLeafletBlocksCode from '../blocks/code.js';
 import * as PubLeafletBlocksHeader from '../blocks/header.js';
 import * as PubLeafletBlocksHorizontalRule from '../blocks/horizontalRule.js';
+import * as PubLeafletBlocksIframe from '../blocks/iframe.js';
 import * as PubLeafletBlocksImage from '../blocks/image.js';
 import * as PubLeafletBlocksMath from '../blocks/math.js';
 import * as PubLeafletBlocksText from '../blocks/text.js';
@@ -23,6 +24,7 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksCode.mainSchema,
 			PubLeafletBlocksHeader.mainSchema,
 			PubLeafletBlocksHorizontalRule.mainSchema,
+			PubLeafletBlocksIframe.mainSchema,
 			PubLeafletBlocksImage.mainSchema,
 			PubLeafletBlocksMath.mainSchema,
 			PubLeafletBlocksText.mainSchema,

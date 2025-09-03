@@ -1,1 +1,1 @@
-https://github.com/hyperlink-academy/leaflet/tree/3d71e345a74478c262b58839c983720be5b27d4c/lexicons/pub/leaflet/
+https://github.com/hyperlink-academy/leaflet/tree/515933e3da8c813a2b342a63a016678df1240c56/lexicons/pub/leaflet/
