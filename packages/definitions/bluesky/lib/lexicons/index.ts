@@ -8,6 +8,10 @@ export * as AppBskyActorPutPreferences from './types/app/bsky/actor/putPreferenc
 export * as AppBskyActorSearchActors from './types/app/bsky/actor/searchActors.js';
 export * as AppBskyActorSearchActorsTypeahead from './types/app/bsky/actor/searchActorsTypeahead.js';
 export * as AppBskyActorStatus from './types/app/bsky/actor/status.js';
+export * as AppBskyBookmarkCreateBookmark from './types/app/bsky/bookmark/createBookmark.js';
+export * as AppBskyBookmarkDefs from './types/app/bsky/bookmark/defs.js';
+export * as AppBskyBookmarkDeleteBookmark from './types/app/bsky/bookmark/deleteBookmark.js';
+export * as AppBskyBookmarkGetBookmarks from './types/app/bsky/bookmark/getBookmarks.js';
 export * as AppBskyEmbedDefs from './types/app/bsky/embed/defs.js';
 export * as AppBskyEmbedExternal from './types/app/bsky/embed/external.js';
 export * as AppBskyEmbedImages from './types/app/bsky/embed/images.js';

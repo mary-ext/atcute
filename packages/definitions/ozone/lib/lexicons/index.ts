@@ -17,6 +17,7 @@ export * as ToolsOzoneModerationGetSubjects from './types/tools/ozone/moderation
 export * as ToolsOzoneModerationQueryEvents from './types/tools/ozone/moderation/queryEvents.js';
 export * as ToolsOzoneModerationQueryStatuses from './types/tools/ozone/moderation/queryStatuses.js';
 export * as ToolsOzoneModerationSearchRepos from './types/tools/ozone/moderation/searchRepos.js';
+export * as ToolsOzoneReportDefs from './types/tools/ozone/report/defs.js';
 export * as ToolsOzoneSafelinkAddRule from './types/tools/ozone/safelink/addRule.js';
 export * as ToolsOzoneSafelinkDefs from './types/tools/ozone/safelink/defs.js';
 export * as ToolsOzoneSafelinkQueryEvents from './types/tools/ozone/safelink/queryEvents.js';

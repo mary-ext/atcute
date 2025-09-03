@@ -130,6 +130,7 @@ const _postViewSchema = /*#__PURE__*/ v.object({
 	get author() {
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
+	bookmarkCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	cid: /*#__PURE__*/ v.cidString(),
 	get embed() {
 		return /*#__PURE__*/ v.optional(
@@ -240,6 +241,7 @@ const _threadgateViewSchema = /*#__PURE__*/ v.object({
 });
 const _viewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#viewerState')),
+	bookmarked: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	embeddingDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	like: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	pinned: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),

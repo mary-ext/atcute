@@ -90,3 +90,4 @@ export * as ComAtprotoTempCheckHandleAvailability from './types/com/atproto/temp
 export * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue.js';
 export * as ComAtprotoTempFetchLabels from './types/com/atproto/temp/fetchLabels.js';
 export * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification.js';
+export * as ComAtprotoTempRevokeAccountCredentials from './types/com/atproto/temp/revokeAccountCredentials.js';
