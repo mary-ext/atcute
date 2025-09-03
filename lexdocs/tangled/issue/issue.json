@@ -9,18 +9,11 @@
 			"key": "tid",
 			"record": {
 				"type": "object",
-				"required": ["repo", "issueId", "owner", "title", "createdAt"],
+				"required": ["repo", "title", "createdAt"],
 				"properties": {
 					"repo": {
 						"type": "string",
 						"format": "at-uri"
-					},
-					"issueId": {
-						"type": "integer"
-					},
-					"owner": {
-						"type": "string",
-						"format": "did"
 					},
 					"title": {
 						"type": "string"

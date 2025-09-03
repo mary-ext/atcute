@@ -8,8 +8,6 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.issue'),
 		body: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		issueId: /*#__PURE__*/ v.integer(),
-		owner: /*#__PURE__*/ v.didString(),
 		repo: /*#__PURE__*/ v.resourceUriString(),
 		title: /*#__PURE__*/ v.string(),
 	}),

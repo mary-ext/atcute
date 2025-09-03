@@ -19,9 +19,6 @@
 						"type": "string",
 						"format": "at-uri"
 					},
-					"commentId": {
-						"type": "integer"
-					},
 					"owner": {
 						"type": "string",
 						"format": "did"
