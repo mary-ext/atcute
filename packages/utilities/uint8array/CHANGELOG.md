@@ -1,5 +1,11 @@
 # @atcute/uint8array
 
+## 1.0.4
+
+### Patch Changes
+
+- 5241c38: fix typing issue around Uint8Array defaulting to ArrayBufferLike instead of ArrayBuffer
+
 ## 1.0.3
 
 ### Patch Changes

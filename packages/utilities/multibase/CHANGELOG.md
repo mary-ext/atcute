@@ -1,5 +1,13 @@
 # @atcute/multibase
 
+## 1.1.5
+
+### Patch Changes
+
+- a0471dd: fix typing issue around Uint8Array
+- Updated dependencies [5241c38]
+  - @atcute/uint8array@1.0.4
+
 ## 1.1.4
 
 ### Patch Changes

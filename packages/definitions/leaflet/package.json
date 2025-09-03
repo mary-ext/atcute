@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/leaflet",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Leaflet (pub.leaflet.*) schema definitions",
 	"keywords": [
 		"atcute",
