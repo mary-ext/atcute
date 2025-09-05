@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './utils.js';
+import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
 
 // tsc dislikes this schema with the amount of type expansion that happens here.
 // the interface declaration allows tsc to just reference it instead of
