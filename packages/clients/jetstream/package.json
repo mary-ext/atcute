@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/jetstream",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"description": "lightweight and cute Jetstream subscriber for AT Protocol",
 	"license": "0BSD",
 	"repository": {

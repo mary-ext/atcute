@@ -1,5 +1,15 @@
 # @atcute/jetstream
 
+## 1.1.0
+
+### Minor Changes
+
+- 28b7f2f: allow passing multiple Jetstream instances for a random selection
+
+### Patch Changes
+
+- 3dc44e6: do not rollback the cursor on new messages
+
 ## 1.0.2
 
 ### Patch Changes
