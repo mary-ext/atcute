@@ -11,7 +11,7 @@ import type { ReadonlyDeep } from 'type-fest';
 import { jetstreamEventSchema, type JetstreamEvent, type JetstreamProcedure } from './types.js';
 
 export interface JetstreamSubscriptionOptions {
-	url: string;
+	url: string | string[];
 
 	cursor?: number;
 
@@ -52,10 +52,16 @@ export class JetstreamSubscription {
 
 	#options: JetstreamSubscriptionOptions;
 	#cursor: number;
+	#lastUsedUrl?: string;
 
 	constructor(options: JetstreamSubscriptionOptions) {
 		this.#options = options;
 		this.#cursor = options.cursor ?? Date.now() * 1_000;
+
+		// initialize to empty string for URL arrays to trigger cursor rollback on
+		// first connection since we don't know which instance the cursor came
+		// from in a previous session
+		this.#lastUsedUrl = Array.isArray(options.url) ? '' : undefined;
 	}
 
 	#sendOptionsUpdate() {
@@ -81,7 +87,7 @@ export class JetstreamSubscription {
 		}
 
 		const {
-			url: wsUrl,
+			url: wsUrls,
 			ws: wsOptions,
 			validateEvents = true,
 			onConnectionClose,
@@ -90,10 +96,25 @@ export class JetstreamSubscription {
 		} = this.#options;
 		const emitter = this.#emitter;
 
+		let selectedUrl: string;
+
 		const getUrl = () => {
-			const url = new URL('/subscribe', wsUrl);
+			if (typeof wsUrls === 'string') {
+				selectedUrl = wsUrls;
+			} else {
+				selectedUrl = wsUrls[Math.floor(Math.random() * wsUrls.length)];
+			}
+
+			let cursor = this.#cursor;
+			if (this.#lastUsedUrl !== undefined && this.#lastUsedUrl !== selectedUrl) {
+				// rollback cursor by 10 seconds when switching to a different instance
+				// to ensure we don't miss any events due to clock differences
+				cursor = Math.max(0, cursor - 10_000_000);
+			}
+
+			const url = new URL('/subscribe', selectedUrl);
 			url.searchParams.set('requireHello', 'true');
-			url.searchParams.set('cursor', '' + this.#cursor);
+			url.searchParams.set('cursor', '' + cursor);
 
 			return url.toString();
 		};
@@ -127,7 +148,11 @@ export class JetstreamSubscription {
 			}
 
 			if (event.time_us > this.#cursor) {
-			this.#cursor = event.time_us;
+				this.#cursor = event.time_us;
+
+				// set `lastUsedUrl` now that we've passed the stored cursor.
+				// ensures we cursor rollback still happens during a reconnection.
+				this.#lastUsedUrl = selectedUrl;
 			}
 
 			emitter.emit(event);
