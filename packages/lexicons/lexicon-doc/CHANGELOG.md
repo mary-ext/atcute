@@ -1,5 +1,21 @@
 # @atcute/lexicon-doc
 
+## 1.1.1
+
+### Patch Changes
+
+- a025873: change the return type of `findExternalReferences`
+
+  this is a breaking change, I've made the mistake of shipping this function too early. it will now
+  return the full NSID + definition IDs, instead of just NSIDs. it's also now returned as a set
+  instead of a sorted array.
+
+- a025873: make `findExternalReferences` walk a sibling's definitions if referenced
+- a025873: add an optional definition ID parameter to `findExternalReferences`
+
+  this will let you view all the external references from a specific schema definition instead of
+  the whole schema.
+
 ## 1.1.0
 
 ### Minor Changes
