@@ -126,7 +126,10 @@ export class JetstreamSubscription {
 				event = raw;
 			}
 
+			if (event.time_us > this.#cursor) {
 			this.#cursor = event.time_us;
+			}
+
 			emitter.emit(event);
 		};
 	}
