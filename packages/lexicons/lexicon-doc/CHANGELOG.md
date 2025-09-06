@@ -1,5 +1,11 @@
 # @atcute/lexicon-doc
 
+## 1.1.0
+
+### Minor Changes
+
+- 29f8857: `findExternalReferences` function for extracting all external references from a document
+
 ## 1.0.3
 
 ### Patch Changes

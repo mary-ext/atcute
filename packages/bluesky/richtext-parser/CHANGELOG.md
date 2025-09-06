@@ -1,5 +1,19 @@
 # @atcute/bluesky-richtext-parser
 
+## 2.0.0
+
+### Major Changes
+
+- 9f2074b: type interface cleanup
+
+### Minor Changes
+
+- 3da2cb9: basic Markdown formatting
+
+### Patch Changes
+
+- 593ea02: fix infinite loop on whitespace
+
 ## 1.1.0-next.0
 
 ### Minor Changes
