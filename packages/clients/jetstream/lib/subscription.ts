@@ -16,18 +16,18 @@ export interface JetstreamSubscriptionOptions {
 	cursor?: number;
 
 	/**
-	 * Array of collection NSIDs that you're interested in receiving commit events
+	 * array of collection NSIDs that you're interested in receiving commit events
 	 * for, pass in an empty array for no commit events.
 	 */
 	wantedCollections?: string[];
 	/**
-	 * Array of account DIDs that you're interested in receiving commit events
+	 * array of account DIDs that you're interested in receiving commit events
 	 * for, pass in an empty array for no commit events.
 	 */
 	wantedDids?: Did[];
 
 	/**
-	 * Whether to validate Jetstream's events, you'd still need to validate the records.
+	 * whether to validate Jetstream's events, you'd still need to validate the records.
 	 * @default true
 	 */
 	validateEvents?: boolean;
