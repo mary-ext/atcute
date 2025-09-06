@@ -2,7 +2,7 @@ import type { LexiconDoc, LexRefVariant, LexUserType } from '../schema.js';
 
 type SchemaValue = LexUserType | LexRefVariant;
 
-export const findExternalReferences = (doc: LexiconDoc): string[] => {
+export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<string> => {
 	const refs = new Set<string>();
 
 	const extract = (def: SchemaValue): void => {
@@ -10,29 +10,57 @@ export const findExternalReferences = (doc: LexiconDoc): string[] => {
 			case 'ref': {
 				const ref = def.ref;
 				if (ref.startsWith('#')) {
+					const id = extractDefId(ref)!;
+
+					const child = doc.defs[id];
+					if (child !== undefined) {
+						extract(child);
+					}
+
 					break;
 				}
 
 				const nsid = stripHash(ref);
 				if (nsid === doc.id) {
+					const id = extractDefId(ref)!;
+
+					const child = doc.defs[id];
+					if (child !== undefined) {
+						extract(child);
+					}
+
 					break;
 				}
 
-				refs.add(nsid);
+				refs.add(ref);
 				break;
 			}
 			case 'union': {
 				for (const ref of def.refs) {
 					if (ref.startsWith('#')) {
+						const id = extractDefId(ref)!;
+
+						const child = doc.defs[id];
+						if (child !== undefined) {
+							extract(child);
+						}
+
 						continue;
 					}
 
 					const nsid = stripHash(ref);
 					if (nsid === doc.id) {
+						const id = extractDefId(ref)!;
+
+						const child = doc.defs[id];
+						if (child !== undefined) {
+							extract(child);
+						}
+
 						continue;
 					}
 
-					refs.add(nsid);
+					refs.add(ref);
 				}
 
 				break;
@@ -95,11 +123,19 @@ export const findExternalReferences = (doc: LexiconDoc): string[] => {
 		}
 	};
 
-	for (const def of Object.values(doc.defs)) {
-		extract(def);
+	if (defId !== undefined) {
+		const def = doc.defs[defId];
+		if (def !== undefined) {
+			extract(def);
+		}
+	} else {
+		for (const defId in doc.defs) {
+			const def = doc.defs[defId];
+			extract(def);
+		}
 	}
 
-	return Array.from(refs).sort();
+	return refs;
 };
 
 const stripHash = (defUri: string): string => {
@@ -109,4 +145,13 @@ const stripHash = (defUri: string): string => {
 	}
 
 	return defUri.slice(0, index);
+};
+
+const extractDefId = (ref: string): string | undefined => {
+	const hashIndex = ref.indexOf('#');
+	if (hashIndex === -1) {
+		return undefined;
+	}
+
+	return ref.slice(hashIndex + 1);
 };
