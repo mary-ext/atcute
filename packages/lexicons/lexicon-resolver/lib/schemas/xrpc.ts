@@ -4,6 +4,7 @@ import { getPdsEndpoint } from '@atcute/identity';
 import type { DidDocumentResolver } from '@atcute/identity-resolver';
 import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 import type { AtprotoDid, Nsid } from '@atcute/lexicons/syntax';
+
 import {
 	FailedResponseError,
 	isResponseOk,
@@ -14,22 +15,20 @@ import {
 
 import * as err from '../errors.js';
 import type { ResolveLexiconRecordOptions } from '../types.js';
+import { verifyLexiconRecord } from './verify.js';
 
-// AT Protocol lexicon schema record structure - validate $type, then use lexiconDoc
-const lexiconSchemaRecord = v
-	.object({
-		$type: v.literal('com.atproto.lexicon.schema'),
-	})
-	.chain((input) => {
-		// After validating $type, validate the full lexicon document
-		return lexiconDoc.try(input, { mode: 'passthrough' }) as v.ValitaResult<LexiconSchemaRecord>;
-	});
+// basic sanity checks, we'll have it go through `lexiconDoc` later
+const lexiconSchemaRaw = v.object({
+	$type: v.literal('com.atproto.lexicon.schema'),
+	id: v.string(),
+	lexicon: v.number().assert((input) => Number.isSafeInteger(input) && input >= 0),
+});
 
 // com.atproto.repo.getRecord response structure
 const getRecordResponse = v.object({
 	uri: v.string(),
 	cid: v.string(),
-	value: lexiconSchemaRecord,
+	value: lexiconSchemaRaw,
 });
 
 const fetchXrpcHandler = pipe(
@@ -43,10 +42,6 @@ export interface LexiconSchemaResolverOptions {
 	fetch?: typeof fetch;
 }
 
-export interface LexiconSchemaRecord extends LexiconDoc {
-	$type: 'com.atproto.lexicon.schema';
-}
-
 export class LexiconSchemaResolver {
 	readonly didDocumentResolver: DidDocumentResolver;
 	#fetch: typeof fetch;
@@ -57,12 +52,12 @@ export class LexiconSchemaResolver {
 	}
 
 	async resolve(
-		did: AtprotoDid,
+		authority: AtprotoDid,
 		nsid: Nsid,
 		options?: ResolveLexiconRecordOptions,
-	): Promise<LexiconSchemaRecord> {
+	): Promise<LexiconDoc> {
 		// Step 1: Resolve DID to get PDS service endpoint
-		const didDocument = await this.didDocumentResolver.resolve(did, {
+		const didDocument = await this.didDocumentResolver.resolve(authority, {
 			signal: options?.signal,
 			noCache: options?.noCache,
 		});
@@ -72,7 +67,7 @@ export class LexiconSchemaResolver {
 
 		if (!pdsEndpoint) {
 			throw new err.FailedLexiconResolutionError(nsid, {
-				cause: new TypeError(`no pds service in did document; did=${did}`),
+				cause: new TypeError(`no pds service in did document; did=${authority}`),
 			});
 		}
 
@@ -81,7 +76,7 @@ export class LexiconSchemaResolver {
 
 		try {
 			const url = new URL('/xrpc/com.atproto.repo.getRecord', pdsEndpoint);
-			url.searchParams.set('repo', did);
+			url.searchParams.set('repo', authority);
 			url.searchParams.set('collection', 'com.atproto.lexicon.schema');
 			url.searchParams.set('rkey', nsid);
 
@@ -101,14 +96,57 @@ export class LexiconSchemaResolver {
 			throw new err.FailedLexiconResolutionError(nsid, { cause });
 		}
 
-		// Step 4: Validate that the lexicon ID matches the requested NSID
-		const record = json.value;
-		if (record.id !== nsid) {
-			throw new err.InvalidLexiconError(nsid, {
-				cause: new TypeError(`lexicon nsid mismatch; expected=${nsid}; got=${record.id}`),
+		// Step 4: Parse into lexicon schema
+		const rawSchema = json.value;
+		if (rawSchema.id !== nsid) {
+			throw new err.InvalidLexiconSchemaError(nsid, {
+				cause: new TypeError(`lexicon nsid mismatch; expected=${nsid}; got=${rawSchema.id}`),
 			});
 		}
 
-		return record;
+		let schema: LexiconDoc;
+		try {
+			schema = lexiconDoc.parse(rawSchema, { mode: 'passthrough' });
+		} catch (cause) {
+			throw new err.InvalidLexiconSchemaError(nsid, { cause });
+		}
+
+		// Step 5: Fetch CAR proof and verify record
+		let carBytes: Uint8Array;
+		try {
+			const url = new URL('/xrpc/com.atproto.sync.getRecord', pdsEndpoint);
+			url.searchParams.set('did', authority);
+			url.searchParams.set('collection', 'com.atproto.lexicon.schema');
+			url.searchParams.set('rkey', nsid);
+
+			const response = await (0, this.#fetch)(url, {
+				signal: options?.signal,
+				cache: options?.noCache ? 'no-cache' : undefined,
+				headers: { accept: 'application/vnd.ipld.car' },
+			});
+
+			if (!response.ok) {
+				throw new FailedResponseError(response.status, `got http ${response.status}`);
+			}
+
+			carBytes = await response.bytes();
+		} catch (cause) {
+			throw new err.FailedLexiconResolutionError(nsid, { cause });
+		}
+
+		// Step 6: Verify the record proof
+		try {
+			await verifyLexiconRecord({
+				did: authority,
+				cid: json.cid,
+				record: rawSchema,
+				didDocument,
+				carBytes,
+			});
+		} catch (cause) {
+			throw new err.InvalidLexiconProofError(nsid, { cause });
+		}
+
+		return schema;
 	}
 }

@@ -68,14 +68,25 @@ export class FailedLexiconResolutionError extends LexiconResolutionError {
 	}
 }
 
-export class InvalidLexiconError extends LexiconResolutionError {
-	override name = 'InvalidLexiconError';
+export class InvalidLexiconSchemaError extends LexiconResolutionError {
+	override name = 'InvalidLexiconSchemaError';
 
 	constructor(
 		public nsid: Nsid,
 		options?: ErrorOptions,
 	) {
 		super(`invalid lexicon schema; nsid=${nsid}`, options);
+	}
+}
+
+export class InvalidLexiconProofError extends LexiconResolutionError {
+	override name = 'InvalidLexiconProofError';
+
+	constructor(
+		public nsid: Nsid,
+		options?: ErrorOptions,
+	) {
+		super(`invalid lexicon record proof; nsid=${nsid}`, options);
 	}
 }
 // #endregion

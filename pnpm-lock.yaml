@@ -488,12 +488,30 @@ importers:
 
   packages/lexicons/lexicon-resolver:
     dependencies:
+      '@atcute/car':
+        specifier: workspace:^
+        version: link:../../utilities/car
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../../utilities/cbor
+      '@atcute/cid':
+        specifier: workspace:^
+        version: link:../../utilities/cid
+      '@atcute/client':
+        specifier: workspace:^
+        version: link:../../clients/client
+      '@atcute/crypto':
+        specifier: workspace:^
+        version: link:../../utilities/crypto
       '@atcute/lexicon-doc':
         specifier: workspace:^
         version: link:../lexicon-doc
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../lexicons
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../../utilities/uint8array
       '@atcute/util-fetch':
         specifier: workspace:^
         version: link:../../misc/util-fetch
