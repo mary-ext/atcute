@@ -488,12 +488,18 @@ importers:
 
   packages/lexicons/lexicon-resolver:
     dependencies:
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../../identity/identity
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../lexicons
       '@atcute/util-fetch':
         specifier: workspace:^
         version: link:../../misc/util-fetch
+      '@badrap/valita':
+        specifier: ^0.4.6
+        version: 0.4.6
     devDependencies:
       '@types/bun':
         specifier: ^1.2.21

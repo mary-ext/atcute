@@ -29,8 +29,10 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
+		"@atcute/identity": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
-		"@atcute/util-fetch": "workspace:^"
+		"@atcute/util-fetch": "workspace:^",
+		"@badrap/valita": "^0.4.6"
 	},
 	"devDependencies": {
 		"@types/bun": "^1.2.21"
