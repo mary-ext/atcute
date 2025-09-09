@@ -36,7 +36,6 @@ export const verifyLexiconRecord = async ({
 
 		const actual = CID.toString(await CID.create(CID.CODEC_DCBOR, cbor));
 		if (actual !== cid) {
-			console.log(record);
 			throw new Error(`record content does not match cid`);
 		}
 	}
