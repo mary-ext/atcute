@@ -92,7 +92,7 @@ export const verifyLexiconRecord = async ({
 
 		const data = CBOR.encode(unsigned);
 		const valid = await verifySig(
-			publicKey!,
+			publicKey,
 			CBOR.fromBytes(sig) as Uint8Array<ArrayBuffer>,
 			data as Uint8Array<ArrayBuffer>,
 		);
