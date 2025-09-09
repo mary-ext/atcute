@@ -33,7 +33,7 @@ const getRecordResponse = v.object({
 
 const fetchXrpcHandler = pipe(
 	isResponseOk,
-	parseResponseAsJson(/^application\/json$/, 256 * 1024), // 256KB limit for lexicon schemas
+	parseResponseAsJson(/^application\/json$/, (1024 + 10) * 1024),
 	validateJsonWith(getRecordResponse, { mode: 'passthrough' }),
 );
 
