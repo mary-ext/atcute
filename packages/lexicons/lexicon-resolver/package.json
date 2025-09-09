@@ -1,0 +1,38 @@
+{
+	"type": "module",
+	"name": "@atcute/lexicon-resolver",
+	"version": "0.1.0",
+	"description": "atproto lexicon authority resolution",
+	"keywords": [
+		"atproto",
+		"lexicon",
+		"did"
+	],
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/lexicons/lexicon-resolver"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "bun test --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/lexicons": "workspace:^",
+		"@atcute/util-fetch": "workspace:^"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.2.21"
+	}
+}
