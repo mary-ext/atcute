@@ -488,9 +488,9 @@ importers:
 
   packages/lexicons/lexicon-resolver:
     dependencies:
-      '@atcute/identity':
+      '@atcute/lexicon-doc':
         specifier: workspace:^
-        version: link:../../identity/identity
+        version: link:../lexicon-doc
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../lexicons
@@ -501,6 +501,12 @@ importers:
         specifier: ^0.4.6
         version: 0.4.6
     devDependencies:
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../../identity/identity
+      '@atcute/identity-resolver':
+        specifier: workspace:^
+        version: link:../../identity/identity-resolver
       '@types/bun':
         specifier: ^1.2.21
         version: 1.2.21(@types/react@19.1.8)

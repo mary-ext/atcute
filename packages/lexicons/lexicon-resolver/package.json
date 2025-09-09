@@ -28,13 +28,19 @@
 		"test": "bun test --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
+	"peerDependencies": {
+		"@atcute/identity": "^1.0.0",
+		"@atcute/identity-resolver": "^1.0.0"
+	},
 	"dependencies": {
-		"@atcute/identity": "workspace:^",
+		"@atcute/lexicon-doc": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
 		"@badrap/valita": "^0.4.6"
 	},
 	"devDependencies": {
+		"@atcute/identity": "workspace:^",
+		"@atcute/identity-resolver": "workspace:^",
 		"@types/bun": "^1.2.21"
 	}
 }

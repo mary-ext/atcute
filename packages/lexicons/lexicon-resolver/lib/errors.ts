@@ -43,3 +43,39 @@ export class AmbiguousAuthorityError extends LexiconAuthorityResolutionError {
 	}
 }
 // #endregion
+
+// #region Lexicon resolution errors
+export class LexiconResolutionError extends Error {
+	override name = 'LexiconResolutionError';
+}
+
+export class LexiconNotFoundError extends LexiconResolutionError {
+	override name = 'LexiconNotFoundError';
+
+	constructor(public nsid: Nsid) {
+		super(`lexicon not found; nsid=${nsid}`);
+	}
+}
+
+export class FailedLexiconResolutionError extends LexiconResolutionError {
+	override name = 'FailedLexiconResolutionError';
+
+	constructor(
+		public nsid: Nsid,
+		options?: ErrorOptions,
+	) {
+		super(`failed to resolve lexicon; nsid=${nsid}`, options);
+	}
+}
+
+export class InvalidLexiconError extends LexiconResolutionError {
+	override name = 'InvalidLexiconError';
+
+	constructor(
+		public nsid: Nsid,
+		options?: ErrorOptions,
+	) {
+		super(`invalid lexicon schema; nsid=${nsid}`, options);
+	}
+}
+// #endregion

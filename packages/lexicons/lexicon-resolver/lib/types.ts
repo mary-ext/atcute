@@ -8,3 +8,8 @@ export interface ResolveLexiconAuthorityOptions {
 export interface LexiconAuthorityResolver {
 	resolve(nsid: Nsid, options?: ResolveLexiconAuthorityOptions): Promise<AtprotoDid>;
 }
+
+export interface ResolveLexiconRecordOptions {
+	signal?: AbortSignal;
+	noCache?: boolean;
+}
