@@ -6,7 +6,7 @@ import { isResponseOk, parseResponseAsJson, pipe, validateJsonWith } from '@atcu
 
 import * as err from '../errors.js';
 import type { LexiconAuthorityResolver, ResolveLexiconAuthorityOptions } from '../types.js';
-import { nsidToAuthority } from '../utils.js';
+import { nsidToLookupDomain } from '../utils.js';
 
 const uint32 = v.number().assert((input) => Number.isInteger(input) && input >= 0 && input <= 2 ** 32 - 1);
 
@@ -78,13 +78,13 @@ export class DohJsonLexiconAuthorityResolver implements LexiconAuthorityResolver
 	}
 
 	async resolve(nsid: Nsid, options?: ResolveLexiconAuthorityOptions): Promise<AtprotoDid> {
-		const authority = nsidToAuthority(nsid);
+		const lookupDomain = nsidToLookupDomain(nsid);
 
 		let json: v.Infer<typeof result>;
 
 		try {
 			const url = new URL(this.dohUrl);
-			url.searchParams.set('name', `${SUBDOMAIN}.${authority}`);
+			url.searchParams.set('name', `${SUBDOMAIN}.${lookupDomain}`);
 			url.searchParams.set('type', 'TXT');
 
 			const response = await (0, this.#fetch)(url, {
