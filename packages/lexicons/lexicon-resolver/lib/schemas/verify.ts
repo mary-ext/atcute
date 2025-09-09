@@ -175,7 +175,7 @@ const dfs = async (
 		key = key.substring(0, entry.p) + decoder.decode(CBOR.fromBytes(entry.k));
 
 		// Calculate depth based on leading zeros in the hash
-		const keyDigest = await toSha256(encoder.encode(key) as Uint8Array<ArrayBuffer>);
+		const keyDigest = await toSha256(encoder.encode(key));
 		let zeroCount = 0;
 
 		outerLoop: for (const byte of keyDigest) {
