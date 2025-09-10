@@ -44,9 +44,6 @@ try {
 	const resolved = await schemaResolver.resolve(authority, 'app.bsky.feed.post');
 	//    ^? { uri: string, cid: string, schema: LexiconDoc }
 } catch (err) {
-	if (err instanceof LexiconNotFoundError) {
-		// lexicon record not found
-	}
 	if (err instanceof InvalidLexiconSchemaError) {
 		// lexicon schema is malformed
 	}
