@@ -42,6 +42,7 @@ of atcute.
 | **Lexicon packages**                                                                                                   |
 | [`lex-cli`](./packages/lexicons/lex-cli): CLI tool to generate schema definitions                                      |
 | [`lexicon-doc`](./packages/lexicons/lexicon-doc): type definitions and schemas for lexicon documents                   |
+| [`lexicon-resolver`](./packages/lexicons/lexicon-resolver): lexicon authority resolution and schema retrieval          |
 | [`lexicons`](./packages/lexicons/lexicons): core lexicon types, interfaces, and schema validations                     |
 | **Lexicon definition packages**                                                                                        |
 | [`atproto`](./packages/definitions/atproto): `com.atproto.*` schema definitions                                        |
