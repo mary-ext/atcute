@@ -29,8 +29,8 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"peerDependencies": {
-		"@atcute/identity": "^1.0.0",
-		"@atcute/identity-resolver": "^1.0.0"
+		"@atcute/identity": "^1.1.0",
+		"@atcute/identity-resolver": "^1.1.3"
 	},
 	"dependencies": {
 		"@atcute/car": "workspace:^",
