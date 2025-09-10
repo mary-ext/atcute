@@ -1,6 +1,6 @@
 # @atcute/lexicon-resolver
 
-atproto lexicon authority resolution
+atproto lexicon authority resolution and schema retrieval
 
 ```ts
 // authority resolution
@@ -26,6 +26,38 @@ try {
 	}
 
 	if (err instanceof LexiconAuthorityResolutionError) {
+		// the errors above extend this class, so you can do a catch-all.
+	}
+}
+
+// schema resolution
+const schemaResolver = new LexiconSchemaResolver({
+	didDocumentResolver: new CompositeDidDocumentResolver({
+		methods: {
+			plc: new PlcDidDocumentResolver(),
+			web: new WebDidDocumentResolver(),
+		},
+	}),
+});
+
+try {
+	const resolved = await schemaResolver.resolve(authority, 'app.bsky.feed.post');
+	//    ^? { uri: string, cid: string, schema: LexiconDoc }
+} catch (err) {
+	if (err instanceof LexiconNotFoundError) {
+		// lexicon record not found
+	}
+	if (err instanceof InvalidLexiconSchemaError) {
+		// lexicon schema is malformed
+	}
+	if (err instanceof InvalidLexiconProofError) {
+		// lexicon record proof verification failed
+	}
+	if (err instanceof FailedLexiconResolutionError) {
+		// lexicon resolution had thrown something unexpected (fetch error)
+	}
+
+	if (err instanceof LexiconResolutionError) {
 		// the errors above extend this class, so you can do a catch-all.
 	}
 }
