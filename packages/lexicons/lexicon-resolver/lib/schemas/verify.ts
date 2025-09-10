@@ -7,7 +7,7 @@ import { type DidDocument, getAtprotoVerificationMaterial } from '@atcute/identi
 import { type AtprotoDid } from '@atcute/lexicons/syntax';
 import { toSha256 } from '@atcute/uint8array';
 
-export interface VerifyLexiconRecordOptions {
+export interface VerifyRecordOptions {
 	did: AtprotoDid;
 	cid: string;
 	record: unknown;
@@ -15,13 +15,13 @@ export interface VerifyLexiconRecordOptions {
 	carBytes: Uint8Array;
 }
 
-export const verifyLexiconRecord = async ({
+export const verifyRecord = async ({
 	did,
 	cid,
 	record,
 	didDocument,
 	carBytes,
-}: VerifyLexiconRecordOptions): Promise<void> => {
+}: VerifyRecordOptions): Promise<void> => {
 	// verify cid can be parsed
 	try {
 		CID.fromString(cid);

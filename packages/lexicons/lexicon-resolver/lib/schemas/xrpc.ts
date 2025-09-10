@@ -14,8 +14,8 @@ import {
 } from '@atcute/util-fetch';
 
 import * as err from '../errors.js';
-import type { ResolveLexiconRecordOptions } from '../types.js';
-import { verifyLexiconRecord } from './verify.js';
+import type { ResolvedSchema, ResolveLexiconRecordOptions } from '../types.js';
+import { verifyRecord } from './verify.js';
 
 // basic sanity checks, we'll have it go through `lexiconDoc` later
 const lexiconSchemaRaw = v.object({
@@ -55,7 +55,7 @@ export class LexiconSchemaResolver {
 		authority: AtprotoDid,
 		nsid: Nsid,
 		options?: ResolveLexiconRecordOptions,
-	): Promise<LexiconDoc> {
+	): Promise<ResolvedSchema> {
 		// Step 1: Resolve DID to get PDS service endpoint
 		const didDocument = await this.didDocumentResolver.resolve(authority, {
 			signal: options?.signal,
@@ -136,7 +136,7 @@ export class LexiconSchemaResolver {
 
 		// Step 6: Verify the record proof
 		try {
-			await verifyLexiconRecord({
+			await verifyRecord({
 				did: authority,
 				cid: json.cid,
 				record: rawSchema,
@@ -147,6 +147,10 @@ export class LexiconSchemaResolver {
 			throw new err.InvalidLexiconProofError(nsid, { cause });
 		}
 
-		return schema;
+		return {
+			uri: json.uri,
+			cid: json.cid,
+			schema,
+		};
 	}
 }
