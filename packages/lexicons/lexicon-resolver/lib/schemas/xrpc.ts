@@ -131,7 +131,7 @@ export class LexiconSchemaResolver {
 
 			carBytes = await response.bytes();
 		} catch (cause) {
-			throw new err.FailedLexiconResolutionError(nsid, { cause });
+			throw new err.InvalidLexiconProofError(nsid, { cause });
 		}
 
 		// Step 6: Verify the record proof
