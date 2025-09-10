@@ -1,41 +1,14 @@
-import * as v from '@badrap/valita';
-
 import { getPdsEndpoint } from '@atcute/identity';
 import type { DidDocumentResolver } from '@atcute/identity-resolver';
 import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 import type { AtprotoDid, Nsid } from '@atcute/lexicons/syntax';
 
-import {
-	FailedResponseError,
-	isResponseOk,
-	parseResponseAsJson,
-	pipe,
-	validateJsonWith,
-} from '@atcute/util-fetch';
+import { FailedResponseError } from '@atcute/util-fetch';
 
+import { LEXICON_SCHEMA_COLLECTION } from '../constants.js';
 import * as err from '../errors.js';
 import type { ResolvedSchema, ResolveLexiconRecordOptions } from '../types.js';
-import { verifyRecord } from './verify.js';
-
-// basic sanity checks, we'll have it go through `lexiconDoc` later
-const lexiconSchemaRaw = v.object({
-	$type: v.literal('com.atproto.lexicon.schema'),
-	id: v.string(),
-	lexicon: v.number().assert((input) => Number.isSafeInteger(input) && input >= 0),
-});
-
-// com.atproto.repo.getRecord response structure
-const getRecordResponse = v.object({
-	uri: v.string(),
-	cid: v.string(),
-	value: lexiconSchemaRaw,
-});
-
-const fetchXrpcHandler = pipe(
-	isResponseOk,
-	parseResponseAsJson(/^application\/json$/, (1024 + 10) * 1024),
-	validateJsonWith(getRecordResponse, { mode: 'passthrough' }),
-);
+import { verifyRecord, type VerifiedRecord } from './verify.js';
 
 export interface LexiconSchemaResolverOptions {
 	didDocumentResolver: DidDocumentResolver;
@@ -62,7 +35,6 @@ export class LexiconSchemaResolver {
 			noCache: options?.noCache,
 		});
 
-		// Step 2: Extract PDS service endpoint from DID document
 		const pdsEndpoint = getPdsEndpoint(didDocument);
 
 		if (!pdsEndpoint) {
@@ -71,52 +43,12 @@ export class LexiconSchemaResolver {
 			});
 		}
 
-		// Step 3: Fetch lexicon record from PDS
-		let json: v.Infer<typeof getRecordResponse>;
-
-		try {
-			const url = new URL('/xrpc/com.atproto.repo.getRecord', pdsEndpoint);
-			url.searchParams.set('repo', authority);
-			url.searchParams.set('collection', 'com.atproto.lexicon.schema');
-			url.searchParams.set('rkey', nsid);
-
-			const response = await (0, this.#fetch)(url, {
-				signal: options?.signal,
-				cache: options?.noCache ? 'no-cache' : undefined,
-				headers: { accept: 'application/json' },
-			});
-
-			const handled = await fetchXrpcHandler(response);
-			json = handled.json;
-		} catch (cause) {
-			if (cause instanceof FailedResponseError && cause.status === 404) {
-				throw new err.LexiconNotFoundError(nsid);
-			}
-
-			throw new err.FailedLexiconResolutionError(nsid, { cause });
-		}
-
-		// Step 4: Parse into lexicon schema
-		const rawSchema = json.value;
-		if (rawSchema.id !== nsid) {
-			throw new err.InvalidLexiconSchemaError(nsid, {
-				cause: new TypeError(`lexicon nsid mismatch; expected=${nsid}; got=${rawSchema.id}`),
-			});
-		}
-
-		let schema: LexiconDoc;
-		try {
-			schema = lexiconDoc.parse(rawSchema, { mode: 'passthrough' });
-		} catch (cause) {
-			throw new err.InvalidLexiconSchemaError(nsid, { cause });
-		}
-
-		// Step 5: Fetch CAR proof and verify record
+		// Step 2: Fetch the record
 		let carBytes: Uint8Array;
 		try {
 			const url = new URL('/xrpc/com.atproto.sync.getRecord', pdsEndpoint);
 			url.searchParams.set('did', authority);
-			url.searchParams.set('collection', 'com.atproto.lexicon.schema');
+			url.searchParams.set('collection', LEXICON_SCHEMA_COLLECTION);
 			url.searchParams.set('rkey', nsid);
 
 			const response = await (0, this.#fetch)(url, {
@@ -131,15 +63,16 @@ export class LexiconSchemaResolver {
 
 			carBytes = await response.bytes();
 		} catch (cause) {
-			throw new err.InvalidLexiconProofError(nsid, { cause });
+			throw new err.FailedLexiconResolutionError(nsid, { cause });
 		}
 
-		// Step 6: Verify the record proof
+		// Step 3: Verify record and extract data
+		let verifiedRecord: VerifiedRecord;
 		try {
-			await verifyRecord({
+			verifiedRecord = await verifyRecord({
 				did: authority,
-				cid: json.cid,
-				record: rawSchema,
+				collection: LEXICON_SCHEMA_COLLECTION,
+				rkey: nsid,
 				didDocument,
 				carBytes,
 			});
@@ -147,9 +80,27 @@ export class LexiconSchemaResolver {
 			throw new err.InvalidLexiconProofError(nsid, { cause });
 		}
 
+		// Step 4: Parse into lexicon schema
+		const rawSchema = verifiedRecord.record;
+		if (
+			typeof rawSchema !== 'object' ||
+			rawSchema === null ||
+			(rawSchema as any).$type !== LEXICON_SCHEMA_COLLECTION ||
+			(rawSchema as any).id !== nsid
+		) {
+			throw new err.InvalidLexiconSchemaError(nsid);
+		}
+
+		let schema: LexiconDoc;
+		try {
+			schema = lexiconDoc.parse(rawSchema, { mode: 'passthrough' });
+		} catch (cause) {
+			throw new err.InvalidLexiconSchemaError(nsid, { cause });
+		}
+
 		return {
-			uri: json.uri,
-			cid: json.cid,
+			uri: verifiedRecord.uri,
+			cid: verifiedRecord.cid,
 			schema,
 		};
 	}

@@ -49,13 +49,6 @@ export class LexiconResolutionError extends Error {
 	override name = 'LexiconResolutionError';
 }
 
-export class LexiconNotFoundError extends LexiconResolutionError {
-	override name = 'LexiconNotFoundError';
-
-	constructor(public nsid: Nsid) {
-		super(`lexicon not found; nsid=${nsid}`);
-	}
-}
 
 export class FailedLexiconResolutionError extends LexiconResolutionError {
 	override name = 'FailedLexiconResolutionError';

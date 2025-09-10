@@ -7,39 +7,30 @@ import { type DidDocument, getAtprotoVerificationMaterial } from '@atcute/identi
 import { type AtprotoDid } from '@atcute/lexicons/syntax';
 import { toSha256 } from '@atcute/uint8array';
 
+export interface VerifiedRecord {
+	/** AT-URI of the record */
+	uri: string;
+	/** CID of the record */
+	cid: string;
+	/** Record data */
+	record: unknown;
+}
+
 export interface VerifyRecordOptions {
 	did: AtprotoDid;
-	cid: string;
-	record: unknown;
+	collection: string;
+	rkey: string;
 	didDocument: DidDocument;
 	carBytes: Uint8Array;
 }
 
 export const verifyRecord = async ({
 	did,
-	cid,
-	record,
+	collection,
+	rkey,
 	didDocument,
 	carBytes,
-}: VerifyRecordOptions): Promise<void> => {
-	// verify cid can be parsed
-	try {
-		CID.fromString(cid);
-	} catch (cause) {
-		throw new Error(`cid is invalid`, { cause });
-	}
-
-	// verify record content matches cid
-	let cbor: Uint8Array;
-	{
-		cbor = CBOR.encode(record);
-
-		const actual = CID.toString(await CID.create(CID.CODEC_DCBOR, cbor));
-		if (actual !== cid) {
-			throw new Error(`record content does not match cid`);
-		}
-	}
-
+}: VerifyRecordOptions): Promise<VerifiedRecord> => {
 	// grab public key from did document
 	let publicKey: FoundPublicKey;
 	{
@@ -101,17 +92,22 @@ export const verifyRecord = async ({
 		}
 	}
 
-	// verify the commit is a valid commit
-	{
-		const result = await dfs(blockmap, commit.data.$link, cid);
-		if (!result.found) {
-			throw new Error(`could not find record in car`);
-		}
+	// find and verify the record in the commit
+	const targetKey = `${collection}/${rkey}`;
+	const { found } = await dfs(blockmap, commit.data.$link, targetKey);
+	if (!found) {
+		throw new Error(`could not find record in car`);
 	}
+
+	return {
+		uri: `at://${did}/${collection}/${rkey}`,
+		cid: found.cid,
+		record: found.record,
+	};
 };
 
 interface DfsResult {
-	found: boolean;
+	found: false | { cid: string; record: unknown };
 	min?: string;
 	max?: string;
 	depth?: number;
@@ -123,7 +119,7 @@ const decoder = new TextDecoder();
 const dfs = async (
 	blockmap: CAR.BlockMap,
 	from: string | undefined,
-	target: string,
+	targetKey: string,
 	visited = new Set<string>(),
 ): Promise<DfsResult> => {
 	// If there's no starting point, return empty state
@@ -157,7 +153,7 @@ const dfs = async (
 	}
 
 	// Recursively process the left child
-	const left = await dfs(blockmap, node.l?.$link, target, visited);
+	const left = await dfs(blockmap, node.l?.$link, targetKey, visited);
 
 	let key = '';
 	let found = left.found;
@@ -167,12 +163,17 @@ const dfs = async (
 
 	// Process all entries in this node
 	for (const entry of node.e) {
-		if (entry.v.$link === target) {
-			found = true;
-		}
-
 		// Construct the key by truncating and appending
 		key = key.substring(0, entry.p) + decoder.decode(CBOR.fromBytes(entry.k));
+
+		// Check if this is our target key
+		if (key === targetKey) {
+			const recordBlock = blockmap.get(entry.v.$link);
+			if (recordBlock) {
+				const record = CBOR.decode(recordBlock.bytes);
+				found = { cid: entry.v.$link, record };
+			}
+		}
 
 		// Calculate depth based on leading zeros in the hash
 		const keyDigest = await toSha256(encoder.encode(key));
@@ -208,14 +209,14 @@ const dfs = async (
 		}
 
 		// Process right child
-		const right = await dfs(blockmap, entry.t?.$link, target, visited);
+		const right = await dfs(blockmap, entry.t?.$link, targetKey, visited);
 
 		// Check ordering with right subtree
 		if (right.min && right.min < lastKey) {
 			throw new Error(`entries are out of order; cid=${from}`);
 		}
 
-		found ||= right.found;
+		found = found || right.found;
 
 		// Check depth ordering
 		if (left.depth !== undefined && left.depth >= thisDepth) {
