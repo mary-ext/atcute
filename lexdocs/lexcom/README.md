@@ -1,1 +1,1 @@
-https://github.com/lexicon-community/lexicon/tree/1a8b319c00b2b57bf2cd5b011e7c0ce9bcafac0e/community/lexicon/
+https://github.com/lexicon-community/lexicon/tree/b3123004cbad9a7d2c061a073d695375e037f990/community/lexicon/
