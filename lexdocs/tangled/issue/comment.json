@@ -15,20 +15,16 @@
 						"type": "string",
 						"format": "at-uri"
 					},
-					"repo": {
-						"type": "string",
-						"format": "at-uri"
-					},
-					"owner": {
-						"type": "string",
-						"format": "did"
-					},
 					"body": {
 						"type": "string"
 					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime"
+					},
+					"replyTo": {
+						"type": "string",
+						"format": "at-uri"
 					}
 				}
 			}

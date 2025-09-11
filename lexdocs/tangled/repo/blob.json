@@ -1,0 +1,138 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.blob",
+	"defs": {
+		"main": {
+			"type": "query",
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "ref", "path"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"description": "Repository identifier in format 'did:plc:.../repoName'"
+					},
+					"ref": {
+						"type": "string",
+						"description": "Git reference (branch, tag, or commit SHA)"
+					},
+					"path": {
+						"type": "string",
+						"description": "Path to the file within the repository"
+					},
+					"raw": {
+						"type": "boolean",
+						"description": "Return raw file content instead of JSON response",
+						"default": false
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["ref", "path", "content"],
+					"properties": {
+						"ref": {
+							"type": "string",
+							"description": "The git reference used"
+						},
+						"path": {
+							"type": "string",
+							"description": "The file path"
+						},
+						"content": {
+							"type": "string",
+							"description": "File content (base64 encoded for binary files)"
+						},
+						"encoding": {
+							"type": "string",
+							"description": "Content encoding",
+							"enum": ["utf-8", "base64"]
+						},
+						"size": {
+							"type": "integer",
+							"description": "File size in bytes"
+						},
+						"isBinary": {
+							"type": "boolean",
+							"description": "Whether the file is binary"
+						},
+						"mimeType": {
+							"type": "string",
+							"description": "MIME type of the file"
+						},
+						"lastCommit": {
+							"type": "ref",
+							"ref": "#lastCommit"
+						}
+					}
+				}
+			},
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "Git reference not found"
+				},
+				{
+					"name": "FileNotFound",
+					"description": "File not found at the specified path"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			]
+		},
+		"lastCommit": {
+			"type": "object",
+			"required": ["hash", "message", "when"],
+			"properties": {
+				"hash": {
+					"type": "string",
+					"description": "Commit hash"
+				},
+				"shortHash": {
+					"type": "string",
+					"description": "Short commit hash"
+				},
+				"message": {
+					"type": "string",
+					"description": "Commit message"
+				},
+				"author": {
+					"type": "ref",
+					"ref": "#signature"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Commit timestamp"
+				}
+			}
+		},
+		"signature": {
+			"type": "object",
+			"required": ["name", "email", "when"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Author name"
+				},
+				"email": {
+					"type": "string",
+					"description": "Author email"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Author timestamp"
+				}
+			}
+		}
+	}
+}

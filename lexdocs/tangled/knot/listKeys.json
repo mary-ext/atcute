@@ -1,0 +1,73 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.knot.listKeys",
+	"defs": {
+		"main": {
+			"type": "query",
+			"description": "List all public keys stored in the knot server",
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"description": "Maximum number of keys to return",
+						"minimum": 1,
+						"maximum": 1000,
+						"default": 100
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["keys"],
+					"properties": {
+						"keys": {
+							"type": "array",
+							"items": {
+								"type": "ref",
+								"ref": "#publicKey"
+							}
+						},
+						"cursor": {
+							"type": "string",
+							"description": "Pagination cursor for next page"
+						}
+					}
+				}
+			},
+			"errors": [
+				{
+					"name": "InternalServerError",
+					"description": "Failed to retrieve public keys"
+				}
+			]
+		},
+		"publicKey": {
+			"type": "object",
+			"required": ["did", "key", "createdAt"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did",
+					"description": "DID associated with the public key"
+				},
+				"key": {
+					"type": "string",
+					"maxLength": 4096,
+					"description": "Public key contents"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Key upload timestamp"
+				}
+			}
+		}
+	}
+}

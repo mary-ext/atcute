@@ -1,0 +1,29 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.owner",
+	"defs": {
+		"main": {
+			"type": "query",
+			"description": "Get the owner of a service",
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["owner"],
+					"properties": {
+						"owner": {
+							"type": "string",
+							"format": "did"
+						}
+					}
+				}
+			},
+			"errors": [
+				{
+					"name": "OwnerNotFound",
+					"description": "Owner is not set for this service"
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,123 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.tree",
+	"defs": {
+		"main": {
+			"type": "query",
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "ref"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"description": "Repository identifier in format 'did:plc:.../repoName'"
+					},
+					"ref": {
+						"type": "string",
+						"description": "Git reference (branch, tag, or commit SHA)"
+					},
+					"path": {
+						"type": "string",
+						"description": "Path within the repository tree",
+						"default": ""
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["ref", "files"],
+					"properties": {
+						"ref": {
+							"type": "string",
+							"description": "The git reference used"
+						},
+						"parent": {
+							"type": "string",
+							"description": "The parent path in the tree"
+						},
+						"dotdot": {
+							"type": "string",
+							"description": "Parent directory path"
+						},
+						"files": {
+							"type": "array",
+							"items": {
+								"type": "ref",
+								"ref": "#treeEntry"
+							}
+						}
+					}
+				}
+			},
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "Git reference not found"
+				},
+				{
+					"name": "PathNotFound",
+					"description": "Path not found in repository tree"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			]
+		},
+		"treeEntry": {
+			"type": "object",
+			"required": ["name", "mode", "size", "is_file", "is_subtree"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Relative file or directory name"
+				},
+				"mode": {
+					"type": "string",
+					"description": "File mode"
+				},
+				"size": {
+					"type": "integer",
+					"description": "File size in bytes"
+				},
+				"is_file": {
+					"type": "boolean",
+					"description": "Whether this entry is a file"
+				},
+				"is_subtree": {
+					"type": "boolean",
+					"description": "Whether this entry is a directory/subtree"
+				},
+				"last_commit": {
+					"type": "ref",
+					"ref": "#lastCommit"
+				}
+			}
+		},
+		"lastCommit": {
+			"type": "object",
+			"required": ["hash", "message", "when"],
+			"properties": {
+				"hash": {
+					"type": "string",
+					"description": "Commit hash"
+				},
+				"message": {
+					"type": "string",
+					"description": "Commit message"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Commit timestamp"
+				}
+			}
+		}
+	}
+}

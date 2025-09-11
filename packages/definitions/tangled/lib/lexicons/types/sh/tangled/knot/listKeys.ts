@@ -1,0 +1,48 @@
+import type {} from '@atcute/lexicons';
+import * as v from '@atcute/lexicons/validations';
+import type {} from '@atcute/lexicons/ambient';
+
+const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.knot.listKeys', {
+	params: /*#__PURE__*/ v.object({
+		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		limit: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 1000)]),
+			100,
+		),
+	}),
+	output: {
+		type: 'lex',
+		schema: /*#__PURE__*/ v.object({
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			get keys() {
+				return /*#__PURE__*/ v.array(publicKeySchema);
+			},
+		}),
+	},
+});
+const _publicKeySchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.knot.listKeys#publicKey')),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
+	did: /*#__PURE__*/ v.didString(),
+	key: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 4096)]),
+});
+
+type main$schematype = typeof _mainSchema;
+type publicKey$schematype = typeof _publicKeySchema;
+
+export interface mainSchema extends main$schematype {}
+export interface publicKeySchema extends publicKey$schematype {}
+
+export const mainSchema = _mainSchema as mainSchema;
+export const publicKeySchema = _publicKeySchema as publicKeySchema;
+
+export interface PublicKey extends v.InferInput<typeof publicKeySchema> {}
+
+export interface $params extends v.InferInput<mainSchema['params']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
+
+declare module '@atcute/lexicons/ambient' {
+	interface XRPCQueries {
+		'sh.tangled.knot.listKeys': mainSchema;
+	}
+}

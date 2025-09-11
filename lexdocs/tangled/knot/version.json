@@ -1,0 +1,23 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.knot.version",
+	"defs": {
+		"main": {
+			"type": "query",
+			"description": "Get the version of a knot",
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["version"],
+					"properties": {
+						"version": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"errors": []
+		}
+	}
+}

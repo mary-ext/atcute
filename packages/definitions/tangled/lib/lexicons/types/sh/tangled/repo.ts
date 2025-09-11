@@ -8,7 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		description: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.datetimeString(), [/*#__PURE__*/ v.stringGraphemes(1, 140)]),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringGraphemes(1, 140)]),
 		),
 		knot: /*#__PURE__*/ v.string(),
 		name: /*#__PURE__*/ v.string(),

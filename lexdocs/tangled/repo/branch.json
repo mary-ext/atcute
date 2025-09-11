@@ -1,0 +1,94 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.repo.branch",
+	"defs": {
+		"main": {
+			"type": "query",
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "name"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"description": "Repository identifier in format 'did:plc:.../repoName'"
+					},
+					"name": {
+						"type": "string",
+						"description": "Branch name to get information for"
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["name", "hash", "when"],
+					"properties": {
+						"name": {
+							"type": "string",
+							"description": "Branch name"
+						},
+						"hash": {
+							"type": "string",
+							"description": "Latest commit hash on this branch"
+						},
+						"shortHash": {
+							"type": "string",
+							"description": "Short commit hash"
+						},
+						"when": {
+							"type": "string",
+							"format": "datetime",
+							"description": "Timestamp of latest commit"
+						},
+						"message": {
+							"type": "string",
+							"description": "Latest commit message"
+						},
+						"author": {
+							"type": "ref",
+							"ref": "#signature"
+						},
+						"isDefault": {
+							"type": "boolean",
+							"description": "Whether this is the default branch"
+						}
+					}
+				}
+			},
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "BranchNotFound",
+					"description": "Branch not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			]
+		},
+		"signature": {
+			"type": "object",
+			"required": ["name", "email", "when"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Author name"
+				},
+				"email": {
+					"type": "string",
+					"description": "Author email"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Author timestamp"
+				}
+			}
+		}
+	}
+}
