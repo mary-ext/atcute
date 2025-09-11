@@ -88,6 +88,7 @@ export * as ComAtprotoSyncSubscribeRepos from './types/com/atproto/sync/subscrib
 export * as ComAtprotoTempAddReservedHandle from './types/com/atproto/temp/addReservedHandle.js';
 export * as ComAtprotoTempCheckHandleAvailability from './types/com/atproto/temp/checkHandleAvailability.js';
 export * as ComAtprotoTempCheckSignupQueue from './types/com/atproto/temp/checkSignupQueue.js';
+export * as ComAtprotoTempDereferenceScope from './types/com/atproto/temp/dereferenceScope.js';
 export * as ComAtprotoTempFetchLabels from './types/com/atproto/temp/fetchLabels.js';
 export * as ComAtprotoTempRequestPhoneVerification from './types/com/atproto/temp/requestPhoneVerification.js';
 export * as ComAtprotoTempRevokeAccountCredentials from './types/com/atproto/temp/revokeAccountCredentials.js';

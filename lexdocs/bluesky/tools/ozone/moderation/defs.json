@@ -30,7 +30,8 @@
 						"#recordEvent",
 						"#modEventPriorityScore",
 						"#ageAssuranceEvent",
-						"#ageAssuranceOverrideEvent"
+						"#ageAssuranceOverrideEvent",
+						"#revokeAccountCredentialsEvent"
 					]
 				},
 				"subject": {
@@ -77,7 +78,8 @@
 						"#recordEvent",
 						"#modEventPriorityScore",
 						"#ageAssuranceEvent",
-						"#ageAssuranceOverrideEvent"
+						"#ageAssuranceOverrideEvent",
+						"#revokeAccountCredentialsEvent"
 					]
 				},
 				"subject": {
@@ -476,6 +478,17 @@
 				"comment": {
 					"type": "string",
 					"description": "Comment describing the reason for the override."
+				}
+			}
+		},
+		"revokeAccountCredentialsEvent": {
+			"type": "object",
+			"description": "Account credentials revocation by moderators. Only works on DID subjects.",
+			"required": ["comment"],
+			"properties": {
+				"comment": {
+					"type": "string",
+					"description": "Comment describing the reason for the revocation."
 				}
 			}
 		},

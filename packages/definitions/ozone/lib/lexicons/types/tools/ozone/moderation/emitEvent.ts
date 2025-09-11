@@ -34,6 +34,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 					ToolsOzoneModerationDefs.modEventUnmuteSchema,
 					ToolsOzoneModerationDefs.modEventUnmuteReporterSchema,
 					ToolsOzoneModerationDefs.recordEventSchema,
+					ToolsOzoneModerationDefs.revokeAccountCredentialsEventSchema,
 				]);
 			},
 			externalId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

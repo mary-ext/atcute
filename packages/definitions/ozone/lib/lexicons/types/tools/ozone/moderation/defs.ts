@@ -205,6 +205,7 @@ const _modEventViewSchema = /*#__PURE__*/ v.object({
 			modEventUnmuteSchema,
 			modEventUnmuteReporterSchema,
 			recordEventSchema,
+			revokeAccountCredentialsEventSchema,
 		]);
 	},
 	id: /*#__PURE__*/ v.integer(),
@@ -248,6 +249,7 @@ const _modEventViewDetailSchema = /*#__PURE__*/ v.object({
 			modEventUnmuteSchema,
 			modEventUnmuteReporterSchema,
 			recordEventSchema,
+			revokeAccountCredentialsEventSchema,
 		]);
 	},
 	id: /*#__PURE__*/ v.integer(),
@@ -412,6 +414,12 @@ const _reviewClosedSchema = /*#__PURE__*/ v.literal('tools.ozone.moderation.defs
 const _reviewEscalatedSchema = /*#__PURE__*/ v.literal('tools.ozone.moderation.defs#reviewEscalated');
 const _reviewNoneSchema = /*#__PURE__*/ v.literal('tools.ozone.moderation.defs#reviewNone');
 const _reviewOpenSchema = /*#__PURE__*/ v.literal('tools.ozone.moderation.defs#reviewOpen');
+const _revokeAccountCredentialsEventSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#revokeAccountCredentialsEvent'),
+	),
+	comment: /*#__PURE__*/ v.string(),
+});
 const _subjectReviewStateSchema = /*#__PURE__*/ v.string<
 	'#reviewClosed' | '#reviewEscalated' | '#reviewNone' | '#reviewOpen' | (string & {})
 >();
@@ -538,6 +546,7 @@ type reviewClosed$schematype = typeof _reviewClosedSchema;
 type reviewEscalated$schematype = typeof _reviewEscalatedSchema;
 type reviewNone$schematype = typeof _reviewNoneSchema;
 type reviewOpen$schematype = typeof _reviewOpenSchema;
+type revokeAccountCredentialsEvent$schematype = typeof _revokeAccountCredentialsEventSchema;
 type subjectReviewState$schematype = typeof _subjectReviewStateSchema;
 type subjectStatusView$schematype = typeof _subjectStatusViewSchema;
 type subjectView$schematype = typeof _subjectViewSchema;
@@ -589,6 +598,7 @@ export interface reviewClosedSchema extends reviewClosed$schematype {}
 export interface reviewEscalatedSchema extends reviewEscalated$schematype {}
 export interface reviewNoneSchema extends reviewNone$schematype {}
 export interface reviewOpenSchema extends reviewOpen$schematype {}
+export interface revokeAccountCredentialsEventSchema extends revokeAccountCredentialsEvent$schematype {}
 export interface subjectReviewStateSchema extends subjectReviewState$schematype {}
 export interface subjectStatusViewSchema extends subjectStatusView$schematype {}
 export interface subjectViewSchema extends subjectView$schematype {}
@@ -641,6 +651,8 @@ export const reviewClosedSchema = _reviewClosedSchema as reviewClosedSchema;
 export const reviewEscalatedSchema = _reviewEscalatedSchema as reviewEscalatedSchema;
 export const reviewNoneSchema = _reviewNoneSchema as reviewNoneSchema;
 export const reviewOpenSchema = _reviewOpenSchema as reviewOpenSchema;
+export const revokeAccountCredentialsEventSchema =
+	_revokeAccountCredentialsEventSchema as revokeAccountCredentialsEventSchema;
 export const subjectReviewStateSchema = _subjectReviewStateSchema as subjectReviewStateSchema;
 export const subjectStatusViewSchema = _subjectStatusViewSchema as subjectStatusViewSchema;
 export const subjectViewSchema = _subjectViewSchema as subjectViewSchema;
@@ -694,6 +706,8 @@ export type ReviewClosed = v.InferInput<typeof reviewClosedSchema>;
 export type ReviewEscalated = v.InferInput<typeof reviewEscalatedSchema>;
 export type ReviewNone = v.InferInput<typeof reviewNoneSchema>;
 export type ReviewOpen = v.InferInput<typeof reviewOpenSchema>;
+export interface RevokeAccountCredentialsEvent
+	extends v.InferInput<typeof revokeAccountCredentialsEventSchema> {}
 export type SubjectReviewState = v.InferInput<typeof subjectReviewStateSchema>;
 export interface SubjectStatusView extends v.InferInput<typeof subjectStatusViewSchema> {}
 export interface SubjectView extends v.InferInput<typeof subjectViewSchema> {}
