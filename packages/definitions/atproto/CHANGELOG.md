@@ -1,5 +1,11 @@
 # @atcute/atproto
 
+## 3.1.4
+
+### Patch Changes
+
+- 5c34327: pull latest Bluesky lexicons
+
 ## 3.1.3
 
 ### Patch Changes

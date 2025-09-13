@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/atproto",
-	"version": "3.1.3",
+	"version": "3.1.4",
 	"description": "AT Protocol (com.atproto.*) schema definitions",
 	"keywords": [
 		"atcute",
