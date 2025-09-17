@@ -91,3 +91,25 @@ serve(
 	},
 );
 ```
+
+## internal calls
+
+you can make typed calls to your own endpoints using `@atcute/client`:
+
+```ts
+import { Client, ok } from '@atcute/client';
+
+const client = new Client({
+	handler(pathname, init) {
+		return router.fetch(new Request(new URL(pathname, 'http://localhost'), init));
+	},
+});
+
+const data = await ok(
+	client.get('com.example.greet', {
+		params: { name: 'world' },
+	}),
+);
+
+console.log(data.message); // fully typed!
+```
