@@ -15,7 +15,9 @@ import * as PubLeafletBlocksWebsite from '../blocks/website.js';
 const _blockSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.linearDocument#block')),
 	alignment: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.string<'#textAlignCenter' | '#textAlignLeft' | '#textAlignRight' | (string & {})>(),
+		/*#__PURE__*/ v.string<
+			'#textAlignCenter' | '#textAlignJustify' | '#textAlignLeft' | '#textAlignRight' | (string & {})
+		>(),
 	),
 	get block() {
 		return /*#__PURE__*/ v.variant([

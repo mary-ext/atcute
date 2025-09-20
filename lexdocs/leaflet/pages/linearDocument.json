@@ -36,7 +36,7 @@
 				},
 				"alignment": {
 					"type": "string",
-					"knownValues": ["#textAlignLeft", "#textAlignCenter", "#textAlignRight"]
+					"knownValues": ["#textAlignLeft", "#textAlignCenter", "#textAlignRight", "#textAlignJustify"]
 				}
 			}
 		},
