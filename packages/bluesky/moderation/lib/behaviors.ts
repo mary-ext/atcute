@@ -1,4 +1,4 @@
-export const enum LabelTarget {
+export enum LabelTarget {
 	/** label is intended for account's content */
 	Content = 'content',
 	/** label is intended for account's profile */
@@ -7,7 +7,7 @@ export const enum LabelTarget {
 	Account = 'account',
 }
 
-export const enum DisplayContext {
+export enum DisplayContext {
 	/** content in expanded view */
 	ContentView = 'contentView',
 	/** images or video contained in content */
@@ -23,7 +23,7 @@ export const enum DisplayContext {
 	ProfileList = 'profileList',
 }
 
-export const enum ModerationAction {
+export enum ModerationAction {
 	/** should cause blurring */
 	Blur = 'blur',
 	/** should cause an alert */

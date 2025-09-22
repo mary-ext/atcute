@@ -4,7 +4,7 @@ import type { Did } from '@atcute/lexicons';
 
 import { DisplayContext, LabelTarget, ModerationAction, type LabelBehaviorMatrix } from './behaviors.js';
 
-export const enum LabelPreference {
+export enum LabelPreference {
 	/** ignore this label */
 	Ignore = 'ignore',
 	/** warn when viewing content or profile with this label */
@@ -13,7 +13,7 @@ export const enum LabelPreference {
 	Hide = 'hide',
 }
 
-export const enum LabelFlags {
+export enum LabelFlags {
 	/** no flags */
 	None = 0,
 
@@ -29,7 +29,7 @@ export const enum LabelFlags {
 	UnauthenticatedOnly = 1 << 4,
 }
 
-export const enum BlurLevel {
+export enum BlurLevel {
 	/** don't blur any parts of the content */
 	None = 'none',
 	/** only blur the media present in the content */
@@ -41,7 +41,7 @@ export const enum BlurLevel {
 	Forced = 'forced',
 }
 
-export const enum SeverityLevel {
+export enum SeverityLevel {
 	/** don't inform the user */
 	None = 'none',
 	/** lightly inform the user about this label's presence */

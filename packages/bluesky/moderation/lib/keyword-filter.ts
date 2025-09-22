@@ -49,7 +49,7 @@ const escape = (str: string) => {
 	return str.replace(ESCAPE_RE, '\\$&');
 };
 
-export const enum KeywordFilterFlags {
+export enum KeywordFilterFlags {
 	/** filter applies to content */
 	ApplyContent = 1 << 0,
 	/** filter applies to tags */

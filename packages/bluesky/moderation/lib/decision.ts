@@ -19,7 +19,7 @@ const enum ModerationSeverity {
 	Low = 3,
 }
 
-export const enum ModerationCauseType {
+export enum ModerationCauseType {
 	/** caused by a label */
 	Label = 1,
 	/** caused by viewer blocking the subject */
