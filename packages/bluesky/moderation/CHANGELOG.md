@@ -1,5 +1,11 @@
 # @atcute/bluesky-moderation
 
+## 2.0.3
+
+### Patch Changes
+
+- c80127b: replace const enums with regular enums
+
 ## 2.0.2
 
 ### Patch Changes
