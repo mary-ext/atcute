@@ -35,7 +35,7 @@ export const readResponseAsText =
 export const parseResponseAsJson =
 	(typeRegex: RegExp, maxSize: number) =>
 	async (response: Response): Promise<ParsedJsonResponse> => {
-		assertContentType(response, typeRegex);
+		await assertContentType(response, typeRegex);
 
 		const text = await readResponse(response, maxSize);
 
