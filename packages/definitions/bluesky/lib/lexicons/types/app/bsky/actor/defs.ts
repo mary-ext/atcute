@@ -292,6 +292,7 @@ const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
 	},
 	postsCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	pronouns: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	get status() {
 		return /*#__PURE__*/ v.optional(statusViewSchema);
 	},
@@ -301,6 +302,7 @@ const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 	get viewer() {
 		return /*#__PURE__*/ v.optional(viewerStateSchema);
 	},
+	website: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 });
 const _savedFeedSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#savedFeed')),
