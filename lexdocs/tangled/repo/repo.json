@@ -9,15 +9,11 @@
 			"key": "tid",
 			"record": {
 				"type": "object",
-				"required": ["name", "knot", "owner", "createdAt"],
+				"required": ["name", "knot", "createdAt"],
 				"properties": {
 					"name": {
 						"type": "string",
 						"description": "name of the repo"
-					},
-					"owner": {
-						"type": "string",
-						"format": "did"
 					},
 					"knot": {
 						"type": "string",
@@ -36,6 +32,14 @@
 						"type": "string",
 						"format": "uri",
 						"description": "source of the repo"
+					},
+					"labels": {
+						"type": "array",
+						"description": "List of labels that this repo subscribes to",
+						"items": {
+							"type": "string",
+							"format": "at-uri"
+						}
 					},
 					"createdAt": {
 						"type": "string",

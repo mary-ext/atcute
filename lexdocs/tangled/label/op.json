@@ -1,0 +1,56 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.label.op",
+	"needsCbor": true,
+	"needsType": true,
+	"defs": {
+		"main": {
+			"type": "record",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["subject", "add", "delete", "performedAt"],
+				"properties": {
+					"subject": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "The subject (task, pull or discussion) of this label. Appviews may apply a `scope` check and refuse this op."
+					},
+					"performedAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"add": {
+						"type": "array",
+						"items": {
+							"type": "ref",
+							"ref": "#operand"
+						}
+					},
+					"delete": {
+						"type": "array",
+						"items": {
+							"type": "ref",
+							"ref": "#operand"
+						}
+					}
+				}
+			}
+		},
+		"operand": {
+			"type": "object",
+			"required": ["key", "value"],
+			"properties": {
+				"key": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "ATURI to the label definition"
+				},
+				"value": {
+					"type": "string",
+					"description": "Stringified value of the label. This is first unstringed by appviews and then interpreted as a concrete value."
+				}
+			}
+		}
+	}
+}

@@ -7,6 +7,8 @@ export * as ShTangledKnot from './types/sh/tangled/knot.js';
 export * as ShTangledKnotListKeys from './types/sh/tangled/knot/listKeys.js';
 export * as ShTangledKnotMember from './types/sh/tangled/knot/member.js';
 export * as ShTangledKnotVersion from './types/sh/tangled/knot/version.js';
+export * as ShTangledLabelDefinition from './types/sh/tangled/label/definition.js';
+export * as ShTangledLabelOp from './types/sh/tangled/label/op.js';
 export * as ShTangledOwner from './types/sh/tangled/owner.js';
 export * as ShTangledPipeline from './types/sh/tangled/pipeline.js';
 export * as ShTangledPipelineStatus from './types/sh/tangled/pipeline/status.js';

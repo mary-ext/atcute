@@ -1,1 +1,1 @@
-https://github.com/mary-ext/tangled.sh-mirror/tree/d7569292ec44bc33e772739adbe0eeb01675a019/lexicons/
+https://github.com/mary-ext/tangled.sh-mirror/tree/71953ed5003cc6878bd65ffa312b1434c5d0c4b2/lexicons/
