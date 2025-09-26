@@ -101,7 +101,8 @@ export class LexiconSchemaResolver {
 		return {
 			uri: verifiedRecord.uri,
 			cid: verifiedRecord.cid,
-			schema,
+			rawSchema: verifiedRecord.record,
+			schema: schema,
 		};
 	}
 }

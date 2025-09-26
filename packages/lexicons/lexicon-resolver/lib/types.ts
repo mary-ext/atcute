@@ -20,6 +20,8 @@ export interface ResolvedSchema {
 	uri: string;
 	/** CID of the lexicon record */
 	cid: string;
+	/** Raw record value */
+	rawSchema: unknown;
 	/** Parsed lexicon schema document */
 	schema: LexiconDoc;
 }
