@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/lexicon-resolver",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "atproto lexicon authority resolution",
 	"keywords": [
 		"atproto",
@@ -34,7 +34,7 @@
 	},
 	"dependencies": {
 		"@atcute/car": "workspace:^",
-		"@atcute/cbor": "workspace:^", 
+		"@atcute/cbor": "workspace:^",
 		"@atcute/cid": "workspace:^",
 		"@atcute/crypto": "workspace:^",
 		"@atcute/lexicon-doc": "workspace:^",
