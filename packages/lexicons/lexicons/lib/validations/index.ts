@@ -52,18 +52,21 @@ export type StringFormat = keyof StringFormatMap;
 type Literal = string | number | boolean;
 type Key = string | number;
 
+type IssueFormatter = () => string;
+
 // #region Schema issue types
-export type IssueLeaf =
-	| { ok: false; code: 'missing_value' }
-	| { ok: false; code: 'invalid_literal'; expected: readonly Literal[] }
-	| { ok: false; code: 'invalid_type'; expected: InputType }
-	| { ok: false; code: 'invalid_variant'; expected: string[] }
-	| { ok: false; code: 'invalid_integer_range'; min: number; max: number }
-	| { ok: false; code: 'invalid_string_format'; expected: StringFormat }
-	| { ok: false; code: 'invalid_string_graphemes'; minGraphemes: number; maxGraphemes: number }
-	| { ok: false; code: 'invalid_string_length'; minLength: number; maxLength: number }
-	| { ok: false; code: 'invalid_array_length'; minLength: number; maxLength: number }
-	| { ok: false; code: 'invalid_bytes_size'; minSize: number; maxSize: number };
+export type IssueLeaf = { ok: false; msg: IssueFormatter } & (
+	| { code: 'missing_value' }
+	| { code: 'invalid_literal'; expected: readonly Literal[] }
+	| { code: 'invalid_type'; expected: InputType }
+	| { code: 'invalid_variant'; expected: string[] }
+	| { code: 'invalid_integer_range'; min: number; max: number }
+	| { code: 'invalid_string_format'; expected: StringFormat }
+	| { code: 'invalid_string_graphemes'; minGraphemes: number; maxGraphemes: number }
+	| { code: 'invalid_string_length'; minLength: number; maxLength: number }
+	| { code: 'invalid_array_length'; minLength: number; maxLength: number }
+	| { code: 'invalid_bytes_size'; minSize: number; maxSize: number }
+);
 
 export type IssueTree =
 	| IssueLeaf
@@ -144,7 +147,7 @@ export type InferOutput<T extends BaseSchema> = T extends { [kObjectType]?: any 
 
 // #region Schema runner
 const cloneIssueWithPath = (issue: IssueLeaf, path: Key[]): Issue => {
-	const { ok: _ok, ...clone } = issue;
+	const { ok: _ok, msg: _fmt, ...clone } = issue;
 
 	return { ...clone, path };
 };
@@ -252,65 +255,7 @@ const formatIssueTree = (tree: IssueTree): string => {
 		break;
 	}
 
-	let message: string;
-	switch (tree.code) {
-		case 'missing_value': {
-			message = `missing value`;
-			break;
-		}
-		case 'invalid_literal': {
-			message = `expected ${separatedList(tree.expected.map(formatLiteral), 'or')}`;
-			break;
-		}
-		case 'invalid_type': {
-			message = `expected ${tree.expected}`;
-			break;
-		}
-		case 'invalid_variant': {
-			message = `expected ${separatedList(tree.expected, 'or')}`;
-			break;
-		}
-		case 'invalid_integer_range': {
-			const min = tree.min;
-			const max = tree.max;
-
-			message = `expected an integer `;
-
-			if (min > 0) {
-				if (max === min) {
-					message += `of exactly ${min}`;
-				} else if (max !== Infinity) {
-					message += `between ${min} and ${max}`;
-				} else {
-					message += `of at least ${min}`;
-				}
-			} else {
-				message += `of at most ${max}`;
-			}
-
-			break;
-		}
-		case 'invalid_string_format': {
-			message = `expected a ${tree.expected} formatted string`;
-			break;
-		}
-		case 'invalid_string_graphemes': {
-			message = formatRangeMessage('a string', 'grapheme', tree.minGraphemes, tree.maxGraphemes);
-			break;
-		}
-		case 'invalid_string_length': {
-			message = formatRangeMessage('a string', 'character', tree.minLength, tree.maxLength);
-			break;
-		}
-		case 'invalid_array_length': {
-			message = formatRangeMessage('an array', 'item', tree.minLength, tree.maxLength);
-			break;
-		}
-		case 'invalid_bytes_size': {
-			message = formatRangeMessage('a byte array', 'byte', tree.minSize, tree.maxSize);
-			break;
-		}
-	}
+	const message = tree.msg();
 
 	let msg = `${tree.code} at ${path || '.'} (${message})`;
 	if (count > 0) {
@@ -495,6 +440,9 @@ export const literal = <T extends Literal>(value: T): LiteralSchema<T> => {
 		ok: false,
 		code: 'invalid_literal',
 		expected: [value],
+		msg() {
+			return `expected ${formatLiteral(value)}`;
+		},
 	};
 
 	return {
@@ -525,6 +473,9 @@ export const literalEnum = <const TEnums extends readonly Literal[]>(
 		ok: false,
 		code: 'invalid_literal',
 		expected: values,
+		msg() {
+			return `expected ${separatedList(values.map(formatLiteral), 'or')}`;
+		},
 	};
 
 	return {
@@ -551,6 +502,9 @@ const ISSUE_TYPE_BOOLEAN: IssueLeaf = {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'boolean',
+	msg() {
+		return `expected boolean`;
+	},
 };
 
 const BOOLEAN_SCHEMA: BooleanSchema = {
@@ -580,6 +534,9 @@ const ISSUE_TYPE_INTEGER: IssueLeaf = {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'integer',
+	msg() {
+		return `expected integer`;
+	},
 };
 
 const INTEGER_SCHEMA: IntegerSchema = {
@@ -625,6 +582,23 @@ export const integerRange: {
 		code: 'invalid_integer_range',
 		min: min,
 		max: max,
+		msg() {
+			let message = `expected an integer `;
+
+			if (min > 0) {
+				if (max === min) {
+					message += `of exactly ${min}`;
+				} else if (max !== Infinity) {
+					message += `between ${min} and ${max}`;
+				} else {
+					message += `of at least ${min}`;
+				}
+			} else {
+				message += `of at most ${max}`;
+			}
+
+			return message;
+		},
 	};
 
 	return {
@@ -663,6 +637,9 @@ const ISSUE_TYPE_STRING: IssueLeaf = {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'string',
+	msg() {
+		return `expected string`;
+	},
 };
 
 const STRING_SINGLETON: StringSchema = {
@@ -692,6 +669,9 @@ const _formattedString = <TFormat extends keyof StringFormatMap>(
 		ok: false,
 		code: 'invalid_string_format',
 		expected: format,
+		msg() {
+			return `expected a ${format} formatted string`;
+		},
 	};
 
 	const schema: FormattedStringSchema<TFormat> = {
@@ -751,6 +731,9 @@ export const stringLength: {
 		code: 'invalid_string_length',
 		minLength: minLength,
 		maxLength: maxLength,
+		msg() {
+			return formatRangeMessage('a string', 'character', minLength, maxLength);
+		},
 	};
 
 	return {
@@ -812,6 +795,9 @@ export const stringGraphemes: {
 		code: 'invalid_string_graphemes',
 		minGraphemes: minGraphemes,
 		maxGraphemes: maxGraphemes,
+		msg() {
+			return formatRangeMessage('a string', 'grapheme', minGraphemes, maxGraphemes);
+		},
 	};
 
 	return {
@@ -861,6 +847,9 @@ const ISSUE_EXPECTED_BLOB: IssueLeaf = {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'blob',
+	msg() {
+		return `expected blob`;
+	},
 };
 
 const BLOB_SCHEMA: BlobSchema = {
@@ -905,6 +894,9 @@ const ISSUE_EXPECTED_BYTES: IssueLeaf = {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'bytes',
+	msg() {
+		return `expected bytes`;
+	},
 };
 
 const BYTES_SCHEMA: BytesSchema = {
@@ -945,6 +937,9 @@ export const bytesSize: {
 		code: 'invalid_bytes_size',
 		minSize: minSize,
 		maxSize: maxSize,
+		msg() {
+			return formatRangeMessage('a byte array', 'byte', minSize, maxSize);
+		},
 	};
 
 	return {
@@ -994,6 +989,9 @@ const ISSUE_EXPECTED_CID_LINK: IssueLeaf = {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'cid-link',
+	msg() {
+		return `expected cid-link`;
+	},
 };
 
 const CID_LINK_SCHEMA: CidLinkSchema = {
@@ -1106,6 +1104,9 @@ const ISSUE_TYPE_ARRAY: IssueLeaf = {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'array',
+	msg() {
+		return `expected array`;
+	},
 };
 
 // #__NO_SIDE_EFFECTS__
@@ -1190,6 +1191,9 @@ export const arrayLength: {
 		code: 'invalid_array_length',
 		minLength: minLength,
 		maxLength: maxLength,
+		msg() {
+			return formatRangeMessage('an array', 'item', minLength, maxLength);
+		},
 	};
 
 	return {
@@ -1274,11 +1278,17 @@ const ISSUE_TYPE_OBJECT: IssueLeaf = {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'object',
+	msg() {
+		return `expected object`;
+	},
 };
 
 const ISSUE_MISSING: IssueLeaf = {
 	ok: false,
 	code: 'missing_value',
+	msg() {
+		return `missing value`;
+	},
 };
 
 const set = (obj: Record<string, unknown>, key: string, value: unknown): void => {
@@ -1537,16 +1547,9 @@ export interface VariantSchema<
 	readonly [kObjectType]?: { in: InferVariantInput<TMembers>; out: InferVariantOutput<TMembers> };
 }
 
-const ISSUE_VARIANT_MISSING = /*#__PURE__*/ prependPath('$type', {
-	ok: false,
-	code: 'missing_value',
-});
+const ISSUE_VARIANT_MISSING = /*#__PURE__*/ prependPath('$type', ISSUE_MISSING);
 
-const ISSUE_VARIANT_TYPE = /*#__PURE__*/ prependPath('$type', {
-	ok: false,
-	code: 'invalid_type',
-	expected: 'string',
-});
+const ISSUE_VARIANT_TYPE = /*#__PURE__*/ prependPath('$type', ISSUE_TYPE_STRING);
 
 // #__NO_SIDE_EFFECTS__
 export const variant: {
@@ -1586,6 +1589,9 @@ export const variant: {
 				ok: false,
 				code: 'invalid_variant',
 				expected: Object.keys(map),
+				msg() {
+					return `expected ${separatedList(Object.keys(map), 'or')}`;
+				},
 			};
 
 			const matcher: Matcher = (input, flags) => {
@@ -1631,6 +1637,9 @@ const ISSUE_TYPE_UNKNOWN: IssueLeaf = {
 	ok: false,
 	code: 'invalid_type',
 	expected: 'unknown',
+	msg() {
+		return `expected unknown`;
+	},
 };
 
 const UNKNOWN_SCHEMA: UnknownSchema = {
