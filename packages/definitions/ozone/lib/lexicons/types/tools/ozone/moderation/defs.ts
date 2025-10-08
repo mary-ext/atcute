@@ -67,6 +67,12 @@ const _blobViewSchema = /*#__PURE__*/ v.object({
 	},
 	size: /*#__PURE__*/ v.integer(),
 });
+const _cancelScheduledTakedownEventSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#cancelScheduledTakedownEvent'),
+	),
+	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+});
 const _identityEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#identityEvent')),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
@@ -187,6 +193,7 @@ const _modEventViewSchema = /*#__PURE__*/ v.object({
 			accountEventSchema,
 			ageAssuranceEventSchema,
 			ageAssuranceOverrideEventSchema,
+			cancelScheduledTakedownEventSchema,
 			identityEventSchema,
 			modEventAcknowledgeSchema,
 			modEventCommentSchema,
@@ -206,6 +213,7 @@ const _modEventViewSchema = /*#__PURE__*/ v.object({
 			modEventUnmuteReporterSchema,
 			recordEventSchema,
 			revokeAccountCredentialsEventSchema,
+			scheduleTakedownEventSchema,
 		]);
 	},
 	id: /*#__PURE__*/ v.integer(),
@@ -231,6 +239,7 @@ const _modEventViewDetailSchema = /*#__PURE__*/ v.object({
 			accountEventSchema,
 			ageAssuranceEventSchema,
 			ageAssuranceOverrideEventSchema,
+			cancelScheduledTakedownEventSchema,
 			identityEventSchema,
 			modEventAcknowledgeSchema,
 			modEventCommentSchema,
@@ -250,6 +259,7 @@ const _modEventViewDetailSchema = /*#__PURE__*/ v.object({
 			modEventUnmuteReporterSchema,
 			recordEventSchema,
 			revokeAccountCredentialsEventSchema,
+			scheduleTakedownEventSchema,
 		]);
 	},
 	id: /*#__PURE__*/ v.integer(),
@@ -420,6 +430,33 @@ const _revokeAccountCredentialsEventSchema = /*#__PURE__*/ v.object({
 	),
 	comment: /*#__PURE__*/ v.string(),
 });
+const _scheduleTakedownEventSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#scheduleTakedownEvent'),
+	),
+	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	executeAfter: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	executeAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	executeUntil: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+});
+const _scheduledActionViewSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#scheduledActionView')),
+	action: /*#__PURE__*/ v.string<'takedown' | (string & {})>(),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
+	createdBy: /*#__PURE__*/ v.didString(),
+	did: /*#__PURE__*/ v.didString(),
+	eventData: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+	executeAfter: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	executeAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	executeUntil: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	executionEventId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	id: /*#__PURE__*/ v.integer(),
+	lastExecutedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	lastFailureReason: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	randomizeExecution: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	status: /*#__PURE__*/ v.string<'cancelled' | 'executed' | 'failed' | 'pending' | (string & {})>(),
+	updatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+});
 const _subjectReviewStateSchema = /*#__PURE__*/ v.string<
 	'#reviewClosed' | '#reviewEscalated' | '#reviewNone' | '#reviewOpen' | (string & {})
 >();
@@ -509,6 +546,7 @@ type accountStats$schematype = typeof _accountStatsSchema;
 type ageAssuranceEvent$schematype = typeof _ageAssuranceEventSchema;
 type ageAssuranceOverrideEvent$schematype = typeof _ageAssuranceOverrideEventSchema;
 type blobView$schematype = typeof _blobViewSchema;
+type cancelScheduledTakedownEvent$schematype = typeof _cancelScheduledTakedownEventSchema;
 type identityEvent$schematype = typeof _identityEventSchema;
 type imageDetails$schematype = typeof _imageDetailsSchema;
 type modEventAcknowledge$schematype = typeof _modEventAcknowledgeSchema;
@@ -547,6 +585,8 @@ type reviewEscalated$schematype = typeof _reviewEscalatedSchema;
 type reviewNone$schematype = typeof _reviewNoneSchema;
 type reviewOpen$schematype = typeof _reviewOpenSchema;
 type revokeAccountCredentialsEvent$schematype = typeof _revokeAccountCredentialsEventSchema;
+type scheduleTakedownEvent$schematype = typeof _scheduleTakedownEventSchema;
+type scheduledActionView$schematype = typeof _scheduledActionViewSchema;
 type subjectReviewState$schematype = typeof _subjectReviewStateSchema;
 type subjectStatusView$schematype = typeof _subjectStatusViewSchema;
 type subjectView$schematype = typeof _subjectViewSchema;
@@ -561,6 +601,7 @@ export interface accountStatsSchema extends accountStats$schematype {}
 export interface ageAssuranceEventSchema extends ageAssuranceEvent$schematype {}
 export interface ageAssuranceOverrideEventSchema extends ageAssuranceOverrideEvent$schematype {}
 export interface blobViewSchema extends blobView$schematype {}
+export interface cancelScheduledTakedownEventSchema extends cancelScheduledTakedownEvent$schematype {}
 export interface identityEventSchema extends identityEvent$schematype {}
 export interface imageDetailsSchema extends imageDetails$schematype {}
 export interface modEventAcknowledgeSchema extends modEventAcknowledge$schematype {}
@@ -599,6 +640,8 @@ export interface reviewEscalatedSchema extends reviewEscalated$schematype {}
 export interface reviewNoneSchema extends reviewNone$schematype {}
 export interface reviewOpenSchema extends reviewOpen$schematype {}
 export interface revokeAccountCredentialsEventSchema extends revokeAccountCredentialsEvent$schematype {}
+export interface scheduleTakedownEventSchema extends scheduleTakedownEvent$schematype {}
+export interface scheduledActionViewSchema extends scheduledActionView$schematype {}
 export interface subjectReviewStateSchema extends subjectReviewState$schematype {}
 export interface subjectStatusViewSchema extends subjectStatusView$schematype {}
 export interface subjectViewSchema extends subjectView$schematype {}
@@ -614,6 +657,8 @@ export const ageAssuranceEventSchema = _ageAssuranceEventSchema as ageAssuranceE
 export const ageAssuranceOverrideEventSchema =
 	_ageAssuranceOverrideEventSchema as ageAssuranceOverrideEventSchema;
 export const blobViewSchema = _blobViewSchema as blobViewSchema;
+export const cancelScheduledTakedownEventSchema =
+	_cancelScheduledTakedownEventSchema as cancelScheduledTakedownEventSchema;
 export const identityEventSchema = _identityEventSchema as identityEventSchema;
 export const imageDetailsSchema = _imageDetailsSchema as imageDetailsSchema;
 export const modEventAcknowledgeSchema = _modEventAcknowledgeSchema as modEventAcknowledgeSchema;
@@ -653,6 +698,8 @@ export const reviewNoneSchema = _reviewNoneSchema as reviewNoneSchema;
 export const reviewOpenSchema = _reviewOpenSchema as reviewOpenSchema;
 export const revokeAccountCredentialsEventSchema =
 	_revokeAccountCredentialsEventSchema as revokeAccountCredentialsEventSchema;
+export const scheduleTakedownEventSchema = _scheduleTakedownEventSchema as scheduleTakedownEventSchema;
+export const scheduledActionViewSchema = _scheduledActionViewSchema as scheduledActionViewSchema;
 export const subjectReviewStateSchema = _subjectReviewStateSchema as subjectReviewStateSchema;
 export const subjectStatusViewSchema = _subjectStatusViewSchema as subjectStatusViewSchema;
 export const subjectViewSchema = _subjectViewSchema as subjectViewSchema;
@@ -669,6 +716,8 @@ export interface AccountStats extends v.InferInput<typeof accountStatsSchema> {}
 export interface AgeAssuranceEvent extends v.InferInput<typeof ageAssuranceEventSchema> {}
 export interface AgeAssuranceOverrideEvent extends v.InferInput<typeof ageAssuranceOverrideEventSchema> {}
 export interface BlobView extends v.InferInput<typeof blobViewSchema> {}
+export interface CancelScheduledTakedownEvent
+	extends v.InferInput<typeof cancelScheduledTakedownEventSchema> {}
 export interface IdentityEvent extends v.InferInput<typeof identityEventSchema> {}
 export interface ImageDetails extends v.InferInput<typeof imageDetailsSchema> {}
 export interface ModEventAcknowledge extends v.InferInput<typeof modEventAcknowledgeSchema> {}
@@ -708,6 +757,8 @@ export type ReviewNone = v.InferInput<typeof reviewNoneSchema>;
 export type ReviewOpen = v.InferInput<typeof reviewOpenSchema>;
 export interface RevokeAccountCredentialsEvent
 	extends v.InferInput<typeof revokeAccountCredentialsEventSchema> {}
+export interface ScheduleTakedownEvent extends v.InferInput<typeof scheduleTakedownEventSchema> {}
+export interface ScheduledActionView extends v.InferInput<typeof scheduledActionViewSchema> {}
 export type SubjectReviewState = v.InferInput<typeof subjectReviewStateSchema>;
 export interface SubjectStatusView extends v.InferInput<typeof subjectStatusViewSchema> {}
 export interface SubjectView extends v.InferInput<typeof subjectViewSchema> {}

@@ -4,6 +4,7 @@ export * as ToolsOzoneCommunicationDeleteTemplate from './types/tools/ozone/comm
 export * as ToolsOzoneCommunicationListTemplates from './types/tools/ozone/communication/listTemplates.js';
 export * as ToolsOzoneCommunicationUpdateTemplate from './types/tools/ozone/communication/updateTemplate.js';
 export * as ToolsOzoneHostingGetAccountHistory from './types/tools/ozone/hosting/getAccountHistory.js';
+export * as ToolsOzoneModerationCancelScheduledActions from './types/tools/ozone/moderation/cancelScheduledActions.js';
 export * as ToolsOzoneModerationDefs from './types/tools/ozone/moderation/defs.js';
 export * as ToolsOzoneModerationEmitEvent from './types/tools/ozone/moderation/emitEvent.js';
 export * as ToolsOzoneModerationGetAccountTimeline from './types/tools/ozone/moderation/getAccountTimeline.js';
@@ -14,8 +15,10 @@ export * as ToolsOzoneModerationGetRepo from './types/tools/ozone/moderation/get
 export * as ToolsOzoneModerationGetReporterStats from './types/tools/ozone/moderation/getReporterStats.js';
 export * as ToolsOzoneModerationGetRepos from './types/tools/ozone/moderation/getRepos.js';
 export * as ToolsOzoneModerationGetSubjects from './types/tools/ozone/moderation/getSubjects.js';
+export * as ToolsOzoneModerationListScheduledActions from './types/tools/ozone/moderation/listScheduledActions.js';
 export * as ToolsOzoneModerationQueryEvents from './types/tools/ozone/moderation/queryEvents.js';
 export * as ToolsOzoneModerationQueryStatuses from './types/tools/ozone/moderation/queryStatuses.js';
+export * as ToolsOzoneModerationScheduleAction from './types/tools/ozone/moderation/scheduleAction.js';
 export * as ToolsOzoneModerationSearchRepos from './types/tools/ozone/moderation/searchRepos.js';
 export * as ToolsOzoneReportDefs from './types/tools/ozone/report/defs.js';
 export * as ToolsOzoneSafelinkAddRule from './types/tools/ozone/safelink/addRule.js';

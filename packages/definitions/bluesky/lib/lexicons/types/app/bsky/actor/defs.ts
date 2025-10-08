@@ -219,6 +219,7 @@ const _profileViewSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	pronouns: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	get status() {
 		return /*#__PURE__*/ v.optional(statusViewSchema);
 	},
@@ -247,6 +248,7 @@ const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	pronouns: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	get status() {
 		return /*#__PURE__*/ v.optional(statusViewSchema);
 	},
