@@ -11,7 +11,14 @@ const _mainSchema = /*#__PURE__*/ v.procedure('blue.moji.collection.putItem', {
 			get item() {
 				return BlueMojiCollectionItem.itemViewSchema;
 			},
+			/**
+			 * The handle or DID of the repo (aka, current account).
+			 */
 			repo: /*#__PURE__*/ v.actorIdentifierString(),
+			/**
+			 * Can be set to 'false' to skip Lexicon schema validation of record data.
+			 * @default true
+			 */
 			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 		}),
 	},

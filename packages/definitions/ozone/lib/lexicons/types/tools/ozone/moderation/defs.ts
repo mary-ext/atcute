@@ -9,6 +9,9 @@ import * as ComAtprotoServerDefs from '@atcute/atproto/types/server/defs';
 
 const _accountEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#accountEvent')),
+	/**
+	 * Indicates that the account has a repository which can be fetched from the host that emitted this event.
+	 */
 	active: /*#__PURE__*/ v.boolean(),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	status: /*#__PURE__*/ v.optional(
@@ -31,27 +34,69 @@ const _accountHostingSchema = /*#__PURE__*/ v.object({
 });
 const _accountStatsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#accountStats')),
+	/**
+	 * Total number of appeals against a moderation action on the account
+	 */
 	appealCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Number of times the account was escalated
+	 */
 	escalateCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Total number of reports on the account
+	 */
 	reportCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Number of times the account was suspended
+	 */
 	suspendCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Number of times the account was taken down
+	 */
 	takedownCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _ageAssuranceEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#ageAssuranceEvent')),
+	/**
+	 * The unique identifier for this instance of the age assurance flow, in UUID format.
+	 */
 	attemptId: /*#__PURE__*/ v.string(),
+	/**
+	 * The IP address used when completing the AA flow.
+	 */
 	completeIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The user agent used when completing the AA flow.
+	 */
 	completeUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The date and time of this write operation.
+	 */
 	createdAt: /*#__PURE__*/ v.datetimeString(),
+	/**
+	 * The IP address used when initiating the AA flow.
+	 */
 	initIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The user agent used when initiating the AA flow.
+	 */
 	initUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The status of the age assurance process.
+	 */
 	status: /*#__PURE__*/ v.string<'assured' | 'pending' | 'unknown' | (string & {})>(),
 });
 const _ageAssuranceOverrideEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#ageAssuranceOverrideEvent'),
 	),
+	/**
+	 * Comment describing the reason for the override.
+	 */
 	comment: /*#__PURE__*/ v.string(),
+	/**
+	 * The status to be set for the user decided by a moderator, overriding whatever value the user had previously. Use reset to default to original state.
+	 */
 	status: /*#__PURE__*/ v.string<'assured' | 'blocked' | 'reset' | (string & {})>(),
 });
 const _blobViewSchema = /*#__PURE__*/ v.object({
@@ -88,12 +133,18 @@ const _imageDetailsSchema = /*#__PURE__*/ v.object({
 });
 const _modEventAcknowledgeSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventAcknowledge')),
+	/**
+	 * If true, all other reports on content authored by this account will be resolved (acknowledged).
+	 */
 	acknowledgeAccountSubjects: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 const _modEventCommentSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventComment')),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Make the comment persistent on the subject
+	 */
 	sticky: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 const _modEventDivertSchema = /*#__PURE__*/ v.object({
@@ -102,8 +153,17 @@ const _modEventDivertSchema = /*#__PURE__*/ v.object({
 });
 const _modEventEmailSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventEmail')),
+	/**
+	 * Additional comment about the outgoing comm.
+	 */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The content of the email sent to the user.
+	 */
 	content: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The subject line of the email sent to the user.
+	 */
 	subjectLine: /*#__PURE__*/ v.string(),
 });
 const _modEventEscalateSchema = /*#__PURE__*/ v.object({
@@ -114,12 +174,18 @@ const _modEventLabelSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventLabel')),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	createLabelVals: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
+	/**
+	 * Indicates how long the label will remain on the subject. Only applies on labels that are being added.
+	 */
 	durationInHours: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	negateLabelVals: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
 });
 const _modEventMuteSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventMute')),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Indicates how long the subject should remain muted.
+	 */
 	durationInHours: /*#__PURE__*/ v.integer(),
 });
 const _modEventMuteReporterSchema = /*#__PURE__*/ v.object({
@@ -127,6 +193,9 @@ const _modEventMuteReporterSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventMuteReporter'),
 	),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Indicates how long the account should remain muted. Falsy value here means a permanent mute.
+	 */
 	durationInHours: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _modEventPriorityScoreSchema = /*#__PURE__*/ v.object({
@@ -134,11 +203,18 @@ const _modEventPriorityScoreSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventPriorityScore'),
 	),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * @minimum 0
+	 * @maximum 100
+	 */
 	score: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
 });
 const _modEventReportSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventReport')),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Set to true if the reporter was muted from reporting at the time of the event. These reports won't impact the reviewState of the subject.
+	 */
 	isReporterMuted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	get reportType() {
 		return ComAtprotoModerationDefs.reasonTypeSchema;
@@ -148,25 +224,50 @@ const _modEventResolveAppealSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventResolveAppeal'),
 	),
+	/**
+	 * Describe resolution.
+	 */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 const _modEventReverseTakedownSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventReverseTakedown'),
 	),
+	/**
+	 * Describe reasoning behind the reversal.
+	 */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 const _modEventTagSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventTag')),
+	/**
+	 * Tags to be added to the subject. If already exists, won't be duplicated.
+	 */
 	add: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
+	/**
+	 * Additional comment about added/removed tags.
+	 */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Tags to be removed to the subject. Ignores a tag If it doesn't exist, won't be duplicated.
+	 */
 	remove: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
 });
 const _modEventTakedownSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventTakedown')),
+	/**
+	 * If true, all other reports on content authored by this account will be resolved (acknowledged).
+	 */
 	acknowledgeAccountSubjects: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Indicates how long the takedown should be in effect before automatically expiring.
+	 */
 	durationInHours: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Names/Keywords of the policies that drove the decision.
+	 * @maxLength 5
+	 */
 	policies: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
 			/*#__PURE__*/ v.arrayLength(0, 5),
@@ -175,12 +276,18 @@ const _modEventTakedownSchema = /*#__PURE__*/ v.object({
 });
 const _modEventUnmuteSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventUnmute')),
+	/**
+	 * Describe reasoning behind the reversal.
+	 */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 const _modEventUnmuteReporterSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventUnmuteReporter'),
 	),
+	/**
+	 * Describe reasoning behind the reversal.
+	 */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 const _modEventViewSchema = /*#__PURE__*/ v.object({
@@ -280,7 +387,13 @@ const _modEventViewDetailSchema = /*#__PURE__*/ v.object({
 });
 const _modToolSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modTool')),
+	/**
+	 * Additional arbitrary metadata about the source
+	 */
 	meta: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+	/**
+	 * Name/identifier of the source (e.g., 'automod', 'ozone/workspace')
+	 */
 	name: /*#__PURE__*/ v.string(),
 });
 const _moderationSchema = /*#__PURE__*/ v.object({
@@ -348,13 +461,37 @@ const _recordViewNotFoundSchema = /*#__PURE__*/ v.object({
 });
 const _recordsStatsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#recordsStats')),
+	/**
+	 * Number of items that were appealed at least once
+	 */
 	appealedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Number of items that were escalated at least once
+	 */
 	escalatedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Number of item currently in "reviewOpen" or "reviewEscalated" state
+	 */
 	pendingCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Number of item currently in "reviewNone" or "reviewClosed" state
+	 */
 	processedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Number of items that were reported at least once
+	 */
 	reportedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Total number of item in the set
+	 */
 	subjectCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Number of item currently taken down
+	 */
 	takendownCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Cumulative sum of the number of reports on the items in the set
+	 */
 	totalReports: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _repoViewSchema = /*#__PURE__*/ v.object({
@@ -410,14 +547,38 @@ const _repoViewNotFoundSchema = /*#__PURE__*/ v.object({
 });
 const _reporterStatsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#reporterStats')),
+	/**
+	 * The total number of reports made by the user on accounts.
+	 */
 	accountReportCount: /*#__PURE__*/ v.integer(),
 	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * The total number of accounts labeled as a result of the user's reports.
+	 */
 	labeledAccountCount: /*#__PURE__*/ v.integer(),
+	/**
+	 * The total number of records labeled as a result of the user's reports.
+	 */
 	labeledRecordCount: /*#__PURE__*/ v.integer(),
+	/**
+	 * The total number of reports made by the user on records.
+	 */
 	recordReportCount: /*#__PURE__*/ v.integer(),
+	/**
+	 * The total number of accounts reported by the user.
+	 */
 	reportedAccountCount: /*#__PURE__*/ v.integer(),
+	/**
+	 * The total number of records reported by the user.
+	 */
 	reportedRecordCount: /*#__PURE__*/ v.integer(),
+	/**
+	 * The total number of accounts taken down as a result of the user's reports.
+	 */
 	takendownAccountCount: /*#__PURE__*/ v.integer(),
+	/**
+	 * The total number of records taken down as a result of the user's reports.
+	 */
 	takendownRecordCount: /*#__PURE__*/ v.integer(),
 });
 const _reviewClosedSchema = /*#__PURE__*/ v.literal('tools.ozone.moderation.defs#reviewClosed');
@@ -428,6 +589,9 @@ const _revokeAccountCredentialsEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#revokeAccountCredentialsEvent'),
 	),
+	/**
+	 * Comment describing the reason for the revocation.
+	 */
 	comment: /*#__PURE__*/ v.string(),
 });
 const _scheduleTakedownEventSchema = /*#__PURE__*/ v.object({
@@ -441,20 +605,65 @@ const _scheduleTakedownEventSchema = /*#__PURE__*/ v.object({
 });
 const _scheduledActionViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#scheduledActionView')),
+	/**
+	 * Type of action to be executed
+	 */
 	action: /*#__PURE__*/ v.string<'takedown' | (string & {})>(),
+	/**
+	 * When the scheduled action was created
+	 */
 	createdAt: /*#__PURE__*/ v.datetimeString(),
+	/**
+	 * DID of the user who created this scheduled action
+	 */
 	createdBy: /*#__PURE__*/ v.didString(),
+	/**
+	 * Subject DID for the action
+	 */
 	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * Serialized event object that will be propagated to the event when performed
+	 */
 	eventData: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+	/**
+	 * Earliest time to execute the action (for randomized scheduling)
+	 */
 	executeAfter: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Exact time to execute the action
+	 */
 	executeAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Latest time to execute the action (for randomized scheduling)
+	 */
 	executeUntil: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * ID of the moderation event created when action was successfully executed
+	 */
 	executionEventId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Auto-incrementing row ID
+	 */
 	id: /*#__PURE__*/ v.integer(),
+	/**
+	 * When the action was last attempted to be executed
+	 */
 	lastExecutedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Reason for the last execution failure
+	 */
 	lastFailureReason: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Whether execution time should be randomized within the specified range
+	 */
 	randomizeExecution: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Current status of the scheduled action
+	 */
 	status: /*#__PURE__*/ v.string<'cancelled' | 'executed' | 'failed' | 'pending' | (string & {})>(),
+	/**
+	 * When the scheduled action was last updated
+	 */
 	updatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _subjectReviewStateSchema = /*#__PURE__*/ v.string<
@@ -462,29 +671,58 @@ const _subjectReviewStateSchema = /*#__PURE__*/ v.string<
 >();
 const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#subjectStatusView')),
+	/**
+	 * Statistics related to the account subject
+	 */
 	get accountStats() {
 		return /*#__PURE__*/ v.optional(accountStatsSchema);
 	},
+	/**
+	 * Current age assurance state of the subject.
+	 */
 	ageAssuranceState: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.string<'assured' | 'blocked' | 'pending' | 'reset' | 'unknown' | (string & {})>(),
 	),
+	/**
+	 * Whether or not the last successful update to age assurance was made by the user or admin.
+	 */
 	ageAssuranceUpdatedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'admin' | 'user' | (string & {})>()),
+	/**
+	 * True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
+	 */
 	appealed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Sticky comment on the subject.
+	 */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Timestamp referencing the first moderation status impacting event was emitted on the subject
+	 */
 	createdAt: /*#__PURE__*/ v.datetimeString(),
 	get hosting() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([accountHostingSchema, recordHostingSchema]));
 	},
 	id: /*#__PURE__*/ v.integer(),
+	/**
+	 * Timestamp referencing when the author of the subject appealed a moderation action
+	 */
 	lastAppealedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	lastReportedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	lastReviewedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	lastReviewedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	muteReportingUntil: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	muteUntil: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Numeric value representing the level of priority. Higher score means higher priority.
+	 * @minimum 0
+	 * @maximum 100
+	 */
 	priorityScore: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
 	),
+	/**
+	 * Statistics related to the record subjects authored by the subject's account
+	 */
 	get recordsStats() {
 		return /*#__PURE__*/ v.optional(recordsStatsSchema);
 	},
@@ -503,6 +741,9 @@ const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 	suspendUntil: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	tags: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 	takendown: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Timestamp referencing when the last update was made to the moderation status of the subject
+	 */
 	updatedAt: /*#__PURE__*/ v.datetimeString(),
 });
 const _subjectViewSchema = /*#__PURE__*/ v.object({

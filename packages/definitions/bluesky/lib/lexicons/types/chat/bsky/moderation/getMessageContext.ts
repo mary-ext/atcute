@@ -5,8 +5,17 @@ import * as ChatBskyConvoDefs from '../convo/defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.moderation.getMessageContext', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * @default 5
+		 */
 		after: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer(), 5),
+		/**
+		 * @default 5
+		 */
 		before: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer(), 5),
+		/**
+		 * Conversation that the message is from. NOTE: this field will eventually be required.
+		 */
 		convoId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		messageId: /*#__PURE__*/ v.string(),
 	}),

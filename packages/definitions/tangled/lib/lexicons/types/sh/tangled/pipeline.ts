@@ -35,12 +35,24 @@ const _pullRequestTriggerDataSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.pipeline#pullRequestTriggerData')),
 	action: /*#__PURE__*/ v.string(),
 	sourceBranch: /*#__PURE__*/ v.string(),
+	/**
+	 * @minLength 40
+	 * @maxLength 40
+	 */
 	sourceSha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
 	targetBranch: /*#__PURE__*/ v.string(),
 });
 const _pushTriggerDataSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.pipeline#pushTriggerData')),
+	/**
+	 * @minLength 40
+	 * @maxLength 40
+	 */
 	newSha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
+	/**
+	 * @minLength 40
+	 * @maxLength 40
+	 */
 	oldSha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
 	ref: /*#__PURE__*/ v.string(),
 });

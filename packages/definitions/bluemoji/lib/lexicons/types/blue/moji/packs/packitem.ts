@@ -7,7 +7,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('blue.moji.packs.packitem'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * Reference (AT-URI) to the pack record (blue.moji.packs.pack).
+		 */
 		pack: /*#__PURE__*/ v.resourceUriString(),
+		/**
+		 * Reference (AT-URI) to the Bluemoji item record (blue.moji.collection.item).
+		 */
 		subject: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );

@@ -7,6 +7,11 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.team.listMembers', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		disabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+		/**
+		 * @minimum 1
+		 * @maximum 100
+		 * @default 50
+		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,

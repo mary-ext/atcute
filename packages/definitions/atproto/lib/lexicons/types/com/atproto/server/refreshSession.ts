@@ -14,6 +14,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.refreshSession
 			didDoc: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 			handle: /*#__PURE__*/ v.handleString(),
 			refreshJwt: /*#__PURE__*/ v.string(),
+			/**
+			 * Hosting status of the account. If not specified, then assume 'active'.
+			 */
 			status: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.string<'deactivated' | 'suspended' | 'takendown' | (string & {})>(),
 			),

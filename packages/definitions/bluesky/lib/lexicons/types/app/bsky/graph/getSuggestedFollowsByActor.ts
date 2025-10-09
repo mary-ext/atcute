@@ -10,7 +10,14 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getSuggestedFollowsByA
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * If true, response has fallen-back to generic results, and is not scoped using relativeToDid
+			 * @default false
+			 */
 			isFallback: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+			/**
+			 * Snowflake for this recommendation, use when submitting recommendation events.
+			 */
 			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 			get suggestions() {
 				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);

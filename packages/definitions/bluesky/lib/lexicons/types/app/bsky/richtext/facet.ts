@@ -3,7 +3,13 @@ import * as v from '@atcute/lexicons/validations';
 
 const _byteSliceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.richtext.facet#byteSlice')),
+	/**
+	 * @minimum 0
+	 */
 	byteEnd: /*#__PURE__*/ v.integer(),
+	/**
+	 * @minimum 0
+	 */
 	byteStart: /*#__PURE__*/ v.integer(),
 });
 const _linkSchema = /*#__PURE__*/ v.object({
@@ -25,6 +31,10 @@ const _mentionSchema = /*#__PURE__*/ v.object({
 });
 const _tagSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.richtext.facet#tag')),
+	/**
+	 * @maxLength 640
+	 * @maxGraphemes 64
+	 */
 	tag: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 640),
 		/*#__PURE__*/ v.stringGraphemes(0, 64),

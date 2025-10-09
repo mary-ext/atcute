@@ -7,6 +7,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.issue.state'),
 		issue: /*#__PURE__*/ v.resourceUriString(),
+		/**
+		 * state of the issue
+		 * @default "sh.tangled.repo.issue.state.open"
+		 */
 		state: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<
 				'sh.tangled.repo.issue.state.closed' | 'sh.tangled.repo.issue.state.open' | (string & {})

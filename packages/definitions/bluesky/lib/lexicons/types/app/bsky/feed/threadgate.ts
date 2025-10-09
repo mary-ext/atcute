@@ -16,6 +16,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.feed.threadgate'),
+		/**
+		 * List of rules defining who can reply to this post. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
+		 * @maxLength 5
+		 */
 		get allow() {
 			return /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(
@@ -32,11 +36,18 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			);
 		},
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * List of hidden reply URIs.
+		 * @maxLength 50
+		 */
 		hiddenReplies: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 				/*#__PURE__*/ v.arrayLength(0, 50),
 			]),
 		),
+		/**
+		 * Reference (AT-URI) to the post record.
+		 */
 		post: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );

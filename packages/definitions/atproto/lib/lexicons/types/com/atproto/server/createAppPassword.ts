@@ -16,7 +16,13 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.createAppPassw
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * A short name for the App Password, to help distinguish them.
+			 */
 			name: /*#__PURE__*/ v.string(),
+			/**
+			 * If an app password has 'privileged' access to possibly sensitive account state. Meant for use with trusted clients.
+			 */
 			privileged: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		}),
 	},

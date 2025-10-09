@@ -8,8 +8,18 @@ const _mainSchema = /*#__PURE__*/ v.procedure('blue.moji.collection.saveToCollec
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * The source Bluemoji name/rkey.
+			 * @maxLength 15
+			 */
 			name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 15)]),
+			/**
+			 * The alias to save the Bluemoji to in the current logged-in user's repo.
+			 */
 			renameTo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			/**
+			 * The handle or DID of the repo to copy from.
+			 */
 			source: /*#__PURE__*/ v.actorIdentifierString(),
 		}),
 	},

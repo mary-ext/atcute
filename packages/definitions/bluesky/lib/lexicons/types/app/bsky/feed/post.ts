@@ -15,6 +15,9 @@ const _entitySchema = /*#__PURE__*/ v.object({
 	get index() {
 		return textSliceSchema;
 	},
+	/**
+	 * Expected values are 'mention' and 'link'.
+	 */
 	type: /*#__PURE__*/ v.string(),
 	value: /*#__PURE__*/ v.string(),
 });
@@ -22,6 +25,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.feed.post'),
+		/**
+		 * Client-declared timestamp when this post was originally created.
+		 */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		get embed() {
 			return /*#__PURE__*/ v.optional(
@@ -34,15 +40,29 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				]),
 			);
 		},
+		/**
+		 * DEPRECATED: replaced by app.bsky.richtext.facet.
+		 * @deprecated
+		 */
 		get entities() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(entitySchema));
 		},
+		/**
+		 * Annotations of text (mentions, URLs, hashtags, etc)
+		 */
 		get facets() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 		},
+		/**
+		 * Self-label values for this post. Effectively content warnings.
+		 */
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
+		/**
+		 * Indicates human language of post primary text content.
+		 * @maxLength 3
+		 */
 		langs: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.languageCodeString()), [
 				/*#__PURE__*/ v.arrayLength(0, 3),
@@ -51,6 +71,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get reply() {
 			return /*#__PURE__*/ v.optional(replyRefSchema);
 		},
+		/**
+		 * Additional hashtags, in addition to any included in post text and facets.
+		 * @maxLength 8
+		 */
 		tags: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(
 				/*#__PURE__*/ v.array(
@@ -62,6 +86,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				[/*#__PURE__*/ v.arrayLength(0, 8)],
 			),
 		),
+		/**
+		 * The primary post content. May be an empty string, if there are embeds.
+		 * @maxLength 3000
+		 * @maxGraphemes 300
+		 */
 		text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 3000),
 			/*#__PURE__*/ v.stringGraphemes(0, 300),
@@ -79,7 +108,13 @@ const _replyRefSchema = /*#__PURE__*/ v.object({
 });
 const _textSliceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.post#textSlice')),
+	/**
+	 * @minimum 0
+	 */
 	end: /*#__PURE__*/ v.integer(),
+	/**
+	 * @minimum 0
+	 */
 	start: /*#__PURE__*/ v.integer(),
 });
 

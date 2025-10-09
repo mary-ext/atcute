@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.spindle.member'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * spindle instance that the subject is now a member of
+		 */
 		instance: /*#__PURE__*/ v.string(),
 		subject: /*#__PURE__*/ v.didString(),
 	}),

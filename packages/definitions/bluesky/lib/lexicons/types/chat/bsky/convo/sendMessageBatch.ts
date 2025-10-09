@@ -15,6 +15,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.convo.sendMessageBatch'
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * @maxLength 100
+			 */
 			get items() {
 				return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(batchItemSchema), [
 					/*#__PURE__*/ v.arrayLength(0, 100),

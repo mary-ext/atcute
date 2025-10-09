@@ -5,7 +5,14 @@ import * as ComAtprotoServerDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.getAccountInviteCodes', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * Controls whether any new 'earned' but not 'created' invites should be created.
+		 * @default true
+		 */
 		createAvailable: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+		/**
+		 * @default true
+		 */
 		includeUsed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 	}),
 	output: {

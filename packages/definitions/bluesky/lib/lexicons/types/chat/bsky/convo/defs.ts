@@ -115,9 +115,16 @@ const _messageInputSchema = /*#__PURE__*/ v.object({
 	get embed() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedRecord.mainSchema]));
 	},
+	/**
+	 * Annotations of text (mentions, URLs, hashtags, etc)
+	 */
 	get facets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 	},
+	/**
+	 * @maxLength 10000
+	 * @maxGraphemes 1000
+	 */
 	text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 10000),
 		/*#__PURE__*/ v.stringGraphemes(0, 1000),
@@ -134,10 +141,16 @@ const _messageViewSchema = /*#__PURE__*/ v.object({
 	get embed() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedRecord.viewSchema]));
 	},
+	/**
+	 * Annotations of text (mentions, URLs, hashtags, etc)
+	 */
 	get facets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 	},
 	id: /*#__PURE__*/ v.string(),
+	/**
+	 * Reactions to this message, in ascending order of creation time.
+	 */
 	get reactions() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(reactionViewSchema));
 	},
@@ -146,6 +159,10 @@ const _messageViewSchema = /*#__PURE__*/ v.object({
 		return messageViewSenderSchema;
 	},
 	sentAt: /*#__PURE__*/ v.datetimeString(),
+	/**
+	 * @maxLength 10000
+	 * @maxGraphemes 1000
+	 */
 	text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 10000),
 		/*#__PURE__*/ v.stringGraphemes(0, 1000),

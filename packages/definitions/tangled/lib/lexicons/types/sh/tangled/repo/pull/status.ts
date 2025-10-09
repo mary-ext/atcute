@@ -7,6 +7,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.pull.status'),
 		pull: /*#__PURE__*/ v.resourceUriString(),
+		/**
+		 * status of the pull request
+		 * @default "sh.tangled.repo.pull.status.open"
+		 */
 		status: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<
 				| 'sh.tangled.repo.pull.status.closed'

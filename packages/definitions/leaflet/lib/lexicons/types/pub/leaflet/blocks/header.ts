@@ -7,6 +7,10 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	get facets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(PubLeafletRichtextFacet.mainSchema));
 	},
+	/**
+	 * @minimum 1
+	 * @maximum 6
+	 */
 	level: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 6)]),
 	),

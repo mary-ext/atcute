@@ -10,6 +10,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.identity.signPlcOpera
 			alsoKnownAs: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			rotationKeys: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			services: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+			/**
+			 * A token received through com.atproto.identity.requestPlcOperationSignature
+			 */
 			token: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			verificationMethods: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 		}),
@@ -17,6 +20,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.identity.signPlcOpera
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * A signed DID PLC operation.
+			 */
 			operation: /*#__PURE__*/ v.unknown(),
 		}),
 	},

@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.sync.requestCrawl', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Hostname of the current service (eg, PDS) that is requesting to be crawled.
+			 */
 			hostname: /*#__PURE__*/ v.string(),
 		}),
 	},

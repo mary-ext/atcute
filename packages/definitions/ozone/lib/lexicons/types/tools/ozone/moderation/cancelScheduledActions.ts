@@ -6,9 +6,15 @@ const _cancellationResultsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.cancelScheduledActions#cancellationResults'),
 	),
+	/**
+	 * DIDs for which cancellation failed with error details
+	 */
 	get failed() {
 		return /*#__PURE__*/ v.array(failedCancellationSchema);
 	},
+	/**
+	 * DIDs for which all pending scheduled actions were successfully cancelled
+	 */
 	succeeded: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
 });
 const _failedCancellationSchema = /*#__PURE__*/ v.object({
@@ -24,7 +30,14 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.cancelSche
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Optional comment describing the reason for cancellation
+			 */
 			comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			/**
+			 * Array of DID subjects to cancel scheduled actions for
+			 * @maxLength 100
+			 */
 			subjects: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
 				/*#__PURE__*/ v.arrayLength(0, 100),
 			]),

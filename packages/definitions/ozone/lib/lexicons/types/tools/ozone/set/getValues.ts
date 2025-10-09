@@ -6,6 +6,11 @@ import * as ToolsOzoneSetDefs from './defs.js';
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.set.getValues', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		/**
+		 * @minimum 1
+		 * @maximum 1000
+		 * @default 100
+		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 1000)]),
 			100,

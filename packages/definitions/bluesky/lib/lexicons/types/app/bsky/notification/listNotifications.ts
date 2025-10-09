@@ -7,11 +7,19 @@ import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.listNotifications', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		/**
+		 * @minimum 1
+		 * @maximum 100
+		 * @default 50
+		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
 		priority: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+		/**
+		 * Notification reasons to include in response.
+		 */
 		reasons: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		seenAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	}),
@@ -40,6 +48,9 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	/**
+	 * The reason why this notification was delivered - e.g. your post was liked, or you received a new follower.
+	 */
 	reason: /*#__PURE__*/ v.string<
 		| 'follow'
 		| 'like'

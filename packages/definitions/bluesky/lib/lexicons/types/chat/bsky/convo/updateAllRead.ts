@@ -13,6 +13,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.convo.updateAllRead', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * The count of updated convos.
+			 */
 			updatedCount: /*#__PURE__*/ v.integer(),
 		}),
 	},

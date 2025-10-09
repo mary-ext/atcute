@@ -4,20 +4,33 @@ import * as AppBskyEmbedDefs from './defs.js';
 
 const _imageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images#image')),
+	/**
+	 * Alt text description of the image, for accessibility.
+	 */
 	alt: /*#__PURE__*/ v.string(),
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
+	/**
+	 * @accept image/*
+	 * @maxSize 1000000
+	 */
 	image: /*#__PURE__*/ v.blob(),
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images')),
+	/**
+	 * @maxLength 4
+	 */
 	get images() {
 		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(imageSchema), [/*#__PURE__*/ v.arrayLength(0, 4)]);
 	},
 });
 const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images#view')),
+	/**
+	 * @maxLength 4
+	 */
 	get images() {
 		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(viewImageSchema), [
 			/*#__PURE__*/ v.arrayLength(0, 4),
@@ -26,11 +39,20 @@ const _viewSchema = /*#__PURE__*/ v.object({
 });
 const _viewImageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images#viewImage')),
+	/**
+	 * Alt text description of the image, for accessibility.
+	 */
 	alt: /*#__PURE__*/ v.string(),
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
+	/**
+	 * Fully-qualified URL where a large version of the image can be fetched. May or may not be the exact original blob. For example, CDN location provided by the App View.
+	 */
 	fullsize: /*#__PURE__*/ v.genericUriString(),
+	/**
+	 * Fully-qualified URL where a thumbnail of the image can be fetched. For example, CDN location provided by the App View.
+	 */
 	thumb: /*#__PURE__*/ v.genericUriString(),
 });
 

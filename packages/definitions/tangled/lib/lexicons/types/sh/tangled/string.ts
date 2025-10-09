@@ -6,11 +6,21 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.string'),
+		/**
+		 * @minGraphemes 1
+		 */
 		contents: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringGraphemes(1)]),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * @maxGraphemes 280
+		 */
 		description: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringGraphemes(0, 280),
 		]),
+		/**
+		 * @minGraphemes 1
+		 * @maxGraphemes 140
+		 */
 		filename: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringGraphemes(1, 140)]),
 	}),
 );

@@ -9,8 +9,15 @@ const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(AppBskyActorDefs.profileAssociatedSchema);
 	},
 	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	/**
+	 * Set to true when the actor cannot actively participate in conversations
+	 */
 	chatDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * @maxLength 640
+	 * @maxGraphemes 64
+	 */
 	displayName: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 640),

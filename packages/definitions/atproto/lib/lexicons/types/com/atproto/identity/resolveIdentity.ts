@@ -5,6 +5,9 @@ import * as ComAtprotoIdentityDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.identity.resolveIdentity', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * Handle or DID to resolve.
+		 */
 		identifier: /*#__PURE__*/ v.actorIdentifierString(),
 	}),
 	output: {

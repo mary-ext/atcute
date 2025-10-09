@@ -5,6 +5,10 @@ import * as ToolsOzoneModerationDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.getRecords', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * @minLength 1
+		 * @maxLength 100
+		 */
 		uris: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 			/*#__PURE__*/ v.arrayLength(1, 100),
 		]),

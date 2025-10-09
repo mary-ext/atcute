@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.deactivateAcco
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * A recommendation to server as to how long they should hold onto the deactivated account before deleting.
+			 */
 			deleteAfter: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		}),
 	},

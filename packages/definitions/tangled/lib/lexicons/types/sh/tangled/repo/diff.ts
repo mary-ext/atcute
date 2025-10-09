@@ -4,7 +4,13 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.diff', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * Git reference (branch, tag, or commit SHA)
+		 */
 		ref: /*#__PURE__*/ v.string(),
+		/**
+		 * Repository identifier in format 'did:plc:.../repoName'
+		 */
 		repo: /*#__PURE__*/ v.string(),
 	}),
 	output: {

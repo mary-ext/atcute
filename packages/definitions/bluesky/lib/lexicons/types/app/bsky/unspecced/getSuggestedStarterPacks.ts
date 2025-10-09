@@ -5,6 +5,11 @@ import * as AppBskyGraphDefs from '../graph/defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedStarterPacks', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * @minimum 1
+		 * @maximum 25
+		 * @default 10
+		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 25)]),
 			10,

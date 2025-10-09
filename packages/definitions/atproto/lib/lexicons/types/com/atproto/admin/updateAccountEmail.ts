@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.updateAccountEm
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * The handle or DID of the repo.
+			 */
 			account: /*#__PURE__*/ v.actorIdentifierString(),
 			email: /*#__PURE__*/ v.string(),
 		}),

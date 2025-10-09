@@ -9,6 +9,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('community.lexicon.calendar.rsvp'),
+		/**
+		 * @default "community.lexicon.calendar.rsvp#going"
+		 */
 		status: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<
 				| 'community.lexicon.calendar.rsvp#going'

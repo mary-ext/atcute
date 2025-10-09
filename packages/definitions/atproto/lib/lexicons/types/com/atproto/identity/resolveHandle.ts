@@ -4,6 +4,9 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.identity.resolveHandle', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * The handle to resolve.
+		 */
 		handle: /*#__PURE__*/ v.handleString(),
 	}),
 	output: {

@@ -5,8 +5,16 @@ import * as AppBskyFeedDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getTimeline', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * Variant 'algorithm' for timeline. Implementation-specific. NOTE: most feed flexibility has been moved to feed generator mechanism.
+		 */
 		algorithm: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		/**
+		 * @minimum 1
+		 * @maximum 100
+		 * @default 50
+		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,

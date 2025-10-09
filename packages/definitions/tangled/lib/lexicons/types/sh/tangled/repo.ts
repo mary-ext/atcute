@@ -7,13 +7,32 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * @minGraphemes 1
+		 * @maxGraphemes 140
+		 */
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringGraphemes(1, 140)]),
 		),
+		/**
+		 * knot where the repo was created
+		 */
 		knot: /*#__PURE__*/ v.string(),
+		/**
+		 * List of labels that this repo subscribes to
+		 */
 		labels: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString())),
+		/**
+		 * name of the repo
+		 */
 		name: /*#__PURE__*/ v.string(),
+		/**
+		 * source of the repo
+		 */
 		source: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+		/**
+		 * CI runner to send jobs to and receive results from
+		 */
 		spindle: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),
 );

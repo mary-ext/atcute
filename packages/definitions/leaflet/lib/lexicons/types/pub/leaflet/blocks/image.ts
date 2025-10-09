@@ -8,10 +8,17 @@ const _aspectRatioSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.image')),
+	/**
+	 * Alt text description of the image, for accessibility.
+	 */
 	alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	get aspectRatio() {
 		return aspectRatioSchema;
 	},
+	/**
+	 * @accept image/*
+	 * @maxSize 1000000
+	 */
 	image: /*#__PURE__*/ v.blob(),
 });
 

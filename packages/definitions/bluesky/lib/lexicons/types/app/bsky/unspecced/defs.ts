@@ -5,18 +5,48 @@ import * as AppBskyFeedDefs from '../feed/defs.js';
 
 const _ageAssuranceEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.unspecced.defs#ageAssuranceEvent')),
+	/**
+	 * The unique identifier for this instance of the age assurance flow, in UUID format.
+	 */
 	attemptId: /*#__PURE__*/ v.string(),
+	/**
+	 * The IP address used when completing the AA flow.
+	 */
 	completeIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The user agent used when completing the AA flow.
+	 */
 	completeUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The date and time of this write operation.
+	 */
 	createdAt: /*#__PURE__*/ v.datetimeString(),
+	/**
+	 * The email used for AA.
+	 */
 	email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The IP address used when initiating the AA flow.
+	 */
 	initIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The user agent used when initiating the AA flow.
+	 */
 	initUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The status of the age assurance process.
+	 */
 	status: /*#__PURE__*/ v.string<'assured' | 'pending' | 'unknown' | (string & {})>(),
 });
 const _ageAssuranceStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.unspecced.defs#ageAssuranceState')),
+	/**
+	 * The timestamp when this state was last updated.
+	 */
 	lastInitiatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * The status of the age assurance process.
+	 */
 	status: /*#__PURE__*/ v.string<'assured' | 'blocked' | 'pending' | 'unknown' | (string & {})>(),
 });
 const _skeletonSearchActorSchema = /*#__PURE__*/ v.object({
@@ -60,10 +90,25 @@ const _threadItemNotFoundSchema = /*#__PURE__*/ v.object({
 });
 const _threadItemPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.unspecced.defs#threadItemPost')),
+	/**
+	 * The threadgate created by the author indicates this post as a reply to be hidden for everyone consuming the thread.
+	 */
 	hiddenByThreadgate: /*#__PURE__*/ v.boolean(),
+	/**
+	 * This post has more parents that were not present in the response. This is just a boolean, without the number of parents.
+	 */
 	moreParents: /*#__PURE__*/ v.boolean(),
+	/**
+	 * This post has more replies that were not present in the response. This is a numeric value, which is best-effort and might not be accurate.
+	 */
 	moreReplies: /*#__PURE__*/ v.integer(),
+	/**
+	 * This is by an account muted by the viewer requesting it.
+	 */
 	mutedByViewer: /*#__PURE__*/ v.boolean(),
+	/**
+	 * This post is part of a contiguous thread by the OP from the thread root. Many different OP threads can happen in the same thread.
+	 */
 	opThread: /*#__PURE__*/ v.boolean(),
 	get post() {
 		return AppBskyFeedDefs.postViewSchema;

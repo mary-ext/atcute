@@ -8,19 +8,42 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.listSchedu
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Cursor for pagination
+			 */
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			/**
+			 * Filter actions scheduled to execute before this time
+			 */
 			endsBefore: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+			/**
+			 * Maximum number of results to return
+			 * @minimum 1
+			 * @maximum 100
+			 * @default 50
+			 */
 			limit: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 				50,
 			),
+			/**
+			 * Filter actions scheduled to execute after this time
+			 */
 			startsAfter: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+			/**
+			 * Filter actions by status
+			 * @minLength 1
+			 */
 			statuses: /*#__PURE__*/ v.constrain(
 				/*#__PURE__*/ v.array(
 					/*#__PURE__*/ v.string<'cancelled' | 'executed' | 'failed' | 'pending' | (string & {})>(),
 				),
 				[/*#__PURE__*/ v.arrayLength(1)],
 			),
+			/**
+			 * Filter actions for specific DID subjects
+			 * @maxLength 100
+			 */
 			subjects: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
 					/*#__PURE__*/ v.arrayLength(0, 100),
@@ -34,6 +57,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.listSchedu
 			get actions() {
 				return /*#__PURE__*/ v.array(ToolsOzoneModerationDefs.scheduledActionViewSchema);
 			},
+			/**
+			 * Cursor for next page of results
+			 */
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

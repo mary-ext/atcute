@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.set.deleteSet', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Name of the set to delete
+			 */
 			name: /*#__PURE__*/ v.string(),
 		}),
 	},

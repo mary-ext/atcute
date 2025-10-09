@@ -10,11 +10,19 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.feed.postgate'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * List of AT-URIs embedding this post that the author has detached from.
+		 * @maxLength 50
+		 */
 		detachedEmbeddingUris: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 				/*#__PURE__*/ v.arrayLength(0, 50),
 			]),
 		),
+		/**
+		 * List of rules defining who can embed this post. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
+		 * @maxLength 5
+		 */
 		get embeddingRules() {
 			return /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.variant([disableRuleSchema])), [
@@ -22,6 +30,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				]),
 			);
 		},
+		/**
+		 * Reference (AT-URI) to the post record.
+		 */
 		post: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );

@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.identity.updateHandle
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * The new handle.
+			 */
 			handle: /*#__PURE__*/ v.handleString(),
 		}),
 	},

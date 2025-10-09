@@ -13,9 +13,21 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('community.lexicon.calendar.event'),
+		/**
+		 * Client-declared timestamp when the event was created.
+		 */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * The description of the event.
+		 */
 		description: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		/**
+		 * Client-declared timestamp when the event ends.
+		 */
 		endsAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+		/**
+		 * The locations where the event takes place.
+		 */
 		get locations() {
 			return /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.array(
@@ -29,14 +41,29 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				),
 			);
 		},
+		/**
+		 * The attendance mode of the event.
+		 */
 		get mode() {
 			return /*#__PURE__*/ v.optional(modeSchema);
 		},
+		/**
+		 * The name of the event.
+		 */
 		name: /*#__PURE__*/ v.string(),
+		/**
+		 * Client-declared timestamp when the event starts.
+		 */
 		startsAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+		/**
+		 * The status of the event.
+		 */
 		get status() {
 			return /*#__PURE__*/ v.optional(statusSchema);
 		},
+		/**
+		 * URIs associated with the event.
+		 */
 		get uris() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(uriSchema));
 		},
@@ -68,6 +95,9 @@ const _statusSchema = /*#__PURE__*/ v.optional(
 );
 const _uriSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('community.lexicon.calendar.event#uri')),
+	/**
+	 * The display name of the URI.
+	 */
 	name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	uri: /*#__PURE__*/ v.genericUriString(),
 });

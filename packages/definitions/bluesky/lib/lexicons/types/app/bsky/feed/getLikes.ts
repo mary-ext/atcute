@@ -13,12 +13,23 @@ const _likeSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getLikes', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * CID of the subject record (aka, specific version of record), to filter likes.
+		 */
 		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		/**
+		 * @minimum 1
+		 * @maximum 100
+		 * @default 50
+		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
+		/**
+		 * AT-URI of the subject (eg, a post record).
+		 */
 		uri: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {

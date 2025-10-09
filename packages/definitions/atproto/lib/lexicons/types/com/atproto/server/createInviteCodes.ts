@@ -14,6 +14,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.createInviteCo
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * @default 1
+			 */
 			codeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer(), 1),
 			forAccounts: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
 			useCount: /*#__PURE__*/ v.integer(),

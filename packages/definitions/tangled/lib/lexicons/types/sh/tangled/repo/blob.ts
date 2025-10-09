@@ -7,38 +7,93 @@ const _lastCommitSchema = /*#__PURE__*/ v.object({
 	get author() {
 		return /*#__PURE__*/ v.optional(signatureSchema);
 	},
+	/**
+	 * Commit hash
+	 */
 	hash: /*#__PURE__*/ v.string(),
+	/**
+	 * Commit message
+	 */
 	message: /*#__PURE__*/ v.string(),
+	/**
+	 * Short commit hash
+	 */
 	shortHash: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Commit timestamp
+	 */
 	when: /*#__PURE__*/ v.datetimeString(),
 });
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.blob', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * Path to the file within the repository
+		 */
 		path: /*#__PURE__*/ v.string(),
+		/**
+		 * Return raw file content instead of JSON response
+		 * @default false
+		 */
 		raw: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+		/**
+		 * Git reference (branch, tag, or commit SHA)
+		 */
 		ref: /*#__PURE__*/ v.string(),
+		/**
+		 * Repository identifier in format 'did:plc:.../repoName'
+		 */
 		repo: /*#__PURE__*/ v.string(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * File content (base64 encoded for binary files)
+			 */
 			content: /*#__PURE__*/ v.string(),
+			/**
+			 * Content encoding
+			 */
 			encoding: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['base64', 'utf-8'])),
+			/**
+			 * Whether the file is binary
+			 */
 			isBinary: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			get lastCommit() {
 				return /*#__PURE__*/ v.optional(lastCommitSchema);
 			},
+			/**
+			 * MIME type of the file
+			 */
 			mimeType: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			/**
+			 * The file path
+			 */
 			path: /*#__PURE__*/ v.string(),
+			/**
+			 * The git reference used
+			 */
 			ref: /*#__PURE__*/ v.string(),
+			/**
+			 * File size in bytes
+			 */
 			size: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		}),
 	},
 });
 const _signatureSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.blob#signature')),
+	/**
+	 * Author email
+	 */
 	email: /*#__PURE__*/ v.string(),
+	/**
+	 * Author name
+	 */
 	name: /*#__PURE__*/ v.string(),
+	/**
+	 * Author timestamp
+	 */
 	when: /*#__PURE__*/ v.datetimeString(),
 });
 

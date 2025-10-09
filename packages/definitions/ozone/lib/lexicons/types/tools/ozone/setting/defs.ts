@@ -5,6 +5,10 @@ const _optionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.setting.defs#option')),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	createdBy: /*#__PURE__*/ v.didString(),
+	/**
+	 * @maxLength 10240
+	 * @maxGraphemes 1024
+	 */
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 10240),

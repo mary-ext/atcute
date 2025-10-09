@@ -78,6 +78,9 @@ const _viewRecordSchema = /*#__PURE__*/ v.object({
 	replyCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	repostCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	uri: /*#__PURE__*/ v.resourceUriString(),
+	/**
+	 * The record data itself.
+	 */
 	value: /*#__PURE__*/ v.unknown(),
 });
 

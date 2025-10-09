@@ -10,10 +10,16 @@ import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 
 const _adultContentPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#adultContentPref')),
+	/**
+	 * @default false
+	 */
 	enabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 });
 const _bskyAppProgressGuideSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#bskyAppProgressGuide')),
+	/**
+	 * @maxLength 100
+	 */
 	guide: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 });
 const _bskyAppStatePrefSchema = /*#__PURE__*/ v.object({
@@ -21,11 +27,19 @@ const _bskyAppStatePrefSchema = /*#__PURE__*/ v.object({
 	get activeProgressGuide() {
 		return /*#__PURE__*/ v.optional(bskyAppProgressGuideSchema);
 	},
+	/**
+	 * Storage for NUXs the user has encountered.
+	 * @maxLength 100
+	 */
 	get nuxs() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(nuxSchema), [/*#__PURE__*/ v.arrayLength(0, 100)]),
 		);
 	},
+	/**
+	 * An array of tokens which identify nudges (modals, popups, tours, highlight dots) that should be shown to the user.
+	 * @maxLength 1000
+	 */
 	queuedNudges: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(
 			/*#__PURE__*/ v.array(
@@ -38,24 +52,53 @@ const _bskyAppStatePrefSchema = /*#__PURE__*/ v.object({
 const _contentLabelPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#contentLabelPref')),
 	label: /*#__PURE__*/ v.string(),
+	/**
+	 * Which labeler does this preference apply to? If undefined, applies globally.
+	 */
 	labelerDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	visibility: /*#__PURE__*/ v.string<'hide' | 'ignore' | 'show' | 'warn' | (string & {})>(),
 });
 const _feedViewPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#feedViewPref')),
+	/**
+	 * The URI of the feed, or an identifier which describes the feed.
+	 */
 	feed: /*#__PURE__*/ v.string(),
+	/**
+	 * Hide quote posts in the feed.
+	 */
 	hideQuotePosts: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Hide replies in the feed.
+	 */
 	hideReplies: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Hide replies in the feed if they do not have this number of likes.
+	 */
 	hideRepliesByLikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Hide replies in the feed if they are not by followed users.
+	 * @default true
+	 */
 	hideRepliesByUnfollowed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+	/**
+	 * Hide reposts in the feed.
+	 */
 	hideReposts: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 const _hiddenPostsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#hiddenPostsPref')),
+	/**
+	 * A list of URIs of posts the account owner has hidden.
+	 */
 	items: /*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()),
 });
 const _interestsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#interestsPref')),
+	/**
+	 * A list of tags which describe the account owner's interests gathered during onboarding.
+	 * @maxLength 100
+	 */
 	tags: /*#__PURE__*/ v.constrain(
 		/*#__PURE__*/ v.array(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
@@ -69,6 +112,10 @@ const _interestsPrefSchema = /*#__PURE__*/ v.object({
 const _knownFollowersSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#knownFollowers')),
 	count: /*#__PURE__*/ v.integer(),
+	/**
+	 * @minLength 0
+	 * @maxLength 5
+	 */
 	get followers() {
 		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(profileViewBasicSchema), [
 			/*#__PURE__*/ v.arrayLength(0, 5),
@@ -87,15 +134,30 @@ const _labelersPrefSchema = /*#__PURE__*/ v.object({
 });
 const _mutedWordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#mutedWord')),
+	/**
+	 * Groups of users to apply the muted word to. If undefined, applies to all users.
+	 * @default "all"
+	 */
 	actorTarget: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.string<'all' | 'exclude-following' | (string & {})>(),
 		'all',
 	),
+	/**
+	 * The date and time at which the muted word will expire and no longer be applied.
+	 */
 	expiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	id: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The intended targets of the muted word.
+	 */
 	get targets() {
 		return /*#__PURE__*/ v.array(mutedWordTargetSchema);
 	},
+	/**
+	 * The muted word itself.
+	 * @maxLength 10000
+	 * @maxGraphemes 1000
+	 */
 	value: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 		/*#__PURE__*/ v.stringLength(0, 10000),
 		/*#__PURE__*/ v.stringGraphemes(0, 1000),
@@ -107,28 +169,52 @@ const _mutedWordTargetSchema = /*#__PURE__*/ v.constrain(
 );
 const _mutedWordsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#mutedWordsPref')),
+	/**
+	 * A list of words the account owner has muted.
+	 */
 	get items() {
 		return /*#__PURE__*/ v.array(mutedWordSchema);
 	},
 });
 const _nuxSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#nux')),
+	/**
+	 * @default false
+	 */
 	completed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+	/**
+	 * Arbitrary data for the NUX. The structure is defined by the NUX itself. Limited to 300 characters.
+	 * @maxLength 3000
+	 * @maxGraphemes 300
+	 */
 	data: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 3000),
 			/*#__PURE__*/ v.stringGraphemes(0, 300),
 		]),
 	),
+	/**
+	 * The date and time at which the NUX will expire and should be considered completed.
+	 */
 	expiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * @maxLength 100
+	 */
 	id: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 });
 const _personalDetailsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#personalDetailsPref')),
+	/**
+	 * The birth date of account owner.
+	 */
 	birthDate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _postInteractionSettingsPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#postInteractionSettingsPref')),
+	/**
+	 * Matches postgate record. List of rules defining who can embed this users posts. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
+	 * @maxLength 5
+	 */
 	get postgateEmbeddingRules() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(
@@ -137,6 +223,10 @@ const _postInteractionSettingsPrefSchema = /*#__PURE__*/ v.object({
 			),
 		);
 	},
+	/**
+	 * Matches threadgate record. List of rules defining who can reply to this users posts. If value is an empty array, no one can reply. If value is undefined, anyone can reply.
+	 * @maxLength 5
+	 */
 	get threadgateAllowRules() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(
@@ -201,6 +291,10 @@ const _profileViewSchema = /*#__PURE__*/ v.object({
 	},
 	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * @maxLength 2560
+	 * @maxGraphemes 256
+	 */
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 2560),
@@ -208,6 +302,10 @@ const _profileViewSchema = /*#__PURE__*/ v.object({
 		]),
 	),
 	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * @maxLength 640
+	 * @maxGraphemes 64
+	 */
 	displayName: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 640),
@@ -238,6 +336,10 @@ const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * @maxLength 640
+	 * @maxGraphemes 64
+	 */
 	displayName: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 640),
@@ -267,6 +369,10 @@ const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	banner: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * @maxLength 2560
+	 * @maxGraphemes 256
+	 */
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 2560),
@@ -274,6 +380,10 @@ const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 		]),
 	),
 	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * @maxLength 640
+	 * @maxGraphemes 64
+	 */
 	displayName: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 640),
@@ -327,42 +437,88 @@ const _savedFeedsPrefV2Schema = /*#__PURE__*/ v.object({
 });
 const _statusViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#statusView')),
+	/**
+	 * An optional embed associated with the status.
+	 */
 	get embed() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedExternal.viewSchema]));
 	},
+	/**
+	 * The date when this status will expire. The application might choose to no longer return the status after expiration.
+	 */
 	expiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * True if the status is not expired, false if it is expired. Only present if expiration was set.
+	 */
 	isActive: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	record: /*#__PURE__*/ v.unknown(),
+	/**
+	 * The status for the account.
+	 */
 	status: /*#__PURE__*/ v.string<'app.bsky.actor.status#live' | (string & {})>(),
 });
 const _threadViewPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#threadViewPref')),
+	/**
+	 * Show followed users at the top of all replies.
+	 */
 	prioritizeFollowedUsers: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Sorting mode for threads.
+	 */
 	sort: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.string<'hotness' | 'most-likes' | 'newest' | 'oldest' | 'random' | (string & {})>(),
 	),
 });
 const _verificationPrefsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#verificationPrefs')),
+	/**
+	 * Hide the blue check badges for verified accounts and trusted verifiers.
+	 * @default false
+	 */
 	hideBadges: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 });
 const _verificationStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#verificationState')),
+	/**
+	 * The user's status as a trusted verifier.
+	 */
 	trustedVerifierStatus: /*#__PURE__*/ v.string<'invalid' | 'none' | 'valid' | (string & {})>(),
+	/**
+	 * All verifications issued by trusted verifiers on behalf of this user. Verifications by untrusted verifiers are not included.
+	 */
 	get verifications() {
 		return /*#__PURE__*/ v.array(verificationViewSchema);
 	},
+	/**
+	 * The user's status as a verified account.
+	 */
 	verifiedStatus: /*#__PURE__*/ v.string<'invalid' | 'none' | 'valid' | (string & {})>(),
 });
 const _verificationViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#verificationView')),
+	/**
+	 * Timestamp when the verification was created.
+	 */
 	createdAt: /*#__PURE__*/ v.datetimeString(),
+	/**
+	 * True if the verification passes validation, otherwise false.
+	 */
 	isValid: /*#__PURE__*/ v.boolean(),
+	/**
+	 * The user who issued this verification.
+	 */
 	issuer: /*#__PURE__*/ v.didString(),
+	/**
+	 * The AT-URI of the verification record.
+	 */
 	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _viewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#viewerState')),
+	/**
+	 * This property is present only in selected cases, as an optimization.
+	 */
 	get activitySubscription() {
 		return /*#__PURE__*/ v.optional(AppBskyNotificationDefs.activitySubscriptionSchema);
 	},
@@ -373,6 +529,9 @@ const _viewerStateSchema = /*#__PURE__*/ v.object({
 	},
 	followedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	following: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	/**
+	 * This property is present only in selected cases, as an optimization.
+	 */
 	get knownFollowers() {
 		return /*#__PURE__*/ v.optional(knownFollowersSchema);
 	},

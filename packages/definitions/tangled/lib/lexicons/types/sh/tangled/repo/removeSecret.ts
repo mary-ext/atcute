@@ -7,6 +7,10 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.removeSecret', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * @minLength 1
+			 * @maxLength 50
+			 */
 			key: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 50)]),
 			repo: /*#__PURE__*/ v.resourceUriString(),
 		}),

@@ -5,6 +5,9 @@ import * as ComAtprotoAdminDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.admin.getAccountInfos', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * @minLength 1
+		 */
 		dids: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
 			/*#__PURE__*/ v.arrayLength(1),
 		]),

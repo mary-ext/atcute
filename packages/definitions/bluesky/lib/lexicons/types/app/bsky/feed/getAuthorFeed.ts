@@ -7,6 +7,10 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getAuthorFeed', {
 	params: /*#__PURE__*/ v.object({
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		/**
+		 * Combinations of post/repost types to include in response.
+		 * @default "posts_with_replies"
+		 */
 		filter: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<
 				| 'posts_and_author_threads'
@@ -18,7 +22,15 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getAuthorFeed', {
 			>(),
 			'posts_with_replies',
 		),
+		/**
+		 * @default false
+		 */
 		includePins: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+		/**
+		 * @minimum 1
+		 * @maximum 100
+		 * @default 50
+		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,

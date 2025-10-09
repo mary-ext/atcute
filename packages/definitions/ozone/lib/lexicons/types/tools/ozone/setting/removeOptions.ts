@@ -7,6 +7,10 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.setting.removeOptions
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * @minLength 1
+			 * @maxLength 200
+			 */
 			keys: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString()), [
 				/*#__PURE__*/ v.arrayLength(1, 200),
 			]),

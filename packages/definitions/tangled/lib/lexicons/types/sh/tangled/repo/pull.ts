@@ -22,6 +22,10 @@ const _sourceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.pull#source')),
 	branch: /*#__PURE__*/ v.string(),
 	repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	/**
+	 * @minLength 40
+	 * @maxLength 40
+	 */
 	sha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
 });
 const _targetSchema = /*#__PURE__*/ v.object({

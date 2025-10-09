@@ -5,7 +5,14 @@ import * as AppBskyGraphDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getRelationships', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * Primary account requesting relationships for.
+		 */
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
+		/**
+		 * List of 'other' accounts to be related back to the primary.
+		 * @maxLength 30
+		 */
 		others: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.actorIdentifierString()), [
 				/*#__PURE__*/ v.arrayLength(0, 30),

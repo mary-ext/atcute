@@ -7,7 +7,14 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.set.deleteValues', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Name of the set to delete values from
+			 */
 			name: /*#__PURE__*/ v.string(),
+			/**
+			 * Array of string values to delete from the set
+			 * @minLength 1
+			 */
 			values: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
 				/*#__PURE__*/ v.arrayLength(1),
 			]),

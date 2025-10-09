@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.graph.listblock'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * Reference (AT-URI) to the mod list record.
+		 */
 		subject: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );

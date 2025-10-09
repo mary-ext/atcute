@@ -7,7 +7,15 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.set.addValues', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Name of the set to add values to
+			 */
 			name: /*#__PURE__*/ v.string(),
+			/**
+			 * Array of string values to add to the set
+			 * @minLength 1
+			 * @maxLength 1000
+			 */
 			values: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
 				/*#__PURE__*/ v.arrayLength(1, 1000),
 			]),

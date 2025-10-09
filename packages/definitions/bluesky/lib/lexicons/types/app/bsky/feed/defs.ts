@@ -33,6 +33,10 @@ const _contentModeUnspecifiedSchema = /*#__PURE__*/ v.literal('app.bsky.feed.def
 const _contentModeVideoSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#contentModeVideo');
 const _feedViewPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#feedViewPost')),
+	/**
+	 * Context provided by feed generator that may be passed back alongside interactions.
+	 * @maxLength 2000
+	 */
 	feedContext: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 	),
@@ -45,6 +49,10 @@ const _feedViewPostSchema = /*#__PURE__*/ v.object({
 	get reply() {
 		return /*#__PURE__*/ v.optional(replyRefSchema);
 	},
+	/**
+	 * Unique identifier per request that may be passed back alongside interactions.
+	 * @maxLength 100
+	 */
 	reqId: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 	),
@@ -62,6 +70,10 @@ const _generatorViewSchema = /*#__PURE__*/ v.object({
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
+	/**
+	 * @maxLength 3000
+	 * @maxGraphemes 300
+	 */
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 3000),
@@ -77,6 +89,9 @@ const _generatorViewSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	/**
+	 * @minimum 0
+	 */
 	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	get viewer() {
@@ -106,10 +121,18 @@ const _interactionSchema = /*#__PURE__*/ v.object({
 			| (string & {})
 		>(),
 	),
+	/**
+	 * Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.
+	 * @maxLength 2000
+	 */
 	feedContext: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 	),
 	item: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	/**
+	 * Unique identifier per request that may be passed back alongside interactions.
+	 * @maxLength 100
+	 */
 	reqId: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 	),
@@ -174,6 +197,9 @@ const _reasonRepostSchema = /*#__PURE__*/ v.object({
 });
 const _replyRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#replyRef')),
+	/**
+	 * When parent is a reply to another post, this is the author of that post.
+	 */
 	get grandparentAuthor() {
 		return /*#__PURE__*/ v.optional(AppBskyActorDefs.profileViewBasicSchema);
 	},
@@ -188,6 +214,10 @@ const _requestLessSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#requestLe
 const _requestMoreSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#requestMore');
 const _skeletonFeedPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#skeletonFeedPost')),
+	/**
+	 * Context that will be passed through to client and may be passed to feed generator back alongside interactions.
+	 * @maxLength 2000
+	 */
 	feedContext: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 	),

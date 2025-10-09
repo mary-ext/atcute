@@ -4,15 +4,27 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.describeRepo', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * The handle or DID of the repo.
+		 */
 		repo: /*#__PURE__*/ v.actorIdentifierString(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * List of all the collections (NSIDs) for which this repo contains at least one record.
+			 */
 			collections: /*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString()),
 			did: /*#__PURE__*/ v.didString(),
+			/**
+			 * The complete DID document for this account.
+			 */
 			didDoc: /*#__PURE__*/ v.unknown(),
 			handle: /*#__PURE__*/ v.handleString(),
+			/**
+			 * Indicates if handle is currently valid (resolves bi-directionally)
+			 */
 			handleIsCorrect: /*#__PURE__*/ v.boolean(),
 		}),
 	},

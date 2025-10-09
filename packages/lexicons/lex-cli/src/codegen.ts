@@ -11,6 +11,8 @@ import type {
 	LexPrimitive,
 	LexRecord,
 	LexRefVariant,
+	LexUnknown,
+	LexUserType,
 	LexXrpcBody,
 	LexXrpcParameters,
 	LexXrpcProcedure,
@@ -564,6 +566,11 @@ const generateObject = (
 			call = `${PURE} v.optional(${call})`;
 		}
 
+		const jsdoc = generateJsdocField(propSpec);
+		if (jsdoc.length !== 0) {
+			inner += `\n${jsdoc}\n`;
+		}
+
 		if (lazy) {
 			inner += `get ${lit(prop)} () { return ${call} },`;
 		} else {
@@ -572,6 +579,112 @@ const generateObject = (
 	}
 
 	return `${PURE} v.object({\n${inner}})`;
+};
+
+const IS_DEPRECATED_PREFIX_RE = /^\s*(?:\(deprecated\)|deprecated[.:;])/i;
+const IS_DEPRECATED_SUFFIX_RE = /\b(?:deprecated(?::[^]+)?)\s*$/i;
+
+const generateJsdocField = (spec: LexUserType | LexRefVariant | LexUnknown) => {
+	const lines: string[] = [];
+
+	if ('description' in spec && spec.description) {
+		let desc = spec.description
+			.replace(/\*\//g, '*\\/')
+			.replace(/@/g, '\\@')
+			.replace(/\r?\n/g, ' ')
+			.replace(/\s+/g, ' ')
+			.trim();
+
+		if (desc) {
+			lines.push(desc);
+		}
+
+		if (IS_DEPRECATED_PREFIX_RE.test(desc) || IS_DEPRECATED_SUFFIX_RE.test(desc)) {
+			lines.push(`@deprecated`);
+		}
+	}
+
+	// Add annotations based on property spec type
+	switch (spec.type) {
+		case 'boolean': {
+			if (spec.default !== undefined) {
+				lines.push(`@default ${lit(spec.default)}`);
+			}
+			break;
+		}
+		case 'string': {
+			if (spec.minLength !== undefined) {
+				lines.push(`@minLength ${spec.minLength}`);
+			}
+			if (spec.maxLength !== undefined) {
+				lines.push(`@maxLength ${spec.maxLength}`);
+			}
+			if (spec.minGraphemes !== undefined) {
+				lines.push(`@minGraphemes ${spec.minGraphemes}`);
+			}
+			if (spec.maxGraphemes !== undefined) {
+				lines.push(`@maxGraphemes ${spec.maxGraphemes}`);
+			}
+			if (spec.default !== undefined) {
+				lines.push(`@default ${lit(spec.default)}`);
+			}
+			break;
+		}
+		case 'integer': {
+			if (spec.minimum !== undefined) {
+				lines.push(`@minimum ${spec.minimum}`);
+			}
+			if (spec.maximum !== undefined) {
+				lines.push(`@maximum ${spec.maximum}`);
+			}
+			if (spec.default !== undefined) {
+				lines.push(`@default ${lit(spec.default)}`);
+			}
+			break;
+		}
+		case 'bytes': {
+			if (spec.minLength !== undefined) {
+				lines.push(`@minLength ${spec.minLength}`);
+			}
+			if (spec.maxLength !== undefined) {
+				lines.push(`@maxLength ${spec.maxLength}`);
+			}
+			break;
+		}
+		case 'array': {
+			if (spec.minLength !== undefined) {
+				lines.push(`@minLength ${spec.minLength}`);
+			}
+			if (spec.maxLength !== undefined) {
+				lines.push(`@maxLength ${spec.maxLength}`);
+			}
+			break;
+		}
+		case 'blob': {
+			if (spec.accept) {
+				const accept = spec.accept.map((mime) => mime.replace(/\*\//g, '*\\/')).join(', ');
+				lines.push(`@accept ${accept}`);
+			}
+			if (spec.maxSize !== undefined) {
+				lines.push(`@maxSize ${spec.maxSize}`);
+			}
+			break;
+		}
+	}
+
+	let res = ``;
+	if (lines.length > 0) {
+		res += `/**\n`;
+
+		for (let idx = 0, len = lines.length; idx < len; idx++) {
+			const line = lines[idx];
+			res += ` * ${line}\n`;
+		}
+
+		res += `*/`;
+	}
+
+	return res;
 };
 
 const generateType = (

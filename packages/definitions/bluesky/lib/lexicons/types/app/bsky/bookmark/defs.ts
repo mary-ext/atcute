@@ -5,6 +5,9 @@ import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 
 const _bookmarkSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.bookmark.defs#bookmark')),
+	/**
+	 * A strong ref to the record to be bookmarked. Currently, only `app.bsky.feed.post` records are supported.
+	 */
 	get subject() {
 		return ComAtprotoRepoStrongRef.mainSchema;
 	},
@@ -19,6 +22,9 @@ const _bookmarkViewSchema = /*#__PURE__*/ v.object({
 			AppBskyFeedDefs.postViewSchema,
 		]);
 	},
+	/**
+	 * A strong ref to the bookmarked record.
+	 */
 	get subject() {
 		return ComAtprotoRepoStrongRef.mainSchema;
 	},

@@ -4,6 +4,9 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getLatestCommit', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * The DID of the repo.
+		 */
 		did: /*#__PURE__*/ v.didString(),
 	}),
 	output: {

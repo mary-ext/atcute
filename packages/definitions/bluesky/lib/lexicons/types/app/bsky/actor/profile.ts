@@ -8,15 +8,34 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.literal('self'),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.actor.profile'),
+		/**
+		 * Small image to be displayed next to posts from account. AKA, 'profile picture'
+		 * @accept image/png, image/jpeg
+		 * @maxSize 1000000
+		 */
 		avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		/**
+		 * Larger horizontal image to display behind profile view.
+		 * @accept image/png, image/jpeg
+		 * @maxSize 1000000
+		 */
 		banner: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
 		createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+		/**
+		 * Free-form profile description text.
+		 * @maxLength 2560
+		 * @maxGraphemes 256
+		 */
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 2560),
 				/*#__PURE__*/ v.stringGraphemes(0, 256),
 			]),
 		),
+		/**
+		 * @maxLength 640
+		 * @maxGraphemes 64
+		 */
 		displayName: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 640),
@@ -26,12 +45,20 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get joinedViaStarterPack() {
 			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
 		},
+		/**
+		 * Self-label values, specific to the Bluesky application, on the overall account.
+		 */
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
 		get pinnedPost() {
 			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
 		},
+		/**
+		 * Free-form pronouns text.
+		 * @maxLength 200
+		 * @maxGraphemes 20
+		 */
 		pronouns: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 200),

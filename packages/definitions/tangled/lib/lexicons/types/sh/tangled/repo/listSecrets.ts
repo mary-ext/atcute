@@ -19,6 +19,10 @@ const _secretSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.listSecrets#secret')),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
 	createdBy: /*#__PURE__*/ v.didString(),
+	/**
+	 * @minLength 1
+	 * @maxLength 50
+	 */
 	key: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 50)]),
 	repo: /*#__PURE__*/ v.resourceUriString(),
 });

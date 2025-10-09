@@ -8,6 +8,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.enableAccountIn
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			account: /*#__PURE__*/ v.didString(),
+			/**
+			 * Optional reason for enabled invites.
+			 */
 			note: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

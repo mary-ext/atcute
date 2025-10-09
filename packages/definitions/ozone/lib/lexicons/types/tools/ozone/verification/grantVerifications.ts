@@ -7,7 +7,13 @@ const _grantErrorSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.verification.grantVerifications#grantError'),
 	),
+	/**
+	 * Error message describing the reason for failure.
+	 */
 	error: /*#__PURE__*/ v.string(),
+	/**
+	 * The did of the subject being verified
+	 */
 	subject: /*#__PURE__*/ v.didString(),
 });
 const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.verification.grantVerifications', {
@@ -15,6 +21,10 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.verification.grantVer
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Array of verification requests to process
+			 * @maxLength 100
+			 */
 			get verifications() {
 				return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(verificationInputSchema), [
 					/*#__PURE__*/ v.arrayLength(0, 100),
@@ -38,9 +48,21 @@ const _verificationInputSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.verification.grantVerifications#verificationInput'),
 	),
+	/**
+	 * Timestamp for verification record. Defaults to current time when not specified.
+	 */
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Display name of the subject the verification applies to at the moment of verifying.
+	 */
 	displayName: /*#__PURE__*/ v.string(),
+	/**
+	 * Handle of the subject the verification applies to at the moment of verifying.
+	 */
 	handle: /*#__PURE__*/ v.handleString(),
+	/**
+	 * The did of the subject being verified
+	 */
 	subject: /*#__PURE__*/ v.didString(),
 });
 

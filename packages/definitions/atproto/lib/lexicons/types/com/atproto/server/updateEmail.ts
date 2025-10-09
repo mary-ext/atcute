@@ -9,6 +9,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.updateEmail', 
 		schema: /*#__PURE__*/ v.object({
 			email: /*#__PURE__*/ v.string(),
 			emailAuthFactor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			/**
+			 * Requires a token from com.atproto.sever.requestEmailUpdate if the account's email has been confirmed.
+			 */
 			token: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

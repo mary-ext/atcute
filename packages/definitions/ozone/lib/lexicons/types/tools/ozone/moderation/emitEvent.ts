@@ -39,6 +39,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 					ToolsOzoneModerationDefs.scheduleTakedownEventSchema,
 				]);
 			},
+			/**
+			 * An optional external ID for the event, used to deduplicate events from external systems. Fails when an event of same type with the same external ID exists for the same subject.
+			 */
 			externalId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get modTool() {
 				return /*#__PURE__*/ v.optional(ToolsOzoneModerationDefs.modToolSchema);

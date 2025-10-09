@@ -6,10 +6,18 @@ import * as ComAtprotoAdminDefs from '@atcute/atproto/types/admin/defs';
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.signature.searchAccounts', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		/**
+		 * @minimum 1
+		 * @maximum 100
+		 * @default 50
+		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
+		/**
+		 * @minLength 1
+		 */
 		values: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
 			/*#__PURE__*/ v.arrayLength(1),
 		]),

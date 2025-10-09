@@ -4,6 +4,10 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.website')),
 	description: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * @accept image/*
+	 * @maxSize 1000000
+	 */
 	previewImage: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
 	src: /*#__PURE__*/ v.genericUriString(),
 	title: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

@@ -4,11 +4,17 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.identity.resolveDid', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * DID to resolve.
+		 */
 		did: /*#__PURE__*/ v.didString(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * The complete DID document for the identity.
+			 */
 			didDoc: /*#__PURE__*/ v.unknown(),
 		}),
 	},

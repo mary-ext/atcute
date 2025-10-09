@@ -4,37 +4,80 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _lastCommitSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#lastCommit')),
+	/**
+	 * Commit hash
+	 */
 	hash: /*#__PURE__*/ v.string(),
+	/**
+	 * Commit message
+	 */
 	message: /*#__PURE__*/ v.string(),
+	/**
+	 * Commit timestamp
+	 */
 	when: /*#__PURE__*/ v.datetimeString(),
 });
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.tree', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * Path within the repository tree
+		 * @default ""
+		 */
 		path: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string(), ''),
+		/**
+		 * Git reference (branch, tag, or commit SHA)
+		 */
 		ref: /*#__PURE__*/ v.string(),
+		/**
+		 * Repository identifier in format 'did:plc:.../repoName'
+		 */
 		repo: /*#__PURE__*/ v.string(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Parent directory path
+			 */
 			dotdot: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get files() {
 				return /*#__PURE__*/ v.array(treeEntrySchema);
 			},
+			/**
+			 * The parent path in the tree
+			 */
 			parent: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			/**
+			 * The git reference used
+			 */
 			ref: /*#__PURE__*/ v.string(),
 		}),
 	},
 });
 const _treeEntrySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#treeEntry')),
+	/**
+	 * Whether this entry is a file
+	 */
 	is_file: /*#__PURE__*/ v.boolean(),
+	/**
+	 * Whether this entry is a directory/subtree
+	 */
 	is_subtree: /*#__PURE__*/ v.boolean(),
 	get last_commit() {
 		return /*#__PURE__*/ v.optional(lastCommitSchema);
 	},
+	/**
+	 * File mode
+	 */
 	mode: /*#__PURE__*/ v.string(),
+	/**
+	 * Relative file or directory name
+	 */
 	name: /*#__PURE__*/ v.string(),
+	/**
+	 * File size in bytes
+	 */
 	size: /*#__PURE__*/ v.integer(),
 });
 

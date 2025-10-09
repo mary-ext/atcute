@@ -4,7 +4,13 @@ import * as v from '@atcute/lexicons/validations';
 const _identityInfoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.identity.defs#identityInfo')),
 	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * The complete DID document for the identity.
+	 */
 	didDoc: /*#__PURE__*/ v.unknown(),
+	/**
+	 * The validated handle of the account; or 'handle.invalid' if the handle did not bi-directionally match the DID document.
+	 */
 	handle: /*#__PURE__*/ v.handleString(),
 });
 

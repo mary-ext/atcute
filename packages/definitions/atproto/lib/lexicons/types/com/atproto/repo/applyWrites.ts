@@ -6,6 +6,10 @@ import * as ComAtprotoRepoDefs from './defs.js';
 const _createSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.repo.applyWrites#create')),
 	collection: /*#__PURE__*/ v.nsidString(),
+	/**
+	 * NOTE: maxLength is redundant with record-key format. Keeping it temporarily to ensure backwards compatibility.
+	 * @maxLength 512
+	 */
 	rkey: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.recordKeyString(), [/*#__PURE__*/ v.stringLength(0, 512)]),
 	),
@@ -30,8 +34,17 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.applyWrites', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * The handle or DID of the repo (aka, current account).
+			 */
 			repo: /*#__PURE__*/ v.actorIdentifierString(),
+			/**
+			 * If provided, the entire operation will fail if the current repo commit CID does not match this value. Used to prevent conflicting repo mutations.
+			 */
 			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+			/**
+			 * Can be set to 'false' to skip Lexicon schema validation of record data across all operations, 'true' to require it, or leave unset to validate only for known Lexicons.
+			 */
 			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			get writes() {
 				return /*#__PURE__*/ v.array(

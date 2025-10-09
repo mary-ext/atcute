@@ -7,8 +7,17 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.create', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Default branch to push to
+			 */
 			defaultBranch: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			/**
+			 * Rkey of the repository record
+			 */
 			rkey: /*#__PURE__*/ v.string(),
+			/**
+			 * A source URL to clone from, populate this when forking or importing a repository.
+			 */
 			source: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

@@ -8,8 +8,15 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('blue.moji.packs.pack'),
+		/**
+		 * @default false
+		 */
 		adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * @maxLength 3000
+		 * @maxGraphemes 300
+		 */
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 3000),
@@ -19,10 +26,21 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get descriptionFacets() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(BlueMojiRichtextFacet.mainSchema));
 		},
+		/**
+		 * @accept image/png, image/jpeg
+		 * @maxSize 1000000
+		 */
 		icon: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		/**
+		 * Self-label values for this emoji. Effectively content warnings.
+		 */
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
+		/**
+		 * @minLength 1
+		 * @maxLength 64
+		 */
 		name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
 	}),
 );

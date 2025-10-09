@@ -5,6 +5,9 @@ import * as AppBskyActorDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.actor.getProfile', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * Handle or DID of account to fetch profile of.
+		 */
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
 	}),
 	output: {

@@ -9,10 +9,20 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('pub.leaflet.publication'),
 		base_path: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+		/**
+		 * @maxLength 2000
+		 */
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 		),
+		/**
+		 * @accept image/*
+		 * @maxSize 1000000
+		 */
 		icon: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		/**
+		 * @maxLength 2000
+		 */
 		name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 		get preferences() {
 			return /*#__PURE__*/ v.optional(preferencesSchema);
@@ -24,7 +34,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 );
 const _preferencesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.publication#preferences')),
+	/**
+	 * @default true
+	 */
 	showComments: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+	/**
+	 * @default true
+	 */
 	showInDiscover: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 });
 const _themeSchema = /*#__PURE__*/ v.object({
@@ -57,6 +73,9 @@ const _themeSchema = /*#__PURE__*/ v.object({
 			/*#__PURE__*/ v.variant([PubLeafletThemeColor.rgbSchema, PubLeafletThemeColor.rgbaSchema]),
 		);
 	},
+	/**
+	 * @default false
+	 */
 	showPageBackground: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 });
 

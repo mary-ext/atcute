@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.graph.block'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * DID of the account to be blocked.
+		 */
 		subject: /*#__PURE__*/ v.didString(),
 	}),
 );

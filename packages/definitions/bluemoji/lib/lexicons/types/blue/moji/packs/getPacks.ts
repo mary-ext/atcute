@@ -5,6 +5,10 @@ import * as BlueMojiPacksDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('blue.moji.packs.getPacks', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * @minLength 1
+		 * @maxLength 25
+		 */
 		uris: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
 			/*#__PURE__*/ v.arrayLength(1, 25),
 		]),

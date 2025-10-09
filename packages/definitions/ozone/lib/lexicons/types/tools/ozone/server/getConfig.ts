@@ -19,6 +19,9 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.server.getConfig', {
 			get pds() {
 				return /*#__PURE__*/ v.optional(serviceConfigSchema);
 			},
+			/**
+			 * The did of the verifier used for verification.
+			 */
 			verifierDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 			get viewer() {
 				return /*#__PURE__*/ v.optional(viewerConfigSchema);

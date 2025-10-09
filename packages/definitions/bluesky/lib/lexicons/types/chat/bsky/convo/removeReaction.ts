@@ -10,6 +10,12 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.convo.removeReaction', 
 		schema: /*#__PURE__*/ v.object({
 			convoId: /*#__PURE__*/ v.string(),
 			messageId: /*#__PURE__*/ v.string(),
+			/**
+			 * @minLength 1
+			 * @maxLength 64
+			 * @minGraphemes 1
+			 * @maxGraphemes 1
+			 */
 			value: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(1, 64),
 				/*#__PURE__*/ v.stringGraphemes(1, 1),

@@ -4,6 +4,10 @@ import * as v from '@atcute/lexicons/validations';
 const _externalSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.external#external')),
 	description: /*#__PURE__*/ v.string(),
+	/**
+	 * @accept image/*
+	 * @maxSize 1000000
+	 */
 	thumb: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
 	title: /*#__PURE__*/ v.string(),
 	uri: /*#__PURE__*/ v.genericUriString(),

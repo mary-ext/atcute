@@ -5,6 +5,11 @@ import * as ComAtprotoLabelDefs from '../label/defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.temp.fetchLabels', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * @minimum 1
+		 * @maximum 250
+		 * @default 50
+		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 250)]),
 			50,

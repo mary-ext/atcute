@@ -4,7 +4,13 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getBlob', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * The CID of the blob to fetch
+		 */
 		cid: /*#__PURE__*/ v.cidString(),
+		/**
+		 * The DID of the account.
+		 */
 		did: /*#__PURE__*/ v.didString(),
 	}),
 	output: {

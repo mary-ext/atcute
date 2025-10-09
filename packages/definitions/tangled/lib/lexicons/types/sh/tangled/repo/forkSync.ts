@@ -7,9 +7,21 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.forkSync', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Branch to sync
+			 */
 			branch: /*#__PURE__*/ v.string(),
+			/**
+			 * DID of the fork owner
+			 */
 			did: /*#__PURE__*/ v.didString(),
+			/**
+			 * Name of the forked repository
+			 */
 			name: /*#__PURE__*/ v.string(),
+			/**
+			 * AT-URI of the source repository
+			 */
 			source: /*#__PURE__*/ v.resourceUriString(),
 		}),
 	},

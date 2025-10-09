@@ -8,6 +8,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.setting.upsertOption'
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * @maxLength 2000
+			 */
 			description: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 			),

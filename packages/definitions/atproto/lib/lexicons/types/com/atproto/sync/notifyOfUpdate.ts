@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.sync.notifyOfUpdate',
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Hostname of the current service (usually a PDS) that is notifying of update.
+			 */
 			hostname: /*#__PURE__*/ v.string(),
 		}),
 	},

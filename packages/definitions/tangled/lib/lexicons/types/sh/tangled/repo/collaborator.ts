@@ -7,6 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.collaborator'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		/**
+		 * repo to add this user to
+		 */
 		repo: /*#__PURE__*/ v.resourceUriString(),
 		subject: /*#__PURE__*/ v.didString(),
 	}),

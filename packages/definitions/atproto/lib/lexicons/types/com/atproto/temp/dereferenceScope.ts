@@ -4,11 +4,17 @@ import type {} from '@atcute/lexicons/ambient';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.temp.dereferenceScope', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * The scope reference (starts with 'ref:')
+		 */
 		scope: /*#__PURE__*/ v.string(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * The full oauth permission scope
+			 */
 			scope: /*#__PURE__*/ v.string(),
 		}),
 	},

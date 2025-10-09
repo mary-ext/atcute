@@ -26,6 +26,10 @@ const _listViewSchema = /*#__PURE__*/ v.object({
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
+	/**
+	 * @maxLength 3000
+	 * @maxGraphemes 300
+	 */
 	description: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 			/*#__PURE__*/ v.stringLength(0, 3000),
@@ -39,7 +43,14 @@ const _listViewSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	/**
+	 * @minimum 0
+	 */
 	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * @minLength 1
+	 * @maxLength 64
+	 */
 	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
 	get purpose() {
 		return listPurposeSchema;
@@ -57,7 +68,14 @@ const _listViewBasicSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	/**
+	 * @minimum 0
+	 */
 	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * @minLength 1
+	 * @maxLength 64
+	 */
 	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
 	get purpose() {
 		return listPurposeSchema;
@@ -82,7 +100,13 @@ const _referencelistSchema = /*#__PURE__*/ v.literal('app.bsky.graph.defs#refere
 const _relationshipSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#relationship')),
 	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * if the actor is followed by this DID, contains the AT-URI of the follow record
+	 */
 	followedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	/**
+	 * if the actor follows this DID, this is the AT-URI of the follow record
+	 */
 	following: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _starterPackViewSchema = /*#__PURE__*/ v.object({
@@ -91,6 +115,9 @@ const _starterPackViewSchema = /*#__PURE__*/ v.object({
 	get creator() {
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
+	/**
+	 * @maxLength 3
+	 */
 	get feeds() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(AppBskyFeedDefs.generatorViewSchema), [
@@ -99,7 +126,13 @@ const _starterPackViewSchema = /*#__PURE__*/ v.object({
 		);
 	},
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
+	/**
+	 * @minimum 0
+	 */
 	joinedAllTimeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * @minimum 0
+	 */
 	joinedWeekCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
@@ -107,6 +140,9 @@ const _starterPackViewSchema = /*#__PURE__*/ v.object({
 	get list() {
 		return /*#__PURE__*/ v.optional(listViewBasicSchema);
 	},
+	/**
+	 * @maxLength 12
+	 */
 	get listItemsSample() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(listItemViewSchema), [
@@ -124,11 +160,20 @@ const _starterPackViewBasicSchema = /*#__PURE__*/ v.object({
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
+	/**
+	 * @minimum 0
+	 */
 	joinedAllTimeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * @minimum 0
+	 */
 	joinedWeekCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
+	/**
+	 * @minimum 0
+	 */
 	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	record: /*#__PURE__*/ v.unknown(),
 	uri: /*#__PURE__*/ v.resourceUriString(),

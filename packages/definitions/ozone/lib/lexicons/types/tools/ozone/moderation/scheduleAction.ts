@@ -20,12 +20,19 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.scheduleAc
 				return /*#__PURE__*/ v.variant([takedownSchema]);
 			},
 			createdBy: /*#__PURE__*/ v.didString(),
+			/**
+			 * This will be propagated to the moderation event when it is applied
+			 */
 			get modTool() {
 				return /*#__PURE__*/ v.optional(ToolsOzoneModerationDefs.modToolSchema);
 			},
 			get scheduling() {
 				return schedulingConfigSchema;
 			},
+			/**
+			 * Array of DID subjects to schedule the action for
+			 * @maxLength 100
+			 */
 			subjects: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
 				/*#__PURE__*/ v.arrayLength(0, 100),
 			]),
@@ -51,15 +58,34 @@ const _schedulingConfigSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.scheduleAction#schedulingConfig'),
 	),
+	/**
+	 * Earliest time to execute the action (for randomized scheduling)
+	 */
 	executeAfter: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Exact time to execute the action
+	 */
 	executeAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Latest time to execute the action (for randomized scheduling)
+	 */
 	executeUntil: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _takedownSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.scheduleAction#takedown')),
+	/**
+	 * If true, all other reports on content authored by this account will be resolved (acknowledged).
+	 */
 	acknowledgeAccountSubjects: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Indicates how long the takedown should be in effect before automatically expiring.
+	 */
 	durationInHours: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Names/Keywords of the policies that drove the decision.
+	 * @maxLength 5
+	 */
 	policies: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
 			/*#__PURE__*/ v.arrayLength(0, 5),
