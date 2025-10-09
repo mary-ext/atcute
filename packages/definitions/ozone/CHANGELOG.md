@@ -1,5 +1,15 @@
 # @atcute/ozone
 
+## 3.1.9
+
+### Patch Changes
+
+- e23f15c: missing default value for literal enums
+- 8f4bd4b: add JSDoc to object fields
+- Updated dependencies [8f4bd4b]
+  - @atcute/atproto@3.1.7
+  - @atcute/bluesky@3.2.6
+
 ## 3.1.8
 
 ### Patch Changes
@@ -220,7 +230,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 

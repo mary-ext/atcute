@@ -1,5 +1,14 @@
 # @atcute/bluemoji
 
+## 3.1.2
+
+### Patch Changes
+
+- 8f4bd4b: add JSDoc to object fields
+- Updated dependencies [8f4bd4b]
+  - @atcute/atproto@3.1.7
+  - @atcute/bluesky@3.2.6
+
 ## 3.1.1
 
 ### Patch Changes
@@ -152,7 +161,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 

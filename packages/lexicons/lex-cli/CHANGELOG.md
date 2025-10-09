@@ -1,5 +1,12 @@
 # @atcute/lex-cli
 
+## 2.2.2
+
+### Patch Changes
+
+- e23f15c: missing default value for literal enums
+- 8f4bd4b: add JSDoc to object fields
+
 ## 2.2.1
 
 ### Patch Changes

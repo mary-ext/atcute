@@ -1,5 +1,12 @@
 # @atcute/whitewind
 
+## 3.1.2
+
+### Patch Changes
+
+- e23f15c: missing default value for literal enums
+- 8f4bd4b: add JSDoc to object fields
+
 ## 3.1.1
 
 ### Patch Changes
@@ -122,7 +129,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 

@@ -1,5 +1,11 @@
 # @atcute/atproto
 
+## 3.1.7
+
+### Patch Changes
+
+- 8f4bd4b: add JSDoc to object fields
+
 ## 3.1.6
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @atcute/lexicon-community
 
+## 1.1.2
+
+### Patch Changes
+
+- 8f4bd4b: add JSDoc to object fields
+- Updated dependencies [8f4bd4b]
+  - @atcute/atproto@3.1.7
+
 ## 1.1.1
 
 ### Patch Changes

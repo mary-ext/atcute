@@ -1,5 +1,14 @@
 # @atcute/tangled
 
+## 1.0.8
+
+### Patch Changes
+
+- e23f15c: missing default value for literal enums
+- 8f4bd4b: add JSDoc to object fields
+- Updated dependencies [8f4bd4b]
+  - @atcute/atproto@3.1.7
+
 ## 1.0.7
 
 ### Patch Changes
