@@ -131,7 +131,12 @@ export const FLAG_ABORT_EARLY = 1 << 0;
 type MatcherResult = undefined | Ok<unknown> | IssueTree;
 type Matcher = (input: unknown, flags: number) => MatcherResult;
 
-type LexStandardSchema<T extends BaseSchema> = StandardSchemaV1.Props<InferInput<T>, InferOutput<T>>;
+type LexStandardSchemaResult<T extends BaseSchema> = StandardSchemaV1.Result<InferOutput<T>>;
+
+interface LexStandardSchema<T extends BaseSchema> extends StandardSchemaV1.Props<unknown> {
+	readonly validate: (value: unknown) => LexStandardSchemaResult<T> | Promise<LexStandardSchemaResult<T>>;
+	readonly types?: StandardSchemaV1.Types<InferInput<T>, InferOutput<T>>;
+}
 
 export interface BaseSchema<TInput = unknown, TOutput = TInput> {
 	readonly kind: 'schema';
@@ -379,9 +384,7 @@ const collectStandardIssues = (
 	}
 };
 
-const toStandardSchema = <TSchema extends BaseSchema>(
-	schema: TSchema,
-): StandardSchemaV1.Props<InferInput<TSchema>, InferOutput<TSchema>> => {
+const toStandardSchema = <TSchema extends BaseSchema>(schema: TSchema): LexStandardSchema<TSchema> => {
 	return {
 		version: 1,
 		vendor: '@atcute/lexicons',
