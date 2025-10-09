@@ -1,5 +1,12 @@
 # @atcute/lexicons
 
+## 1.2.1
+
+### Patch Changes
+
+- c7355a6: fix TypeScript go-to definition not working on validation schemas
+- 171d74f: remove internal kObjectType field
+
 ## 1.2.0
 
 ### Minor Changes
