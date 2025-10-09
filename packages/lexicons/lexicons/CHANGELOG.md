@@ -1,5 +1,16 @@
 # @atcute/lexicons
 
+## 1.2.0
+
+### Minor Changes
+
+- 4edc2e4: Standard Schema support
+- 2391db5: improved tree-shaking for validation error formatting
+
+### Patch Changes
+
+- 87953c2: consistent object shape for the internal Ok<T> interface
+
 ## 1.1.1
 
 ### Patch Changes
