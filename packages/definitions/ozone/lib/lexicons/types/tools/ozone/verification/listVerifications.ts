@@ -44,7 +44,7 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.verification.listVerifica
 		 * Sort direction for creation date
 		 * @default "desc"
 		 */
-		sortDirection: /*#__PURE__*/ v.literalEnum(['asc', 'desc']),
+		sortDirection: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['asc', 'desc']), 'desc'),
 		/**
 		 * Filter to specific verified DIDs
 		 * @maxLength 100

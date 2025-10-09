@@ -8,7 +8,10 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.archive', {
 		 * Archive format
 		 * @default "tar.gz"
 		 */
-		format: /*#__PURE__*/ v.literalEnum(['tar', 'tar.bz2', 'tar.gz', 'tar.xz', 'zip']),
+		format: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.literalEnum(['tar', 'tar.bz2', 'tar.gz', 'tar.xz', 'zip']),
+			'tar.gz',
+		),
 		/**
 		 * Prefix for files in the archive
 		 */

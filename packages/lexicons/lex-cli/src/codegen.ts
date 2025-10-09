@@ -791,7 +791,13 @@ const generateType = (
 			}
 
 			if (spec.enum !== undefined) {
-				return `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
+				let call = `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
+
+				if (spec.default !== undefined) {
+					call = `${PURE} v.optional(${call}, ${lit(spec.default)})`;
+				}
+
+				return call;
 			}
 
 			let pipe: string[] = [];
@@ -822,7 +828,13 @@ const generateType = (
 			}
 
 			if (spec.enum !== undefined) {
-				return `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
+				let call = `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
+
+				if (spec.default !== undefined) {
+					call = `${PURE} v.optional(${call}, ${lit(spec.default)})`;
+				}
+
+				return call;
 			}
 
 			let pipe: string[] = [];

@@ -131,17 +131,20 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryStatuses'
 		/**
 		 * @default "desc"
 		 */
-		sortDirection: /*#__PURE__*/ v.literalEnum(['asc', 'desc']),
+		sortDirection: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['asc', 'desc']), 'desc'),
 		/**
 		 * @default "lastReportedAt"
 		 */
-		sortField: /*#__PURE__*/ v.literalEnum([
+		sortField: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.literalEnum([
+				'lastReportedAt',
+				'lastReviewedAt',
+				'priorityScore',
+				'reportedRecordsCount',
+				'takendownRecordsCount',
+			]),
 			'lastReportedAt',
-			'lastReviewedAt',
-			'priorityScore',
-			'reportedRecordsCount',
-			'takendownRecordsCount',
-		]),
+		),
 		/**
 		 * The subject to get the status for.
 		 */

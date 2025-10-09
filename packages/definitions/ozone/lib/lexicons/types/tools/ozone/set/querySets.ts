@@ -19,12 +19,12 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.set.querySets', {
 		/**
 		 * @default "name"
 		 */
-		sortBy: /*#__PURE__*/ v.literalEnum(['createdAt', 'name', 'updatedAt']),
+		sortBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['createdAt', 'name', 'updatedAt']), 'name'),
 		/**
 		 * Defaults to ascending order of name field.
 		 * @default "asc"
 		 */
-		sortDirection: /*#__PURE__*/ v.literalEnum(['asc', 'desc']),
+		sortDirection: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['asc', 'desc']), 'asc'),
 	}),
 	output: {
 		type: 'lex',

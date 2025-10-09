@@ -40,7 +40,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 * Tells the visibility of the article to AppView.
 		 * @default "public"
 		 */
-		visibility: /*#__PURE__*/ v.literalEnum(['author', 'public', 'url']),
+		visibility: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['author', 'public', 'url']), 'public'),
 	}),
 );
 

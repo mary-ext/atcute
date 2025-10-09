@@ -82,7 +82,7 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryEvents', 
 		 * Sort direction for the events. Defaults to descending order of created at timestamp.
 		 * @default "desc"
 		 */
-		sortDirection: /*#__PURE__*/ v.literalEnum(['asc', 'desc']),
+		sortDirection: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['asc', 'desc']), 'desc'),
 		subject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 		/**
 		 * If specified, only events where the subject is of the given type (account or record) will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set, this will be ignored.
