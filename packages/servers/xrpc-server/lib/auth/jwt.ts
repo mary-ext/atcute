@@ -45,8 +45,8 @@ export interface JwtPayload extends v.Infer<typeof jwtPayload> {}
 export interface ParsedJwt {
 	header: JwtHeader;
 	payload: JwtPayload;
-	message: Uint8Array;
-	signature: Uint8Array;
+	message: Uint8Array<ArrayBuffer>;
+	signature: Uint8Array<ArrayBuffer>;
 }
 
 const readJwtPortion = <T>(schema: v.Type<T>, input: string): Result<T, AuthError> => {
@@ -69,7 +69,7 @@ const readJwtPortion = <T>(schema: v.Type<T>, input: string): Result<T, AuthErro
 	};
 };
 
-const readJwtSignature = (input: string): Result<Uint8Array, AuthError> => {
+const readJwtSignature = (input: string): Result<Uint8Array<ArrayBuffer>, AuthError> => {
 	try {
 		return { ok: true, value: fromBase64Url(input) };
 	} catch {}
