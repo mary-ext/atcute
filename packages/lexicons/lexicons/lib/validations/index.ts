@@ -112,6 +112,11 @@ export type Err = {
 
 export type ValidationResult<T> = Ok<T> | Err;
 
+// #__NO_SIDE_EFFECTS__
+export const ok = <T>(value: T): Ok<T> => {
+	return { ok: true, value };
+};
+
 // #region Base schema
 
 // Private symbols meant to hold types
@@ -329,7 +334,7 @@ export const safeParse = <const TSchema extends BaseSchema>(
 	const r = schema['~run'](input, FLAG_EMPTY);
 
 	if (r === undefined) {
-		return { ok: true, value: input as InferOutput<TSchema> };
+		return ok(input as InferOutput<TSchema>);
 	}
 
 	if (r.ok) {
@@ -944,7 +949,7 @@ const BLOB_SCHEMA: BlobSchema = {
 				size: -1,
 			};
 
-			return { ok: true, value: blob };
+			return ok(blob);
 		}
 
 		return ISSUE_EXPECTED_BLOB;
@@ -1163,7 +1168,7 @@ export const optional: {
 
 				const value = typeof defaultValue === 'function' ? defaultValue() : defaultValue;
 
-				return { ok: true, value };
+				return ok(value);
 			}
 
 			return wrapped['~run'](input, flags);
@@ -1245,7 +1250,7 @@ export const array = <TItem extends BaseSchema>(item: TItem | (() => TItem)): Ar
 				}
 
 				if (output !== undefined) {
-					return { ok: true, value: output };
+					return ok(output);
 				}
 
 				return undefined;
@@ -1429,6 +1434,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 
 			const generateFastpass = (): Matcher => {
 				const fields: [string, any][] = [
+					['$ok', ok],
 					['$joinIssues', joinIssues],
 					['$prependPath', prependPath],
 				];
@@ -1480,7 +1486,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 					doc += `}`;
 				}
 
-				doc += `if($iss!==undefined)return $iss;if($out!==undefined)return{ok:true,value:$out};`;
+				doc += `if($iss!==undefined)return $iss;if($out!==undefined)return $ok($out);`;
 
 				const fn = new Function(
 					`[${fields.map(([id]) => id).join(',')}]`,
@@ -1552,7 +1558,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 				}
 
 				if (output !== undefined) {
-					return { ok: true, value: output };
+					return ok(output);
 				}
 
 				return undefined;
