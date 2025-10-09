@@ -293,7 +293,7 @@ const createState = (): State => {
 	};
 };
 
-export const encode = (value: any): Uint8Array => {
+export const encode = (value: any): Uint8Array<ArrayBuffer> => {
 	const state = createState();
 
 	writeValue(state, value);
