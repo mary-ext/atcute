@@ -49,7 +49,6 @@ export class LexiconResolutionError extends Error {
 	override name = 'LexiconResolutionError';
 }
 
-
 export class FailedLexiconResolutionError extends LexiconResolutionError {
 	override name = 'FailedLexiconResolutionError';
 
