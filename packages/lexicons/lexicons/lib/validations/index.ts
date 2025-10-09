@@ -1,3 +1,5 @@
+import type { StandardSchemaV1 } from '@standard-schema/spec';
+
 import * as syntax from '../syntax/index.js';
 
 import { _isBytesWrapper } from '../interfaces/bytes.js';
@@ -129,10 +131,13 @@ export const FLAG_ABORT_EARLY = 1 << 0;
 type MatcherResult = undefined | Ok<unknown> | IssueTree;
 type Matcher = (input: unknown, flags: number) => MatcherResult;
 
+type LexStandardSchema<T extends BaseSchema> = StandardSchemaV1.Props<InferInput<T>, InferOutput<T>>;
+
 export interface BaseSchema<TInput = unknown, TOutput = TInput> {
 	readonly kind: 'schema';
 	readonly type: string;
 	readonly '~run': Matcher;
+	readonly '~standard': LexStandardSchema<this>;
 
 	readonly [kType]?: { in: TInput; out: TOutput };
 }
@@ -351,6 +356,55 @@ export const parse = <const TSchema extends BaseSchema>(
 	throw new ValidationError(r);
 };
 
+// #region Standard Schema support
+
+const collectStandardIssues = (
+	tree: IssueTree,
+	path: Key[] = [],
+	issues: StandardSchemaV1.Issue[] = [],
+): StandardSchemaV1.Issue[] => {
+	for (;;) {
+		switch (tree.code) {
+			case 'join': {
+				collectStandardIssues(tree.left, path.slice(), issues);
+				tree = tree.right;
+				continue;
+			}
+			case 'prepend': {
+				path.push(tree.key);
+				tree = tree.tree;
+				continue;
+			}
+			default: {
+				issues.push({ message: tree.msg(), path: path.length > 0 ? path : undefined });
+				return issues;
+			}
+		}
+	}
+};
+
+const toStandardSchema = <TSchema extends BaseSchema>(
+	schema: TSchema,
+): StandardSchemaV1.Props<InferInput<TSchema>, InferOutput<TSchema>> => {
+	return {
+		version: 1,
+		vendor: '@atcute/lexicons',
+		validate(value) {
+			const r = schema['~run'](value, FLAG_EMPTY);
+
+			if (r === undefined) {
+				return { value: value as InferOutput<TSchema> };
+			}
+
+			if (r.ok) {
+				return { value: r.value as InferOutput<TSchema> };
+			}
+
+			return { issues: collectStandardIssues(r) };
+		},
+	};
+};
+
 // #region Base constraint
 
 export interface BaseConstraint<TType = unknown> {
@@ -456,6 +510,9 @@ export const literal = <T extends Literal>(value: T): LiteralSchema<T> => {
 
 			return undefined;
 		},
+		get '~standard'() {
+			return lazyProperty(this, '~standard', toStandardSchema(this));
+		},
 	};
 };
 
@@ -489,6 +546,9 @@ export const literalEnum = <const TEnums extends readonly Literal[]>(
 
 			return undefined;
 		},
+		get '~standard'() {
+			return lazyProperty(this, '~standard', toStandardSchema(this));
+		},
 	};
 };
 
@@ -516,6 +576,9 @@ const BOOLEAN_SCHEMA: BooleanSchema = {
 		}
 
 		return undefined;
+	},
+	get '~standard'() {
+		return lazyProperty(this, '~standard', toStandardSchema(this));
 	},
 };
 
@@ -552,6 +615,9 @@ const INTEGER_SCHEMA: IntegerSchema = {
 		}
 
 		return undefined;
+	},
+	get '~standard'() {
+		return lazyProperty(this, '~standard', toStandardSchema(this));
 	},
 };
 
@@ -653,6 +719,9 @@ const STRING_SINGLETON: StringSchema = {
 
 		return undefined;
 	},
+	get '~standard'() {
+		return lazyProperty(this, '~standard', toStandardSchema(this));
+	},
 };
 
 // #__NO_SIDE_EFFECTS__
@@ -688,6 +757,9 @@ const _formattedString = <TFormat extends keyof StringFormatMap>(
 			}
 
 			return undefined;
+		},
+		get '~standard'() {
+			return lazyProperty(this, '~standard', toStandardSchema(this));
 		},
 	};
 
@@ -877,6 +949,9 @@ const BLOB_SCHEMA: BlobSchema = {
 
 		return ISSUE_EXPECTED_BLOB;
 	},
+	get '~standard'() {
+		return lazyProperty(this, '~standard', toStandardSchema(this));
+	},
 };
 
 // #__NO_SIDE_EFFECTS__
@@ -908,6 +983,9 @@ const BYTES_SCHEMA: BytesSchema = {
 		}
 
 		return undefined;
+	},
+	get '~standard'() {
+		return lazyProperty(this, '~standard', toStandardSchema(this));
 	},
 };
 
@@ -1004,6 +1082,9 @@ const CID_LINK_SCHEMA: CidLinkSchema = {
 
 		return undefined;
 	},
+	get '~standard'() {
+		return lazyProperty(this, '~standard', toStandardSchema(this));
+	},
 };
 
 // #__NO_SIDE_EFFECTS__
@@ -1031,6 +1112,9 @@ export const nullable = <TItem extends BaseSchema>(wrapped: TItem): NullableSche
 			}
 
 			return wrapped['~run'](input, flags);
+		},
+		get '~standard'() {
+			return lazyProperty(this, '~standard', toStandardSchema(this));
 		},
 	};
 };
@@ -1083,6 +1167,9 @@ export const optional: {
 			}
 
 			return wrapped['~run'](input, flags);
+		},
+		get '~standard'() {
+			return lazyProperty(this, '~standard', toStandardSchema(this));
 		},
 	};
 };
@@ -1165,6 +1252,9 @@ export const array = <TItem extends BaseSchema>(item: TItem | (() => TItem)): Ar
 			};
 
 			return lazyProperty(this, '~run', matcher);
+		},
+		get '~standard'() {
+			return lazyProperty(this, '~standard', toStandardSchema(this));
 		},
 	};
 };
@@ -1470,6 +1560,9 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 
 			return lazyProperty(this, '~run', matcher);
 		},
+		get '~standard'() {
+			return lazyProperty(this, '~standard', toStandardSchema(this));
+		},
 	};
 };
 
@@ -1524,6 +1617,9 @@ export const record = <TKey extends RecordKeySchema, TObject extends ObjectSchem
 		},
 		'~run'(input, flags) {
 			return lazyProperty(this, '~run', validatedObject.value['~run'])(input, flags);
+		},
+		get '~standard'() {
+			return lazyProperty(this, '~standard', toStandardSchema(this));
 		},
 	};
 };
@@ -1624,6 +1720,9 @@ export const variant: {
 
 			return lazyProperty(this, '~run', matcher);
 		},
+		get '~standard'() {
+			return lazyProperty(this, '~standard', toStandardSchema(this));
+		},
 	};
 };
 
@@ -1651,6 +1750,9 @@ const UNKNOWN_SCHEMA: UnknownSchema = {
 		}
 
 		return undefined;
+	},
+	get '~standard'() {
+		return lazyProperty(this, '~standard', toStandardSchema(this));
 	},
 };
 

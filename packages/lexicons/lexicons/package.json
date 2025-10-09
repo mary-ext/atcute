@@ -34,6 +34,7 @@
 		"vitest": "^3.2.4"
 	},
 	"dependencies": {
+		"@standard-schema/spec": "^1.0.0",
 		"esm-env": "^1.2.2"
 	}
 }
