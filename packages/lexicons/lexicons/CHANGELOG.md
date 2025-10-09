@@ -1,5 +1,15 @@
 # @atcute/lexicons
 
+## 1.2.2
+
+### Patch Changes
+
+- 17c6f4a: fix recursive type error
+
+  messed up how I implemented Standard Schema support.
+
+- b30da0e: add `declarationMap` to tsconfig
+
 ## 1.2.1
 
 ### Patch Changes

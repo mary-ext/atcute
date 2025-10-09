@@ -1,5 +1,16 @@
 # @atcute/cbor
 
+## 2.2.6
+
+### Patch Changes
+
+- 4393144: explicitly clarify `Uint8Array<ArrayBuffer>` for encode
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [b30da0e]
+  - @atcute/uint8array@1.0.5
+  - @atcute/multibase@1.1.6
+  - @atcute/cid@2.2.4
+
 ## 2.2.5
 
 ### Patch Changes

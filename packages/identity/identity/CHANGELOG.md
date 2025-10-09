@@ -1,5 +1,14 @@
 # @atcute/identity
 
+## 1.1.1
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [17c6f4a]
+- Updated dependencies [b30da0e]
+  - @atcute/lexicons@1.2.2
+
 ## 1.1.0
 
 ### Minor Changes

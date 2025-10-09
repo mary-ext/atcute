@@ -1,5 +1,18 @@
 # @atcute/oauth-browser-client
 
+## 1.0.27
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [17c6f4a]
+- Updated dependencies [b30da0e]
+  - @atcute/lexicons@1.2.2
+  - @atcute/uint8array@1.0.5
+  - @atcute/multibase@1.1.6
+  - @atcute/identity@1.1.1
+  - @atcute/client@4.0.4
+
 ## 1.0.26
 
 ### Patch Changes

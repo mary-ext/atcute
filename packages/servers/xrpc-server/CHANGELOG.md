@@ -1,5 +1,20 @@
 # @atcute/xrpc-server
 
+## 0.1.2
+
+### Patch Changes
+
+- 1db9645: explicitly clarify `Uint8Array<ArrayBuffer>` for readJwtSignature
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [17c6f4a]
+- Updated dependencies [b30da0e]
+  - @atcute/lexicons@1.2.2
+  - @atcute/identity-resolver@1.1.4
+  - @atcute/uint8array@1.0.5
+  - @atcute/multibase@1.1.6
+  - @atcute/identity@1.1.1
+  - @atcute/crypto@2.2.5
+
 ## 0.1.1
 
 ### Patch Changes

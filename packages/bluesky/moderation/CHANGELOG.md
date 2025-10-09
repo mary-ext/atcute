@@ -1,5 +1,14 @@
 # @atcute/bluesky-moderation
 
+## 2.0.4
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [17c6f4a]
+- Updated dependencies [b30da0e]
+  - @atcute/lexicons@1.2.2
+
 ## 2.0.3
 
 ### Patch Changes

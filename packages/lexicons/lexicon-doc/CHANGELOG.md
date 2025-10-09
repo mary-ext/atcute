@@ -1,5 +1,11 @@
 # @atcute/lexicon-doc
 
+## 1.1.2
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+
 ## 1.1.1
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/varint",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "protobuf-style LEB128 varint codec library",
 	"license": "0BSD",
 	"repository": {

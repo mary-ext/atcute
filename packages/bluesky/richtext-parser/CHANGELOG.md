@@ -1,5 +1,11 @@
 # @atcute/bluesky-richtext-parser
 
+## 2.0.1
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+
 ## 2.0.0
 
 ### Major Changes

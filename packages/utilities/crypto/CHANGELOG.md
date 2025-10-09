@@ -1,5 +1,14 @@
 # @atcute/crypto
 
+## 2.2.5
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [b30da0e]
+  - @atcute/uint8array@1.0.5
+  - @atcute/multibase@1.1.6
+
 ## 2.2.4
 
 ### Patch Changes

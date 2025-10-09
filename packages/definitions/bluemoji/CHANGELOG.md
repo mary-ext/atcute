@@ -1,5 +1,16 @@
 # @atcute/bluemoji
 
+## 3.1.1
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [17c6f4a]
+- Updated dependencies [b30da0e]
+  - @atcute/lexicons@1.2.2
+  - @atcute/atproto@3.1.6
+  - @atcute/bluesky@3.2.5
+
 ## 3.1.0
 
 ### Minor Changes
@@ -141,7 +152,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 

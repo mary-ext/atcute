@@ -1,5 +1,21 @@
 # @atcute/did-plc
 
+## 0.1.7
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [17c6f4a]
+- Updated dependencies [4393144]
+- Updated dependencies [b30da0e]
+  - @atcute/lexicons@1.2.2
+  - @atcute/cbor@2.2.6
+  - @atcute/uint8array@1.0.5
+  - @atcute/multibase@1.1.6
+  - @atcute/identity@1.1.1
+  - @atcute/crypto@2.2.5
+  - @atcute/cid@2.2.4
+
 ## 0.1.6
 
 ### Patch Changes

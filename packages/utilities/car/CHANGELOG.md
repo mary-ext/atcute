@@ -1,5 +1,17 @@
 # @atcute/car
 
+## 3.1.2
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [4393144]
+- Updated dependencies [b30da0e]
+  - @atcute/cbor@2.2.6
+  - @atcute/uint8array@1.0.5
+  - @atcute/varint@1.0.3
+  - @atcute/cid@2.2.4
+
 ## 3.1.1
 
 ### Patch Changes

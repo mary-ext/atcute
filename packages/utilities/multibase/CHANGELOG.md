@@ -1,5 +1,13 @@
 # @atcute/multibase
 
+## 1.1.6
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [b30da0e]
+  - @atcute/uint8array@1.0.5
+
 ## 1.1.5
 
 ### Patch Changes

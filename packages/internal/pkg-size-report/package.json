@@ -2,7 +2,7 @@
 	"private": true,
 	"type": "module",
 	"name": "pkg-size-report",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "cli tool to compute and analyze package sizes",
 	"license": "0BSD",
 	"repository": {

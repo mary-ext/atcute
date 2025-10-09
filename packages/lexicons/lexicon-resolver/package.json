@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/lexicon-resolver",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "atproto lexicon authority resolution",
 	"keywords": [
 		"atproto",

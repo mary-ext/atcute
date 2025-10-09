@@ -1,5 +1,13 @@
 # @atcute/lex-cli
 
+## 2.2.1
+
+### Patch Changes
+
+- b30da0e: add `declarationMap` to tsconfig
+- Updated dependencies [b30da0e]
+  - @atcute/lexicon-doc@1.1.2
+
 ## 2.2.0
 
 ### Minor Changes
