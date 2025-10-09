@@ -123,11 +123,6 @@ export const ok = <T>(value: T): Ok<T> => {
 declare const kType: unique symbol;
 type kType = typeof kType;
 
-// We need a special symbol to hold the types for objects due to their
-// recursive nature.
-declare const kObjectType: unique symbol;
-type kObjectType = typeof kObjectType;
-
 // None set
 export const FLAG_EMPTY = 0;
 // Don't continue validation if an error is encountered
@@ -147,13 +142,9 @@ export interface BaseSchema<TInput = unknown, TOutput = TInput> {
 	readonly [kType]?: { in: TInput; out: TOutput };
 }
 
-export type InferInput<T extends BaseSchema> = T extends { [kObjectType]?: any }
-	? NonNullable<T[kObjectType]>['in']
-	: NonNullable<T[kType]>['in'];
+export type InferInput<T extends BaseSchema> = NonNullable<T[kType]>['in'];
 
-export type InferOutput<T extends BaseSchema> = T extends { [kObjectType]?: any }
-	? NonNullable<T[kObjectType]>['out']
-	: NonNullable<T[kType]>['out'];
+export type InferOutput<T extends BaseSchema> = NonNullable<T[kType]>['out'];
 
 // #region Schema runner
 const cloneIssueWithPath = (issue: IssueLeaf, path: Key[]): Issue => {
@@ -1189,7 +1180,7 @@ export interface ArraySchema<TItem extends BaseSchema = BaseSchema> extends Base
 	readonly type: 'array';
 	readonly item: TItem;
 
-	readonly [kObjectType]?: { in: InferInput<TItem>[]; out: InferOutput<TItem>[] };
+	readonly [kType]?: { in: InferInput<TItem>[]; out: InferOutput<TItem>[] };
 }
 
 const ISSUE_TYPE_ARRAY: IssueLeaf = {
@@ -1357,9 +1348,8 @@ export interface ObjectSchema<TShape extends LooseObjectShape = LooseObjectShape
 
 	// passing `InferObjectX` into `extends BaseSchema<...>` eagerly evaluates the
 	// shape, however, passing it as a property means that it's only evaluated if
-	// you attempt to grab the value. `InferX` is conditioned to grab from
-	// `kObjectType` first before going to `kType`
-	readonly [kObjectType]?: { in: InferObjectInput<TShape>; out: InferObjectOutput<TShape> };
+	// you attempt to grab the value.
+	readonly [kType]?: { in: InferObjectInput<TShape>; out: InferObjectOutput<TShape> };
 }
 
 interface ObjectEntry {
@@ -1591,7 +1581,7 @@ export interface RecordSchema<TObject extends ObjectSchema, TKey extends RecordK
 	readonly key: TKey;
 	readonly object: TObject;
 
-	readonly [kObjectType]?: { in: InferInput<TObject>; out: InferOutput<TObject> };
+	readonly [kType]?: { in: InferInput<TObject>; out: InferOutput<TObject> };
 }
 
 // #__NO_SIDE_EFFECTS__
@@ -1646,7 +1636,7 @@ export interface VariantSchema<
 	readonly members: TMembers;
 	readonly closed: TClosed;
 
-	readonly [kObjectType]?: { in: InferVariantInput<TMembers>; out: InferVariantOutput<TMembers> };
+	readonly [kType]?: { in: InferVariantInput<TMembers>; out: InferVariantOutput<TMembers> };
 }
 
 const ISSUE_VARIANT_MISSING = /*#__PURE__*/ prependPath('$type', ISSUE_MISSING);
