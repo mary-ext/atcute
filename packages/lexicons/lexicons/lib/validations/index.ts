@@ -1327,17 +1327,25 @@ export type OptionalObjectOutputKeys<TShape extends ObjectShape> = {
 
 type InferObjectInput<TShape extends ObjectShape> = Flatten<
 	{
-		-readonly [Key in Exclude<keyof TShape, OptionalObjectInputKeys<TShape>>]: InferInput<TShape[Key]>;
+		-readonly [Key in keyof TShape as Key extends OptionalObjectInputKeys<TShape> ? never : Key]: InferInput<
+			TShape[Key]
+		>;
 	} & {
-		-readonly [Key in OptionalObjectInputKeys<TShape>]?: InferInput<TShape[Key]>;
+		-readonly [Key in keyof TShape as Key extends OptionalObjectInputKeys<TShape> ? Key : never]?: InferInput<
+			TShape[Key]
+		>;
 	}
 >;
 
 type InferObjectOutput<TShape extends ObjectShape> = Flatten<
 	{
-		-readonly [Key in Exclude<keyof TShape, OptionalObjectOutputKeys<TShape>>]: InferOutput<TShape[Key]>;
+		-readonly [Key in keyof TShape as Key extends OptionalObjectOutputKeys<TShape>
+			? never
+			: Key]: InferOutput<TShape[Key]>;
 	} & {
-		-readonly [Key in OptionalObjectOutputKeys<TShape>]?: InferOutput<TShape[Key]>;
+		-readonly [Key in keyof TShape as Key extends OptionalObjectOutputKeys<TShape>
+			? Key
+			: never]?: InferOutput<TShape[Key]>;
 	}
 >;
 
