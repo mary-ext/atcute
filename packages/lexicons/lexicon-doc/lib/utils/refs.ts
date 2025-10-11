@@ -4,6 +4,7 @@ type SchemaValue = LexUserType | LexRefVariant;
 
 export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<string> => {
 	const refs = new Set<string>();
+	const visited = new Set<string>();
 
 	const extract = (def: SchemaValue): void => {
 		switch (def.type) {
@@ -11,6 +12,12 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 				const ref = def.ref;
 				if (ref.startsWith('#')) {
 					const id = extractDefId(ref)!;
+
+					if (visited.has(id)) {
+						break;
+					}
+
+					visited.add(id);
 
 					const child = doc.defs[id];
 					if (child !== undefined) {
@@ -23,6 +30,12 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 				const nsid = stripHash(ref);
 				if (nsid === doc.id) {
 					const id = extractDefId(ref)!;
+
+					if (visited.has(id)) {
+						break;
+					}
+
+					visited.add(id);
 
 					const child = doc.defs[id];
 					if (child !== undefined) {
@@ -40,6 +53,12 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 					if (ref.startsWith('#')) {
 						const id = extractDefId(ref)!;
 
+						if (visited.has(id)) {
+							continue;
+						}
+
+						visited.add(id);
+
 						const child = doc.defs[id];
 						if (child !== undefined) {
 							extract(child);
@@ -51,6 +70,12 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 					const nsid = stripHash(ref);
 					if (nsid === doc.id) {
 						const id = extractDefId(ref)!;
+
+						if (visited.has(id)) {
+							continue;
+						}
+
+						visited.add(id);
 
 						const child = doc.defs[id];
 						if (child !== undefined) {
