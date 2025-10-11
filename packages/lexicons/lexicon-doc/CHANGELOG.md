@@ -1,5 +1,11 @@
 # @atcute/lexicon-doc
 
+## 1.1.3
+
+### Patch Changes
+
+- a945bc3: fix infinite recursion when crawling internal references
+
 ## 1.1.2
 
 ### Patch Changes
