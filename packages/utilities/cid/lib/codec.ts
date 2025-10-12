@@ -1,5 +1,5 @@
 import { fromBase32, toBase32 } from '@atcute/multibase';
-import { allocUnsafe, toSha256 } from '@atcute/uint8array';
+import { allocUnsafe, toSha256, equals as isBufferEqual } from '@atcute/uint8array';
 
 export const CID_VERSION = 1;
 export const HASH_SHA256 = 0x12;
@@ -180,4 +180,12 @@ export const toBinary = (cid: Cid): Uint8Array => {
 	bytes.set(cid.bytes, 1);
 
 	return bytes;
+};
+
+export const equals = (a: Cid, b: Cid): boolean => {
+	if (a._str !== undefined && b._str !== undefined) {
+		return a._str === b._str;
+	}
+
+	return isBufferEqual(a.bytes, b.bytes);
 };
