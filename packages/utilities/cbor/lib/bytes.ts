@@ -21,6 +21,14 @@ export class BytesWrapper implements Bytes {
 	}
 }
 
+export const isBytes = (value: unknown): value is Bytes => {
+	const val = value as any;
+
+	return (
+		val instanceof BytesWrapper || (val !== null && typeof val === 'object' && typeof val.$bytes === 'string')
+	);
+};
+
 export const toBytes = (buf: Uint8Array): Bytes => {
 	return new BytesWrapper(buf);
 };

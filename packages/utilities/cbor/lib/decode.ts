@@ -117,7 +117,7 @@ const readBytes = (state: State, length: number): Bytes => {
 const readCid = (state: State, length: number): CidLink => {
 	const cid = fromBinary(state.b.subarray(state.p, (state.p += length)));
 
-	return new CidLinkWrapper(cid.bytes);
+	return new CidLinkWrapper(cid.bytes, undefined);
 };
 
 const compareKeys = (a: string, b: string): number => {
