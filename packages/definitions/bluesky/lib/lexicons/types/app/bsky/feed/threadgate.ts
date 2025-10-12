@@ -38,11 +38,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
 		 * List of hidden reply URIs.
-		 * @maxLength 50
+		 * @maxLength 300
 		 */
 		hiddenReplies: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
-				/*#__PURE__*/ v.arrayLength(0, 50),
+				/*#__PURE__*/ v.arrayLength(0, 300),
 			]),
 		),
 		/**
