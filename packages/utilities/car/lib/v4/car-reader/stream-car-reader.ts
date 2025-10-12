@@ -146,6 +146,8 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 				contents: digest,
 			},
 			bytes: bytes,
+			// @ts-expect-error
+			_str: undefined,
 		};
 
 		return cid;

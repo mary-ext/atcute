@@ -165,6 +165,8 @@ const readCid = (reader: SyncByteReader): CID.Cid => {
 			contents: digest,
 		},
 		bytes: bytes,
+		// @ts-expect-error
+		_str: undefined,
 	};
 
 	return cid;
