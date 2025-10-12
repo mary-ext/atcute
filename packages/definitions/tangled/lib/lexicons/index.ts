@@ -24,6 +24,7 @@ export * as ShTangledRepoCollaborator from './types/sh/tangled/repo/collaborator
 export * as ShTangledRepoCompare from './types/sh/tangled/repo/compare.js';
 export * as ShTangledRepoCreate from './types/sh/tangled/repo/create.js';
 export * as ShTangledRepoDelete from './types/sh/tangled/repo/delete.js';
+export * as ShTangledRepoDeleteBranch from './types/sh/tangled/repo/deleteBranch.js';
 export * as ShTangledRepoDiff from './types/sh/tangled/repo/diff.js';
 export * as ShTangledRepoForkStatus from './types/sh/tangled/repo/forkStatus.js';
 export * as ShTangledRepoForkSync from './types/sh/tangled/repo/forkSync.js';

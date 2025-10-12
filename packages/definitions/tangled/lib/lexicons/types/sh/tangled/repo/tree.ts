@@ -48,11 +48,28 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.tree', {
 			 */
 			parent: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
+			 * Readme for this file tree
+			 */
+			get readme() {
+				return /*#__PURE__*/ v.optional(readmeSchema);
+			},
+			/**
 			 * The git reference used
 			 */
 			ref: /*#__PURE__*/ v.string(),
 		}),
 	},
+});
+const _readmeSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#readme')),
+	/**
+	 * Contents of the readme file
+	 */
+	contents: /*#__PURE__*/ v.string(),
+	/**
+	 * Name of the readme file
+	 */
+	filename: /*#__PURE__*/ v.string(),
 });
 const _treeEntrySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#treeEntry')),
@@ -83,17 +100,21 @@ const _treeEntrySchema = /*#__PURE__*/ v.object({
 
 type lastCommit$schematype = typeof _lastCommitSchema;
 type main$schematype = typeof _mainSchema;
+type readme$schematype = typeof _readmeSchema;
 type treeEntry$schematype = typeof _treeEntrySchema;
 
 export interface lastCommitSchema extends lastCommit$schematype {}
 export interface mainSchema extends main$schematype {}
+export interface readmeSchema extends readme$schematype {}
 export interface treeEntrySchema extends treeEntry$schematype {}
 
 export const lastCommitSchema = _lastCommitSchema as lastCommitSchema;
 export const mainSchema = _mainSchema as mainSchema;
+export const readmeSchema = _readmeSchema as readmeSchema;
 export const treeEntrySchema = _treeEntrySchema as treeEntrySchema;
 
 export interface LastCommit extends v.InferInput<typeof lastCommitSchema> {}
+export interface Readme extends v.InferInput<typeof readmeSchema> {}
 export interface TreeEntry extends v.InferInput<typeof treeEntrySchema> {}
 
 export interface $params extends v.InferInput<mainSchema['params']> {}

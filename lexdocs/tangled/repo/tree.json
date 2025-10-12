@@ -41,6 +41,11 @@
 							"type": "string",
 							"description": "Parent directory path"
 						},
+						"readme": {
+							"type": "ref",
+							"ref": "#readme",
+							"description": "Readme for this file tree"
+						},
 						"files": {
 							"type": "array",
 							"items": {
@@ -69,6 +74,20 @@
 					"description": "Invalid request parameters"
 				}
 			]
+		},
+		"readme": {
+			"type": "object",
+			"required": ["filename", "contents"],
+			"properties": {
+				"filename": {
+					"type": "string",
+					"description": "Name of the readme file"
+				},
+				"contents": {
+					"type": "string",
+					"description": "Contents of the readme file"
+				}
+			}
 		},
 		"treeEntry": {
 			"type": "object",
