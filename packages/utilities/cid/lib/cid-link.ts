@@ -11,12 +11,18 @@ export interface CidLink {
 export class CidLinkWrapper implements CidLink {
 	/** @internal */
 	readonly [CID_LINK_SYMBOL] = true;
+	/** @internal */
+	_str: string | undefined;
 
-	constructor(public bytes: Uint8Array) {}
+	readonly bytes: Uint8Array;
+
+	constructor(bytes: Uint8Array, str?: string) {
+		this.bytes = bytes;
+		this._str = str;
+	}
 
 	get $link(): string {
-		const encoded = toBase32(this.bytes);
-		return `b${encoded}`;
+		return (this._str ??= `b${toBase32(this.bytes)}`);
 	}
 
 	toJSON(): CidLink {
@@ -34,7 +40,7 @@ export const isCidLink = (value: unknown): value is CidLink => {
 };
 
 export const toCidLink = (cid: Cid): CidLink => {
-	return new CidLinkWrapper(cid.bytes);
+	return new CidLinkWrapper(cid.bytes, cid._str);
 };
 
 export const fromCidLink = (link: CidLink): Cid => {

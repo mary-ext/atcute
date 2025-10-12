@@ -14,18 +14,21 @@ export const CODEC_DCBOR = 0x71;
  */
 export interface Cid {
 	/** CID version, this is always `1` for CIDv1 */
-	version: number;
+	readonly version: number;
 	/** Multicodec type for the data, can be `0x55` for raw data or `0x71` for DAG-CBOR */
-	codec: number;
+	readonly codec: number;
 	/** Digest contents */
-	digest: {
+	readonly digest: {
 		/** Multicodec type for the digest, this is always `0x12` for SHA-256 */
-		codec: number;
+		readonly codec: number;
 		/** Raw hash bytes */
-		contents: Uint8Array;
+		readonly contents: Uint8Array;
 	};
 	/** Raw CID bytes */
-	bytes: Uint8Array;
+	readonly bytes: Uint8Array;
+
+	/** @internal */
+	_str: string | undefined;
 }
 
 // a SHA-256 CIDv1 is always going to be 36 bytes, that's 4 bytes for the
@@ -54,6 +57,7 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 			contents: bytes.subarray(4, 36),
 		},
 		bytes: bytes,
+		_str: undefined,
 	};
 
 	return cid;
@@ -71,6 +75,7 @@ export const createEmpty = (codec: 0x55 | 0x71): Cid => {
 			contents: digest,
 		},
 		bytes: bytes,
+		_str: undefined,
 	};
 
 	return cid;
@@ -116,6 +121,7 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 			contents: bytes.subarray(4, 4 + digestSize),
 		},
 		bytes: bytes.subarray(0, 4 + digestSize),
+		_str: undefined,
 	};
 
 	return [cid, bytes.subarray(4 + digestSize)];
@@ -143,12 +149,14 @@ export const fromString = (input: string): Cid => {
 	}
 
 	const bytes = fromBase32(input.slice(1));
-	return decode(bytes);
+	const cid = decode(bytes);
+
+	cid._str = input;
+	return cid;
 };
 
 export const toString = (cid: Cid): string => {
-	const encoded = toBase32(cid.bytes);
-	return `b${encoded}`;
+	return (cid._str ??= `b${toBase32(cid.bytes)}`);
 };
 
 export const fromBinary = (input: Uint8Array): Cid => {
