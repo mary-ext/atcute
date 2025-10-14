@@ -304,10 +304,6 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 
 						await response.body?.cancel();
 
-						if (type != null) {
-							throw new TypeError(`Invalid response content-type (got ${type})`);
-						}
-
 						break;
 					}
 
