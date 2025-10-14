@@ -1,5 +1,5 @@
 ---
-'@atcute/cbor': minor
+'@atcute/cbor': patch
 ---
 
 `isBytes` function for Bytes interface
