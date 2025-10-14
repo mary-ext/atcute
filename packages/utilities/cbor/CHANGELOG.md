@@ -1,5 +1,15 @@
 # @atcute/cbor
 
+## 2.2.7
+
+### Patch Changes
+
+- 5bbd5be: `isBytes` function for Bytes interface
+- 4653fe5: memoize toString results
+- Updated dependencies [4653fe5]
+- Updated dependencies [bd7df47]
+  - @atcute/cid@2.2.5
+
 ## 2.2.6
 
 ### Patch Changes

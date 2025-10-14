@@ -1,5 +1,16 @@
 # @atcute/car
 
+## 3.1.3
+
+### Patch Changes
+
+- 4653fe5: memoize toString results
+- Updated dependencies [5bbd5be]
+- Updated dependencies [4653fe5]
+- Updated dependencies [bd7df47]
+  - @atcute/cbor@2.2.7
+  - @atcute/cid@2.2.5
+
 ## 3.1.2
 
 ### Patch Changes

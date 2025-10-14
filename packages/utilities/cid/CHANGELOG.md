@@ -1,5 +1,12 @@
 # @atcute/cid
 
+## 2.2.5
+
+### Patch Changes
+
+- 4653fe5: memoize toString results
+- bd7df47: `equals` function for CID comparison
+
 ## 2.2.4
 
 ### Patch Changes

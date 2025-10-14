@@ -1,5 +1,11 @@
 # @atcute/client
 
+## 4.0.5
+
+### Patch Changes
+
+- 7f0e453: allow `as: null` to discard response body entirely
+
 ## 4.0.4
 
 ### Patch Changes
@@ -106,7 +112,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 
