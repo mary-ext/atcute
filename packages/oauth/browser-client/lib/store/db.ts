@@ -191,10 +191,6 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 		},
 
 		sessions: createStore('sessions', ({ token }) => {
-			if (token.refresh) {
-				return null;
-			}
-
 			return token.expires_at ?? null;
 		}),
 		states: createStore('states', (_item) => Date.now() + 10 * 60 * 1_000), // 10 minutes
