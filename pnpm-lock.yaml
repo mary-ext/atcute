@@ -736,6 +736,31 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(@vitest/browser@3.2.4)(tsx@4.20.6)(yaml@2.8.0)
 
+  packages/utilities/mst:
+    dependencies:
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../cbor
+      '@atcute/cid':
+        specifier: workspace:^
+        version: link:../cid
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../uint8array
+      '@atcute/varint':
+        specifier: workspace:^
+        version: link:../varint
+      '@badrap/valita':
+        specifier: ^0.4.6
+        version: 0.4.6
+    devDependencies:
+      '@vitest/coverage-v8':
+        specifier: ^3.2.4
+        version: 3.2.4(@vitest/browser@3.2.4)(vitest@3.2.4)
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@24.3.0)(@vitest/browser@3.2.4)(yaml@2.8.0)
+
   packages/utilities/multibase:
     dependencies:
       '@atcute/uint8array':
