@@ -463,9 +463,12 @@ importers:
       '@badrap/valita':
         specifier: ^0.4.6
         version: 0.4.6
-      '@externdefs/collider':
-        specifier: ^0.3.0
-        version: 0.3.0(@badrap/valita@0.4.6)
+      '@optique/core':
+        specifier: ^0.6.1
+        version: 0.6.1
+      '@optique/run':
+        specifier: ^0.6.1
+        version: 0.6.1
       picocolors:
         specifier: ^1.1.1
         version: 1.1.1
@@ -1346,11 +1349,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@externdefs/collider@0.3.0':
-    resolution: {integrity: sha512-x5CpeZ4c8n+1wMFthUMWSQKqCGcQo52/Qbda5ES+JFRRg/D8Ep6/JOvUUq5HExFuv/wW+6UYG2U/mXzw0IAd8Q==}
-    peerDependencies:
-      '@badrap/valita': ^0.4.4
-
   '@hapi/accept@6.0.3':
     resolution: {integrity: sha512-p72f9k56EuF0n3MwlBNThyVE5PXX40g+aQh+C/xbKrfzahM2Oispv3AXmOIU51t3j77zay1qrX7IIziZXspMlw==}
 
@@ -1558,6 +1556,14 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@optique/core@0.6.1':
+    resolution: {integrity: sha512-e3J5zCL9aBAheZkLgYUoeAt1wKSkFbSn0+h0kB4VYabOGUnesVuSxZe00BY4jLnXr36HqaSf6ZTJi8bxbLH0Zg==}
+    engines: {bun: '>=1.2.0', deno: '>=2.3.0', node: '>=20.0.0'}
+
+  '@optique/run@0.6.1':
+    resolution: {integrity: sha512-P3E5ZAAwhAg8RYp2M4MPtwUr1wdZD7/IxHGKwW+Ie8eFbmfXnfvrygyqh5At0mQXVxbzKYlVrfl1vdoKVoxD7Q==}
+    engines: {bun: '>=1.2.0', deno: '>=2.3.0', node: '>=20.0.0'}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -4874,10 +4880,6 @@ snapshots:
   '@esbuild/win32-x64@0.25.9':
     optional: true
 
-  '@externdefs/collider@0.3.0(@badrap/valita@0.4.6)':
-    dependencies:
-      '@badrap/valita': 0.4.6
-
   '@hapi/accept@6.0.3':
     dependencies:
       '@hapi/boom': 10.0.1
@@ -5065,6 +5067,12 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
+
+  '@optique/core@0.6.1': {}
+
+  '@optique/run@0.6.1':
+    dependencies:
+      '@optique/core': 0.6.1
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
