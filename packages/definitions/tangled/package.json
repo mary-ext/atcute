@@ -37,5 +37,13 @@
 		"@atcute/lex-cli": "workspace:^",
 		"@atcute/tangled": "file:",
 		"vitest": "^3.2.4"
+	},
+	"atcute:lexicons": {
+		"mapping": {
+			"sh.tangled.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
 	}
 }

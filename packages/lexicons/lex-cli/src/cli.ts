@@ -10,8 +10,105 @@ import pc from 'picocolors';
 
 import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 
-import { generateLexiconApi } from './codegen.js';
+import { generateLexiconApi, type ImportMapping } from './codegen.js';
 import type { LexiconConfig } from './index.js';
+import { validatePackageJson } from './lexicon-metadata.js';
+
+/**
+ * Resolves package imports to ImportMapping[]
+ */
+const resolveImportsToMappings = async (
+	imports: string[],
+	configDirname: string,
+): Promise<ImportMapping[]> => {
+	const mappings: ImportMapping[] = [];
+
+	for (const packageName of imports) {
+		// Walk up from config directory to find package in node_modules
+		let packageJson: unknown;
+		let currentDir = configDirname;
+		let found = false;
+
+		while (currentDir !== path.dirname(currentDir)) {
+			const candidatePath = path.join(currentDir, 'node_modules', packageName, 'package.json');
+			try {
+				const content = await fs.readFile(candidatePath, 'utf8');
+				packageJson = JSON.parse(content);
+				found = true;
+				break;
+			} catch (err: any) {
+				// Only continue to parent if file not found
+				if (err.code !== 'ENOENT') {
+					console.error(pc.bold(pc.red(`failed to read package.json for "${packageName}":`)));
+					console.error(err);
+					process.exit(1);
+				}
+
+				// Not found, try parent directory
+				currentDir = path.dirname(currentDir);
+			}
+		}
+
+		if (!found) {
+			console.error(pc.bold(pc.red(`failed to resolve package "${packageName}"`)));
+			console.error(`Could not find package in node_modules starting from ${configDirname}`);
+			process.exit(1);
+		}
+
+		// Validate package.json
+		const result = validatePackageJson(packageJson);
+		if (!result.success) {
+			console.error(pc.bold(pc.red(`invalid atcute:lexicons in "${packageName}":`)));
+			console.error(result.issues);
+			process.exit(1);
+		}
+
+		const lexicons = result.output['atcute:lexicons'];
+		if (!lexicons?.mapping) {
+			continue;
+		}
+
+		// Convert mapping to ImportMapping[]
+		for (const [pattern, entry] of Object.entries(lexicons.mapping)) {
+			const isWildcard = pattern.endsWith('.*');
+
+			mappings.push({
+				nsid: [pattern],
+				imports: (nsid: string) => {
+					// Check if pattern matches
+					if (isWildcard) {
+						if (!nsid.startsWith(pattern.slice(0, -1))) {
+							throw new Error(`NSID ${nsid} does not match pattern ${pattern}`);
+						}
+					} else {
+						if (nsid !== pattern) {
+							throw new Error(`NSID ${nsid} does not match pattern ${pattern}`);
+						}
+					}
+
+					const nsidPrefix = isWildcard ? pattern.slice(0, -2) : pattern;
+					const nsidRemainder = isWildcard ? nsid.slice(nsidPrefix.length + 1) : '';
+
+					let expandedPath = entry.path
+						.replaceAll('{{nsid}}', nsid.replaceAll('.', '/'))
+						.replaceAll('{{nsid_remainder}}', nsidRemainder.replaceAll('.', '/'))
+						.replaceAll('{{nsid_prefix}}', nsidPrefix.replaceAll('.', '/'));
+
+					if (expandedPath.startsWith('./')) {
+						expandedPath = `${packageName}/${expandedPath.slice(2)}`;
+					}
+
+					return {
+						type: entry.type,
+						from: expandedPath,
+					};
+				},
+			});
+		}
+	}
+
+	return mappings;
+};
 
 const parser = command(
 	'generate',
@@ -38,6 +135,10 @@ if (result.type === 'generate') {
 
 		process.exit(1);
 	}
+
+	// Resolve imports to mappings
+	const importMappings = config.imports ? await resolveImportsToMappings(config.imports, configDirname) : [];
+	const allMappings = [...importMappings, ...(config.mappings ?? [])];
 
 	const documents: LexiconDoc[] = [];
 
@@ -79,7 +180,7 @@ if (result.type === 'generate') {
 
 	const generationResult = await generateLexiconApi({
 		documents: documents,
-		mappings: config.mappings ?? [],
+		mappings: allMappings,
 		modules: {
 			importSuffix: config.modules?.importSuffix ?? '.js',
 		},

@@ -31,5 +31,13 @@
 	"devDependencies": {
 		"@atcute/bluemoji": "file:",
 		"@atcute/lex-cli": "workspace:^"
+	},
+	"atcute:lexicons": {
+		"mapping": {
+			"blue.moji.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
 	}
 }

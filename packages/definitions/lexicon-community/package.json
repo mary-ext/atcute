@@ -30,5 +30,13 @@
 	"devDependencies": {
 		"@atcute/lexicon-community": "file:",
 		"@atcute/lex-cli": "workspace:^"
+	},
+	"atcute:lexicons": {
+		"mapping": {
+			"community.lexicon.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
 	}
 }

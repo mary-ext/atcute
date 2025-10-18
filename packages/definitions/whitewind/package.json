@@ -34,5 +34,13 @@
 	"devDependencies": {
 		"@atcute/lex-cli": "workspace:^",
 		"@atcute/whitewind": "file:"
+	},
+	"atcute:lexicons": {
+		"mapping": {
+			"com.whtwnd.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
 	}
 }

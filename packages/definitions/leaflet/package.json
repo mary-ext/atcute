@@ -37,5 +37,13 @@
 		"@atcute/leaflet": "file:",
 		"@atcute/lex-cli": "workspace:^",
 		"vitest": "^3.2.4"
+	},
+	"atcute:lexicons": {
+		"mapping": {
+			"pub.leaflet.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
 	}
 }

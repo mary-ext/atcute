@@ -37,5 +37,13 @@
 	"devDependencies": {
 		"@atcute/lex-cli": "workspace:^",
 		"@atcute/ozone": "file:"
+	},
+	"atcute:lexicons": {
+		"mapping": {
+			"tools.ozone.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
 	}
 }

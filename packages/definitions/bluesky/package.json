@@ -39,5 +39,17 @@
 		"@atcute/lex-cli": "workspace:^",
 		"@atproto/api": "^0.15.27",
 		"vitest": "^3.2.4"
+	},
+	"atcute:lexicons": {
+		"mapping": {
+			"app.bsky.*": {
+				"type": "namespace",
+				"path": "./types/app/{{nsid_remainder}}"
+			},
+			"chat.bsky.*": {
+				"type": "namespace",
+				"path": "./types/chat/{{nsid_remainder}}"
+			}
+		}
 	}
 }
