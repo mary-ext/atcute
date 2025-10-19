@@ -5,20 +5,44 @@ import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
 
 import { isNodeData, type NodeData, type TreeEntry } from './types.js';
 
+/**
+ * represents a node in a Merkle Search Tree (MST)
+ * stores sorted keys, their associated values (CIDs), and subtree pointers
+ */
 export class MSTNode {
-	/** @internal */
+	/**
+	 * cached height of this node in the tree
+	 * @internal
+	 */
 	_height: number | null | undefined;
-	/** @internal */
+	/**
+	 * cached CID for this node
+	 * @internal
+	 */
 	_cid: CidLink | undefined;
-	/** @internal */
+	/**
+	 * cached serialized bytes for this node
+	 * @internal
+	 */
 	_bytes: Uint8Array<ArrayBuffer> | undefined;
 
 	protected constructor(
+		/** sorted array of keys stored in this node */
 		readonly keys: readonly string[],
+		/** array of value CIDs corresponding to each key */
 		readonly values: readonly CidLink[],
+		/** array of subtree CIDs (length is keys.length + 1) */
 		readonly subtrees: readonly (CidLink | null)[],
 	) {}
 
+	/**
+	 * creates a new MST node with validation
+	 * @param keys sorted array of keys
+	 * @param values array of value CIDs corresponding to keys
+	 * @param subtrees array of subtree CIDs (length must be keys.length + 1)
+	 * @returns a new validated MST node
+	 * @throws {TypeError} if node structure is invalid or keys have inconsistent heights
+	 */
 	static async create(
 		keys: readonly string[],
 		values: readonly CidLink[],
@@ -45,10 +69,20 @@ export class MSTNode {
 		return new MSTNode(keys, values, subtrees);
 	}
 
+	/**
+	 * creates an empty MST node
+	 * @returns a new empty node
+	 */
 	static empty(): MSTNode {
 		return new MSTNode([], [], [null]);
 	}
 
+	/**
+	 * deserializes an MST node from CBOR-encoded bytes
+	 * @param bytes the CBOR-encoded node data
+	 * @returns the deserialized MST node
+	 * @throws {TypeError} if the bytes don't represent a valid MST node
+	 */
 	static async deserialize(bytes: Uint8Array): Promise<MSTNode> {
 		const node = CBOR.decode(bytes);
 		if (!isNodeData(node)) {
@@ -87,6 +121,10 @@ export class MSTNode {
 		return await MSTNode.create(keys, values, subtrees);
 	}
 
+	/**
+	 * serializes the node to CBOR-encoded bytes with prefix compression
+	 * @returns the CBOR-encoded node data
+	 */
 	async serialize(): Promise<Uint8Array<ArrayBuffer>> {
 		let bytes = this._bytes;
 		if (bytes === undefined) {
@@ -122,6 +160,17 @@ export class MSTNode {
 		return bytes;
 	}
 
+	/**
+	 * whether the node is empty (no keys or values)
+	 */
+	get isEmpty(): boolean {
+		return this.subtrees.length === 1 && this.subtrees[0] === null;
+	}
+
+	/**
+	 * computes the CID for this node
+	 * @returns the CID link for this node
+	 */
 	async cid(): Promise<CidLink> {
 		let cid = this._cid;
 		if (cid === undefined) {
@@ -131,16 +180,16 @@ export class MSTNode {
 		return cid;
 	}
 
-	isEmpty(): boolean {
-		return this.subtrees.length === 1 && this.subtrees[0] === null;
-	}
-
+	/**
+	 * computes the height of this node in the MST
+	 * @returns the height, or null if indeterminate (empty intermediate node)
+	 */
 	async height(): Promise<number | null> {
 		let height = this._height;
 		if (height === undefined) {
 			const keys = this.keys;
 
-			if (this.isEmpty()) {
+			if (this.isEmpty) {
 				height = 0;
 			} else if (keys.length > 0) {
 				height = await getKeyHeight(keys[0]);
@@ -154,6 +203,11 @@ export class MSTNode {
 		return height;
 	}
 
+	/**
+	 * gets the node height, throwing if indeterminate
+	 * @returns the height
+	 * @throws {Error} if height cannot be determined
+	 */
 	async requireHeight(): Promise<number> {
 		const height = await this.height();
 		if (height === null) {
@@ -163,6 +217,11 @@ export class MSTNode {
 		return height;
 	}
 
+	/**
+	 * finds the index of the first key >= the given key
+	 * @param key the key to search for
+	 * @returns the index of the lower bound
+	 */
 	lowerBound(key: string): number {
 		const keys = this.keys;
 		const len = keys.length;
@@ -177,6 +236,11 @@ export class MSTNode {
 	}
 }
 
+/**
+ * computes the MST height for a given key by counting leading zeros in its hash
+ * @param key the key to compute height for
+ * @returns the height (number of leading zero bits in 2-bit chunks)
+ */
 export const getKeyHeight = async (key: string): Promise<number> => {
 	const hash = await toSha256(encodeUtf8(key));
 
@@ -204,6 +268,12 @@ export const getKeyHeight = async (key: string): Promise<number> => {
 	return lz;
 };
 
+/**
+ * computes the length of the common prefix between two strings
+ * @param a first string
+ * @param b second string
+ * @returns length of common prefix
+ */
 const commonPrefixLength = (a: string, b: string): number => {
 	let idx = 0;
 	for (let len = Math.min(a.length, b.length); idx < len; idx++) {

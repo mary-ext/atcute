@@ -25,7 +25,7 @@ class LRUCache<K, V> {
 		this.#size = size;
 	}
 
-	/** the maximum capacity of the cache */
+	/** maximum capacity of the cache */
 	get size(): number {
 		return this.#size;
 	}

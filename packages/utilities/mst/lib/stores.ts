@@ -3,24 +3,73 @@ import * as CBOR from '@atcute/cbor';
 import { deleteMany, setMany, type BlockMap } from './blockmap.js';
 import { MissingBlockError, UnexpectedObjectError } from './errors.js';
 
+/**
+ * a read-only interface for retrieving blocks by their CID
+ */
 export interface ReadonlyBlockStore {
+	/**
+	 * retrieves a single block by its CID
+	 * @param cid the CID of the block to retrieve
+	 * @returns the block data, or null if not found
+	 */
 	get(cid: string): Promise<Uint8Array<ArrayBuffer> | null>;
+
+	/**
+	 * retrieves multiple blocks by their CIDs
+	 * @param cids array of CIDs to retrieve
+	 * @returns object containing found blocks and missing CIDs
+	 */
 	getMany(cids: string[]): Promise<{ found: BlockMap; missing: string[] }>;
 
+	/**
+	 * checks if a block exists in the store
+	 * @param cid the CID to check
+	 * @returns true if the block exists, false otherwise
+	 */
 	has(cid: string): Promise<boolean>;
 }
 
+/**
+ * a writable block store supporting both read and write operations
+ */
 export interface BlockStore extends ReadonlyBlockStore {
+	/**
+	 * stores a single block
+	 * @param cid the CID of the block
+	 * @param bytes the block data to store
+	 */
 	put(cid: string, bytes: Uint8Array<ArrayBuffer>): Promise<void>;
+
+	/**
+	 * stores multiple blocks at once
+	 * @param blocks map of CIDs to block data
+	 */
 	putMany(blocks: BlockMap): Promise<void>;
 
+	/**
+	 * removes a single block from the store
+	 * @param cid the CID of the block to remove
+	 */
 	delete(cid: string): Promise<void>;
+
+	/**
+	 * removes multiple blocks from the store
+	 * @param cids array of CIDs to remove
+	 */
 	deleteMany(cids: string[]): Promise<void>;
 }
 
+/**
+ * an in-memory read-only block store using a Map
+ */
 export class ReadonlyMemoryBlockStore implements ReadonlyBlockStore {
+	/** underlying map storing CID to block data */
 	blocks: BlockMap = new Map();
 
+	/**
+	 * creates a new read-only memory block store
+	 * @param blocks optional initial blocks to populate the store with
+	 */
 	constructor(blocks?: BlockMap) {
 		if (blocks !== undefined) {
 			setMany(this.blocks, blocks);
@@ -52,6 +101,9 @@ export class ReadonlyMemoryBlockStore implements ReadonlyBlockStore {
 	}
 }
 
+/**
+ * an in-memory writable block store using a Map
+ */
 export class MemoryBlockStore extends ReadonlyMemoryBlockStore implements BlockStore {
 	put(cid: string, bytes: Uint8Array<ArrayBuffer>): Promise<void> {
 		this.blocks.set(cid, bytes);
@@ -74,10 +126,22 @@ export class MemoryBlockStore extends ReadonlyMemoryBlockStore implements BlockS
 	}
 }
 
+/**
+ * a block store that overlays one store on top of another
+ * reads check upper first, then fall back to lower
+ * all writes go to the upper store only
+ */
 export class OverlayBlockStore implements BlockStore {
+	/** the writable upper layer store */
 	upper: BlockStore;
+	/** the read-only lower layer store */
 	lower: ReadonlyBlockStore;
 
+	/**
+	 * creates a new overlay block store
+	 * @param upper the writable upper layer store
+	 * @param lower the read-only lower layer store
+	 */
 	constructor(upper: BlockStore, lower: ReadonlyBlockStore) {
 		this.upper = upper;
 		this.lower = lower;
@@ -130,6 +194,15 @@ export class OverlayBlockStore implements BlockStore {
 	}
 }
 
+/**
+ * reads and decodes a block, validating it matches the expected type
+ * @param store block store to read from
+ * @param cid CID of the block to read
+ * @param def schema definition with name and validation function
+ * @returns the decoded and validated object
+ * @throws {MissingBlockError} if block is not found
+ * @throws {UnexpectedObjectError} if block doesn't match expected type
+ */
 export const readObject = async <T>(store: ReadonlyBlockStore, cid: string, def: CheckDef<T>): Promise<T> => {
 	const bytes = await store.get(cid);
 	if (bytes === null) {
@@ -144,6 +217,13 @@ export const readObject = async <T>(store: ReadonlyBlockStore, cid: string, def:
 	return decoded;
 };
 
+/**
+ * reads and decodes a block without type validation
+ * @param store block store to read from
+ * @param cid CID of the block to read
+ * @returns the decoded object
+ * @throws {MissingBlockError} if block is not found
+ */
 export const readRecord = async (store: ReadonlyBlockStore, cid: string): Promise<unknown> => {
 	const bytes = await store.get(cid);
 	if (bytes === null) {
@@ -155,7 +235,13 @@ export const readRecord = async (store: ReadonlyBlockStore, cid: string): Promis
 	return decoded;
 };
 
-interface CheckDef<T> {
+/**
+ * defines a type validator for use with readObject
+ * combines a human-readable type name with a type guard function
+ */
+export interface CheckDef<T> {
+	/** human-readable name of the expected type */
 	name: string;
+	/** type guard function to validate the decoded value */
 	check: (value: unknown) => value is T;
 }
