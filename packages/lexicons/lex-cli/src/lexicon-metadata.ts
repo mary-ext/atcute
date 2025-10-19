@@ -22,7 +22,7 @@ const isValidLexiconPattern = (pattern: string): boolean => {
  */
 const lexiconMappingEntry = v.object({
 	type: v.picklist(['namespace', 'named']),
-	path: v.pipe(v.string(), v.regex(/^\.$|^\.\//)),
+	path: v.pipe(v.string(), v.regex(/^\.$|^\.\//, `path must be "." or start with "./"`)),
 });
 
 /**
@@ -33,7 +33,7 @@ const atcuteLexiconsField = v.object({
 		v.record(
 			v.pipe(
 				v.string(),
-				v.check(isValidLexiconPattern, 'Invalid NSID pattern (must be valid NSID or end with .*)'),
+				v.check(isValidLexiconPattern, `invalid NSID pattern (must be valid NSID or end with .*)`),
 			),
 			lexiconMappingEntry,
 		),
