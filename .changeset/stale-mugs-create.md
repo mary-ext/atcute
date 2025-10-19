@@ -41,7 +41,7 @@ patterns mapped to import paths:
 ```json
 {
 	"atcute:lexicons": {
-		"mapping": {
+		"mappings": {
 			"com.atproto.*": {
 				"type": "namespace",
 				"path": "./types/{{nsid_remainder}}"

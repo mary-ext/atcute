@@ -33,7 +33,7 @@ schemas without manual configuration.
 {
 	"name": "@example/my-schemas",
 	"atcute:lexicons": {
-		"mapping": {
+		"mappings": {
 			"com.example.*": {
 				"type": "namespace",
 				"path": "./types/{{nsid_remainder}}"

@@ -64,12 +64,12 @@ const resolveImportsToMappings = async (
 		}
 
 		const lexicons = result.output['atcute:lexicons'];
-		if (!lexicons?.mapping) {
+		if (!lexicons?.mappings) {
 			continue;
 		}
 
 		// Convert mapping to ImportMapping[]
-		for (const [pattern, entry] of Object.entries(lexicons.mapping)) {
+		for (const [pattern, entry] of Object.entries(lexicons.mappings)) {
 			const isWildcard = pattern.endsWith('.*');
 
 			mappings.push({

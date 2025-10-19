@@ -33,7 +33,7 @@
 		"@atcute/lex-cli": "workspace:^"
 	},
 	"atcute:lexicons": {
-		"mapping": {
+		"mappings": {
 			"blue.moji.*": {
 				"type": "namespace",
 				"path": "./types/{{nsid_remainder}}"

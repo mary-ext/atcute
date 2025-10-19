@@ -39,7 +39,7 @@
 		"@atcute/ozone": "file:"
 	},
 	"atcute:lexicons": {
-		"mapping": {
+		"mappings": {
 			"tools.ozone.*": {
 				"type": "namespace",
 				"path": "./types/{{nsid_remainder}}"

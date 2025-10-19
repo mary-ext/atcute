@@ -41,7 +41,7 @@
 		"vitest": "^3.2.4"
 	},
 	"atcute:lexicons": {
-		"mapping": {
+		"mappings": {
 			"app.bsky.*": {
 				"type": "namespace",
 				"path": "./types/app/{{nsid_remainder}}"

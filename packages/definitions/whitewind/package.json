@@ -36,7 +36,7 @@
 		"@atcute/whitewind": "file:"
 	},
 	"atcute:lexicons": {
-		"mapping": {
+		"mappings": {
 			"com.whtwnd.*": {
 				"type": "namespace",
 				"path": "./types/{{nsid_remainder}}"

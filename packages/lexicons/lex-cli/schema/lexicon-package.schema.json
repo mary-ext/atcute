@@ -8,7 +8,7 @@
     "atcute:lexicons": {
       "type": "object",
       "properties": {
-        "mapping": {
+        "mappings": {
           "type": "object",
           "additionalProperties": {
             "type": "object",

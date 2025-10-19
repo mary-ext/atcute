@@ -29,7 +29,7 @@ const lexiconMappingEntry = v.object({
  * Schema for the atcute:lexicons field in package.json
  */
 const atcuteLexiconsField = v.object({
-	mapping: v.optional(
+	mappings: v.optional(
 		v.record(
 			v.pipe(
 				v.string(),

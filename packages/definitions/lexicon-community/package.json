@@ -32,7 +32,7 @@
 		"@atcute/lex-cli": "workspace:^"
 	},
 	"atcute:lexicons": {
-		"mapping": {
+		"mappings": {
 			"community.lexicon.*": {
 				"type": "namespace",
 				"path": "./types/{{nsid_remainder}}"

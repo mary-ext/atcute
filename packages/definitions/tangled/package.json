@@ -39,7 +39,7 @@
 		"vitest": "^3.2.4"
 	},
 	"atcute:lexicons": {
-		"mapping": {
+		"mappings": {
 			"sh.tangled.*": {
 				"type": "namespace",
 				"path": "./types/{{nsid_remainder}}"
