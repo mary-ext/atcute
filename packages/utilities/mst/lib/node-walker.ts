@@ -40,32 +40,20 @@ export class NodeWalker {
 	static readonly PATH_MIN = ''; // string that compares less than all legal path strings
 	static readonly PATH_MAX = '\xff'; // string that compares greater than all legal path strings
 
-	/**
-	 * node store for fetching nodes
-	 * @internal
-	 */
-	_store: NodeStore;
-	/**
-	 * stack of frames representing the traversal path
-	 * @internal
-	 */
-	_stack: Stack<StackFrame>;
-	/**
-	 * height of the root node
-	 * @internal
-	 */
-	_rootHeight: number;
-	/**
-	 * whether to skip height validation (for trusted trees)
-	 * @internal
-	 */
-	_trusted: boolean;
+	/** node store for fetching nodes */
+	readonly store: NodeStore;
+	/** stack of frames representing the traversal path */
+	readonly stack: Stack<StackFrame>;
+	/** height of the root node */
+	readonly rootHeight: number;
+	/** whether to skip height validation (for trusted trees) */
+	readonly trusted: boolean;
 
 	private constructor(store: NodeStore, stack: Stack<StackFrame>, rootHeight: number, trusted: boolean) {
-		this._store = store;
-		this._stack = stack;
-		this._rootHeight = rootHeight;
-		this._trusted = trusted;
+		this.store = store;
+		this.stack = stack;
+		this.rootHeight = rootHeight;
+		this.trusted = trusted;
 	}
 
 	/**
@@ -111,18 +99,18 @@ export class NodeWalker {
 	 */
 	async createSubtreeWalker(): Promise<NodeWalker> {
 		return await NodeWalker.create(
-			this._store,
+			this.store,
 			this.subtree?.$link ?? null,
 			this.lpath,
 			this.rpath,
-			this._trusted,
+			this.trusted,
 			this.height - 1,
 		);
 	}
 
 	/** current stack frame */
 	get frame(): StackFrame {
-		const frame = this._stack.peek();
+		const frame = this.stack.peek();
 		if (frame === undefined) {
 			throw new Error(`stack is empty`);
 		}
@@ -132,7 +120,7 @@ export class NodeWalker {
 
 	/** current height in the tree (decreases as you descend) */
 	get height(): number {
-		return this._rootHeight - (this._stack.size - 1);
+		return this.rootHeight - (this.stack.size - 1);
 	}
 
 	/** key/path to the left of current cursor position */
@@ -166,9 +154,9 @@ export class NodeWalker {
 	/** whether the walker has reached the end of the tree */
 	get done(): boolean {
 		// is (not this.stack) really necessary here? is that a reachable state?
-		const bottom = this._stack.peekBottom();
+		const bottom = this.stack.peekBottom();
 		return (
-			this._stack.size === 0 || (this.subtree === null && bottom !== undefined && this.rpath === bottom.rpath)
+			this.stack.size === 0 || (this.subtree === null && bottom !== undefined && this.rpath === bottom.rpath)
 		);
 	}
 
@@ -185,8 +173,8 @@ export class NodeWalker {
 	rightOrUp(): void {
 		if (!this.canGoRight) {
 			// we reached the end of this node, go up a level
-			this._stack.pop();
-			if (this._stack.size === 0) {
+			this.stack.pop();
+			if (this.stack.size === 0) {
 				throw new Error(`cannot navigate beyond root; check .done before calling`);
 			}
 			return this.rightOrUp(); // we need to recurse, to skip over empty intermediates on the way back up
@@ -215,9 +203,9 @@ export class NodeWalker {
 			throw new Error(`cannot descend; no subtree at current position`);
 		}
 
-		const subtreeNode = await this._store.get(subtree.$link);
+		const subtreeNode = await this.store.get(subtree.$link);
 
-		if (!this._trusted) {
+		if (!this.trusted) {
 			// if we "trust" the source we can elide this check
 			// the "null" case occurs for empty intermediate nodes
 			const subtreeHeight = await subtreeNode.height();
@@ -226,7 +214,7 @@ export class NodeWalker {
 			}
 		}
 
-		this._stack.push({
+		this.stack.push({
 			node: subtreeNode,
 			lpath: this.lpath,
 			rpath: this.rpath,

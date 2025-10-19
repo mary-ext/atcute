@@ -234,6 +234,18 @@ export class MSTNode {
 
 		return len;
 	}
+
+	/**
+	 * returns the node's CID if it's not empty, null otherwise
+	 * @returns the CID or null
+	 * @internal
+	 */
+	async _toNullable(): Promise<CidLink | null> {
+		if (this.isEmpty) {
+			return null;
+		}
+		return await this.cid();
+	}
 }
 
 /**
