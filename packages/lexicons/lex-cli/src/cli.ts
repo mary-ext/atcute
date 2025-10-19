@@ -94,7 +94,9 @@ const resolveImportsToMappings = async (
 						.replaceAll('{{nsid_remainder}}', nsidRemainder.replaceAll('.', '/'))
 						.replaceAll('{{nsid_prefix}}', nsidPrefix.replaceAll('.', '/'));
 
-					if (expandedPath.startsWith('./')) {
+					if (expandedPath === '.') {
+						expandedPath = packageName;
+					} else if (expandedPath.startsWith('./')) {
 						expandedPath = `${packageName}/${expandedPath.slice(2)}`;
 					}
 

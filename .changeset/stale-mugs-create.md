@@ -45,8 +45,8 @@ patterns mapped to import paths:
 the CLI discovers these mappings from packages listed in the `imports` array. available template
 expansions:
 
-- `./` at the start of the path is replaced with the package name (e.g., `./types/foo` becomes
-  `@atcute/atproto/types/foo`)
+- `.` or `./` at the start of the path is replaced with the package name (e.g., `./types/foo` becomes
+  `@atcute/atproto/types/foo`, or `.` becomes `@atcute/atproto`)
 - `{{nsid}}` is replaced with the full NSID (e.g., `com/atproto/sync/subscribeRepos`)
 - `{{nsid_prefix}}` is replaced with the part before the wildcard (e.g., `com/atproto`)
 - `{{nsid_remainder}}` is replaced with the part after the prefix (e.g., `sync/subscribeRepos`)

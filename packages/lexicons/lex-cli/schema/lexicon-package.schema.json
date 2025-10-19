@@ -20,7 +20,8 @@
                 ]
               },
               "path": {
-                "type": "string"
+                "type": "string",
+                "pattern": "^(\\.|\\.\\/)"
               }
             },
             "required": [

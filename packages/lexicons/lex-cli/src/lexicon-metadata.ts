@@ -22,7 +22,7 @@ const isValidLexiconPattern = (pattern: string): boolean => {
  */
 const lexiconMappingEntry = v.object({
 	type: v.picklist(['namespace', 'named']),
-	path: v.pipe(v.string(), v.startsWith('./')),
+	path: v.pipe(v.string(), v.regex(/^(\.|\.\/)/)),
 });
 
 /**

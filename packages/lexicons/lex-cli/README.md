@@ -45,8 +45,8 @@ schemas without manual configuration.
 
 the `path` field supports several template expansions:
 
-- `./` at the start is replaced with the package name (e.g., `./types/foo` becomes
-  `@example/my-schemas/types/foo`)
+- `.` or `./` at the start is replaced with the package name (e.g., `./types/foo` becomes
+  `@example/my-schemas/types/foo`, or `.` becomes `@example/my-schemas`)
 - `{{nsid}}` - the full NSID with dots replaced by slashes (e.g., `com/example/foo/bar`)
 - `{{nsid_prefix}}` - the part before the wildcard (e.g., `com/example`)
 - `{{nsid_remainder}}` - the part after the prefix (e.g., `foo/bar`)
