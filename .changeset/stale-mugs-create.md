@@ -1,14 +1,5 @@
 ---
 '@atcute/lex-cli': minor
-'@atcute/atproto': patch
-'@atcute/bluesky': patch
-'@atcute/bluemoji': patch
-'@atcute/frontpage': patch
-'@atcute/leaflet': patch
-'@atcute/lexicon-community': patch
-'@atcute/ozone': patch
-'@atcute/tangled': patch
-'@atcute/whitewind': patch
 ---
 
 add package.json-based lexicon import metadata
