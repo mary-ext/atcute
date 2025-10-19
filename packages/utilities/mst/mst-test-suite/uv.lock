@@ -1,0 +1,81 @@
+version = 1
+revision = 3
+requires-python = ">=3.11"
+
+[[package]]
+name = "atmst"
+version = "0.0.6"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cbrrr" },
+    { name = "lru-dict" },
+    { name = "more-itertools" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/47/7a/2cca04368b664d372473504615e37150466ecc796dff018504d8daf5de6d/atmst-0.0.6.tar.gz", hash = "sha256:bdc3ada3f234e28dada73f50cd40359534f99208436e831fe035f6fc7c7b188e", size = 18577, upload-time = "2024-12-21T11:37:20.15Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f1/ec/d743d809cadfaae230ebed08c00f63a68f1bfe82042f74ea98c51965ed8f/atmst-0.0.6-py3-none-any.whl", hash = "sha256:e63801225f31b602a3aacfe73360561fa5f488adb1a56d64e0746d462981ecff", size = 19744, upload-time = "2024-12-21T11:37:17.804Z" },
+]
+
+[[package]]
+name = "cbrrr"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a3/2e/321b68b2b12c99864f0872feb8ce80f03483b59c113730f7cb4465a49e0e/cbrrr-1.0.1.tar.gz", hash = "sha256:2dc5f78a71b67849e1b364053819053f03cd2032797ce6adbe1d02e8d602698c", size = 17503, upload-time = "2024-11-16T22:59:41.164Z" }
+
+[[package]]
+name = "lru-dict"
+version = "1.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/e3/42c87871920602a3c8300915bd0292f76eccc66c38f782397acbf8a62088/lru-dict-1.3.0.tar.gz", hash = "sha256:54fd1966d6bd1fcde781596cb86068214edeebff1db13a2cea11079e3fd07b6b", size = 13123, upload-time = "2023-11-06T01:40:12.951Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a8/c9/6fac0cb67160f0efa3cc76a6a7d04d5e21a516eeb991ebba08f4f8f01ec5/lru_dict-1.3.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:20c595764695d20bdc3ab9b582e0cc99814da183544afb83783a36d6741a0dac", size = 17750, upload-time = "2023-11-06T01:38:52.667Z" },
+    { url = "https://files.pythonhosted.org/packages/61/14/f90dee4bc547ae266dbeffd4e11611234bb6af511dea48f3bc8dac1de478/lru_dict-1.3.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:d9b30a8f50c3fa72a494eca6be5810a1b5c89e4f0fda89374f0d1c5ad8d37d51", size = 11055, upload-time = "2023-11-06T01:38:53.798Z" },
+    { url = "https://files.pythonhosted.org/packages/4e/63/a0ae20525f9d52f62ac0def47935f8a2b3b6fcd2c145218b9a27fc1fb910/lru_dict-1.3.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:9710737584650a4251b9a566cbb1a86f83437adb209c9ba43a4e756d12faf0d7", size = 11330, upload-time = "2023-11-06T01:38:54.847Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/c6/8c2b81b61e5206910c81b712500736227289aefe4ccfb36137aa21807003/lru_dict-1.3.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:b84c321ae34f2f40aae80e18b6fa08b31c90095792ab64bb99d2e385143effaa", size = 31793, upload-time = "2023-11-06T01:38:56.163Z" },
+    { url = "https://files.pythonhosted.org/packages/f9/d7/af9733f94df67a2e9e31ef47d4c41aff1836024f135cdbda4743eb628452/lru_dict-1.3.0-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:eed24272b4121b7c22f234daed99899817d81d671b3ed030c876ac88bc9dc890", size = 33090, upload-time = "2023-11-06T01:38:57.091Z" },
+    { url = "https://files.pythonhosted.org/packages/5b/6e/5b09b069a70028bcf05dbdc57a301fbe8b3bafecf916f2ed5a3065c79a71/lru_dict-1.3.0-cp311-cp311-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:9bd13af06dab7c6ee92284fd02ed9a5613a07d5c1b41948dc8886e7207f86dfd", size = 29795, upload-time = "2023-11-06T01:38:58.278Z" },
+    { url = "https://files.pythonhosted.org/packages/21/92/4690daefc2602f7c3429ecf54572d37a9e3c372d370344d2185daa4d5ecc/lru_dict-1.3.0-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a1efc59bfba6aac33684d87b9e02813b0e2445b2f1c444dae2a0b396ad0ed60c", size = 31586, upload-time = "2023-11-06T01:38:59.363Z" },
+    { url = "https://files.pythonhosted.org/packages/3c/67/0a29a91087196b02f278d8765120ee4e7486f1f72a4c505fd1cd3109e627/lru_dict-1.3.0-cp311-cp311-musllinux_1_1_aarch64.whl", hash = "sha256:cfaf75ac574447afcf8ad998789071af11d2bcf6f947643231f692948839bd98", size = 36662, upload-time = "2023-11-06T01:39:00.795Z" },
+    { url = "https://files.pythonhosted.org/packages/36/54/8d56c514cd2333b652bd44c8f1962ab986cbe68e8ad7258c9e0f360cddb6/lru_dict-1.3.0-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:c95f8751e2abd6f778da0399c8e0239321d560dbc58cb063827123137d213242", size = 35118, upload-time = "2023-11-06T01:39:01.883Z" },
+    { url = "https://files.pythonhosted.org/packages/f5/9a/c7a175d10d503b86974cb07141ca175947145dd1c7370fcda86fbbcaf326/lru_dict-1.3.0-cp311-cp311-musllinux_1_1_ppc64le.whl", hash = "sha256:abd0c284b26b5c4ee806ca4f33ab5e16b4bf4d5ec9e093e75a6f6287acdde78e", size = 38198, upload-time = "2023-11-06T01:39:03.306Z" },
+    { url = "https://files.pythonhosted.org/packages/fd/59/2e5086c8e8a05a7282a824a2a37e3c45cd5714e7b83d8bc0267cb3bb5b4f/lru_dict-1.3.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:2a47740652b25900ac5ce52667b2eade28d8b5fdca0ccd3323459df710e8210a", size = 36542, upload-time = "2023-11-06T01:39:04.751Z" },
+    { url = "https://files.pythonhosted.org/packages/12/52/80d0a06e5f45fe7c278dd662da6ea5b39f2ff003248f448189932f6b71c2/lru_dict-1.3.0-cp311-cp311-win32.whl", hash = "sha256:a690c23fc353681ed8042d9fe8f48f0fb79a57b9a45daea2f0be1eef8a1a4aa4", size = 12533, upload-time = "2023-11-06T01:39:05.838Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/fe/1f12f33513310860ec6d722709ec4ad8256d9dcc3385f6ae2a244e6e66f5/lru_dict-1.3.0-cp311-cp311-win_amd64.whl", hash = "sha256:efd3f4e0385d18f20f7ea6b08af2574c1bfaa5cb590102ef1bee781bdfba84bc", size = 13651, upload-time = "2023-11-06T01:39:06.871Z" },
+    { url = "https://files.pythonhosted.org/packages/fc/5c/385f080747eb3083af87d8e4c9068f3c4cab89035f6982134889940dafd8/lru_dict-1.3.0-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:c279068f68af3b46a5d649855e1fb87f5705fe1f744a529d82b2885c0e1fc69d", size = 17174, upload-time = "2023-11-06T01:39:07.923Z" },
+    { url = "https://files.pythonhosted.org/packages/3c/de/5ef2ed75ce55d7059d1b96177ba04fa7ee1f35564f97bdfcd28fccfbe9d2/lru_dict-1.3.0-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:350e2233cfee9f326a0d7a08e309372d87186565e43a691b120006285a0ac549", size = 10742, upload-time = "2023-11-06T01:39:08.871Z" },
+    { url = "https://files.pythonhosted.org/packages/ca/05/f69a6abb0062d2cf2ce0aaf0284b105b97d1da024ca6d3d0730e6151242e/lru_dict-1.3.0-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:4eafb188a84483b3231259bf19030859f070321b00326dcb8e8c6cbf7db4b12f", size = 11079, upload-time = "2023-11-06T01:39:09.766Z" },
+    { url = "https://files.pythonhosted.org/packages/ea/59/cf891143abe58a455b8eaa9175f0e80f624a146a2bf9a1ca842ee0ef930a/lru_dict-1.3.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:73593791047e36b37fdc0b67b76aeed439fcea80959c7d46201240f9ec3b2563", size = 32469, upload-time = "2023-11-06T01:39:11.091Z" },
+    { url = "https://files.pythonhosted.org/packages/59/88/d5976e9f70107ce11e45d93c6f0c2d5eaa1fc30bb3c8f57525eda4510dff/lru_dict-1.3.0-cp312-cp312-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:1958cb70b9542773d6241974646e5410e41ef32e5c9e437d44040d59bd80daf2", size = 33496, upload-time = "2023-11-06T01:39:12.463Z" },
+    { url = "https://files.pythonhosted.org/packages/6c/f8/94d6e910d54fc1fa05c0ee1cd608c39401866a18cf5e5aff238449b33c11/lru_dict-1.3.0-cp312-cp312-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:bc1cd3ed2cee78a47f11f3b70be053903bda197a873fd146e25c60c8e5a32cd6", size = 29914, upload-time = "2023-11-06T01:39:13.395Z" },
+    { url = "https://files.pythonhosted.org/packages/ca/b9/9db79780c8a3cfd66bba6847773061e5cf8a3746950273b9985d47bbfe53/lru_dict-1.3.0-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:82eb230d48eaebd6977a92ddaa6d788f14cf4f4bcf5bbffa4ddfd60d051aa9d4", size = 32241, upload-time = "2023-11-06T01:39:14.612Z" },
+    { url = "https://files.pythonhosted.org/packages/9b/b6/08a623019daec22a40c4d6d2c40851dfa3d129a53b2f9469db8eb13666c1/lru_dict-1.3.0-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:5ad659cbc349d0c9ba8e536b5f40f96a70c360f43323c29f4257f340d891531c", size = 37320, upload-time = "2023-11-06T01:39:15.875Z" },
+    { url = "https://files.pythonhosted.org/packages/70/0b/d3717159c26155ff77679cee1b077d22e1008bf45f19921e193319cd8e46/lru_dict-1.3.0-cp312-cp312-musllinux_1_1_i686.whl", hash = "sha256:ba490b8972531d153ac0d4e421f60d793d71a2f4adbe2f7740b3c55dce0a12f1", size = 35054, upload-time = "2023-11-06T01:39:17.063Z" },
+    { url = "https://files.pythonhosted.org/packages/04/74/f2ae00de7c27984a19b88d2b09ac877031c525b01199d7841ec8fa657fd6/lru_dict-1.3.0-cp312-cp312-musllinux_1_1_ppc64le.whl", hash = "sha256:c0131351b8a7226c69f1eba5814cbc9d1d8daaf0fdec1ae3f30508e3de5262d4", size = 38613, upload-time = "2023-11-06T01:39:18.136Z" },
+    { url = "https://files.pythonhosted.org/packages/5a/0b/e30236aafe31b4247aa9ae61ba8aac6dde75c3ea0e47a8fb7eef53f6d5ce/lru_dict-1.3.0-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:0e88dba16695f17f41701269fa046197a3fd7b34a8dba744c8749303ddaa18df", size = 37143, upload-time = "2023-11-06T01:39:19.571Z" },
+    { url = "https://files.pythonhosted.org/packages/1c/28/b59bcebb8d76ba8147a784a8be7eab6a4ad3395b9236e73740ff675a5a52/lru_dict-1.3.0-cp312-cp312-win32.whl", hash = "sha256:6ffaf595e625b388babc8e7d79b40f26c7485f61f16efe76764e32dce9ea17fc", size = 12653, upload-time = "2023-11-06T01:39:20.574Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/18/06d9710cb0a0d3634f8501e4bdcc07abe64a32e404d82895a6a36fab97f6/lru_dict-1.3.0-cp312-cp312-win_amd64.whl", hash = "sha256:cf9da32ef2582434842ab6ba6e67290debfae72771255a8e8ab16f3e006de0aa", size = 13811, upload-time = "2023-11-06T01:39:21.599Z" },
+]
+
+[[package]]
+name = "more-itertools"
+version = "10.8.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ea/5d/38b681d3fce7a266dd9ab73c66959406d565b3e85f21d5e66e1181d93721/more_itertools-10.8.0.tar.gz", hash = "sha256:f638ddf8a1a0d134181275fb5d58b086ead7c6a72429ad725c67503f13ba30bd", size = 137431, upload-time = "2025-09-02T15:23:11.018Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a4/8e/469e5a4a2f5855992e425f3cb33804cc07bf18d48f2db061aec61ce50270/more_itertools-10.8.0-py3-none-any.whl", hash = "sha256:52d4362373dcf7c52546bc4af9a86ee7c4579df9a8dc268be0a2f949d376cc9b", size = 69667, upload-time = "2025-09-02T15:23:09.635Z" },
+]
+
+[[package]]
+name = "mst-test-suite"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "atmst" },
+    { name = "cbrrr" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "atmst", specifier = ">=0.0.6" },
+    { name = "cbrrr", specifier = ">=1.0.1" },
+]

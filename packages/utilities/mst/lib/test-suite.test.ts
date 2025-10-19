@@ -1,177 +1,146 @@
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
+import * as v from 'valibot';
+
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
 
 import { fromUint8Array } from '@atcute/car/v4/car-reader';
 import * as CID from '@atcute/cid';
 
+import { setMany } from './blockmap.js';
 import { DeltaType, mstDiff, recordDiff } from './diff.js';
 import { NodeStore } from './node-store.js';
-import { MemoryBlockStore } from './stores.js';
+import { NodeWrangler } from './node-wrangler.js';
+import { buildExclusionProof, buildInclusionProof } from './proof.js';
+import {
+	LoggingBlockStore,
+	MemoryBlockStore,
+	OverlayBlockStore,
+	ReadonlyMemoryBlockStore,
+} from './stores.js';
 
-interface MstDiffTestCase {
-	$type: 'mst-diff';
-	description: string;
-	inputs: {
-		mst_a: string;
-		mst_b: string;
-	};
-	results: {
-		created_nodes: string[];
-		deleted_nodes: string[];
-		record_ops: Array<{
-			rpath: string;
-			old_value: string | null;
-			new_value: string | null;
-		}>;
-		proof_nodes: string[];
-		inductive_proof_nodes: string[];
-		firehose_cids: string | string[];
-	};
-}
+const mstDiffTestCaseSchema = v.object({
+	$type: v.literal('mst-diff'),
+	description: v.string(),
+	inputs: v.object({
+		mst_a: v.string(),
+		mst_b: v.string(),
+	}),
+	results: v.object({
+		created_nodes: v.array(v.string()),
+		deleted_nodes: v.array(v.string()),
+		record_ops: v.array(
+			v.object({
+				rpath: v.string(),
+				old_value: v.nullable(v.string()),
+				new_value: v.nullable(v.string()),
+			}),
+		),
+		proof_nodes: v.array(v.string()),
+		inductive_proof_nodes: v.array(v.string()),
+	}),
+});
+
+type MstDiffTestCase = v.InferOutput<typeof mstDiffTestCaseSchema>;
+
+const testSuiteRoot = path.join(__dirname, '../mst-test-suite');
 
 /**
  * Load a CAR file into a MemoryBlockStore and extract the root CID
  */
-const loadCar = (carPath: string): { store: MemoryBlockStore; root: string } => {
-	const testSuiteRoot = join(__dirname, '..', '.research', 'mst-test-suite');
-	const fullPath = join(testSuiteRoot, carPath);
-	const carBytes = readFileSync(fullPath);
+const loadCar = async (relname: string): Promise<{ store: ReadonlyMemoryBlockStore; root: string }> => {
+	const filename = path.join(testSuiteRoot, relname);
+	const bytes = await fs.readFile(filename);
 
-	const car = fromUint8Array(carBytes);
+	const car = fromUint8Array(bytes);
 	const store = new MemoryBlockStore();
 
-	// Load all blocks from CAR into the store
 	for (const entry of car) {
 		const cidStr = CID.toCidLink(entry.cid).$link;
-		store.blocks.set(cidStr, entry.bytes);
+		store.blocks.set(cidStr, entry.bytes as Uint8Array<ArrayBuffer>);
 	}
 
-	// Extract root CID from CAR header
 	if (car.roots.length !== 1) {
-		throw new Error(`Expected exactly 1 root in CAR, got ${car.roots.length}`);
+		throw new Error(`expected exactly 1 root in CAR, got ${car.roots.length}`);
 	}
 
 	const root = car.roots[0].$link;
 	return { store, root };
 };
 
-/**
- * Recursively find all .json test files in a directory
- */
-const findTestFiles = (dir: string): string[] => {
-	const results: string[] = [];
-	const entries = readdirSync(dir);
+const testCases = await (async () => {
+	const testsDir = path.join(testSuiteRoot, 'tests');
 
-	for (const entry of entries) {
-		const fullPath = join(dir, entry);
-		const stat = statSync(fullPath);
+	const testCases: Array<{ path: string; description: string; testCase: MstDiffTestCase }> = [];
 
-		if (stat.isDirectory()) {
-			results.push(...findTestFiles(fullPath));
-		} else if (entry.endsWith('.json')) {
-			results.push(fullPath);
-		}
-	}
+	for await (const name of fs.glob('**/*.json', { cwd: testsDir })) {
+		const filename = path.join(testsDir, name);
 
-	return results;
-};
+		const raw = await fs.readFile(filename, 'utf-8');
+		const json = JSON.parse(raw);
 
-/**
- * Load all test cases from the test suite
- */
-const loadTestCases = (): Array<{ path: string; testCase: MstDiffTestCase }> => {
-	const testSuiteRoot = join(__dirname, '..', '.research', 'mst-test-suite');
-	const testsDir = join(testSuiteRoot, 'tests');
-	const testFiles = findTestFiles(testsDir);
+		const testCase = v.parse(mstDiffTestCaseSchema, json);
 
-	const testCases: Array<{ path: string; testCase: MstDiffTestCase }> = [];
-
-	for (const filePath of testFiles) {
-		const content = readFileSync(filePath, 'utf-8');
-		const testCase = JSON.parse(content) as MstDiffTestCase;
-
-		if (testCase.$type === 'mst-diff') {
-			testCases.push({ path: filePath, testCase });
-		}
+		testCases.push({
+			path: filename,
+			description: testCase.description.replace(`procedurally generated MST diff test case `, ``),
+			testCase,
+		});
 	}
 
 	return testCases;
-};
+})();
 
 describe('MST Test Suite', () => {
-	const allTestCases = loadTestCases();
+	describe.each(testCases)('$description', ({ testCase }) => {
+		let storeA: ReadonlyMemoryBlockStore;
+		let rootA: string;
 
-	// Run all test cases
-	const testCases = allTestCases;
+		let storeB: ReadonlyMemoryBlockStore;
+		let rootB: string;
 
-	it(`should have loaded test cases (${testCases.length} total)`, () => {
-		expect(testCases.length).toBeGreaterThan(1000); // Should have 16k+ tests
-	});
+		beforeAll(async () => {
+			({ store: storeA, root: rootA } = await loadCar(testCase.inputs.mst_a));
+			({ store: storeB, root: rootB } = await loadCar(testCase.inputs.mst_b));
+		});
 
-	describe.each(testCases)('$testCase.description', ({ testCase }) => {
-		it('should compute correct mstDiff', async () => {
-			// Load both CARs
-			const { store: storeA, root: rootA } = loadCar(testCase.inputs.mst_a);
-			const { store: storeB, root: rootB } = loadCar(testCase.inputs.mst_b);
-
-			// Create NodeStores (combine both block stores for access to all blocks)
-			// We need an overlay approach since diff needs to read from both trees
+		it('computes the correct mstDiff', async () => {
 			const combinedStore = new MemoryBlockStore();
-			for (const [cid, bytes] of storeA.blocks) {
-				combinedStore.blocks.set(cid, bytes);
-			}
-			for (const [cid, bytes] of storeB.blocks) {
-				combinedStore.blocks.set(cid, bytes);
-			}
+			setMany(combinedStore.blocks, storeA.blocks);
+			setMany(combinedStore.blocks, storeB.blocks);
 
 			const nodeStore = new NodeStore(combinedStore);
 
-			// Run mstDiff
 			const [createdNodes, deletedNodes] = await mstDiff(nodeStore, rootA, rootB);
 
-			// Compare created_nodes (as sets, order doesn't matter)
 			const expectedCreated = new Set(testCase.results.created_nodes);
 			expect(createdNodes).toEqual(expectedCreated);
 
-			// Compare deleted_nodes (as sets, order doesn't matter)
 			const expectedDeleted = new Set(testCase.results.deleted_nodes);
 			expect(deletedNodes).toEqual(expectedDeleted);
 		});
 
-		it('should compute correct recordDiff', async () => {
-			// Load both CARs
-			const { store: storeA, root: rootA } = loadCar(testCase.inputs.mst_a);
-			const { store: storeB, root: rootB } = loadCar(testCase.inputs.mst_b);
-
-			// Create combined NodeStore
+		it('computes the correct recordDiff', async () => {
 			const combinedStore = new MemoryBlockStore();
-			for (const [cid, bytes] of storeA.blocks) {
-				combinedStore.blocks.set(cid, bytes);
-			}
-			for (const [cid, bytes] of storeB.blocks) {
-				combinedStore.blocks.set(cid, bytes);
-			}
+			setMany(combinedStore.blocks, storeA.blocks);
+			setMany(combinedStore.blocks, storeB.blocks);
 
 			const nodeStore = new NodeStore(combinedStore);
 
-			// Run mstDiff and recordDiff
 			const [createdNodes, deletedNodes] = await mstDiff(nodeStore, rootA, rootB);
 
-			const deltas = [];
-			for await (const delta of recordDiff(nodeStore, createdNodes, deletedNodes)) {
-				deltas.push(delta);
-			}
+			const deltas = await Array.fromAsync(recordDiff(nodeStore, createdNodes, deletedNodes));
+			deltas.sort((a, b) => +(a.path > b.path) - +(a.path < b.path));
 
-			// Sort both actual and expected by rpath for comparison
-			const sortedDeltas = deltas.sort((a, b) => a.path.localeCompare(b.path));
-			const sortedExpected = [...testCase.results.record_ops].sort((a, b) => a.rpath.localeCompare(b.rpath));
+			const expectance = testCase.results.record_ops.toSorted(
+				(a, b) => +(a.rpath > b.rpath) - +(a.rpath < b.rpath),
+			);
 
-			expect(sortedDeltas.length).toBe(sortedExpected.length);
+			expect(deltas.length).toBe(expectance.length);
 
-			for (let i = 0; i < sortedDeltas.length; i++) {
-				const actual = sortedDeltas[i];
-				const expected = sortedExpected[i];
+			for (let idx = 0, len = deltas.length; idx < len; idx++) {
+				const actual = deltas[idx];
+				const expected = expectance[idx];
 
 				expect(actual.path).toBe(expected.rpath);
 				expect(actual.priorValue?.$link ?? null).toBe(expected.old_value);
@@ -186,6 +155,80 @@ describe('MST Test Suite', () => {
 					expect(actual.deltaType).toBe(DeltaType.UPDATED);
 				}
 			}
+		});
+
+		it('computes the correct proof_nodes', async () => {
+			// create combined store
+			const combinedStore = new MemoryBlockStore();
+			setMany(combinedStore.blocks, storeA.blocks);
+			setMany(combinedStore.blocks, storeB.blocks);
+
+			const nodeStore = new NodeStore(combinedStore);
+
+			// collect proof nodes for all record operations
+			const proofNodes = new Set<string>();
+
+			for (const op of testCase.results.record_ops) {
+				let proof: Set<string>;
+
+				if (op.old_value === null) {
+					// CREATED: inclusion proof for new record in rootB
+					proof = await buildInclusionProof(nodeStore, rootB, op.rpath);
+				} else if (op.new_value === null) {
+					// DELETED: exclusion proof in rootB
+					proof = await buildExclusionProof(nodeStore, rootB, op.rpath);
+				} else {
+					// UPDATED: inclusion proof for updated record in rootB
+					proof = await buildInclusionProof(nodeStore, rootB, op.rpath);
+				}
+
+				// add all proof nodes to the set
+				for (const cid of proof) {
+					proofNodes.add(cid);
+				}
+			}
+
+			// compare against expected proof_nodes (as sets, order doesn't matter)
+			const expectedProofNodes = new Set(testCase.results.proof_nodes);
+			expect(proofNodes).toEqual(expectedProofNodes);
+		});
+
+		it('computes the correct inductive_proof_nodes', async () => {
+			// create combined store
+			const combinedStore = new MemoryBlockStore();
+			setMany(combinedStore.blocks, storeA.blocks);
+			setMany(combinedStore.blocks, storeB.blocks);
+
+			// inductive proofs: nodes that get READ when applying ops in REVERSE order
+			// this is used for MST operation inversion (verifying B→A instead of A→B)
+
+			const loggingStore = new LoggingBlockStore(combinedStore);
+
+			const overlayStore = new OverlayBlockStore(new MemoryBlockStore(), loggingStore);
+			const nodeStore = new NodeStore(overlayStore);
+			const wrangler = new NodeWrangler(nodeStore);
+
+			// start from rootB and apply operations in REVERSE order
+			let currentRoot = rootB;
+			const reversedOps = testCase.results.record_ops.toReversed();
+
+			for (const op of reversedOps) {
+				if (op.old_value === null) {
+					// was CREATE, reverse it with DELETE
+					currentRoot = await wrangler.deleteRecord(currentRoot, op.rpath);
+				} else {
+					// was UPDATE or DELETE, reverse with PUT of old value
+					currentRoot = await wrangler.putRecord(currentRoot, op.rpath, { $link: op.old_value });
+				}
+			}
+
+			// after reversing all operations, we should end up back at rootA
+			expect(currentRoot).toBe(rootA);
+
+			// the blocks that were accessed (read) are the inductive proof nodes
+			const inductiveProofNodes = loggingStore.accessed;
+			const expectedInductiveProofNodes = new Set(testCase.results.inductive_proof_nodes);
+			expect(inductiveProofNodes).toEqual(expectedInductiveProofNodes);
 		});
 	});
 });

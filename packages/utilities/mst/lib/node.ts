@@ -147,6 +147,8 @@ export class MSTNode {
 					t: subtrees[idx + 1],
 					v: values[idx],
 				});
+
+				prevKey = key;
 			}
 
 			const n: NodeData = {

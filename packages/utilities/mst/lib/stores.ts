@@ -1,7 +1,4 @@
-import * as CBOR from '@atcute/cbor';
-
 import { deleteMany, setMany, type BlockMap } from './blockmap.js';
-import { MissingBlockError, UnexpectedObjectError } from './errors.js';
 
 /**
  * a read-only interface for retrieving blocks by their CID
@@ -132,9 +129,9 @@ export class MemoryBlockStore extends ReadonlyMemoryBlockStore implements BlockS
  * all writes go to the upper store only
  */
 export class OverlayBlockStore implements BlockStore {
-	/** the writable upper layer store */
+	/** writable upper layer store */
 	upper: BlockStore;
-	/** the read-only lower layer store */
+	/** read-only lower layer store */
 	lower: ReadonlyBlockStore;
 
 	/**
@@ -195,53 +192,41 @@ export class OverlayBlockStore implements BlockStore {
 }
 
 /**
- * reads and decodes a block, validating it matches the expected type
- * @param store block store to read from
- * @param cid CID of the block to read
- * @param def schema definition with name and validation function
- * @returns the decoded and validated object
- * @throws {MissingBlockError} if block is not found
- * @throws {UnexpectedObjectError} if block doesn't match expected type
+ * a read-only block store wrapper that tracks all get() accesses
+ * useful for collecting proof nodes during MST operations
  */
-export const readObject = async <T>(store: ReadonlyBlockStore, cid: string, def: CheckDef<T>): Promise<T> => {
-	const bytes = await store.get(cid);
-	if (bytes === null) {
-		throw new MissingBlockError(cid, def.name);
+export class LoggingBlockStore implements ReadonlyBlockStore {
+	/** block store being proxied */
+	readonly wrapped: ReadonlyBlockStore;
+	/** set of CIDs that were accessed via get() or getMany() */
+	readonly accessed = new Set<string>();
+
+	/**
+	 * creates a new logging block store wrapper
+	 * @param store the block store to wrap
+	 */
+	constructor(store: ReadonlyBlockStore) {
+		this.wrapped = store;
 	}
 
-	const decoded = CBOR.decode(bytes);
-	if (!def.check(decoded)) {
-		throw new UnexpectedObjectError(cid, def.name);
+	async get(cid: string): Promise<Uint8Array<ArrayBuffer> | null> {
+		this.accessed.add(cid);
+
+		return this.wrapped.get(cid);
 	}
 
-	return decoded;
-};
+	async getMany(cids: string[]): Promise<{ found: BlockMap; missing: string[] }> {
+		const accessed = this.accessed;
 
-/**
- * reads and decodes a block without type validation
- * @param store block store to read from
- * @param cid CID of the block to read
- * @returns the decoded object
- * @throws {MissingBlockError} if block is not found
- */
-export const readRecord = async (store: ReadonlyBlockStore, cid: string): Promise<unknown> => {
-	const bytes = await store.get(cid);
-	if (bytes === null) {
-		throw new MissingBlockError(cid, undefined);
+		for (const cid of cids) {
+			accessed.add(cid);
+		}
+
+		return this.wrapped.getMany(cids);
 	}
 
-	const decoded = CBOR.decode(bytes);
-
-	return decoded;
-};
-
-/**
- * defines a type validator for use with readObject
- * combines a human-readable type name with a type guard function
- */
-export interface CheckDef<T> {
-	/** human-readable name of the expected type */
-	name: string;
-	/** type guard function to validate the decoded value */
-	check: (value: unknown) => value is T;
+	async has(cid: string): Promise<boolean> {
+		// has() doesn't count as an access for proof purposes
+		return this.wrapped.has(cid);
+	}
 }

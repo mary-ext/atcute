@@ -4,24 +4,24 @@ import { MSTNode, getKeyHeight } from './node.js';
 import { NodeStore } from './node-store.js';
 
 /**
- * array helper: replaces element at index with a new value
+ * replaces element at index with a new value
  */
 const replaceAt = <T>(arr: readonly T[], index: number, value: T): readonly T[] => {
-	return [...arr.slice(0, index), value, ...arr.slice(index + 1)];
+	return arr.with(index, value);
 };
 
 /**
- * array helper: inserts element at index
+ * inserts element at index
  */
 const insertAt = <T>(arr: readonly T[], index: number, value: T): readonly T[] => {
-	return [...arr.slice(0, index), value, ...arr.slice(index)];
+	return arr.toSpliced(index, 0, value);
 };
 
 /**
- * array helper: removes element at index
+ * removes element at index
  */
 const removeAt = <T>(arr: readonly T[], index: number): readonly T[] => {
-	return [...arr.slice(0, index), ...arr.slice(index + 1)];
+	return arr.toSpliced(index, 1);
 };
 
 /**
@@ -31,8 +31,8 @@ const removeAt = <T>(arr: readonly T[], index: number): readonly T[] => {
  * the external APIs take a CID (the MST root) and return a CID (the new root),
  * while storing any newly created nodes in the NodeStore.
  *
- * neither method should ever fail - deleting a node that doesn't exist is a nop,
- * and adding the same node twice with the same value is also a nop. Callers
+ * neither method should ever fail - deleting a node that doesn't exist is a noop,
+ * and adding the same node twice with the same value is also a nop. callers
  * can detect these cases by seeing if the initial and final CIDs changed.
  */
 export class NodeWrangler {

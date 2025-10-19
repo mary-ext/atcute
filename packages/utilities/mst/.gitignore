@@ -1,0 +1,4 @@
+/mst-test-suite/.venv/
+
+/mst-test-suite/cars/**/*.car
+/mst-test-suite/tests/**/*.json
