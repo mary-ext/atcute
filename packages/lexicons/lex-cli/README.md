@@ -23,12 +23,38 @@ then run the tool:
 npm exec lex-cli generate -c ./lex.config.js
 ```
 
-highly recommend packaging the generated schemas as a publishable library for others to use.
+## publishing your schemas
+
+if you're packaging your generated schemas as a publishable library, add the `atcute:lexicons`
+field to your package.json. this allows other projects to automatically discover and import your
+schemas without manual configuration.
+
+```json
+{
+	"name": "@example/my-schemas",
+	"atcute:lexicons": {
+		"mapping": {
+			"com.example.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
+	}
+}
+```
+
+the `path` field supports several template expansions:
+
+- `./` at the start is replaced with the package name (e.g., `./types/foo` becomes
+  `@example/my-schemas/types/foo`)
+- `{{nsid}}` - the full NSID with dots replaced by slashes (e.g., `com/example/foo/bar`)
+- `{{nsid_prefix}}` - the part before the wildcard (e.g., `com/example`)
+- `{{nsid_remainder}}` - the part after the prefix (e.g., `foo/bar`)
 
 ## external references
 
 when your lexicons reference types from namespaces outside your configured files, you'll need to
-configure mappings to resolve these references.
+configure how these references are resolved.
 
 for example, if your lexicon references a type from another namespace:
 
@@ -54,7 +80,25 @@ for example, if your lexicon references a type from another namespace:
 }
 ```
 
-define mappings in your configuration to specify how external namespaces should be imported:
+the simplest way to resolve external references is using the `imports` array with packages that
+provide the `atcute:lexicons` metadata:
+
+```ts
+// file: lex.config.js
+import { defineLexiconConfig } from '@atcute/lex-cli';
+
+export default defineLexiconConfig({
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
+	imports: ['@atcute/atproto', '@atcute/bluesky'],
+});
+```
+
+the CLI will automatically discover the namespace mappings from each package's `atcute:lexicons`
+field in their package.json.
+
+for packages without metadata, or when you need more fine-grained control over import resolution,
+use the `mappings` configuration instead:
 
 ```ts
 // file: lex.config.js
@@ -81,6 +125,3 @@ export default defineLexiconConfig({
 	],
 });
 ```
-
-with this configuration, any reference to a lexicon in the `com.atproto.*` or `app.bsky.*` namespace
-will be imported from `@atcute/atproto` or `@atcute/bluesky`, respectively.
