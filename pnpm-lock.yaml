@@ -522,6 +522,9 @@ importers:
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../lexicons
+      '@atcute/repo':
+        specifier: workspace:^
+        version: link:../../utilities/repo
       '@atcute/uint8array':
         specifier: workspace:^
         version: link:../../utilities/uint8array
@@ -656,16 +659,16 @@ importers:
       '@atcute/varint':
         specifier: workspace:^
         version: link:../varint
-      yocto-queue:
-        specifier: ^1.2.1
-        version: 1.2.1
     devDependencies:
       '@atcute/multibase':
         specifier: workspace:^
         version: link:../multibase
-      '@types/bun':
-        specifier: ^1.2.21
-        version: 1.2.21(@types/react@19.1.8)
+      '@vitest/coverage-v8':
+        specifier: ^3.2.4
+        version: 3.2.4(@vitest/browser@3.2.4)(vitest@3.2.4)
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@24.3.0)(@vitest/browser@3.2.4)(tsx@4.20.6)(yaml@2.8.0)
 
   packages/utilities/cbor:
     dependencies:
@@ -744,9 +747,6 @@ importers:
       '@atcute/uint8array':
         specifier: workspace:^
         version: link:../uint8array
-      '@atcute/varint':
-        specifier: workspace:^
-        version: link:../varint
     devDependencies:
       '@atcute/car':
         specifier: workspace:^
@@ -770,6 +770,40 @@ importers:
       '@types/bun':
         specifier: ^1.2.21
         version: 1.2.21(@types/react@19.1.8)
+
+  packages/utilities/repo:
+    dependencies:
+      '@atcute/car':
+        specifier: workspace:^
+        version: link:../car
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../cbor
+      '@atcute/cid':
+        specifier: workspace:^
+        version: link:../cid
+      '@atcute/crypto':
+        specifier: workspace:^
+        version: link:../crypto
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+      '@atcute/mst':
+        specifier: workspace:^
+        version: link:../mst
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../uint8array
+    devDependencies:
+      '@atcute/multibase':
+        specifier: workspace:^
+        version: link:../multibase
+      '@vitest/coverage-v8':
+        specifier: ^3.2.4
+        version: 3.2.4(@vitest/browser@3.2.4)(vitest@3.2.4)
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@24.3.0)(@vitest/browser@3.2.4)(tsx@4.20.6)(yaml@2.8.0)
 
   packages/utilities/tid:
     devDependencies:

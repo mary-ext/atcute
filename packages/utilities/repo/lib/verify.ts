@@ -1,15 +1,16 @@
-import { CarReader } from '@atcute/car';
-import { type BlockMap, type Commit, isMstNode, type MstNode } from '@atcute/car/repo-reader';
+import * as CAR from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
-import { type FoundPublicKey, getPublicKeyFromDidController, verifySig } from '@atcute/crypto';
-import { type DidDocument, getAtprotoVerificationMaterial } from '@atcute/identity';
-import { type AtprotoDid } from '@atcute/lexicons/syntax';
-import { toSha256 } from '@atcute/uint8array';
+import type { PublicKey } from '@atcute/crypto';
+import type { AtprotoDid } from '@atcute/lexicons/syntax';
+import { isNodeData, type NodeData } from '@atcute/mst';
+import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
+
+import { isCommit, type Commit } from './types.js';
+
+type BlockMap = Map<string, Uint8Array>;
 
 export interface VerifiedRecord {
-	/** AT-URI of the record */
-	uri: string;
 	/** CID of the record */
 	cid: string;
 	/** Record data */
@@ -17,10 +18,10 @@ export interface VerifiedRecord {
 }
 
 export interface VerifyRecordOptions {
-	did: AtprotoDid;
+	did?: AtprotoDid;
 	collection: string;
 	rkey: string;
-	didDocument: DidDocument;
+	publicKey?: PublicKey;
 	carBytes: Uint8Array;
 }
 
@@ -28,25 +29,14 @@ export const verifyRecord = async ({
 	did,
 	collection,
 	rkey,
-	didDocument,
+	publicKey,
 	carBytes,
 }: VerifyRecordOptions): Promise<VerifiedRecord> => {
-	// grab public key from did document
-	let publicKey: FoundPublicKey;
-	{
-		const controller = getAtprotoVerificationMaterial(didDocument);
-		if (!controller) {
-			throw new Error(`did document does not contain verification material`);
-		}
-
-		publicKey = getPublicKeyFromDidController(controller);
-	}
-
 	// read the car
 	let blockmap: BlockMap;
 	let commit: Commit;
 	{
-		const reader = CarReader.fromUint8Array(carBytes);
+		const reader = CAR.fromUint8Array(carBytes);
 		if (reader.header.data.roots.length !== 1) {
 			throw new Error(`car must have exactly one root`);
 		}
@@ -61,28 +51,27 @@ export const verifyRecord = async ({
 				throw new Error(`cid does not match bytes`);
 			}
 
-			blockmap.set(cidString, entry);
+			blockmap.set(cidString, entry.bytes);
 		}
 
 		if (blockmap.size === 0) {
 			throw new Error(`car must have at least one block`);
 		}
 
-		commit = CAR.readBlock(blockmap, reader.header.data.roots[0], CAR.isCommit);
+		commit = readBlock(blockmap, reader.header.data.roots[0].$link, isCommit);
 	}
 
 	// verify did in commit matches the did
-	if (commit.did !== did) {
+	if (did !== undefined && commit.did !== did) {
 		throw new Error(`did in commit does not match expected did`);
 	}
 
-	// verify signature contained in commit is valid
-	{
+	// verify signature contained in commit is valid (if publicKey provided)
+	if (publicKey) {
 		const { sig, ...unsigned } = commit;
 
 		const data = CBOR.encode(unsigned);
-		const valid = await verifySig(
-			publicKey,
+		const valid = await publicKey.verify(
 			CBOR.fromBytes(sig) as Uint8Array<ArrayBuffer>,
 			data as Uint8Array<ArrayBuffer>,
 		);
@@ -100,10 +89,23 @@ export const verifyRecord = async ({
 	}
 
 	return {
-		uri: `at://${did}/${collection}/${rkey}`,
 		cid: found.cid,
 		record: found.record,
 	};
+};
+
+const readBlock = <T>(blockmap: BlockMap, cid: string, validate: (value: unknown) => value is T): T => {
+	const bytes = blockmap.get(cid);
+	if (!bytes) {
+		throw new Error(`cid not found in blockmap; cid=${cid}`);
+	}
+
+	const decoded = CBOR.decode(bytes);
+	if (!validate(decoded)) {
+		throw new Error(`validation failed for cid=${cid}`);
+	}
+
+	return decoded;
 };
 
 interface DfsResult {
@@ -112,9 +114,6 @@ interface DfsResult {
 	max?: string;
 	depth?: number;
 }
-
-const encoder = new TextEncoder();
-const decoder = new TextDecoder();
 
 const dfs = async (
 	blockmap: BlockMap,
@@ -137,15 +136,15 @@ const dfs = async (
 	}
 
 	// Get the block data
-	let node: MstNode;
+	let node: NodeData;
 	{
-		const entry = blockmap.get(from);
-		if (!entry) {
+		const bytes = blockmap.get(from);
+		if (!bytes) {
 			return { found: false };
 		}
 
-		const decoded = CBOR.decode(entry.bytes);
-		if (!isMstNode(decoded)) {
+		const decoded = CBOR.decode(bytes);
+		if (!isNodeData(decoded)) {
 			throw new Error(`invalid mst node; cid=${from}`);
 		}
 
@@ -164,19 +163,19 @@ const dfs = async (
 	// Process all entries in this node
 	for (const entry of node.e) {
 		// Construct the key by truncating and appending
-		key = key.substring(0, entry.p) + decoder.decode(CBOR.fromBytes(entry.k));
+		key = key.substring(0, entry.p) + decodeUtf8From(CBOR.fromBytes(entry.k));
 
 		// Check if this is our target key
 		if (key === targetKey) {
-			const recordBlock = blockmap.get(entry.v.$link);
-			if (recordBlock) {
-				const record = CBOR.decode(recordBlock.bytes);
+			const recordBytes = blockmap.get(entry.v.$link);
+			if (recordBytes) {
+				const record = CBOR.decode(recordBytes);
 				found = { cid: entry.v.$link, record };
 			}
 		}
 
 		// Calculate depth based on leading zeros in the hash
-		const keyDigest = await toSha256(encoder.encode(key));
+		const keyDigest = await toSha256(encodeUtf8(key));
 		let zeroCount = 0;
 
 		outerLoop: for (const byte of keyDigest) {

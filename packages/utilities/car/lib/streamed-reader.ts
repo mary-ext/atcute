@@ -1,4 +1,5 @@
 import * as CBOR from '@atcute/cbor';
+import type { Cid, CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import { concat } from '@atcute/uint8array';
 
@@ -6,7 +7,7 @@ import { isCarV1Header, type CarEntry, type CarHeader } from './types.js';
 
 export interface StreamedCarReader {
 	header(): Promise<CarHeader>;
-	roots(): Promise<CBOR.CidLink[]>;
+	roots(): Promise<CidLink[]>;
 
 	dispose(): Promise<void>;
 
@@ -110,7 +111,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 		return buffer;
 	};
 
-	const readCid = async (): Promise<CID.Cid> => {
+	const readCid = async (): Promise<Cid> => {
 		const head = await readExact(4);
 
 		const version = head[0];
@@ -138,7 +139,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 		const bytes = concat([head, await readExact(digestSize)]);
 		const digest = bytes.subarray(4, 4 + digestSize);
 
-		const cid: CID.Cid = {
+		const cid: Cid = {
 			version: version,
 			codec: codec,
 			digest: {
@@ -146,8 +147,6 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 				contents: digest,
 			},
 			bytes: bytes,
-			// @ts-expect-error
-			_str: undefined,
 		};
 
 		return cid;
@@ -188,7 +187,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 			return (_header = { data, headerStart, headerEnd, dataStart, dataEnd });
 		},
 
-		async roots(): Promise<CBOR.CidLink[]> {
+		async roots(): Promise<CidLink[]> {
 			const header = await this.header();
 
 			return header.data.roots;

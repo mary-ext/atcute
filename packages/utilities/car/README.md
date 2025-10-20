@@ -1,7 +1,6 @@
 # @atcute/car
 
-lightweight [DASL CAR (content-addressable archives)][dasl-car] and atproto repository decoder
-library for AT Protocol.
+lightweight [DASL CAR (content-addressable archives)][dasl-car] codec library for AT Protocol.
 
 [dasl-car]: https://dasl.ing/car.html
 
@@ -10,50 +9,34 @@ library for AT Protocol.
 ### streaming usage
 
 ```ts
-import { CarReader, RepoReader } from '@atcute/car';
+import { fromStream } from '@atcute/car';
 
 const stream = new ReadableStream({
 	/* ... */
 });
 
-// read AT Protocol repository exports
-{
-	await using repo = RepoReader.fromStream(stream);
+await using car = fromStream(stream);
 
-	for await (const entry of repo) {
-		entry;
-		// ^? RepoEntry { collection: 'app.bsky.feed.post', rkey: '3lprcc55bb222', ... }
-	}
+const roots = await car.roots();
 
-	repo.missingBlocks;
-	//   ^? []
-}
-
-// read generic CAR archives
-{
-	await using car = CarReader.fromStream(stream);
-
-	const roots = await car.roots();
-
-	for await (const entry of car) {
-		entry;
-		// ^? CarEntry { cid: CidLink {}, bytes: Uint8Array {}, ... }
-	}
+for await (const entry of car) {
+	entry;
+	// ^? CarEntry { cid: CidLink {}, bytes: Uint8Array {}, ... }
 }
 ```
 
 ### streaming usage (for runtimes without `await using` yet)
 
 ```ts
-const repo = RepoReader.fromStream(stream);
+const car = fromStream(stream);
 
 try {
-	for await (const entry of repo) {
+	for await (const entry of car) {
 		entry;
-		// ^? RepoEntry
+		// ^? CarEntry { ... }
 	}
 } finally {
-	await repo.dispose();
+	await car.dispose();
 }
 ```
 
@@ -64,28 +47,13 @@ const buffer = Uint8Array.from([
 	/* ... */
 ]);
 
-// read AT Protocol repository exports
-{
-	const repo = RepoReader.fromUint8Array(buffer);
-
-	for (const entry of repo) {
-		entry;
-		// ^? RepoEntry { collection: 'app.bsky.feed.post', rkey: '3lprcc55bb222', ... }
-	}
-
-	repo.missingBlocks;
-	//   ^? []
-}
-
 // read generic CAR archives
-{
-	const car = CarReader.fromUint8Array(buffer);
+const car = fromUint8Array(buffer);
 
-	const roots = car.roots;
+const roots = car.roots;
 
-	for (const entry of car) {
-		entry;
-		// ^? CarEntry { cid: CidLink {}, bytes: Uint8Array {}, ... }
-	}
+for (const entry of car) {
+	entry;
+	// ^? CarEntry { cid: CidLink {}, bytes: Uint8Array {}, ... }
 }
 ```

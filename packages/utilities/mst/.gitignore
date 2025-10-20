@@ -1,3 +1,5 @@
+/coverage/
+
 /mst-test-suite/.venv/
 
 /mst-test-suite/cars/**/*.car

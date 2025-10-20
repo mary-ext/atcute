@@ -59,7 +59,7 @@ of atcute.
 | [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution                       |
 | [`identity-resolver-node`](./packages/identity/identity-resolver-node): additional identity resolvers for Node.js      |
 | **Utility packages**                                                                                                   |
-| [`car`](./packages/utilities/car): DASL CAR and atproto repository decoder                                             |
+| [`car`](./packages/utilities/car): DASL CAR codec                                                                      |
 | [`cbor`](./packages/utilities/cbor): DASL dCBOR42 codec                                                                |
 | [`cid`](./packages/utilities/cid): DASL CID codec                                                                      |
 | [`crypto`](./packages/utilities/crypto): cryptographic utilities                                                       |

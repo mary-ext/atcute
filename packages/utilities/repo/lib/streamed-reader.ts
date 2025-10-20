@@ -1,20 +1,19 @@
-import Queue from 'yocto-queue';
-
+import type { CarEntry } from '@atcute/car';
+import * as CAR from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
+import { isNodeData } from '@atcute/mst';
 import { decodeUtf8From } from '@atcute/uint8array';
 
-import * as CarReader from '../car-reader/index.js';
-import { assert } from '../utils.js';
-
-import { isCommit, isMstNode } from './mst.js';
-import { RepoEntry } from './types.js';
+import { isCommit, RepoEntry } from './types.js';
+import { assert } from './utils.js';
+import Queue from './utils/queue.js';
 
 type EntryMeta = { t: 0 } | { t: 1 } | { t: 2; k: string };
 
 type Task = {
 	c: string;
-	e: CarReader.CarEntry;
+	e: CarEntry;
 	m: EntryMeta;
 };
 
@@ -94,11 +93,11 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 		},
 		async *[Symbol.asyncIterator]() {
 			// await using car = CarReader.fromStream(stream);
-			const car = CarReader.fromStream(stream);
+			const car = CAR.fromStream(stream);
 
 			try {
 				const pending = new Map<string, EntryMeta>();
-				const strays = new Map<string, CarReader.CarEntry>();
+				const strays = new Map<string, CarEntry>();
 
 				const queue = new Queue<Task>();
 
@@ -149,7 +148,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 							}
 							case 1: {
 								const node = CBOR.decode(entry.bytes);
-								assert(isMstNode(node), `expected mst node block; cid=${cid}`);
+								assert(isNodeData(node), `expected mst node block; cid=${cid}`);
 
 								const entries = node.e;
 								const left = node.l;

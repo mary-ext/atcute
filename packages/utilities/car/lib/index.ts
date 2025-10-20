@@ -1,2 +1,6 @@
-export * as CarReader from './car-reader/index.js';
-export * as RepoReader from './repo-reader/index.js';
+export * from './reader.js';
+export * from './streamed-reader.js';
+
+export * from './writer.js';
+
+export * from './types.js';

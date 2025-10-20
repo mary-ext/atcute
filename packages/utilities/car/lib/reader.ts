@@ -1,4 +1,5 @@
 import * as CBOR from '@atcute/cbor';
+import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import * as varint from '@atcute/varint';
 
@@ -13,7 +14,7 @@ interface SyncByteReader {
 
 export interface SyncCarReader {
 	readonly header: CarHeader;
-	readonly roots: CBOR.CidLink[];
+	readonly roots: CidLink[];
 
 	/** @deprecated do for..of on the reader directly */
 	iterate(): Generator<CarEntry>;
@@ -165,8 +166,6 @@ const readCid = (reader: SyncByteReader): CID.Cid => {
 			contents: digest,
 		},
 		bytes: bytes,
-		// @ts-expect-error
-		_str: undefined,
 	};
 
 	return cid;

@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 
 import { fromString, toCidLink } from '@atcute/cid';
 import { fromBase64 } from '@atcute/multibase';
 
-import { carEntryTransform, fromStream } from './stream-car-reader.js';
-import { fromUint8Array } from './sync-car-reader.js';
+import { fromUint8Array } from './reader.js';
+import { carEntryTransform, fromStream } from './streamed-reader.js';
 
 describe('fromUint8Array', () => {
 	it('reads car files', () => {

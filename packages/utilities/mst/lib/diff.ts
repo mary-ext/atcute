@@ -1,8 +1,8 @@
 import type { CidLink } from '@atcute/cid';
 
-import { MSTNode } from './node.js';
 import type { NodeStore } from './node-store.js';
 import { NodeWalker } from './node-walker.js';
+import { MSTNode } from './node.js';
 
 /**
  * Type of change to a record
@@ -164,7 +164,11 @@ const EMPTY_NODE_CID = (await MSTNode.empty().cid()).$link;
  * @param rootB CID of second MST root
  * @returns tuple of [created nodes, deleted nodes]
  */
-export const mstDiff = async (ns: NodeStore, rootA: string, rootB: string): Promise<[Set<string>, Set<string>]> => {
+export const mstDiff = async (
+	ns: NodeStore,
+	rootA: string,
+	rootB: string,
+): Promise<[Set<string>, Set<string>]> => {
 	const created = new Set<string>(); // nodes in B but not in A
 	const deleted = new Set<string>(); // nodes in A but not in B
 
@@ -265,9 +269,6 @@ const mstDiffRecursive = async (
 		}
 
 		// The rpaths now match, but the subtrees below us might not
-		const aSubtree = a.subtree;
-		const bSubtree = b.subtree;
-
 		// Recursively diff the subtrees
 		const aSubWalker = await a.createSubtreeWalker();
 		const bSubWalker = await b.createSubtreeWalker();

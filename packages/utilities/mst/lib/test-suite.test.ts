@@ -4,10 +4,9 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
-import { CarReader } from '@atcute/car';
+import * as CAR from '@atcute/car';
 import * as CID from '@atcute/cid';
 
-import { setMany } from './blockmap.js';
 import { DeltaType, mstDiff, recordDiff } from './diff.js';
 import { NodeStore } from './node-store.js';
 import { NodeWrangler } from './node-wrangler.js';
@@ -18,6 +17,7 @@ import {
 	OverlayBlockStore,
 	ReadonlyMemoryBlockStore,
 } from './stores.js';
+import { setMany } from './utils/blockmap.js';
 
 const mstDiffTestCaseSchema = v.object({
 	$type: v.literal('mst-diff'),
@@ -52,7 +52,7 @@ const loadCar = async (relname: string): Promise<{ store: ReadonlyMemoryBlockSto
 	const filename = path.join(testSuiteRoot, relname);
 	const bytes = await fs.readFile(filename);
 
-	const car = CarReader.fromUint8Array(bytes);
+	const car = CAR.fromUint8Array(bytes);
 	const store = new MemoryBlockStore();
 
 	for (const entry of car) {

@@ -3,8 +3,10 @@ import type { CidLink } from '@atcute/cid';
 import { allocUnsafe } from '@atcute/uint8array';
 import * as varint from '@atcute/varint';
 
+import type { CarBlock } from './types.js';
+
 /**
- * Encodes a number as an unsigned varint (variable-length integer)
+ * encodes a number as an unsigned varint (variable-length integer)
  * @param n the number to encode
  * @returns the varint-encoded bytes
  */
@@ -16,7 +18,8 @@ const encodeVarint = (n: number): Uint8Array<ArrayBuffer> => {
 };
 
 /**
- * Serializes a CAR v1 header
+ * serializes a CAR v1 header
+ * @internal
  * @param roots array of root CIDs (typically just one)
  * @returns the serialized header bytes
  */
@@ -36,7 +39,8 @@ export const serializeCarHeader = (roots: readonly CidLink[]): Uint8Array<ArrayB
 };
 
 /**
- * Serializes a single CAR entry (block)
+ * serializes a single CAR entry (block)
+ * @internal
  * @param cid the CID of the block (as bytes)
  * @param data the block data
  * @returns the serialized entry bytes
@@ -53,18 +57,8 @@ export const serializeCarEntry = (cid: Uint8Array, data: Uint8Array): Uint8Array
 };
 
 /**
- * Represents a block to be written to a CAR file
- */
-export interface CarBlock {
-	/** the CID of the block (as bytes) */
-	cid: Uint8Array;
-	/** the block data */
-	data: Uint8Array;
-}
-
-/**
- * Creates an async generator that yields CAR file chunks
- * @param root the root CID for the CAR file
+ * creates an async generator that yields CAR file chunks
+ * @param root root CIDs for the CAR file
  * @param blocks async iterable of blocks to write
  * @yields Uint8Array chunks of the CAR file (header, then entries)
  *
@@ -76,20 +70,20 @@ export interface CarBlock {
  * };
  *
  * // Stream chunks
- * for await (const chunk of createCarStream(rootCid, blocks())) {
+ * for await (const chunk of writeCarStream([rootCid], blocks())) {
  *   stream.write(chunk);
  * }
  *
  * // Or collect into array (requires Array.fromAsync or polyfill)
- * const chunks = await Array.fromAsync(createCarStream(rootCid, blocks()));
+ * const chunks = await Array.fromAsync(writeCarStream([rootCid], blocks()));
  * ```
  */
-export async function* createCarStream(
-	root: CidLink,
+export async function* writeCarStream(
+	roots: CidLink[],
 	blocks: AsyncIterable<CarBlock> | Iterable<CarBlock>,
 ): AsyncGenerator<Uint8Array<ArrayBuffer>> {
 	// Emit header first
-	yield serializeCarHeader([root]);
+	yield serializeCarHeader(roots);
 
 	// Then emit each block entry
 	for await (const block of blocks) {

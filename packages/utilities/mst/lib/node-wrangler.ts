@@ -1,7 +1,7 @@
 import type { CidLink } from '@atcute/cid';
 
-import { MSTNode, getKeyHeight } from './node.js';
 import { NodeStore } from './node-store.js';
+import { MSTNode, getKeyHeight } from './node.js';
 
 /**
  * replaces element at index with a new value

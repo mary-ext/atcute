@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 
 import { fromCidLink, toString } from '@atcute/cid';
 import { fromBase64 } from '@atcute/multibase';
 
-import { fromStream, repoEntryTransform } from './stream-repo-reader.js';
-import { fromUint8Array } from './sync-repo-reader.js';
+import { fromStream, fromUint8Array, repoEntryTransform } from './index.js';
 
 describe('fromUint8Array', () => {
 	it('decodes atproto car files', () => {

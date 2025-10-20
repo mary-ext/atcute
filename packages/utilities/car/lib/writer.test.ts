@@ -3,7 +3,8 @@ import { describe, expect, it } from 'vitest';
 import * as CID from '@atcute/cid';
 import { concat, encodeUtf8 } from '@atcute/uint8array';
 
-import { type CarBlock, createCarStream, serializeCarEntry, serializeCarHeader } from './car-writer.js';
+import type { CarBlock } from './types.js';
+import { serializeCarEntry, serializeCarHeader, writeCarStream } from './writer.js';
 
 describe('serializeCarHeader', () => {
 	it('should serialize a header with one root', async () => {
@@ -42,7 +43,7 @@ describe('serializeCarEntry', () => {
 	});
 });
 
-describe('createCarStream', () => {
+describe('writeCarStream', () => {
 	it('should stream a CAR with a single block', async () => {
 		const rootCid = CID.toCidLink(await CID.create(0x55, encodeUtf8('root')));
 		const blockCid = await CID.create(0x55, encodeUtf8('block1'));
@@ -53,7 +54,7 @@ describe('createCarStream', () => {
 		};
 
 		const chunks: Uint8Array[] = [];
-		for await (const chunk of createCarStream(rootCid, blocks())) {
+		for await (const chunk of writeCarStream([rootCid], blocks())) {
 			chunks.push(chunk);
 		}
 
@@ -75,7 +76,7 @@ describe('createCarStream', () => {
 			}
 		};
 
-		const chunks = await Array.fromAsync(createCarStream(rootCid, blocks()));
+		const chunks = await Array.fromAsync(writeCarStream([rootCid], blocks()));
 		const car = concat(chunks);
 
 		expect(chunks).toHaveLength(6); // header + 5 blocks
@@ -90,12 +91,12 @@ describe('createCarStream', () => {
 		const blocks: CarBlock[] = [{ cid: blockCid.bytes, data: blockData }];
 
 		const chunks1: Uint8Array[] = [];
-		for await (const chunk of createCarStream(rootCid, blocks)) {
+		for await (const chunk of writeCarStream([rootCid], blocks)) {
 			chunks1.push(chunk);
 		}
 
 		const chunks2: Uint8Array[] = [];
-		for await (const chunk of createCarStream(rootCid, blocks)) {
+		for await (const chunk of writeCarStream([rootCid], blocks)) {
 			chunks2.push(chunk);
 		}
 

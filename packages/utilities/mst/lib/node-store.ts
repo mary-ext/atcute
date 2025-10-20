@@ -1,7 +1,6 @@
 import { MissingBlockError } from './errors.js';
 import { MSTNode } from './node.js';
 import type { BlockStore } from './stores.js';
-
 import LRUCache from './utils/lru.js';
 
 /**

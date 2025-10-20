@@ -1,14 +1,20 @@
-import { getPdsEndpoint } from '@atcute/identity';
+import {
+	getPublicKeyFromDidController,
+	P256PublicKey,
+	Secp256k1PublicKey,
+	type PublicKey,
+} from '@atcute/crypto';
+import { getAtprotoVerificationMaterial, getPdsEndpoint } from '@atcute/identity';
 import type { DidDocumentResolver } from '@atcute/identity-resolver';
 import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 import type { AtprotoDid, Nsid } from '@atcute/lexicons/syntax';
+import { verifyRecord, type VerifiedRecord } from '@atcute/repo';
 
 import { FailedResponseError } from '@atcute/util-fetch';
 
 import { LEXICON_SCHEMA_COLLECTION } from '../constants.js';
 import * as err from '../errors.js';
 import type { ResolvedSchema, ResolveLexiconRecordOptions } from '../types.js';
-import { verifyRecord, type VerifiedRecord } from './verify.js';
 
 export interface LexiconSchemaResolverOptions {
 	didDocumentResolver: DidDocumentResolver;
@@ -69,11 +75,31 @@ export class LexiconSchemaResolver {
 		// Step 3: Verify record and extract data
 		let verifiedRecord: VerifiedRecord;
 		try {
+			// Extract public key from DID document for signature verification
+			const controller = getAtprotoVerificationMaterial(didDocument);
+			if (!controller) {
+				throw new Error(`did document does not contain verification material`);
+			}
+
+			const found = getPublicKeyFromDidController(controller);
+
+			let publicKey: PublicKey;
+			switch (found.type) {
+				case 'p256': {
+					publicKey = await P256PublicKey.importRaw(found.publicKeyBytes);
+					break;
+				}
+				case 'secp256k1': {
+					publicKey = await Secp256k1PublicKey.importRaw(found.publicKeyBytes);
+					break;
+				}
+			}
+
 			verifiedRecord = await verifyRecord({
 				did: authority,
 				collection: LEXICON_SCHEMA_COLLECTION,
 				rkey: nsid,
-				didDocument,
+				publicKey,
 				carBytes,
 			});
 		} catch (cause) {
@@ -99,7 +125,7 @@ export class LexiconSchemaResolver {
 		}
 
 		return {
-			uri: verifiedRecord.uri,
+			uri: `at://${authority}/${LEXICON_SCHEMA_COLLECTION}/${nsid}`,
 			cid: verifiedRecord.cid,
 			rawSchema: verifiedRecord.record,
 			schema: schema,

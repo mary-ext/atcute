@@ -1,17 +1,16 @@
 {
 	"type": "module",
-	"name": "@atcute/mst",
+	"name": "@atcute/repo",
 	"version": "0.1.0",
-	"description": "atproto MST manipulation utilities",
+	"description": "AT Protocol repository decoder for AT Protocol.",
 	"keywords": [
 		"atproto",
-		"repo",
-		"mst"
+		"repo"
 	],
 	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
-		"directory": "packages/utilities/mst"
+		"directory": "packages/utilities/repo"
 	},
 	"files": [
 		"dist/",
@@ -24,20 +23,22 @@
 	},
 	"sideEffects": false,
 	"scripts": {
-		"generate-tests": "cd mst-test-suite && mise exec -- uv run python scripts/generate_exhaustive_cars.py",
 		"build": "tsc --project tsconfig.build.json",
-		"test": "vitest run",
+		"test": "vitest run --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@atcute/car": "workspace:^",
+		"@atcute/multibase": "workspace:^",
 		"@vitest/coverage-v8": "^3.2.4",
-		"valibot": "^1.1.0",
 		"vitest": "^3.2.4"
 	},
 	"dependencies": {
+		"@atcute/car": "workspace:^",
 		"@atcute/cbor": "workspace:^",
 		"@atcute/cid": "workspace:^",
+		"@atcute/crypto": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
+		"@atcute/mst": "workspace:^",
 		"@atcute/uint8array": "workspace:^"
 	}
 }
