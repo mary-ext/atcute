@@ -63,7 +63,9 @@ of atcute.
 | [`cbor`](./packages/utilities/cbor): DASL dCBOR42 codec                                                                |
 | [`cid`](./packages/utilities/cid): DASL CID codec                                                                      |
 | [`crypto`](./packages/utilities/crypto): cryptographic utilities                                                       |
+| [`mst`](./packages/utilities/mst): atproto MST manipulation utilities                                                  |
 | [`multibase`](./packages/utilities/multibase): multibase utilities                                                     |
+| [`repo`](./packages/utilities/repo): read AT Protocol repository exports                                               |
 | [`tid`](./packages/utilities/tid): atproto timestamp identifier codec                                                  |
 | [`varint`](./packages/utilities/varint): protobuf-style LEB128 varint codec                                            |
 | **Bluesky-specific packages**                                                                                          |
