@@ -20,10 +20,12 @@
 		"!lib/**/*.test.ts"
 	],
 	"exports": {
-		".": "./dist/v3/index.js",
-		"./v4": "./dist/v4/index.js",
-		"./v4/car-reader": "./dist/v4/car-reader/index.js",
-		"./v4/repo-reader": "./dist/v4/repo-reader/index.js"
+		".": "./dist/index.js",
+		"./car-reader": "./dist/car-reader/index.js",
+		"./repo-reader": "./dist/repo-reader/index.js",
+		"./v4": "./dist/index.js",
+		"./v4/car-reader": "./dist/car-reader/index.js",
+		"./v4/repo-reader": "./dist/repo-reader/index.js"
 	},
 	"sideEffects": false,
 	"scripts": {

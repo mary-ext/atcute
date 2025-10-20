@@ -1,5 +1,5 @@
-import * as CAR from '@atcute/car';
-import { CarReader } from '@atcute/car/v4';
+import { CarReader } from '@atcute/car';
+import { type BlockMap, type Commit, isMstNode, type MstNode } from '@atcute/car/repo-reader';
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 import { type FoundPublicKey, getPublicKeyFromDidController, verifySig } from '@atcute/crypto';
@@ -43,8 +43,8 @@ export const verifyRecord = async ({
 	}
 
 	// read the car
-	let blockmap: CAR.BlockMap;
-	let commit: CAR.Commit;
+	let blockmap: BlockMap;
+	let commit: Commit;
 	{
 		const reader = CarReader.fromUint8Array(carBytes);
 		if (reader.header.data.roots.length !== 1) {
@@ -117,7 +117,7 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 const dfs = async (
-	blockmap: CAR.BlockMap,
+	blockmap: BlockMap,
 	from: string | undefined,
 	targetKey: string,
 	visited = new Set<string>(),
@@ -137,7 +137,7 @@ const dfs = async (
 	}
 
 	// Get the block data
-	let node: CAR.MstNode;
+	let node: MstNode;
 	{
 		const entry = blockmap.get(from);
 		if (!entry) {
@@ -145,7 +145,7 @@ const dfs = async (
 		}
 
 		const decoded = CBOR.decode(entry.bytes);
-		if (!CAR.isMstNode(decoded)) {
+		if (!isMstNode(decoded)) {
 			throw new Error(`invalid mst node; cid=${from}`);
 		}
 

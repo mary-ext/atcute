@@ -1,10 +1,10 @@
-import { beforeAll, describe, expect, it } from 'vitest';
 import * as v from 'valibot';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
-import { fromUint8Array } from '@atcute/car/v4/car-reader';
+import { CarReader } from '@atcute/car';
 import * as CID from '@atcute/cid';
 
 import { setMany } from './blockmap.js';
@@ -52,7 +52,7 @@ const loadCar = async (relname: string): Promise<{ store: ReadonlyMemoryBlockSto
 	const filename = path.join(testSuiteRoot, relname);
 	const bytes = await fs.readFile(filename);
 
-	const car = fromUint8Array(bytes);
+	const car = CarReader.fromUint8Array(bytes);
 	const store = new MemoryBlockStore();
 
 	for (const entry of car) {

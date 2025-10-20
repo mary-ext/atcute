@@ -10,7 +10,7 @@ library for AT Protocol.
 ### streaming usage
 
 ```ts
-import { CarReader, RepoReader } from '@atcute/car/v4';
+import { CarReader, RepoReader } from '@atcute/car';
 
 const stream = new ReadableStream({
 	/* ... */
