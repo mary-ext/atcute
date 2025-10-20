@@ -1,8 +1,11 @@
 import { toBase32 } from '@atcute/multibase';
 
-import { decode, fromString, type Cid } from './codec.js';
+import { CID_STRINGIFY_CACHE, decode, fromString, type Cid } from './codec.js';
 
 const CID_LINK_SYMBOL = Symbol.for('@atcute/cid-link-wrapper');
+
+/** @internal */
+export const CIDLINK_STRINGIFY_CACHE = new WeakMap<CidLinkWrapper, string>();
 
 export interface CidLink {
 	$link: string;
@@ -11,18 +14,22 @@ export interface CidLink {
 export class CidLinkWrapper implements CidLink {
 	/** @internal */
 	readonly [CID_LINK_SYMBOL] = true;
-	/** @internal */
-	_str: string | undefined;
 
 	readonly bytes: Uint8Array;
 
-	constructor(bytes: Uint8Array, str?: string) {
+	constructor(bytes: Uint8Array) {
 		this.bytes = bytes;
-		this._str = str;
 	}
 
 	get $link(): string {
-		return (this._str ??= `b${toBase32(this.bytes)}`);
+		let str = CIDLINK_STRINGIFY_CACHE.get(this);
+		if (str === undefined) {
+			str = `b${toBase32(this.bytes)}`;
+
+			CIDLINK_STRINGIFY_CACHE.set(this, str);
+		}
+
+		return str;
 	}
 
 	toJSON(): CidLink {
@@ -40,7 +47,14 @@ export const isCidLink = (value: unknown): value is CidLink => {
 };
 
 export const toCidLink = (cid: Cid): CidLink => {
-	return new CidLinkWrapper(cid.bytes, cid._str);
+	const inst = new CidLinkWrapper(cid.bytes);
+	const str = CID_STRINGIFY_CACHE.get(cid);
+
+	if (str !== undefined) {
+		CIDLINK_STRINGIFY_CACHE.set(inst, str);
+	}
+
+	return inst;
 };
 
 export const fromCidLink = (link: CidLink): Cid => {

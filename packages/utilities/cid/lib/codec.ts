@@ -7,6 +7,9 @@ export const HASH_SHA256 = 0x12;
 export const CODEC_RAW = 0x55;
 export const CODEC_DCBOR = 0x71;
 
+/** @internal */
+export const CID_STRINGIFY_CACHE = new WeakMap<Cid, string>();
+
 /**
  * Represents a Content Identifier (CID), in particular, a limited subset of
  * CIDv1 as described by DASL specifications.
@@ -26,9 +29,6 @@ export interface Cid {
 	};
 	/** Raw CID bytes */
 	readonly bytes: Uint8Array;
-
-	/** @internal */
-	_str: string | undefined;
 }
 
 // a SHA-256 CIDv1 is always going to be 36 bytes, that's 4 bytes for the
@@ -57,7 +57,6 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 			contents: bytes.subarray(4, 36),
 		},
 		bytes: bytes,
-		_str: undefined,
 	};
 
 	return cid;
@@ -75,7 +74,6 @@ export const createEmpty = (codec: 0x55 | 0x71): Cid => {
 			contents: digest,
 		},
 		bytes: bytes,
-		_str: undefined,
 	};
 
 	return cid;
@@ -121,7 +119,6 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 			contents: bytes.subarray(4, 4 + digestSize),
 		},
 		bytes: bytes.subarray(0, 4 + digestSize),
-		_str: undefined,
 	};
 
 	return [cid, bytes.subarray(4 + digestSize)];
@@ -151,12 +148,19 @@ export const fromString = (input: string): Cid => {
 	const bytes = fromBase32(input.slice(1));
 	const cid = decode(bytes);
 
-	cid._str = input;
+	CID_STRINGIFY_CACHE.set(cid, input);
 	return cid;
 };
 
 export const toString = (cid: Cid): string => {
-	return (cid._str ??= `b${toBase32(cid.bytes)}`);
+	let str = CID_STRINGIFY_CACHE.get(cid);
+	if (str === undefined) {
+		str = `b${toBase32(cid.bytes)}`;
+
+		CID_STRINGIFY_CACHE.set(cid, str);
+	}
+
+	return str;
 };
 
 export const fromBinary = (input: Uint8Array): Cid => {
@@ -183,9 +187,5 @@ export const toBinary = (cid: Cid): Uint8Array => {
 };
 
 export const equals = (a: Cid, b: Cid): boolean => {
-	if (a._str !== undefined && b._str !== undefined) {
-		return a._str === b._str;
-	}
-
 	return isBufferEqual(a.bytes, b.bytes);
 };
