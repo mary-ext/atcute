@@ -1,5 +1,28 @@
 # @atcute/car
 
+## 5.0.0
+
+### Major Changes
+
+- 5176725: remove AT Protocol repository reader
+
+  the addition of `@atcute/mst` into the atcute family of packages has put `@atcute/car` in a weird
+  spot, we can't have `@atcute/car` depend on `@atcute/mst` because we've already done the reverse
+  to test `@atcute/mst`'s functionalities.
+
+  if you need this functionality back, use `@atcute/repo`.
+
+  this does mean that we are skipping the stable release of v4, and straight into v5.
+
+### Minor Changes
+
+- 5176725: add `writeCarStream` for writing CAR archives
+
+### Patch Changes
+
+- Updated dependencies [b76bc11]
+  - @atcute/cid@2.2.6
+
 ## 3.1.3
 
 ### Patch Changes

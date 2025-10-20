@@ -1,5 +1,18 @@
 # @atcute/lexicon-resolver
 
+## 0.1.3
+
+### Patch Changes
+
+- 5176725: use `@atcute/repo` to verify records
+- Updated dependencies [5176725]
+- Updated dependencies [4c165bf]
+- Updated dependencies [5176725]
+- Updated dependencies [b76bc11]
+  - @atcute/car@5.0.0
+  - @atcute/cid@2.2.6
+  - @atcute/repo@0.1.1
+
 ## 0.1.2
 
 ### Patch Changes

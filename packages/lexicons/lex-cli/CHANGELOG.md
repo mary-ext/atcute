@@ -1,5 +1,64 @@
 # @atcute/lex-cli
 
+## 2.3.0
+
+### Minor Changes
+
+- 9e48104: add package.json-based lexicon import metadata
+
+  instead of manually configuring mappings:
+
+  ```js
+  mappings: [
+  	{
+  		nsid: ['com.atproto.*'],
+  		imports: (nsid) => {
+  			const specifier = nsid.slice('com.atproto.'.length).replaceAll('.', '/');
+  			return { type: 'namespace', from: `@atcute/atproto/types/${specifier}` };
+  		},
+  	},
+  ];
+  ```
+
+  you can now simply write:
+
+  ```js
+  imports: ['@atcute/atproto'];
+  ```
+
+  the package metadata is automatically discovered and used for import resolution.
+
+  for lexicon definition packages, add an `atcute:lexicons` field to your package.json with NSID
+  patterns mapped to import paths:
+
+  ```json
+  {
+  	"atcute:lexicons": {
+  		"mappings": {
+  			"com.atproto.*": {
+  				"type": "namespace",
+  				"path": "./types/{{nsid_remainder}}"
+  			}
+  		}
+  	}
+  }
+  ```
+
+  the CLI discovers these mappings from packages listed in the `imports` array. available template
+  expansions:
+  - `.` or `./` at the start of the path is replaced with the package name (e.g., `./types/foo`
+    becomes `@atcute/atproto/types/foo`, or `.` becomes `@atcute/atproto`)
+  - `{{nsid}}` is replaced with the full NSID (e.g., `com/atproto/sync/subscribeRepos`)
+  - `{{nsid_prefix}}` is replaced with the part before the wildcard (e.g., `com/atproto`)
+  - `{{nsid_remainder}}` is replaced with the part after the prefix (e.g., `sync/subscribeRepos`)
+
+### Patch Changes
+
+- 93b3e0a: switch from Clipanion to Optique
+
+  lex-cli was previously using my personal fork of Clipanion and I wasn't quite interested in
+  maintaining it any longer.
+
 ## 2.2.2
 
 ### Patch Changes

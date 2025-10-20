@@ -1,5 +1,17 @@
 # @atcute/bluesky
 
+## 3.2.8
+
+### Patch Changes
+
+- 1429438: add `atcute:lexicons` metadata to package.json
+
+  all lexicon definition packages now include the `atcute:lexicons` field with namespace mappings,
+  enabling automatic import resolution when used with `@atcute/lex-cli`'s `imports` configuration.
+
+- Updated dependencies [1429438]
+  - @atcute/atproto@3.1.8
+
 ## 3.2.7
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/car",
-	"version": "4.0.0",
+	"version": "5.0.0",
 	"description": "lightweight DASL CAR (content-addressable archives) codec for AT Protocol.",
 	"keywords": [
 		"atproto",

@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/frontpage",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"description": "Frontpage (fyi.unravel.frontpage.*) schema definitions",
 	"keywords": [
 		"atcute",

@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/bluesky",
-	"version": "3.2.7",
+	"version": "3.2.8",
 	"description": "Bluesky (app.bsky.* and chat.bsky.*) schema definitions",
 	"keywords": [
 		"atcute",

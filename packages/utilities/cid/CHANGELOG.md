@@ -1,5 +1,11 @@
 # @atcute/cid
 
+## 2.2.6
+
+### Patch Changes
+
+- b76bc11: use WeakMap for CID string caching
+
 ## 2.2.5
 
 ### Patch Changes
