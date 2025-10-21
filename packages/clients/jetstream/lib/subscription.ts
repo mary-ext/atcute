@@ -8,8 +8,8 @@ import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 
 import type { ReadonlyDeep } from 'type-fest';
 
-import type { JetstreamEvent, JetstreamProcedure } from './typedefs.js';
-import { jetstreamEventSchema } from './types.js';
+import type { JetstreamEvent, JetstreamProcedure } from './types.js';
+import { jetstreamEventSchema } from './typedefs.js';
 
 export interface JetstreamSubscriptionOptions {
 	url: string | string[];
