@@ -1,5 +1,6 @@
 import * as v from '@badrap/valita';
 
+import type { Did, Nsid } from '@atcute/lexicons';
 import { isDid, isNsid } from '@atcute/lexicons/syntax';
 import { fromBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
@@ -13,14 +14,26 @@ const nsidString = v.string().assert(isNsid, `must be an nsid`);
 
 const integer = v.number().assert((input) => input >= 0 && Number.isSafeInteger(input), `must be an integer`);
 
-const jwtHeader = v.object({
+export interface JwtHeader {
+	typ?: string;
+	alg: string;
+}
+
+const jwtHeader: v.Type<JwtHeader> = v.object({
 	typ: v.string().optional(),
 	alg: v.string(),
 });
 
-export interface JwtHeader extends v.Infer<typeof jwtHeader> {}
+export interface JwtPayload {
+	iss: Did;
+	aud: Did;
+	exp: number;
+	iat?: number;
+	lxm?: Nsid;
+	jti?: string;
+}
 
-const jwtPayload = v
+const jwtPayload: v.Type<JwtPayload> = v
 	.object({
 		/** issuer */
 		iss: didString,
@@ -39,8 +52,6 @@ const jwtPayload = v
 		message: `expiry time must be greater than issued time`,
 		path: ['exp'],
 	});
-
-export interface JwtPayload extends v.Infer<typeof jwtPayload> {}
 
 export interface ParsedJwt {
 	header: JwtHeader;
