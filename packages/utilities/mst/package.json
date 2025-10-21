@@ -30,9 +30,9 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
+		"@badrap/valita": "^0.4.6",
 		"@atcute/car": "workspace:^",
 		"@vitest/coverage-v8": "^3.2.4",
-		"valibot": "^1.1.0",
 		"vitest": "^3.2.4"
 	},
 	"dependencies": {

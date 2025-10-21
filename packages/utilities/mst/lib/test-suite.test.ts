@@ -1,4 +1,4 @@
-import * as v from 'valibot';
+import * as v from '@badrap/valita';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import * as fs from 'node:fs/promises';
@@ -32,8 +32,8 @@ const mstDiffTestCaseSchema = v.object({
 		record_ops: v.array(
 			v.object({
 				rpath: v.string(),
-				old_value: v.nullable(v.string()),
-				new_value: v.nullable(v.string()),
+				old_value: v.string().nullable(),
+				new_value: v.string().nullable(),
 			}),
 		),
 		proof_nodes: v.array(v.string()),
@@ -41,7 +41,7 @@ const mstDiffTestCaseSchema = v.object({
 	}),
 });
 
-type MstDiffTestCase = v.InferOutput<typeof mstDiffTestCaseSchema>;
+type MstDiffTestCase = v.Infer<typeof mstDiffTestCaseSchema>;
 
 const testSuiteRoot = path.join(__dirname, '../mst-test-suite');
 
@@ -79,7 +79,7 @@ const testCases = await (async () => {
 		const raw = await fs.readFile(filename, 'utf-8');
 		const json = JSON.parse(raw);
 
-		const testCase = v.parse(mstDiffTestCaseSchema, json);
+		const testCase = mstDiffTestCaseSchema.parse(json, { mode: 'passthrough' });
 
 		testCases.push({
 			path: filename,
