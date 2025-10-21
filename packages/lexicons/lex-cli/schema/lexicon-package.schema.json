@@ -3,6 +3,7 @@
   "$id": "https://unpkg.com/@atcute/lex-cli/schema/lexicon-package.schema.json",
   "title": "package.json with atcute:lexicons",
   "description": "JSON Schema for package.json with atcute:lexicons field for lexicon import mappings",
+  "additionalProperties": true,
   "type": "object",
   "properties": {
     "atcute:lexicons": {
@@ -20,10 +21,11 @@
                 ]
               },
               "path": {
-                "type": "string",
-                "pattern": "^\\.$|^\\.\\/"
+                "pattern": "^\\.$|^\\.\\/",
+                "type": "string"
               }
             },
+            "additionalProperties": false,
             "required": [
               "type",
               "path"
@@ -31,8 +33,7 @@
           }
         }
       },
-      "required": []
+      "additionalProperties": false
     }
-  },
-  "required": []
+  }
 }

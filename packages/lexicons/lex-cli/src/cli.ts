@@ -12,7 +12,7 @@ import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 
 import { generateLexiconApi, type ImportMapping } from './codegen.js';
 import type { LexiconConfig } from './index.js';
-import { validatePackageJson } from './lexicon-metadata.js';
+import { packageJsonSchema } from './lexicon-metadata.js';
 
 /**
  * Resolves package imports to ImportMapping[]
@@ -56,14 +56,19 @@ const resolveImportsToMappings = async (
 		}
 
 		// Validate package.json
-		const result = validatePackageJson(packageJson);
-		if (!result.success) {
+		const result = packageJsonSchema.try(packageJson, { mode: 'passthrough' });
+		if (!result.ok) {
 			console.error(pc.bold(pc.red(`invalid atcute:lexicons in "${packageName}":`)));
-			console.error(result.issues);
+			console.error(result.message);
+
+			for (const issue of result.issues) {
+				console.log(`- ${issue.code} at .${issue.path.join('.')}`);
+			}
+
 			process.exit(1);
 		}
 
-		const lexicons = result.output['atcute:lexicons'];
+		const lexicons = result.value['atcute:lexicons'];
 		if (!lexicons?.mappings) {
 			continue;
 		}
