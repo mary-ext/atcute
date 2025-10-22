@@ -553,19 +553,21 @@ export const lexUserType: v.Type<t.LexUserType> = v.union(
 const NSID_RE =
 	/^[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?:\.[a-zA-Z](?:[a-zA-Z0-9]{0,62})?)$/;
 
-export const lexiconDoc: v.Type<t.LexiconDoc> = v
-	.object({
-		lexicon: v.literal(1),
-		id: v.string().assert((input) => NSID_RE.test(input), `must be valid nsid`),
-		revision: integer.optional(),
-		description: v.string().optional(),
-		defs: v.record(lexUserType),
-	})
-	.chain((input) => {
-		const { defs } = input;
-
+export const lexiconDoc: v.Type<t.LexiconDoc> = v.object({
+	lexicon: v.literal(1),
+	id: v.string().assert((input) => NSID_RE.test(input), `must be valid nsid`),
+	revision: integer.optional(),
+	description: v.string().optional(),
+	defs: v.record(lexUserType).chain((defs) => {
 		for (const key in defs) {
 			const def = defs[key];
+
+			if (!KEY_RE.test(key)) {
+				return v.err({
+					message: `invalid definition id`,
+					path: [key],
+				});
+			}
 
 			if (
 				key !== 'main' &&
@@ -576,10 +578,11 @@ export const lexiconDoc: v.Type<t.LexiconDoc> = v
 			) {
 				return v.err({
 					message: `records, procedures, queries and subscriptions must be the main definition`,
-					path: ['defs', key],
+					path: [key],
 				});
 			}
 		}
 
-		return v.ok(input);
-	});
+		return v.ok(defs);
+	}),
+});
