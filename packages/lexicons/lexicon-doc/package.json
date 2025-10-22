@@ -10,6 +10,7 @@
 	},
 	"files": [
 		"dist/",
+		"schema/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
@@ -19,7 +20,8 @@
 	},
 	"sideEffects": false,
 	"scripts": {
-		"build": "tsc --project tsconfig.build.json",
+		"build": "pnpm run generate:schema && tsc --project tsconfig.build.json",
+		"generate:schema": "node scripts/generate-schema.js",
 		"test": "vitest --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
@@ -28,6 +30,7 @@
 	},
 	"devDependencies": {
 		"@vitest/coverage-v8": "^3.2.4",
+		"tschema": "^3.2.0",
 		"vitest": "^3.2.4"
 	}
 }
