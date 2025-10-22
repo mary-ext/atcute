@@ -1,40 +1,20 @@
 import * as v from '@badrap/valita';
 
 import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
+import * as t from './types.js';
 
-// tsc dislikes this schema with the amount of type expansion that happens here.
-// the interface declaration allows tsc to just reference it instead of
-// expanding on every type reference.
-
-const _integer = v
+const integer = v
 	.number()
 	.assert((input) => input >= 0 && Number.isSafeInteger(input), `expected non-negative integer`);
 
-const integer = _integer as integer.$schema;
-declare namespace integer {
-	export {};
-
-	type $schematype = typeof _integer;
-	export interface $schema extends $schematype {}
-}
-
-const _lexBoolean = v.object({
+export const lexBoolean: v.Type<t.LexBoolean> = v.object({
 	type: v.literal('boolean'),
 	description: v.string().optional(),
 	default: v.boolean().optional(),
 	const: v.boolean().optional(),
 });
 
-export const lexBoolean = _lexBoolean as lexBoolean.$schema;
-export interface LexBoolean extends v.Infer<typeof lexBoolean> {}
-export declare namespace lexBoolean {
-	export {};
-
-	type $schematype = typeof _lexBoolean;
-	export interface $schema extends $schematype {}
-}
-
-const _lexInteger = v
+export const lexInteger: v.Type<t.LexInteger> = v
 	.object({
 		type: v.literal('integer'),
 		description: v.string().optional(),
@@ -115,16 +95,7 @@ const _lexInteger = v
 		return v.ok(input);
 	});
 
-export const lexInteger = _lexInteger as lexInteger.$schema;
-export interface LexInteger extends v.Infer<typeof lexInteger> {}
-export declare namespace lexInteger {
-	export {};
-
-	type $schematype = typeof _lexInteger;
-	export interface $schema extends $schematype {}
-}
-
-const _lexStringFormat = v.union(
+export const lexStringFormat: v.Type<t.LexStringFormat> = v.union(
 	v.literal('datetime'),
 	v.literal('uri'),
 	v.literal('at-uri'),
@@ -138,16 +109,7 @@ const _lexStringFormat = v.union(
 	v.literal('record-key'),
 );
 
-export const lexStringFormat = _lexStringFormat as lexStringFormat.$schema;
-export type LexStringFormat = v.Infer<typeof lexStringFormat>;
-export declare namespace lexStringFormat {
-	export {};
-
-	type $schematype = typeof _lexStringFormat;
-	export interface $schema extends $schematype {}
-}
-
-const _lexString = v
+export const lexString: v.Type<t.LexString> = v
 	.object({
 		type: v.literal('string'),
 		format: lexStringFormat.optional(),
@@ -346,45 +308,17 @@ const _lexString = v
 				}
 			}
 		}
-
 		return v.ok(input);
 	});
 
-export const lexString = _lexString as lexString.$schema;
-export interface LexString extends v.Infer<typeof lexString> {}
-export declare namespace lexString {
-	export {};
-
-	type $schematype = typeof _lexString;
-	export interface $schema extends $schematype {}
-}
-
-const _lexUnknown = v.object({
+export const lexUnknown: v.Type<t.LexUnknown> = v.object({
 	type: v.literal('unknown'),
 	description: v.string().optional(),
 });
 
-export const lexUnknown = _lexUnknown as lexUnknown.$schema;
-export interface LexUnknown extends v.Infer<typeof lexUnknown> {}
-export declare namespace lexUnknown {
-	export {};
+export const lexPrimitive: v.Type<t.LexPrimitive> = v.union(lexBoolean, lexInteger, lexString, lexUnknown);
 
-	type $schematype = typeof _lexUnknown;
-	export interface $schema extends $schematype {}
-}
-
-const _lexPrimitive = v.union(lexBoolean, lexInteger, lexString, lexUnknown);
-
-export const lexPrimitive = _lexPrimitive as lexPrimitive.$schema;
-export type LexPrimitive = v.Infer<typeof lexPrimitive>;
-export declare namespace lexPrimitive {
-	export {};
-
-	type $schematype = typeof _lexPrimitive;
-	export interface $schema extends $schematype {}
-}
-
-const _lexBytes = v
+export const lexBytes: v.Type<t.LexBytes> = v
 	.object({
 		type: v.literal('bytes'),
 		description: v.string().optional(),
@@ -404,104 +338,41 @@ const _lexBytes = v
 		return v.ok(input);
 	});
 
-export const lexBytes = _lexBytes as lexBytes.$schema;
-export interface LexBytes extends v.Infer<typeof lexBytes> {}
-export declare namespace lexBytes {
-	export {};
-
-	type $schematype = typeof _lexBytes;
-	export interface $schema extends $schematype {}
-}
-
-const _lexCidLink = v.object({
+export const lexCidLink: v.Type<t.LexCidLink> = v.object({
 	type: v.literal('cid-link'),
 	description: v.string().optional(),
 });
 
-export const lexCidLink = _lexCidLink as lexCidLink.$schema;
-export interface LexCidLink extends v.Infer<typeof lexCidLink> {}
-export declare namespace lexCidLink {
-	export {};
-
-	type $schematype = typeof _lexCidLink;
-	export interface $schema extends $schematype {}
-}
-
-const _lexIpldType = v.union(lexBytes, lexCidLink);
-
-export const lexIpldType = _lexIpldType as lexIpldType.$schema;
-export type LexIpldType = v.Infer<typeof lexIpldType>;
-export declare namespace lexIpldType {
-	export {};
-
-	type $schematype = typeof _lexIpldType;
-	export interface $schema extends $schematype {}
-}
+export const lexIpldType: v.Type<t.LexIpldType> = v.union(lexBytes, lexCidLink);
 
 const REF_RE =
 	/^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9_]{0,62}?)?$/;
 
-const refString = v.string().assert((input) => REF_RE.test(input));
+const refString = v.string().assert((input) => REF_RE.test(input), `invalid ref identifier`);
 
-const _lexRef = v.object({
+export const lexRef: v.Type<t.LexRef> = v.object({
 	type: v.literal('ref'),
 	description: v.string().optional(),
 	ref: refString,
 });
 
-export const lexRef = _lexRef as lexRef.$schema;
-export interface LexRef extends v.Infer<typeof lexRef> {}
-export declare namespace lexRef {
-	export {};
-
-	type $schematype = typeof _lexRef;
-	export interface $schema extends $schematype {}
-}
-
-const _lexRefUnion = v.object({
+export const lexRefUnion: v.Type<t.LexRefUnion> = v.object({
 	type: v.literal('union'),
 	description: v.string().optional(),
 	refs: v.array(refString),
-	closed: v.boolean().optional(() => false),
+	closed: v.boolean().optional(),
 });
 
-export const lexRefUnion = _lexRefUnion as lexRefUnion.$schema;
-export interface LexRefUnion extends v.Infer<typeof lexRefUnion> {}
-export declare namespace lexRefUnion {
-	export {};
+export const lexRefVariant: v.Type<t.LexRefVariant> = v.union(lexRef, lexRefUnion);
 
-	type $schematype = typeof _lexRefUnion;
-	export interface $schema extends $schematype {}
-}
-
-const _lexRefVariant = v.union(lexRef, lexRefUnion);
-
-export const lexRefVariant = _lexRefVariant as lexRefVariant.$schema;
-export type LexRefVariant = v.Infer<typeof lexRefVariant>;
-export declare namespace lexRefVariant {
-	export {};
-
-	type $schematype = typeof _lexRefVariant;
-	export interface $schema extends $schematype {}
-}
-
-const _lexBlob = v.object({
+export const lexBlob: v.Type<t.LexBlob> = v.object({
 	type: v.literal('blob'),
 	description: v.string().optional(),
 	accept: v.array(v.string()).optional(),
 	maxSize: integer.optional(),
 });
 
-export const lexBlob = _lexBlob as lexBlob.$schema;
-export interface LexBlob extends v.Infer<typeof lexBlob> {}
-export declare namespace lexBlob {
-	export {};
-
-	type $schematype = typeof _lexBlob;
-	export interface $schema extends $schematype {}
-}
-
-const _lexArray = v
+export const lexArray: v.Type<t.LexArray> = v
 	.object({
 		type: v.literal('array'),
 		description: v.string().optional(),
@@ -522,16 +393,7 @@ const _lexArray = v
 		return v.ok(input);
 	});
 
-export const lexArray = _lexArray as lexArray.$schema;
-export interface LexArray extends v.Infer<typeof lexArray> {}
-export declare namespace lexArray {
-	export {};
-
-	type $schematype = typeof _lexArray;
-	export interface $schema extends $schematype {}
-}
-
-const _lexPrimitiveArray = v
+export const lexPrimitiveArray: v.Type<t.LexPrimitiveArray> = v
 	.object({
 		type: v.literal('array'),
 		description: v.string().optional(),
@@ -552,28 +414,10 @@ const _lexPrimitiveArray = v
 		return v.ok(input);
 	});
 
-export const lexPrimitiveArray = _lexPrimitiveArray as lexPrimitiveArray.$schema;
-export interface LexPrimitiveArray extends v.Infer<typeof lexPrimitiveArray> {}
-export declare namespace lexPrimitiveArray {
-	export {};
-
-	type $schematype = typeof _lexPrimitiveArray;
-	export interface $schema extends $schematype {}
-}
-
-const _lexToken = v.object({
+export const lexToken: v.Type<t.LexToken> = v.object({
 	type: v.literal('token'),
 	description: v.string().optional(),
 });
-
-export const lexToken = _lexToken as lexToken.$schema;
-export interface LexToken extends v.Infer<typeof lexToken> {}
-export declare namespace lexToken {
-	export {};
-
-	type $schematype = typeof _lexToken;
-	export interface $schema extends $schematype {}
-}
 
 const KEY_RE = /^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/;
 
@@ -612,7 +456,7 @@ const refineObjectProperties = <T extends { required?: string[]; properties?: Re
 	return v.ok(input);
 };
 
-const _lexObject = v
+export const lexObject: v.Type<t.LexObject> = v
 	.object({
 		type: v.literal('object'),
 		description: v.string().optional(),
@@ -622,16 +466,7 @@ const _lexObject = v
 	})
 	.chain(refineObjectProperties);
 
-export const lexObject = _lexObject as lexObject.$schema;
-export interface LexObject extends v.Infer<typeof lexObject> {}
-export declare namespace lexObject {
-	export {};
-
-	type $schematype = typeof _lexObject;
-	export interface $schema extends $schematype {}
-}
-
-const _lexXrpcParameters = v
+export const lexXrpcParameters: v.Type<t.LexXrpcParameters> = v
 	.object({
 		type: v.literal('params'),
 		description: v.string().optional(),
@@ -640,19 +475,10 @@ const _lexXrpcParameters = v
 	})
 	.chain(refineObjectProperties);
 
-export const lexXrpcParameters = _lexXrpcParameters as lexXrpcParameters.$schema;
-export interface LexXrpcParameters extends v.Infer<typeof lexXrpcParameters> {}
-export declare namespace lexXrpcParameters {
-	export {};
-
-	type $schematype = typeof _lexXrpcParameters;
-	export interface $schema extends $schematype {}
-}
-
 const MIME_TYPE_RE =
 	/^\s*(?:\*\/\*|[a-z]+\/[a-zA-Z][a-zA-Z0-9-+.]*(?:\s*,\s*[a-z]+\/[a-zA-Z][a-zA-Z0-9-+.]*)*?)\s*$/;
 
-const _lexXrpcBody = v.object({
+export const lexXrpcBody: v.Type<t.LexXrpcBody> = v.object({
 	description: v.string().optional(),
 	encoding: v
 		.string()
@@ -660,44 +486,17 @@ const _lexXrpcBody = v.object({
 	schema: v.union(lexRefVariant, lexObject).optional(),
 });
 
-export const lexXrpcBody = _lexXrpcBody as lexXrpcBody.$schema;
-export interface LexXrpcBody extends v.Infer<typeof lexXrpcBody> {}
-export declare namespace lexXrpcBody {
-	export {};
-
-	type $schematype = typeof _lexXrpcBody;
-	export interface $schema extends $schematype {}
-}
-
-const _lexXrpcSubscriptionMessage = v.object({
+export const lexXrpcSubscriptionMessage: v.Type<t.LexXrpcSubscriptionMessage> = v.object({
 	description: v.string().optional(),
 	schema: v.union(lexRefVariant, lexObject).optional(),
 });
 
-export const lexXrpcSubscriptionMessage = _lexXrpcSubscriptionMessage as lexXrpcSubscriptionMessage.$schema;
-export interface LexXrpcSubscriptionMessage extends v.Infer<typeof lexXrpcSubscriptionMessage> {}
-export declare namespace lexXrpcSubscriptionMessage {
-	export {};
-
-	type $schematype = typeof _lexXrpcSubscriptionMessage;
-	export interface $schema extends $schematype {}
-}
-
-const _lexXrpcError = v.object({
+export const lexXrpcError: v.Type<t.LexXrpcError> = v.object({
 	name: v.string(),
 	description: v.string().optional(),
 });
 
-export const lexXrpcError = _lexXrpcError as lexXrpcError.$schema;
-export interface LexXrpcError extends v.Infer<typeof lexXrpcError> {}
-export declare namespace lexXrpcError {
-	export {};
-
-	type $schematype = typeof _lexXrpcError;
-	export interface $schema extends $schematype {}
-}
-
-const _lexXrpcQuery = v.object({
+export const lexXrpcQuery: v.Type<t.LexXrpcQuery> = v.object({
 	type: v.literal('query'),
 	description: v.string().optional(),
 	parameters: lexXrpcParameters.optional(),
@@ -705,16 +504,7 @@ const _lexXrpcQuery = v.object({
 	errors: v.array(lexXrpcError).optional(),
 });
 
-export const lexXrpcQuery = _lexXrpcQuery as lexXrpcQuery.$schema;
-export interface LexXrpcQuery extends v.Infer<typeof lexXrpcQuery> {}
-export declare namespace lexXrpcQuery {
-	export {};
-
-	type $schematype = typeof _lexXrpcQuery;
-	export interface $schema extends $schematype {}
-}
-
-const _lexXrpcProcedure = v.object({
+export const lexXrpcProcedure: v.Type<t.LexXrpcProcedure> = v.object({
 	type: v.literal('procedure'),
 	description: v.string().optional(),
 	parameters: lexXrpcParameters.optional(),
@@ -723,16 +513,7 @@ const _lexXrpcProcedure = v.object({
 	errors: v.array(lexXrpcError).optional(),
 });
 
-export const lexXrpcProcedure = _lexXrpcProcedure as lexXrpcProcedure.$schema;
-export interface LexXrpcProcedure extends v.Infer<typeof lexXrpcProcedure> {}
-export declare namespace lexXrpcProcedure {
-	export {};
-
-	type $schematype = typeof _lexXrpcProcedure;
-	export interface $schema extends $schematype {}
-}
-
-const _lexXrpcSubscription = v.object({
+export const lexXrpcSubscription: v.Type<t.LexXrpcSubscription> = v.object({
 	type: v.literal('subscription'),
 	description: v.string().optional(),
 	parameters: lexXrpcParameters.optional(),
@@ -740,18 +521,7 @@ const _lexXrpcSubscription = v.object({
 	errors: v.array(lexXrpcError).optional(),
 });
 
-export const lexXrpcSubscription = _lexXrpcSubscription as lexXrpcSubscription.$schema;
-export interface LexXrpcSubscription extends v.Infer<typeof lexXrpcSubscription> {}
-export declare namespace lexXrpcSubscription {
-	export {};
-
-	type $schematype = typeof _lexXrpcSubscription;
-	export interface $schema extends $schematype {}
-}
-
-const LITERAL_KEY_RE = /^literal:(.+)$/;
-
-const _lexRecord = v.object({
+export const lexRecord: v.Type<t.LexRecord> = v.object({
 	type: v.literal('record'),
 	description: v.string().optional(),
 	key: v
@@ -759,22 +529,15 @@ const _lexRecord = v.object({
 			v.literal('tid'),
 			v.literal('nsid'),
 			v.literal('any'),
-			v.string().assert<`literal:${string}`>((input) => LITERAL_KEY_RE.test(input)),
+			v.string().assert<`literal:${string}`>((input) => input.startsWith('literal:'), {
+				message: `invalid literal key`,
+			}),
 		)
-		.optional(() => 'any'),
+		.optional(),
 	record: lexObject,
 });
 
-export const lexRecord = _lexRecord as lexRecord.$schema;
-export interface LexRecord extends v.Infer<typeof lexRecord> {}
-export declare namespace lexRecord {
-	export {};
-
-	type $schematype = typeof _lexRecord;
-	export interface $schema extends $schematype {}
-}
-
-const _lexUserType = v.union(
+export const lexUserType: v.Type<t.LexUserType> = v.union(
 	lexRecord,
 	lexXrpcQuery,
 	lexXrpcProcedure,
@@ -787,25 +550,15 @@ const _lexUserType = v.union(
 	lexPrimitive,
 );
 
-export const lexUserType = _lexUserType as lexUserType.$schema;
-export type LexUserType = v.Infer<typeof lexUserType>;
-export declare namespace lexUserType {
-	export {};
-
-	type $schematype = typeof _lexUserType;
-	export interface $schema extends $schematype {}
-}
-
 const NSID_RE =
 	/^[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?:\.[a-zA-Z](?:[a-zA-Z0-9]{0,62})?)$/;
 
-const _lexiconDoc = v
+export const lexiconDoc: v.Type<t.LexiconDoc> = v
 	.object({
 		lexicon: v.literal(1),
 		id: v.string().assert((input) => NSID_RE.test(input), `must be valid nsid`),
 		revision: integer.optional(),
 		description: v.string().optional(),
-		// defs: v.record(v.pipe(v.string(), v.regex(/^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/)), lexUserType),
 		defs: v.record(lexUserType),
 	})
 	.chain((input) => {
@@ -830,12 +583,3 @@ const _lexiconDoc = v
 
 		return v.ok(input);
 	});
-
-export const lexiconDoc = _lexiconDoc as lexiconDoc.$schema;
-export interface LexiconDoc extends v.Infer<typeof lexiconDoc> {}
-export declare namespace lexiconDoc {
-	export {};
-
-	type $schematype = typeof _lexiconDoc;
-	export interface $schema extends $schematype {}
-}

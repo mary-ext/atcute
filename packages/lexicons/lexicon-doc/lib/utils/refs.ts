@@ -1,4 +1,4 @@
-import type { LexiconDoc, LexRefVariant, LexUserType } from '../schema.js';
+import type { LexiconDoc, LexRefVariant, LexUserType } from '../types.js';
 
 type SchemaValue = LexUserType | LexRefVariant;
 
