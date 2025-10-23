@@ -1,10 +1,12 @@
 import type {
 	InferOutput,
 	ObjectSchema,
+	VariantSchema,
 	XRPCBlobBodyParam,
 	XRPCLexBodyParam,
 	XRPCProcedureMetadata,
 	XRPCQueryMetadata,
+	XRPCSubscriptionMetadata,
 } from '@atcute/lexicons/validations';
 
 import type { Literal, Promisable } from '../../types/misc.js';
@@ -84,4 +86,35 @@ export type ProcedureHandler<TProcedure extends XRPCProcedureMetadata> = (
 
 export type ProcedureConfig<TProcedure extends XRPCProcedureMetadata = XRPCProcedureMetadata> = {
 	handler: ProcedureHandler<TProcedure>;
+};
+
+// #region Subscription
+
+export interface UnknownSubscriptionContext {
+	request: Request;
+	signal: AbortSignal;
+	params: Record<string, Literal | Literal[]>;
+}
+
+export type SubscriptionContext<TSubscription extends XRPCSubscriptionMetadata> = {
+	request: Request;
+	signal: AbortSignal;
+} & (TSubscription['params'] extends ObjectSchema
+	? {
+			params: InferOutput<TSubscription['params']>;
+		}
+	: {
+			// params
+		});
+
+export type SubscriptionHandler<TSubscription extends XRPCSubscriptionMetadata> = (
+	context: SubscriptionContext<TSubscription>,
+) => AsyncIterable<
+	TSubscription['message'] extends ObjectSchema | VariantSchema<any>
+		? InferOutput<TSubscription['message']>
+		: never
+>;
+
+export type SubscriptionConfig<TSubscription extends XRPCSubscriptionMetadata = XRPCSubscriptionMetadata> = {
+	handler: SubscriptionHandler<TSubscription>;
 };

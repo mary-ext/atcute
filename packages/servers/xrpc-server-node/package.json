@@ -1,0 +1,39 @@
+{
+	"type": "module",
+	"name": "@atcute/xrpc-server-node",
+	"version": "0.1.0",
+	"description": "Node.js WebSocket adapter for @atcute/xrpc-server",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/servers/xrpc-server-node"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/main/index.js"
+	},
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"test": "vitest run",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"peerDependencies": {
+		"@atcute/xrpc-server": "workspace:^"
+	},
+	"dependencies": {
+		"ws": "^8.18.0"
+	},
+	"devDependencies": {
+		"@atcute/atproto": "workspace:^",
+		"@atcute/cbor": "workspace:^",
+		"@hono/node-server": "^1.19.5",
+		"@types/node": "^22.10.2",
+		"@types/ws": "^8.5.13",
+		"vitest": "^3.2.4"
+	}
+}

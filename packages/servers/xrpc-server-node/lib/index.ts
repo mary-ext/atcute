@@ -1,0 +1,110 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
+import type { IncomingMessage, Server } from 'node:http';
+import type { Http2SecureServer, Http2Server } from 'node:http2';
+import type { Duplex } from 'node:stream';
+
+import type { WebSocketAdapter, WebSocketConnection, XRPCRouter } from '@atcute/xrpc-server';
+
+import { WebSocketServer } from 'ws';
+
+type Promisable<T> = T | Promise<T>;
+
+export interface NodeWebSocket {
+	adapter: WebSocketAdapter;
+	wss: WebSocketServer;
+	injectWebSocket(server: Server | Http2Server | Http2SecureServer, router: XRPCRouter): void;
+}
+
+interface WebSocketHandlerContext {
+	handler: ((ws: WebSocketConnection) => Promisable<void>) | null;
+}
+
+export const createNodeWebSocket = (): NodeWebSocket => {
+	const context = new AsyncLocalStorage<WebSocketHandlerContext>();
+	const wss = new WebSocketServer({ noServer: true });
+
+	return {
+		wss,
+		adapter: {
+			async upgrade(_request, handler) {
+				const ctx = context.getStore();
+				if (!ctx) {
+					return undefined;
+				}
+
+				ctx.handler = handler;
+				return new Response(null);
+			},
+		},
+		injectWebSocket(server, router) {
+			server.on('upgrade', async (request: IncomingMessage, socket: Duplex, head: Buffer) => {
+				const url = new URL(request.url || '/', `http://${request.headers.host || 'localhost'}`);
+				const headers = new Headers();
+
+				for (const [key, value] of Object.entries(request.headers)) {
+					if (value !== undefined) {
+						if (Array.isArray(value)) {
+							for (const v of value) {
+								headers.append(key, v);
+							}
+						} else {
+							headers.set(key, value);
+						}
+					}
+				}
+
+				const ctx: WebSocketHandlerContext = {
+					handler: null,
+				};
+
+				const response = await context.run(ctx, async (): Promise<Response> => {
+					const webRequest = new Request(url, { method: request.method, headers });
+					const response = await router.fetch(webRequest);
+
+					return response;
+				});
+
+				if (ctx.handler) {
+					const handler = ctx.handler;
+
+					wss.handleUpgrade(request, socket, head, (ws) => {
+						wss.emit('connection', ws, request);
+
+						const controller = new AbortController();
+						const connection: WebSocketConnection = {
+							signal: controller.signal,
+							send(data) {
+								return new Promise((resolve, reject) => {
+									ws.send(data, (err) => {
+										if (err) {
+											reject(err);
+										} else {
+											resolve();
+										}
+									});
+								});
+							},
+							close(code, reason) {
+								ws.close(code, reason);
+							},
+						};
+
+						ws.onclose = (ev) => {
+							controller.abort(new Error(`WebSocket connection closed with code ${ev.code}`));
+						};
+
+						handler(connection);
+					});
+				} else {
+					socket.end(
+						`HTTP/1.1 ${response.status} ${response.statusText}\r\n` +
+							Array.from(response.headers.entries())
+								.map(([k, v]) => `${k}: ${v}`)
+								.join('\r\n') +
+							'\r\n\r\n',
+					);
+				}
+			});
+		},
+	};
+};

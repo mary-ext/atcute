@@ -37,6 +37,10 @@ of atcute.
 | [`jetstream`](./packages/clients/jetstream): Jetstream client                                                          |
 | **Server packages**                                                                                                    |
 | [`xrpc-server`](./packages/servers/xrpc-server): web framework                                                         |
+| [`xrpc-server-bun`](./packages/servers/xrpc-server-bun): Bun WebSocket adapter                                         |
+| [`xrpc-server-cloudflare`](./packages/servers/xrpc-server-cloudflare): Cloudflare Workers WebSocket adapter            |
+| [`xrpc-server-deno`](./packages/servers/xrpc-server-deno): Deno WebSocket adapter                                      |
+| [`xrpc-server-node`](./packages/servers/xrpc-server-node): Node.js WebSocket adapter                                   |
 | **OAuth packages**                                                                                                     |
 | [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth browser client implementation                 |
 | **Lexicon packages**                                                                                                   |

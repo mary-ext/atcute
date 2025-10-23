@@ -4,6 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 
 import { json } from './response.js';
 import { defaultNotFoundHandler, XRPCRouter } from './router.js';
+import type { WebSocketAdapter } from './types/websocket.js';
 import { InvalidRequestError } from './xrpc-error.js';
 
 describe('XRPCRouter', () => {
@@ -43,8 +44,8 @@ describe('XRPCRouter', () => {
 			});
 
 			const router = new XRPCRouter();
-			router.add(querySchema, { handler: vi.fn() });
-			router.add(procedureSchema, { handler: vi.fn() });
+			router.addQuery(querySchema, { handler: vi.fn() });
+			router.addProcedure(procedureSchema, { handler: vi.fn() });
 
 			{
 				const request = new Request('https://example.com/xrpc/com.example.query', { method: 'POST' });
@@ -70,7 +71,7 @@ describe('XRPCRouter', () => {
 			});
 
 			const router = new XRPCRouter();
-			router.add(querySchema, { handler: vi.fn() });
+			router.addQuery(querySchema, { handler: vi.fn() });
 
 			{
 				const request = new Request('https://example.com/xrpc/com.example.query', { method: 'GET' });
@@ -104,7 +105,7 @@ describe('XRPCRouter', () => {
 			const mock = vi.fn();
 
 			const router = new XRPCRouter();
-			router.add(querySchema, { handler: mock });
+			router.addQuery(querySchema, { handler: mock });
 
 			{
 				const request = new Request('https://example.com/xrpc/com.example.query', { method: 'GET' });
@@ -212,7 +213,7 @@ describe('XRPCRouter', () => {
 			});
 
 			const router = new XRPCRouter();
-			router.add(querySchema, {
+			router.addQuery(querySchema, {
 				async handler() {
 					return json({ did: 'did:web:example.com' });
 				},
@@ -237,7 +238,7 @@ describe('XRPCRouter', () => {
 			const router = new XRPCRouter();
 
 			{
-				router.add(querySchema, {
+				router.addQuery(querySchema, {
 					async handler() {
 						throw new InvalidRequestError({ description: 'invalid user' });
 					},
@@ -255,7 +256,7 @@ describe('XRPCRouter', () => {
 			}
 
 			{
-				router.add(querySchema, {
+				router.addQuery(querySchema, {
 					async handler() {
 						throw Response.json({ hello: 'world' });
 					},
@@ -272,7 +273,7 @@ describe('XRPCRouter', () => {
 			}
 
 			{
-				router.add(querySchema, {
+				router.addQuery(querySchema, {
 					async handler() {
 						throw new Error('whoops');
 					},
@@ -300,7 +301,7 @@ describe('XRPCRouter', () => {
 			});
 
 			const router = new XRPCRouter();
-			router.add(procedureSchema, { handler: vi.fn() });
+			router.addProcedure(procedureSchema, { handler: vi.fn() });
 
 			{
 				const request = new Request('https://example.com/xrpc/com.example.procedure', {
@@ -338,7 +339,7 @@ describe('XRPCRouter', () => {
 			const mock = vi.fn();
 
 			const router = new XRPCRouter();
-			router.add(procedureSchema, { handler: mock });
+			router.addProcedure(procedureSchema, { handler: mock });
 
 			{
 				const request = new Request('https://example.com/xrpc/com.example.procedure', { method: 'POST' });
@@ -448,7 +449,7 @@ describe('XRPCRouter', () => {
 			const mock = vi.fn();
 
 			const router = new XRPCRouter();
-			router.add(procedureSchema, { handler: mock });
+			router.addProcedure(procedureSchema, { handler: mock });
 
 			{
 				const request = new Request('https://example.com/xrpc/com.example.procedure', {
@@ -515,7 +516,7 @@ describe('XRPCRouter', () => {
 			const mock = vi.fn();
 
 			const router = new XRPCRouter();
-			router.add(procedureSchema, { handler: mock });
+			router.addProcedure(procedureSchema, { handler: mock });
 
 			{
 				const request = new Request('https://example.com/xrpc/com.example.procedure', { method: 'POST' });
@@ -644,7 +645,7 @@ describe('XRPCRouter', () => {
 			const mock = vi.fn();
 
 			const router = new XRPCRouter();
-			router.add(procedureSchema, { handler: mock });
+			router.addProcedure(procedureSchema, { handler: mock });
 
 			{
 				const request = new Request('https://example.com/xrpc/com.example.procedure', { method: 'POST' });
@@ -693,7 +694,7 @@ describe('XRPCRouter', () => {
 			const mock = vi.fn();
 
 			const router = new XRPCRouter();
-			router.add(procedureSchema, { handler: mock });
+			router.addProcedure(procedureSchema, { handler: mock });
 
 			{
 				const request = new Request('https://example.com/xrpc/com.example.procedure', { method: 'POST' });
@@ -780,7 +781,7 @@ describe('XRPCRouter', () => {
 			});
 
 			const router = new XRPCRouter();
-			router.add(procedureSchema, {
+			router.addProcedure(procedureSchema, {
 				async handler() {
 					return json({ did: 'did:web:example.com' });
 				},
@@ -806,7 +807,7 @@ describe('XRPCRouter', () => {
 			const router = new XRPCRouter();
 
 			{
-				router.add(procedureSchema, {
+				router.addProcedure(procedureSchema, {
 					async handler() {
 						throw new InvalidRequestError({ description: 'invalid user' });
 					},
@@ -824,7 +825,7 @@ describe('XRPCRouter', () => {
 			}
 
 			{
-				router.add(procedureSchema, {
+				router.addProcedure(procedureSchema, {
 					async handler() {
 						throw Response.json({ hello: 'world' });
 					},
@@ -841,7 +842,7 @@ describe('XRPCRouter', () => {
 			}
 
 			{
-				router.add(procedureSchema, {
+				router.addProcedure(procedureSchema, {
 					async handler() {
 						throw new Error('whoops');
 					},
@@ -857,6 +858,48 @@ describe('XRPCRouter', () => {
 					message: 'an exception happened whilst processing this request',
 				});
 			}
+		});
+	});
+
+	// we won't be testing actual subscriptions here
+	describe('subscription', () => {
+		const noopAdapter: WebSocketAdapter = {
+			async upgrade(_request, _handler) {
+				return undefined;
+			},
+		};
+
+		it('handles defining subscriptions', () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.object({ random: v.integer() }),
+			});
+
+			const router = new XRPCRouter({ websocket: noopAdapter });
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler() {
+					yield { random: 123 };
+				},
+			});
+		});
+
+		it('handles defining subscriptions with variants', () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.variant([
+					v.object({ $type: v.literal('foo'), foo: v.string() }),
+					v.object({ $type: v.literal('bar'), bar: v.integer() }),
+				]),
+			});
+
+			const router = new XRPCRouter({ websocket: noopAdapter });
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler() {
+					yield { $type: 'foo', foo: '123' };
+				},
+			});
 		});
 	});
 });

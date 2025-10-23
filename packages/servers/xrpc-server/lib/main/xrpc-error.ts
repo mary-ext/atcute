@@ -78,3 +78,23 @@ export class UpstreamTimeoutError extends XRPCError {
 		super({ status, error, description });
 	}
 }
+
+export interface XRPCSubscriptionErrorOptions {
+	closeCode?: number;
+	error: string;
+	description?: string;
+}
+
+export class XRPCSubscriptionError extends Error {
+	readonly closeCode: number;
+	readonly error: string;
+	readonly description?: string;
+
+	constructor({ closeCode = 1008, error, description }: XRPCSubscriptionErrorOptions) {
+		super(`Subscription error: ${error}${description ? ` - ${description}` : ''}`);
+
+		this.closeCode = closeCode;
+		this.error = error;
+		this.description = description;
+	}
+}

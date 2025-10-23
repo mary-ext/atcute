@@ -604,6 +604,9 @@ importers:
 
   packages/servers/xrpc-server:
     dependencies:
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../../utilities/cbor
       '@atcute/crypto':
         specifier: workspace:^
         version: link:../../utilities/crypto
@@ -644,6 +647,70 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(@vitest/browser@3.2.4)(tsx@4.20.6)(yaml@2.8.0)
+
+  packages/servers/xrpc-server-bun:
+    dependencies:
+      '@atcute/xrpc-server':
+        specifier: workspace:^
+        version: link:../xrpc-server
+    devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../../utilities/cbor
+      '@types/bun':
+        specifier: ^1.1.14
+        version: 1.2.21(@types/react@19.1.8)
+
+  packages/servers/xrpc-server-cloudflare:
+    dependencies:
+      '@atcute/xrpc-server':
+        specifier: workspace:^
+        version: link:../xrpc-server
+    devDependencies:
+      '@cloudflare/workers-types':
+        specifier: ^4.20250110.0
+        version: 4.20251014.0
+
+  packages/servers/xrpc-server-deno:
+    dependencies:
+      '@atcute/xrpc-server':
+        specifier: workspace:^
+        version: link:../xrpc-server
+    devDependencies:
+      '@types/deno':
+        specifier: ^2.5.0
+        version: 2.5.0
+
+  packages/servers/xrpc-server-node:
+    dependencies:
+      '@atcute/xrpc-server':
+        specifier: workspace:^
+        version: link:../xrpc-server
+      ws:
+        specifier: ^8.18.0
+        version: 8.18.3
+    devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../../utilities/cbor
+      '@hono/node-server':
+        specifier: ^1.19.5
+        version: 1.19.5(hono@4.10.2)
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.18.0
+      '@types/ws':
+        specifier: ^8.5.13
+        version: 8.18.1
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@22.18.0)(@vitest/browser@3.2.4)(tsx@4.20.6)(yaml@2.8.0)
 
   packages/utilities/car:
     dependencies:
@@ -1252,6 +1319,9 @@ packages:
   '@changesets/write@0.4.0':
     resolution: {integrity: sha512-CdTLvIOPiCNuH71pyDu3rA+Q0n65cmAbXnwWH84rKGiFumFzkmHNT8KHTMEchcxN+Kl8I54xGUhJ7l3E7X396Q==}
 
+  '@cloudflare/workers-types@4.20251014.0':
+    resolution: {integrity: sha512-tEW98J/kOa0TdylIUOrLKRdwkUw0rvvYVlo+Ce0mqRH3c8kSoxLzUH9gfCvwLe0M89z1RkzFovSKAW2Nwtyn3w==}
+
   '@did-plc/lib@0.0.4':
     resolution: {integrity: sha512-Omeawq3b8G/c/5CtkTtzovSOnWuvIuCI4GTJNrt1AmCskwEQV7zbX5d6km1mjJNbE0gHuQPTVqZxLVqetNbfwA==}
 
@@ -1435,6 +1505,12 @@ packages:
 
   '@hapi/hoek@11.0.7':
     resolution: {integrity: sha512-HV5undWkKzcB4RZUusqOpcgxOaq6VOAH7zhhIr2g3G8NF/MlFO75SjOr2NfuSx0Mh40+1FqCkagKLJRykUWoFQ==}
+
+  '@hono/node-server@1.19.5':
+    resolution: {integrity: sha512-iBuhh+uaaggeAuf+TftcjZyWh2GEgZcVGXkNtskLVoWaXhnJtC5HLHrU8W1KHDoucqO1MswwglmkWLFyiDn4WQ==}
+    engines: {node: '>=18.14.1'}
+    peerDependencies:
+      hono: ^4
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -1988,6 +2064,9 @@ packages:
   '@types/deep-eql@4.0.2':
     resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
 
+  '@types/deno@2.5.0':
+    resolution: {integrity: sha512-g8JS38vmc0S87jKsFzre+0ZyMOUDHPVokEJymSCRlL57h6f/FdKPWBXgdFh3Z8Ees9sz11qt9VWELU9Y9ZkiVw==}
+
   '@types/elliptic@6.4.18':
     resolution: {integrity: sha512-UseG6H5vjRiNpQvrhy4VF/JXdA3V/Fp5amvveaL+fs28BZ6xIKJBPnUPRlEaZpysD9MbpfaLi8lbl7PGUAkpWw==}
 
@@ -2011,6 +2090,9 @@ packages:
 
   '@types/uuid@9.0.8':
     resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
+
+  '@types/ws@8.18.1':
+    resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
 
   '@vitest/browser@3.2.4':
     resolution: {integrity: sha512-tJxiPrWmzH8a+w9nLKlQMzAKX/7VjFs50MWgcAj7p9XQ7AQ9/35fByFYptgPELyLw+0aixTnC4pUWV+APcZ/kw==}
@@ -2677,6 +2759,10 @@ packages:
 
   hmac-drbg@1.0.1:
     resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
+
+  hono@4.10.2:
+    resolution: {integrity: sha512-p6fyzl+mQo6uhESLxbF5WlBOAJMDh36PljwlKtP5V1v09NxlqGru3ShK+4wKhSuhuYf8qxMmrivHOa/M7q0sMg==}
+    engines: {node: '>=16.9.0'}
 
   html-escaper@2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
@@ -3781,6 +3867,7 @@ snapshots:
 
   '@atcute/xrpc-server@file:packages/servers/xrpc-server':
     dependencies:
+      '@atcute/cbor': link:packages/utilities/cbor
       '@atcute/crypto': link:packages/utilities/crypto
       '@atcute/identity': link:packages/identity/identity
       '@atcute/identity-resolver': link:packages/identity/identity-resolver
@@ -4848,6 +4935,8 @@ snapshots:
       human-id: 4.1.1
       prettier: 2.8.8
 
+  '@cloudflare/workers-types@4.20251014.0': {}
+
   '@did-plc/lib@0.0.4':
     dependencies:
       '@atproto/common': 0.1.1
@@ -4983,6 +5072,10 @@ snapshots:
       '@hapi/boom': 10.0.1
 
   '@hapi/hoek@11.0.7': {}
+
+  '@hono/node-server@1.19.5(hono@4.10.2)':
+    dependencies:
+      hono: 4.10.2
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
@@ -5598,6 +5691,8 @@ snapshots:
 
   '@types/deep-eql@4.0.2': {}
 
+  '@types/deno@2.5.0': {}
+
   '@types/elliptic@6.4.18':
     dependencies:
       '@types/bn.js': 5.2.0
@@ -5622,6 +5717,30 @@ snapshots:
       csstype: 3.1.3
 
   '@types/uuid@9.0.8': {}
+
+  '@types/ws@8.18.1':
+    dependencies:
+      '@types/node': 22.18.0
+
+  '@vitest/browser@3.2.4(playwright@1.55.0)(vite@7.1.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0))(vitest@3.2.4)':
+    dependencies:
+      '@testing-library/dom': 10.4.1
+      '@testing-library/user-event': 14.6.1(@testing-library/dom@10.4.1)
+      '@vitest/mocker': 3.2.4(vite@7.1.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0))
+      '@vitest/utils': 3.2.4
+      magic-string: 0.30.18
+      sirv: 3.0.1
+      tinyrainbow: 2.0.0
+      vitest: 3.2.4(@types/node@22.18.0)(@vitest/browser@3.2.4)(tsx@4.20.6)(yaml@2.8.0)
+      ws: 8.18.3
+    optionalDependencies:
+      playwright: 1.55.0
+    transitivePeerDependencies:
+      - bufferutil
+      - msw
+      - utf-8-validate
+      - vite
+    optional: true
 
   '@vitest/browser@3.2.4(playwright@1.55.0)(vite@7.1.4(@types/node@24.3.0)(tsx@4.20.6)(yaml@2.8.0))(vitest@3.2.4)':
     dependencies:
@@ -5670,6 +5789,14 @@ snapshots:
       '@vitest/utils': 3.2.4
       chai: 5.3.3
       tinyrainbow: 2.0.0
+
+  '@vitest/mocker@3.2.4(vite@7.1.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0))':
+    dependencies:
+      '@vitest/spy': 3.2.4
+      estree-walker: 3.0.3
+      magic-string: 0.30.18
+    optionalDependencies:
+      vite: 7.1.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0)
 
   '@vitest/mocker@3.2.4(vite@7.1.4(@types/node@24.3.0)(tsx@4.20.6)(yaml@2.8.0))':
     dependencies:
@@ -6359,6 +6486,8 @@ snapshots:
       hash.js: 1.1.7
       minimalistic-assert: 1.0.1
       minimalistic-crypto-utils: 1.0.1
+
+  hono@4.10.2: {}
 
   html-escaper@2.0.2: {}
 
@@ -7266,6 +7395,27 @@ snapshots:
 
   vary@1.1.2: {}
 
+  vite-node@3.2.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0):
+    dependencies:
+      cac: 6.7.14
+      debug: 4.4.1
+      es-module-lexer: 1.7.0
+      pathe: 2.0.3
+      vite: 7.1.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0)
+    transitivePeerDependencies:
+      - '@types/node'
+      - jiti
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
+
   vite-node@3.2.4(@types/node@24.3.0)(tsx@4.20.6)(yaml@2.8.0):
     dependencies:
       cac: 6.7.14
@@ -7287,6 +7437,20 @@ snapshots:
       - tsx
       - yaml
 
+  vite@7.1.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0):
+    dependencies:
+      esbuild: 0.25.9
+      fdir: 6.5.0(picomatch@4.0.3)
+      picomatch: 4.0.3
+      postcss: 8.5.6
+      rollup: 4.50.0
+      tinyglobby: 0.2.14
+    optionalDependencies:
+      '@types/node': 22.18.0
+      fsevents: 2.3.3
+      tsx: 4.20.6
+      yaml: 2.8.0
+
   vite@7.1.4(@types/node@24.3.0)(tsx@4.20.6)(yaml@2.8.0):
     dependencies:
       esbuild: 0.25.9
@@ -7300,6 +7464,48 @@ snapshots:
       fsevents: 2.3.3
       tsx: 4.20.6
       yaml: 2.8.0
+
+  vitest@3.2.4(@types/node@22.18.0)(@vitest/browser@3.2.4)(tsx@4.20.6)(yaml@2.8.0):
+    dependencies:
+      '@types/chai': 5.2.2
+      '@vitest/expect': 3.2.4
+      '@vitest/mocker': 3.2.4(vite@7.1.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0))
+      '@vitest/pretty-format': 3.2.4
+      '@vitest/runner': 3.2.4
+      '@vitest/snapshot': 3.2.4
+      '@vitest/spy': 3.2.4
+      '@vitest/utils': 3.2.4
+      chai: 5.3.3
+      debug: 4.4.1
+      expect-type: 1.2.2
+      magic-string: 0.30.18
+      pathe: 2.0.3
+      picomatch: 4.0.3
+      std-env: 3.9.0
+      tinybench: 2.9.0
+      tinyexec: 0.3.2
+      tinyglobby: 0.2.14
+      tinypool: 1.1.1
+      tinyrainbow: 2.0.0
+      vite: 7.1.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0)
+      vite-node: 3.2.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 22.18.0
+      '@vitest/browser': 3.2.4(playwright@1.55.0)(vite@7.1.4(@types/node@22.18.0)(tsx@4.20.6)(yaml@2.8.0))(vitest@3.2.4)
+    transitivePeerDependencies:
+      - jiti
+      - less
+      - lightningcss
+      - msw
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
 
   vitest@3.2.4(@types/node@24.3.0)(@vitest/browser@3.2.4)(tsx@4.20.6)(yaml@2.8.0):
     dependencies:

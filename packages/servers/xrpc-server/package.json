@@ -25,6 +25,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
+		"@atcute/cbor": "workspace:^",
 		"@atcute/crypto": "workspace:^",
 		"@atcute/identity": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
