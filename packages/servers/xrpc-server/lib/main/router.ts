@@ -121,30 +121,27 @@ export class XRPCRouter {
 		}
 	}
 
+	/** @deprecated use `addQuery` and `addProcedure` instead */
 	add<TQuery extends XRPCQueryMetadata>(query: TQuery, config: QueryConfig<TQuery>): void;
 	add<TProcedure extends XRPCProcedureMetadata>(
 		procedure: TProcedure,
 		config: ProcedureConfig<TProcedure>,
 	): void;
-	add<TSubscription extends XRPCSubscriptionMetadata>(
-		subscription: TSubscription,
-		config: SubscriptionConfig<TSubscription>,
-	): void;
-	add(operation: XRPCQueryMetadata | XRPCProcedureMetadata | XRPCSubscriptionMetadata, config: any): void {
+	add(operation: XRPCQueryMetadata | XRPCProcedureMetadata, config: any): void {
 		switch (operation.type) {
 			case 'xrpc_query': {
-				return this.#addQuery(operation, config);
+				return this.addQuery(operation, config);
 			}
 			case 'xrpc_procedure': {
-				return this.#addProcedure(operation, config);
-			}
-			case 'xrpc_subscription': {
-				return this.#addSubscription(operation, config);
+				return this.addProcedure(operation, config);
 			}
 		}
 	}
 
-	#addQuery<TQuery extends XRPCQueryMetadata>(query: TQuery, config: QueryConfig<TQuery>): void {
+	addQuery<TQuery extends XRPCQueryMetadata, TConfig extends QueryConfig<TQuery>>(
+		query: TQuery,
+		config: TConfig,
+	): void {
 		const handleParams = query.params ? constructParamsHandler(query.params) : null;
 
 		const handler = config.handler;
@@ -181,9 +178,9 @@ export class XRPCRouter {
 		};
 	}
 
-	#addProcedure<TProcedure extends XRPCProcedureMetadata>(
+	addProcedure<TProcedure extends XRPCProcedureMetadata, TConfig extends ProcedureConfig<TProcedure>>(
 		procedure: TProcedure,
-		config: ProcedureConfig<TProcedure>,
+		config: TConfig,
 	): void {
 		const handleParams = procedure.params ? constructParamsHandler(procedure.params) : null;
 		const validateInputType = procedure.input ? constructMimeValidator(procedure.input) : null;
