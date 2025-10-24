@@ -11,7 +11,7 @@ import { ComAtprotoSyncSubscribeRepos } from './lexicons/index.js';
 const adapter = createCloudflareWebSocket();
 const router = new XRPCRouter({ websocket: adapter });
 
-router.add(ComAtprotoSyncSubscribeRepos.mainSchema, {
+router.addSubscription(ComAtprotoSyncSubscribeRepos.mainSchema, {
 	async *handler({ params, signal }) {
 		while (!signal.aborted) {
 			yield {

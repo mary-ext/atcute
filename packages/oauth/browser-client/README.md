@@ -175,6 +175,113 @@ try {
 }
 ```
 
+## confidential client mode (optional)
+
+by default, `@atcute/oauth-browser-client` operates as a **public client**, which means it cannot
+securely store credentials. this results in shorter session lifetimes enforced by authorization
+servers.
+
+if you want longer-lived sessions and better security controls, you can enable **confidential client
+mode** by setting up a client assertion backend service.
+
+### how it works
+
+the [client assertion backend pattern](https://github.com/bluesky-social/proposals/tree/main/0010-client-assertion-backend)
+allows browser apps to act as confidential clients:
+
+1. your browser app generates a DPoP key (this already happens automatically)
+2. when requesting tokens, the browser sends a DPoP proof to your backend service
+3. your backend validates the proof and returns a signed client assertion (JWT) that's
+   cryptographically bound to the DPoP key via the `cnf` (confirmation) claim
+4. the browser includes both the client assertion and DPoP proof in token requests
+5. the authorization server verifies the binding and issues longer-lived tokens
+
+### setup
+
+configure the client with a function to fetch client assertions from your backend:
+
+```ts
+import { configureOAuth } from '@atcute/oauth-browser-client';
+
+configureOAuth({
+	metadata: {
+		client_id: 'https://example.com/oauth-client-metadata.json',
+		redirect_uri: 'https://example.com/oauth/callback',
+	},
+	// enable confidential client mode with your custom backend:
+	fetchClientAssertion: async ({ jkt, createDpopProof, aud }) => {
+		// Create DPoP proof for authenticating to your backend
+		const dpop = await createDpopProof('https://example.com/api/client-assertion');
+
+		// Call your backend endpoint (design your own API format)
+		const response = await fetch('https://example.com/api/client-assertion', {
+			method: 'POST',
+			headers: { 'dpop': dpop },
+			body: JSON.stringify({ jkt, aud }),
+		});
+
+		const data = await response.json();
+		return {
+			client_assertion: data.assertion,
+			client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+		};
+	},
+});
+```
+
+the backend API format is up to you - there's no standardized spec. design it however works best for
+your infrastructure (authentication, request format, error handling, etc.).
+
+the library will automatically:
+- calculate JWK thumbprints for DPoP keys
+- provide a `createDpopProof()` function for backend authentication
+- request client assertions when making token requests
+
+**important**: if you configure `fetchClientAssertion`, your backend **must** be available.
+there is no fallback to public client mode, because your OAuth client metadata will declare you as
+a confidential client, and authorization servers will reject requests without client assertions.
+
+### backend requirements
+
+your backend service needs to:
+
+1. accept POST requests with DPoP proofs in the `DPoP` header
+2. validate the incoming DPoP proof
+3. generate and sign a client assertion JWT with:
+   - standard claims: `iss`, `sub` (both should be your `client_id`), `aud` (authorization server
+     issuer), `exp`, `jti`
+   - **crucial**: include `cnf: { jkt }` claim with the JWK thumbprint of the DPoP key
+4. return `{ "client_assertion": "<signed-jwt>" }`
+
+additionally:
+- enforce CORS to only allow requests from your frontend origin
+- never cache responses (client assertions should be fresh)
+- optionally track devices via DPoP keys and refuse assertions for suspicious sessions
+
+### client metadata updates
+
+your OAuth client metadata document must also be updated for confidential clients:
+
+```json
+{
+	"client_id": "https://example.com/oauth-client-metadata.json",
+	"client_name": "My App",
+	"redirect_uris": ["https://example.com/oauth/callback"],
+	"scope": "atproto transition:generic",
+	"token_endpoint_auth_method": "private_key_jwt",
+	"jwks_uri": "https://example.com/oauth-jwks.json"
+}
+```
+
+the `jwks_uri` should expose the public keys used to sign client assertions (not the DPoP keys!).
+
+### benefits
+
+- **longer sessions**: authorization servers grant extended refresh token lifetimes to confidential
+  clients
+- **better security**: your backend can revoke sessions, track devices, and enforce policies
+- **mass revocation**: rotate your backend keypair to instantly invalidate all sessions
+
 ## additional guide
 
 ### configuring your Vite project

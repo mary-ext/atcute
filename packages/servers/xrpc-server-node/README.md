@@ -10,7 +10,7 @@ import { createNodeWebSocket } from '@atcute/xrpc-server-node';
 const { adapter, injectWebSocket } = createNodeWebSocket();
 const router = new XRPCRouter({ websocket: adapter });
 
-router.add(ComAtprotoSyncSubscribeRepos.mainSchema, {
+router.addSubscription(ComAtprotoSyncSubscribeRepos.mainSchema, {
 	async *handler({ params, signal }) {
 		while (!signal.aborted) {
 			yield {
