@@ -1,7 +1,5 @@
 import type { WebSocketAdapter, WebSocketConnection, XRPCRouter } from '@atcute/xrpc-server';
 
-import type { Server } from 'bun';
-
 type Promisable<T> = T | Promise<T>;
 
 interface WsData {
@@ -12,13 +10,13 @@ interface WsData {
 export interface BunWebSocket {
 	adapter: WebSocketAdapter;
 	wrap(router: XRPCRouter): {
-		fetch(request: Request, server: Bun.Server): Promise<Response>;
+		fetch(request: Request, server: Bun.Server<WsData>): Promise<Response>;
 		websocket: Bun.WebSocketHandler<WsData>;
 	};
 }
 
 export const createBunWebSocket = (): BunWebSocket => {
-	let server: Server | undefined;
+	let server: Bun.Server<WsData> | undefined;
 
 	return {
 		adapter: {

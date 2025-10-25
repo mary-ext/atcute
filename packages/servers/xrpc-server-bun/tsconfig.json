@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"types": [],
+		"types": ["bun"],
 		"outDir": "dist/",
 		"esModuleInterop": true,
 		"skipLibCheck": true,
@@ -18,7 +18,7 @@
 		"module": "NodeNext",
 		"sourceMap": true,
 		"declaration": true,
-		"declarationMap": true
+		"declarationMap": true,
 	},
-	"include": ["lib"]
+	"include": ["lib"],
 }
