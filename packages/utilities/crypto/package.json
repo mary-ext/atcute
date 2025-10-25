@@ -41,7 +41,7 @@
 	},
 	"devDependencies": {
 		"@noble/curves": "^1.9.7",
-		"@types/node": "^24.9.1",
+		"@types/node": "^22.18.12",
 		"@vitest/browser-playwright": "^4.0.3",
 		"@vitest/coverage-v8": "^4.0.3",
 		"playwright": "^1.56.1",
