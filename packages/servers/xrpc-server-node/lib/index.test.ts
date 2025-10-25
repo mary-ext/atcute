@@ -4,7 +4,7 @@ import { serve, type ServerType } from '@hono/node-server';
 
 import { ComAtprotoLabelDefs, ComAtprotoLabelSubscribeLabels } from '@atcute/atproto';
 import { decode, decodeFirst } from '@atcute/cbor';
-import { XRPCRouter, XRPCSubscriptionError } from '@atcute/xrpc-server';
+import { XRPCRouter } from '@atcute/xrpc-server';
 
 import { createNodeWebSocket, type NodeWebSocket } from './index.js';
 
@@ -101,99 +101,6 @@ describe('subscriptions', () => {
 		client.close();
 	});
 
-	it('handles subscription with params', async () => {
-		const ws = createNodeWebSocket();
-		const router = new XRPCRouter({ websocket: ws.adapter });
-
-		let receivedCursor: number | undefined;
-
-		router.addSubscription(ComAtprotoLabelSubscribeLabels.mainSchema, {
-			async *handler({ params }) {
-				receivedCursor = params.cursor;
-				yield {
-					$type: 'com.atproto.label.subscribeLabels#labels',
-					seq: params.cursor ?? 0,
-					labels: [],
-				};
-			},
-		});
-
-		using server = await createHttpServer(router, ws);
-
-		const client = new WebSocket(
-			`ws://localhost:${server.port}/xrpc/com.atproto.label.subscribeLabels?cursor=42`,
-		);
-		client.binaryType = 'arraybuffer';
-
-		await new Promise<void>((resolve, reject) => {
-			client.onmessage = () => {
-				resolve();
-			};
-			client.onerror = () => {
-				reject(new Error('WebSocket error'));
-			};
-		});
-
-		expect(receivedCursor).toBe(42);
-		client.close();
-	});
-
-	it('handles multiple messages from subscription', async () => {
-		const ws = createNodeWebSocket();
-		const router = new XRPCRouter({ websocket: ws.adapter });
-
-		router.addSubscription(ComAtprotoLabelSubscribeLabels.mainSchema, {
-			async *handler() {
-				yield {
-					$type: 'com.atproto.label.subscribeLabels#labels',
-					seq: 1,
-					labels: [],
-				};
-				yield {
-					$type: 'com.atproto.label.subscribeLabels#labels',
-					seq: 2,
-					labels: [],
-				};
-				yield {
-					$type: 'com.atproto.label.subscribeLabels#labels',
-					seq: 3,
-					labels: [],
-				};
-			},
-		});
-
-		using server = await createHttpServer(router, ws);
-
-		const client = new WebSocket(`ws://localhost:${server.port}/xrpc/com.atproto.label.subscribeLabels`);
-		client.binaryType = 'arraybuffer';
-
-		const frames: any[] = [];
-		await new Promise<void>((resolve, reject) => {
-			client.onmessage = (event) => {
-				const buffer = event.data;
-				const uint8 = new Uint8Array(buffer);
-
-				const { header, body } = decodeFrame(uint8);
-
-				frames.push({ header, body });
-
-				if (frames.length === 3) {
-					resolve();
-				}
-			};
-			client.onerror = () => {
-				reject(new Error('WebSocket error'));
-			};
-		});
-
-		expect(frames).toEqual([
-			{ header: { op: 1, t: '#labels' }, body: { labels: [], seq: 1 } },
-			{ header: { op: 1, t: '#labels' }, body: { labels: [], seq: 2 } },
-			{ header: { op: 1, t: '#labels' }, body: { labels: [], seq: 3 } },
-		]);
-
-		client.close();
-	});
 
 	it('stops sending when client disconnects', async () => {
 		const ws = createNodeWebSocket();
@@ -255,86 +162,4 @@ describe('subscriptions', () => {
 		client.close();
 	});
 
-	it('sends error frame on XRPCSubscriptionError', async () => {
-		const ws = createNodeWebSocket();
-		const router = new XRPCRouter({ websocket: ws.adapter });
-
-		router.addSubscription(ComAtprotoLabelSubscribeLabels.mainSchema, {
-			async *handler() {
-				yield {
-					$type: 'com.atproto.label.subscribeLabels#labels',
-					seq: 1,
-					labels: [],
-				};
-
-				throw new XRPCSubscriptionError({
-					error: 'FutureCursor',
-					description: `Cursor is in the future`,
-				});
-			},
-		});
-
-		using server = await createHttpServer(router, ws);
-
-		const client = new WebSocket(`ws://localhost:${server.port}/xrpc/com.atproto.label.subscribeLabels`);
-		client.binaryType = 'arraybuffer';
-
-		const frames: any[] = [];
-		await new Promise<void>((resolve, reject) => {
-			client.onmessage = (event) => {
-				const buffer = event.data;
-				const uint8 = new Uint8Array(buffer);
-
-				const { header, body } = decodeFrame(uint8);
-
-				frames.push({ header, body });
-				resolve();
-			};
-			client.onerror = () => {
-				reject(new Error('WebSocket error'));
-			};
-		});
-
-		expect(frames).toEqual([
-			{
-				header: { op: 1, t: '#labels' },
-				body: {
-					labels: [],
-					seq: 1,
-				},
-			},
-			{
-				header: { op: -1 },
-				body: {
-					error: 'FutureCursor',
-					message: 'Cursor is in the future',
-				},
-			},
-		]);
-
-		client.close();
-	});
-
-	it('rejects non-WebSocket upgrade requests', async () => {
-		const ws = createNodeWebSocket();
-		const router = new XRPCRouter({ websocket: ws.adapter });
-
-		router.addSubscription(ComAtprotoLabelSubscribeLabels.mainSchema, {
-			async *handler() {
-				yield {
-					$type: 'com.atproto.label.subscribeLabels#labels',
-					seq: 1,
-					labels: [],
-				};
-			},
-		});
-
-		using server = await createHttpServer(router, ws);
-
-		const response = await fetch(`http://localhost:${server.port}/xrpc/com.atproto.label.subscribeLabels`);
-		const error = await response.json();
-
-		expect(response.status).toBe(400);
-		expect(error).toEqual(expect.objectContaining({ error: 'InvalidRequest' }));
-	});
 });

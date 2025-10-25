@@ -38,6 +38,7 @@ export type FetchMiddleware = Middleware<[request: Request], Promise<Response>>;
 
 export type NotFoundHandler = (request: Request) => Promisable<Response>;
 export type ExceptionHandler = (error: unknown, request: Request) => Promisable<Response>;
+export type SubscriptionExceptionHandler = (error: unknown, request: Request) => void;
 
 export const defaultExceptionHandler: ExceptionHandler = (error: unknown) => {
 	if (error instanceof XRPCError) {
@@ -58,10 +59,15 @@ export const defaultNotFoundHandler: NotFoundHandler = () => {
 	return new Response('Not Found', { status: 404 });
 };
 
+export const defaultSubscriptionExceptionHandler: SubscriptionExceptionHandler = (error: unknown) => {
+	throw error;
+};
+
 export interface XRPCRouterOptions {
 	middlewares?: FetchMiddleware[];
 	handleNotFound?: NotFoundHandler;
 	handleException?: ExceptionHandler;
+	handleSubscriptionException?: SubscriptionExceptionHandler;
 	websocket?: WebSocketAdapter;
 }
 
@@ -69,6 +75,7 @@ export class XRPCRouter {
 	#handlers: Record<string, InternalRouteData> = {};
 	#handleNotFound: NotFoundHandler;
 	#handleException: ExceptionHandler;
+	#handleSubscriptionException: SubscriptionExceptionHandler;
 	#websocket?: WebSocketAdapter;
 
 	fetch: (request: Request) => Promise<Response>;
@@ -77,6 +84,7 @@ export class XRPCRouter {
 		middlewares = [],
 		handleException = defaultExceptionHandler,
 		handleNotFound = defaultNotFoundHandler,
+		handleSubscriptionException = defaultSubscriptionExceptionHandler,
 		websocket,
 	}: XRPCRouterOptions = {}) {
 		const runner = createAsyncMiddlewareRunner([...middlewares, (request) => this.#dispatch(request)]);
@@ -84,6 +92,7 @@ export class XRPCRouter {
 		this.fetch = (request) => runner(request);
 		this.#handleException = handleException;
 		this.#handleNotFound = handleNotFound;
+		this.#handleSubscriptionException = handleSubscriptionException;
 		this.#websocket = websocket;
 	}
 
@@ -301,15 +310,17 @@ export class XRPCRouter {
 				}
 
 				const upgrade = await websocket.upgrade(request, async (ws) => {
+					const signal = ws.signal;
+
 					const context: UnknownSubscriptionContext = {
 						request: request,
 						params: params,
-						signal: ws.signal,
+						signal: signal,
 					};
 
 					try {
 						for await (const message of handler(context)) {
-							if (ws.signal.aborted) {
+							if (signal.aborted) {
 								break;
 							}
 
@@ -319,6 +330,8 @@ export class XRPCRouter {
 							const frame = encodeMessageFrame(body, type);
 							await ws.send(frame);
 						}
+
+						ws.close(1000);
 					} catch (err) {
 						if (err instanceof XRPCSubscriptionError) {
 							const frame = encodeErrorFrame(err.error, err.description);
@@ -332,7 +345,7 @@ export class XRPCRouter {
 						}
 
 						ws.close(1011, `internal server error`);
-						throw err;
+						this.#handleSubscriptionException(err, request);
 					}
 				});
 

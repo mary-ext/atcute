@@ -1,11 +1,12 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, type AsymmetricMatchersContaining } from 'vitest';
 
+import { decode, decodeFirst } from '@atcute/cbor';
 import * as v from '@atcute/lexicons/validations';
 
 import { json } from './response.js';
 import { defaultNotFoundHandler, XRPCRouter } from './router.js';
-import type { WebSocketAdapter } from './types/websocket.js';
-import { InvalidRequestError } from './xrpc-error.js';
+import { MockWebSocketAdapter } from './utils/websocket-mock.js';
+import { InvalidRequestError, XRPCSubscriptionError } from './xrpc-error.js';
 
 describe('XRPCRouter', () => {
 	describe('routing', () => {
@@ -861,45 +862,304 @@ describe('XRPCRouter', () => {
 		});
 	});
 
-	// we won't be testing actual subscriptions here
 	describe('subscription', () => {
-		const noopAdapter: WebSocketAdapter = {
-			async upgrade(_request, _handler) {
-				return undefined;
-			},
-		};
-
-		it('handles defining subscriptions', () => {
+		it('handles subscriptions', async () => {
 			const subscriptionSchema = v.subscription('com.example.subscription', {
 				params: null,
 				message: v.object({ random: v.integer() }),
 			});
 
-			const router = new XRPCRouter({ websocket: noopAdapter });
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
 
 			router.addSubscription(subscriptionSchema, {
 				async *handler() {
 					yield { random: 123 };
 				},
 			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
+
+			let frames: Uint8Array[] = [];
+			await new Promise<void>((resolve) => {
+				client.events.on('message', (data) => {
+					frames.push(data);
+				});
+
+				client.events.on('close', () => {
+					resolve();
+				});
+			});
+
+			expect(decodeFrames(frames)).toEqual([{ header: { op: 1 }, body: { random: 123 } }]);
 		});
 
-		it('handles defining subscriptions with variants', () => {
+		it('handles subscription with variants', async () => {
 			const subscriptionSchema = v.subscription('com.example.subscription', {
 				params: null,
 				message: v.variant([
-					v.object({ $type: v.literal('foo'), foo: v.string() }),
-					v.object({ $type: v.literal('bar'), bar: v.integer() }),
+					v.object({ $type: v.literal('com.example.subscription#foo'), foo: v.string() }),
+					v.object({ $type: v.literal('com.example.subscription#bar'), bar: v.integer() }),
 				]),
 			});
 
-			const router = new XRPCRouter({ websocket: noopAdapter });
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
 
 			router.addSubscription(subscriptionSchema, {
 				async *handler() {
-					yield { $type: 'foo', foo: '123' };
+					yield { $type: 'com.example.subscription#foo', foo: 'foo' };
+					yield { $type: 'com.example.subscription#bar', bar: 123 };
 				},
 			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
+
+			let frames: Uint8Array[] = [];
+			await new Promise<void>((resolve) => {
+				client.events.on('message', (data) => {
+					frames.push(data);
+				});
+
+				client.events.on('close', () => {
+					resolve();
+				});
+			});
+
+			expect(decodeFrames(frames)).toEqual([
+				{ header: { op: 1, t: '#foo' }, body: { foo: 'foo' } },
+				{ header: { op: 1, t: '#bar' }, body: { bar: 123 } },
+			]);
+		});
+
+		it('handles subscriptions with params', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: v.object({ cursor: v.optional(v.integer()) }),
+				message: v.object({ seq: v.integer() }),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
+
+			let receivedCursor: number | undefined;
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler({ params }) {
+					receivedCursor = params.cursor;
+					yield { seq: params.cursor ?? 0 };
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription?cursor=42`);
+
+			await new Promise<void>((resolve) => {
+				client.events.on('close', () => resolve());
+			});
+
+			expect(receivedCursor).toBe(42);
+		});
+
+		it('handles multiple subscription messages', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.object({ seq: v.integer() }),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler() {
+					yield { seq: 1 };
+					yield { seq: 2 };
+					yield { seq: 3 };
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
+
+			const frames: Uint8Array[] = [];
+			await new Promise<void>((resolve) => {
+				client.events.on('message', (data) => {
+					frames.push(data);
+				});
+
+				client.events.on('close', () => {
+					resolve();
+				});
+			});
+
+			expect(decodeFrames(frames)).toEqual([
+				{ header: { op: 1 }, body: { seq: 1 } },
+				{ header: { op: 1 }, body: { seq: 2 } },
+				{ header: { op: 1 }, body: { seq: 3 } },
+			]);
+		});
+
+		it('stops sending when client disconnects', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.object({ seq: v.integer() }),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
+
+			const { promise: aborted, resolve } = Promise.withResolvers<void>();
+			let messageCount = 0;
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler({ signal }) {
+					while (!signal.aborted) {
+						yield { seq: messageCount++ };
+					}
+
+					resolve();
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
+
+			const frames: Uint8Array[] = [];
+			await new Promise<void>((resolve) => {
+				client.events.on('message', (data) => {
+					frames.push(data);
+
+					if (frames.length === 2) {
+						client.dispose();
+					}
+				});
+
+				client.events.on('close', () => {
+					resolve();
+				});
+			});
+
+			expect(decodeFrames(frames)).toEqual([
+				{ header: { op: 1 }, body: { seq: 0 } },
+				{ header: { op: 1 }, body: { seq: 1 } },
+			]);
+
+			await aborted;
+		});
+
+		it('sends error frame on XRPCSubscriptionError', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.object({ seq: v.integer() }),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler() {
+					yield { seq: 1 };
+
+					throw new XRPCSubscriptionError({
+						error: 'FutureCursor',
+						description: 'Cursor is in the future',
+					});
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
+
+			const frames: Uint8Array[] = [];
+			await new Promise<void>((resolve) => {
+				client.events.on('message', (data) => {
+					frames.push(data);
+				});
+
+				client.events.on('close', () => {
+					resolve();
+				});
+			});
+
+			expect(decodeFrames(frames)).toEqual([
+				{ header: { op: 1 }, body: { seq: 1 } },
+				{ header: { op: -1 }, body: { error: 'FutureCursor', message: 'Cursor is in the future' } },
+			]);
+		});
+
+		it('rejects non-WebSocket upgrade requests', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.object({ seq: v.integer() }),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler() {
+					yield { seq: 1 };
+				},
+			});
+
+			const request = new Request('http://localhost/xrpc/com.example.subscription');
+			const response = await router.fetch(request);
+			const body = await response.json();
+
+			expect(response.status).toBe(400);
+			expect(body).toEqual(expect.objectContaining({ error: 'InvalidRequest' }));
+		});
+
+		it('invokes handleSubscriptionException for unexpected errors', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.object({ seq: v.integer() }),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const handleSubscriptionException = vi.fn();
+			const router = new XRPCRouter({ websocket: adapter, handleSubscriptionException });
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler() {
+					throw new Error('boom');
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
+
+			await new Promise<void>((resolve) => {
+				client.events.on('close', (event) => {
+					expect(event).toEqual({ code: 1011, reason: 'internal server error', wasClean: true });
+					resolve();
+				});
+			});
+
+			expect(handleSubscriptionException).toBeCalledTimes(1);
+
+			expect(handleSubscriptionException).toBeCalledWith(expect.any(Error), expect.any(Request));
+			expect(handleSubscriptionException).toBeCalledWith(
+				expect.objectContaining({ message: 'boom' }),
+				expect.anything(),
+			);
 		});
 	});
 });
+
+interface Frame {
+	header: unknown;
+	body: unknown;
+}
+
+function decodeFrame(frame: Uint8Array): Frame {
+	const [header, remainder] = decodeFirst(frame);
+	const body = decode(remainder);
+
+	return { header, body };
+}
+
+function decodeFrames(frames: Uint8Array[]): Frame[] {
+	return frames.map((frame) => decodeFrame(frame));
+}
