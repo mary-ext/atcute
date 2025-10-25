@@ -31,7 +31,7 @@
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"nanoid": "^5.1.5"
+		"nanoid": "^5.1.6"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^"

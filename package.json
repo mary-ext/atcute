@@ -12,12 +12,12 @@
 		"fmt": "PRETTIER_EXPERIMENTAL_CLI=1 prettier --cache --write ."
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.29.6",
+		"@changesets/cli": "^2.29.7",
 		"@mary/tar": "jsr:^0.3.1",
 		"@mitata/counters": "^0.0.8",
 		"mitata": "^1.0.34",
 		"pkg-size-report": "workspace:^",
 		"prettier": "^3.6.2",
-		"typescript": "~5.9.2"
+		"typescript": "~5.9.3"
 	}
 }

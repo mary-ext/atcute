@@ -34,7 +34,7 @@
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
-		"@types/bun": "^1.2.21"
+		"@types/bun": "^1.3.1"
 	},
 	"dependencies": {
 		"@atcute/lexicons": "workspace:^"

@@ -35,7 +35,7 @@
 	},
 	"devDependencies": {
 		"@atcute/lexicons": "workspace:^",
-		"@types/node": "^22.18.0",
+		"@types/node": "^22.18.12",
 		"tschema": "^3.2.0"
 	}
 }

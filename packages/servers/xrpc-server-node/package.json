@@ -26,14 +26,14 @@
 		"@atcute/xrpc-server": "workspace:^"
 	},
 	"dependencies": {
-		"ws": "^8.18.0"
+		"ws": "^8.18.3"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/cbor": "workspace:^",
 		"@hono/node-server": "^1.19.5",
-		"@types/node": "^22.10.2",
-		"@types/ws": "^8.5.13",
+		"@types/node": "^22.18.12",
+		"@types/ws": "^8.18.1",
 		"vitest": "^3.2.4"
 	}
 }
