@@ -30,6 +30,7 @@ interface Schema {
 			dpopKey: DPoPKey;
 			metadata: AuthorizationServerMetadata;
 			verifier?: string;
+			state?: unknown;
 		};
 	};
 

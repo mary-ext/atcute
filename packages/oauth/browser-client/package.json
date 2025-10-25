@@ -27,6 +27,7 @@
 	"dependencies": {
 		"@atcute/client": "workspace:^",
 		"@atcute/identity": "workspace:^",
+		"@atcute/identity-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",

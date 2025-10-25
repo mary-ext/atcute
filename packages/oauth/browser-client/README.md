@@ -18,60 +18,57 @@ minimal OAuth browser client implementation for AT Protocol.
 
 ### setup
 
-initialize the client by importing and calling `configureOAuth` with the client ID and redirect URL.
-this call should be placed before any other calls you make with this library.
+initialize the client by importing and calling `configureOAuth` with the client ID and redirect URL,
+along with the resolvers that will be used to resolve and verify account details. this call should
+be placed before any other calls you make with this library.
 
 ```ts
-import { configureOAuth } from '@atcute/oauth-browser-client';
+import { configureOAuth, defaultIdentityResolver } from '@atcute/oauth-browser-client';
+
+import {
+	CompositeDidDocumentResolver,
+	PlcDidDocumentResolver,
+	WebDidDocumentResolver,
+	XrpcHandleResolver,
+} from '@atcute/identity-resolver';
 
 configureOAuth({
 	metadata: {
 		client_id: 'https://example.com/oauth-client-metadata.json',
 		redirect_uri: 'https://example.com/oauth/callback',
 	},
+	identityResolver: defaultIdentityResolver({
+		// AT Protocol handles resolve via DNS TXT record or HTTP well-known endpoints.
+		// since web apps lack direct DNS access and face CORS restrictions, we're using
+		// Bluesky's AppView for this example.
+		//
+		// NOTE: Bluesky may log handle resolutions and requester info per their privacy
+		// policy. consider the privacy implications of this arrangement and change this
+		// setup if unsuitable for your use case.
+		handleResolver: new XrpcHandleResolver({ serviceUrl: 'https://public.api.bsky.app' }),
+
+		didDocumentResolver: new CompositeDidDocumentResolver({
+			methods: {
+				plc: new PlcDidDocumentResolver(),
+				web: new WebDidDocumentResolver(),
+			},
+		}),
+	}),
 });
 ```
 
 ### starting an authorization flow
 
-> [!CAUTION]  
-> the built-in handle resolution makes use of Bluesky-hosted services to return the intended DID,
-> and this can mean sharing the user's IP address and the handle identifiers to Bluesky.
->
-> while Bluesky has a declared privacy policy, both developers and users need to be informed and
-> aware of the privacy implications of this arrangement. read [this guide](#doing-handle-resolution)
-> on how you can implement your own resolution code.
-
-if your application involves asking for the user's handle or DID, you can use `resolveFromIdentity`
-which resolves the user's identity to get its PDS, and the metadata of its authorization server.
-
-```ts
-import { resolveFromIdentity } from '@atcute/oauth-browser-client';
-
-const { identity, metadata } = await resolveFromIdentity('mary.my.id');
-```
-
-alternatively, if it involves asking for the user's PDS, then you can use `resolveFromService` which
-just grabs the authorization server metadata.
-
-```ts
-import { resolveFromService } from '@atcute/oauth-browser-client';
-
-const { metadata } = await resolveFromService('bsky.social');
-```
-
-we can then proceed with authorization by calling `createAuthorizationUrl` with the resolved
-`metadata` (and `identity`, if using `resolveFromIdentity`) along with the scope of the
-authorization, which should either match the one in your client metadata, or a reduced set of it.
+we can start authorization by calling `createAuthorizationUrl` with the intended account's
+identifier or service along with the scope of the authorization, which should either match the one
+in your client metadata, or a reduced set of it.
 
 ```ts
 import { createAuthorizationUrl } from '@atcute/oauth-browser-client';
 
-// passing `identity` is optional,
-// it allows for the login form to be autofilled with the user's handle or DID
 const authUrl = await createAuthorizationUrl({
-	metadata: metadata,
-	identity: identity,
+	target: { type: 'account', identifier: 'mary.my.id' },
+	//   or { type: 'pds', serviceUrl: 'https://bsky.social' }
 	scope: 'atproto transition:generic transition:chat.bsky',
 });
 
@@ -186,7 +183,8 @@ mode** by setting up a client assertion backend service.
 
 ### how it works
 
-the [client assertion backend pattern](https://github.com/bluesky-social/proposals/tree/main/0010-client-assertion-backend)
+the
+[client assertion backend pattern](https://github.com/bluesky-social/proposals/tree/main/0010-client-assertion-backend)
 allows browser apps to act as confidential clients:
 
 1. your browser app generates a DPoP key (this already happens automatically)
@@ -216,7 +214,7 @@ configureOAuth({
 		// Call your backend endpoint (design your own API format)
 		const response = await fetch('https://example.com/api/client-assertion', {
 			method: 'POST',
-			headers: { 'dpop': dpop },
+			headers: { dpop: dpop },
 			body: JSON.stringify({ jkt, aud }),
 		});
 
@@ -233,13 +231,14 @@ the backend API format is up to you - there's no standardized spec. design it ho
 your infrastructure (authentication, request format, error handling, etc.).
 
 the library will automatically:
+
 - calculate JWK thumbprints for DPoP keys
 - provide a `createDpopProof()` function for backend authentication
 - request client assertions when making token requests
 
-**important**: if you configure `fetchClientAssertion`, your backend **must** be available.
-there is no fallback to public client mode, because your OAuth client metadata will declare you as
-a confidential client, and authorization servers will reject requests without client assertions.
+**important**: if you configure `fetchClientAssertion`, your backend **must** be available. there is
+no fallback to public client mode, because your OAuth client metadata will declare you as a
+confidential client, and authorization servers will reject requests without client assertions.
 
 ### backend requirements
 
@@ -254,6 +253,7 @@ your backend service needs to:
 4. return `{ "client_assertion": "<signed-jwt>" }`
 
 additionally:
+
 - enforce CORS to only allow requests from your frontend origin
 - never cache responses (client assertions should be fresh)
 - optionally track devices via DPoP keys and refuse assertions for suspicious sessions
@@ -372,195 +372,15 @@ configureOAuth({
 		client_id: import.meta.env.VITE_OAUTH_CLIENT_ID,
 		redirect_uri: import.meta.env.VITE_OAUTH_REDIRECT_URI,
 	},
+	// ...
 });
 
 // ... later during sign-in process
 const authUrl = await createAuthorizationUrl({
-	metadata: metadata,
-	identity: identity,
+	// ...
 	scope: import.meta.env.VITE_OAUTH_SCOPE,
 });
 ```
 
 adjust the code here as necessary, the plugin adds more environment variables than what is actually
 needed, you can remove them if you don't think you'd need it.
-
-### doing handle resolution
-
-there are two ways that a handle can be verified:
-
-1. HTTP verification: there is a file at `/.well-known/atproto-did` containing your account's DID
-2. DNS verification: there is an `_atproto` TXT record containing your account's DID
-
-you'd want to resolve both of these. if both methods return a response but does not match each other
-then it should ideally be thrown.
-
-verify that the DID matches the intended format
-
-```ts
-const isDid = (did: string): did is At.DID => {
-	return /^did:([a-z]+):([a-zA-Z0-9._:%-]*[a-zA-Z0-9._-])$/.test(did);
-};
-```
-
-pass this resolved DID to `resolveFromIdentity`, and carry on as per usual.
-
-#### HTTP handle resolution
-
-this is very straightforward, make a request to `https://<handle>/.well-known/atproto-did` without
-following redirects. check if the response status is 200 and trim off any excess whitespaces.
-
-some web servers might not set a permissible CORS header to access this resource, in which case
-there is nothing that can be done, unless you'd want to proxy the requests.
-
-```ts
-const resolveHandleViaHttp = async (handle: string): Promise<At.DID> => {
-	const url = new URL('/.well-known/atproto-did', `https://${handle}`);
-
-	const response = await fetch(url, { redirect: 'error' });
-	if (!response.ok) {
-		throw new ResolverError(`domain is unreachable`);
-	}
-
-	const text = await response.text();
-
-	const did = text.split('\n')[0]!.trim();
-	if (isDid(did)) {
-		return did;
-	}
-
-	throw new ResolverError(`failed to resolve ${handle}`);
-};
-```
-
-#### DNS handle resolution
-
-as websites can't do DNS resolution on their own, we'd have to rely on DNS-over-HTTPS (DoH)
-services. it should be noted that this _can_ have privacy implications of its own, please read
-through the privacy policy of whichever DoH service you end up using and make the user aware of it
-as well.
-
-for this example, we'll be using Cloudflare's DoH resolver for Firefox ([privacy
-policy][cf-resolver-firefox-privacy]) as it has support for `application/dns-json` format which
-allows us to query and see the responses in JSON.
-
-```ts
-const SUBDOMAIN = '_atproto';
-const PREFIX = 'did=';
-
-const resolveHandleViaDoH = async (handle: string): Promise<At.DID> => {
-	const url = new URL('https://mozilla.cloudflare-dns.com/dns-query');
-	url.searchParams.set('type', 'TXT');
-	url.searchParams.set('name', `${SUBDOMAIN}.${handle}`);
-
-	const response = await fetch(url, {
-		method: 'GET',
-		headers: { accept: 'application/dns-json' },
-		redirect: 'follow',
-	});
-
-	const type = response.headers.get('content-type')?.trim();
-	if (!response.ok) {
-		const message = type?.startsWith('text/plain') ? await response.text() : `failed to resolve ${handle}`;
-
-		throw new ResolverError(message);
-	}
-
-	if (type !== 'application/dns-json') {
-		throw new ResolverError(`unexpected response from DoH server`);
-	}
-
-	const result = asResult(await response.json());
-	const answers = result.Answer?.filter(isAnswerTxt).map(extractTxtData) ?? [];
-
-	for (let i = 0; i < answers.length; i++) {
-		// skip if the line does not start with "did="
-		if (!answers[i].startsWith(PREFIX)) {
-			continue;
-		}
-
-		// ensure there is no other entry starting with "did="
-		for (let j = i + 1; j < answers.length; j++) {
-			if (answers[j].startsWith(PREFIX)) {
-				throw new ResolverError(`handle returned multiple did values`);
-			}
-		}
-
-		const did = answers[i].slice(PREFIX.length);
-		if (isDid(did)) {
-			return did;
-		}
-
-		break;
-	}
-
-	throw new ResolverError(`failed to resolve ${handle}`);
-};
-
-type Result = { Status: number; Answer?: Answer[] };
-const isResult = (result: unknown): result is Result => {
-	if (result === null || typeof result !== 'object') {
-		return false;
-	}
-
-	return (
-		'Status' in result &&
-		typeof result.Status === 'number' &&
-		(!('Answer' in result) || (Array.isArray(result.Answer) && result.Answer.every(isAnswer)))
-	);
-};
-const asResult = (result: unknown): Result => {
-	if (!isResult(result)) {
-		throw new TypeError(`unexpected DoH response`);
-	}
-
-	return result;
-};
-
-type Answer = { name: string; type: number; data: string; TTL: number };
-const isAnswer = (answer: unknown): answer is Answer => {
-	if (answer === null || typeof answer !== 'object') {
-		return false;
-	}
-
-	return (
-		'name' in answer &&
-		typeof answer.name === 'string' &&
-		'type' in answer &&
-		typeof answer.type === 'number' &&
-		'data' in answer &&
-		typeof answer.data === 'string' &&
-		'TTL' in answer &&
-		typeof answer.TTL === 'number'
-	);
-};
-
-type AnswerTxt = Answer & { type: 16 };
-const isAnswerTxt = (answer: Answer): answer is AnswerTxt => {
-	return answer.type === 16;
-};
-
-const extractTxtData = (answer: AnswerTxt): string => {
-	return answer.data.replace(/^"|"$/g, '').replace(/\\"/g, '"');
-};
-```
-
-[cf-resolver-firefox-privacy]: https://developers.cloudflare.com/1.1.1.1/privacy/cloudflare-resolver-firefox/
-
-#### using your PDS for handle resolution
-
-alternatively, if you operate your own PDS, you can make use of it as a handle resolver.
-
-```ts
-const resolveHandleViaPds = async (handle: string): Promise<At.DID> => {
-	const rpc = new XRPC({ handler: simpleFetchHandler({ service: `https://my-pds.example.com` }) });
-
-	const { data } = await rpc.get('com.atproto.identity.resolveHandle', {
-		params: {
-			handle: handle,
-		},
-	});
-
-	return data.did;
-};
-```

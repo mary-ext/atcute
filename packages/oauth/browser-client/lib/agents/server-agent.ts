@@ -3,7 +3,7 @@ import type { Did } from '@atcute/lexicons';
 import { createDPoPFetch } from '../dpop.js';
 import { CLIENT_ID, REDIRECT_URI } from '../environment.js';
 import { FetchResponseError, OAuthResponseError, TokenRefreshError } from '../errors.js';
-import { resolveFromIdentity } from '../resolvers.js';
+import { resolveFromIdentifier } from '../resolvers.js';
 import type { DPoPKey } from '../types/dpop.js';
 import type { OAuthParResponse } from '../types/par.js';
 import type { PersistedAuthorizationServerMetadata } from '../types/server.js';
@@ -124,7 +124,7 @@ export class OAuthServerAgent {
 		}
 
 		const token = this.#processTokenResponse(res);
-		const resolved = await resolveFromIdentity(sub);
+		const resolved = await resolveFromIdentifier(sub as Did);
 
 		if (resolved.metadata.issuer !== this.#metadata.issuer) {
 			throw new TypeError(`issuer mismatch; got ${resolved.metadata.issuer}`);
@@ -134,7 +134,7 @@ export class OAuthServerAgent {
 			token: token,
 			info: {
 				sub: sub as Did,
-				aud: resolved.identity.pds.href,
+				aud: resolved.identity.pds,
 				server: pick(resolved.metadata, [
 					'issuer',
 					'authorization_endpoint',

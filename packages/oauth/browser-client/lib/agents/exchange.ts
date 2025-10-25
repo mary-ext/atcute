@@ -1,20 +1,30 @@
 import { nanoid } from 'nanoid';
 
+import type { ActorIdentifier } from '@atcute/lexicons';
+
 import { createES256Key } from '../dpop.js';
 import { CLIENT_ID, database, REDIRECT_URI } from '../environment.js';
 import { AuthorizationError, LoginError } from '../errors.js';
-import type { IdentityMetadata } from '../types/identity.js';
+import type { ResolvedIdentity } from '../types/identity.js';
 import type { AuthorizationServerMetadata } from '../types/server.js';
 import type { Session } from '../types/token.js';
 import { generatePKCE } from '../utils/runtime.js';
 
+import { resolveFromIdentifier, resolveFromService } from '../resolvers.js';
 import { OAuthServerAgent } from './server-agent.js';
 import { storeSession } from './sessions.js';
 
+export type AuthorizeTargetOptions =
+	| { type: 'account'; identifier: ActorIdentifier }
+	| { type: 'pds'; serviceUrl: string };
+
 export interface AuthorizeOptions {
-	metadata: AuthorizationServerMetadata;
-	identity?: IdentityMetadata;
+	target: AuthorizeTargetOptions;
 	scope: string;
+	state?: unknown;
+	prompt?: 'none' | 'login' | 'consent' | 'select_account';
+	display?: 'page' | 'popup' | 'touch' | 'wap';
+	locale?: string;
 }
 
 /**
@@ -22,36 +32,52 @@ export interface AuthorizeOptions {
  * @param options
  * @returns URL to redirect the user for authorization
  */
-export const createAuthorizationUrl = async ({
-	metadata,
-	identity,
-	scope,
-}: AuthorizeOptions): Promise<URL> => {
-	const state = nanoid(24);
+export const createAuthorizationUrl = async (options: AuthorizeOptions): Promise<URL> => {
+	const { target, scope, state = null, ...reqs } = options;
+
+	let resolved: { identity?: ResolvedIdentity; metadata: AuthorizationServerMetadata };
+	switch (target.type) {
+		case 'account': {
+			resolved = await resolveFromIdentifier(target.identifier);
+			break;
+		}
+		case 'pds': {
+			resolved = await resolveFromService(target.serviceUrl);
+		}
+	}
+
+	const { identity, metadata } = resolved;
+	const loginHint = identity
+		? identity.handle !== 'handle.invalid'
+			? identity.handle
+			: identity.did
+		: undefined;
+
+	const sid = nanoid(24);
 
 	const pkce = await generatePKCE();
 	const dpopKey = await createES256Key();
 
 	const params = {
+		display: reqs.display,
+		ui_locales: reqs.locale,
+		prompt: reqs.prompt,
+
 		redirect_uri: REDIRECT_URI,
 		code_challenge: pkce.challenge,
 		code_challenge_method: pkce.method,
-		state: state,
-		login_hint: identity?.raw,
+		state: sid,
+		login_hint: loginHint,
 		response_mode: 'fragment',
 		response_type: 'code',
-		display: 'page',
-		// id_token_hint: undefined,
-		// max_age: undefined,
-		// prompt: undefined,
 		scope: scope,
-		// ui_locales: undefined,
 	} satisfies Record<string, string | undefined>;
 
-	database.states.set(state, {
+	database.states.set(sid, {
 		dpopKey: dpopKey,
 		metadata: metadata,
 		verifier: pkce.verifier,
+		state: state,
 	});
 
 	const server = new OAuthServerAgent(metadata, dpopKey);
@@ -71,24 +97,21 @@ export const createAuthorizationUrl = async ({
  */
 export const finalizeAuthorization = async (params: URLSearchParams) => {
 	const issuer = params.get('iss');
-	const state = params.get('state');
+	const sid = params.get('state');
 	const code = params.get('code');
 	const error = params.get('error');
 
-	if (!state || !(code || error)) {
+	if (!sid || !(code || error)) {
 		throw new LoginError(`missing parameters`);
 	}
 
-	const stored = database.states.get(state);
+	const stored = database.states.get(sid);
 	if (stored) {
 		// Delete now that we've caught it
-		database.states.delete(state);
+		database.states.delete(sid);
 	} else {
 		throw new LoginError(`unknown state provided`);
 	}
-
-	const dpopKey = stored.dpopKey;
-	const metadata = stored.metadata;
 
 	if (error) {
 		throw new AuthorizationError(params.get('error_description') || error);
@@ -96,6 +119,10 @@ export const finalizeAuthorization = async (params: URLSearchParams) => {
 	if (!code) {
 		throw new LoginError(`missing code parameter`);
 	}
+
+	const dpopKey = stored.dpopKey;
+	const metadata = stored.metadata;
+	const state = stored.state ?? null;
 
 	if (issuer === null) {
 		throw new LoginError(`missing issuer parameter`);
@@ -113,5 +140,5 @@ export const finalizeAuthorization = async (params: URLSearchParams) => {
 
 	await storeSession(sub, session);
 
-	return session;
+	return { session, state };
 };

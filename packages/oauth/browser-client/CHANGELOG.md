@@ -1,5 +1,68 @@
 # @atcute/oauth-browser-client
 
+## 2.0.0-next.0
+
+### Major Changes
+
+- 82eb851: handle and DID document resolution are now externalized.
+
+  although we've provided a "guide" on how to do your own handle resolution, the client itself still
+  had to make its own resolution for post-authorization verification checks. this change finally
+  makes it possible for you to supply a resolver for the client to use, and you're required to
+  provide them.
+
+  after upgrading, you would supply an `identityResolver` to `configureOAuth`. the helper
+  `defaultIdentityResolver` composes handle and DID document resolvers if you still want the default
+  behavior; using `@atcute/identity-resolver` implementations is recommended for this.
+
+  ```ts
+  import { configureOAuth, defaultIdentityResolver } from '@atcute/oauth-browser-client';
+
+  import {
+  	CompositeDidDocumentResolver,
+  	PlcDidDocumentResolver,
+  	WebDidDocumentResolver,
+  	XrpcHandleResolver,
+  } from '@atcute/identity-resolver';
+
+  configureOAuth({
+  	// ... existing config
+
+  	identityResolver: defaultIdentityResolver({
+  	// AT Protocol handles resolve via DNS TXT record or HTTP well-known endpoints.
+  	// since web apps lack direct DNS access and face CORS restrictions, we're using
+  	// Bluesky's AppView for this example.
+  	//
+  	// NOTE: Bluesky may log handle resolutions and requester info per their privacy
+  	// policy. consider the privacy implications of this arrangement and change this
+  	// setup if unsuitable for your use case.
+  	handleResolver: new XrpcHandleResolver({ serviceUrl: 'https://public.api.bsky.app' }),
+
+  	didDocumentResolver: new CompositeDidDocumentResolver({
+  		methods: {
+  			plc: new PlcDidDocumentResolver(),
+  			web: new WebDidDocumentResolver(),
+  		},
+  	}),
+  }),
+  });
+
+  the resolved identity now includes both the did and a canonical handle (or `handle.invalid` if it
+  can't be verified), which we use for `login_hint` to better match the reference OAuth client.
+  ```
+
+  `resolveFromIdentity` and `resolveFromService` has been removed as a result. instead, pass the
+  target directly to `createAuthorizationUrl`.
+
+  ```ts
+  const authUrl = await createAuthorizationUrl({
+  	target: { type: 'account', identifier: 'mary.my.id' },
+  	//   or { type: 'pds', serviceUrl: 'https://bsky.social' }
+
+  	// ... existing options
+  });
+  ```
+
 ## 1.0.27
 
 ### Patch Changes
