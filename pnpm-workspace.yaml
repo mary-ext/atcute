@@ -9,3 +9,9 @@ packages:
   - packages/oauth/*
   - packages/servers/*
   - packages/utilities/*
+
+onlyBuiltDependencies:
+  - better-sqlite3
+  - cbor-extract
+  - esbuild
+  - sharp

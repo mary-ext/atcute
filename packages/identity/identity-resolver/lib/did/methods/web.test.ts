@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 
 import { WebDidDocumentResolver } from './web.js';
 
@@ -21,7 +21,7 @@ describe('WebDidDocumentResolver', () => {
 		],
 		service: [
 			{
-				id: '#atproto_pds',
+				id: 'did:web:zio.sh#atproto_pds',
 				type: 'AtprotoPersonalDataServer',
 				serviceEndpoint: 'https://zio.blue',
 			},

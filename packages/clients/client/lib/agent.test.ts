@@ -27,7 +27,7 @@ it('can connect to a PDS', async () => {
 
 	expect(data).toEqual({
 		did: 'did:web:localhost',
-		availableUserDomains: ['.test'],
+		availableUserDomains: ['.test', '.example'],
 		inviteCodeRequired: false,
 		links: {
 			privacyPolicy: 'https://bsky.social/about/support/privacy-policy',

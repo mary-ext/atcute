@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 
 import { PlcDidDocumentResolver } from './plc.js';
 
@@ -61,7 +61,7 @@ describe('PlcDidDocumentResolver', () => {
 			],
 			service: [
 				{
-					id: 'did:plc:ia76kvnndjutgedggx2ibrem#atproto_pds',
+					id: '#atproto_pds',
 					type: 'AtprotoPersonalDataServer',
 					serviceEndpoint: 'https://porcini.us-east.host.bsky.network',
 				},

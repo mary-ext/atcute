@@ -25,7 +25,6 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"test": "vitest",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
@@ -35,8 +34,7 @@
 	},
 	"devDependencies": {
 		"@atcute/leaflet": "file:",
-		"@atcute/lex-cli": "workspace:^",
-		"vitest": "^3.2.4"
+		"@atcute/lex-cli": "workspace:^"
 	},
 	"atcute:lexicons": {
 		"mappings": {

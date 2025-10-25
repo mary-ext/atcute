@@ -29,8 +29,8 @@
 	},
 	"devDependencies": {
 		"@atcute/multibase": "workspace:^",
-		"@vitest/coverage-v8": "^3.2.4",
-		"vitest": "^3.2.4"
+		"@vitest/coverage-v8": "^4.0.3",
+		"vitest": "^4.0.3"
 	},
 	"dependencies": {
 		"@atcute/car": "workspace:^",
