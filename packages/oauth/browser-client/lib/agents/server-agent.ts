@@ -35,13 +35,16 @@ export class OAuthServerAgent {
 			throw new Error(`no endpoint for ${endpoint}`);
 		}
 
-		if (endpoint === 'token' && fetchClientAssertion !== undefined) {
+		if (
+			(endpoint === 'token' || endpoint === 'pushed_authorization_request') &&
+			fetchClientAssertion !== undefined
+		) {
 			const jkt = this.#dpopKey.jkt;
 			if (jkt === undefined) {
 				throw new Error(`DPoP key missing jkt field`);
 			}
 
-			const clientAssertionCredentials = await fetchClientAssertion({
+			const assertion = await fetchClientAssertion({
 				jkt: jkt,
 				aud: this.#metadata.issuer,
 				createDpopProof: async (url) => {
@@ -50,7 +53,7 @@ export class OAuthServerAgent {
 				},
 			});
 
-			payload = { ...payload, ...clientAssertionCredentials };
+			payload = { ...payload, ...assertion };
 		}
 
 		const response = await this.#fetch(url, {
