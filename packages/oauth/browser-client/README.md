@@ -253,11 +253,32 @@ your OAuth client metadata document must also be updated for confidential client
 	"redirect_uris": ["https://example.com/oauth/callback"],
 	"scope": "atproto transition:generic",
 	"token_endpoint_auth_method": "private_key_jwt",
+	"token_endpoint_auth_signing_alg": "ES256",
 	"jwks_uri": "https://example.com/oauth-jwks.json"
 }
 ```
 
-the `jwks_uri` should expose the public keys used to sign client assertions.
+the `jwks_uri` should expose the public keys used to sign client assertions. it should return a JSON
+Web Key Set (JWKS) document:
+
+```json
+{
+	"keys": [
+		{
+			"kty": "EC",
+			"crv": "P-256",
+			"x": "base64url-encoded-x-coordinate",
+			"y": "base64url-encoded-y-coordinate",
+			"use": "sig",
+			"kid": "key-identifier",
+			"alg": "ES256"
+		}
+	]
+}
+```
+
+the public keys in the JWKS must correspond to the private keys your backend uses to sign client
+assertions. multiple keys can be listed to support key rotation.
 
 ## additional guide
 
