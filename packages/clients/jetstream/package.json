@@ -28,8 +28,7 @@
 		"@mary-ext/event-iterator": "^1.0.0",
 		"@mary-ext/simple-event-emitter": "^1.0.0",
 		"partysocket": "^1.1.5",
-		"type-fest": "^4.41.0",
-		"yocto-queue": "^1.2.1"
+		"type-fest": "^4.41.0"
 	},
 	"devDependencies": {
 		"@vitest/coverage-v8": "^3.2.4",
