@@ -1,5 +1,11 @@
 # @atcute/jetstream
 
+## 1.1.2
+
+### Patch Changes
+
+- dc9fe6f: clean up Valita schemas
+
 ## 1.1.1
 
 ### Patch Changes

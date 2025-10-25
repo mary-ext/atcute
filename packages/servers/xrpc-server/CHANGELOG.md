@@ -1,5 +1,16 @@
 # @atcute/xrpc-server
 
+## 0.1.3
+
+### Minor Changes
+
+- 913bf06: XRPC subscriptions support
+- 93bfccf: deprecate `router.add()` in favor of `.addQuery()` and `.addProcedure()` instead
+
+### Patch Changes
+
+- b07ccbb: clean up Valita schemas
+
 ## 0.1.2
 
 ### Patch Changes

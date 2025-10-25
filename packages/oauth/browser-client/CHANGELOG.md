@@ -1,5 +1,131 @@
 # @atcute/oauth-browser-client
 
+## 2.0.0
+
+### Major Changes
+
+- bac1b0f: allow passing user-provided state during authorization
+
+  `createAuthorizationUrl` now takes in an optional `state` property
+
+  ```ts
+  const authUrl = await createAuthorizationUrl({
+  	// ...
+  	state: {
+  		// ...
+  	},
+  });
+  ```
+
+  `finalizeAuthorization` now returns an object containing `session` and your provided `state`.
+
+  ```ts
+  const { session, state } = await finalizeAuthorization(params);
+  ```
+
+- bac1b0f: handle and DID document resolution are now externalized.
+
+  although we've provided a "guide" on how to do your own handle resolution, the client itself still
+  had to make its own resolution for post-authorization verification checks. this change finally
+  makes it possible for you to supply a resolver for the client to use, and you're required to
+  provide them.
+
+  after upgrading, you would supply an `identityResolver` to `configureOAuth`. there is a built-in
+  identity resolver implementation that takes in a handle and DID document resolver (which you can
+  use `@atcute/identity-resolver` with.)
+
+  ```ts
+  import { configureOAuth, defaultIdentityResolver } from '@atcute/oauth-browser-client';
+
+  import {
+  	CompositeDidDocumentResolver,
+  	PlcDidDocumentResolver,
+  	WebDidDocumentResolver,
+  	XrpcHandleResolver,
+  } from '@atcute/identity-resolver';
+
+  configureOAuth({
+  	// ... existing config
+
+  	identityResolver: defaultIdentityResolver({
+  		// AT Protocol handles resolve via DNS TXT record or HTTP well-known endpoints.
+  		// since web apps lack direct DNS access and face CORS restrictions, we're using
+  		// Bluesky's AppView for this example.
+  		//
+  		// NOTE: Bluesky may log handle resolutions and requester info per their privacy
+  		// policy. consider the privacy implications of this arrangement and change this
+  		// setup if unsuitable for your use case.
+  		handleResolver: new XrpcHandleResolver({ serviceUrl: 'https://public.api.bsky.app' }),
+
+  		didDocumentResolver: new CompositeDidDocumentResolver({
+  			methods: {
+  				plc: new PlcDidDocumentResolver(),
+  				web: new WebDidDocumentResolver(),
+  			},
+  		}),
+  	}),
+  });
+  ```
+
+  `resolveFromIdentity` and `resolveFromService` has been removed as a result. instead, pass the
+  target directly to `createAuthorizationUrl`.
+
+  ```ts
+  const authUrl = await createAuthorizationUrl({
+  	target: { type: 'account', identifier: 'mary.my.id' },
+  	//   or { type: 'pds', serviceUrl: 'https://bsky.social' }
+
+  	// ... existing options
+  });
+  ```
+
+### Minor Changes
+
+- bac1b0f: allow customizing some parts of the authorization process
+
+  `createAuthorizationUrl` now takes in optional `prompt`, `display`, `locale` fields.
+
+  ```ts
+  const authUrl = createAuthorizationUrl({
+  	// ...
+  	display: 'popup',
+  });
+  ```
+
+- 80b400e: add support for client assertions.
+
+  this adds an optional `fetchClientAssertion` callback to `configureOAuth` that lets you fetch
+  client assertions from your backend, allowing your client to be classified as a confidential
+  client.
+
+  ```ts
+  import { configureOAuth } from '@atcute/oauth-browser-client';
+
+  configureOAuth({
+  	// ... existing config
+
+  	async fetchClientAssertion({ jkt, aud, createDpopProof }) {
+  		const dpop = await createDpopProof('https://example.com/api/client-assertion');
+
+  		const response = await fetch('https://example.com/api/client-assertion', {
+  			method: 'POST',
+  			headers: {
+  				dpop: dpop,
+  				'content-type': 'application/json',
+  			},
+  			body: JSON.stringify({ jkt, aud }),
+  		});
+
+  		const data = await response.json();
+
+  		return {
+  			client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+  			client_assertion: data.assertion,
+  		};
+  	},
+  });
+  ```
+
 ## 1.0.27
 
 ### Patch Changes

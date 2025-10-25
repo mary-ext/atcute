@@ -1,5 +1,13 @@
 # @atcute/lexicon-doc
 
+## 1.1.4
+
+### Patch Changes
+
+- d901d8a: throw if definition ID is invalid
+- c603d16: add JSON schema for lexicon schemas
+- 84b135f: clean up Valita schemas
+
 ## 1.1.3
 
 ### Patch Changes

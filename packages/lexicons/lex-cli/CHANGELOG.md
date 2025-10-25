@@ -1,5 +1,15 @@
 # @atcute/lex-cli
 
+## 2.3.1
+
+### Patch Changes
+
+- 8c5ec99: remove Valibot, consistently use Valita
+- Updated dependencies [d901d8a]
+- Updated dependencies [c603d16]
+- Updated dependencies [84b135f]
+  - @atcute/lexicon-doc@1.1.4
+
 ## 2.3.0
 
 ### Minor Changes
