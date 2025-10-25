@@ -1,5 +1,11 @@
 # @atcute/oauth-browser-client
 
+## 2.0.1
+
+### Patch Changes
+
+- 7d3da57: request client assertion during PAR request
+
 ## 2.0.0
 
 ### Major Changes
