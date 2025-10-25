@@ -50,6 +50,6 @@
 	"dependencies": {
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"@noble/secp256k1": "^2.3.0"
+		"@noble/secp256k1": "^3.0.0"
 	}
 }

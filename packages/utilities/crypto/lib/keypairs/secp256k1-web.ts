@@ -1,6 +1,6 @@
 import { toBase16, toBase64Url } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
-import { getPublicKey, ProjectivePoint, signAsync, utils, verify } from '@noble/secp256k1';
+import { getPublicKey, Point, signAsync, utils, verify } from '@noble/secp256k1';
 
 import type { DidKeyString, PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.js';
 import { assertUnreachable, checkKeypairRelationship, toMultikey } from '../utils.js';
@@ -17,7 +17,7 @@ const toJsonWebKey = (publicKey: Uint8Array, privateKey?: Uint8Array): JsonWebKe
 
 	// Decompress point so we can encode both x and y.
 	// Could just make it a bool, but it's not recommended [4] and poorly supported.
-	const point = ProjectivePoint.fromHex(publicKey).toRawBytes(false);
+	const point = Point.fromBytes(publicKey).toBytes(false);
 
 	const key = {
 		kty: 'EC', // [2]; [3] § 3.1.
@@ -64,7 +64,7 @@ export class Secp256k1PublicKey implements PublicKey {
 		const allowMalleable = options?.allowMalleableSig ?? false;
 		const hashed = await toSha256(data);
 
-		return verify(sig, hashed, this._publicKey, { lowS: !allowMalleable });
+		return verify(sig, hashed, this._publicKey, { lowS: !allowMalleable, prehash: false });
 	}
 
 	exportPublicKey(format: 'did'): Promise<DidKeyString>;
@@ -125,16 +125,15 @@ export class Secp256k1PrivateKey extends Secp256k1PublicKey implements PrivateKe
 
 	async sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
 		const hashed = await toSha256(data);
-		const sig = await signAsync(hashed, this._privateKey, { lowS: true });
+		const sig = await signAsync(hashed, this._privateKey, { lowS: true, prehash: false });
 
-		// return raw 64 byte sig not DER-encoded
-		return sig.toCompactRawBytes() as Uint8Array<ArrayBuffer>;
+		return sig as Uint8Array<ArrayBuffer>;
 	}
 }
 
 export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey implements PrivateKeyExportable {
 	static async createKeypair(): Promise<Secp256k1PrivateKeyExportable> {
-		const privateKeyBytes = utils.randomPrivateKey();
+		const privateKeyBytes = utils.randomSecretKey();
 		const publicKeyBytes = getPublicKey(privateKeyBytes);
 
 		return new Secp256k1PrivateKeyExportable(privateKeyBytes, publicKeyBytes);
