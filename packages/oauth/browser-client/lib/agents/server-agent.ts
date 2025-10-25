@@ -1,7 +1,7 @@
 import type { Did } from '@atcute/lexicons';
 
-import { createDPoPFetch } from '../dpop.js';
-import { CLIENT_ID, REDIRECT_URI } from '../environment.js';
+import { createDPoPFetch, createDPoPSignage } from '../dpop.js';
+import { CLIENT_ID, fetchClientAssertion, REDIRECT_URI } from '../environment.js';
 import { FetchResponseError, OAuthResponseError, TokenRefreshError } from '../errors.js';
 import { resolveFromIdentifier } from '../resolvers.js';
 import type { DPoPKey } from '../types/dpop.js';
@@ -14,9 +14,11 @@ import { extractContentType } from '../utils/response.js';
 export class OAuthServerAgent {
 	#fetch: typeof fetch;
 	#metadata: PersistedAuthorizationServerMetadata;
+	#dpopKey: DPoPKey;
 
 	constructor(metadata: PersistedAuthorizationServerMetadata, dpopKey: DPoPKey) {
 		this.#metadata = metadata;
+		this.#dpopKey = dpopKey;
 		this.#fetch = createDPoPFetch(dpopKey, true);
 	}
 
@@ -31,6 +33,24 @@ export class OAuthServerAgent {
 		const url: string | undefined = (this.#metadata as any)[`${endpoint}_endpoint`];
 		if (!url) {
 			throw new Error(`no endpoint for ${endpoint}`);
+		}
+
+		if (endpoint === 'token' && fetchClientAssertion !== undefined) {
+			const jkt = this.#dpopKey.jkt;
+			if (jkt === undefined) {
+				throw new Error(`DPoP key missing jkt field`);
+			}
+
+			const clientAssertionCredentials = await fetchClientAssertion({
+				jkt: jkt,
+				aud: this.#metadata.issuer,
+				createDpopProof: async (url) => {
+					const sign = createDPoPSignage(this.#dpopKey);
+					return await sign('POST', url, undefined, undefined);
+				},
+			});
+
+			payload = { ...payload, ...clientAssertionCredentials };
 		}
 
 		const response = await this.#fetch(url, {

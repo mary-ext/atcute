@@ -16,10 +16,14 @@ export const createES256Key = async (): Promise<DPoPKey> => {
 	const key = await crypto.subtle.exportKey('pkcs8', pair.privateKey);
 	const { ext: _ext, key_ops: _key_opts, ...jwk } = await crypto.subtle.exportKey('jwk', pair.publicKey);
 
+	const canonicalJwk = JSON.stringify({ crv: jwk.crv, kty: jwk.kty, x: jwk.x, y: jwk.y });
+	const jkt = await stringToSha256(canonicalJwk);
+
 	return {
 		typ: 'ES256',
 		key: toBase64Url(new Uint8Array(key)),
 		jwt: toBase64Url(encodeUtf8(JSON.stringify({ typ: 'dpop+jwt', alg: 'ES256', jwk: jwk }))),
+		jkt: jkt,
 	};
 };
 
