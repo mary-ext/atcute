@@ -6,7 +6,7 @@
 	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
-		"directory": "packages/utilities/uint8array"
+		"directory": "packages/misc/uint8array"
 	},
 	"files": [
 		"dist/",

@@ -328,7 +328,7 @@ importers:
         version: link:../../utilities/multibase
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../../utilities/uint8array
+        version: link:../../misc/uint8array
       '@badrap/valita':
         specifier: ^0.4.6
         version: 0.4.6
@@ -531,6 +531,8 @@ importers:
         specifier: ^4.0.3
         version: 4.0.3(@types/node@24.9.1)(@vitest/browser-playwright@4.0.3)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
 
+  packages/misc/uint8array: {}
+
   packages/misc/util-fetch:
     dependencies:
       '@badrap/valita':
@@ -556,7 +558,7 @@ importers:
         version: link:../../utilities/multibase
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../../utilities/uint8array
+        version: link:../../misc/uint8array
       nanoid:
         specifier: ^5.1.6
         version: 5.1.6
@@ -587,7 +589,7 @@ importers:
         version: link:../../utilities/multibase
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../../utilities/uint8array
+        version: link:../../misc/uint8array
       '@badrap/valita':
         specifier: ^0.4.6
         version: 0.4.6
@@ -688,7 +690,7 @@ importers:
         version: link:../cid
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../uint8array
+        version: link:../../misc/uint8array
       '@atcute/varint':
         specifier: workspace:^
         version: link:../varint
@@ -713,7 +715,7 @@ importers:
         version: link:../multibase
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../uint8array
+        version: link:../../misc/uint8array
     devDependencies:
       '@ipld/dag-cbor':
         specifier: ^9.2.5
@@ -732,7 +734,7 @@ importers:
         version: link:../multibase
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../uint8array
+        version: link:../../misc/uint8array
     devDependencies:
       '@types/bun':
         specifier: ^1.3.1
@@ -745,7 +747,7 @@ importers:
         version: link:../multibase
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../uint8array
+        version: link:../../misc/uint8array
       '@noble/secp256k1':
         specifier: ^3.0.0
         version: 3.0.0
@@ -779,7 +781,7 @@ importers:
         version: link:../cid
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../uint8array
+        version: link:../../misc/uint8array
     devDependencies:
       '@atcute/car':
         specifier: workspace:^
@@ -798,7 +800,7 @@ importers:
     dependencies:
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../uint8array
+        version: link:../../misc/uint8array
     devDependencies:
       '@types/bun':
         specifier: ^1.3.1
@@ -826,7 +828,7 @@ importers:
         version: link:../mst
       '@atcute/uint8array':
         specifier: workspace:^
-        version: link:../uint8array
+        version: link:../../misc/uint8array
     devDependencies:
       '@atcute/multibase':
         specifier: workspace:^
@@ -843,8 +845,6 @@ importers:
       vitest:
         specifier: ^4.0.3
         version: 4.0.3(@types/node@24.9.1)(@vitest/browser-playwright@4.0.3)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
-
-  packages/utilities/uint8array: {}
 
   packages/utilities/varint:
     devDependencies:
@@ -3760,7 +3760,7 @@ snapshots:
       '@atcute/identity-resolver': link:packages/identity/identity-resolver
       '@atcute/lexicons': link:packages/lexicons/lexicons
       '@atcute/multibase': link:packages/utilities/multibase
-      '@atcute/uint8array': link:packages/utilities/uint8array
+      '@atcute/uint8array': link:packages/misc/uint8array
       '@badrap/valita': 0.4.6
       nanoid: 5.1.6
 
