@@ -92,6 +92,10 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryEvents', 
 		 * The types of events (fully qualified string in the format of tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned.
 		 */
 		types: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+		/**
+		 * If specified, only events where strikeCount value is set are returned.
+		 */
+		withStrike: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	}),
 	output: {
 		type: 'lex',

@@ -55,6 +55,25 @@ const _accountStatsSchema = /*#__PURE__*/ v.object({
 	 */
 	takedownCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
+const _accountStrikeSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#accountStrike')),
+	/**
+	 * Current number of active strikes (excluding expired strikes)
+	 */
+	activeStrikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Timestamp of the first strike received
+	 */
+	firstStrikeAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Timestamp of the most recent strike received
+	 */
+	lastStrikeAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Total number of strikes ever received (including expired strikes)
+	 */
+	totalStrikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+});
 const _ageAssuranceEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#ageAssuranceEvent')),
 	/**
@@ -162,6 +181,27 @@ const _modEventEmailSchema = /*#__PURE__*/ v.object({
 	 */
 	content: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**
+	 * Names/Keywords of the policies that necessitated the email.
+	 * @maxLength 5
+	 */
+	policies: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
+			/*#__PURE__*/ v.arrayLength(0, 5),
+		]),
+	),
+	/**
+	 * Severity level of the violation. Normally 'sev-1' that adds strike on repeat offense
+	 */
+	severityLevel: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Number of strikes to assign to the user for this violation. Normally 0 as an indicator of a warning and only added as a strike on a repeat offense.
+	 */
+	strikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * When the strike should expire. If not provided, the strike never expires.
+	 */
+	strikeExpiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
 	 * The subject line of the email sent to the user.
 	 */
 	subjectLine: /*#__PURE__*/ v.string(),
@@ -237,6 +277,23 @@ const _modEventReverseTakedownSchema = /*#__PURE__*/ v.object({
 	 * Describe reasoning behind the reversal.
 	 */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Names/Keywords of the policy infraction for which takedown is being reversed.
+	 * @maxLength 5
+	 */
+	policies: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
+			/*#__PURE__*/ v.arrayLength(0, 5),
+		]),
+	),
+	/**
+	 * Severity level of the violation. Usually set from the last policy infraction's severity.
+	 */
+	severityLevel: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Number of strikes to subtract from the user's strike count. Usually set from the last policy infraction's severity.
+	 */
+	strikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _modEventTagSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventTag')),
@@ -273,6 +330,18 @@ const _modEventTakedownSchema = /*#__PURE__*/ v.object({
 			/*#__PURE__*/ v.arrayLength(0, 5),
 		]),
 	),
+	/**
+	 * Severity level of the violation (e.g., 'sev-0', 'sev-1', 'sev-2', etc.).
+	 */
+	severityLevel: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Number of strikes to assign to the user for this violation.
+	 */
+	strikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * When the strike should expire. If not provided, the strike never expires.
+	 */
+	strikeExpiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _modEventUnmuteSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventUnmute')),
@@ -678,6 +747,12 @@ const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(accountStatsSchema);
 	},
 	/**
+	 * Strike information for the account (account-level only)
+	 */
+	get accountStrike() {
+		return /*#__PURE__*/ v.optional(accountStrikeSchema);
+	},
+	/**
 	 * Current age assurance state of the subject.
 	 */
 	ageAssuranceState: /*#__PURE__*/ v.optional(
@@ -784,6 +859,7 @@ const _videoDetailsSchema = /*#__PURE__*/ v.object({
 type accountEvent$schematype = typeof _accountEventSchema;
 type accountHosting$schematype = typeof _accountHostingSchema;
 type accountStats$schematype = typeof _accountStatsSchema;
+type accountStrike$schematype = typeof _accountStrikeSchema;
 type ageAssuranceEvent$schematype = typeof _ageAssuranceEventSchema;
 type ageAssuranceOverrideEvent$schematype = typeof _ageAssuranceOverrideEventSchema;
 type blobView$schematype = typeof _blobViewSchema;
@@ -839,6 +915,7 @@ type videoDetails$schematype = typeof _videoDetailsSchema;
 export interface accountEventSchema extends accountEvent$schematype {}
 export interface accountHostingSchema extends accountHosting$schematype {}
 export interface accountStatsSchema extends accountStats$schematype {}
+export interface accountStrikeSchema extends accountStrike$schematype {}
 export interface ageAssuranceEventSchema extends ageAssuranceEvent$schematype {}
 export interface ageAssuranceOverrideEventSchema extends ageAssuranceOverrideEvent$schematype {}
 export interface blobViewSchema extends blobView$schematype {}
@@ -894,6 +971,7 @@ export interface videoDetailsSchema extends videoDetails$schematype {}
 export const accountEventSchema = _accountEventSchema as accountEventSchema;
 export const accountHostingSchema = _accountHostingSchema as accountHostingSchema;
 export const accountStatsSchema = _accountStatsSchema as accountStatsSchema;
+export const accountStrikeSchema = _accountStrikeSchema as accountStrikeSchema;
 export const ageAssuranceEventSchema = _ageAssuranceEventSchema as ageAssuranceEventSchema;
 export const ageAssuranceOverrideEventSchema =
 	_ageAssuranceOverrideEventSchema as ageAssuranceOverrideEventSchema;
@@ -954,6 +1032,7 @@ export const videoDetailsSchema = _videoDetailsSchema as videoDetailsSchema;
 export interface AccountEvent extends v.InferInput<typeof accountEventSchema> {}
 export interface AccountHosting extends v.InferInput<typeof accountHostingSchema> {}
 export interface AccountStats extends v.InferInput<typeof accountStatsSchema> {}
+export interface AccountStrike extends v.InferInput<typeof accountStrikeSchema> {}
 export interface AgeAssuranceEvent extends v.InferInput<typeof ageAssuranceEventSchema> {}
 export interface AgeAssuranceOverrideEvent extends v.InferInput<typeof ageAssuranceOverrideEventSchema> {}
 export interface BlobView extends v.InferInput<typeof blobViewSchema> {}

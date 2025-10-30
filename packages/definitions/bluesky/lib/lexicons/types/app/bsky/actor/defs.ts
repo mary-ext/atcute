@@ -292,6 +292,10 @@ const _profileViewSchema = /*#__PURE__*/ v.object({
 	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	/**
+	 * Debug information for internal development
+	 */
+	debug: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+	/**
 	 * @maxLength 2560
 	 * @maxGraphemes 256
 	 */
@@ -335,6 +339,10 @@ const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 	},
 	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Debug information for internal development
+	 */
+	debug: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 	did: /*#__PURE__*/ v.didString(),
 	/**
 	 * @maxLength 640
@@ -369,6 +377,10 @@ const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	banner: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * Debug information for internal development
+	 */
+	debug: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 	/**
 	 * @maxLength 2560
 	 * @maxGraphemes 256

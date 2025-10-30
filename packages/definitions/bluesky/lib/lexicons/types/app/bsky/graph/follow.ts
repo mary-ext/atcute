@@ -1,6 +1,7 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
+import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
@@ -8,6 +9,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('app.bsky.graph.follow'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		subject: /*#__PURE__*/ v.didString(),
+		get via() {
+			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
+		},
 	}),
 );
 

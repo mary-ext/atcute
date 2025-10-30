@@ -155,6 +155,10 @@ const _postViewSchema = /*#__PURE__*/ v.object({
 	},
 	bookmarkCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	cid: /*#__PURE__*/ v.cidString(),
+	/**
+	 * Debug information for internal development
+	 */
+	debug: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 	get embed() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.variant([
