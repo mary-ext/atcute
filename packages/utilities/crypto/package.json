@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/crypto",
-	"version": "2.2.5",
+	"version": "2.2.6",
 	"description": "lightweight atproto cryptographic library",
 	"keywords": [
 		"atproto",

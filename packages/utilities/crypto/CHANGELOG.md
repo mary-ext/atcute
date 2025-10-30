@@ -1,5 +1,11 @@
 # @atcute/crypto
 
+## 2.2.6
+
+### Patch Changes
+
+- 141bc68: upgrade noble/secp256k1 dependency
+
 ## 2.2.5
 
 ### Patch Changes

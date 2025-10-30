@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/xrpc-server-bun",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Bun WebSocket adapter for @atcute/xrpc-server",
 	"license": "0BSD",
 	"repository": {

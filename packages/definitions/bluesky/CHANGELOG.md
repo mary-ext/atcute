@@ -1,5 +1,11 @@
 # @atcute/bluesky
 
+## 3.2.9
+
+### Patch Changes
+
+- 4723171: pull latest Bluesky lexicons
+
 ## 3.2.8
 
 ### Patch Changes
@@ -267,7 +273,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 
