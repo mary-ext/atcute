@@ -23,7 +23,10 @@ the packages are organized into categories under `packages/`:
 ### code writing
 
 - new files should be in kebab-case
-- formatting is enforced by Prettier, using tabs for indentation, single quotes and trailing commas
+- use tabs for indentation, spaces allowed for diagrams in comments
+- use single quotes and add trailing commas
+- prefer arrow functions
+- write blocks for control statements
 
 ### documentation
 
@@ -31,7 +34,7 @@ the packages are organized into categories under `packages/`:
 - any writing should be in lowercase, except for proper nouns, acronyms and 'I'
 - keep comments focused on explaining _why_ rather than _what_
 - write comments and JSDoc in lowercase (except proper nouns, acronyms, and 'I')
-- keep JSDoc concise: no dashes after @param names, omit articles like "a"/"the" when possible
+- keep JSDoc concise: no dashes after @param names
 - add JSDoc comments to all new exported functions, methods, classes, fields, and enums
 
 ### testing
