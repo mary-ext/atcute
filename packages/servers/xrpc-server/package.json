@@ -39,8 +39,8 @@
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/xrpc-server": "file:",
-		"@types/node": "^22.18.12",
-		"@vitest/coverage-v8": "^4.0.3",
-		"vitest": "^4.0.3"
+		"@types/node": "^22.18.13",
+		"@vitest/coverage-v8": "^4.0.5",
+		"vitest": "^4.0.5"
 	}
 }

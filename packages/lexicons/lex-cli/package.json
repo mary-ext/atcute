@@ -28,14 +28,14 @@
 	"dependencies": {
 		"@atcute/lexicon-doc": "workspace:^",
 		"@badrap/valita": "^0.4.6",
-		"@optique/core": "^0.6.1",
-		"@optique/run": "^0.6.1",
+		"@optique/core": "^0.6.2",
+		"@optique/run": "^0.6.2",
 		"picocolors": "^1.1.1",
 		"prettier": "^3.6.2"
 	},
 	"devDependencies": {
 		"@atcute/lexicons": "workspace:^",
-		"@types/node": "^22.18.12",
+		"@types/node": "^22.18.13",
 		"tschema": "^3.2.0"
 	}
 }

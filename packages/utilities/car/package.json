@@ -30,8 +30,8 @@
 	},
 	"devDependencies": {
 		"@atcute/multibase": "workspace:^",
-		"@vitest/coverage-v8": "^4.0.3",
-		"vitest": "^4.0.3"
+		"@vitest/coverage-v8": "^4.0.5",
+		"vitest": "^4.0.5"
 	},
 	"dependencies": {
 		"@atcute/cbor": "workspace:^",
