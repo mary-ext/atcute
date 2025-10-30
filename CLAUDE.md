@@ -7,7 +7,7 @@ the packages are organized into categories under `packages/`:
 - `servers/`: XRPC server framework and runtime adapters
 - `oauth/`: OAuth implementations
 - `lexicons/`: lexicon schema tooling
-- `definitions/`: generated schema definitions for various AT Protocol services
+- `definitions/`: generated validation and type definitions for various AT Protocol services
 - `identity/`: DID document and handle resolutions, and did:plc validation
 - `utilities/`: DASL codecs, data encoding and atproto primitives
 - `misc/`: general-purpose utilities
@@ -16,9 +16,37 @@ the packages are organized into categories under `packages/`:
 
 ## development notes
 
+### tool management
+
 - tools like Node.js, Bun and pnpm are managed by mise, to run them, use `mise exec -- pnpm ...`
-- the Bash tool maintains a persistent shell session; `cd` changes persist across calls
+
+### code writing
+
+- new files should be in kebab-case
+- formatting is enforced by Prettier, using tabs for indentation, single quotes and trailing commas
+
+### documentation
+
+- documentations include README, code comments, commit messages, changesets
+- any writing should be in lowercase, except for proper nouns, acronyms and 'I'
 - keep comments focused on explaining _why_ rather than _what_
 - write comments and JSDoc in lowercase (except proper nouns, acronyms, and 'I')
 - keep JSDoc concise: no dashes after @param names, omit articles like "a"/"the" when possible
 - add JSDoc comments to all new exported functions, methods, classes, fields, and enums
+
+### testing
+
+- Vitest is the standard test runner, though some packages may still be using bun test
+- run them via `pnpm run --filter <package> test ...`
+
+### commits
+
+- don't do any commits, but do stop if you think the user should make a git commit/changeset now
+- suggest commit messages, the commit messages use Conventional Commit, and is written like
+  `[type]([package?]): [message]` where package may be optional.
+- suggest changesets for any notable changes, with a brief summary of the change and an optional
+  description of why specifically the change was made with example code demonstrating it
+
+### misc
+
+- Claude Code's Bash tool persists directory changes (`cd`) across calls
