@@ -1,975 +1,910 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://unpkg.com/@atcute/lexicon-doc/schema/lexicon-doc.schema.json",
-  "title": "",
-  "description": "",
-  "type": "object",
-  "properties": {
-    "lexicon": {
-      "const": 1
-    },
-    "id": {
-      "pattern": "^[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?:\\.[a-zA-Z](?:[a-zA-Z0-9]{0,62})?)$",
-      "type": "string"
-    },
-    "revision": {
-      "minimum": 0,
-      "type": "integer"
-    },
-    "description": {
-      "type": "string"
-    },
-    "defs": {
-      "propertyNames": {
-        "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-        "type": "string"
-      },
-      "additionalProperties": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/LexObject"
-          },
-          {
-            "$ref": "#/$defs/LexArray"
-          },
-          {
-            "$ref": "#/$defs/LexToken"
-          },
-          {
-            "$ref": "#/$defs/LexIpldType"
-          },
-          {
-            "$ref": "#/$defs/LexBlob"
-          },
-          {
-            "$ref": "#/$defs/LexPrimitive"
-          }
-        ]
-      },
-      "type": "object",
-      "properties": {
-        "main": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/LexRecord"
-            },
-            {
-              "$ref": "#/$defs/LexXrpcQuery"
-            },
-            {
-              "$ref": "#/$defs/LexXrpcProcedure"
-            },
-            {
-              "$ref": "#/$defs/LexXrpcSubscription"
-            },
-            {
-              "$ref": "#/$defs/LexObject"
-            },
-            {
-              "$ref": "#/$defs/LexArray"
-            },
-            {
-              "$ref": "#/$defs/LexToken"
-            },
-            {
-              "$ref": "#/$defs/LexIpldType"
-            },
-            {
-              "$ref": "#/$defs/LexBlob"
-            },
-            {
-              "$ref": "#/$defs/LexPrimitive"
-            }
-          ]
-        }
-      }
-    }
-  },
-  "additionalProperties": false,
-  "required": [
-    "lexicon",
-    "id",
-    "defs"
-  ],
-  "$defs": {
-    "LexArray": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "array"
-        },
-        "description": {
-          "type": "string"
-        },
-        "items": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/LexPrimitive"
-            },
-            {
-              "$ref": "#/$defs/LexIpldType"
-            },
-            {
-              "$ref": "#/$defs/LexRefVariant"
-            },
-            {
-              "$ref": "#/$defs/LexBlob"
-            }
-          ]
-        },
-        "minLength": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "maxLength": {
-          "minimum": 0,
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type",
-        "items"
-      ]
-    },
-    "LexBlob": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "blob"
-        },
-        "description": {
-          "type": "string"
-        },
-        "accept": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "maxSize": {
-          "minimum": 0,
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexBoolean": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "boolean"
-        },
-        "description": {
-          "type": "string"
-        },
-        "default": {
-          "type": "boolean"
-        },
-        "const": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexBytes": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "bytes"
-        },
-        "description": {
-          "type": "string"
-        },
-        "minLength": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "maxLength": {
-          "minimum": 0,
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexCidLink": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "cid-link"
-        },
-        "description": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexInteger": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "integer"
-        },
-        "description": {
-          "type": "string"
-        },
-        "default": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "minimum": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "maximum": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "enum": {
-          "type": "array",
-          "items": {
-            "minimum": 0,
-            "type": "integer"
-          }
-        },
-        "const": {
-          "minimum": 0,
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexIpldType": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/LexBytes"
-        },
-        {
-          "$ref": "#/$defs/LexCidLink"
-        }
-      ]
-    },
-    "LexObject": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "object"
-        },
-        "description": {
-          "type": "string"
-        },
-        "required": {
-          "type": "array",
-          "items": {
-            "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-            "type": "string"
-          }
-        },
-        "nullable": {
-          "type": "array",
-          "items": {
-            "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-            "type": "string"
-          }
-        },
-        "properties": {
-          "propertyNames": {
-            "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-            "type": "string"
-          },
-          "type": "object",
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "$ref": "#/$defs/LexArray"
-              },
-              {
-                "$ref": "#/$defs/LexPrimitive"
-              },
-              {
-                "$ref": "#/$defs/LexIpldType"
-              },
-              {
-                "$ref": "#/$defs/LexRefVariant"
-              },
-              {
-                "$ref": "#/$defs/LexBlob"
-              }
-            ]
-          }
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexPrimitive": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/LexBoolean"
-        },
-        {
-          "$ref": "#/$defs/LexInteger"
-        },
-        {
-          "$ref": "#/$defs/LexString"
-        },
-        {
-          "$ref": "#/$defs/LexUnknown"
-        }
-      ]
-    },
-    "LexPrimitiveArray": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "array"
-        },
-        "description": {
-          "type": "string"
-        },
-        "items": {
-          "$ref": "#/$defs/LexPrimitive"
-        },
-        "minLength": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "maxLength": {
-          "minimum": 0,
-          "type": "integer"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type",
-        "items"
-      ]
-    },
-    "LexRecord": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "record"
-        },
-        "description": {
-          "type": "string"
-        },
-        "key": {
-          "anyOf": [
-            {
-              "enum": [
-                "tid",
-                "nsid",
-                "any"
-              ]
-            },
-            {
-              "pattern": "^literal:.+$",
-              "type": "string"
-            }
-          ]
-        },
-        "record": {
-          "$ref": "#/$defs/LexObject"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type",
-        "record"
-      ]
-    },
-    "LexRef": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "ref"
-        },
-        "description": {
-          "type": "string"
-        },
-        "ref": {
-          "pattern": "^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9_]{0,62}?)?$",
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type",
-        "ref"
-      ]
-    },
-    "LexRefUnion": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "union"
-        },
-        "description": {
-          "type": "string"
-        },
-        "refs": {
-          "type": "array",
-          "items": {
-            "pattern": "^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9_]{0,62}?)?$",
-            "type": "string"
-          }
-        },
-        "closed": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type",
-        "refs"
-      ]
-    },
-    "LexRefVariant": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/LexRef"
-        },
-        {
-          "$ref": "#/$defs/LexRefUnion"
-        }
-      ]
-    },
-    "LexString": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "string"
-        },
-        "format": {
-          "enum": [
-            "datetime",
-            "uri",
-            "at-uri",
-            "did",
-            "handle",
-            "at-identifier",
-            "nsid",
-            "cid",
-            "language",
-            "tid",
-            "record-key"
-          ]
-        },
-        "description": {
-          "type": "string"
-        },
-        "default": {
-          "type": "string"
-        },
-        "minLength": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "maxLength": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "minGraphemes": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "maxGraphemes": {
-          "minimum": 0,
-          "type": "integer"
-        },
-        "enum": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "const": {
-          "type": "string"
-        },
-        "knownValues": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexStringFormat": {
-      "enum": [
-        "datetime",
-        "uri",
-        "at-uri",
-        "did",
-        "handle",
-        "at-identifier",
-        "nsid",
-        "cid",
-        "language",
-        "tid",
-        "record-key"
-      ]
-    },
-    "LexToken": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "token"
-        },
-        "description": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexUnknown": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "unknown"
-        },
-        "description": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexUserType": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/LexRecord"
-        },
-        {
-          "$ref": "#/$defs/LexXrpcQuery"
-        },
-        {
-          "$ref": "#/$defs/LexXrpcProcedure"
-        },
-        {
-          "$ref": "#/$defs/LexXrpcSubscription"
-        },
-        {
-          "$ref": "#/$defs/LexObject"
-        },
-        {
-          "$ref": "#/$defs/LexArray"
-        },
-        {
-          "$ref": "#/$defs/LexToken"
-        },
-        {
-          "$ref": "#/$defs/LexIpldType"
-        },
-        {
-          "$ref": "#/$defs/LexBlob"
-        },
-        {
-          "$ref": "#/$defs/LexPrimitive"
-        }
-      ]
-    },
-    "LexXrpcBody": {
-      "type": "object",
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "encoding": {
-          "pattern": "^\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*)(?:\\s*,\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*))*\\s*$",
-          "type": "string"
-        },
-        "schema": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/LexRefVariant"
-            },
-            {
-              "$ref": "#/$defs/LexObject"
-            }
-          ]
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "encoding"
-      ]
-    },
-    "LexXrpcError": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "name"
-      ]
-    },
-    "LexXrpcParameters": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "params"
-        },
-        "description": {
-          "type": "string"
-        },
-        "required": {
-          "type": "array",
-          "items": {
-            "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-            "type": "string"
-          }
-        },
-        "properties": {
-          "propertyNames": {
-            "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-            "type": "string"
-          },
-          "type": "object",
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "$ref": "#/$defs/LexPrimitive"
-              },
-              {
-                "$ref": "#/$defs/LexPrimitiveArray"
-              }
-            ]
-          }
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexXrpcProcedure": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "procedure"
-        },
-        "description": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "const": "params"
-            },
-            "description": {
-              "type": "string"
-            },
-            "required": {
-              "type": "array",
-              "items": {
-                "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-                "type": "string"
-              }
-            },
-            "properties": {
-              "propertyNames": {
-                "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-                "type": "string"
-              },
-              "type": "object",
-              "additionalProperties": {
-                "anyOf": [
-                  {
-                    "$ref": "#/$defs/LexPrimitive"
-                  },
-                  {
-                    "$ref": "#/$defs/LexPrimitiveArray"
-                  }
-                ]
-              }
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "type"
-          ]
-        },
-        "input": {
-          "type": "object",
-          "properties": {
-            "description": {
-              "type": "string"
-            },
-            "encoding": {
-              "pattern": "^\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*)(?:\\s*,\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*))*\\s*$",
-              "type": "string"
-            },
-            "schema": {
-              "anyOf": [
-                {
-                  "$ref": "#/$defs/LexRefVariant"
-                },
-                {
-                  "$ref": "#/$defs/LexObject"
-                }
-              ]
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "encoding"
-          ]
-        },
-        "output": {
-          "type": "object",
-          "properties": {
-            "description": {
-              "type": "string"
-            },
-            "encoding": {
-              "pattern": "^\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*)(?:\\s*,\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*))*\\s*$",
-              "type": "string"
-            },
-            "schema": {
-              "anyOf": [
-                {
-                  "$ref": "#/$defs/LexRefVariant"
-                },
-                {
-                  "$ref": "#/$defs/LexObject"
-                }
-              ]
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "encoding"
-          ]
-        },
-        "errors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/LexXrpcError"
-          }
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexXrpcQuery": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "query"
-        },
-        "description": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "const": "params"
-            },
-            "description": {
-              "type": "string"
-            },
-            "required": {
-              "type": "array",
-              "items": {
-                "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-                "type": "string"
-              }
-            },
-            "properties": {
-              "propertyNames": {
-                "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-                "type": "string"
-              },
-              "type": "object",
-              "additionalProperties": {
-                "anyOf": [
-                  {
-                    "$ref": "#/$defs/LexPrimitive"
-                  },
-                  {
-                    "$ref": "#/$defs/LexPrimitiveArray"
-                  }
-                ]
-              }
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "type"
-          ]
-        },
-        "output": {
-          "type": "object",
-          "properties": {
-            "description": {
-              "type": "string"
-            },
-            "encoding": {
-              "pattern": "^\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*)(?:\\s*,\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*))*\\s*$",
-              "type": "string"
-            },
-            "schema": {
-              "anyOf": [
-                {
-                  "$ref": "#/$defs/LexRefVariant"
-                },
-                {
-                  "$ref": "#/$defs/LexObject"
-                }
-              ]
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "encoding"
-          ]
-        },
-        "errors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/LexXrpcError"
-          }
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexXrpcSubscription": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "subscription"
-        },
-        "description": {
-          "type": "string"
-        },
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "const": "params"
-            },
-            "description": {
-              "type": "string"
-            },
-            "required": {
-              "type": "array",
-              "items": {
-                "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-                "type": "string"
-              }
-            },
-            "properties": {
-              "propertyNames": {
-                "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
-                "type": "string"
-              },
-              "type": "object",
-              "additionalProperties": {
-                "anyOf": [
-                  {
-                    "$ref": "#/$defs/LexPrimitive"
-                  },
-                  {
-                    "$ref": "#/$defs/LexPrimitiveArray"
-                  }
-                ]
-              }
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "type"
-          ]
-        },
-        "message": {
-          "type": "object",
-          "properties": {
-            "description": {
-              "type": "string"
-            },
-            "schema": {
-              "anyOf": [
-                {
-                  "$ref": "#/$defs/LexRefVariant"
-                },
-                {
-                  "$ref": "#/$defs/LexObject"
-                }
-              ]
-            }
-          },
-          "additionalProperties": false
-        },
-        "errors": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/LexXrpcError"
-          }
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "type"
-      ]
-    },
-    "LexXrpcSubscriptionMessage": {
-      "type": "object",
-      "properties": {
-        "description": {
-          "type": "string"
-        },
-        "schema": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/LexRefVariant"
-            },
-            {
-              "$ref": "#/$defs/LexObject"
-            }
-          ]
-        }
-      },
-      "additionalProperties": false
-    }
-  }
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://unpkg.com/@atcute/lexicon-doc/schema/lexicon-doc.schema.json",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"properties": {
+		"lexicon": {
+			"const": 1
+		},
+		"id": {
+			"pattern": "^[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?:\\.[a-zA-Z](?:[a-zA-Z0-9]{0,62})?)$",
+			"type": "string"
+		},
+		"revision": {
+			"minimum": 0,
+			"type": "integer"
+		},
+		"description": {
+			"type": "string"
+		},
+		"defs": {
+			"propertyNames": {
+				"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+				"type": "string"
+			},
+			"additionalProperties": {
+				"anyOf": [
+					{
+						"$ref": "#/$defs/LexObject"
+					},
+					{
+						"$ref": "#/$defs/LexArray"
+					},
+					{
+						"$ref": "#/$defs/LexToken"
+					},
+					{
+						"$ref": "#/$defs/LexIpldType"
+					},
+					{
+						"$ref": "#/$defs/LexBlob"
+					},
+					{
+						"$ref": "#/$defs/LexPrimitive"
+					}
+				]
+			},
+			"type": "object",
+			"properties": {
+				"main": {
+					"anyOf": [
+						{
+							"$ref": "#/$defs/LexRecord"
+						},
+						{
+							"$ref": "#/$defs/LexXrpcQuery"
+						},
+						{
+							"$ref": "#/$defs/LexXrpcProcedure"
+						},
+						{
+							"$ref": "#/$defs/LexXrpcSubscription"
+						},
+						{
+							"$ref": "#/$defs/LexObject"
+						},
+						{
+							"$ref": "#/$defs/LexArray"
+						},
+						{
+							"$ref": "#/$defs/LexToken"
+						},
+						{
+							"$ref": "#/$defs/LexIpldType"
+						},
+						{
+							"$ref": "#/$defs/LexBlob"
+						},
+						{
+							"$ref": "#/$defs/LexPrimitive"
+						}
+					]
+				}
+			}
+		}
+	},
+	"additionalProperties": false,
+	"required": ["lexicon", "id", "defs"],
+	"$defs": {
+		"LexArray": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "array"
+				},
+				"description": {
+					"type": "string"
+				},
+				"items": {
+					"anyOf": [
+						{
+							"$ref": "#/$defs/LexPrimitive"
+						},
+						{
+							"$ref": "#/$defs/LexIpldType"
+						},
+						{
+							"$ref": "#/$defs/LexRefVariant"
+						},
+						{
+							"$ref": "#/$defs/LexBlob"
+						}
+					]
+				},
+				"minLength": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"maxLength": {
+					"minimum": 0,
+					"type": "integer"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type", "items"]
+		},
+		"LexBlob": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "blob"
+				},
+				"description": {
+					"type": "string"
+				},
+				"accept": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"maxSize": {
+					"minimum": 0,
+					"type": "integer"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexBoolean": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "boolean"
+				},
+				"description": {
+					"type": "string"
+				},
+				"default": {
+					"type": "boolean"
+				},
+				"const": {
+					"type": "boolean"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexBytes": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "bytes"
+				},
+				"description": {
+					"type": "string"
+				},
+				"minLength": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"maxLength": {
+					"minimum": 0,
+					"type": "integer"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexCidLink": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "cid-link"
+				},
+				"description": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexInteger": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "integer"
+				},
+				"description": {
+					"type": "string"
+				},
+				"default": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"minimum": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"maximum": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"enum": {
+					"type": "array",
+					"items": {
+						"minimum": 0,
+						"type": "integer"
+					}
+				},
+				"const": {
+					"minimum": 0,
+					"type": "integer"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexIpldType": {
+			"anyOf": [
+				{
+					"$ref": "#/$defs/LexBytes"
+				},
+				{
+					"$ref": "#/$defs/LexCidLink"
+				}
+			]
+		},
+		"LexObject": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "object"
+				},
+				"description": {
+					"type": "string"
+				},
+				"required": {
+					"type": "array",
+					"items": {
+						"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+						"type": "string"
+					}
+				},
+				"nullable": {
+					"type": "array",
+					"items": {
+						"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+						"type": "string"
+					}
+				},
+				"properties": {
+					"propertyNames": {
+						"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+						"type": "string"
+					},
+					"type": "object",
+					"additionalProperties": {
+						"anyOf": [
+							{
+								"$ref": "#/$defs/LexArray"
+							},
+							{
+								"$ref": "#/$defs/LexPrimitive"
+							},
+							{
+								"$ref": "#/$defs/LexIpldType"
+							},
+							{
+								"$ref": "#/$defs/LexRefVariant"
+							},
+							{
+								"$ref": "#/$defs/LexBlob"
+							}
+						]
+					}
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexPrimitive": {
+			"anyOf": [
+				{
+					"$ref": "#/$defs/LexBoolean"
+				},
+				{
+					"$ref": "#/$defs/LexInteger"
+				},
+				{
+					"$ref": "#/$defs/LexString"
+				},
+				{
+					"$ref": "#/$defs/LexUnknown"
+				}
+			]
+		},
+		"LexPrimitiveArray": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "array"
+				},
+				"description": {
+					"type": "string"
+				},
+				"items": {
+					"$ref": "#/$defs/LexPrimitive"
+				},
+				"minLength": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"maxLength": {
+					"minimum": 0,
+					"type": "integer"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type", "items"]
+		},
+		"LexRecord": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "record"
+				},
+				"description": {
+					"type": "string"
+				},
+				"key": {
+					"anyOf": [
+						{
+							"enum": ["tid", "nsid", "any"]
+						},
+						{
+							"pattern": "^literal:.+$",
+							"type": "string"
+						}
+					]
+				},
+				"record": {
+					"$ref": "#/$defs/LexObject"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type", "record"]
+		},
+		"LexRef": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "ref"
+				},
+				"description": {
+					"type": "string"
+				},
+				"ref": {
+					"pattern": "^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9_]{0,62}?)?$",
+					"type": "string"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type", "ref"]
+		},
+		"LexRefUnion": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "union"
+				},
+				"description": {
+					"type": "string"
+				},
+				"refs": {
+					"type": "array",
+					"items": {
+						"pattern": "^(?=.)(?:[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+\\.[a-zA-Z][a-zA-Z0-9]{0,62}?)?(?:#[a-zA-Z][a-zA-Z0-9_]{0,62}?)?$",
+						"type": "string"
+					}
+				},
+				"closed": {
+					"type": "boolean"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type", "refs"]
+		},
+		"LexRefVariant": {
+			"anyOf": [
+				{
+					"$ref": "#/$defs/LexRef"
+				},
+				{
+					"$ref": "#/$defs/LexRefUnion"
+				}
+			]
+		},
+		"LexString": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "string"
+				},
+				"format": {
+					"enum": [
+						"datetime",
+						"uri",
+						"at-uri",
+						"did",
+						"handle",
+						"at-identifier",
+						"nsid",
+						"cid",
+						"language",
+						"tid",
+						"record-key"
+					]
+				},
+				"description": {
+					"type": "string"
+				},
+				"default": {
+					"type": "string"
+				},
+				"minLength": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"maxLength": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"minGraphemes": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"maxGraphemes": {
+					"minimum": 0,
+					"type": "integer"
+				},
+				"enum": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"const": {
+					"type": "string"
+				},
+				"knownValues": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexStringFormat": {
+			"enum": [
+				"datetime",
+				"uri",
+				"at-uri",
+				"did",
+				"handle",
+				"at-identifier",
+				"nsid",
+				"cid",
+				"language",
+				"tid",
+				"record-key"
+			]
+		},
+		"LexToken": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "token"
+				},
+				"description": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexUnknown": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "unknown"
+				},
+				"description": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexUserType": {
+			"anyOf": [
+				{
+					"$ref": "#/$defs/LexRecord"
+				},
+				{
+					"$ref": "#/$defs/LexXrpcQuery"
+				},
+				{
+					"$ref": "#/$defs/LexXrpcProcedure"
+				},
+				{
+					"$ref": "#/$defs/LexXrpcSubscription"
+				},
+				{
+					"$ref": "#/$defs/LexObject"
+				},
+				{
+					"$ref": "#/$defs/LexArray"
+				},
+				{
+					"$ref": "#/$defs/LexToken"
+				},
+				{
+					"$ref": "#/$defs/LexIpldType"
+				},
+				{
+					"$ref": "#/$defs/LexBlob"
+				},
+				{
+					"$ref": "#/$defs/LexPrimitive"
+				}
+			]
+		},
+		"LexXrpcBody": {
+			"type": "object",
+			"properties": {
+				"description": {
+					"type": "string"
+				},
+				"encoding": {
+					"pattern": "^\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*)(?:\\s*,\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*))*\\s*$",
+					"type": "string"
+				},
+				"schema": {
+					"anyOf": [
+						{
+							"$ref": "#/$defs/LexRefVariant"
+						},
+						{
+							"$ref": "#/$defs/LexObject"
+						}
+					]
+				}
+			},
+			"additionalProperties": false,
+			"required": ["encoding"]
+		},
+		"LexXrpcError": {
+			"type": "object",
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["name"]
+		},
+		"LexXrpcParameters": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "params"
+				},
+				"description": {
+					"type": "string"
+				},
+				"required": {
+					"type": "array",
+					"items": {
+						"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+						"type": "string"
+					}
+				},
+				"properties": {
+					"propertyNames": {
+						"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+						"type": "string"
+					},
+					"type": "object",
+					"additionalProperties": {
+						"anyOf": [
+							{
+								"$ref": "#/$defs/LexPrimitive"
+							},
+							{
+								"$ref": "#/$defs/LexPrimitiveArray"
+							}
+						]
+					}
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexXrpcProcedure": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "procedure"
+				},
+				"description": {
+					"type": "string"
+				},
+				"parameters": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"const": "params"
+						},
+						"description": {
+							"type": "string"
+						},
+						"required": {
+							"type": "array",
+							"items": {
+								"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+								"type": "string"
+							}
+						},
+						"properties": {
+							"propertyNames": {
+								"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+								"type": "string"
+							},
+							"type": "object",
+							"additionalProperties": {
+								"anyOf": [
+									{
+										"$ref": "#/$defs/LexPrimitive"
+									},
+									{
+										"$ref": "#/$defs/LexPrimitiveArray"
+									}
+								]
+							}
+						}
+					},
+					"additionalProperties": false,
+					"required": ["type"]
+				},
+				"input": {
+					"type": "object",
+					"properties": {
+						"description": {
+							"type": "string"
+						},
+						"encoding": {
+							"pattern": "^\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*)(?:\\s*,\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*))*\\s*$",
+							"type": "string"
+						},
+						"schema": {
+							"anyOf": [
+								{
+									"$ref": "#/$defs/LexRefVariant"
+								},
+								{
+									"$ref": "#/$defs/LexObject"
+								}
+							]
+						}
+					},
+					"additionalProperties": false,
+					"required": ["encoding"]
+				},
+				"output": {
+					"type": "object",
+					"properties": {
+						"description": {
+							"type": "string"
+						},
+						"encoding": {
+							"pattern": "^\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*)(?:\\s*,\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*))*\\s*$",
+							"type": "string"
+						},
+						"schema": {
+							"anyOf": [
+								{
+									"$ref": "#/$defs/LexRefVariant"
+								},
+								{
+									"$ref": "#/$defs/LexObject"
+								}
+							]
+						}
+					},
+					"additionalProperties": false,
+					"required": ["encoding"]
+				},
+				"errors": {
+					"type": "array",
+					"items": {
+						"$ref": "#/$defs/LexXrpcError"
+					}
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexXrpcQuery": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "query"
+				},
+				"description": {
+					"type": "string"
+				},
+				"parameters": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"const": "params"
+						},
+						"description": {
+							"type": "string"
+						},
+						"required": {
+							"type": "array",
+							"items": {
+								"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+								"type": "string"
+							}
+						},
+						"properties": {
+							"propertyNames": {
+								"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+								"type": "string"
+							},
+							"type": "object",
+							"additionalProperties": {
+								"anyOf": [
+									{
+										"$ref": "#/$defs/LexPrimitive"
+									},
+									{
+										"$ref": "#/$defs/LexPrimitiveArray"
+									}
+								]
+							}
+						}
+					},
+					"additionalProperties": false,
+					"required": ["type"]
+				},
+				"output": {
+					"type": "object",
+					"properties": {
+						"description": {
+							"type": "string"
+						},
+						"encoding": {
+							"pattern": "^\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*)(?:\\s*,\\s*(?:\\*\\/\\*|[a-z]+\\/[a-zA-Z][a-zA-Z0-9-+.]*))*\\s*$",
+							"type": "string"
+						},
+						"schema": {
+							"anyOf": [
+								{
+									"$ref": "#/$defs/LexRefVariant"
+								},
+								{
+									"$ref": "#/$defs/LexObject"
+								}
+							]
+						}
+					},
+					"additionalProperties": false,
+					"required": ["encoding"]
+				},
+				"errors": {
+					"type": "array",
+					"items": {
+						"$ref": "#/$defs/LexXrpcError"
+					}
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexXrpcSubscription": {
+			"type": "object",
+			"properties": {
+				"type": {
+					"const": "subscription"
+				},
+				"description": {
+					"type": "string"
+				},
+				"parameters": {
+					"type": "object",
+					"properties": {
+						"type": {
+							"const": "params"
+						},
+						"description": {
+							"type": "string"
+						},
+						"required": {
+							"type": "array",
+							"items": {
+								"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+								"type": "string"
+							}
+						},
+						"properties": {
+							"propertyNames": {
+								"pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,62}?$",
+								"type": "string"
+							},
+							"type": "object",
+							"additionalProperties": {
+								"anyOf": [
+									{
+										"$ref": "#/$defs/LexPrimitive"
+									},
+									{
+										"$ref": "#/$defs/LexPrimitiveArray"
+									}
+								]
+							}
+						}
+					},
+					"additionalProperties": false,
+					"required": ["type"]
+				},
+				"message": {
+					"type": "object",
+					"properties": {
+						"description": {
+							"type": "string"
+						},
+						"schema": {
+							"anyOf": [
+								{
+									"$ref": "#/$defs/LexRefVariant"
+								},
+								{
+									"$ref": "#/$defs/LexObject"
+								}
+							]
+						}
+					},
+					"additionalProperties": false
+				},
+				"errors": {
+					"type": "array",
+					"items": {
+						"$ref": "#/$defs/LexXrpcError"
+					}
+				}
+			},
+			"additionalProperties": false,
+			"required": ["type"]
+		},
+		"LexXrpcSubscriptionMessage": {
+			"type": "object",
+			"properties": {
+				"description": {
+					"type": "string"
+				},
+				"schema": {
+					"anyOf": [
+						{
+							"$ref": "#/$defs/LexRefVariant"
+						},
+						{
+							"$ref": "#/$defs/LexObject"
+						}
+					]
+				}
+			},
+			"additionalProperties": false
+		}
+	}
 }

@@ -39,11 +39,9 @@ const isValidLexiconPattern = (pattern: string): boolean => {
  */
 const lexiconMappingEntry: v.Type<LexiconMappingEntry> = v.object({
 	type: v.union(v.literal('namespace'), v.literal('named')),
-	path: v
-		.string()
-		.assert((input): input is LexiconMappingPath => input === '.' || input.startsWith('./'), {
-			message: `path must be "." or start with "./"`,
-		}),
+	path: v.string().assert((input): input is LexiconMappingPath => input === '.' || input.startsWith('./'), {
+		message: `path must be "." or start with "./"`,
+	}),
 });
 
 /**

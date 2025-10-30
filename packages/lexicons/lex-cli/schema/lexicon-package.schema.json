@@ -1,39 +1,33 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://unpkg.com/@atcute/lex-cli/schema/lexicon-package.schema.json",
-  "title": "package.json with atcute:lexicons",
-  "description": "JSON Schema for package.json with atcute:lexicons field for lexicon import mappings",
-  "additionalProperties": true,
-  "type": "object",
-  "properties": {
-    "atcute:lexicons": {
-      "type": "object",
-      "properties": {
-        "mappings": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "type": {
-                "enum": [
-                  "namespace",
-                  "named"
-                ]
-              },
-              "path": {
-                "pattern": "^\\.$|^\\.\\/",
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "required": [
-              "type",
-              "path"
-            ]
-          }
-        }
-      },
-      "additionalProperties": false
-    }
-  }
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://unpkg.com/@atcute/lex-cli/schema/lexicon-package.schema.json",
+	"title": "package.json with atcute:lexicons",
+	"description": "JSON Schema for package.json with atcute:lexicons field for lexicon import mappings",
+	"additionalProperties": true,
+	"type": "object",
+	"properties": {
+		"atcute:lexicons": {
+			"type": "object",
+			"properties": {
+				"mappings": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"properties": {
+							"type": {
+								"enum": ["namespace", "named"]
+							},
+							"path": {
+								"pattern": "^\\.$|^\\.\\/",
+								"type": "string"
+							}
+						},
+						"additionalProperties": false,
+						"required": ["type", "path"]
+					}
+				}
+			},
+			"additionalProperties": false
+		}
+	}
 }

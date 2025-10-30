@@ -141,5 +141,4 @@ describe('createBunWebSocket', () => {
 
 		client.close();
 	});
-
 });

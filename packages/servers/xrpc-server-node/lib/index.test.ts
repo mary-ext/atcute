@@ -101,7 +101,6 @@ describe('subscriptions', () => {
 		client.close();
 	});
 
-
 	it('stops sending when client disconnects', async () => {
 		const ws = createNodeWebSocket();
 		const router = new XRPCRouter({ websocket: ws.adapter });
@@ -161,5 +160,4 @@ describe('subscriptions', () => {
 
 		client.close();
 	});
-
 });

@@ -181,8 +181,7 @@ credentials.
 if you want longer-lived sessions and better security controls, you can enable **confidential client
 mode** by setting up a [client assertion backend](client-assertion-backend).
 
-[client-assertion-backend]:
-	https://github.com/bluesky-social/proposals/tree/main/0010-client-assertion-backend
+[client-assertion-backend]: https://github.com/bluesky-social/proposals/tree/main/0010-client-assertion-backend
 
 ### setup
 
