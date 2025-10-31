@@ -24,8 +24,8 @@ const ECDSA_ALG: EcdsaParams & EcKeyImportParams = {
 	hash: 'SHA-256',
 } as const;
 
-// TODO(2026-10-29): set this to true, importing compressed EC keys should be widely available by then
-// Firefox added support in 2025-10-29
+// TODO(2026-12-09): set this to true, importing compressed EC keys should be widely available by then
+// Firefox added support in 2025-10-29, Firefox 146 scheduled release is 2025-12-09
 // WebKit added support in 2022-09-10 but only in SPKI format (why???)
 const SUPPORTS_COMPRESSED_EC_KEYS = false;
 
