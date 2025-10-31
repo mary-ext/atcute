@@ -22,6 +22,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get facets() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(PubLeafletRichtextFacet.mainSchema));
 		},
+		onPage: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		plaintext: /*#__PURE__*/ v.string(),
 		get reply() {
 			return /*#__PURE__*/ v.optional(replyRefSchema);

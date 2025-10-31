@@ -8,7 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('pub.leaflet.publication'),
-		base_path: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+		base_path: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
 		 * @maxLength 2000
 		 */

@@ -30,7 +30,7 @@ const _italicSchema = /*#__PURE__*/ v.object({
 });
 const _linkSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#link')),
-	uri: /*#__PURE__*/ v.genericUriString(),
+	uri: /*#__PURE__*/ v.string(),
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet')),

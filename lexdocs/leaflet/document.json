@@ -42,7 +42,7 @@
 						"type": "array",
 						"items": {
 							"type": "union",
-							"refs": ["pub.leaflet.pages.linearDocument"]
+							"refs": ["pub.leaflet.pages.linearDocument", "pub.leaflet.pages.canvas"]
 						}
 					}
 				}

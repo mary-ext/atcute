@@ -1,6 +1,6 @@
 {
 	"lexicon": 1,
-	"id": "pub.leaflet.pages.linearDocument",
+	"id": "pub.leaflet.pages.canvas",
 	"defs": {
 		"main": {
 			"type": "object",
@@ -20,7 +20,7 @@
 		},
 		"block": {
 			"type": "object",
-			"required": ["block"],
+			"required": ["block", "x", "y", "width"],
 			"properties": {
 				"block": {
 					"type": "union",
@@ -41,9 +41,21 @@
 						"pub.leaflet.blocks.button"
 					]
 				},
-				"alignment": {
-					"type": "string",
-					"knownValues": ["#textAlignLeft", "#textAlignCenter", "#textAlignRight", "#textAlignJustify"]
+				"x": {
+					"type": "integer"
+				},
+				"y": {
+					"type": "integer"
+				},
+				"width": {
+					"type": "integer"
+				},
+				"height": {
+					"type": "integer"
+				},
+				"rotation": {
+					"type": "integer",
+					"description": "The rotation of the block in degrees"
 				}
 			}
 		},
@@ -54,9 +66,6 @@
 			"type": "token"
 		},
 		"textAlignRight": {
-			"type": "token"
-		},
-		"textAlignJustify": {
 			"type": "token"
 		},
 		"quote": {
