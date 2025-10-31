@@ -9,7 +9,6 @@ import {
 	checkKeypairRelationship,
 	compressPoint,
 	deriveEcPublicKeyFromPrivateKey,
-	isCompressedPoint,
 	isSignatureNormalized,
 	normalizeSignature,
 	toMultikey,
@@ -25,6 +24,19 @@ const ECDSA_ALG: EcdsaParams & EcKeyImportParams = {
 	hash: 'SHA-256',
 } as const;
 
+// TODO(2026-10-29): set this to true, importing compressed EC keys should be widely available by then
+// Firefox added support in 2025-10-29
+// WebKit added support in 2022-09-10 but only in SPKI format (why???)
+const SUPPORTS_COMPRESSED_EC_KEYS = false;
+
+const ASN1_ALGORITHM_IDENTIFIER = Uint8Array.from([
+	...[/* SEQ */ 0x30, /* len */ 0x13], // AlgorithmIdentifier
+	/**/ ...[/* OID */ 0x06, /* len */ 0x07], // {iso(1) member-body(2) us(840) ansi-x962(10045) keyType(2) ecPublicKey(1)} -- https://datatracker.ietf.org/doc/html/rfc5753#section-7.1.2
+	/******/ ...[/* 1.2.840.10045.2.1 (ecPublicKey) */ 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01],
+	/**/ ...[/* OID */ 0x06, /* len */ 0x08], // {iso(1) member-body(2) us(840) ansi-x962(10045) curves(3) prime(1) prime256v1(7)} -- https://datatracker.ietf.org/doc/html/rfc5480#section-2.1.1.1
+	/******/ ...[/* 1.2.840.10045.3.1.7 (prime256v1) */ 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07],
+]);
+
 // This is a hack, to convert a raw private key to a PKCS#8 wrapped key.
 // Reference: [1] RFC 5958 Asymmetric Key Packages, § 2. Asymmetric Key Package CMS Content Type https://datatracker.ietf.org/doc/html/rfc5958#section-2
 // A raw private key can trivially be wrapped in a dummy PKCS#8 container (aka OneAsymmetricKey) without any extra information.
@@ -36,15 +48,17 @@ const ECDSA_ALG: EcdsaParams & EcKeyImportParams = {
 const PKCS8_PRIVATE_KEY_PREFIX = Uint8Array.from([
 	...[/* SEQ */ 0x30, /* len */ 0x41], // PrivateKeyInfo
 	/**/ ...[/* INT */ 0x02, /* len */ 0x01, /* 0 */ 0x00], // Version
-	/**/ ...[/* SEQ */ 0x30, /* len */ 0x13], // AlgorithmIdentifier
-	/******/ ...[/* OID */ 0x06, /* len */ 0x07], // {iso(1) member-body(2) us(840) ansi-x962(10045) keyType(2) ecPublicKey(1)} -- https://datatracker.ietf.org/doc/html/rfc5753#section-7.1.2
-	/**********/ ...[/* 1.2.840.10045.2.1 (ecPublicKey) */ 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01],
-	/******/ ...[/* OID */ 0x06, /* len */ 0x08], // {iso(1) member-body(2) us(840) ansi-x962(10045) curves(3) prime(1) prime256v1(7)} -- https://datatracker.ietf.org/doc/html/rfc5480#section-2.1.1.1
-	/**********/ ...[/* 1.2.840.10045.3.1.7 (prime256v1) */ 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07],
+	/**/ ...ASN1_ALGORITHM_IDENTIFIER, // AlgorithmIdentifier
 	/**/ ...[/* OCT_STR */ 0x04, /* len */ 0x27], // PrivateKey
 	/******/ ...[/* SEQ */ 0x30, /* len */ 0x25],
 	/**********/ ...[/* INT */ 0x02, /* len */ 0x01, /* 1 */ 0x01],
 	/**********/ ...[/* OCT_STR */ 0x04, /* len: 32 */ 0x20 /* ... */],
+]);
+
+const SPKI_PREFIX = Uint8Array.from([
+	...[/* SEQ */ 0x30, /* len */ 0x39], // SubjectPublicKeyInfo
+	/**/ ...ASN1_ALGORITHM_IDENTIFIER, // AlgorithmIdentifier
+	/**/ ...[/* BIT_STR */ 0x03, /* len: 33 */ 0x22, 0x00 /* ... */], // PublicKey
 ]);
 
 export class P256PublicKey implements PublicKey {
@@ -60,15 +74,21 @@ export class P256PublicKey implements PublicKey {
 	}
 
 	static async importRaw(publicKeyBytes: Uint8Array): Promise<P256PublicKey> {
-		const imported = await crypto.subtle.importKey(
-			'raw',
-			isCompressedPoint(publicKeyBytes)
-				? uncompressP256Point(publicKeyBytes)
-				: (publicKeyBytes as BufferSource),
-			ECDSA_ALG,
-			true,
-			['verify'],
-		);
+		let imported: CryptoKey;
+
+		if (!SUPPORTS_COMPRESSED_EC_KEYS) {
+			imported = await crypto.subtle.importKey('raw', uncompressP256Point(publicKeyBytes), ECDSA_ALG, true, [
+				'verify',
+			]);
+		} else {
+			imported = await crypto.subtle.importKey(
+				'spki',
+				concat([SPKI_PREFIX, publicKeyBytes]),
+				ECDSA_ALG,
+				true,
+				['verify'],
+			);
+		}
 
 		return new P256PublicKey(imported);
 	}
@@ -151,17 +171,30 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 		const pkcs8 = concat([PKCS8_PRIVATE_KEY_PREFIX, privateKeyBytes]);
 
 		const privateKey = await crypto.subtle.importKey('pkcs8', pkcs8, ECDSA_ALG, !publicKeyBytes, ['sign']);
-		const publicKey = publicKeyBytes
-			? await crypto.subtle.importKey(
+
+		let publicKey: CryptoKey;
+
+		if (publicKeyBytes) {
+			if (!SUPPORTS_COMPRESSED_EC_KEYS) {
+				publicKey = await crypto.subtle.importKey(
 					'raw',
-					isCompressedPoint(publicKeyBytes)
-						? uncompressP256Point(publicKeyBytes)
-						: (publicKeyBytes as BufferSource),
+					uncompressP256Point(publicKeyBytes),
 					ECDSA_ALG,
 					true,
 					['verify'],
-				)
-			: await deriveEcPublicKeyFromPrivateKey(privateKey, ['verify']);
+				);
+			} else {
+				publicKey = await crypto.subtle.importKey(
+					'spki',
+					concat([SPKI_PREFIX, publicKeyBytes]),
+					ECDSA_ALG,
+					true,
+					['verify'],
+				);
+			}
+		} else {
+			publicKey = await deriveEcPublicKeyFromPrivateKey(privateKey, ['verify']);
+		}
 
 		const keypair = new P256PrivateKey(privateKey, publicKey);
 
