@@ -42,10 +42,8 @@ const _unsignedLegacyCreateOperation = v.object({
 	prev: v.null(),
 	signingKey: didKeyString,
 	recoveryKey: didKeyString,
-	handle: v.string().assert((input) => input.length <= 256, `handle too long (max 256 characters)`),
-	service: v
-		.string()
-		.assert((input) => input.length <= 512, `service endpoint too long (max 512 characters)`),
+	handle: v.string(),
+	service: v.string(),
 }) satisfies v.Type<t.UnsignedLegacyCreateOperation>;
 
 export const unsignedLegacyCreateOperation: v.Type<t.UnsignedLegacyCreateOperation> =
@@ -58,108 +56,17 @@ export const legacyCreateOperation: v.Type<t.LegacyCreateOperation> = _unsignedL
 
 // #region plc_operation
 export const service: v.Type<t.Service> = v.object({
-	type: v.string().assert((input) => input.length <= 256, `service type too long (max 256 characters)`),
-	endpoint: v
-		.string()
-		.assert((input) => input.length <= 512, `service endpoint too long (max 512 characters)`),
+	type: v.string(),
+	endpoint: v.string(),
 });
 
 const _unsignedOperation = v.object({
 	type: v.literal('plc_operation'),
 	prev: v.string().nullable(),
-	rotationKeys: v.array(didKeyString).chain((input) => {
-		const length = input.length;
-
-		if (length === 0) {
-			return v.err(`missing rotation keys`);
-		} else if (length > 10) {
-			return v.err(`too many rotation keys (max 10 keys)`);
-		}
-
-		for (let i = 0; i < length; i++) {
-			const key = input[i];
-
-			for (let j = 0; j < i; j++) {
-				if (input[j] === key) {
-					return v.err({
-						message: `duplicate "${key}" rotation key`,
-						path: [i],
-					});
-				}
-			}
-		}
-
-		return v.ok(input);
-	}),
-	verificationMethods: v.record(permissiveDidKeyString).chain((input) => {
-		const length = Object.keys(input).length;
-
-		if (length > 10) {
-			return v.err(`too many verification method entries (max 10)`);
-		}
-
-		for (const id in input) {
-			const key = input[id];
-
-			if (id.length > 32) {
-				return v.err({
-					message: `verification method id too long (max 32 characters)`,
-					path: [id],
-				});
-			}
-
-			if (key.length > 256) {
-				return v.err({
-					message: `verification method key too long (max 256 characters)`,
-					path: [id],
-				});
-			}
-		}
-
-		return v.ok(input);
-	}),
-	alsoKnownAs: v
-		.array(v.string().assert((input) => input.length <= 256, `aka entry too long (max 256 characters)`))
-		.chain((input) => {
-			const length = input.length;
-
-			if (length > 10) {
-				return v.err(`too many aka entries (max 10)`);
-			}
-
-			for (let i = 0; i < length; i++) {
-				const aka = input[i];
-
-				for (let j = 0; j < i; j++) {
-					if (input[j] === aka) {
-						return v.err({
-							message: `duplicate "${aka}" aka entry`,
-							path: [i],
-						});
-					}
-				}
-			}
-
-			return v.ok(input);
-		}),
-	services: v.record(service).chain((input) => {
-		const length = Object.keys(input).length;
-
-		if (length > 10) {
-			return v.err(`too many service entries (max 10)`);
-		}
-
-		for (const id in input) {
-			if (id.length > 32) {
-				return v.err({
-					message: `service id too long (max 32 characters)`,
-					path: [id],
-				});
-			}
-		}
-
-		return v.ok(input);
-	}),
+	rotationKeys: v.array(didKeyString),
+	verificationMethods: v.record(permissiveDidKeyString),
+	alsoKnownAs: v.array(v.string()),
+	services: v.record(service),
 }) satisfies v.Type<t.UnsignedOperation>;
 
 export const unsignedOperation: v.Type<t.UnsignedOperation> = _unsignedOperation;

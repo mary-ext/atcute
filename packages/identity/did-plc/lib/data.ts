@@ -1,5 +1,6 @@
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
+import { isKeyDid } from '@atcute/identity';
 import { toBase32 } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
@@ -7,6 +8,122 @@ import { DISPUTE_WINDOW } from './constants.js';
 import * as err from './errors.js';
 import * as t from './types.js';
 import { isSignedOperationValid, normalizeOp } from './utils.js';
+
+// soft constraint limits for incoming operations
+const MAX_OP_BYTES = 4000;
+const MAX_AKA_ENTRIES = 10;
+const MAX_AKA_LENGTH = 258; // max handle length (253) plus at:// prefix (5)
+const MAX_ROTATION_ENTRIES = 10;
+const MAX_SERVICE_ENTRIES = 10;
+const MAX_SERVICE_TYPE_LENGTH = 256;
+const MAX_SERVICE_ENDPOINT_LENGTH = 512;
+const MAX_VERIFICATION_METHOD_ENTRIES = 10;
+const MAX_ID_LENGTH = 32;
+const MAX_DID_KEY_LENGTH = 256; // k256 = 57, BLS12-381 = 143
+
+/**
+ * Validate an incoming operation against soft constraints (length limits, counts, duplicates).
+ * This should be used when preparing to submit a new operation to plc.directory.
+ * Historical operations should only be validated against hard constraints (structure, signatures, hashes).
+ */
+export const validateIncomingOp = (op: t.CompatibleOperationOrTombstone): void => {
+	// Check CBOR size limit
+	const byteLength = CBOR.encode(op).byteLength;
+	if (byteLength > MAX_OP_BYTES) {
+		throw new Error(`operation too large (${MAX_OP_BYTES} bytes maximum in cbor encoding)`);
+	}
+
+	if (op.type === 'plc_tombstone') {
+		return;
+	}
+
+	op = normalizeOp(op);
+
+	{
+		const alsoKnownAs = op.alsoKnownAs;
+
+		if (alsoKnownAs.length > MAX_AKA_ENTRIES) {
+			throw new Error(`too many alsoKnownAs entries (max ${MAX_AKA_ENTRIES})`);
+		}
+
+		const alsoKnownAsDupe = new Set<string>();
+		for (const aka of alsoKnownAs) {
+			if (aka.length > MAX_AKA_LENGTH) {
+				throw new Error(`alsoKnownAs entry too long (max ${MAX_AKA_LENGTH}): ${aka}`);
+			}
+
+			if (alsoKnownAsDupe.has(aka)) {
+				throw new Error(`duplicate alsoKnownAs entry: ${aka}`);
+			}
+
+			alsoKnownAsDupe.add(aka);
+		}
+	}
+
+	{
+		const rotationKeys = op.rotationKeys;
+
+		if (rotationKeys.length === 0) {
+			throw new Error(`missing rotation keys`);
+		}
+
+		if (rotationKeys.length > MAX_ROTATION_ENTRIES) {
+			throw new Error(`too many rotationKey entries (max ${MAX_ROTATION_ENTRIES})`);
+		}
+
+		const rotationKeyDupe = new Set<string>();
+		for (const key of rotationKeys) {
+			if (rotationKeyDupe.has(key)) {
+				throw new Error(`duplicate rotation key: ${key}`);
+			}
+			rotationKeyDupe.add(key);
+		}
+	}
+
+	{
+		const services = Object.entries(op.services);
+
+		if (services.length > MAX_SERVICE_ENTRIES) {
+			throw new Error(`too many service entries (max ${MAX_SERVICE_ENTRIES})`);
+		}
+
+		for (const [id, service] of services) {
+			if (id.length > MAX_ID_LENGTH) {
+				throw new Error(`service id too long (max ${MAX_ID_LENGTH}): ${id}`);
+			}
+
+			if (service.type.length > MAX_SERVICE_TYPE_LENGTH) {
+				throw new Error(`service type too long (max ${MAX_SERVICE_TYPE_LENGTH})`);
+			}
+
+			if (service.endpoint.length > MAX_SERVICE_ENDPOINT_LENGTH) {
+				throw new Error(`service endpoint too long (max ${MAX_SERVICE_ENDPOINT_LENGTH})`);
+			}
+		}
+	}
+
+	{
+		const verificationMethods = Object.entries(op.verificationMethods);
+
+		if (verificationMethods.length > MAX_VERIFICATION_METHOD_ENTRIES) {
+			throw new Error(`too many verification method entries (max ${MAX_VERIFICATION_METHOD_ENTRIES})`);
+		}
+
+		for (const [id, key] of verificationMethods) {
+			if (id.length > MAX_ID_LENGTH) {
+				throw new Error(`verification method id too long (max ${MAX_ID_LENGTH}): ${id}`);
+			}
+
+			if (key.length > MAX_DID_KEY_LENGTH) {
+				throw new Error(`verification method key too long (max ${MAX_DID_KEY_LENGTH}): ${key}`);
+			}
+
+			if (!isKeyDid(key)) {
+				throw new Error(`invalid verification method key: ${key}`);
+			}
+		}
+	}
+};
 
 /**
  * Process an indexed entry by validating it and integrating it into the canonical log.
