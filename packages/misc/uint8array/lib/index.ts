@@ -137,238 +137,54 @@ export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, len
 
 const fromCharCode = String.fromCharCode;
 
-const shortStringInJS = (buffer: Uint8Array, idx: number, length: number): string | undefined => {
-	if (length < 4) {
-		if (length < 2) {
-			if (length === 0) {
-				return '';
-			} else {
-				const a = buffer[idx];
-
-				if (a & 0x80) {
-					return;
-				}
-
-				return fromCharCode(a);
-			}
-		} else {
-			const a = buffer[idx];
-			const b = buffer[idx + 1];
-
-			if (a & 0x80 || b & 0x80) {
-				return;
-			}
-
-			if (length < 3) {
-				return fromCharCode(a, b);
-			}
-
-			const c = buffer[idx + 2];
-
-			if (c & 0x80) {
-				return;
-			}
-
-			return fromCharCode(a, b, c);
-		}
-	} else {
-		const a = buffer[idx];
-		const b = buffer[idx + 1];
-		const c = buffer[idx + 2];
-		const d = buffer[idx + 3];
-
-		if (a & 0x80 || b & 0x80 || c & 0x80 || d & 0x80) {
-			return;
-		}
-
-		if (length < 6) {
-			if (length === 4) {
-				return fromCharCode(a, b, c, d);
-			} else {
-				const e = buffer[idx + 4];
-
-				if (e & 0x80) {
-					return;
-				}
-
-				return fromCharCode(a, b, c, d, e);
-			}
-		} else if (length < 8) {
-			const e = buffer[idx + 4];
-			const f = buffer[idx + 5];
-
-			if (e & 0x80 || f & 0x80) {
-				return;
-			}
-
-			if (length < 7) {
-				return fromCharCode(a, b, c, d, e, f);
-			}
-
-			const g = buffer[idx + 6];
-
-			if (g & 0x80) {
-				return;
-			}
-
-			return fromCharCode(a, b, c, d, e, f, g);
-		} else {
-			const e = buffer[idx + 4];
-			const f = buffer[idx + 5];
-			const g = buffer[idx + 6];
-			const h = buffer[idx + 7];
-
-			if (e & 0x80 || f & 0x80 || g & 0x80 || h & 0x80) {
-				return;
-			}
-
-			if (length < 10) {
-				if (length === 8) {
-					return fromCharCode(a, b, c, d, e, f, g, h);
-				} else {
-					const i = buffer[idx + 8];
-
-					if (i & 0x80) {
-						return;
-					}
-
-					return fromCharCode(a, b, c, d, e, f, g, h, i);
-				}
-			} else if (length < 12) {
-				const i = buffer[idx + 8];
-				const j = buffer[idx + 9];
-
-				if (i & 0x80 || j & 0x80) {
-					return;
-				}
-
-				if (length < 11) {
-					return fromCharCode(a, b, c, d, e, f, g, h, i, j);
-				}
-
-				const k = buffer[idx + 10];
-
-				if (k & 0x80) {
-					return;
-				}
-
-				return fromCharCode(a, b, c, d, e, f, g, h, i, j, k);
-			} else {
-				const i = buffer[idx + 8];
-				const j = buffer[idx + 9];
-				const k = buffer[idx + 10];
-				const l = buffer[idx + 11];
-
-				if (i & 0x80 || j & 0x80 || k & 0x80 || l & 0x80) {
-					return;
-				}
-
-				if (length < 14) {
-					if (length === 12) {
-						return fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l);
-					} else {
-						const m = buffer[idx + 12];
-
-						if (m & 0x80) {
-							return;
-						}
-
-						return fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m);
-					}
-				} else {
-					const m = buffer[idx + 12];
-					const n = buffer[idx + 13];
-
-					if (m & 0x80 || n & 0x80) {
-						return;
-					}
-
-					if (length < 15) {
-						return fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n);
-					}
-
-					const o = buffer[idx + 14];
-
-					if (o & 0x80) {
-						return;
-					}
-
-					return fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o);
-				}
-			}
-		}
-	}
-};
-
-const longStringInJS = (buffer: Uint8Array, idx: number, length: number): string | undefined => {
-	const bytes = new Array(length);
-
-	for (let i = 0; i < length; i++) {
-		const byte = buffer[idx + i];
-		if (byte & 0x80) {
-			return;
-		}
-		bytes[i] = byte;
-	}
-
-	return fromCharCode.apply(String, bytes);
-};
-
 /**
  * decodes a UTF-8 string from a given buffer
  */
-export const decodeUtf8From = (
-	from: Uint8Array,
-	offset: number = 0,
-	length: number = from.length - offset,
-): string => {
-	if (length < 16) {
-		const result = shortStringInJS(from, offset, length);
-		if (result !== undefined) {
-			return result;
-		}
+export const decodeUtf8From = (from: Uint8Array, offset?: number, length?: number): string => {
+	let buffer: Uint8Array;
+
+	if (offset === undefined) {
+		buffer = from;
+	} else if (length === undefined) {
+		buffer = from.subarray(offset);
+	} else {
+		buffer = from.subarray(offset, offset + length);
 	}
 
-	if (length < 32) {
-		const result = longStringInJS(from, offset, length);
-		if (result !== undefined) {
-			return result;
-		}
+	const end = buffer.length;
+	if (end > 24) {
+		return textDecoder.decode(buffer);
 	}
 
-	const end = offset + length;
+	{
+		let str = '';
+		let idx = 0;
 
-	if (length >= 64) {
-		return textDecoder.decode(from.subarray(offset, end));
-	}
+		for (; idx + 3 < end; idx += 4) {
+			const a = buffer[idx];
+			const b = buffer[idx + 1];
+			const c = buffer[idx + 2];
+			const d = buffer[idx + 3];
 
-	let str = '';
-	let i = offset;
+			if ((a | b | c | d) & 0x80) {
+				return str + textDecoder.decode(buffer.subarray(idx));
+			}
 
-	for (; i + 3 < end; i += 4) {
-		const a = from[i];
-		const b = from[i + 1];
-		const c = from[i + 2];
-		const d = from[i + 3];
-
-		if ((a | b | c | d) & 0x80) {
-			return str + textDecoder.decode(from.subarray(i, end));
+			str += fromCharCode(a, b, c, d);
 		}
 
-		str += fromCharCode(a, b, c, d);
-	}
+		for (; idx < end; idx++) {
+			const x = buffer[idx];
 
-	for (; i < end; i++) {
-		const x = from[i];
+			if (x & 0x80) {
+				return str + textDecoder.decode(buffer.subarray(idx));
+			}
 
-		if (x & 0x80) {
-			return str + textDecoder.decode(from.subarray(i, end));
+			str += fromCharCode(x);
 		}
 
-		str += fromCharCode(x);
+		return str;
 	}
-
-	return str;
 };
 
 /**
