@@ -15,9 +15,6 @@ featuring:
   - Bluesky-specific helpers like [a rich text builder][bluesky-richtext-builder] and [a post thread
     builder][bluesky-threading]
 
-looking for more? check out [skyware][skyware], an additional collection of packages, built on top
-of atcute.
-
 [bluemoji]: ./packages/definitions/bluemoji
 [bluesky-richtext-builder]: ./packages/bluesky/richtext-builder
 [bluesky-threading]: ./packages/bluesky/threading
