@@ -7,24 +7,26 @@ import type { BaseSchema } from '@atcute/lexicons/validations';
 /**
  * extracts the params type from an XRPC subscription schema
  */
-export type ParamsOf<T> = T extends XRPCSubscriptionMetadata<infer TParams, any, any>
-	? TParams extends null
-		? undefined
-		: TParams extends BaseSchema
-			? InferOutput<TParams>
-			: never
-	: never;
+export type ParamsOf<T> =
+	T extends XRPCSubscriptionMetadata<infer TParams, any, any>
+		? TParams extends null
+			? undefined
+			: TParams extends BaseSchema
+				? InferOutput<TParams>
+				: never
+		: never;
 
 /**
  * extracts the message type from an XRPC subscription schema
  */
-export type MessageOf<T> = T extends XRPCSubscriptionMetadata<any, infer TMessage, any>
-	? TMessage extends null
-		? unknown
-		: TMessage extends BaseSchema
-			? InferOutput<TMessage>
-			: never
-	: never;
+export type MessageOf<T> =
+	T extends XRPCSubscriptionMetadata<any, infer TMessage, any>
+		? TMessage extends null
+			? unknown
+			: TMessage extends BaseSchema
+				? InferOutput<TMessage>
+				: never
+		: never;
 
 /**
  * configuration options for FirehoseSubscription
