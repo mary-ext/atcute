@@ -1,5 +1,13 @@
 # @atcute/leaflet
 
+## 1.0.12
+
+### Patch Changes
+
+- 11b2218: pull latest Leaflet lexicons
+- Updated dependencies [8b5d7e0]
+  - @atcute/atproto@3.1.9
+
 ## 1.0.11
 
 ### Patch Changes

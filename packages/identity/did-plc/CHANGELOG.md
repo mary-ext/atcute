@@ -1,5 +1,15 @@
 # @atcute/did-plc
 
+## 0.2.0
+
+### Minor Changes
+
+- d12bcb6: loosen validations around PLC operations
+
+  the schemas still contain constraints that are considered a hard requirement, but the soft
+  requirements goes to `validateIncomingOp()`, use this if you're trying to check whether the
+  operation you're trying to submit would pass or not.
+
 ## 0.1.7
 
 ### Patch Changes
