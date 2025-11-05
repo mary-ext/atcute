@@ -33,7 +33,8 @@ of atcute.
 | Packages                                                                                                               |
 | ---------------------------------------------------------------------------------------------------------------------- |
 | **Client packages**                                                                                                    |
-| [`client`](./packages/clients/client): API client library                                                              |
+| [`client`](./packages/clients/client): XRPC HTTP client library                                                        |
+| [`firehose`](./packages/clients/firehose): XRPC subscriptions client library                                           |
 | [`jetstream`](./packages/clients/jetstream): Jetstream client                                                          |
 | **Server packages**                                                                                                    |
 | [`xrpc-server`](./packages/servers/xrpc-server): web framework                                                         |

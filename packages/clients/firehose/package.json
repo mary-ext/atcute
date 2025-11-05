@@ -1,0 +1,36 @@
+{
+	"type": "module",
+	"name": "@atcute/firehose",
+	"version": "0.1.0",
+	"description": "lightweight and cute XRPC subscription client for AT Protocol",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/clients/firehose"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"scripts": {
+		"build": "tsc --project tsconfig.build.json",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/cbor": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
+		"@mary-ext/event-iterator": "^1.0.0",
+		"@mary-ext/simple-event-emitter": "^1.0.0",
+		"partysocket": "^1.1.6",
+		"type-fest": "^4.41.0"
+	},
+	"devDependencies": {
+		"@atcute/atproto": "^3.1.8"
+	}
+}
