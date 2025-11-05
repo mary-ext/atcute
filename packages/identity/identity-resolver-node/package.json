@@ -33,7 +33,7 @@
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
-		"@types/node": "^22.18.13"
+		"@types/node": "^22.19.0"
 	},
 	"dependencies": {
 		"@atcute/lexicons": "workspace:^"
