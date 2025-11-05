@@ -36,11 +36,6 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadV2', 
 			10,
 		),
 		/**
-		 * Whether to prioritize posts from followed users. It only has effect when the user is authenticated.
-		 * @default false
-		 */
-		prioritizeFollowedUsers: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
-		/**
 		 * Sorting for the thread replies.
 		 * @default "oldest"
 		 */

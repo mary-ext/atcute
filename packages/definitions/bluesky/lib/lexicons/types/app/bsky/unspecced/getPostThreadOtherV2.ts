@@ -9,11 +9,6 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadOther
 		 * Reference (AT-URI) to post record. This is the anchor post.
 		 */
 		anchor: /*#__PURE__*/ v.resourceUriString(),
-		/**
-		 * Whether to prioritize posts from followed users. It only has effect when the user is authenticated.
-		 * @default false
-		 */
-		prioritizeFollowedUsers: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	}),
 	output: {
 		type: 'lex',

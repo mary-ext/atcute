@@ -472,10 +472,6 @@ const _statusViewSchema = /*#__PURE__*/ v.object({
 const _threadViewPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#threadViewPref')),
 	/**
-	 * Show followed users at the top of all replies.
-	 */
-	prioritizeFollowedUsers: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-	/**
 	 * Sorting mode for threads.
 	 */
 	sort: /*#__PURE__*/ v.optional(

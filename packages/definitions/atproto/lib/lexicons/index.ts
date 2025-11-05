@@ -27,6 +27,7 @@ export * as ComAtprotoIdentityUpdateHandle from './types/com/atproto/identity/up
 export * as ComAtprotoLabelDefs from './types/com/atproto/label/defs.js';
 export * as ComAtprotoLabelQueryLabels from './types/com/atproto/label/queryLabels.js';
 export * as ComAtprotoLabelSubscribeLabels from './types/com/atproto/label/subscribeLabels.js';
+export * as ComAtprotoLexiconResolveLexicon from './types/com/atproto/lexicon/resolveLexicon.js';
 export * as ComAtprotoLexiconSchema from './types/com/atproto/lexicon/schema.js';
 export * as ComAtprotoModerationCreateReport from './types/com/atproto/moderation/createReport.js';
 export * as ComAtprotoModerationDefs from './types/com/atproto/moderation/defs.js';
