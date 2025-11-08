@@ -57,3 +57,6 @@ the packages are organized into categories under `packages/`:
 ### misc
 
 - Claude Code's Bash tool persists directory changes (`cd`) across calls
+- the `.research/` directory serves as a workspace for temporary files, analysis, and planning
+  materials. create it if necessary (it's gitignored). this directory may contain cloned
+  repositories or other reference materials that can help inform implementation decisions
