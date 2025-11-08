@@ -34,6 +34,22 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 * CI runner to send jobs to and receive results from
 		 */
 		spindle: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		/**
+		 * Topics related to the repo
+		 * @maxLength 50
+		 */
+		topics: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(
+				/*#__PURE__*/ v.array(
+					/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 50)]),
+				),
+				[/*#__PURE__*/ v.arrayLength(0, 50)],
+			),
+		),
+		/**
+		 * Any URI related to the repo
+		 */
+		website: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	}),
 );
 

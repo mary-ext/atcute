@@ -28,6 +28,21 @@
 						"minGraphemes": 1,
 						"maxGraphemes": 140
 					},
+					"website": {
+						"type": "string",
+						"format": "uri",
+						"description": "Any URI related to the repo"
+					},
+					"topics": {
+						"type": "array",
+						"description": "Topics related to the repo",
+						"items": {
+							"type": "string",
+							"minLength": 1,
+							"maxLength": 50
+						},
+						"maxLength": 50
+					},
 					"source": {
 						"type": "string",
 						"format": "uri",
