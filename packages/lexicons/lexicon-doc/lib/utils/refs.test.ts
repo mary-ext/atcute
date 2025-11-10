@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { LexiconDoc } from '../schema.js';
+import type { LexiconDoc } from '../types.js';
 import { findExternalReferences } from './refs.js';
 
 describe('findExternalReferences', () => {
