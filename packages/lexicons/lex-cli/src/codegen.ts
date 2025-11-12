@@ -773,11 +773,11 @@ const generateType = (
 
 		// LexPrimitive
 		case 'boolean': {
-			if (spec.const !== undefined) {
-				return `${PURE} v.literal(${spec.const})`;
-			}
-
 			let call = `${PURE} v.boolean()`;
+
+			if (spec.const !== undefined) {
+				call = `${PURE} v.literal(${spec.const})`;
+			}
 
 			if (spec.default !== undefined) {
 				call = `${PURE} v.optional(${call}, ${lit(spec.default)})`;
@@ -786,20 +786,6 @@ const generateType = (
 			return call;
 		}
 		case 'integer': {
-			if (spec.const !== undefined) {
-				return `${PURE} v.literal(${lit(spec.const)})`;
-			}
-
-			if (spec.enum !== undefined) {
-				let call = `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
-
-				if (spec.default !== undefined) {
-					call = `${PURE} v.optional(${call}, ${lit(spec.default)})`;
-				}
-
-				return call;
-			}
-
 			let pipe: string[] = [];
 
 			if ((spec.minimum ?? 0) > 0 || spec.maximum !== undefined) {
@@ -812,7 +798,11 @@ const generateType = (
 
 			let call = `${PURE} v.integer()`;
 
-			if (pipe.length !== 0) {
+			if (spec.const !== undefined) {
+				call = `${PURE} v.literal(${lit(spec.const)})`;
+			} else if (spec.enum !== undefined) {
+				call = `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
+			} else if (pipe.length !== 0) {
 				call = `${PURE} v.constrain(${call}, [ ${pipe.join(', ')} ])`;
 			}
 
@@ -823,20 +813,6 @@ const generateType = (
 			return call;
 		}
 		case 'string': {
-			if (spec.const !== undefined) {
-				return `${PURE} v.literal(${lit(spec.const)})`;
-			}
-
-			if (spec.enum !== undefined) {
-				let call = `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
-
-				if (spec.default !== undefined) {
-					call = `${PURE} v.optional(${call}, ${lit(spec.default)})`;
-				}
-
-				return call;
-			}
-
 			let pipe: string[] = [];
 
 			if ((spec.minLength ?? 0) > 0 || spec.maxLength !== undefined) {
@@ -908,7 +884,11 @@ const generateType = (
 				}
 			}
 
-			if (pipe.length !== 0) {
+			if (spec.const !== undefined) {
+				call = `${PURE} v.literal(${lit(spec.const)})`;
+			} else if (spec.enum !== undefined) {
+				call = `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
+			} else if (pipe.length !== 0) {
 				call = `${PURE} v.constrain(${call}, [ ${pipe.join(', ')} ])`;
 			}
 
