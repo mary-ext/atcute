@@ -7,12 +7,27 @@ const integer = v
 	.number()
 	.assert((input) => input >= 0 && Number.isSafeInteger(input), `expected non-negative integer`);
 
-export const lexBoolean: v.Type<t.LexBoolean> = v.object({
-	type: v.literal('boolean'),
-	description: v.string().optional(),
-	default: v.boolean().optional(),
-	const: v.boolean().optional(),
-});
+export const lexBoolean: v.Type<t.LexBoolean> = v
+	.object({
+		type: v.literal('boolean'),
+		description: v.string().optional(),
+		default: v.boolean().optional(),
+		const: v.boolean().optional(),
+	})
+	.chain((input) => {
+		const { const: constValue, default: defaultValue } = input;
+
+		if (defaultValue !== undefined) {
+			if (constValue !== undefined && defaultValue !== constValue) {
+				return v.err({
+					message: `default value must match constant value`,
+					path: ['default'],
+				});
+			}
+		}
+
+		return v.ok(input);
+	});
 
 export const lexInteger: v.Type<t.LexInteger> = v
 	.object({
@@ -41,6 +56,13 @@ export const lexInteger: v.Type<t.LexInteger> = v
 		}
 
 		if (defaultValue !== undefined) {
+			if (constValue !== undefined && defaultValue !== constValue) {
+				return v.err({
+					message: `default value must match constant value`,
+					path: ['default'],
+				});
+			}
+
 			if (defaultValue < minimum) {
 				return v.err({
 					message: `default value can't be lower than minimum value`,
@@ -57,6 +79,13 @@ export const lexInteger: v.Type<t.LexInteger> = v
 		}
 
 		if (constValue !== undefined) {
+			if (enumValues !== undefined) {
+				return v.err({
+					message: `const and enum can't be used together`,
+					path: ['const'],
+				});
+			}
+
 			if (constValue < minimum) {
 				return v.err({
 					message: `const value can't be lower than minimum value`,
@@ -150,6 +179,13 @@ export const lexString: v.Type<t.LexString> = v
 		}
 
 		if (defaultValue !== undefined) {
+			if (constValue !== undefined && defaultValue !== constValue) {
+				return v.err({
+					message: `default value must match constant value`,
+					path: ['default'],
+				});
+			}
+
 			{
 				const bound = isWithinUtf8Bounds(defaultValue, minLength, maxLength);
 
@@ -188,6 +224,13 @@ export const lexString: v.Type<t.LexString> = v
 		}
 
 		if (constValue !== undefined) {
+			if (enumValues !== undefined) {
+				return v.err({
+					message: `const and enum can't be used together`,
+					path: ['const'],
+				});
+			}
+
 			{
 				const bound = isWithinUtf8Bounds(constValue, minLength, maxLength);
 
@@ -308,6 +351,7 @@ export const lexString: v.Type<t.LexString> = v
 				}
 			}
 		}
+
 		return v.ok(input);
 	});
 
