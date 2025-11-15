@@ -2,4 +2,4 @@
 '@atcute/lexicon-doc': patch
 ---
 
-check if default value matches provided constant
+raise error if default value does not match provided constant values
