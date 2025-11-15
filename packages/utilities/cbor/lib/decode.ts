@@ -84,21 +84,14 @@ const readUint32 = (state: State): number => {
 };
 
 const readUint53 = (state: State): number => {
-	let pos = state.p;
-
-	const buf = state.b;
-
-	const hi = ((buf[pos++] << 24) | (buf[pos++] << 16) | (buf[pos++] << 8) | buf[pos++]) >>> 0;
+	const hi = readUint32(state);
+	const lo = readUint32(state);
 
 	if (hi > 0x1fffff) {
 		throw new RangeError(`can't decode integers beyond safe integer range`);
 	}
 
-	const lo = ((buf[pos++] << 24) | (buf[pos++] << 16) | (buf[pos++] << 8) | buf[pos++]) >>> 0;
-	const value = hi * 2 ** 32 + lo;
-
-	state.p = pos;
-	return value;
+	return hi * 2 ** 32 + lo;
 };
 
 const readString = (state: State, length: number): string => {
@@ -180,54 +173,46 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 
 		const type = prelude >> 5;
 		const info = prelude & 0x1f;
+		const arg = type === 7 ? 0 : readArgument(state, info);
 
 		switch (type) {
 			case 0: {
-				value = readArgument(state, info);
+				value = arg;
 				break;
 			}
 			case 1: {
-				value = -1 - readArgument(state, info);
+				value = -1 - arg;
 				break;
 			}
 			case 2: {
-				value = readBytes(state, readArgument(state, info));
+				value = readBytes(state, arg);
 				break;
 			}
 			case 3: {
-				value = readString(state, readArgument(state, info));
+				value = readString(state, arg);
 				break;
 			}
 			case 4: {
-				const len = readArgument(state, info);
-				const arr = new Array(len);
-				value = arr;
-
-				if (len > 0) {
-					stack = { t: 1, c: arr, k: null, r: len, n: stack };
+				if (arg > 0) {
+					stack = { t: 1, c: (value = new Array(arg)), k: null, r: arg, n: stack };
 					continue jump;
 				}
 
+				value = []
 				break;
 			}
 			case 5: {
-				const len = readArgument(state, info);
-				const obj: Record<string, unknown> = {};
-				value = obj;
-
-				if (len > 0) {
+				value = {}
+				if (arg > 0) {
 					// We'll read the key of the first item here.
 					const first = decodeStringKey(state);
 
-					stack = { t: 0, c: obj, k: first, r: len, n: stack };
+					stack = { t: 0, c: value, k: first, r: arg, n: stack };
 					continue jump;
 				}
-
 				break;
 			}
 			case 6: {
-				const arg = readArgument(state, info);
-
 				switch (arg) {
 					case 42: {
 						const prelude = readUint8(state);
@@ -289,7 +274,6 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 					}
 
 					obj[key] = value;
-
 					break;
 				}
 				case 1: {
@@ -301,19 +285,17 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 				}
 			}
 
-			if (--stack.r !== 0) {
+			if (--stack.r) {
 				// We still have more values to decode, continue
 
-				if (stack.t === 0) {
+				if (!stack.t) {
 					// Read the key of the next map item
 					const prevKey = stack.k;
-					const nextKey = decodeStringKey(state);
+					stack.k = decodeStringKey(state);
 
-					if (compareKeys(nextKey, prevKey) <= 0) {
+					if (compareKeys(stack.k, prevKey) <= 0) {
 						throw new TypeError(`map keys are not in canonical order or contain duplicates`);
 					}
-
-					stack.k = nextKey;
 				}
 
 				continue jump;

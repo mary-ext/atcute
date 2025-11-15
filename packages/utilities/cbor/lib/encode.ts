@@ -1,14 +1,14 @@
-import { CidLinkWrapper, fromString, type CidLink } from '@atcute/cid';
+import { type CidLink, CidLinkWrapper, fromString } from '@atcute/cid';
 import { allocUnsafe, concat, encodeUtf8Into } from '@atcute/uint8array';
 
-import { BytesWrapper, fromBytes, type Bytes } from './bytes.js';
+import { type Bytes, BytesWrapper, fromBytes } from './bytes.js';
 
 const MAX_TYPE_ARG_LEN = 9;
 const CHUNK_SIZE = 1024;
 
 interface State {
-	c: Uint8Array[];
-	b: Uint8Array;
+	c: Uint8Array<ArrayBuffer>[];
+	b: Uint8Array<ArrayBuffer>;
 	v: DataView | null;
 	p: number;
 	l: number;
@@ -152,21 +152,37 @@ const writeNumber = (state: State, val: number): void => {
 };
 
 const writeString = (state: State, val: string): void => {
+	const strLength = val.length;
+
 	// JS strings are UTF-16 (ECMA spec)
 	// Therefore, worst case length of UTF-8 is length * 3. (plus 9 bytes of CBOR header)
 	// Greatly overshoots in practice, but doesn't matter. (alloc is O(1)+ anyway)
-	const strLength = val.length;
 	resizeIfNeeded(state, strLength * 3 + MAX_TYPE_ARG_LEN);
+
+	// Optimistic fast encode
+	ascii: {
+		const ptr = state.p + getTypeInfoLength(strLength);
+		for (let i = 0; i < strLength; i++) {
+			let code = val.charCodeAt(i);
+			if (code > 0x7f) break ascii;
+			state.b[ptr + i] = code;
+		}
+
+		// String was ASCII-only, we're done
+		writeTypeAndArgument(state, 3, strLength);
+		state.p += strLength;
+		return;
+	}
 
 	// Credit: method used by cbor-x
 	// Rather than allocate a buffer and then copy it back to the destination buffer:
 	// - Estimate the length of the header based on the UTF-16 size of the string.
-	//   Should be accurate most of the time, see last point for when it isn't.
+	//   Should be accurate enough, see last point for when it isn't.
 	// - Directly write the string at the estimated location, retrieving with it the actual length.
 	// - Write the header now that the length is available.
 	//   - If the estimation happened to be wrong, correct the placement of the string.
 	//     While it's costly, it's actually roughly the same cost as if we encoded it separately + copy.
-	const estimatedHeaderSize = getTypeInfoLength(strLength);
+	const estimatedHeaderSize = getTypeInfoLength(strLength * 2);
 	const estimatedPosition = state.p + estimatedHeaderSize;
 	const len = encodeUtf8Into(state.b, val, estimatedPosition);
 
@@ -298,7 +314,10 @@ export const encode = (value: any): Uint8Array<ArrayBuffer> => {
 
 	writeValue(state, value);
 
-	state.c.push(state.b.subarray(0, state.p));
+	const final = state.b.subarray(0, state.p);
+	if (!state.c.length) return final;
+
+	state.c.push(final);
 	return concat(state.c, state.l + state.p);
 };
 
