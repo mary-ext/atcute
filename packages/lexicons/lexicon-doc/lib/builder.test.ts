@@ -284,6 +284,90 @@ describe('builder', () => {
 			});
 		});
 
+		test('throws when token const value violates minLength during build', () => {
+			const myToken = token();
+
+			expect(() =>
+				build({
+					documents: [
+						document({
+							id: 'com.example.test',
+							defs: {
+								main: string({
+									const: myToken,
+									minLength: 1000, // resolved token URI will be much shorter
+								}),
+								myToken,
+							},
+						}),
+					],
+				}),
+			).toThrow(/com\.example\.test#main\/const:.*can't be shorter than minimum length/);
+		});
+
+		test('throws when token default value violates maxLength during build', () => {
+			const myToken = token();
+
+			expect(() =>
+				build({
+					documents: [
+						document({
+							id: 'com.example.test',
+							defs: {
+								main: string({
+									default: myToken,
+									maxLength: 5, // resolved token URI will be much longer
+								}),
+								myToken,
+							},
+						}),
+					],
+				}),
+			).toThrow(/com\.example\.test#main\/default:.*can't be longer than maximum length/);
+		});
+
+		test('throws when token enum value violates minLength during build', () => {
+			const myToken = token();
+
+			expect(() =>
+				build({
+					documents: [
+						document({
+							id: 'com.example.test',
+							defs: {
+								main: string({
+									enum: [myToken],
+									minLength: 1000,
+								}),
+								myToken,
+							},
+						}),
+					],
+				}),
+			).toThrow(/com\.example\.test#main\/enum\/0:.*can't be shorter than minimum length/);
+		});
+
+		test('throws when token knownValues violates maxLength during build', () => {
+			const myToken = token();
+
+			expect(() =>
+				build({
+					documents: [
+						document({
+							id: 'com.example.test',
+							defs: {
+								main: string({
+									knownValues: [myToken],
+									maxLength: 5,
+								}),
+								myToken,
+							},
+						}),
+					],
+				}),
+			).toThrow(/com\.example\.test#main\/knownValues\/0:.*can't be longer than maximum length/);
+		});
+
 		test('throws when minLength > maxLength', () => {
 			expect(() => string({ minLength: 10, maxLength: 5 })).toThrow(
 				"string: minimum length (10) can't be greater than maximum length (5)",
