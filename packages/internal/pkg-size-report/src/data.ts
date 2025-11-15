@@ -4,6 +4,7 @@ import * as fs from 'node:fs';
 import { PKGSIZE_FOLDER } from './consts.js';
 
 const PKGSIZE_DATA = new URL(`data.json`, PKGSIZE_FOLDER);
+fs.mkdirSync(PKGSIZE_FOLDER, { recursive: true });
 
 export interface EntrypointSizeInformation {
 	name: string;
