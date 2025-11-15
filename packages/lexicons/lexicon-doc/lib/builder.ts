@@ -127,6 +127,10 @@ export const integer = (def: Omit<LexIntegerBuilder, 'type'> = {}): LexIntegerBu
 			throw new Error(`integer: default value must match const value`);
 		}
 
+		if (enumValues !== undefined && !enumValues.includes(defaultValue)) {
+			throw new Error(`integer: default value must be one of the enum values`);
+		}
+
 		if (defaultValue < minimum) {
 			throw new Error(
 				`integer: default value (${defaultValue}) can't be lower than minimum value (${minimum})`,
@@ -231,6 +235,10 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 		if (constValue !== undefined && defaultValue !== constValue) {
 			throw new Error(`string: default value must match const value`);
+		}
+
+		if (enumValues !== undefined && !enumValues.includes(defaultValue)) {
+			throw new Error(`string: default value must be one of the enum values`);
 		}
 
 		if (typeof defaultValue === 'string') {

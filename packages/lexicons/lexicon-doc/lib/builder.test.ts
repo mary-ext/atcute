@@ -206,8 +206,18 @@ describe('builder', () => {
 			);
 		});
 
+		test('throws when default value is not in enum', () => {
+			expect(() => integer({ enum: [10, 20, 30], default: 15 })).toThrow(
+				'integer: default value must be one of the enum values',
+			);
+		});
+
 		test('allows valid enum', () => {
 			expect(() => integer({ minimum: 0, maximum: 100, enum: [10, 20, 30] })).not.toThrow();
+		});
+
+		test('allows default value that is in enum', () => {
+			expect(() => integer({ enum: [10, 20, 30], default: 20 })).not.toThrow();
 		});
 	});
 
@@ -328,8 +338,18 @@ describe('builder', () => {
 			);
 		});
 
+		test('throws when default value is not in enum', () => {
+			expect(() => string({ enum: ['foo', 'bar', 'baz'], default: 'qux' })).toThrow(
+				'string: default value must be one of the enum values',
+			);
+		});
+
 		test('allows valid enum', () => {
 			expect(() => string({ minLength: 2, maxLength: 10, enum: ['foo', 'bar', 'baz'] })).not.toThrow();
+		});
+
+		test('allows default value that is in enum', () => {
+			expect(() => string({ enum: ['foo', 'bar', 'baz'], default: 'bar' })).not.toThrow();
 		});
 
 		test('allows valid knownValues', () => {

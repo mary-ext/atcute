@@ -63,6 +63,13 @@ export const lexInteger: v.Type<t.LexInteger> = v
 				});
 			}
 
+			if (enumValues !== undefined && !enumValues.includes(defaultValue)) {
+				return v.err({
+					message: `default value must be one of the enum values`,
+					path: ['default'],
+				});
+			}
+
 			if (defaultValue < minimum) {
 				return v.err({
 					message: `default value can't be lower than minimum value`,
@@ -182,6 +189,13 @@ export const lexString: v.Type<t.LexString> = v
 			if (constValue !== undefined && defaultValue !== constValue) {
 				return v.err({
 					message: `default value must match constant value`,
+					path: ['default'],
+				});
+			}
+
+			if (enumValues !== undefined && !enumValues.includes(defaultValue)) {
+				return v.err({
+					message: `default value must be one of the enum values`,
 					path: ['default'],
 				});
 			}
