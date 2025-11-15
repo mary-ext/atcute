@@ -400,12 +400,27 @@ export const lexRef: v.Type<t.LexRef> = v.object({
 	ref: refString,
 });
 
-export const lexRefUnion: v.Type<t.LexRefUnion> = v.object({
-	type: v.literal('union'),
-	description: v.string().optional(),
-	refs: v.array(refString),
-	closed: v.boolean().optional(),
-});
+export const lexRefUnion: v.Type<t.LexRefUnion> = v
+	.object({
+		type: v.literal('union'),
+		description: v.string().optional(),
+		refs: v.array(refString),
+		closed: v.boolean().optional(),
+	})
+	.chain((input) => {
+		const { refs, closed = false } = input;
+
+		if (closed) {
+			if (refs.length === 0) {
+				return v.err({
+					message: `closed enum can't have zero ref members`,
+					path: ['refs'],
+				});
+			}
+		}
+
+		return v.ok(input);
+	});
 
 export const lexRefVariant: v.Type<t.LexRefVariant> = v.union(lexRef, lexRefUnion);
 
