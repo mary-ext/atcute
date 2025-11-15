@@ -320,6 +320,24 @@ describe('builder', () => {
 			);
 		});
 
+		test('throws when const and knownValues are both present', () => {
+			expect(() => string({ const: 'foo', knownValues: ['bar', 'baz'] })).toThrow(
+				"string: const and knownValues can't be used together",
+			);
+		});
+
+		test('throws when enum and knownValues are both present', () => {
+			expect(() => string({ enum: ['foo', 'bar'], knownValues: ['baz', 'qux'] })).toThrow(
+				"string: enum and knownValues can't be used together",
+			);
+		});
+
+		test('throws when const, enum, and knownValues are all present', () => {
+			expect(() => string({ const: 'foo', enum: ['bar'], knownValues: ['baz'] })).toThrow(
+				"string: const and enum can't be used together",
+			);
+		});
+
 		test('throws when enum value is shorter than minLength', () => {
 			expect(() => string({ minLength: 5, enum: ['hi', 'hello', 'world'] })).toThrow(
 				'string: enum[0] ("hi") can\'t be shorter than minimum length (5)',

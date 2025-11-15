@@ -279,6 +279,10 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 			throw new Error(`string: const and enum can't be used together`);
 		}
 
+		if (knownValues !== undefined) {
+			throw new Error(`string: const and knownValues can't be used together`);
+		}
+
 		if (typeof constValue === 'string') {
 			const bound = isWithinUtf8Bounds(constValue, minLength, maxLength);
 
@@ -311,6 +315,10 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 	}
 
 	if (enumValues !== undefined) {
+		if (knownValues !== undefined) {
+			throw new Error(`string: enum and knownValues can't be used together`);
+		}
+
 		for (let idx = 0, len = enumValues.length; idx < len; idx++) {
 			const enumValue = enumValues[idx];
 			const enumStr = typeof enumValue === 'string' ? enumValue : '<token>';

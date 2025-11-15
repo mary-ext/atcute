@@ -245,6 +245,13 @@ export const lexString: v.Type<t.LexString> = v
 				});
 			}
 
+			if (knownValues !== undefined) {
+				return v.err({
+					message: `const and knownValues can't be used together`,
+					path: ['const'],
+				});
+			}
+
 			{
 				const bound = isWithinUtf8Bounds(constValue, minLength, maxLength);
 
@@ -283,6 +290,13 @@ export const lexString: v.Type<t.LexString> = v
 		}
 
 		if (enumValues !== undefined) {
+			if (knownValues !== undefined) {
+				return v.err({
+					message: `enum and knownValues can't be used together`,
+					path: ['enum'],
+				});
+			}
+
 			for (let idx = 0, len = enumValues.length; idx < len; idx++) {
 				const enumValue = enumValues[idx];
 
