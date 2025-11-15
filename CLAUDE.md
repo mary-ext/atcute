@@ -60,3 +60,5 @@ the packages are organized into categories under `packages/`:
 - the `.research/` directory serves as a workspace for temporary files, analysis, and planning
   materials. create it if necessary (it's gitignored). this directory may contain cloned
   repositories or other reference materials that can help inform implementation decisions
+- you are encouraged to ask questions when uncertain about a given plan or requirement, there is no
+  penalty and avoiding assumptions is important than seeming knowledgeable
