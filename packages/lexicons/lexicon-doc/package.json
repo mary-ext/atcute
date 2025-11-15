@@ -16,7 +16,8 @@
 		"!lib/**/*.test.ts"
 	],
 	"exports": {
-		".": "./dist/index.js"
+		".": "./dist/index.js",
+		"./builder": "./dist/builder.js"
 	},
 	"sideEffects": false,
 	"scripts": {
