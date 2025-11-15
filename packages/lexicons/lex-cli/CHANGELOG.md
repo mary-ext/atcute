@@ -1,5 +1,15 @@
 # @atcute/lex-cli
 
+## 2.3.2
+
+### Patch Changes
+
+- e2970ab: allow setting default value for const/enum values
+- Updated dependencies [d53a847]
+- Updated dependencies [e8e4f43]
+- Updated dependencies [053958e]
+  - @atcute/lexicon-doc@1.2.0
+
 ## 2.3.1
 
 ### Patch Changes
