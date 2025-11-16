@@ -492,6 +492,9 @@ importers:
 
   packages/lexicons/lexicon-doc:
     dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:*
+        version: link:../lexicons
       '@badrap/valita':
         specifier: ^0.4.6
         version: 0.4.6

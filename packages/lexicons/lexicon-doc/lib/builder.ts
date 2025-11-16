@@ -1,3 +1,5 @@
+import type { AtprotoAudience, Nsid } from '@atcute/lexicons/syntax';
+
 import type {
 	LexArray,
 	LexBlob,
@@ -6,7 +8,10 @@ import type {
 	LexCidLink,
 	LexInteger,
 	LexIpldType,
+	LexLang,
 	LexObject,
+	LexPermission,
+	LexPermissionSet,
 	LexPrimitive,
 	LexPrimitiveArray,
 	LexRecord,
@@ -1265,6 +1270,186 @@ const buildRecordSchema = (ctx: BuildContext, def: LexRecordBuilder): LexRecord 
 	};
 };
 
+export type RepoAction = 'create' | 'update' | 'delete';
+
+export interface LexRepoPermissionBuilder {
+	type: 'repo-permission';
+	collection: '*' | Nsid[];
+	action?: RepoAction[];
+}
+
+export const repoPermission = (def: Omit<LexRepoPermissionBuilder, 'type'>): LexRepoPermissionBuilder => {
+	const { collection } = def;
+
+	if (Array.isArray(collection)) {
+		if (collection.length === 0) {
+			throw new Error(`repo-permission: collection can't be empty`);
+		}
+	}
+
+	return { ...def, type: 'repo-permission' };
+};
+
+export interface LexRpcPermissionBuilder {
+	type: 'rpc-permission';
+	lxm: '*' | Nsid[];
+	aud: '*' | AtprotoAudience;
+}
+
+export const rpcPermission = (def: Omit<LexRpcPermissionBuilder, 'type'>): LexRpcPermissionBuilder => {
+	const { lxm, aud } = def;
+
+	if (Array.isArray(lxm)) {
+		if (lxm.length === 0) {
+			throw new Error(`rpc-permission: lxm can't be empty`);
+		}
+	}
+
+	if (aud === '*' && lxm === '*') {
+		throw new Error(`rpc-permission: aud and lxm can't both be wildcards`);
+	}
+
+	return { ...def, type: 'rpc-permission' };
+};
+
+export type BlobAccept = `${string}/${string}`;
+
+export interface LexBlobPermissionBuilder {
+	type: 'blob-permission';
+	accept: BlobAccept[];
+}
+
+export const blobPermission = (def: Omit<LexBlobPermissionBuilder, 'type'>): LexBlobPermissionBuilder => {
+	const { accept } = def;
+
+	if (accept.length === 0) {
+		throw new Error(`blob-permission: accept can't be empty`);
+	}
+
+	return { ...def, type: 'blob-permission' };
+};
+
+export type AccountAction = 'read' | 'manage';
+export type AccountAttribute = 'email' | 'repo' | 'status';
+
+export interface LexAccountPermissionBuilder {
+	type: 'account-permission';
+	attr: AccountAttribute;
+	action?: AccountAction;
+}
+
+export const accountPermission = (
+	def: Omit<LexAccountPermissionBuilder, 'type'>,
+): LexAccountPermissionBuilder => {
+	return { ...def, type: 'account-permission' };
+};
+
+export type IdentityAttribute = 'handle' | '*';
+
+export interface LexIdentityPermissionBuilder {
+	type: 'identity-permission';
+	attr: IdentityAttribute;
+}
+
+export const identityPermission = (
+	def: Omit<LexIdentityPermissionBuilder, 'type'>,
+): LexIdentityPermissionBuilder => {
+	return { ...def, type: 'identity-permission' };
+};
+
+export type LexPermissionBuilder =
+	| LexRepoPermissionBuilder
+	| LexRpcPermissionBuilder
+	| LexBlobPermissionBuilder
+	| LexAccountPermissionBuilder
+	| LexIdentityPermissionBuilder;
+
+const buildPermissionSchema = (_ctx: BuildContext, def: LexPermissionBuilder): LexPermission => {
+	switch (def.type) {
+		case 'repo-permission': {
+			const { collection, action } = def;
+
+			return {
+				action: action,
+				collection: collection === '*' ? ['*'] : collection,
+				resource: 'repo',
+				type: 'permission',
+			};
+		}
+		case 'rpc-permission': {
+			const { lxm, aud } = def;
+
+			return {
+				aud: aud,
+				lxm: lxm === '*' ? ['*'] : lxm,
+				resource: 'rpc',
+				type: 'permission',
+			};
+		}
+		case 'blob-permission': {
+			const { accept } = def;
+
+			return {
+				accept: accept,
+				resource: 'blob',
+				type: 'permission',
+			};
+		}
+		case 'account-permission': {
+			const { attr, action } = def;
+
+			return {
+				action: action,
+				attr: attr,
+				resource: 'account',
+				type: 'permission',
+			};
+		}
+		case 'identity-permission': {
+			const { attr } = def;
+
+			return {
+				attr: attr,
+				resource: 'identity',
+				type: 'permission',
+			};
+		}
+	}
+};
+
+export interface LexPermissionSetBuilder extends Annotations {
+	type: 'permission-set';
+	title?: string;
+	'title:lang'?: LexLang;
+	detail?: string;
+	'detail:lang'?: LexLang;
+	permissions: LexPermissionBuilder[];
+}
+
+export const permissionSet = (def: Omit<LexPermissionSetBuilder, 'type'>): LexPermissionSetBuilder => {
+	const { permissions } = def;
+
+	if (permissions.length === 0) {
+		throw new Error(`permission-set: permissions array can't be empty`);
+	}
+
+	return { ...def, type: 'permission-set' };
+};
+
+const buildPermissionSetSchema = (ctx: BuildContext, def: LexPermissionSetBuilder): LexPermissionSet => {
+	return {
+		'detail:lang': def['detail:lang'],
+		'title:lang': def['title:lang'],
+		description: def.description,
+		detail: def.detail,
+		permissions: def.permissions.map((perm, index) => {
+			return buildPermissionSchema(delve(ctx, `permissions/${index}`), perm);
+		}),
+		title: def.title,
+		type: 'permission-set',
+	};
+};
+
 export type FieldWrapper<T> = {
 	type: 'field-wrapper';
 	wrapped: T;
@@ -1274,7 +1459,12 @@ export type FieldWrapper<T> = {
 
 export type MaybeFieldWrapper<T> = T | FieldWrapper<T>;
 
-type MainType = LexXrpcQueryBuilder | LexXrpcProcedureBuilder | LexXrpcSubscriptionBuilder | LexRecordBuilder;
+type MainType =
+	| LexXrpcQueryBuilder
+	| LexXrpcProcedureBuilder
+	| LexXrpcSubscriptionBuilder
+	| LexRecordBuilder
+	| LexPermissionSetBuilder;
 
 type DefType =
 	| LexObjectBuilder
@@ -1298,7 +1488,8 @@ export const document = (doc: LexDocumentBuilder): LexDocumentBuilder => {
 			(def.type === 'record' ||
 				def.type === 'query' ||
 				def.type === 'procedure' ||
-				def.type === 'subscription')
+				def.type === 'subscription' ||
+				def.type === 'permission-set')
 		) {
 			throw new Error(`${doc.id}#${defId}: ${def.type} must be the main definition`);
 		}
@@ -1332,6 +1523,9 @@ const buildDefSchema = (ctx: BuildContext, def: MainType | DefType): LexUserType
 		}
 		case 'subscription': {
 			return buildSubscriptionSchema(ctx, def);
+		}
+		case 'permission-set': {
+			return buildPermissionSetSchema(ctx, def);
 		}
 
 		case 'object': {

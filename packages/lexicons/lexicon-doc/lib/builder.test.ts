@@ -1,19 +1,25 @@
 import { describe, expect, test } from 'vitest';
 
 import {
+	accountPermission,
 	array,
 	blob,
+	blobPermission,
 	boolean,
 	build,
 	bytes,
 	document,
+	identityPermission,
 	integer,
 	nullable,
 	object,
+	permissionSet,
 	procedure,
 	query,
 	record,
+	repoPermission,
 	required,
+	rpcPermission,
 	string,
 	subscription,
 	token,
@@ -760,6 +766,327 @@ describe('builder', () => {
 					},
 				});
 			}).toThrow('com.example.invalid#other: subscription must be the main definition');
+		});
+
+		test(`throws when permission-set is defined outside main`, () => {
+			expect(() => {
+				return document({
+					id: 'com.example.invalid',
+					defs: {
+						other: permissionSet({
+							permissions: [repoPermission({ collection: ['com.example.foo'] })],
+						}),
+					},
+				});
+			}).toThrow('com.example.invalid#other: permission-set must be the main definition');
+		});
+	});
+
+	describe('permissions', () => {
+		describe('repoPermission', () => {
+			test('accepts wildcard collection', () => {
+				expect(() => repoPermission({ collection: '*' })).not.toThrow();
+			});
+
+			test('accepts array of collections', () => {
+				expect(() => repoPermission({ collection: ['com.example.foo', 'com.example.bar'] })).not.toThrow();
+			});
+
+			test('accepts actions as array', () => {
+				expect(() => repoPermission({ collection: ['com.example.foo'], action: ['create'] })).not.toThrow();
+				expect(() =>
+					repoPermission({ collection: ['com.example.foo'], action: ['create', 'update'] }),
+				).not.toThrow();
+			});
+
+			test('throws on empty array', () => {
+				expect(() => repoPermission({ collection: [] })).toThrow(
+					"repo-permission: collection can't be empty",
+				);
+			});
+		});
+
+		describe('rpcPermission', () => {
+			test('accepts array of lxm with aud', () => {
+				expect(() =>
+					rpcPermission({
+						lxm: ['com.example.method1', 'com.example.method2'],
+						aud: 'did:web:example.com#bsky_appview',
+					}),
+				).not.toThrow();
+			});
+
+			test('accepts wildcard aud with specific lxm', () => {
+				expect(() => rpcPermission({ lxm: ['com.example.method'], aud: '*' })).not.toThrow();
+			});
+
+			test('accepts wildcard lxm with specific aud', () => {
+				expect(() => rpcPermission({ lxm: '*', aud: 'did:web:example.com#bsky_appview' })).not.toThrow();
+			});
+
+			test('throws on both wildcards', () => {
+				expect(() => rpcPermission({ lxm: '*', aud: '*' })).toThrow(
+					"rpc-permission: aud and lxm can't both be wildcards",
+				);
+			});
+
+			test('throws on empty lxm array', () => {
+				expect(() => rpcPermission({ lxm: [], aud: 'did:web:example.com#bsky_appview' })).toThrow(
+					"rpc-permission: lxm can't be empty",
+				);
+			});
+		});
+
+		describe('blobPermission', () => {
+			test('accepts array of mime types', () => {
+				expect(() => blobPermission({ accept: ['image/png', 'image/jpeg'] })).not.toThrow();
+			});
+
+			test('accepts wildcards in array', () => {
+				expect(() => blobPermission({ accept: ['*/*'] })).not.toThrow();
+				expect(() => blobPermission({ accept: ['image/*'] })).not.toThrow();
+			});
+
+			test('throws on empty array', () => {
+				expect(() => blobPermission({ accept: [] })).toThrow("blob-permission: accept can't be empty");
+			});
+		});
+
+		describe('accountPermission', () => {
+			test('accepts valid attributes', () => {
+				expect(() => accountPermission({ attr: 'email' })).not.toThrow();
+				expect(() => accountPermission({ attr: 'repo' })).not.toThrow();
+				expect(() => accountPermission({ attr: 'status' })).not.toThrow();
+			});
+
+			test('accepts actions', () => {
+				expect(() => accountPermission({ attr: 'email', action: 'read' })).not.toThrow();
+				expect(() => accountPermission({ attr: 'email', action: 'manage' })).not.toThrow();
+			});
+		});
+
+		describe('identityPermission', () => {
+			test('accepts valid attributes', () => {
+				expect(() => identityPermission({ attr: 'handle' })).not.toThrow();
+				expect(() => identityPermission({ attr: '*' })).not.toThrow();
+			});
+		});
+
+		describe('permissionSet', () => {
+			test('accepts permissions array', () => {
+				expect(() =>
+					permissionSet({
+						permissions: [repoPermission({ collection: ['com.example.foo'] })],
+					}),
+				).not.toThrow();
+			});
+
+			test('accepts optional fields', () => {
+				expect(() =>
+					permissionSet({
+						description: 'test scope',
+						title: 'Test',
+						detail: 'Test detail',
+						permissions: [repoPermission({ collection: ['com.example.foo'] })],
+					}),
+				).not.toThrow();
+			});
+
+			test('throws on empty permissions array', () => {
+				expect(() => permissionSet({ permissions: [] })).toThrow(
+					"permission-set: permissions array can't be empty",
+				);
+			});
+		});
+
+		describe('building permissions', () => {
+			test('builds repo permission', () => {
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									permissions: [
+										repoPermission({ collection: ['com.example.foo'], action: ['create'] }),
+										repoPermission({ collection: ['com.example.bar', 'com.example.baz'] }),
+									],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'repo',
+							collection: ['com.example.foo'],
+							action: ['create'],
+						},
+						{
+							type: 'permission',
+							resource: 'repo',
+							collection: ['com.example.bar', 'com.example.baz'],
+						},
+					],
+				});
+			});
+
+			test('builds rpc permission', () => {
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									permissions: [
+										rpcPermission({ lxm: ['com.example.method'], aud: 'did:web:example.com#bsky_appview' }),
+									],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'rpc',
+							lxm: ['com.example.method'],
+							aud: 'did:web:example.com#bsky_appview',
+						},
+					],
+				});
+			});
+
+			test('builds blob permission', () => {
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									permissions: [blobPermission({ accept: ['image/png', 'image/jpeg'] })],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'blob',
+							accept: ['image/png', 'image/jpeg'],
+						},
+					],
+				});
+			});
+
+			test('builds account permission', () => {
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									permissions: [accountPermission({ attr: 'email', action: 'manage' })],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'account',
+							attr: 'email',
+							action: 'manage',
+						},
+					],
+				});
+			});
+
+			test('builds identity permission', () => {
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									permissions: [identityPermission({ attr: 'handle' })],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'identity',
+							attr: 'handle',
+						},
+					],
+				});
+			});
+
+			test('builds permission-set with all fields', () => {
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									description: 'test scope',
+									title: 'Test Scope',
+									'title:lang': { en: 'Test Scope', 'pt-BR': 'Escopo de Teste' },
+									detail: 'This is a test scope',
+									'detail:lang': { en: 'This is a test scope', 'pt-BR': 'Este é um escopo de teste' },
+									permissions: [
+										repoPermission({ collection: ['com.example.foo'] }),
+										rpcPermission({ lxm: '*', aud: 'did:web:example.com#bsky_appview' }),
+									],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					description: 'test scope',
+					title: 'Test Scope',
+					'title:lang': { en: 'Test Scope', 'pt-BR': 'Escopo de Teste' },
+					detail: 'This is a test scope',
+					'detail:lang': { en: 'This is a test scope', 'pt-BR': 'Este é um escopo de teste' },
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'repo',
+							collection: ['com.example.foo'],
+						},
+						{
+							type: 'permission',
+							resource: 'rpc',
+							lxm: ['*'],
+							aud: 'did:web:example.com#bsky_appview',
+						},
+					],
+				});
+			});
 		});
 	});
 });
