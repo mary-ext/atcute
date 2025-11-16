@@ -93,6 +93,8 @@ installing one of these definition packages.
 - [`@atcute/bluemoji`](../../definitions/bluemoji): `blue.moji.*` schema definitions
 - [`@atcute/bluesky`](../../definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions
 - [`@atcute/frontpage`](../../definitions/frontpage): `fyi.unravel.frontpage.*` schema definitions
+- [`@atcute/lexicon-community`](../../definitions/lexicon-community): `community.lexicon.\*`
+  schema definitions
 - [`@atcute/ozone`](../../definitions/ozone): `tools.ozone.*` schema definitions
 - [`@atcute/tangled`](../../definitions/tangled): `sh.tangled.*` schema definitions
 - [`@atcute/whitewind`](../../definitions/whitewind): `com.whtwnd.*` schema definitions
