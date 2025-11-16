@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 1.2.3
+
+### Patch Changes
+
+- 2e2159b: add type for atproto audience
+
 ## 1.2.2
 
 ### Patch Changes

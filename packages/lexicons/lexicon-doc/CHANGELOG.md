@@ -1,5 +1,21 @@
 # @atcute/lexicon-doc
 
+## 1.3.0
+
+### Minor Changes
+
+- f31e261: add support for permission sets
+- 262db99: add builders for permission sets
+
+### Patch Changes
+
+- ae2015a: properly validate string constraints on token values
+- d70f4f6: raise error if default value does not match enum
+- 178714d: raise error if knownValues is used with const/enum
+- fdf6519: raise error if values do not match string format
+- Updated dependencies [2e2159b]
+  - @atcute/lexicons@1.2.3
+
 ## 1.2.0
 
 ### Minor Changes

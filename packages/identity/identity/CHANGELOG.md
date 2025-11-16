@@ -1,5 +1,13 @@
 # @atcute/identity
 
+## 1.1.2
+
+### Patch Changes
+
+- 5de2d26: add function for checking if input is atproto audience
+- Updated dependencies [2e2159b]
+  - @atcute/lexicons@1.2.3
+
 ## 1.1.1
 
 ### Patch Changes
