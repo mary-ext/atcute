@@ -75,7 +75,7 @@ const response = await client.get('app.bsky.actor.getProfile', {
 // ...
 ```
 
-## with `@atcute/lex-cli`
+### with `@atcute/lex-cli`
 
 when building your own lexicons that reference Bluesky types, configure lex-cli to import from this
 package:

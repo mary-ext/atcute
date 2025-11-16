@@ -59,7 +59,7 @@ import type {} from '@atcute/lexicon-community';
 
 now all the XRPC operations should be visible in the client
 
-## with `@atcute/lex-cli`
+### with `@atcute/lex-cli`
 
 when building your own lexicons that reference Lexicon Community types, configure lex-cli to import
 from this package:

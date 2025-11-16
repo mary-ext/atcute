@@ -55,7 +55,7 @@ const response = await client.get('com.atproto.server.describeServer');
 // ...
 ```
 
-## with `@atcute/lex-cli`
+### with `@atcute/lex-cli`
 
 when building your own lexicons that reference AT Protocol types, configure lex-cli to import from
 this package:

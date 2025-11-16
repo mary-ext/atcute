@@ -70,7 +70,7 @@ const response = await client.post('tools.ozone.moderation.emitEvent', {
 // ...
 ```
 
-## with `@atcute/lex-cli`
+### with `@atcute/lex-cli`
 
 when building your own lexicons that reference Ozone types, configure lex-cli to import from this
 package:

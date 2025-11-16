@@ -44,7 +44,7 @@ import type {} from '@atcute/whitewind';
 
 now all the XRPC operations should be visible in the client
 
-## with `@atcute/lex-cli`
+### with `@atcute/lex-cli`
 
 when building your own lexicons that reference WhiteWind types, configure lex-cli to import from
 this package:
