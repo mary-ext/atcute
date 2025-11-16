@@ -1,13 +1,29 @@
-import type { AtprotoDid, Did } from '@atcute/lexicons/syntax';
+import type { AtprotoAudience, AtprotoDid, Did } from '@atcute/lexicons/syntax';
 
 import { isPlcDid } from './methods/plc.js';
 import { isAtprotoWebDid } from './methods/web.js';
+
+const FRAGMENT_RE = /^(?:[A-Za-z0-9\-._~!$&'()*+,;=:@\/?]|%[0-9A-Fa-f]{2})*$/;
 
 /**
  * checks if it's a DID identifier that is supported by atproto
  */
 export const isAtprotoDid = (input: string): input is AtprotoDid => {
 	return isPlcDid(input) || isAtprotoWebDid(input);
+};
+
+export const isAtprotoAudience = (input: string): input is AtprotoAudience => {
+	// 'did:web:a.co#f'
+	if (input.length < 14) {
+		return false;
+	}
+
+	const isep = input.indexOf('#', 12);
+	if (isep === -1) {
+		return false;
+	}
+
+	return FRAGMENT_RE.test(input.slice(isep + 1)) && isAtprotoAudience(input.slice(0, isep));
 };
 
 /**
