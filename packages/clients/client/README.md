@@ -95,6 +95,8 @@ installing one of these definition packages.
 - [`@atcute/frontpage`](../../definitions/frontpage): `fyi.unravel.frontpage.*` schema definitions
 - [`@atcute/lexicon-community`](../../definitions/lexicon-community): `community.lexicon.\*`
   schema definitions
+- [`@atcute/microcosm`](../../definitions/microcosm): `blue.microcosm.*` and `com.bad-example.*`
+  schema definitions
 - [`@atcute/ozone`](../../definitions/ozone): `tools.ozone.*` schema definitions
 - [`@atcute/tangled`](../../definitions/tangled): `sh.tangled.*` schema definitions
 - [`@atcute/whitewind`](../../definitions/whitewind): `com.whtwnd.*` schema definitions

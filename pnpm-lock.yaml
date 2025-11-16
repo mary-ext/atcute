@@ -286,6 +286,19 @@ importers:
         specifier: 'file:'
         version: file:packages/definitions/lexicon-community
 
+  packages/definitions/microcosm:
+    dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+    devDependencies:
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../../lexicons/lex-cli
+      '@atcute/microcosm':
+        specifier: 'file:'
+        version: file:packages/definitions/microcosm
+
   packages/definitions/ozone:
     dependencies:
       '@atcute/atproto':
@@ -911,6 +924,9 @@ packages:
 
   '@atcute/lexicons@1.2.2':
     resolution: {integrity: sha512-bgEhJq5Z70/0TbK5sx+tAkrR8FsCODNiL2gUEvS5PuJfPxmFmRYNWaMGehxSPaXWpU2+Oa9ckceHiYbrItDTkA==}
+
+  '@atcute/microcosm@file:packages/definitions/microcosm':
+    resolution: {directory: packages/definitions/microcosm, type: directory}
 
   '@atcute/ozone@file:packages/definitions/ozone':
     resolution: {directory: packages/definitions/ozone, type: directory}
@@ -3785,6 +3801,10 @@ snapshots:
     dependencies:
       '@standard-schema/spec': 1.0.0
       esm-env: 1.2.2
+
+  '@atcute/microcosm@file:packages/definitions/microcosm':
+    dependencies:
+      '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atcute/ozone@file:packages/definitions/ozone':
     dependencies:

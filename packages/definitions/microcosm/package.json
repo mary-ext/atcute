@@ -1,0 +1,46 @@
+{
+	"type": "module",
+	"name": "@atcute/microcosm",
+	"version": "1.0.0",
+	"description": "Microcosm (blue.microcosm.*, com.bad-example.*) schema definitions",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/definitions/microcosm"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js",
+		"./types/blue/microcosm/*": "./dist/lexicons/types/blue/microcosm/*.js",
+		"./types/com/bad-example/*": "./dist/lexicons/types/com/bad-example/*.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/lexicons": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/microcosm": "file:",
+		"@atcute/lex-cli": "workspace:^"
+	},
+	"atcute:lexicons": {
+		"mappings": {
+			"blue.microcosm.*": {
+				"type": "namespace",
+				"path": "./types/blue/microcosm/{{nsid_remainder}}"
+			},
+			"com.bad-example.*": {
+				"type": "namespace",
+				"path": "./types/com/bad-example/{{nsid_remainder}}"
+			}
+		}
+	}
+}
