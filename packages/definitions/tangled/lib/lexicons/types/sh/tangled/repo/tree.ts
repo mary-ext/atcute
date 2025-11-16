@@ -73,14 +73,6 @@ const _readmeSchema = /*#__PURE__*/ v.object({
 });
 const _treeEntrySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#treeEntry')),
-	/**
-	 * Whether this entry is a file
-	 */
-	is_file: /*#__PURE__*/ v.boolean(),
-	/**
-	 * Whether this entry is a directory/subtree
-	 */
-	is_subtree: /*#__PURE__*/ v.boolean(),
 	get last_commit() {
 		return /*#__PURE__*/ v.optional(lastCommitSchema);
 	},

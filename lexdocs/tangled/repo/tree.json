@@ -91,7 +91,7 @@
 		},
 		"treeEntry": {
 			"type": "object",
-			"required": ["name", "mode", "size", "is_file", "is_subtree"],
+			"required": ["name", "mode", "size"],
 			"properties": {
 				"name": {
 					"type": "string",
@@ -104,14 +104,6 @@
 				"size": {
 					"type": "integer",
 					"description": "File size in bytes"
-				},
-				"is_file": {
-					"type": "boolean",
-					"description": "Whether this entry is a file"
-				},
-				"is_subtree": {
-					"type": "boolean",
-					"description": "Whether this entry is a directory/subtree"
 				},
 				"last_commit": {
 					"type": "ref",

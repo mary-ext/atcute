@@ -50,7 +50,7 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.blob', {
 			/**
 			 * File content (base64 encoded for binary files)
 			 */
-			content: /*#__PURE__*/ v.string(),
+			content: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
 			 * Content encoding
 			 */
@@ -78,6 +78,12 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.blob', {
 			 * File size in bytes
 			 */
 			size: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+			/**
+			 * Submodule information if path is a submodule
+			 */
+			get submodule() {
+				return /*#__PURE__*/ v.optional(submoduleSchema);
+			},
 		}),
 	},
 });
@@ -96,21 +102,40 @@ const _signatureSchema = /*#__PURE__*/ v.object({
 	 */
 	when: /*#__PURE__*/ v.datetimeString(),
 });
+const _submoduleSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.blob#submodule')),
+	/**
+	 * Branch to track in the submodule
+	 */
+	branch: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Submodule name
+	 */
+	name: /*#__PURE__*/ v.string(),
+	/**
+	 * Submodule repository URL
+	 */
+	url: /*#__PURE__*/ v.string(),
+});
 
 type lastCommit$schematype = typeof _lastCommitSchema;
 type main$schematype = typeof _mainSchema;
 type signature$schematype = typeof _signatureSchema;
+type submodule$schematype = typeof _submoduleSchema;
 
 export interface lastCommitSchema extends lastCommit$schematype {}
 export interface mainSchema extends main$schematype {}
 export interface signatureSchema extends signature$schematype {}
+export interface submoduleSchema extends submodule$schematype {}
 
 export const lastCommitSchema = _lastCommitSchema as lastCommitSchema;
 export const mainSchema = _mainSchema as mainSchema;
 export const signatureSchema = _signatureSchema as signatureSchema;
+export const submoduleSchema = _submoduleSchema as submoduleSchema;
 
 export interface LastCommit extends v.InferInput<typeof lastCommitSchema> {}
 export interface Signature extends v.InferInput<typeof signatureSchema> {}
+export interface Submodule extends v.InferInput<typeof submoduleSchema> {}
 
 export interface $params extends v.InferInput<mainSchema['params']> {}
 export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}

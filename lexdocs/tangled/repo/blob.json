@@ -31,7 +31,7 @@
 				"encoding": "application/json",
 				"schema": {
 					"type": "object",
-					"required": ["ref", "path", "content"],
+					"required": ["ref", "path"],
 					"properties": {
 						"ref": {
 							"type": "string",
@@ -61,6 +61,11 @@
 						"mimeType": {
 							"type": "string",
 							"description": "MIME type of the file"
+						},
+						"submodule": {
+							"type": "ref",
+							"ref": "#submodule",
+							"description": "Submodule information if path is a submodule"
 						},
 						"lastCommit": {
 							"type": "ref",
@@ -131,6 +136,24 @@
 					"type": "string",
 					"format": "datetime",
 					"description": "Author timestamp"
+				}
+			}
+		},
+		"submodule": {
+			"type": "object",
+			"required": ["name", "url"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Submodule name"
+				},
+				"url": {
+					"type": "string",
+					"description": "Submodule repository URL"
+				},
+				"branch": {
+					"type": "string",
+					"description": "Branch to track in the submodule"
 				}
 			}
 		}
