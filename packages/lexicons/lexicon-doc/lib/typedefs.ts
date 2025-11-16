@@ -1,4 +1,17 @@
 import * as v from '@badrap/valita';
+import {
+	isActorIdentifier,
+	isCid,
+	isDatetime,
+	isDid,
+	isGenericUri,
+	isHandle,
+	isLanguageCode,
+	isNsid,
+	isRecordKey,
+	isResourceUri,
+	isTid,
+} from '@atcute/lexicons/syntax';
 
 import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
 import * as t from './types.js';
@@ -145,6 +158,33 @@ export const lexStringFormat: v.Type<t.LexStringFormat> = v.union(
 	v.literal('record-key'),
 );
 
+const validateStringFormat = (value: string, format: t.LexStringFormat): boolean => {
+	switch (format) {
+		case 'datetime':
+			return isDatetime(value);
+		case 'uri':
+			return isGenericUri(value);
+		case 'at-uri':
+			return isResourceUri(value);
+		case 'did':
+			return isDid(value);
+		case 'handle':
+			return isHandle(value);
+		case 'at-identifier':
+			return isActorIdentifier(value);
+		case 'nsid':
+			return isNsid(value);
+		case 'cid':
+			return isCid(value);
+		case 'language':
+			return isLanguageCode(value);
+		case 'tid':
+			return isTid(value);
+		case 'record-key':
+			return isRecordKey(value);
+	}
+};
+
 export const lexString: v.Type<t.LexString> = v
 	.object({
 		type: v.literal('string'),
@@ -161,6 +201,7 @@ export const lexString: v.Type<t.LexString> = v
 	})
 	.chain((input) => {
 		const {
+			format,
 			minLength = 0,
 			maxLength = Infinity,
 			minGraphemes = 0,
@@ -235,6 +276,13 @@ export const lexString: v.Type<t.LexString> = v
 					});
 				}
 			}
+
+			if (format !== undefined && !validateStringFormat(defaultValue, format)) {
+				return v.err({
+					message: `default value does not match format '${format}'`,
+					path: ['default'],
+				});
+			}
 		}
 
 		if (constValue !== undefined) {
@@ -287,6 +335,13 @@ export const lexString: v.Type<t.LexString> = v
 					});
 				}
 			}
+
+			if (format !== undefined && !validateStringFormat(constValue, format)) {
+				return v.err({
+					message: `const value does not match format '${format}'`,
+					path: ['const'],
+				});
+			}
 		}
 
 		if (enumValues !== undefined) {
@@ -335,6 +390,13 @@ export const lexString: v.Type<t.LexString> = v
 						});
 					}
 				}
+
+				if (format !== undefined && !validateStringFormat(enumValue, format)) {
+					return v.err({
+						message: `enum value does not match format '${format}'`,
+						path: ['enum', idx],
+					});
+				}
 			}
 		}
 
@@ -376,6 +438,13 @@ export const lexString: v.Type<t.LexString> = v
 							path: ['known', idx],
 						});
 					}
+				}
+
+				if (format !== undefined && !validateStringFormat(knownValue, format)) {
+					return v.err({
+						message: `known value does not match format '${format}'`,
+						path: ['knownValues', idx],
+					});
 				}
 			}
 		}
@@ -608,8 +677,18 @@ export const lexXrpcSubscription: v.Type<t.LexXrpcSubscription> = v.object({
 	errors: v.array(lexXrpcError).optional(),
 });
 
-// TODO: add BCP47 language tag validation for keys
-export const lexLang: v.Type<t.LexLang> = v.record(v.union(v.undefined(), v.string()));
+export const lexLang: v.Type<t.LexLang> = v.record(v.union(v.undefined(), v.string())).chain((input) => {
+	for (const key in input) {
+		if (!isLanguageCode(key)) {
+			return v.err({
+				message: `invalid BCP47 language tag`,
+				path: [key],
+			});
+		}
+	}
+
+	return v.ok(input);
+});
 
 export const lexPermission: v.Type<t.LexPermission> = v
 	.object({

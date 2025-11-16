@@ -374,6 +374,116 @@ describe('builder', () => {
 			).toThrow(/com\.example\.test#main\/knownValues\/0:.*can't be longer than maximum length/);
 		});
 
+		test('throws when token const value does not match format during build', () => {
+			const myToken = token();
+
+			expect(() =>
+				build({
+					documents: [
+						document({
+							id: 'com.example.test',
+							defs: {
+								main: string({
+									const: myToken,
+									format: 'did', // resolved token URI won't match did format
+								}),
+								myToken,
+							},
+						}),
+					],
+				}),
+			).toThrow(/com\.example\.test#main\/const:.*does not match format 'did'/);
+		});
+
+		test('allows token const value that matches format during build', () => {
+			const myToken = token();
+
+			expect(() =>
+				build({
+					documents: [
+						document({
+							id: 'com.example.tokenDef',
+							defs: {
+								main: myToken, // resolves to just 'com.example.tokenDef' without fragment
+							},
+						}),
+						document({
+							id: 'com.example.test',
+							defs: {
+								main: string({
+									const: myToken,
+									format: 'nsid', // resolved token URI is valid nsid
+								}),
+							},
+						}),
+					],
+				}),
+			).not.toThrow();
+		});
+
+		test('throws when token default value does not match format during build', () => {
+			const myToken = token();
+
+			expect(() =>
+				build({
+					documents: [
+						document({
+							id: 'com.example.test',
+							defs: {
+								main: string({
+									default: myToken,
+									format: 'handle', // resolved token URI won't match handle format
+								}),
+								myToken,
+							},
+						}),
+					],
+				}),
+			).toThrow(/com\.example\.test#main\/default:.*does not match format 'handle'/);
+		});
+
+		test('throws when token enum value does not match format during build', () => {
+			const myToken = token();
+
+			expect(() =>
+				build({
+					documents: [
+						document({
+							id: 'com.example.test',
+							defs: {
+								main: string({
+									enum: [myToken],
+									format: 'cid', // resolved token URI won't match cid format
+								}),
+								myToken,
+							},
+						}),
+					],
+				}),
+			).toThrow(/com\.example\.test#main\/enum\/0:.*does not match format 'cid'/);
+		});
+
+		test('throws when token knownValue does not match format during build', () => {
+			const myToken = token();
+
+			expect(() =>
+				build({
+					documents: [
+						document({
+							id: 'com.example.test',
+							defs: {
+								main: string({
+									knownValues: [myToken],
+									format: 'datetime', // resolved token URI won't match datetime format
+								}),
+								myToken,
+							},
+						}),
+					],
+				}),
+			).toThrow(/com\.example\.test#main\/knownValues\/0:.*does not match format 'datetime'/);
+		});
+
 		test('throws when minLength > maxLength', () => {
 			expect(() => string({ minLength: 10, maxLength: 5 })).toThrow(
 				"string: minimum length (10) can't be greater than maximum length (5)",
@@ -426,6 +536,50 @@ describe('builder', () => {
 			expect(() => string({ const: 'foo', enum: ['bar'], knownValues: ['baz'] })).toThrow(
 				"string: const and enum can't be used together",
 			);
+		});
+
+		test('throws when default does not match format', () => {
+			expect(() => string({ format: 'did', default: 'not-a-did' })).toThrow(
+				'string: default value ("not-a-did") does not match format \'did\'',
+			);
+		});
+
+		test('allows default that matches format', () => {
+			expect(() => string({ format: 'did', default: 'did:plc:7iza6de2dwap2sbkpav7c6c6' })).not.toThrow();
+		});
+
+		test('throws when const does not match format', () => {
+			expect(() => string({ format: 'nsid', const: 'not a valid nsid' })).toThrow(
+				'string: const value ("not a valid nsid") does not match format \'nsid\'',
+			);
+		});
+
+		test('allows const that matches format', () => {
+			expect(() => string({ format: 'nsid', const: 'com.example.foo' })).not.toThrow();
+		});
+
+		test('throws when enum value does not match format', () => {
+			expect(() => string({ format: 'handle', enum: ['alice.bsky.social', 'invalid handle!'] })).toThrow(
+				'string: enum[1] ("invalid handle!") does not match format \'handle\'',
+			);
+		});
+
+		test('allows enum values that match format', () => {
+			expect(() =>
+				string({ format: 'handle', enum: ['alice.bsky.social', 'bob.bsky.social'] }),
+			).not.toThrow();
+		});
+
+		test('throws when knownValue does not match format', () => {
+			expect(() => string({ format: 'uri', knownValues: ['https://example.com', 'not a uri'] })).toThrow(
+				'string: knownValues[1] ("not a uri") does not match format \'uri\'',
+			);
+		});
+
+		test('allows knownValues that match format', () => {
+			expect(() =>
+				string({ format: 'uri', knownValues: ['https://example.com', 'dns:example.org'] }),
+			).not.toThrow();
 		});
 
 		test('throws when enum value is shorter than minLength', () => {

@@ -1,4 +1,18 @@
-import type { AtprotoAudience, Nsid } from '@atcute/lexicons/syntax';
+import {
+	isActorIdentifier,
+	isCid,
+	isDatetime,
+	isDid,
+	isGenericUri,
+	isHandle,
+	isLanguageCode,
+	isNsid,
+	isRecordKey,
+	isResourceUri,
+	isTid,
+	type AtprotoAudience,
+	type Nsid,
+} from '@atcute/lexicons/syntax';
 
 import type {
 	LexArray,
@@ -211,8 +225,36 @@ export interface LexStringBuilder extends Annotations {
 	knownValues?: (string | LexTokenBuilder)[];
 }
 
+const validateStringFormat = (value: string, format: LexStringFormat): boolean => {
+	switch (format) {
+		case 'datetime':
+			return isDatetime(value);
+		case 'uri':
+			return isGenericUri(value);
+		case 'at-uri':
+			return isResourceUri(value);
+		case 'did':
+			return isDid(value);
+		case 'handle':
+			return isHandle(value);
+		case 'at-identifier':
+			return isActorIdentifier(value);
+		case 'nsid':
+			return isNsid(value);
+		case 'cid':
+			return isCid(value);
+		case 'language':
+			return isLanguageCode(value);
+		case 'tid':
+			return isTid(value);
+		case 'record-key':
+			return isRecordKey(value);
+	}
+};
+
 export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuilder => {
 	const {
+		format,
 		minLength = 0,
 		maxLength = Infinity,
 		minGraphemes = 0,
@@ -278,6 +320,12 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 				);
 			}
 		}
+
+		if (format !== undefined && !validateStringFormat(defaultValue, format)) {
+			throw new Error(
+				`string: default value (${JSON.stringify(defaultValue)}) does not match format '${format}'`,
+			);
+		}
 	}
 
 	if (constValue !== undefined) {
@@ -320,6 +368,12 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 						`string: const value (${JSON.stringify(constValue)}) can't be longer than maximum graphemes (${maxGraphemes})`,
 					);
 				}
+			}
+
+			if (format !== undefined && !validateStringFormat(constValue, format)) {
+				throw new Error(
+					`string: const value (${JSON.stringify(constValue)}) does not match format '${format}'`,
+				);
 			}
 		}
 	}
@@ -364,6 +418,12 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 						);
 					}
 				}
+
+				if (format !== undefined && !validateStringFormat(enumValue, format)) {
+					throw new Error(
+						`string: enum[${idx}] (${JSON.stringify(enumValue)}) does not match format '${format}'`,
+					);
+				}
 			}
 		}
 	}
@@ -404,6 +464,12 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 						);
 					}
 				}
+
+				if (format !== undefined && !validateStringFormat(knownValue, format)) {
+					throw new Error(
+						`string: knownValues[${idx}] (${JSON.stringify(knownValue)}) does not match format '${format}'`,
+					);
+				}
 			}
 		}
 	}
@@ -423,6 +489,7 @@ const resolveStringTokenReference = (ctx: BuildContext, def: LexTokenBuilder): s
 
 const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): LexString => {
 	const {
+		format,
 		default: defaultValue,
 		enum: enumValues,
 		const: constValue,
@@ -498,6 +565,12 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): LexString 
 				);
 			}
 		}
+
+		if (format !== undefined && !validateStringFormat(builtConstValue, format)) {
+			throw new Error(
+				`${ctx.dotPath}/const: value (${JSON.stringify(builtConstValue)}) does not match format '${format}'`,
+			);
+		}
 	}
 
 	// validate resolved default value
@@ -541,6 +614,12 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): LexString 
 				);
 			}
 		}
+
+		if (format !== undefined && !validateStringFormat(builtDefaultValue, format)) {
+			throw new Error(
+				`${ctx.dotPath}/default: value (${JSON.stringify(builtDefaultValue)}) does not match format '${format}'`,
+			);
+		}
 	}
 
 	// validate resolved enum values
@@ -580,6 +659,12 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): LexString 
 							`${ctx.dotPath}/enum/${idx}: value (${JSON.stringify(builtEnumValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
 						);
 					}
+				}
+
+				if (format !== undefined && !validateStringFormat(builtEnumValue, format)) {
+					throw new Error(
+						`${ctx.dotPath}/enum/${idx}: value (${JSON.stringify(builtEnumValue)}) does not match format '${format}'`,
+					);
 				}
 			}
 		}
@@ -622,6 +707,12 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): LexString 
 							`${ctx.dotPath}/knownValues/${idx}: value (${JSON.stringify(builtKnownValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
 						);
 					}
+				}
+
+				if (format !== undefined && !validateStringFormat(builtKnownValue, format)) {
+					throw new Error(
+						`${ctx.dotPath}/knownValues/${idx}: value (${JSON.stringify(builtKnownValue)}) does not match format '${format}'`,
+					);
 				}
 			}
 		}
