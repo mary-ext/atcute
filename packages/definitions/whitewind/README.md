@@ -56,14 +56,6 @@ import { defineLexiconConfig } from '@atcute/lex-cli';
 export default defineLexiconConfig({
 	files: ['lexicons/**/*.json'],
 	outdir: 'src/lexicons/',
-	mappings: [
-		{
-			nsid: ['com.whtwnd.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('com.whtwnd.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/whitewind/types/${specifier}` };
-			},
-		},
-	],
+	imports: ['@atcute/whitewind'],
 });
 ```

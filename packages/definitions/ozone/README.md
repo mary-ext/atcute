@@ -82,14 +82,6 @@ import { defineLexiconConfig } from '@atcute/lex-cli';
 export default defineLexiconConfig({
 	files: ['lexicons/**/*.json'],
 	outdir: 'src/lexicons/',
-	mappings: [
-		{
-			nsid: ['tools.ozone.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('tools.ozone.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/ozone/types/${specifier}` };
-			},
-		},
-	],
+	imports: ['@atcute/ozone'],
 });
 ```

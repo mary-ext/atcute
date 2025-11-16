@@ -71,14 +71,6 @@ import { defineLexiconConfig } from '@atcute/lex-cli';
 export default defineLexiconConfig({
 	files: ['lexicons/**/*.json'],
 	outdir: 'src/lexicons/',
-	mappings: [
-		{
-			nsid: ['community.lexicon.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('community.lexicon.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/lexicon-community/types/${specifier}` };
-			},
-		},
-	],
+	imports: ['@atcute/lexicon-community'],
 });
 ```

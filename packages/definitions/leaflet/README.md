@@ -119,14 +119,6 @@ import { defineLexiconConfig } from '@atcute/lex-cli';
 export default defineLexiconConfig({
 	files: ['lexicons/**/*.json'],
 	outdir: 'src/lexicons/',
-	mappings: [
-		{
-			nsid: ['pub.leaflet.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('pub.leaflet.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/leaflet/types/${specifier}` };
-			},
-		},
-	],
+	imports: ['@atcute/leaflet'],
 });
 ```

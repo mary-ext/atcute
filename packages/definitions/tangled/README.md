@@ -58,14 +58,6 @@ import { defineLexiconConfig } from '@atcute/lex-cli';
 export default defineLexiconConfig({
 	files: ['lexicons/**/*.json'],
 	outdir: 'src/lexicons/',
-	mappings: [
-		{
-			nsid: ['sh.tangled.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('sh.tangled.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/tangled/types/${specifier}` };
-			},
-		},
-	],
+	imports: ['@atcute/tangled'],
 });
 ```

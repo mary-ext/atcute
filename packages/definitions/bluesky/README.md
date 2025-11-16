@@ -87,21 +87,6 @@ import { defineLexiconConfig } from '@atcute/lex-cli';
 export default defineLexiconConfig({
 	files: ['lexicons/**/*.json'],
 	outdir: 'src/lexicons/',
-	mappings: [
-		{
-			nsid: ['app.bsky.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('app.bsky.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/bluesky/types/app/${specifier}` };
-			},
-		},
-		{
-			nsid: ['chat.bsky.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('chat.bsky.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/bluesky/types/chat/${specifier}` };
-			},
-		},
-	],
+	imports: ['@atcute/bluesky'],
 });
 ```

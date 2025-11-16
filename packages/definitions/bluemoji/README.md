@@ -83,14 +83,6 @@ import { defineLexiconConfig } from '@atcute/lex-cli';
 export default defineLexiconConfig({
 	files: ['lexicons/**/*.json'],
 	outdir: 'src/lexicons/',
-	mappings: [
-		{
-			nsid: ['blue.moji.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('blue.moji.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/bluemoji/types/${specifier}` };
-			},
-		},
-	],
+	imports: ['@atcute/bluemoji'],
 });
 ```

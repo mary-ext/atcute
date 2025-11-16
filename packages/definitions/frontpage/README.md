@@ -56,14 +56,6 @@ import { defineLexiconConfig } from '@atcute/lex-cli';
 export default defineLexiconConfig({
 	files: ['lexicons/**/*.json'],
 	outdir: 'src/lexicons/',
-	mappings: [
-		{
-			nsid: ['fyi.unravel.frontpage.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('fyi.unravel.frontpage.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/frontpage/types/${specifier}` };
-			},
-		},
-	],
+	imports: ['@atcute/frontpage'],
 });
 ```
