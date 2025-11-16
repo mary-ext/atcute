@@ -162,6 +162,24 @@ export interface LexXrpcSubscription {
 	errors?: LexXrpcError[];
 }
 
+export type LexLang = Record<string, string | undefined>;
+
+export interface LexPermission {
+	type: 'permission';
+	resource: string;
+	[key: string]: string | number | boolean | (string | number | boolean)[] | undefined;
+}
+
+export interface LexPermissionSet {
+	type: 'permission-set';
+	description?: string;
+	title?: string;
+	'title:lang'?: LexLang;
+	detail?: string;
+	'detail:lang'?: LexLang;
+	permissions: LexPermission[];
+}
+
 export interface LexRecord {
 	type: 'record';
 	description?: string;
@@ -174,6 +192,7 @@ export type LexUserType =
 	| LexXrpcQuery
 	| LexXrpcProcedure
 	| LexXrpcSubscription
+	| LexPermissionSet
 	| LexObject
 	| LexArray
 	| LexToken

@@ -608,6 +608,34 @@ export const lexXrpcSubscription: v.Type<t.LexXrpcSubscription> = v.object({
 	errors: v.array(lexXrpcError).optional(),
 });
 
+// TODO: add BCP47 language tag validation for keys
+export const lexLang: v.Type<t.LexLang> = v.record(v.union(v.undefined(), v.string()));
+
+export const lexPermission: v.Type<t.LexPermission> = v
+	.object({
+		type: v.literal('permission'),
+		resource: v.string().assert((s) => s.length > 0, `resource must not be empty`),
+	})
+	.rest(
+		v.union(
+			v.array(v.union(v.string(), integer, v.boolean())),
+			v.string(),
+			integer,
+			v.boolean(),
+			v.undefined(),
+		),
+	);
+
+export const lexPermissionSet: v.Type<t.LexPermissionSet> = v.object({
+	type: v.literal('permission-set'),
+	description: v.string().optional(),
+	title: v.string().optional(),
+	'title:lang': lexLang.optional(),
+	detail: v.string().optional(),
+	'detail:lang': lexLang.optional(),
+	permissions: v.array(lexPermission),
+});
+
 export const lexRecord: v.Type<t.LexRecord> = v.object({
 	type: v.literal('record'),
 	description: v.string().optional(),
@@ -629,6 +657,7 @@ export const lexUserType: v.Type<t.LexUserType> = v.union(
 	lexXrpcQuery,
 	lexXrpcProcedure,
 	lexXrpcSubscription,
+	lexPermissionSet,
 	lexObject,
 	lexArray,
 	lexToken,
@@ -661,10 +690,11 @@ export const lexiconDoc: v.Type<t.LexiconDoc> = v.object({
 				(def.type === 'record' ||
 					def.type === 'procedure' ||
 					def.type === 'query' ||
-					def.type === 'subscription')
+					def.type === 'subscription' ||
+					def.type === 'permission-set')
 			) {
 				return v.err({
-					message: `records, procedures, queries and subscriptions must be the main definition`,
+					message: `records, procedures, queries, subscriptions and permission sets must be the main definition`,
 					path: [key],
 				});
 			}
