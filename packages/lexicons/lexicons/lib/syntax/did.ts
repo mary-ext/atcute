@@ -8,6 +8,8 @@ export type Did<Method extends string = string> = `did:${Method}:${string}`;
  */
 export type AtprotoDid = Did<'plc' | 'web'>;
 
+export type AtprotoAudience = `${AtprotoDid}#${string}`;
+
 const DID_RE = /^did:([a-z]+):([a-zA-Z0-9._:%\-]*[a-zA-Z0-9._\-])$/;
 
 // #__NO_SIDE_EFFECTS__
