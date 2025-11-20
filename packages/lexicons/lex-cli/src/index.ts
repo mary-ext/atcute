@@ -1,15 +1,7 @@
-import type { ImportMapping } from './codegen.js';
+import { lexiconConfigSchema, type LexiconConfig } from './config.js';
 
-export interface LexiconConfig {
-	outdir: string;
-	files: string[];
-	imports?: string[];
-	mappings?: ImportMapping[];
-	modules?: {
-		importSuffix?: string;
-	};
-}
+export type { LexiconConfig };
 
 export const defineLexiconConfig = (config: LexiconConfig): LexiconConfig => {
-	return config;
+	return lexiconConfigSchema.parse(config);
 };

@@ -1,6 +1,7 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
-import * as url from 'node:url';
+
+import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 
 import { object } from '@optique/core/constructs';
 import { command, constant, option } from '@optique/core/primitives';
@@ -8,10 +9,8 @@ import { run } from '@optique/run';
 import { path as pathParser } from '@optique/run/valueparser';
 import pc from 'picocolors';
 
-import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
-
 import { generateLexiconApi, type ImportMapping } from './codegen.js';
-import type { LexiconConfig } from './index.js';
+import { loadConfig } from './config.js';
 import { packageJsonSchema } from './lexicon-metadata.js';
 
 /**
@@ -128,31 +127,18 @@ const parser = command(
 const result = run(parser, { programName: 'lex-cli' });
 
 if (result.type === 'generate') {
-	const configFilename = path.resolve(result.config);
-	const configDirname = path.dirname(configFilename);
-
-	let config: LexiconConfig;
-	try {
-		const configURL = url.pathToFileURL(configFilename);
-		const configMod = (await import(configURL.href)) as { default: LexiconConfig };
-		config = configMod.default;
-	} catch (err) {
-		console.error(pc.bold(pc.red(`failed to import config:`)));
-		console.error(err);
-
-		process.exit(1);
-	}
+	const config = await loadConfig(result.config);
 
 	// Resolve imports to mappings
-	const importMappings = config.imports ? await resolveImportsToMappings(config.imports, configDirname) : [];
+	const importMappings = config.imports ? await resolveImportsToMappings(config.imports, config.root) : [];
 	const allMappings = [...importMappings, ...(config.mappings ?? [])];
 
 	const documents: LexiconDoc[] = [];
 
-	for await (const filename of fs.glob(config.files, { cwd: configDirname })) {
+	for await (const filename of fs.glob(config.files, { cwd: config.root })) {
 		let source: string;
 		try {
-			source = await fs.readFile(path.join(configDirname, filename), 'utf8');
+			source = await fs.readFile(path.join(config.root, filename), 'utf8');
 		} catch (err) {
 			console.error(pc.bold(pc.red(`file read error with "${filename}"`)));
 			console.error(err);
@@ -196,7 +182,7 @@ if (result.type === 'generate') {
 		},
 	});
 
-	const outdir = path.join(configDirname, config.outdir);
+	const outdir = path.join(config.root, config.outdir);
 
 	for (const file of generationResult.files) {
 		const filename = path.join(outdir, file.filename);
