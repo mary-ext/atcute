@@ -1241,6 +1241,218 @@ describe('builder', () => {
 					],
 				});
 			});
+
+			test('builds repo permission with LexRecordBuilder reference', () => {
+				const postRecord = record({ record: object() });
+
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.post',
+							defs: {
+								main: postRecord,
+							},
+						}),
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									permissions: [repoPermission({ collection: [postRecord], action: ['create'] })],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'repo',
+							collection: ['com.example.post'],
+							action: ['create'],
+						},
+					],
+				});
+			});
+
+			test('builds repo permission with mixed nsid and LexRecordBuilder', () => {
+				const postRecord = record({ record: object() });
+				const commentRecord = record({ record: object() });
+
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.post',
+							defs: {
+								main: postRecord,
+							},
+						}),
+						document({
+							id: 'com.example.comment',
+							defs: {
+								main: commentRecord,
+							},
+						}),
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									permissions: [
+										repoPermission({
+											collection: ['com.example.like', postRecord, commentRecord],
+										}),
+									],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'repo',
+							collection: ['com.example.like', 'com.example.post', 'com.example.comment'],
+						},
+					],
+				});
+			});
+
+			test('builds rpc permission with LexXrpcQueryBuilder reference', () => {
+				const getMethod = query();
+
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.getPost',
+							defs: {
+								main: getMethod,
+							},
+						}),
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									permissions: [rpcPermission({ lxm: [getMethod], aud: 'did:web:example.com#bsky_appview' })],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'rpc',
+							lxm: ['com.example.getPost'],
+							aud: 'did:web:example.com#bsky_appview',
+						},
+					],
+				});
+			});
+
+			test('builds rpc permission with mixed XRPC builders', () => {
+				const getMethod = query();
+				const postMethod = procedure();
+				const subMethod = subscription();
+
+				const docs = build({
+					documents: [
+						document({
+							id: 'com.example.getPost',
+							defs: {
+								main: getMethod,
+							},
+						}),
+						document({
+							id: 'com.example.createPost',
+							defs: {
+								main: postMethod,
+							},
+						}),
+						document({
+							id: 'com.example.subscribePosts',
+							defs: {
+								main: subMethod,
+							},
+						}),
+						document({
+							id: 'com.example.scope',
+							defs: {
+								main: permissionSet({
+									permissions: [
+										rpcPermission({
+											lxm: [getMethod, 'com.example.updatePost', postMethod, subMethod],
+											aud: 'did:web:example.com#bsky_appview',
+										}),
+									],
+								}),
+							},
+						}),
+					],
+				});
+
+				expect(docs['com.example.scope'].defs.main).toEqual({
+					type: 'permission-set',
+					permissions: [
+						{
+							type: 'permission',
+							resource: 'rpc',
+							lxm: [
+								'com.example.getPost',
+								'com.example.updatePost',
+								'com.example.createPost',
+								'com.example.subscribePosts',
+							],
+							aud: 'did:web:example.com#bsky_appview',
+						},
+					],
+				});
+			});
+
+			test('throws when LexRecordBuilder is not a top-level definition', () => {
+				const postRecord = record({ record: object() });
+
+				expect(() =>
+					build({
+						documents: [
+							document({
+								id: 'com.example.scope',
+								defs: {
+									main: permissionSet({
+										permissions: [repoPermission({ collection: [postRecord] })],
+									}),
+								},
+							}),
+						],
+					}),
+				).toThrow('must be defined as a top-level definition');
+			});
+
+			test('throws when XRPC builder is not a top-level definition', () => {
+				const getMethod = query();
+
+				expect(() =>
+					build({
+						documents: [
+							document({
+								id: 'com.example.scope',
+								defs: {
+									main: permissionSet({
+										permissions: [rpcPermission({ lxm: [getMethod], aud: 'did:web:example.com#bsky_appview' })],
+									}),
+								},
+							}),
+						],
+					}),
+				).toThrow('must be defined as a top-level definition');
+			});
 		});
 	});
 });

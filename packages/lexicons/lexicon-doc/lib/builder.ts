@@ -1365,7 +1365,7 @@ export type RepoAction = 'create' | 'update' | 'delete';
 
 export interface LexRepoPermissionBuilder {
 	type: 'repo-permission';
-	collection: '*' | Nsid[];
+	collection: '*' | (Nsid | LexRecordBuilder)[];
 	action?: RepoAction[];
 }
 
@@ -1383,7 +1383,7 @@ export const repoPermission = (def: Omit<LexRepoPermissionBuilder, 'type'>): Lex
 
 export interface LexRpcPermissionBuilder {
 	type: 'rpc-permission';
-	lxm: '*' | Nsid[];
+	lxm: '*' | (Nsid | LexXrpcQueryBuilder | LexXrpcProcedureBuilder | LexXrpcSubscriptionBuilder)[];
 	aud: '*' | AtprotoAudience;
 }
 
@@ -1455,14 +1455,32 @@ export type LexPermissionBuilder =
 	| LexAccountPermissionBuilder
 	| LexIdentityPermissionBuilder;
 
-const buildPermissionSchema = (_ctx: BuildContext, def: LexPermissionBuilder): LexPermission => {
+const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): LexPermission => {
 	switch (def.type) {
 		case 'repo-permission': {
 			const { collection, action } = def;
 
+			let builtCollection: string[];
+			if (collection === '*') {
+				builtCollection = ['*'];
+			} else {
+				builtCollection = collection.map((item, index) => {
+					if (typeof item === 'string') {
+						return item;
+					}
+
+					const defPath = ctx.toplevelDefs.get(item);
+					if (defPath === undefined) {
+						throw new Error(`${ctx.dotPath}/collection/${index} must be defined as a top-level definition`);
+					}
+
+					return toLexUri(defPath);
+				});
+			}
+
 			return {
 				action: action,
-				collection: collection === '*' ? ['*'] : collection,
+				collection: builtCollection,
 				resource: 'repo',
 				type: 'permission',
 			};
@@ -1470,9 +1488,27 @@ const buildPermissionSchema = (_ctx: BuildContext, def: LexPermissionBuilder): L
 		case 'rpc-permission': {
 			const { lxm, aud } = def;
 
+			let builtLxm: string[];
+			if (lxm === '*') {
+				builtLxm = ['*'];
+			} else {
+				builtLxm = lxm.map((item, index) => {
+					if (typeof item === 'string') {
+						return item;
+					}
+
+					const defPath = ctx.toplevelDefs.get(item);
+					if (defPath === undefined) {
+						throw new Error(`${ctx.dotPath}/lxm/${index} must be defined as a top-level definition`);
+					}
+
+					return toLexUri(defPath);
+				});
+			}
+
 			return {
 				aud: aud,
-				lxm: lxm === '*' ? ['*'] : lxm,
+				lxm: builtLxm,
 				resource: 'rpc',
 				type: 'permission',
 			};
