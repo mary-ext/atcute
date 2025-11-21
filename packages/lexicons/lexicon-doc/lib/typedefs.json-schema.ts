@@ -210,16 +210,21 @@ export const lexUserType = s.any(
 const NSID_RE =
 	/^[a-zA-Z](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?:\.[a-zA-Z](?:[a-zA-Z0-9]{0,62})?)$/;
 
-export const lexiconDoc = s.object({
-	lexicon: s.constant(1),
-	id: s.string({ pattern: NSID_RE.source }),
-	revision: s.optional(integer),
-	description: s.optional(s.string()),
-	defs: s.object(
-		{ main: s.optional(lexUserType) },
-		{
-			propertyNames: s.string({ pattern: KEY_RE.source }),
-			additionalProperties: s.any(lexObject, lexArray, lexToken, lexIpldType, lexBlob, lexPrimitive),
-		},
-	),
-});
+export const lexiconDoc = s.object(
+	{
+		lexicon: s.constant(1),
+		id: s.string({ pattern: NSID_RE.source }),
+		revision: s.optional(integer),
+		description: s.optional(s.string()),
+		defs: s.object(
+			{ main: s.optional(lexUserType) },
+			{
+				propertyNames: s.string({ pattern: KEY_RE.source }),
+				additionalProperties: s.any(lexObject, lexArray, lexToken, lexIpldType, lexBlob, lexPrimitive),
+			},
+		),
+	},
+	{
+		additionalProperties: true,
+	},
+);
