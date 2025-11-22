@@ -1,148 +1,27 @@
 import * as v from '@badrap/valita';
-import {
-	isActorIdentifier,
-	isCid,
-	isDatetime,
-	isDid,
-	isGenericUri,
-	isHandle,
-	isLanguageCode,
-	isNsid,
-	isRecordKey,
-	isResourceUri,
-	isTid,
-} from '@atcute/lexicons/syntax';
 
-import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
 import * as t from './types.js';
 
 const integer = v
 	.number()
 	.assert((input) => input >= 0 && Number.isSafeInteger(input), `expected non-negative integer`);
 
-export const lexBoolean: v.Type<t.LexBoolean> = v
-	.object({
-		type: v.literal('boolean'),
-		description: v.string().optional(),
-		default: v.boolean().optional(),
-		const: v.boolean().optional(),
-	})
-	.chain((input) => {
-		const { const: constValue, default: defaultValue } = input;
+export const lexBoolean: v.Type<t.LexBoolean> = v.object({
+	type: v.literal('boolean'),
+	description: v.string().optional(),
+	default: v.boolean().optional(),
+	const: v.boolean().optional(),
+});
 
-		if (defaultValue !== undefined) {
-			if (constValue !== undefined && defaultValue !== constValue) {
-				return v.err({
-					message: `default value must match constant value`,
-					path: ['default'],
-				});
-			}
-		}
-
-		return v.ok(input);
-	});
-
-export const lexInteger: v.Type<t.LexInteger> = v
-	.object({
-		type: v.literal('integer'),
-		description: v.string().optional(),
-		default: integer.optional(),
-		minimum: integer.optional(),
-		maximum: integer.optional(),
-		enum: v.array(integer).optional(),
-		const: integer.optional(),
-	})
-	.chain((input) => {
-		const {
-			minimum = 0,
-			maximum = Infinity,
-			const: constValue,
-			default: defaultValue,
-			enum: enumValues,
-		} = input;
-
-		if (minimum > maximum) {
-			return v.err({
-				message: `minimum value can't be greater than maximum value`,
-				path: ['minimum'],
-			});
-		}
-
-		if (defaultValue !== undefined) {
-			if (constValue !== undefined && defaultValue !== constValue) {
-				return v.err({
-					message: `default value must match constant value`,
-					path: ['default'],
-				});
-			}
-
-			if (enumValues !== undefined && !enumValues.includes(defaultValue)) {
-				return v.err({
-					message: `default value must be one of the enum values`,
-					path: ['default'],
-				});
-			}
-
-			if (defaultValue < minimum) {
-				return v.err({
-					message: `default value can't be lower than minimum value`,
-					path: ['default'],
-				});
-			}
-
-			if (defaultValue > maximum) {
-				return v.err({
-					message: `default value can't be greater than maximum value`,
-					path: ['default'],
-				});
-			}
-		}
-
-		if (constValue !== undefined) {
-			if (enumValues !== undefined) {
-				return v.err({
-					message: `const and enum can't be used together`,
-					path: ['const'],
-				});
-			}
-
-			if (constValue < minimum) {
-				return v.err({
-					message: `const value can't be lower than minimum value`,
-					path: ['const'],
-				});
-			}
-
-			if (constValue > maximum) {
-				return v.err({
-					message: `const value can't be greater than maximum value`,
-					path: ['const'],
-				});
-			}
-		}
-
-		if (enumValues !== undefined) {
-			for (let idx = 0, len = enumValues.length; idx < len; idx++) {
-				const enumValue = enumValues[idx];
-
-				if (enumValue < minimum) {
-					return v.err({
-						message: `enum value can't be lower than minimum value`,
-						path: ['enum', idx],
-					});
-				}
-
-				if (enumValue > maximum) {
-					return v.err({
-						message: `enum value can't be greater than maximum value`,
-						path: ['enum', idx],
-					});
-				}
-			}
-		}
-
-		return v.ok(input);
-	});
+export const lexInteger: v.Type<t.LexInteger> = v.object({
+	type: v.literal('integer'),
+	description: v.string().optional(),
+	default: integer.optional(),
+	minimum: integer.optional(),
+	maximum: integer.optional(),
+	enum: v.array(integer).optional(),
+	const: integer.optional(),
+});
 
 export const lexStringFormat: v.Type<t.LexStringFormat> = v.union(
 	v.literal('datetime'),
@@ -158,299 +37,19 @@ export const lexStringFormat: v.Type<t.LexStringFormat> = v.union(
 	v.literal('record-key'),
 );
 
-const validateStringFormat = (value: string, format: t.LexStringFormat): boolean => {
-	switch (format) {
-		case 'datetime':
-			return isDatetime(value);
-		case 'uri':
-			return isGenericUri(value);
-		case 'at-uri':
-			return isResourceUri(value);
-		case 'did':
-			return isDid(value);
-		case 'handle':
-			return isHandle(value);
-		case 'at-identifier':
-			return isActorIdentifier(value);
-		case 'nsid':
-			return isNsid(value);
-		case 'cid':
-			return isCid(value);
-		case 'language':
-			return isLanguageCode(value);
-		case 'tid':
-			return isTid(value);
-		case 'record-key':
-			return isRecordKey(value);
-	}
-};
-
-export const lexString: v.Type<t.LexString> = v
-	.object({
-		type: v.literal('string'),
-		format: lexStringFormat.optional(),
-		description: v.string().optional(),
-		default: v.string().optional(),
-		minLength: integer.optional(),
-		maxLength: integer.optional(),
-		minGraphemes: integer.optional(),
-		maxGraphemes: integer.optional(),
-		enum: v.array(v.string()).optional(),
-		const: v.string().optional(),
-		knownValues: v.array(v.string()).optional(),
-	})
-	.chain((input) => {
-		const {
-			format,
-			minLength = 0,
-			maxLength = Infinity,
-			minGraphemes = 0,
-			maxGraphemes = Infinity,
-			const: constValue,
-			default: defaultValue,
-			enum: enumValues,
-			knownValues,
-		} = input;
-
-		if (minLength > maxLength) {
-			return v.err({
-				message: `minimum string length can't be greater than maximum string length`,
-				path: ['minLength'],
-			});
-		}
-
-		if (minGraphemes > maxGraphemes) {
-			return v.err({
-				message: `minimum grapheme count can't be greater than maximum grapheme count`,
-				path: ['minGraphemes'],
-			});
-		}
-
-		if (defaultValue !== undefined) {
-			if (constValue !== undefined && defaultValue !== constValue) {
-				return v.err({
-					message: `default value must match constant value`,
-					path: ['default'],
-				});
-			}
-
-			if (enumValues !== undefined && !enumValues.includes(defaultValue)) {
-				return v.err({
-					message: `default value must be one of the enum values`,
-					path: ['default'],
-				});
-			}
-
-			{
-				const bound = isWithinUtf8Bounds(defaultValue, minLength, maxLength);
-
-				if (bound === 'min') {
-					return v.err({
-						message: `default value can't be shorter than minimum string length`,
-						path: ['default'],
-					});
-				}
-
-				if (bound === 'max') {
-					return v.err({
-						message: `default value can't be longer than maximum string length`,
-						path: ['default'],
-					});
-				}
-			}
-
-			{
-				const bound = isWithinGraphemeBounds(defaultValue, minLength, maxLength);
-
-				if (bound === 'min') {
-					return v.err({
-						message: `default value can't be shorter than minimum grapheme count`,
-						path: ['default'],
-					});
-				}
-
-				if (bound === 'max') {
-					return v.err({
-						message: `default value can't be longer than minimum grapheme count`,
-						path: ['default'],
-					});
-				}
-			}
-
-			if (format !== undefined && !validateStringFormat(defaultValue, format)) {
-				return v.err({
-					message: `default value does not match format '${format}'`,
-					path: ['default'],
-				});
-			}
-		}
-
-		if (constValue !== undefined) {
-			if (enumValues !== undefined) {
-				return v.err({
-					message: `const and enum can't be used together`,
-					path: ['const'],
-				});
-			}
-
-			if (knownValues !== undefined) {
-				return v.err({
-					message: `const and knownValues can't be used together`,
-					path: ['const'],
-				});
-			}
-
-			{
-				const bound = isWithinUtf8Bounds(constValue, minLength, maxLength);
-
-				if (bound === 'min') {
-					return v.err({
-						message: `const value can't be shorter than minimum string length`,
-						path: ['const'],
-					});
-				}
-
-				if (bound === 'max') {
-					return v.err({
-						message: `const value can't be longer than maximum string length`,
-						path: ['const'],
-					});
-				}
-			}
-
-			{
-				const bound = isWithinGraphemeBounds(constValue, minLength, maxLength);
-
-				if (bound === 'min') {
-					return v.err({
-						message: `const value can't be shorter than minimum grapheme count`,
-						path: ['const'],
-					});
-				}
-
-				if (bound === 'max') {
-					return v.err({
-						message: `const value can't be longer than minimum grapheme count`,
-						path: ['const'],
-					});
-				}
-			}
-
-			if (format !== undefined && !validateStringFormat(constValue, format)) {
-				return v.err({
-					message: `const value does not match format '${format}'`,
-					path: ['const'],
-				});
-			}
-		}
-
-		if (enumValues !== undefined) {
-			if (knownValues !== undefined) {
-				return v.err({
-					message: `enum and knownValues can't be used together`,
-					path: ['enum'],
-				});
-			}
-
-			for (let idx = 0, len = enumValues.length; idx < len; idx++) {
-				const enumValue = enumValues[idx];
-
-				{
-					const bound = isWithinUtf8Bounds(enumValue, minLength, maxLength);
-
-					if (bound === 'min') {
-						return v.err({
-							message: `enum value can't be shorter than minimum string length`,
-							path: ['enum', idx],
-						});
-					}
-
-					if (bound === 'max') {
-						return v.err({
-							message: `enum value can't be longer than maximum string length`,
-							path: ['enum', idx],
-						});
-					}
-				}
-
-				{
-					const bound = isWithinGraphemeBounds(enumValue, minGraphemes, maxGraphemes);
-
-					if (bound === 'min') {
-						return v.err({
-							message: `enum value can't have fewer graphemes than minimum grapheme count`,
-							path: ['enum', idx],
-						});
-					}
-
-					if (bound === 'max') {
-						return v.err({
-							message: `enum value can't have more graphemes than maximum grapheme count`,
-							path: ['enum', idx],
-						});
-					}
-				}
-
-				if (format !== undefined && !validateStringFormat(enumValue, format)) {
-					return v.err({
-						message: `enum value does not match format '${format}'`,
-						path: ['enum', idx],
-					});
-				}
-			}
-		}
-
-		if (knownValues !== undefined) {
-			for (let idx = 0, len = knownValues.length; idx < len; idx++) {
-				const knownValue = knownValues[idx];
-
-				{
-					const bound = isWithinUtf8Bounds(knownValue, minLength, maxLength);
-
-					if (bound === 'min') {
-						return v.err({
-							message: `known value can't be shorter than minimum string length`,
-							path: ['known', idx],
-						});
-					}
-
-					if (bound === 'max') {
-						return v.err({
-							message: `known value can't be longer than maximum string length`,
-							path: ['known', idx],
-						});
-					}
-				}
-
-				{
-					const bound = isWithinGraphemeBounds(knownValue, minGraphemes, maxGraphemes);
-
-					if (bound === 'min') {
-						return v.err({
-							message: `known value can't have fewer graphemes than minimum grapheme count`,
-							path: ['known', idx],
-						});
-					}
-
-					if (bound === 'max') {
-						return v.err({
-							message: `known value can't have more graphemes than maximum grapheme count`,
-							path: ['known', idx],
-						});
-					}
-				}
-
-				if (format !== undefined && !validateStringFormat(knownValue, format)) {
-					return v.err({
-						message: `known value does not match format '${format}'`,
-						path: ['knownValues', idx],
-					});
-				}
-			}
-		}
-
-		return v.ok(input);
-	});
+export const lexString: v.Type<t.LexString> = v.object({
+	type: v.literal('string'),
+	format: lexStringFormat.optional(),
+	description: v.string().optional(),
+	default: v.string().optional(),
+	minLength: integer.optional(),
+	maxLength: integer.optional(),
+	minGraphemes: integer.optional(),
+	maxGraphemes: integer.optional(),
+	enum: v.array(v.string()).optional(),
+	const: v.string().optional(),
+	knownValues: v.array(v.string()).optional(),
+});
 
 export const lexUnknown: v.Type<t.LexUnknown> = v.object({
 	type: v.literal('unknown'),
@@ -459,25 +58,12 @@ export const lexUnknown: v.Type<t.LexUnknown> = v.object({
 
 export const lexPrimitive: v.Type<t.LexPrimitive> = v.union(lexBoolean, lexInteger, lexString, lexUnknown);
 
-export const lexBytes: v.Type<t.LexBytes> = v
-	.object({
-		type: v.literal('bytes'),
-		description: v.string().optional(),
-		minLength: integer.optional(),
-		maxLength: integer.optional(),
-	})
-	.chain((input) => {
-		const { minLength = 0, maxLength = Infinity } = input;
-
-		if (minLength > maxLength) {
-			return v.err({
-				message: `minimum byte length can't be greater than maximum byte length`,
-				path: ['minLength'],
-			});
-		}
-
-		return v.ok(input);
-	});
+export const lexBytes: v.Type<t.LexBytes> = v.object({
+	type: v.literal('bytes'),
+	description: v.string().optional(),
+	minLength: integer.optional(),
+	maxLength: integer.optional(),
+});
 
 export const lexCidLink: v.Type<t.LexCidLink> = v.object({
 	type: v.literal('cid-link'),
@@ -497,27 +83,12 @@ export const lexRef: v.Type<t.LexRef> = v.object({
 	ref: refString,
 });
 
-export const lexRefUnion: v.Type<t.LexRefUnion> = v
-	.object({
-		type: v.literal('union'),
-		description: v.string().optional(),
-		refs: v.array(refString),
-		closed: v.boolean().optional(),
-	})
-	.chain((input) => {
-		const { refs, closed = false } = input;
-
-		if (closed) {
-			if (refs.length === 0) {
-				return v.err({
-					message: `closed enum can't have zero ref members`,
-					path: ['refs'],
-				});
-			}
-		}
-
-		return v.ok(input);
-	});
+export const lexRefUnion: v.Type<t.LexRefUnion> = v.object({
+	type: v.literal('union'),
+	description: v.string().optional(),
+	refs: v.array(refString),
+	closed: v.boolean().optional(),
+});
 
 export const lexRefVariant: v.Type<t.LexRefVariant> = v.union(lexRef, lexRefUnion);
 
@@ -528,108 +99,41 @@ export const lexBlob: v.Type<t.LexBlob> = v.object({
 	maxSize: integer.optional(),
 });
 
-export const lexArray: v.Type<t.LexArray> = v
-	.object({
-		type: v.literal('array'),
-		description: v.string().optional(),
-		items: v.union(lexPrimitive, lexIpldType, lexRefVariant, lexBlob),
-		minLength: integer.optional(),
-		maxLength: integer.optional(),
-	})
-	.chain((input) => {
-		const { minLength = 0, maxLength = Infinity } = input;
+export const lexArray: v.Type<t.LexArray> = v.object({
+	type: v.literal('array'),
+	description: v.string().optional(),
+	items: v.union(lexPrimitive, lexIpldType, lexRefVariant, lexBlob),
+	minLength: integer.optional(),
+	maxLength: integer.optional(),
+});
 
-		if (minLength > maxLength) {
-			return v.err({
-				message: `minimum array length can't be greater than maximum array length`,
-				path: ['minLength'],
-			});
-		}
-
-		return v.ok(input);
-	});
-
-export const lexPrimitiveArray: v.Type<t.LexPrimitiveArray> = v
-	.object({
-		type: v.literal('array'),
-		description: v.string().optional(),
-		items: lexPrimitive,
-		minLength: integer.optional(),
-		maxLength: integer.optional(),
-	})
-	.chain((input) => {
-		const { minLength = 0, maxLength = Infinity } = input;
-
-		if (minLength > maxLength) {
-			return v.err({
-				message: `minimum array length can't be greater than maximum array length`,
-				path: ['minLength'],
-			});
-		}
-
-		return v.ok(input);
-	});
+export const lexPrimitiveArray: v.Type<t.LexPrimitiveArray> = v.object({
+	type: v.literal('array'),
+	description: v.string().optional(),
+	items: lexPrimitive,
+	minLength: integer.optional(),
+	maxLength: integer.optional(),
+});
 
 export const lexToken: v.Type<t.LexToken> = v.object({
 	type: v.literal('token'),
 	description: v.string().optional(),
 });
 
-const KEY_RE = /^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/;
+export const lexObject: v.Type<t.LexObject> = v.object({
+	type: v.literal('object'),
+	description: v.string().optional(),
+	required: v.array(v.string()).optional(),
+	nullable: v.array(v.string()).optional(),
+	properties: v.record(v.union(lexArray, lexPrimitive, lexIpldType, lexRefVariant, lexBlob)).optional(),
+});
 
-const refineObjectProperties = <T extends { required?: string[]; properties?: Record<string, unknown> }>(
-	input: T,
-): v.ValitaResult<T> => {
-	const { required = [], properties } = input;
-
-	for (const key in properties) {
-		if (!KEY_RE.test(key)) {
-			return v.err({
-				message: `invalid property key`,
-				path: ['properties', key],
-			});
-		}
-	}
-
-	if (required.length > 0) {
-		if (properties === undefined) {
-			return v.err({
-				message: `required fields specified but no properties defined`,
-				path: ['properties'],
-			});
-		}
-
-		for (const key of required) {
-			if (properties[key] === undefined) {
-				return v.err({
-					message: `required fields not defined`,
-					path: ['properties', key],
-				});
-			}
-		}
-	}
-
-	return v.ok(input);
-};
-
-export const lexObject: v.Type<t.LexObject> = v
-	.object({
-		type: v.literal('object'),
-		description: v.string().optional(),
-		required: v.array(v.string()).optional(),
-		nullable: v.array(v.string()).optional(),
-		properties: v.record(v.union(lexArray, lexPrimitive, lexIpldType, lexRefVariant, lexBlob)).optional(),
-	})
-	.chain(refineObjectProperties);
-
-export const lexXrpcParameters: v.Type<t.LexXrpcParameters> = v
-	.object({
-		type: v.literal('params'),
-		description: v.string().optional(),
-		required: v.array(v.string()).optional(),
-		properties: v.record(v.union(lexPrimitive, lexPrimitiveArray)).optional(),
-	})
-	.chain(refineObjectProperties);
+export const lexXrpcParameters: v.Type<t.LexXrpcParameters> = v.object({
+	type: v.literal('params'),
+	description: v.string().optional(),
+	required: v.array(v.string()).optional(),
+	properties: v.record(v.union(lexPrimitive, lexPrimitiveArray)).optional(),
+});
 
 const MIME_TYPE_RE =
 	/^\s*(?:\*\/\*|[a-z]+\/[a-zA-Z][a-zA-Z0-9-+.]*(?:\s*,\s*[a-z]+\/[a-zA-Z][a-zA-Z0-9-+.]*)*?)\s*$/;
@@ -677,18 +181,7 @@ export const lexXrpcSubscription: v.Type<t.LexXrpcSubscription> = v.object({
 	errors: v.array(lexXrpcError).optional(),
 });
 
-export const lexLang: v.Type<t.LexLang> = v.record(v.union(v.undefined(), v.string())).chain((input) => {
-	for (const key in input) {
-		if (!isLanguageCode(key)) {
-			return v.err({
-				message: `invalid BCP47 language tag`,
-				path: [key],
-			});
-		}
-	}
-
-	return v.ok(input);
-});
+export const lexLang: v.Type<t.LexLang> = v.record(v.union(v.undefined(), v.string()));
 
 export const lexPermission: v.Type<t.LexPermission> = v
 	.object({
@@ -753,32 +246,5 @@ export const lexiconDoc: v.Type<t.LexiconDoc> = v.object({
 	id: v.string().assert((input) => NSID_RE.test(input), `must be valid nsid`),
 	revision: integer.optional(),
 	description: v.string().optional(),
-	defs: v.record(lexUserType).chain((defs) => {
-		for (const key in defs) {
-			const def = defs[key];
-
-			if (!KEY_RE.test(key)) {
-				return v.err({
-					message: `invalid definition id`,
-					path: [key],
-				});
-			}
-
-			if (
-				key !== 'main' &&
-				(def.type === 'record' ||
-					def.type === 'procedure' ||
-					def.type === 'query' ||
-					def.type === 'subscription' ||
-					def.type === 'permission-set')
-			) {
-				return v.err({
-					message: `records, procedures, queries, subscriptions and permission sets must be the main definition`,
-					path: [key],
-				});
-			}
-		}
-
-		return v.ok(defs);
-	}),
+	defs: v.record(lexUserType),
 });
