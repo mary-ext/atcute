@@ -126,7 +126,15 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryStatuses'
 		/**
 		 * Specify when fetching subjects in a certain state
 		 */
-		reviewState: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		reviewState: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.string<
+				| 'tools.ozone.moderation.defs#reviewClosed'
+				| 'tools.ozone.moderation.defs#reviewEscalated'
+				| 'tools.ozone.moderation.defs#reviewNone'
+				| 'tools.ozone.moderation.defs#reviewOpen'
+				| (string & {})
+			>(),
+		),
 		/**
 		 * Search subjects reviewed after a given timestamp
 		 */

@@ -83,6 +83,14 @@ const _takedownSchema = /*#__PURE__*/ v.object({
 	 */
 	durationInHours: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/**
+	 * Email content to be sent to the user upon takedown.
+	 */
+	emailContent: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Subject of the email to be sent to the user upon takedown.
+	 */
+	emailSubject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
 	 * Names/Keywords of the policies that drove the decision.
 	 * @maxLength 5
 	 */
@@ -91,6 +99,18 @@ const _takedownSchema = /*#__PURE__*/ v.object({
 			/*#__PURE__*/ v.arrayLength(0, 5),
 		]),
 	),
+	/**
+	 * Severity level of the violation (e.g., 'sev-0', 'sev-1', 'sev-2', etc.).
+	 */
+	severityLevel: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Number of strikes to assign to the user when takedown is applied.
+	 */
+	strikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * When the strike should expire. If not provided, the strike never expires.
+	 */
+	strikeExpiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 
 type failedScheduling$schematype = typeof _failedSchedulingSchema;

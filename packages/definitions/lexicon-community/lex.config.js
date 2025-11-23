@@ -1,7 +1,19 @@
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['../../../lexdocs/lexcom/**/*.json'],
+	files: ['lexicons/**/*.json'],
 	outdir: 'lib/lexicons/',
 	imports: ['@atcute/atproto'],
+
+	pull: {
+		outdir: 'lexicons/',
+		clean: true,
+		sources: [
+			{
+				type: 'git',
+				remote: 'https://github.com/lexicon-community/lexicon.git',
+				pattern: ['**/*.json'],
+			},
+		],
+	},
 });

@@ -1,7 +1,19 @@
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['../../../lexdocs/bluesky/app/bsky/**/*.json', '../../../lexdocs/bluesky/chat/bsky/**/*.json'],
+	files: ['lexicons/**/*.json'],
 	outdir: 'lib/lexicons/',
 	imports: ['@atcute/atproto'],
+
+	pull: {
+		outdir: 'lexicons/',
+		clean: true,
+		sources: [
+			{
+				type: 'git',
+				remote: 'https://github.com/bluesky-social/atproto.git',
+				pattern: ['lexicons/app/bsky/**/*.json', 'lexicons/chat/bsky/**/*.json'],
+			},
+		],
+	},
 });

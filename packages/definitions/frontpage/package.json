@@ -21,10 +21,11 @@
 	],
 	"exports": {
 		".": "./dist/index.js",
-		"./types/*": "./dist/lexicons/types/fyi/unravel/frontpage/*.js"
+		"./types/*": "./dist/lexicons/types/*.js"
 	},
 	"scripts": {
 		"build": "tsc",
+		"pull": "lex-cli pull -c ./lex.config.js",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
@@ -40,7 +41,11 @@
 		"mappings": {
 			"fyi.unravel.frontpage.*": {
 				"type": "namespace",
-				"path": "./types/{{nsid_remainder}}"
+				"path": "./types/{{nsid}}"
+			},
+			"fyi.frontpage.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid}}"
 			}
 		}
 	}

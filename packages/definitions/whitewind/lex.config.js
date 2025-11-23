@@ -1,6 +1,18 @@
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['../../../lexdocs/whtwnd/**/*.json'],
+	files: ['lexicons/com/whtwnd/**/*.json'],
 	outdir: 'lib/lexicons/',
+
+	pull: {
+		outdir: 'lexicons/',
+		clean: true,
+		sources: [
+			{
+				type: 'git',
+				remote: 'https://github.com/whtwnd/whitewind-blog.git',
+				pattern: ['lexicons/com/whtwnd/**/*.json'],
+			},
+		],
+	},
 });

@@ -8,6 +8,32 @@ import { isNsid } from '@atcute/lexicons/syntax';
 
 import type { ImportMapping } from './codegen.js';
 
+const gitSourceConfigSchema = v.object({
+	type: v.literal('git'),
+	remote: v.string().assert((value) => value.length > 0, `must not be empty`),
+	ref: v
+		.string()
+		.assert((value) => value.length > 0, `must not be empty`)
+		.optional(),
+	pattern: v
+		.array(v.string().assert((value) => value.length > 0, `must not be empty`))
+		.assert((value) => value.length > 0, `must include at least one glob pattern`),
+});
+
+const sourceConfigSchema = v.union(gitSourceConfigSchema);
+
+const pullConfigSchema = v.object({
+	outdir: v.string().assert((value) => value.length > 0, `must not be empty`),
+	clean: v.boolean().optional(),
+	sources: v
+		.array(sourceConfigSchema)
+		.assert((value) => value.length > 0, `must include at least one source`),
+});
+
+export type GitSourceConfig = v.Infer<typeof gitSourceConfigSchema>;
+export type SourceConfig = v.Infer<typeof sourceConfigSchema>;
+export type PullConfig = v.Infer<typeof pullConfigSchema>;
+
 const isValidLexiconPattern = (pattern: string): boolean => {
 	if (pattern.endsWith('.*')) {
 		return isNsid(`${pattern.slice(0, -2)}.x`);
@@ -19,7 +45,7 @@ const isValidLexiconPattern = (pattern: string): boolean => {
 const mappingImports: v.Type<ImportMapping['imports']> = v.unknown().chain((value) => {
 	if (typeof value === 'string') {
 		if (value.length === 0) {
-			return v.err({ message: 'imports must not be empty' });
+			return v.err('imports must not be empty');
 		}
 
 		return v.ok(value);
@@ -29,7 +55,7 @@ const mappingImports: v.Type<ImportMapping['imports']> = v.unknown().chain((valu
 		return v.ok(value as ImportMapping['imports']);
 	}
 
-	return v.err({ message: 'imports must be a string or function' });
+	return v.err('imports must be a string or function');
 });
 
 const importMappingSchema: v.Type<ImportMapping> = v.object({
@@ -37,50 +63,33 @@ const importMappingSchema: v.Type<ImportMapping> = v.object({
 		.array(
 			v.string().chain((value) => {
 				if (!isValidLexiconPattern(value)) {
-					return v.err({
-						message: 'invalid NSID pattern (must be valid NSID or end with .*)',
-					});
+					return v.err(`invalid NSID pattern (must be valid NSID or end with .*)`);
 				}
 
 				return v.ok(value);
 			}),
 		)
-		.assert((patterns) => patterns.length > 0, {
-			message: 'nsid requires at least one pattern',
-		}),
+		.assert((patterns) => patterns.length > 0, `nsid requires at least one pattern`),
 	imports: mappingImports,
 });
 
 export const lexiconConfigSchema = v.object({
-	outdir: v.string().assert((value) => value.length > 0, {
-		message: 'outdir must not be empty',
-	}),
+	outdir: v.string().assert((value) => value.length > 0, `must not be empty`),
 	files: v
-		.array(
-			v.string().assert((value) => value.length > 0, {
-				message: 'files entries must not be empty',
-			}),
-		)
-		.assert((value) => value.length > 0, {
-			message: 'files must include at least one pattern',
-		}),
-	imports: v
-		.array(
-			v.string().assert((value) => value.length > 0, {
-				message: 'imports entries must not be empty',
-			}),
-		)
-		.optional(),
+		.array(v.string().assert((value) => value.length > 0, `must not be empty`))
+		.assert((value) => value.length > 0, `must include at least one glob pattern`),
+	imports: v.array(v.string().assert((value) => value.length > 0, `must not be empty`)).optional(),
 	mappings: v.array(importMappingSchema).optional(),
 	modules: v
 		.object({
 			importSuffix: v
 				.string()
-				.assert((value) => value.length > 0, { message: 'importSuffix must not be empty' })
+				.assert((value) => value.length > 0, `must not be empty`)
 				.optional(),
 		})
 		.partial()
 		.optional(),
+	pull: pullConfigSchema.optional(),
 });
 
 export type LexiconConfig = v.Infer<typeof lexiconConfigSchema>;

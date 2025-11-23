@@ -1,0 +1,43 @@
+{
+	"lexicon": 1,
+	"id": "fyi.frontpage.feed.post",
+	"defs": {
+		"main": {
+			"type": "record",
+			"description": "Record containing a Frontpage post.",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["title", "createdAt", "subject"],
+				"properties": {
+					"title": {
+						"type": "string",
+						"maxLength": 3000,
+						"maxGraphemes": 300,
+						"description": "The title of the post."
+					},
+					"subject": {
+						"type": "union",
+						"description": "The piece of content that this Frontpage post is about.",
+						"refs": ["#urlSubject"]
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Client-declared timestamp when this post was originally created."
+					}
+				}
+			}
+		},
+		"urlSubject": {
+			"type": "object",
+			"required": ["url"],
+			"properties": {
+				"url": {
+					"type": "string",
+					"format": "uri"
+				}
+			}
+		}
+	}
+}

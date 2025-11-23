@@ -1,7 +1,19 @@
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['../../../lexdocs/tangled/**/*.json'],
+	files: ['lexicons/**/*.json'],
 	outdir: 'lib/lexicons/',
 	imports: ['@atcute/atproto'],
+
+	pull: {
+		outdir: 'lexicons/',
+		clean: true,
+		sources: [
+			{
+				type: 'git',
+				remote: 'https://github.com/mary-ext/tangled.sh-mirror.git',
+				pattern: ['lexicons/**/*.json'],
+			},
+		],
+	},
 });

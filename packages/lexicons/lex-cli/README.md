@@ -23,6 +23,40 @@ then run the tool:
 npm exec lex-cli generate -c ./lex.config.js
 ```
 
+## pulling lexicons
+
+configure sources to be pulled locally before code generation. pulled files are written using their
+nsids (e.g., `app.bsky.feed.post` becomes `app/bsky/feed/post.json`).
+
+```ts
+// file: lex.config.js
+import { defineLexiconConfig } from '@atcute/lex-cli';
+
+export default defineLexiconConfig({
+	pull: {
+		outdir: 'lexicons/',
+		clean: true,
+		sources: [
+			{
+				type: 'git',
+				remote: 'https://github.com/bluesky-social/atproto.git',
+				ref: 'main',
+				pattern: ['lexicons/**/*.json'],
+			},
+		],
+	},
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
+});
+```
+
+pull the lexicons to disk, then generate types from them:
+
+```
+npm exec lex-cli pull -c ./lex.config.js
+npm exec lex-cli generate -c ./lex.config.js
+```
+
 ## publishing your schemas
 
 if you're packaging your generated schemas as a publishable library, add the `atcute:lexicons`

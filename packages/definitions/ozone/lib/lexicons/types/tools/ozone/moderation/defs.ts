@@ -181,6 +181,10 @@ const _modEventEmailSchema = /*#__PURE__*/ v.object({
 	 */
 	content: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**
+	 * Indicates whether the email was successfully delivered to the user's inbox.
+	 */
+	isDelivered: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
 	 * Names/Keywords of the policies that necessitated the email.
 	 * @maxLength 5
 	 */
@@ -342,6 +346,12 @@ const _modEventTakedownSchema = /*#__PURE__*/ v.object({
 	 * When the strike should expire. If not provided, the strike never expires.
 	 */
 	strikeExpiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/**
+	 * List of services where the takedown should be applied. If empty or not provided, takedown is applied on all configured services.
+	 */
+	targetServices: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.array(/*#__PURE__*/ v.string<'appview' | 'pds' | (string & {})>()),
+	),
 });
 const _modEventUnmuteSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventUnmute')),

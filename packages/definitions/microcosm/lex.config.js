@@ -1,6 +1,6 @@
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['../../../lexdocs/microcosm/**/*.json'],
+	files: ['lexicons/**/*.json'],
 	outdir: 'lib/lexicons/',
 });

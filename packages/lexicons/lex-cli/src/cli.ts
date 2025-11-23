@@ -5,6 +5,7 @@ import { lexiconDoc, refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-d
 
 import { object } from '@optique/core/constructs';
 import { command, constant, option } from '@optique/core/primitives';
+import { or } from '@optique/core/constructs';
 import { run } from '@optique/run';
 import { path as pathParser } from '@optique/run/valueparser';
 import pc from 'picocolors';
@@ -12,6 +13,7 @@ import pc from 'picocolors';
 import { generateLexiconApi, type ImportMapping } from './codegen.js';
 import { loadConfig } from './config.js';
 import { packageJsonSchema } from './lexicon-metadata.js';
+import { runPull } from './pull.js';
 
 /**
  * Resolves package imports to ImportMapping[]
@@ -116,12 +118,21 @@ const resolveImportsToMappings = async (
 	return mappings;
 };
 
-const parser = command(
-	'generate',
-	object({
-		type: constant('generate'),
-		config: option('-c', '--config', pathParser({ metavar: 'CONFIG' })),
-	}),
+const parser = or(
+	command(
+		'generate',
+		object({
+			type: constant('generate'),
+			config: option('-c', '--config', pathParser({ metavar: 'CONFIG' })),
+		}),
+	),
+	command(
+		'pull',
+		object({
+			type: constant('pull'),
+			config: option('-c', '--config', pathParser({ metavar: 'CONFIG' })),
+		}),
+	),
 );
 
 const result = run(parser, { programName: 'lex-cli' });
@@ -202,4 +213,7 @@ if (result.type === 'generate') {
 		await fs.mkdir(dirname, { recursive: true });
 		await fs.writeFile(filename, file.code);
 	}
+} else if (result.type === 'pull') {
+	const config = await loadConfig(result.config);
+	await runPull(config);
 }
