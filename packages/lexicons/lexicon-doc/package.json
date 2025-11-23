@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/lexicon-doc",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "type definitions and schemas for atproto lexicon documents",
 	"license": "0BSD",
 	"repository": {
@@ -28,7 +28,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"@atcute/identity": "^1.1.2",
+		"@atcute/identity": "^1.1.3",
 		"@atcute/lexicons": "workspace:*",
 		"@badrap/valita": "^0.4.6"
 	},

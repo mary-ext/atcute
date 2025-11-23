@@ -1,5 +1,14 @@
 # @atcute/lexicon-doc
 
+## 2.0.1
+
+### Patch Changes
+
+- cb2347f: improve lex permission refinement
+- f82cff8: slight wording change on linting messages
+- Updated dependencies [4b4a027]
+  - @atcute/identity@1.1.3
+
 ## 2.0.0
 
 ### Major Changes

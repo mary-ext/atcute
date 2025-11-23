@@ -1,5 +1,11 @@
 # @atcute/identity
 
+## 1.1.3
+
+### Patch Changes
+
+- 4b4a027: fix isAtprotoAudience doing recursive call
+
 ## 1.1.2
 
 ### Patch Changes
