@@ -1,18 +1,14 @@
-import {
-	isActorIdentifier,
-	isCid,
-	isDatetime,
-	isDid,
-	isGenericUri,
-	isHandle,
-	isLanguageCode,
-	isNsid,
-	isRecordKey,
-	isResourceUri,
-	isTid,
-} from '@atcute/lexicons/syntax';
+import { isLanguageCode, isNsid } from '@atcute/lexicons/syntax';
 
 import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
+import {
+	DELIMITED_MIME_TYPE_RE,
+	KEY_RE,
+	MIME_TYPE_RE,
+	REF_RE,
+	validateRecordKey,
+	validateStringFormat,
+} from './internal/validation.js';
 
 import type * as t from './types.js';
 
@@ -21,13 +17,14 @@ export interface RefineIssue {
 	path: (string | number)[];
 }
 
+// #region Concrete types
 /**
- * validates lexicon boolean type constraints
- * @param input the boolean type definition
- * @returns array of validation issues
+ * validates constraints in lexicon boolean definitions.
+ * @param spec boolean type definition to validate
+ * @returns validation issues found
  */
-export const refineLexBoolean = (input: t.LexBoolean): RefineIssue[] => {
-	const { const: constValue, default: defaultValue } = input;
+export const refineLexBoolean = (spec: t.LexBoolean): RefineIssue[] => {
+	const { const: constValue, default: defaultValue } = spec;
 	const issues: RefineIssue[] = [];
 
 	if (defaultValue !== undefined) {
@@ -43,18 +40,18 @@ export const refineLexBoolean = (input: t.LexBoolean): RefineIssue[] => {
 };
 
 /**
- * validates lexicon integer type constraints
- * @param input the integer type definition
- * @returns array of validation issues
+ * validates constraints in lexicon integer definitions.
+ * @param spec integer type definition to validate
+ * @returns validation issues found
  */
-export const refineLexInteger = (input: t.LexInteger): RefineIssue[] => {
+export const refineLexInteger = (spec: t.LexInteger): RefineIssue[] => {
 	const {
 		minimum = 0,
 		maximum = Infinity,
 		const: constValue,
 		default: defaultValue,
 		enum: enumValues,
-	} = input;
+	} = spec;
 
 	const issues: RefineIssue[] = [];
 
@@ -144,39 +141,12 @@ export const refineLexInteger = (input: t.LexInteger): RefineIssue[] => {
 	return issues;
 };
 
-const validateStringFormat = (value: string, format: t.LexStringFormat): boolean => {
-	switch (format) {
-		case 'datetime':
-			return isDatetime(value);
-		case 'uri':
-			return isGenericUri(value);
-		case 'at-uri':
-			return isResourceUri(value);
-		case 'did':
-			return isDid(value);
-		case 'handle':
-			return isHandle(value);
-		case 'at-identifier':
-			return isActorIdentifier(value);
-		case 'nsid':
-			return isNsid(value);
-		case 'cid':
-			return isCid(value);
-		case 'language':
-			return isLanguageCode(value);
-		case 'tid':
-			return isTid(value);
-		case 'record-key':
-			return isRecordKey(value);
-	}
-};
-
 /**
- * validates lexicon string type constraints
- * @param input the string type definition
- * @returns array of validation issues
+ * validates constraints in lexicon string definitions.
+ * @param spec string type definition to validate
+ * @returns validation issues found
  */
-export const refineLexString = (input: t.LexString): RefineIssue[] => {
+export const refineLexString = (spec: t.LexString): RefineIssue[] => {
 	const {
 		format,
 		minLength = 0,
@@ -187,7 +157,7 @@ export const refineLexString = (input: t.LexString): RefineIssue[] => {
 		default: defaultValue,
 		enum: enumValues,
 		knownValues,
-	} = input;
+	} = spec;
 
 	const issues: RefineIssue[] = [];
 
@@ -439,12 +409,12 @@ export const refineLexString = (input: t.LexString): RefineIssue[] => {
 };
 
 /**
- * validates lexicon bytes type constraints
- * @param input the bytes type definition
- * @returns array of validation issues
+ * validates constraints in lexicon bytes definitions.
+ * @param spec bytes type definition to validate
+ * @returns validation issues found
  */
-export const refineLexBytes = (input: t.LexBytes): RefineIssue[] => {
-	const { minLength = 0, maxLength = Infinity } = input;
+export const refineLexBytes = (spec: t.LexBytes): RefineIssue[] => {
+	const { minLength = 0, maxLength = Infinity } = spec;
 	const issues: RefineIssue[] = [];
 
 	if (minLength > maxLength) {
@@ -458,12 +428,60 @@ export const refineLexBytes = (input: t.LexBytes): RefineIssue[] => {
 };
 
 /**
- * validates lexicon ref union type constraints
- * @param input the ref union type definition
- * @returns array of validation issues
+ * validates constraints in lexicon blob definitions.
+ * @param spec blob type definition to validate
+ * @returns validation issues found
  */
-export const refineLexRefUnion = (input: t.LexRefUnion): RefineIssue[] => {
-	const { refs, closed = false } = input;
+export const refineLexBlob = (spec: t.LexBlob): RefineIssue[] => {
+	const { accept = [] } = spec;
+	const issues: RefineIssue[] = [];
+
+	if (accept.includes('*/*')) {
+		if (accept.length > 1) {
+			issues.push({
+				message: `no other MIME types can be specified when a wildcard is present`,
+				path: ['accept'],
+			});
+		}
+	} else {
+		for (let idx = 0, len = accept.length; idx < len; idx++) {
+			const mime = accept[idx];
+
+			if (!MIME_TYPE_RE.test(mime)) {
+				issues.push({
+					message: `invalid MIME type`,
+					path: ['accept', idx],
+				});
+			}
+		}
+	}
+
+	return issues;
+};
+// #endregion
+
+// #region Meta types
+export const refineLexRef = (spec: t.LexRef): RefineIssue[] => {
+	const { ref } = spec;
+	const issues: RefineIssue[] = [];
+
+	if (!REF_RE.test(ref)) {
+		issues.push({
+			message: `invalid ref identifier`,
+			path: ['ref'],
+		});
+	}
+
+	return issues;
+};
+
+/**
+ * validates constraints in lexicon ref union definitions.
+ * @param spec ref union type definition to validate
+ * @returns validation issues found
+ */
+export const refineLexRefUnion = (spec: t.LexRefUnion): RefineIssue[] => {
+	const { refs, closed = false } = spec;
 	const issues: RefineIssue[] = [];
 
 	if (closed) {
@@ -475,16 +493,73 @@ export const refineLexRefUnion = (input: t.LexRefUnion): RefineIssue[] => {
 		}
 	}
 
+	for (let idx = 0, len = refs.length; idx < len; idx++) {
+		const ref = refs[idx];
+
+		if (!REF_RE.test(ref)) {
+			issues.push({
+				message: `invalid ref identifiier`,
+				path: ['refs', idx],
+			});
+		}
+	}
+
 	return issues;
+};
+// #endregion
+
+// #region Container types
+const refineLexDefinableField = (spec: t.LexDefinableField, deep: boolean = false): RefineIssue[] => {
+	switch (spec.type) {
+		// Concrete
+		case 'boolean': {
+			return refineLexBoolean(spec);
+		}
+		case 'integer': {
+			return refineLexInteger(spec);
+		}
+		case 'string': {
+			return refineLexString(spec);
+		}
+		case 'bytes': {
+			return refineLexBytes(spec);
+		}
+		case 'cid-link': {
+			return [];
+		}
+		case 'blob': {
+			return refineLexBlob(spec);
+		}
+
+		// Meta
+		case 'ref': {
+			return refineLexRef(spec);
+		}
+		case 'union': {
+			return refineLexRefUnion(spec);
+		}
+		case 'unknown': {
+			return [];
+		}
+
+		// Container
+		case 'array': {
+			return refineLexArray(spec, deep);
+		}
+	}
 };
 
 /**
- * validates lexicon array type constraints
- * @param input the array type definition
- * @returns array of validation issues
+ * validates constraints in lexicon array definitions.
+ * @param spec array type definition to validate
+ * @param deep whether nested schemas should be validated
+ * @returns validation issues found
  */
-export const refineLexArray = (input: t.LexArray | t.LexPrimitiveArray): RefineIssue[] => {
-	const { minLength = 0, maxLength = Infinity } = input;
+export const refineLexArray = (
+	spec: t.LexArray | t.LexPrimitiveArray,
+	deep: boolean = false,
+): RefineIssue[] => {
+	const { items, minLength = 0, maxLength = Infinity } = spec;
 	const issues: RefineIssue[] = [];
 
 	if (minLength > maxLength) {
@@ -494,28 +569,27 @@ export const refineLexArray = (input: t.LexArray | t.LexPrimitiveArray): RefineI
 		});
 	}
 
-	return issues;
-};
-
-const KEY_RE = /^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/;
-
-/**
- * validates lexicon object type constraints
- * @param input the object type definition
- * @returns array of validation issues
- */
-export const refineLexObject = (input: t.LexObject): RefineIssue[] => {
-	const { required = [], properties } = input;
-	const issues: RefineIssue[] = [];
-
-	for (const key in properties) {
-		if (!KEY_RE.test(key)) {
+	if (deep) {
+		for (const { message, path } of refineLexDefinableField(items)) {
 			issues.push({
-				message: `invalid property key`,
-				path: ['properties', key],
+				message,
+				path: ['items', ...path],
 			});
 		}
 	}
+
+	return issues;
+};
+
+/**
+ * validates constraints in lexicon object definitions.
+ * @param spec object type definition to validate
+ * @param deep whether nested schemas should be validated
+ * @returns validation issues found
+ */
+export const refineLexObject = (spec: t.LexObject, deep: boolean = false): RefineIssue[] => {
+	const { required = [], properties } = spec;
+	const issues: RefineIssue[] = [];
 
 	if (required.length > 0) {
 		if (properties === undefined) {
@@ -535,59 +609,63 @@ export const refineLexObject = (input: t.LexObject): RefineIssue[] => {
 		}
 	}
 
+	for (const prop in properties) {
+		const propSpec = properties[prop];
+
+		if (!KEY_RE.test(prop)) {
+			issues.push({
+				message: `invalid property key`,
+				path: ['properties', prop],
+			});
+		}
+
+		if (deep) {
+			for (const { message, path } of refineLexDefinableField(propSpec, deep)) {
+				issues.push({
+					message,
+					path: ['properties', prop, ...path],
+				});
+			}
+		}
+	}
+
 	return issues;
 };
+// #endregion
 
-/**
- * validates lexicon record type constraints
- * @param input the record type definition
- * @returns array of validation issues
- */
-export const refineLexRecord = (input: t.LexRecord): RefineIssue[] => {
+// #region Miscellaneous
+const refineLexXrpcBody = (spec: t.LexXrpcBody, deep: boolean = false): RefineIssue[] => {
+	const { encoding, schema } = spec;
 	const issues: RefineIssue[] = [];
 
-	for (const { message, path } of refineLexObject(input.record)) {
+	if (!DELIMITED_MIME_TYPE_RE.test(encoding)) {
 		issues.push({
-			message,
-			path: ['record', ...path],
+			message: `must be a comma-delimited list of MIME types`,
+			path: ['encoding'],
 		});
 	}
 
-	return issues;
-};
-
-/**
- * validates lexicon XRPC parameters type constraints
- * @param input the XRPC parameters type definition
- * @returns array of validation issues
- */
-export const refineLexXrpcParameters = (input: t.LexXrpcParameters): RefineIssue[] => {
-	const { required = [], properties } = input;
-	const issues: RefineIssue[] = [];
-
-	for (const key in properties) {
-		if (!KEY_RE.test(key)) {
-			issues.push({
-				message: `invalid property key`,
-				path: ['properties', key],
-			});
-		}
-	}
-
-	if (required.length > 0) {
-		if (properties === undefined) {
-			issues.push({
-				message: `required fields specified but no properties defined`,
-				path: ['properties'],
-			});
-		} else {
-			for (const key of required) {
-				if (properties[key] === undefined) {
+	if (deep && schema !== undefined) {
+		switch (schema.type) {
+			case 'object': {
+				for (const { message, path } of refineLexObject(schema, deep)) {
 					issues.push({
-						message: `required fields not defined`,
-						path: ['properties', key],
+						message,
+						path: ['schema', ...path],
 					});
 				}
+
+				break;
+			}
+			case 'union': {
+				for (const { message, path } of refineLexRefUnion(schema)) {
+					issues.push({
+						message,
+						path: ['schema', ...path],
+					});
+				}
+
+				break;
 			}
 		}
 	}
@@ -595,162 +673,10 @@ export const refineLexXrpcParameters = (input: t.LexXrpcParameters): RefineIssue
 	return issues;
 };
 
-/**
- * validates lexicon XRPC query type constraints
- * @param input the XRPC query type definition
- * @returns array of validation issues
- */
-export const refineLexXrpcQuery = (input: t.LexXrpcQuery): RefineIssue[] => {
+const refineLexLang = (spec: t.LexLang): RefineIssue[] => {
 	const issues: RefineIssue[] = [];
 
-	if (input.parameters) {
-		for (const { message, path } of refineLexXrpcParameters(input.parameters)) {
-			issues.push({
-				message,
-				path: ['parameters', ...path],
-			});
-		}
-	}
-
-	if (input.output?.schema?.type === 'object') {
-		for (const { message, path } of refineLexObject(input.output.schema)) {
-			issues.push({
-				message,
-				path: ['output', 'schema', ...path],
-			});
-		}
-	}
-
-	if (input.output?.schema?.type === 'union') {
-		for (const { message, path } of refineLexRefUnion(input.output.schema)) {
-			issues.push({
-				message,
-				path: ['output', 'schema', ...path],
-			});
-		}
-	}
-
-	return issues;
-};
-
-/**
- * validates lexicon XRPC procedure type constraints
- * @param input the XRPC procedure type definition
- * @returns array of validation issues
- */
-export const refineLexXrpcProcedure = (input: t.LexXrpcProcedure): RefineIssue[] => {
-	const issues: RefineIssue[] = [];
-
-	if (input.parameters) {
-		for (const { message, path } of refineLexXrpcParameters(input.parameters)) {
-			issues.push({
-				message,
-				path: ['parameters', ...path],
-			});
-		}
-	}
-
-	switch (input.input?.schema?.type) {
-		case 'object': {
-			for (const { message, path } of refineLexObject(input.input.schema)) {
-				issues.push({
-					message,
-					path: ['input', 'schema', ...path],
-				});
-			}
-
-			break;
-		}
-		case 'union': {
-			for (const { message, path } of refineLexRefUnion(input.input.schema)) {
-				issues.push({
-					message,
-					path: ['input', 'schema', ...path],
-				});
-			}
-
-			break;
-		}
-	}
-
-	switch (input.output?.schema?.type) {
-		case 'object': {
-			for (const { message, path } of refineLexObject(input.output.schema)) {
-				issues.push({
-					message,
-					path: ['output', 'schema', ...path],
-				});
-			}
-
-			break;
-		}
-		case 'union': {
-			for (const { message, path } of refineLexRefUnion(input.output.schema)) {
-				issues.push({
-					message,
-					path: ['output', 'schema', ...path],
-				});
-			}
-
-			break;
-		}
-	}
-
-	return issues;
-};
-
-/**
- * validates lexicon XRPC subscription type constraints
- * @param input the XRPC subscription type definition
- * @returns array of validation issues
- */
-export const refineLexXrpcSubscription = (input: t.LexXrpcSubscription): RefineIssue[] => {
-	const issues: RefineIssue[] = [];
-
-	if (input.parameters) {
-		for (const { message, path } of refineLexXrpcParameters(input.parameters)) {
-			issues.push({
-				message,
-				path: ['parameters', ...path],
-			});
-		}
-	}
-
-	switch (input.message?.schema?.type) {
-		case 'object': {
-			for (const { message, path } of refineLexObject(input.message.schema)) {
-				issues.push({
-					message,
-					path: ['message', 'schema', ...path],
-				});
-			}
-
-			break;
-		}
-		case 'union': {
-			for (const { message, path } of refineLexRefUnion(input.message.schema)) {
-				issues.push({
-					message,
-					path: ['message', 'schema', ...path],
-				});
-			}
-
-			break;
-		}
-	}
-
-	return issues;
-};
-
-/**
- * validates lexicon language map
- * @param input the language map with BCP47 language tags as keys
- * @returns array of validation issues
- */
-export const refineLexLang = (input: t.LexLang): RefineIssue[] => {
-	const issues: RefineIssue[] = [];
-
-	for (const key in input) {
+	for (const key in spec) {
 		if (!isLanguageCode(key)) {
 			issues.push({
 				message: `invalid BCP47 language tag`,
@@ -761,19 +687,31 @@ export const refineLexLang = (input: t.LexLang): RefineIssue[] => {
 
 	return issues;
 };
+// #endregion
+
+// #region Sub-types
+/**
+ * validates constraints in lexicon xrpc parameters definitions.
+ * @param spec xrpc parameters type definition to validate
+ * @param deep whether nested schemas should be validated
+ * @returns validation issues found
+ */
+export const refineLexXrpcParameters = (spec: t.LexXrpcParameters, deep: boolean = false): RefineIssue[] => {
+	return refineLexObject({ type: 'object', required: spec.required, properties: spec.properties }, deep);
+};
 
 /**
- * validates lexicon permission constraints
- * @param input the permission definition
- * @returns array of validation issues
+ * validates constraints in lexicon permission definitions.
+ * @param spec permission definition to validate
+ * @returns validation issues found
  */
-export const refineLexPermission = (input: t.LexPermission): RefineIssue[] => {
-	const { resource } = input;
+export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
+	const { resource } = spec;
 	const issues: RefineIssue[] = [];
 
 	switch (resource) {
 		case 'repo': {
-			const collection = input.collection;
+			const collection = spec.collection;
 			if (Array.isArray(collection) && collection.length === 0) {
 				issues.push({
 					message: `collection can't be empty`,
@@ -783,8 +721,8 @@ export const refineLexPermission = (input: t.LexPermission): RefineIssue[] => {
 			break;
 		}
 		case 'rpc': {
-			const lxm = input.lxm;
-			const aud = input.aud;
+			const lxm = spec.lxm;
+			const aud = spec.aud;
 
 			if (Array.isArray(lxm) && lxm.length === 0) {
 				issues.push({
@@ -802,7 +740,7 @@ export const refineLexPermission = (input: t.LexPermission): RefineIssue[] => {
 			break;
 		}
 		case 'blob': {
-			const accept = input.accept;
+			const accept = spec.accept;
 			if (Array.isArray(accept) && accept.length === 0) {
 				issues.push({
 					message: `accept can't be empty`,
@@ -815,14 +753,158 @@ export const refineLexPermission = (input: t.LexPermission): RefineIssue[] => {
 
 	return issues;
 };
+// #endregion
+
+// #region Primary types
+/**
+ * validates constraints in lexicon record definitions.
+ * @param spec record type definition to validate
+ * @param deep whether nested schemas should be validated
+ * @returns validation issues found
+ */
+export const refineLexRecord = (spec: t.LexRecord, deep: boolean = false): RefineIssue[] => {
+	const { key = 'any', record } = spec;
+	const issues: RefineIssue[] = [];
+
+	if (!validateRecordKey(key)) {
+		issues.push({
+			message: `invalid record key`,
+			path: ['key'],
+		});
+	}
+
+	if (deep) {
+		for (const { message, path } of refineLexObject(record, deep)) {
+			issues.push({
+				message,
+				path: ['record', ...path],
+			});
+		}
+	}
+
+	return issues;
+};
 
 /**
- * validates lexicon permission set constraints
- * @param input the permission set definition
- * @returns array of validation issues
+ * validates constraints in lexicon xrpc query definitions.
+ * @param spec xrpc query type definition to validate
+ * @param deep whether nested schemas should be validated
+ * @returns validation issues found
  */
-export const refineLexPermissionSet = (input: t.LexPermissionSet): RefineIssue[] => {
-	const { 'title:lang': titleLang, 'detail:lang': detailLang, permissions } = input;
+export const refineLexXrpcQuery = (spec: t.LexXrpcQuery, deep: boolean = false): RefineIssue[] => {
+	const { parameters, output } = spec;
+	const issues: RefineIssue[] = [];
+
+	if (deep) {
+		if (parameters !== undefined) {
+			for (const { message, path } of refineLexXrpcParameters(parameters, deep)) {
+				issues.push({
+					message,
+					path: ['parameters', ...path],
+				});
+			}
+		}
+	}
+
+	if (output !== undefined) {
+		for (const { message, path } of refineLexXrpcBody(output, deep)) {
+			issues.push({
+				message,
+				path: ['output', ...path],
+			});
+		}
+	}
+
+	return issues;
+};
+
+/**
+ * validates constraints in lexicon xrpc procedure definitions.
+ * @param spec xrpc procedure type definition to validate
+ * @param deep whether nested schemas should be validated
+ * @returns validation issues found
+ */
+export const refineLexXrpcProcedure = (spec: t.LexXrpcProcedure, deep: boolean = false): RefineIssue[] => {
+	const { parameters, input, output } = spec;
+	const issues: RefineIssue[] = [];
+
+	if (deep) {
+		if (parameters !== undefined) {
+			for (const { message, path } of refineLexXrpcParameters(parameters, deep)) {
+				issues.push({
+					message,
+					path: ['parameters', ...path],
+				});
+			}
+		}
+	}
+
+	if (input !== undefined) {
+		for (const { message, path } of refineLexXrpcBody(input, deep)) {
+			issues.push({
+				message,
+				path: ['input', ...path],
+			});
+		}
+	}
+
+	if (output !== undefined) {
+		for (const { message, path } of refineLexXrpcBody(output, deep)) {
+			issues.push({
+				message,
+				path: ['output', ...path],
+			});
+		}
+	}
+
+	return issues;
+};
+
+/**
+ * validates constraints in lexicon xrpc subscription definitions.
+ * @param spec xrpc subscription type definition to validate
+ * @param deep whether nested schemas should be validated
+ * @returns validation issues found
+ */
+export const refineLexXrpcSubscription = (spec: t.LexXrpcSubscription, deep: boolean): RefineIssue[] => {
+	const { parameters, message } = spec;
+	const issues: RefineIssue[] = [];
+
+	if (deep) {
+		if (parameters !== undefined) {
+			for (const { message, path } of refineLexXrpcParameters(parameters, deep)) {
+				issues.push({
+					message,
+					path: ['parameters', ...path],
+				});
+			}
+		}
+
+		if (message !== undefined) {
+			const schema = message.schema;
+
+			if (schema !== undefined) {
+				for (const { message, path } of refineLexRefUnion(schema)) {
+					issues.push({
+						message,
+						path: ['output', 'schema', ...path],
+					});
+				}
+			}
+		}
+	}
+
+	return issues;
+};
+
+/**
+ * validates constraints in lexicon permission sets.
+ * @param spec permission set definition to validate
+ * @param deep whether nested schemas should be validated
+ * @returns validation issues found
+ */
+export const refineLexPermissionSet = (spec: t.LexPermissionSet, deep: boolean = false): RefineIssue[] => {
+	const { 'title:lang': titleLang, 'detail:lang': detailLang, permissions } = spec;
 	const issues: RefineIssue[] = [];
 
 	if (titleLang !== undefined) {
@@ -850,42 +932,110 @@ export const refineLexPermissionSet = (input: t.LexPermissionSet): RefineIssue[]
 		});
 	}
 
-	// validate each permission
-	for (let idx = 0, len = permissions.length; idx < len; idx++) {
-		const permission = permissions[idx];
+	if (deep) {
+		// validate each permission
+		for (let idx = 0, len = permissions.length; idx < len; idx++) {
+			const permission = permissions[idx];
 
-		for (const { message, path } of refineLexPermission(permission)) {
-			issues.push({
-				message,
-				path: ['permission', idx, ...path],
-			});
+			for (const { message, path } of refineLexPermission(permission)) {
+				issues.push({
+					message,
+					path: ['permission', idx, ...path],
+				});
+			}
 		}
 	}
 
 	return issues;
 };
 
+// #region Document
+const refineUserType = (spec: t.LexUserType, deep: boolean = false): RefineIssue[] => {
+	switch (spec.type) {
+		// Primary
+		case 'record': {
+			return refineLexRecord(spec, deep);
+		}
+		case 'query': {
+			return refineLexXrpcQuery(spec, deep);
+		}
+		case 'procedure': {
+			return refineLexXrpcProcedure(spec, deep);
+		}
+		case 'subscription': {
+			return refineLexXrpcSubscription(spec, deep);
+		}
+		case 'permission-set': {
+			return refineLexPermissionSet(spec, deep);
+		}
+
+		// Concrete
+		case 'boolean': {
+			return refineLexBoolean(spec);
+		}
+		case 'integer': {
+			return refineLexInteger(spec);
+		}
+		case 'string': {
+			return refineLexString(spec);
+		}
+		case 'bytes': {
+			return refineLexBytes(spec);
+		}
+		case 'cid-link': {
+			return [];
+		}
+		case 'blob': {
+			return refineLexBlob(spec);
+		}
+
+		// Meta
+		case 'token': {
+			return [];
+		}
+		case 'unknown': {
+			return [];
+		}
+
+		// Container
+		case 'array': {
+			return refineLexArray(spec, deep);
+		}
+		case 'object': {
+			return refineLexObject(spec, deep);
+		}
+	}
+};
+
 /**
- * validates lexicon document constraints
- * @param input the lexicon document input
- * @returns array of validation issues
+ * validates constraints in lexicon documents.
+ * @param spec lexicon document input to validate
+ * @param deep whether nested schemas should be validated
+ * @returns validation issues found
  */
-export const refineLexiconDoc = (input: { defs: Record<string, t.LexUserType> }): RefineIssue[] => {
-	const { defs } = input;
+export const refineLexiconDoc = (spec: t.LexiconDoc, deep: boolean = false): RefineIssue[] => {
+	const { id, defs } = spec;
 	const issues: RefineIssue[] = [];
 
-	for (const key in defs) {
-		const def = defs[key];
+	if (!isNsid(id)) {
+		issues.push({
+			message: `must be valid NSID`,
+			path: ['id'],
+		});
+	}
 
-		if (!KEY_RE.test(key)) {
+	for (const prop in defs) {
+		const def = defs[prop];
+
+		if (!KEY_RE.test(prop)) {
 			issues.push({
 				message: `invalid definition id`,
-				path: [key],
+				path: [prop],
 			});
 		}
 
 		if (
-			key !== 'main' &&
+			prop !== 'main' &&
 			(def.type === 'record' ||
 				def.type === 'procedure' ||
 				def.type === 'query' ||
@@ -894,83 +1044,20 @@ export const refineLexiconDoc = (input: { defs: Record<string, t.LexUserType> })
 		) {
 			issues.push({
 				message: `records, procedures, queries, subscriptions and permission sets must be the main definition`,
-				path: [key],
+				path: [prop],
 			});
+		}
+
+		if (deep) {
+			for (const { message, path } of refineUserType(def, deep)) {
+				issues.push({
+					message,
+					path: ['defs', prop, ...path],
+				});
+			}
 		}
 	}
 
 	return issues;
 };
-
-const validateUserType = (def: t.LexUserType): RefineIssue[] => {
-	switch (def.type) {
-		case 'boolean': {
-			return refineLexBoolean(def);
-		}
-		case 'integer': {
-			return refineLexInteger(def);
-		}
-		case 'string': {
-			return refineLexString(def);
-		}
-		case 'bytes': {
-			return refineLexBytes(def);
-		}
-		case 'array': {
-			return refineLexArray(def);
-		}
-		case 'object': {
-			return refineLexObject(def);
-		}
-		case 'record': {
-			return refineLexRecord(def);
-		}
-		case 'query': {
-			return refineLexXrpcQuery(def);
-		}
-		case 'procedure': {
-			return refineLexXrpcProcedure(def);
-		}
-		case 'subscription': {
-			return refineLexXrpcSubscription(def);
-		}
-		case 'permission-set': {
-			return refineLexPermissionSet(def);
-		}
-		case 'unknown':
-		case 'blob':
-		case 'cid-link':
-		case 'token': {
-			return [];
-		}
-	}
-};
-
-/**
- * lints an entire lexicon document
- * @param doc the lexicon document to validate
- * @returns array of all validation issues with paths adjusted to include definition keys
- */
-export const validateLexiconDoc = (doc: t.LexiconDoc): RefineIssue[] => {
-	const issues: RefineIssue[] = [];
-
-	// document-level validation
-	for (const { message, path } of refineLexiconDoc({ defs: doc.defs })) {
-		issues.push({
-			message,
-			path: ['defs', ...path],
-		});
-	}
-
-	// validate each definition
-	for (const [key, def] of Object.entries(doc.defs)) {
-		for (const { message, path } of validateUserType(def)) {
-			issues.push({
-				message,
-				path: ['defs', key, ...path],
-			});
-		}
-	}
-
-	return issues;
-};
+// #endregion

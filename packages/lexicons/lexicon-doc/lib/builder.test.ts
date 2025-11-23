@@ -67,11 +67,11 @@ describe('builder', () => {
 			});
 		});
 
-		test('throws when default does not match const', () => {
-			expect(() => boolean({ const: true, default: false })).toThrow(
-				'boolean: default value must match const value',
-			);
-		});
+			test('throws when default does not match const', () => {
+				expect(() => boolean({ const: true, default: false })).toThrow(
+					'boolean/default: value must match const value',
+				);
+			});
 
 		test('allows valid default with const', () => {
 			expect(() => boolean({ const: true, default: true })).not.toThrow();
@@ -170,53 +170,53 @@ describe('builder', () => {
 			});
 		});
 
-		test('throws when minimum > maximum', () => {
-			expect(() => integer({ minimum: 10, maximum: 5 })).toThrow(
-				"integer: minimum value (10) can't be greater than maximum value (5)",
-			);
-		});
+			test('throws when minimum > maximum', () => {
+				expect(() => integer({ minimum: 10, maximum: 5 })).toThrow(
+					"integer/minimum: value (10) can't be greater than maximum value (5)",
+				);
+			});
 
-		test('throws when default does not match const', () => {
-			expect(() => integer({ const: 5, default: 10 })).toThrow(
-				'integer: default value must match const value',
-			);
-		});
+			test('throws when default does not match const', () => {
+				expect(() => integer({ const: 5, default: 10 })).toThrow(
+					'integer/default: value must match const value',
+				);
+			});
 
-		test('throws when default < minimum', () => {
-			expect(() => integer({ minimum: 10, default: 5 })).toThrow(
-				"integer: default value (5) can't be lower than minimum value (10)",
-			);
-		});
+			test('throws when default < minimum', () => {
+				expect(() => integer({ minimum: 10, default: 5 })).toThrow(
+					"integer/default: value (5) can't be lower than minimum value (10)",
+				);
+			});
 
-		test('throws when default > maximum', () => {
-			expect(() => integer({ maximum: 10, default: 15 })).toThrow(
-				"integer: default value (15) can't be greater than maximum value (10)",
-			);
-		});
+			test('throws when default > maximum', () => {
+				expect(() => integer({ maximum: 10, default: 15 })).toThrow(
+					"integer/default: value (15) can't be greater than maximum value (10)",
+				);
+			});
 
-		test('throws when const and enum are both present', () => {
-			expect(() => integer({ const: 5, enum: [1, 2, 3] })).toThrow(
-				"integer: const and enum can't be used together",
-			);
-		});
+			test('throws when const and enum are both present', () => {
+				expect(() => integer({ const: 5, enum: [1, 2, 3] })).toThrow(
+					"integer/const: const and enum can't be used together",
+				);
+			});
 
-		test('throws when enum value < minimum', () => {
-			expect(() => integer({ minimum: 10, enum: [5, 15, 20] })).toThrow(
-				"integer: enum[0] (5) can't be lower than minimum value (10)",
-			);
-		});
+			test('throws when enum value < minimum', () => {
+				expect(() => integer({ minimum: 10, enum: [5, 15, 20] })).toThrow(
+					"integer/enum[0]: value (5) can't be lower than minimum value (10)",
+				);
+			});
 
-		test('throws when enum value > maximum', () => {
-			expect(() => integer({ maximum: 10, enum: [5, 15, 20] })).toThrow(
-				"integer: enum[1] (15) can't be greater than maximum value (10)",
-			);
-		});
+			test('throws when enum value > maximum', () => {
+				expect(() => integer({ maximum: 10, enum: [5, 15, 20] })).toThrow(
+					"integer/enum[1]: value (15) can't be greater than maximum value (10)",
+				);
+			});
 
-		test('throws when default value is not in enum', () => {
-			expect(() => integer({ enum: [10, 20, 30], default: 15 })).toThrow(
-				'integer: default value must be one of the enum values',
-			);
-		});
+			test('throws when default value is not in enum', () => {
+				expect(() => integer({ enum: [10, 20, 30], default: 15 })).toThrow(
+					'integer/default: value must be one of the enum values',
+				);
+			});
 
 		test('allows valid enum', () => {
 			expect(() => integer({ minimum: 0, maximum: 100, enum: [10, 20, 30] })).not.toThrow();
@@ -484,85 +484,85 @@ describe('builder', () => {
 			).toThrow(/com\.example\.test#main\/knownValues\/0:.*does not match format 'datetime'/);
 		});
 
-		test('throws when minLength > maxLength', () => {
-			expect(() => string({ minLength: 10, maxLength: 5 })).toThrow(
-				"string: minimum length (10) can't be greater than maximum length (5)",
-			);
-		});
+			test('throws when minLength > maxLength', () => {
+				expect(() => string({ minLength: 10, maxLength: 5 })).toThrow(
+					"string/minLength: value (10) can't be greater than maximum length (5)",
+				);
+			});
 
-		test('throws when minGraphemes > maxGraphemes', () => {
-			expect(() => string({ minGraphemes: 10, maxGraphemes: 5 })).toThrow(
-				"string: minimum graphemes (10) can't be greater than maximum graphemes (5)",
-			);
-		});
+			test('throws when minGraphemes > maxGraphemes', () => {
+				expect(() => string({ minGraphemes: 10, maxGraphemes: 5 })).toThrow(
+					"string/minGraphemes: value (10) can't be greater than maximum graphemes (5)",
+				);
+			});
 
-		test('throws when default does not match const', () => {
-			expect(() => string({ const: 'foo', default: 'bar' })).toThrow(
-				'string: default value must match const value',
-			);
-		});
+			test('throws when default does not match const', () => {
+				expect(() => string({ const: 'foo', default: 'bar' })).toThrow(
+					'string/default: value must match const value',
+				);
+			});
 
-		test('throws when default is shorter than minLength', () => {
-			expect(() => string({ minLength: 10, default: 'hi' })).toThrow(
-				'string: default value ("hi") can\'t be shorter than minimum length (10)',
-			);
-		});
+			test('throws when default is shorter than minLength', () => {
+				expect(() => string({ minLength: 10, default: 'hi' })).toThrow(
+					'string/default: value ("hi") can\'t be shorter than minimum length (10)',
+				);
+			});
 
-		test('throws when default is longer than maxLength', () => {
-			expect(() => string({ maxLength: 5, default: 'hello world' })).toThrow(
-				'string: default value ("hello world") can\'t be longer than maximum length (5)',
-			);
-		});
+			test('throws when default is longer than maxLength', () => {
+				expect(() => string({ maxLength: 5, default: 'hello world' })).toThrow(
+					'string/default: value ("hello world") can\'t be longer than maximum length (5)',
+				);
+			});
 
-		test('throws when const and enum are both present', () => {
-			expect(() => string({ const: 'foo', enum: ['bar', 'baz'] })).toThrow(
-				"string: const and enum can't be used together",
-			);
-		});
+			test('throws when const and enum are both present', () => {
+				expect(() => string({ const: 'foo', enum: ['bar', 'baz'] })).toThrow(
+					"string/const: const and enum can't be used together",
+				);
+			});
 
-		test('throws when const and knownValues are both present', () => {
-			expect(() => string({ const: 'foo', knownValues: ['bar', 'baz'] })).toThrow(
-				"string: const and knownValues can't be used together",
-			);
-		});
+			test('throws when const and knownValues are both present', () => {
+				expect(() => string({ const: 'foo', knownValues: ['bar', 'baz'] })).toThrow(
+					"string/const: const and knownValues can't be used together",
+				);
+			});
 
-		test('throws when enum and knownValues are both present', () => {
-			expect(() => string({ enum: ['foo', 'bar'], knownValues: ['baz', 'qux'] })).toThrow(
-				"string: enum and knownValues can't be used together",
-			);
-		});
+			test('throws when enum and knownValues are both present', () => {
+				expect(() => string({ enum: ['foo', 'bar'], knownValues: ['baz', 'qux'] })).toThrow(
+					"string/enum: enum and knownValues can't be used together",
+				);
+			});
 
-		test('throws when const, enum, and knownValues are all present', () => {
-			expect(() => string({ const: 'foo', enum: ['bar'], knownValues: ['baz'] })).toThrow(
-				"string: const and enum can't be used together",
-			);
-		});
+			test('throws when const, enum, and knownValues are all present', () => {
+				expect(() => string({ const: 'foo', enum: ['bar'], knownValues: ['baz'] })).toThrow(
+					"string/const: const and enum can't be used together",
+				);
+			});
 
-		test('throws when default does not match format', () => {
-			expect(() => string({ format: 'did', default: 'not-a-did' })).toThrow(
-				'string: default value ("not-a-did") does not match format \'did\'',
-			);
-		});
+			test('throws when default does not match format', () => {
+				expect(() => string({ format: 'did', default: 'not-a-did' })).toThrow(
+					'string/default: value ("not-a-did") does not match format \'did\'',
+				);
+			});
 
 		test('allows default that matches format', () => {
 			expect(() => string({ format: 'did', default: 'did:plc:7iza6de2dwap2sbkpav7c6c6' })).not.toThrow();
 		});
 
-		test('throws when const does not match format', () => {
-			expect(() => string({ format: 'nsid', const: 'not a valid nsid' })).toThrow(
-				'string: const value ("not a valid nsid") does not match format \'nsid\'',
-			);
-		});
+			test('throws when const does not match format', () => {
+				expect(() => string({ format: 'nsid', const: 'not a valid nsid' })).toThrow(
+					'string/const: value ("not a valid nsid") does not match format \'nsid\'',
+				);
+			});
 
 		test('allows const that matches format', () => {
 			expect(() => string({ format: 'nsid', const: 'com.example.foo' })).not.toThrow();
 		});
 
-		test('throws when enum value does not match format', () => {
-			expect(() => string({ format: 'handle', enum: ['alice.bsky.social', 'invalid handle!'] })).toThrow(
-				'string: enum[1] ("invalid handle!") does not match format \'handle\'',
-			);
-		});
+			test('throws when enum value does not match format', () => {
+				expect(() => string({ format: 'handle', enum: ['alice.bsky.social', 'invalid handle!'] })).toThrow(
+					'string/enum[1]: value ("invalid handle!") does not match format \'handle\'',
+				);
+			});
 
 		test('allows enum values that match format', () => {
 			expect(() =>
@@ -570,11 +570,11 @@ describe('builder', () => {
 			).not.toThrow();
 		});
 
-		test('throws when knownValue does not match format', () => {
-			expect(() => string({ format: 'uri', knownValues: ['https://example.com', 'not a uri'] })).toThrow(
-				'string: knownValues[1] ("not a uri") does not match format \'uri\'',
-			);
-		});
+			test('throws when knownValue does not match format', () => {
+				expect(() => string({ format: 'uri', knownValues: ['https://example.com', 'not a uri'] })).toThrow(
+					'string/knownValues[1]: value ("not a uri") does not match format \'uri\'',
+				);
+			});
 
 		test('allows knownValues that match format', () => {
 			expect(() =>
@@ -582,29 +582,29 @@ describe('builder', () => {
 			).not.toThrow();
 		});
 
-		test('throws when enum value is shorter than minLength', () => {
-			expect(() => string({ minLength: 5, enum: ['hi', 'hello', 'world'] })).toThrow(
-				'string: enum[0] ("hi") can\'t be shorter than minimum length (5)',
-			);
-		});
+			test('throws when enum value is shorter than minLength', () => {
+				expect(() => string({ minLength: 5, enum: ['hi', 'hello', 'world'] })).toThrow(
+					'string/enum[0]: value ("hi") can\'t be shorter than minimum length (5)',
+				);
+			});
 
-		test('throws when enum value is longer than maxLength', () => {
-			expect(() => string({ maxLength: 5, enum: ['hi', 'hello', 'worlds'] })).toThrow(
-				'string: enum[2] ("worlds") can\'t be longer than maximum length (5)',
-			);
-		});
+			test('throws when enum value is longer than maxLength', () => {
+				expect(() => string({ maxLength: 5, enum: ['hi', 'hello', 'worlds'] })).toThrow(
+					'string/enum[2]: value ("worlds") can\'t be longer than maximum length (5)',
+				);
+			});
 
-		test('throws when knownValues value is shorter than minLength', () => {
-			expect(() => string({ minLength: 5, knownValues: ['hi', 'hello', 'world'] })).toThrow(
-				'string: knownValues[0] ("hi") can\'t be shorter than minimum length (5)',
-			);
-		});
+			test('throws when knownValues value is shorter than minLength', () => {
+				expect(() => string({ minLength: 5, knownValues: ['hi', 'hello', 'world'] })).toThrow(
+					'string/knownValues[0]: value ("hi") can\'t be shorter than minimum length (5)',
+				);
+			});
 
-		test('throws when default value is not in enum', () => {
-			expect(() => string({ enum: ['foo', 'bar', 'baz'], default: 'qux' })).toThrow(
-				'string: default value must be one of the enum values',
-			);
-		});
+			test('throws when default value is not in enum', () => {
+				expect(() => string({ enum: ['foo', 'bar', 'baz'], default: 'qux' })).toThrow(
+					'string/default: value must be one of the enum values',
+				);
+			});
 
 		test('allows valid enum', () => {
 			expect(() => string({ minLength: 2, maxLength: 10, enum: ['foo', 'bar', 'baz'] })).not.toThrow();
@@ -691,12 +691,12 @@ describe('builder', () => {
 		});
 	});
 
-	describe('bytes', () => {
-		test('throws when minLength > maxLength', () => {
-			expect(() => bytes({ minLength: 10, maxLength: 5 })).toThrow(
-				"bytes: minimum length (10) can't be greater than maximum length (5)",
-			);
-		});
+		describe('bytes', () => {
+			test('throws when minLength > maxLength', () => {
+				expect(() => bytes({ minLength: 10, maxLength: 5 })).toThrow(
+					"bytes/minLength: value (10) can't be greater than maximum length (5)",
+				);
+			});
 
 		test('allows valid bounds', () => {
 			expect(() => bytes({ minLength: 0, maxLength: 100 })).not.toThrow();
@@ -788,12 +788,12 @@ describe('builder', () => {
 		});
 	});
 
-	describe('array', () => {
-		test('throws when minLength > maxLength', () => {
-			expect(() => array({ items: string(), minLength: 10, maxLength: 5 })).toThrow(
-				"array: minimum length (10) can't be greater than maximum length (5)",
-			);
-		});
+		describe('array', () => {
+			test('throws when minLength > maxLength', () => {
+				expect(() => array({ items: string(), minLength: 10, maxLength: 5 })).toThrow(
+					"array/minLength: value (10) can't be greater than maximum length (5)",
+				);
+			});
 
 		test('allows valid bounds', () => {
 			expect(() => array({ items: string(), minLength: 0, maxLength: 100 })).not.toThrow();
@@ -953,14 +953,14 @@ describe('builder', () => {
 				).not.toThrow();
 			});
 
-			test('throws on empty array', () => {
-				expect(() => repoPermission({ collection: [] })).toThrow(
-					"repo-permission: collection can't be empty",
-				);
+				test('throws on empty array', () => {
+					expect(() => repoPermission({ collection: [] })).toThrow(
+						"repo-permission/collection: value can't be empty",
+					);
+				});
 			});
-		});
 
-		describe('rpcPermission', () => {
+			describe('rpcPermission', () => {
 			test('accepts array of lxm with aud', () => {
 				expect(() =>
 					rpcPermission({
@@ -978,18 +978,18 @@ describe('builder', () => {
 				expect(() => rpcPermission({ lxm: '*', aud: 'did:web:example.com#bsky_appview' })).not.toThrow();
 			});
 
-			test('throws on both wildcards', () => {
-				expect(() => rpcPermission({ lxm: '*', aud: '*' })).toThrow(
-					"rpc-permission: aud and lxm can't both be wildcards",
-				);
-			});
+				test('throws on both wildcards', () => {
+					expect(() => rpcPermission({ lxm: '*', aud: '*' })).toThrow(
+						"rpc-permission: aud and lxm can't both be '*'",
+					);
+				});
 
-			test('throws on empty lxm array', () => {
-				expect(() => rpcPermission({ lxm: [], aud: 'did:web:example.com#bsky_appview' })).toThrow(
-					"rpc-permission: lxm can't be empty",
-				);
+				test('throws on empty lxm array', () => {
+					expect(() => rpcPermission({ lxm: [], aud: 'did:web:example.com#bsky_appview' })).toThrow(
+						"rpc-permission/lxm: value can't be empty",
+					);
+				});
 			});
-		});
 
 		describe('blobPermission', () => {
 			test('accepts array of mime types', () => {
@@ -1001,10 +1001,10 @@ describe('builder', () => {
 				expect(() => blobPermission({ accept: ['image/*'] })).not.toThrow();
 			});
 
-			test('throws on empty array', () => {
-				expect(() => blobPermission({ accept: [] })).toThrow("blob-permission: accept can't be empty");
+				test('throws on empty array', () => {
+					expect(() => blobPermission({ accept: [] })).toThrow("blob-permission/accept: value can't be empty");
+				});
 			});
-		});
 
 		describe('accountPermission', () => {
 			test('accepts valid attributes', () => {
@@ -1046,12 +1046,12 @@ describe('builder', () => {
 				).not.toThrow();
 			});
 
-			test('throws on empty permissions array', () => {
-				expect(() => permissionSet({ permissions: [] })).toThrow(
-					"permission-set: permissions array can't be empty",
-				);
+				test('throws on empty permissions array', () => {
+					expect(() => permissionSet({ permissions: [] })).toThrow(
+						"permission-set/permissions: array can't be empty",
+					);
+				});
 			});
-		});
 
 		describe('building permissions', () => {
 			test('builds repo permission', () => {

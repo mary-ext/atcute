@@ -57,3 +57,43 @@ const post = document({
 const lexicons = build({ documents: [post] });
 //    ^? { 'com.example.post': { lexicon: 1, ... } }
 ```
+
+## validations API
+
+this package provides remote schema validation functionality
+
+```ts
+import { RecordValidator } from '@atcute/lexicon-doc/validations';
+
+// lexicon documents retrieved from the network or loaded from disk
+const docs = {
+	'app.bsky.feed.post': {
+		lexicon: 1,
+		id: 'app.bsky.feed.post',
+		defs: {
+			main: {
+				type: 'record',
+				record: {
+					type: 'object',
+					required: ['text', 'createdAt'],
+					properties: {
+						text: { type: 'string', maxLength: 300 },
+						createdAt: { type: 'string', format: 'datetime' },
+					},
+				},
+			},
+		},
+	},
+};
+
+const validator = new RecordValidator(docs, 'app.bsky.feed.post');
+
+validator.parse({
+	key: '3m6bkzurm4c7w',
+	object: {
+		$type: 'app.bsky.feed.post',
+		text: 'hello world',
+		createdAt: '2024-01-01T00:00:00.000Z',
+	},
+});
+```

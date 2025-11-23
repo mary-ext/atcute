@@ -1,53 +1,11 @@
-import {
-	isActorIdentifier,
-	isCid,
-	isDatetime,
-	isDid,
-	isGenericUri,
-	isHandle,
-	isLanguageCode,
-	isNsid,
-	isRecordKey,
-	isResourceUri,
-	isTid,
-	type AtprotoAudience,
-	type Nsid,
-} from '@atcute/lexicons/syntax';
+import { type AtprotoAudience, type Nsid } from '@atcute/lexicons/syntax';
 
-import type {
-	LexArray,
-	LexBlob,
-	LexBoolean,
-	LexBytes,
-	LexCidLink,
-	LexInteger,
-	LexIpldType,
-	LexLang,
-	LexObject,
-	LexPermission,
-	LexPermissionSet,
-	LexPrimitive,
-	LexPrimitiveArray,
-	LexRecord,
-	LexRef,
-	LexRefUnion,
-	LexRefVariant,
-	LexString,
-	LexStringFormat,
-	LexToken,
-	LexUnknown,
-	LexUserType,
-	LexXrpcBody,
-	LexXrpcParameters,
-	LexXrpcProcedure,
-	LexXrpcQuery,
-	LexXrpcSubscription,
-	LexXrpcSubscriptionMessage,
-	LexiconDoc,
-} from './types.js';
+import type * as t from './types.js';
 
 import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
+import { DELIMITED_MIME_TYPE_RE, KEY_RE, MIME_TYPE_RE, validateStringFormat } from './internal/validation.js';
 
+// #region Utilities
 type LexPath = {
 	nsid: string;
 	defId: string;
@@ -73,7 +31,7 @@ const delve = (ctx: BuildContext, path: string): BuildContext => {
 	return { ...ctx, dotPath: `${ctx.dotPath}/${path}` };
 };
 
-const getReference = (ctx: BuildContext, def: DefType | MainType): LexRef | undefined => {
+const getReference = (ctx: BuildContext, def: DefType | MainType): t.LexRef | undefined => {
 	const defPath = ctx.toplevelDefs.get(def);
 	if (defPath === undefined) {
 		return undefined;
@@ -85,38 +43,53 @@ const getReference = (ctx: BuildContext, def: DefType | MainType): LexRef | unde
 	};
 };
 
-const requireReference = (ctx: BuildContext, def: DefType | MainType): LexRef => {
+const requireReference = (ctx: BuildContext, def: DefType | MainType): t.LexRef => {
 	const ref = getReference(ctx, def);
 	if (ref === undefined) {
-		throw new Error(`${ctx.dotPath} cannot be found as a top-level definition anywhere`);
+		throw new Error(`${ctx.dotPath}: cannot be found as a top-level definition anywhere`);
 	}
 
 	return ref;
 };
 
+/**
+ * annotations shared by lexicon builder definitions
+ */
 export type Annotations = {
 	description?: string;
 };
+// #endregion
 
+// #region Concrete types
+/**
+ * builder definition for a boolean field
+ */
 export interface LexBooleanBuilder extends Annotations {
 	type: 'boolean';
+	/** default boolean value */
 	default?: boolean;
+	/** fixed boolean value */
 	const?: boolean;
 }
 
+/**
+ * builds a boolean definition
+ * @param def optional boolean definition options
+ * @returns boolean builder definition
+ */
 export const boolean = (def: Omit<LexBooleanBuilder, 'type'> = {}): LexBooleanBuilder => {
 	const { const: constValue, default: defaultValue } = def;
 
 	if (defaultValue !== undefined) {
 		if (constValue !== undefined && defaultValue !== constValue) {
-			throw new Error(`boolean: default value must match const value`);
+			throw new Error(`boolean/default: value must match const value`);
 		}
 	}
 
 	return { ...def, type: 'boolean' };
 };
 
-const buildBooleanSchema = (_ctx: BuildContext, def: LexBooleanBuilder): LexBoolean => {
+const buildBooleanSchema = (_ctx: BuildContext, def: LexBooleanBuilder): t.LexBoolean => {
 	return {
 		const: def.const,
 		default: def.default,
@@ -125,56 +98,69 @@ const buildBooleanSchema = (_ctx: BuildContext, def: LexBooleanBuilder): LexBool
 	};
 };
 
+/**
+ * builder definition for a signed integer field
+ */
 export interface LexIntegerBuilder extends Annotations {
 	type: 'integer';
+	/** default integer value */
 	default?: number;
+	/** minimum allowed value */
 	minimum?: number;
+	/** maximum allowed value */
 	maximum?: number;
+	/** closed set of allowed values */
 	enum?: number[];
+	/** fixed integer value */
 	const?: number;
 }
 
+/**
+ * builds an integer definition
+ * @param def optional integer definition options
+ * @returns integer builder definition
+ */
 export const integer = (def: Omit<LexIntegerBuilder, 'type'> = {}): LexIntegerBuilder => {
 	const { minimum = 0, maximum = Infinity, const: constValue, default: defaultValue, enum: enumValues } = def;
 
 	if (minimum > maximum) {
-		throw new Error(`integer: minimum value (${minimum}) can't be greater than maximum value (${maximum})`);
+		throw new Error(`integer/minimum: value (${minimum}) can't be greater than maximum value (${maximum})`);
 	}
 
 	if (defaultValue !== undefined) {
 		if (constValue !== undefined && defaultValue !== constValue) {
-			throw new Error(`integer: default value must match const value`);
+			throw new Error(`integer/default: value must match const value`);
 		}
 
 		if (enumValues !== undefined && !enumValues.includes(defaultValue)) {
-			throw new Error(`integer: default value must be one of the enum values`);
+			throw new Error(`integer/default: value must be one of the enum values`);
 		}
 
 		if (defaultValue < minimum) {
 			throw new Error(
-				`integer: default value (${defaultValue}) can't be lower than minimum value (${minimum})`,
+				`integer/default: value (${defaultValue}) can't be lower than minimum value (${minimum})`,
 			);
 		}
 
 		if (defaultValue > maximum) {
 			throw new Error(
-				`integer: default value (${defaultValue}) can't be greater than maximum value (${maximum})`,
+				`integer/default: value (${defaultValue}) can't be greater than maximum value (${maximum})`,
 			);
 		}
 	}
 
 	if (constValue !== undefined) {
 		if (enumValues !== undefined) {
-			throw new Error(`integer: const and enum can't be used together`);
+			throw new Error(`integer/const: const and enum can't be used together`);
 		}
 
 		if (constValue < minimum) {
-			throw new Error(`integer: const value (${constValue}) can't be lower than minimum value (${minimum})`);
+			throw new Error(`integer/const: value (${constValue}) can't be lower than minimum value (${minimum})`);
 		}
 
 		if (constValue > maximum) {
 			throw new Error(
-				`integer: const value (${constValue}) can't be greater than maximum value (${maximum})`,
+				`integer/const: value (${constValue}) can't be greater than maximum value (${maximum})`,
 			);
 		}
 	}
@@ -185,13 +171,13 @@ export const integer = (def: Omit<LexIntegerBuilder, 'type'> = {}): LexIntegerBu
 
 			if (enumValue < minimum) {
 				throw new Error(
-					`integer: enum[${idx}] (${enumValue}) can't be lower than minimum value (${minimum})`,
+					`integer/enum[${idx}]: value (${enumValue}) can't be lower than minimum value (${minimum})`,
 				);
 			}
 
 			if (enumValue > maximum) {
 				throw new Error(
-					`integer: enum[${idx}] (${enumValue}) can't be greater than maximum value (${maximum})`,
+					`integer/enum[${idx}]: value (${enumValue}) can't be greater than maximum value (${maximum})`,
 				);
 			}
 		}
@@ -200,7 +186,7 @@ export const integer = (def: Omit<LexIntegerBuilder, 'type'> = {}): LexIntegerBu
 	return { ...def, type: 'integer' };
 };
 
-const buildIntegerSchema = (_ctx: BuildContext, def: LexIntegerBuilder): LexInteger => {
+const buildIntegerSchema = (_ctx: BuildContext, def: LexIntegerBuilder): t.LexInteger => {
 	return {
 		const: def.const,
 		default: def.default,
@@ -212,46 +198,36 @@ const buildIntegerSchema = (_ctx: BuildContext, def: LexIntegerBuilder): LexInte
 	};
 };
 
+/**
+ * builder definition for a string field
+ */
 export interface LexStringBuilder extends Annotations {
 	type: 'string';
-	format?: LexStringFormat;
+	/** semantic format constraint */
+	format?: t.LexStringFormat;
+	/** default string or token reference */
 	default?: string | LexTokenBuilder;
+	/** minimum length in utf-8 bytes */
 	minLength?: number;
+	/** maximum length in utf-8 bytes */
 	maxLength?: number;
+	/** minimum grapheme count */
 	minGraphemes?: number;
+	/** maximum grapheme count */
 	maxGraphemes?: number;
+	/** closed set of allowed values */
 	enum?: (string | LexTokenBuilder)[];
+	/** fixed string or token reference */
 	const?: string | LexTokenBuilder;
+	/** suggested values */
 	knownValues?: (string | LexTokenBuilder)[];
 }
 
-const validateStringFormat = (value: string, format: LexStringFormat): boolean => {
-	switch (format) {
-		case 'datetime':
-			return isDatetime(value);
-		case 'uri':
-			return isGenericUri(value);
-		case 'at-uri':
-			return isResourceUri(value);
-		case 'did':
-			return isDid(value);
-		case 'handle':
-			return isHandle(value);
-		case 'at-identifier':
-			return isActorIdentifier(value);
-		case 'nsid':
-			return isNsid(value);
-		case 'cid':
-			return isCid(value);
-		case 'language':
-			return isLanguageCode(value);
-		case 'tid':
-			return isTid(value);
-		case 'record-key':
-			return isRecordKey(value);
-	}
-};
-
+/**
+ * builds a string definition
+ * @param def optional string definition options
+ * @returns string builder definition
+ */
 export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuilder => {
 	const {
 		format,
@@ -267,25 +243,25 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 	if (minLength > maxLength) {
 		throw new Error(
-			`string: minimum length (${minLength}) can't be greater than maximum length (${maxLength})`,
+			`string/minLength: value (${minLength}) can't be greater than maximum length (${maxLength})`,
 		);
 	}
 
 	if (minGraphemes > maxGraphemes) {
 		throw new Error(
-			`string: minimum graphemes (${minGraphemes}) can't be greater than maximum graphemes (${maxGraphemes})`,
+			`string/minGraphemes: value (${minGraphemes}) can't be greater than maximum graphemes (${maxGraphemes})`,
 		);
 	}
 
 	if (defaultValue !== undefined && typeof defaultValue === 'string') {
 		if (constValue !== undefined && typeof constValue === 'string' && defaultValue !== constValue) {
-			throw new Error(`string: default value must match const value`);
+			throw new Error(`string/default: value must match const value`);
 		}
 
 		if (enumValues !== undefined) {
 			const allStrings = enumValues.every((v) => typeof v === 'string');
 			if (allStrings && !enumValues.includes(defaultValue)) {
-				throw new Error(`string: default value must be one of the enum values`);
+				throw new Error(`string/default: value must be one of the enum values`);
 			}
 		}
 
@@ -294,13 +270,13 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 			if (bound === 'min') {
 				throw new Error(
-					`string: default value (${JSON.stringify(defaultValue)}) can't be shorter than minimum length (${minLength})`,
+					`string/default: value (${JSON.stringify(defaultValue)}) can't be shorter than minimum length (${minLength})`,
 				);
 			}
 
 			if (bound === 'max') {
 				throw new Error(
-					`string: default value (${JSON.stringify(defaultValue)}) can't be longer than maximum length (${maxLength})`,
+					`string/default: value (${JSON.stringify(defaultValue)}) can't be longer than maximum length (${maxLength})`,
 				);
 			}
 		}
@@ -310,31 +286,31 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 			if (bound === 'min') {
 				throw new Error(
-					`string: default value (${JSON.stringify(defaultValue)}) can't be shorter than minimum graphemes (${minGraphemes})`,
+					`string/default: value (${JSON.stringify(defaultValue)}) can't be shorter than minimum graphemes (${minGraphemes})`,
 				);
 			}
 
 			if (bound === 'max') {
 				throw new Error(
-					`string: default value (${JSON.stringify(defaultValue)}) can't be longer than maximum graphemes (${maxGraphemes})`,
+					`string/default: value (${JSON.stringify(defaultValue)}) can't be longer than maximum graphemes (${maxGraphemes})`,
 				);
 			}
 		}
 
 		if (format !== undefined && !validateStringFormat(defaultValue, format)) {
 			throw new Error(
-				`string: default value (${JSON.stringify(defaultValue)}) does not match format '${format}'`,
+				`string/default: value (${JSON.stringify(defaultValue)}) does not match format '${format}'`,
 			);
 		}
 	}
 
 	if (constValue !== undefined) {
 		if (enumValues !== undefined) {
-			throw new Error(`string: const and enum can't be used together`);
+			throw new Error(`string/const: const and enum can't be used together`);
 		}
 
 		if (knownValues !== undefined) {
-			throw new Error(`string: const and knownValues can't be used together`);
+			throw new Error(`string/const: const and knownValues can't be used together`);
 		}
 
 		if (typeof constValue === 'string') {
@@ -343,13 +319,13 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 				if (bound === 'min') {
 					throw new Error(
-						`string: const value (${JSON.stringify(constValue)}) can't be shorter than minimum length (${minLength})`,
+						`string/const: value (${JSON.stringify(constValue)}) can't be shorter than minimum length (${minLength})`,
 					);
 				}
 
 				if (bound === 'max') {
 					throw new Error(
-						`string: const value (${JSON.stringify(constValue)}) can't be longer than maximum length (${maxLength})`,
+						`string/const: value (${JSON.stringify(constValue)}) can't be longer than maximum length (${maxLength})`,
 					);
 				}
 			}
@@ -359,20 +335,20 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 				if (bound === 'min') {
 					throw new Error(
-						`string: const value (${JSON.stringify(constValue)}) can't be shorter than minimum graphemes (${minGraphemes})`,
+						`string/const: value (${JSON.stringify(constValue)}) can't be shorter than minimum graphemes (${minGraphemes})`,
 					);
 				}
 
 				if (bound === 'max') {
 					throw new Error(
-						`string: const value (${JSON.stringify(constValue)}) can't be longer than maximum graphemes (${maxGraphemes})`,
+						`string/const: value (${JSON.stringify(constValue)}) can't be longer than maximum graphemes (${maxGraphemes})`,
 					);
 				}
 			}
 
 			if (format !== undefined && !validateStringFormat(constValue, format)) {
 				throw new Error(
-					`string: const value (${JSON.stringify(constValue)}) does not match format '${format}'`,
+					`string/const: value (${JSON.stringify(constValue)}) does not match format '${format}'`,
 				);
 			}
 		}
@@ -380,7 +356,7 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 	if (enumValues !== undefined) {
 		if (knownValues !== undefined) {
-			throw new Error(`string: enum and knownValues can't be used together`);
+			throw new Error(`string/enum: enum and knownValues can't be used together`);
 		}
 
 		for (let idx = 0, len = enumValues.length; idx < len; idx++) {
@@ -392,13 +368,13 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 					if (bound === 'min') {
 						throw new Error(
-							`string: enum[${idx}] (${JSON.stringify(enumValue)}) can't be shorter than minimum length (${minLength})`,
+							`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) can't be shorter than minimum length (${minLength})`,
 						);
 					}
 
 					if (bound === 'max') {
 						throw new Error(
-							`string: enum[${idx}] (${JSON.stringify(enumValue)}) can't be longer than maximum length (${maxLength})`,
+							`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) can't be longer than maximum length (${maxLength})`,
 						);
 					}
 				}
@@ -408,20 +384,20 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 					if (bound === 'min') {
 						throw new Error(
-							`string: enum[${idx}] (${JSON.stringify(enumValue)}) can't have fewer graphemes than minimum graphemes (${minGraphemes})`,
+							`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) can't have fewer graphemes than minimum graphemes (${minGraphemes})`,
 						);
 					}
 
 					if (bound === 'max') {
 						throw new Error(
-							`string: enum[${idx}] (${JSON.stringify(enumValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
+							`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
 						);
 					}
 				}
 
 				if (format !== undefined && !validateStringFormat(enumValue, format)) {
 					throw new Error(
-						`string: enum[${idx}] (${JSON.stringify(enumValue)}) does not match format '${format}'`,
+						`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) does not match format '${format}'`,
 					);
 				}
 			}
@@ -438,13 +414,13 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 					if (bound === 'min') {
 						throw new Error(
-							`string: knownValues[${idx}] (${JSON.stringify(knownValue)}) can't be shorter than minimum length (${minLength})`,
+							`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) can't be shorter than minimum length (${minLength})`,
 						);
 					}
 
 					if (bound === 'max') {
 						throw new Error(
-							`string: knownValues[${idx}] (${JSON.stringify(knownValue)}) can't be longer than maximum length (${maxLength})`,
+							`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) can't be longer than maximum length (${maxLength})`,
 						);
 					}
 				}
@@ -454,20 +430,20 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 
 					if (bound === 'min') {
 						throw new Error(
-							`string: knownValues[${idx}] (${JSON.stringify(knownValue)}) can't have fewer graphemes than minimum graphemes (${minGraphemes})`,
+							`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) can't have fewer graphemes than minimum graphemes (${minGraphemes})`,
 						);
 					}
 
 					if (bound === 'max') {
 						throw new Error(
-							`string: knownValues[${idx}] (${JSON.stringify(knownValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
+							`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
 						);
 					}
 				}
 
 				if (format !== undefined && !validateStringFormat(knownValue, format)) {
 					throw new Error(
-						`string: knownValues[${idx}] (${JSON.stringify(knownValue)}) does not match format '${format}'`,
+						`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) does not match format '${format}'`,
 					);
 				}
 			}
@@ -480,14 +456,14 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 const resolveStringTokenReference = (ctx: BuildContext, def: LexTokenBuilder): string => {
 	const defPath = ctx.toplevelDefs.get(def);
 	if (defPath === undefined) {
-		throw new Error(`${ctx.dotPath} is referencing an undefined token`);
+		throw new Error(`${ctx.dotPath}: references an undefined token`);
 	}
 
 	// don't use the relative path here
 	return toLexUri(defPath);
 };
 
-const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): LexString => {
+const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexString => {
 	const {
 		format,
 		default: defaultValue,
@@ -732,42 +708,35 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): LexString 
 	};
 };
 
-export interface LexUnknownBuilder extends Annotations {
-	type: 'unknown';
-}
-
-export const unknown = (def?: Omit<LexUnknownBuilder, 'type'>): LexUnknownBuilder => {
-	return { ...def, type: 'unknown' };
-};
-
-const buildUnknownSchema = (_ctx: BuildContext, def: LexUnknownBuilder): LexUnknown => {
-	return {
-		description: def.description,
-		type: 'unknown',
-	};
-};
-
-type LexPrimitiveBuilder = LexBooleanBuilder | LexIntegerBuilder | LexStringBuilder | LexUnknownBuilder;
-
+/**
+ * builder definition for raw binary data
+ */
 export interface LexBytesBuilder extends Annotations {
 	type: 'bytes';
+	/** minimum size in bytes */
 	minLength?: number;
+	/** maximum size in bytes */
 	maxLength?: number;
 }
 
+/**
+ * builds a bytes definition
+ * @param def optional bytes definition options
+ * @returns bytes builder definition
+ */
 export const bytes = (def: Omit<LexBytesBuilder, 'type'> = {}): LexBytesBuilder => {
 	const { minLength = 0, maxLength = Infinity } = def;
 
 	if (minLength > maxLength) {
 		throw new Error(
-			`bytes: minimum length (${minLength}) can't be greater than maximum length (${maxLength})`,
+			`bytes/minLength: value (${minLength}) can't be greater than maximum length (${maxLength})`,
 		);
 	}
 
 	return { ...def, type: 'bytes' };
 };
 
-const buildBytesSchema = (_ctx: BuildContext, def: LexBytesBuilder): LexBytes => {
+const buildBytesSchema = (_ctx: BuildContext, def: LexBytesBuilder): t.LexBytes => {
 	return {
 		description: def.description,
 		maxLength: def.maxLength,
@@ -776,34 +745,66 @@ const buildBytesSchema = (_ctx: BuildContext, def: LexBytesBuilder): LexBytes =>
 	};
 };
 
+/**
+ * builder definition for a cid-link reference
+ */
 export interface LexCidLinkBuilder extends Annotations {
 	type: 'cid-link';
 }
 
+/**
+ * builds a cid-link definition
+ * @param def optional cid-link definition options
+ * @returns cid-link builder definition
+ */
 export const cidLink = (def?: Omit<LexCidLinkBuilder, 'type'>): LexCidLinkBuilder => {
 	return { ...def, type: 'cid-link' };
 };
 
-const buildCidLinkSchema = (_ctx: BuildContext, def: LexCidLinkBuilder): LexCidLink => {
+const buildCidLinkSchema = (_ctx: BuildContext, def: LexCidLinkBuilder): t.LexCidLink => {
 	return {
 		description: def.description,
 		type: 'cid-link',
 	};
 };
 
-type LexIpldBuilder = LexBytesBuilder | LexCidLinkBuilder;
-
+/**
+ * builder definition for binary attachments
+ */
 export interface LexBlobBuilder extends Annotations {
 	type: 'blob';
+	/** allowed MIME types */
 	accept?: string[];
+	/** maximum size in bytes */
 	maxSize?: number;
 }
 
-export const blob = (def?: Omit<LexBlobBuilder, 'type'>): LexBlobBuilder => {
+/**
+ * builds a blob definition
+ * @param def optional blob definition options
+ * @returns blob builder definition
+ */
+export const blob = (def: Omit<LexBlobBuilder, 'type'> = {}): LexBlobBuilder => {
+	const { accept = [] } = def;
+
+	if (accept.includes('*/*')) {
+		if (accept.length > 1) {
+			throw new Error(`blob/accept: no other MIME types can be specified when a wildcard is present`);
+		}
+	} else {
+		for (let idx = 0, len = accept.length; idx < len; idx++) {
+			const mime = accept[idx];
+
+			if (!MIME_TYPE_RE.test(mime)) {
+				throw new Error(`blob/accept[${idx}]: invalid MIME type (${mime})`);
+			}
+		}
+	}
+
 	return { ...def, type: 'blob' };
 };
 
-const buildBlobSchema = (_ctx: BuildContext, def: LexBlobBuilder): LexBlob => {
+const buildBlobSchema = (_ctx: BuildContext, def: LexBlobBuilder): t.LexBlob => {
 	return {
 		accept: def.accept,
 		description: def.description,
@@ -812,31 +813,60 @@ const buildBlobSchema = (_ctx: BuildContext, def: LexBlobBuilder): LexBlob => {
 	};
 };
 
+type LexPrimitiveBuilder = LexBooleanBuilder | LexIntegerBuilder | LexStringBuilder;
+
+type LexConcreteBuilder =
+	| LexBooleanBuilder
+	| LexIntegerBuilder
+	| LexStringBuilder
+	| LexBytesBuilder
+	| LexCidLinkBuilder
+	| LexBlobBuilder;
+// #endregion
+
+// #region Meta types
+/**
+ * builder definition for a named token reference
+ */
 export interface LexTokenBuilder extends Annotations {
 	type: 'token';
 }
 
+/**
+ * builds a token definition
+ * @param def optional token definition options
+ * @returns token builder definition
+ */
 export const token = (def?: Omit<LexTokenBuilder, 'type'>): LexTokenBuilder => {
 	return { ...def, type: 'token' };
 };
 
-const buildTokenSchema = (_ctx: BuildContext, def: LexTokenBuilder): LexToken => {
+const buildTokenSchema = (_ctx: BuildContext, def: LexTokenBuilder): t.LexToken => {
 	return {
 		description: def.description,
 		type: 'token',
 	};
 };
 
+/**
+ * builder definition for a ref to another schema
+ */
 export interface LexRefBuilder extends Annotations {
 	type: 'ref';
+	/** reference URI or fragment */
 	ref: string;
 }
 
+/**
+ * builds a ref definition
+ * @param def ref definition parameters
+ * @returns ref builder definition
+ */
 export const ref = (def: Omit<LexRefBuilder, 'type'>): LexRefBuilder => {
 	return { ...def, type: 'ref' };
 };
 
-const buildRefSchema = (_ctx: BuildContext, def: LexRefBuilder): LexRef => {
+const buildRefSchema = (_ctx: BuildContext, def: LexRefBuilder): t.LexRef => {
 	return {
 		description: def.description,
 		ref: def.ref,
@@ -844,30 +874,40 @@ const buildRefSchema = (_ctx: BuildContext, def: LexRefBuilder): LexRef => {
 	};
 };
 
+/**
+ * builder definition for a union of referenced schemas
+ */
 export interface LexRefUnionBuilder extends Annotations {
 	type: 'union';
+	/** referenced variants for the union */
 	refs: Array<
 		// referable
 		| LexObjectBuilder
 		// inlinable
 		| LexRefBuilder
 	>;
+	/** marks the union as closed */
 	closed?: boolean;
 }
 
+/**
+ * builds a union definition
+ * @param def union definition parameters
+ * @returns union builder definition
+ */
 export const union = (def: Omit<LexRefUnionBuilder, 'type'>): LexRefUnionBuilder => {
 	const { refs, closed = false } = def;
 
 	if (closed) {
 		if (refs.length === 0) {
-			throw new Error(`union: closed unions can't have zero ref members`);
+			throw new Error(`union/refs: closed unions can't be empty`);
 		}
 	}
 
 	return { ...def, type: 'union' };
 };
 
-const buildUnionSchema = (ctx: BuildContext, def: LexRefUnionBuilder): LexRefUnion => {
+const buildUnionSchema = (ctx: BuildContext, def: LexRefUnionBuilder): t.LexRefUnion => {
 	return {
 		closed: def.closed,
 		description: def.description,
@@ -878,7 +918,7 @@ const buildUnionSchema = (ctx: BuildContext, def: LexRefUnionBuilder): LexRefUni
 
 			const defPath = ctx.toplevelDefs.get(item);
 			if (defPath === undefined) {
-				throw new Error(`${ctx.dotPath}/refs/${index} must be defined as a top-level definition`);
+				throw new Error(`${ctx.dotPath}/refs/${index}: must be defined as a top-level definition`);
 			}
 
 			return toLexUri(defPath, ctx.lexPath);
@@ -887,118 +927,152 @@ const buildUnionSchema = (ctx: BuildContext, def: LexRefUnionBuilder): LexRefUni
 	};
 };
 
+/**
+ * builder definition for an unknown value
+ */
+export interface LexUnknownBuilder extends Annotations {
+	type: 'unknown';
+}
+
+/**
+ * builds an unknown definition
+ * @param def optional unknown definition options
+ * @returns unknown builder definition
+ */
+export const unknown = (def?: Omit<LexUnknownBuilder, 'type'>): LexUnknownBuilder => {
+	return { ...def, type: 'unknown' };
+};
+
+const buildUnknownSchema = (_ctx: BuildContext, def: LexUnknownBuilder): t.LexUnknown => {
+	return {
+		description: def.description,
+		type: 'unknown',
+	};
+};
+
 type LexRefVariantBuilder = LexRefBuilder | LexRefUnionBuilder;
 
-type ArrayItem =
-	// referable
-	| LexObjectBuilder
-	| LexTokenBuilder
-	| LexArrayBuilder
-	// inlinable
-	| LexPrimitiveBuilder
-	| LexIpldBuilder
-	| LexRefVariantBuilder
-	| LexBlobBuilder;
+type LexMetaBuilder = LexTokenBuilder | LexRefBuilder | LexRefUnionBuilder | LexUnknownBuilder;
+// #endregion
 
-export interface LexArrayBuilder<TItems extends ArrayItem = ArrayItem> extends Annotations {
+// #region Container types
+type LexFieldBuilder = LexConcreteBuilder | LexMetaBuilder | LexContainerBuilder;
+
+const buildFieldSchema = (ctx: BuildContext, def: LexFieldBuilder): t.LexDefinableField => {
+	switch (def.type) {
+		// Concrete
+		case 'boolean': {
+			return getReference(ctx, def) ?? buildBooleanSchema(ctx, def);
+		}
+		case 'integer': {
+			return getReference(ctx, def) ?? buildIntegerSchema(ctx, def);
+		}
+		case 'string': {
+			return getReference(ctx, def) ?? buildStringSchema(ctx, def);
+		}
+		case 'bytes': {
+			return getReference(ctx, def) ?? buildBytesSchema(ctx, def);
+		}
+		case 'cid-link': {
+			return getReference(ctx, def) ?? buildCidLinkSchema(ctx, def);
+		}
+		case 'blob': {
+			return getReference(ctx, def) ?? buildBlobSchema(ctx, def);
+		}
+
+		// Meta
+		case 'token': {
+			return requireReference(ctx, def);
+		}
+		case 'ref': {
+			return buildRefSchema(ctx, def);
+		}
+		case 'union': {
+			return buildUnionSchema(ctx, def);
+		}
+		case 'unknown': {
+			return getReference(ctx, def) ?? buildUnknownSchema(ctx, def);
+		}
+
+		// Container
+		case 'array': {
+			return getReference(ctx, def) ?? buildArraySchema(ctx, def);
+		}
+		case 'object': {
+			return requireReference(ctx, def);
+		}
+	}
+};
+
+/**
+ * builder definition for an array field
+ */
+export interface LexArrayBuilder<TItems extends LexFieldBuilder = LexFieldBuilder> extends Annotations {
 	type: 'array';
+	/** schema for array elements */
 	items: TItems;
+	/** minimum item count */
 	minLength?: number;
+	/** maximum item count */
 	maxLength?: number;
 }
 
-export const array = <TItems extends ArrayItem>(
+type LexPrimitiveArrayBuilder = LexArrayBuilder<LexPrimitiveBuilder>;
+
+/**
+ * builds an array definition
+ * @param def array definition parameters
+ * @returns array builder definition
+ */
+export const array = <TItems extends LexFieldBuilder>(
 	def: Omit<LexArrayBuilder<TItems>, 'type'>,
 ): LexArrayBuilder<TItems> => {
 	const { minLength = 0, maxLength = Infinity } = def;
 
 	if (minLength > maxLength) {
 		throw new Error(
-			`array: minimum length (${minLength}) can't be greater than maximum length (${maxLength})`,
+			`array/minLength: value (${minLength}) can't be greater than maximum length (${maxLength})`,
 		);
 	}
 
 	return { ...def, type: 'array' };
 };
 
-const buildArraySchema = (ctx: BuildContext, def: LexArrayBuilder): LexArray => {
-	const itemsCtx = delve(ctx, 'items');
-	const items = def.items;
-	let builtItems: LexArray['items'];
-
-	switch (items.type) {
-		case 'ref': {
-			builtItems = buildRefSchema(itemsCtx, items);
-			break;
-		}
-		case 'union': {
-			builtItems = buildUnionSchema(itemsCtx, items);
-			break;
-		}
-
-		case 'array':
-		case 'object':
-		case 'token': {
-			builtItems = requireReference(itemsCtx, items);
-			break;
-		}
-
-		case 'boolean': {
-			builtItems = getReference(itemsCtx, items) ?? buildBooleanSchema(itemsCtx, items);
-			break;
-		}
-		case 'integer': {
-			builtItems = getReference(itemsCtx, items) ?? buildIntegerSchema(itemsCtx, items);
-			break;
-		}
-		case 'string': {
-			builtItems = getReference(itemsCtx, items) ?? buildStringSchema(itemsCtx, items);
-			break;
-		}
-		case 'unknown': {
-			builtItems = getReference(itemsCtx, items) ?? buildUnknownSchema(itemsCtx, items);
-			break;
-		}
-		case 'bytes': {
-			builtItems = getReference(itemsCtx, items) ?? buildBytesSchema(itemsCtx, items);
-			break;
-		}
-		case 'cid-link': {
-			builtItems = getReference(itemsCtx, items) ?? buildCidLinkSchema(itemsCtx, items);
-			break;
-		}
-		case 'blob': {
-			builtItems = getReference(itemsCtx, items) ?? buildBlobSchema(itemsCtx, items);
-			break;
-		}
-	}
-
+const buildArraySchema = (ctx: BuildContext, def: LexArrayBuilder): t.LexArray => {
 	return {
 		description: def.description,
-		items: builtItems,
+		items: buildFieldSchema(delve(ctx, 'items'), def.items),
 		maxLength: def.maxLength,
 		minLength: def.minLength,
 		type: 'array',
 	};
 };
 
-type ObjectItem =
-	// referable
-	| LexObjectBuilder
-	| LexTokenBuilder
-	// inlinable
-	| LexArrayBuilder
-	| LexPrimitiveBuilder
-	| LexIpldBuilder
-	| LexRefVariantBuilder
-	| LexBlobBuilder;
+/**
+ * wraps a field definition with requirement and nullability metadata
+ */
+export type FieldWrapper<T> = {
+	type: 'field-wrapper';
+	wrapped: T;
+	required: boolean;
+	nullable: boolean;
+};
 
+/**
+ * optionally wrapped field definition
+ */
+export type MaybeFieldWrapper<T> = T | FieldWrapper<T>;
+
+/**
+ * builder definition for an object schema
+ */
 export interface LexObjectBuilder extends Annotations {
 	type: 'object';
-	properties?: Record<string, MaybeFieldWrapper<ObjectItem>>;
+	/** property definitions keyed by name */
+	properties?: Record<string, MaybeFieldWrapper<LexFieldBuilder>>;
 }
 
-const wrapField = <T extends DefType | LexRefVariantBuilder>(
+const wrapField = <T extends LexFieldBuilder>(
 	def: T,
 	required: boolean,
 	nullable: boolean,
@@ -1011,91 +1085,80 @@ const wrapField = <T extends DefType | LexRefVariantBuilder>(
 	};
 };
 
-export const object = (def?: Omit<LexObjectBuilder, 'type'>): LexObjectBuilder => {
+/**
+ * builds an object definition
+ * @param def optional object definition options
+ * @returns object builder definition
+ */
+export const object = (def: Omit<LexObjectBuilder, 'type'> = {}): LexObjectBuilder => {
+	const { properties } = def;
+
+	if (properties !== undefined) {
+		for (const prop in properties) {
+			if (!KEY_RE.test(prop)) {
+				throw new Error(`object/properties: invalid "${prop}" property name`);
+			}
+		}
+	}
+
 	return { ...def, type: 'object' };
 };
 
-const buildObjectSchema = (ctx: BuildContext, def: LexObjectBuilder): LexObject => {
-	const properties: Record<string, LexArray | LexPrimitive | LexIpldType | LexRefVariant | LexBlob> = {};
+/**
+ * marks a field definition as required
+ * @param def field definition to wrap
+ * @returns wrapped field definition marked required
+ */
+export const required = <T extends LexFieldBuilder>(def: MaybeFieldWrapper<T>): FieldWrapper<T> => {
+	if (def.type === 'field-wrapper') {
+		return wrapField(def.wrapped, true, def.nullable);
+	}
+
+	return wrapField(def, true, false);
+};
+
+/**
+ * marks a field definition as nullable
+ * @param def field definition to wrap
+ * @returns wrapped field definition marked nullable
+ */
+export const nullable = <T extends LexFieldBuilder>(def: MaybeFieldWrapper<T>): FieldWrapper<T> => {
+	if (def.type === 'field-wrapper') {
+		return wrapField(def.wrapped, def.required, true);
+	}
+
+	return wrapField(def, false, true);
+};
+
+const buildObjectSchema = (ctx: BuildContext, def: LexObjectBuilder): t.LexObject => {
+	const properties: Record<string, t.LexDefinableField> = {};
 	const required: string[] = [];
 	const nullable: string[] = [];
 
 	if (def.properties) {
-		for (const [key, prop] of Object.entries(def.properties)) {
-			const propCtx = delve(ctx, key);
-			let unwrapped: Exclude<typeof prop, FieldWrapper<any>>;
+		for (const prop in def.properties) {
+			const propDef = def.properties[prop];
+
+			let unwrapped: LexFieldBuilder;
 			let isRequired = false;
 			let isNullable = false;
 
-			if (prop.type === 'field-wrapper') {
-				unwrapped = prop.wrapped;
-				isRequired = prop.required;
-				isNullable = prop.nullable;
+			if (propDef.type === 'field-wrapper') {
+				unwrapped = propDef.wrapped;
+				isRequired = propDef.required;
+				isNullable = propDef.nullable;
 			} else {
-				unwrapped = prop;
+				unwrapped = propDef;
 			}
 
 			if (isRequired) {
-				required.push(key);
+				required.push(prop);
 			}
 			if (isNullable) {
-				nullable.push(key);
+				nullable.push(prop);
 			}
 
-			let builtProp: LexArray | LexPrimitive | LexIpldType | LexRefVariant | LexBlob;
-
-			switch (unwrapped.type) {
-				case 'ref': {
-					builtProp = buildRefSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'union': {
-					builtProp = buildUnionSchema(propCtx, unwrapped);
-					break;
-				}
-
-				case 'object':
-				case 'token': {
-					builtProp = requireReference(propCtx, unwrapped);
-					break;
-				}
-
-				case 'boolean': {
-					builtProp = getReference(propCtx, unwrapped) ?? buildBooleanSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'integer': {
-					builtProp = getReference(propCtx, unwrapped) ?? buildIntegerSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'string': {
-					builtProp = getReference(propCtx, unwrapped) ?? buildStringSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'unknown': {
-					builtProp = getReference(propCtx, unwrapped) ?? buildUnknownSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'bytes': {
-					builtProp = getReference(propCtx, unwrapped) ?? buildBytesSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'cid-link': {
-					builtProp = getReference(propCtx, unwrapped) ?? buildCidLinkSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'blob': {
-					builtProp = getReference(propCtx, unwrapped) ?? buildBlobSchema(propCtx, unwrapped);
-					break;
-				}
-
-				case 'array': {
-					builtProp = getReference(propCtx, unwrapped) ?? buildArraySchema(propCtx, unwrapped);
-					break;
-				}
-			}
-
-			properties[key] = builtProp;
+			properties[prop] = buildFieldSchema(delve(ctx, prop), unwrapped);
 		}
 	}
 
@@ -1108,102 +1171,17 @@ const buildObjectSchema = (ctx: BuildContext, def: LexObjectBuilder): LexObject 
 	};
 };
 
-export const required = <T extends DefType | LexRefVariantBuilder>(
-	def: MaybeFieldWrapper<T>,
-): FieldWrapper<T> => {
-	if (def.type === 'field-wrapper') {
-		return wrapField(def.wrapped, true, def.nullable);
-	}
+type LexContainerBuilder = LexArrayBuilder | LexObjectBuilder;
+// #endregion
 
-	return wrapField(def, true, false);
-};
-
-export const nullable = <T extends DefType | LexRefVariantBuilder>(
-	def: MaybeFieldWrapper<T>,
-): FieldWrapper<T> => {
-	if (def.type === 'field-wrapper') {
-		return wrapField(def.wrapped, def.required, true);
-	}
-
-	return wrapField(def, false, true);
-};
-
-type LexPrimitiveArrayBuilder = LexArrayBuilder<LexPrimitiveBuilder>;
-
-export interface LexXrpcParametersBuilder extends Annotations {
-	type: 'params';
-	properties?: Record<string, MaybeFieldWrapper<LexPrimitiveBuilder | LexPrimitiveArrayBuilder>>;
-}
-
-export const params = (def?: Omit<LexXrpcParametersBuilder, 'type'>): LexXrpcParametersBuilder => {
-	return { ...def, type: 'params' };
-};
-
-const buildXrpcParametersSchema = (ctx: BuildContext, def: LexXrpcParametersBuilder): LexXrpcParameters => {
-	const properties: Record<string, LexPrimitive | LexPrimitiveArray> = {};
-	const required: string[] = [];
-
-	if (def.properties) {
-		for (const [key, prop] of Object.entries(def.properties)) {
-			const propCtx = delve(ctx, key);
-			let unwrapped: Exclude<typeof prop, FieldWrapper<any>>;
-			let isRequired = false;
-
-			if (prop.type === 'field-wrapper') {
-				unwrapped = prop.wrapped;
-				isRequired = prop.required;
-			} else {
-				unwrapped = prop;
-			}
-
-			if (isRequired) {
-				required.push(key);
-			}
-
-			let builtProp: LexPrimitive | LexPrimitiveArray;
-
-			switch (unwrapped.type) {
-				case 'boolean': {
-					builtProp = buildBooleanSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'integer': {
-					builtProp = buildIntegerSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'string': {
-					builtProp = buildStringSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'unknown': {
-					builtProp = buildUnknownSchema(propCtx, unwrapped);
-					break;
-				}
-				case 'array': {
-					builtProp = buildArraySchema(propCtx, unwrapped) as LexPrimitiveArray;
-					break;
-				}
-			}
-
-			properties[key] = builtProp;
-		}
-	}
-
-	return {
-		description: def.description,
-		properties: Object.keys(properties).length > 0 ? properties : undefined,
-		required: required.length > 0 ? required : undefined,
-		type: 'params',
-	};
-};
-
+// #region Miscellaneous
 interface XrpcBody extends Annotations {
 	encoding: string;
 	schema?: LexRefVariantBuilder | LexObjectBuilder;
 }
 
-const buildXrpcBodySchema = (ctx: BuildContext, def: XrpcBody): LexXrpcBody => {
-	let schema: LexXrpcBody['schema'] | undefined;
+const buildXrpcBodySchema = (ctx: BuildContext, def: XrpcBody): t.LexXrpcBody => {
+	let schema: t.LexXrpcBody['schema'] | undefined;
 
 	if (def.schema) {
 		const schemaCtx = delve(ctx, 'schema');
@@ -1231,38 +1209,19 @@ const buildXrpcBodySchema = (ctx: BuildContext, def: XrpcBody): LexXrpcBody => {
 	};
 };
 
-interface XrpcError {
-	name: string;
-	description?: string;
-}
-
 interface XrpcSubscriptionMessage extends Annotations {
-	schema?: LexRefVariantBuilder | LexObjectBuilder;
+	schema?: LexRefUnionBuilder;
 }
 
 const buildSubscriptionMessageSchema = (
 	ctx: BuildContext,
 	def: XrpcSubscriptionMessage,
-): LexXrpcSubscriptionMessage => {
-	let schema: LexXrpcSubscriptionMessage['schema'] | undefined;
+): t.LexXrpcSubscriptionMessage => {
+	let schema: t.LexXrpcSubscriptionMessage['schema'] | undefined;
 
 	if (def.schema) {
 		const schemaCtx = delve(ctx, 'schema');
-
-		switch (def.schema.type) {
-			case 'ref': {
-				schema = buildRefSchema(schemaCtx, def.schema);
-				break;
-			}
-			case 'union': {
-				schema = buildUnionSchema(schemaCtx, def.schema);
-				break;
-			}
-			case 'object': {
-				schema = getReference(schemaCtx, def.schema) ?? buildObjectSchema(schemaCtx, def.schema);
-				break;
-			}
-		}
+		schema = buildUnionSchema(schemaCtx, def.schema);
 	}
 
 	return {
@@ -1271,133 +1230,122 @@ const buildSubscriptionMessageSchema = (
 	};
 };
 
-export interface LexXrpcQueryBuilder extends Annotations {
-	type: 'query';
-	parameters?: LexXrpcParametersBuilder;
-	output?: XrpcBody;
-	errors?: XrpcError[];
+interface XrpcError {
+	name: string;
+	description?: string;
+}
+// #endregion
+
+// #region Sub-types
+/**
+ * builder definition for XRPC query parameters
+ */
+export interface LexXrpcParametersBuilder extends Annotations {
+	type: 'params';
+	/** query parameters limited to primitives and arrays */
+	properties?: Record<string, MaybeFieldWrapper<LexPrimitiveBuilder | LexPrimitiveArrayBuilder>>;
 }
 
-export const query = (def?: Omit<LexXrpcQueryBuilder, 'type'>): LexXrpcQueryBuilder => {
-	return { ...def, type: 'query' };
+/**
+ * builds a params definition
+ * @param def optional params definition options
+ * @returns params builder definition
+ */
+export const params = (def?: Omit<LexXrpcParametersBuilder, 'type'>): LexXrpcParametersBuilder => {
+	return { ...def, type: 'params' };
 };
 
-const buildQuerySchema = (ctx: BuildContext, def: LexXrpcQueryBuilder): LexXrpcQuery => {
+const buildXrpcParametersSchema = (ctx: BuildContext, def: LexXrpcParametersBuilder): t.LexXrpcParameters => {
+	const properties: Record<string, t.LexPrimitive | t.LexPrimitiveArray> = {};
+	const required: string[] = [];
+
+	if (def.properties) {
+		for (const [prop, propDef] of Object.entries(def.properties)) {
+			let unwrapped: LexPrimitiveBuilder | LexPrimitiveArrayBuilder;
+			let isRequired = false;
+
+			if (propDef.type === 'field-wrapper') {
+				unwrapped = propDef.wrapped;
+				isRequired = propDef.required;
+			} else {
+				unwrapped = propDef;
+			}
+
+			if (isRequired) {
+				required.push(prop);
+			}
+
+			properties[prop] = buildFieldSchema(delve(ctx, prop), unwrapped) as
+				| t.LexPrimitive
+				| t.LexPrimitiveArray;
+		}
+	}
+
 	return {
 		description: def.description,
-		errors: def.errors,
-		output: def.output ? buildXrpcBodySchema(delve(ctx, 'output'), def.output) : undefined,
-		parameters: def.parameters
-			? buildXrpcParametersSchema(delve(ctx, 'parameters'), def.parameters)
-			: undefined,
-		type: 'query',
-	};
-};
-
-export interface LexXrpcProcedureBuilder extends Annotations {
-	type: 'procedure';
-	parameters?: LexXrpcParametersBuilder;
-	input?: XrpcBody;
-	output?: XrpcBody;
-	errors?: XrpcError[];
-}
-
-export const procedure = (def?: Omit<LexXrpcProcedureBuilder, 'type'>): LexXrpcProcedureBuilder => {
-	return { ...def, type: 'procedure' };
-};
-
-const buildProcedureSchema = (ctx: BuildContext, def: LexXrpcProcedureBuilder): LexXrpcProcedure => {
-	return {
-		description: def.description,
-		errors: def.errors,
-		input: def.input ? buildXrpcBodySchema(delve(ctx, 'input'), def.input) : undefined,
-		output: def.output ? buildXrpcBodySchema(delve(ctx, 'output'), def.output) : undefined,
-		parameters: def.parameters
-			? buildXrpcParametersSchema(delve(ctx, 'parameters'), def.parameters)
-			: undefined,
-		type: 'procedure',
-	};
-};
-
-export interface LexXrpcSubscriptionBuilder extends Annotations {
-	type: 'subscription';
-	parameters?: LexXrpcParametersBuilder;
-	message?: XrpcSubscriptionMessage;
-	errors?: XrpcError[];
-}
-
-export const subscription = (def?: Omit<LexXrpcSubscriptionBuilder, 'type'>): LexXrpcSubscriptionBuilder => {
-	return { ...def, type: 'subscription' };
-};
-
-const buildSubscriptionSchema = (ctx: BuildContext, def: LexXrpcSubscriptionBuilder): LexXrpcSubscription => {
-	return {
-		description: def.description,
-		errors: def.errors,
-		message: def.message ? buildSubscriptionMessageSchema(delve(ctx, 'message'), def.message) : undefined,
-		parameters: def.parameters
-			? buildXrpcParametersSchema(delve(ctx, 'parameters'), def.parameters)
-			: undefined,
-		type: 'subscription',
-	};
-};
-
-export interface LexRecordBuilder extends Annotations {
-	type: 'record';
-	key?: 'tid' | 'nsid' | 'any' | `literal:${string}`;
-	record: LexObjectBuilder;
-}
-
-export const record = (def: Omit<LexRecordBuilder, 'type'>): LexRecordBuilder => {
-	return { ...def, type: 'record' };
-};
-
-const buildRecordSchema = (ctx: BuildContext, def: LexRecordBuilder): LexRecord => {
-	return {
-		description: def.description,
-		key: def.key,
-		record: buildObjectSchema(delve(ctx, 'record'), def.record),
-		type: 'record',
+		properties: Object.keys(properties).length > 0 ? properties : undefined,
+		required: required.length > 0 ? required : undefined,
+		type: 'params',
 	};
 };
 
 export type RepoAction = 'create' | 'update' | 'delete';
 
+/**
+ * builder definition for repository permissions
+ */
 export interface LexRepoPermissionBuilder {
 	type: 'repo-permission';
+	/** collections this permission covers */
 	collection: '*' | (Nsid | LexRecordBuilder)[];
+	/** allowed actions */
 	action?: RepoAction[];
 }
 
+/**
+ * builds a repository permission definition
+ * @param def permission definition parameters
+ * @returns repository permission builder definition
+ */
 export const repoPermission = (def: Omit<LexRepoPermissionBuilder, 'type'>): LexRepoPermissionBuilder => {
 	const { collection } = def;
 
 	if (Array.isArray(collection)) {
 		if (collection.length === 0) {
-			throw new Error(`repo-permission: collection can't be empty`);
+			throw new Error(`repo-permission/collection: value can't be empty`);
 		}
 	}
 
 	return { ...def, type: 'repo-permission' };
 };
 
+/**
+ * builder definition for rpc permissions
+ */
 export interface LexRpcPermissionBuilder {
 	type: 'rpc-permission';
+	/** allowed rpc methods or wildcard */
 	lxm: '*' | (Nsid | LexXrpcQueryBuilder | LexXrpcProcedureBuilder | LexXrpcSubscriptionBuilder)[];
+	/** allowed audience or wildcard */
 	aud: '*' | AtprotoAudience;
 }
 
+/**
+ * builds an rpc permission definition
+ * @param def permission definition parameters
+ * @returns rpc permission builder definition
+ */
 export const rpcPermission = (def: Omit<LexRpcPermissionBuilder, 'type'>): LexRpcPermissionBuilder => {
 	const { lxm, aud } = def;
 
 	if (Array.isArray(lxm)) {
 		if (lxm.length === 0) {
-			throw new Error(`rpc-permission: lxm can't be empty`);
+			throw new Error(`rpc-permission/lxm: value can't be empty`);
 		}
 	}
 
 	if (aud === '*' && lxm === '*') {
-		throw new Error(`rpc-permission: aud and lxm can't both be wildcards`);
+		throw new Error(`rpc-permission: aud and lxm can't both be '*'`);
 	}
 
 	return { ...def, type: 'rpc-permission' };
@@ -1405,16 +1353,41 @@ export const rpcPermission = (def: Omit<LexRpcPermissionBuilder, 'type'>): LexRp
 
 export type BlobAccept = `${string}/${string}`;
 
+/**
+ * builder definition for blob permissions
+ */
 export interface LexBlobPermissionBuilder {
 	type: 'blob-permission';
+	/** accepted MIME types */
 	accept: BlobAccept[];
 }
 
+/**
+ * builds a blob permission definition
+ * @param def permission definition parameters
+ * @returns blob permission builder definition
+ */
 export const blobPermission = (def: Omit<LexBlobPermissionBuilder, 'type'>): LexBlobPermissionBuilder => {
 	const { accept } = def;
 
 	if (accept.length === 0) {
-		throw new Error(`blob-permission: accept can't be empty`);
+		throw new Error(`blob-permission/accept: value can't be empty`);
+	}
+
+	if (accept.includes('*/*')) {
+		if (accept.length > 1) {
+			throw new Error(
+				`blob-permission/accept: no other MIME types can be specified when a wildcard is present`,
+			);
+		}
+	} else {
+		for (let idx = 0, len = accept.length; idx < len; idx++) {
+			const mime = accept[idx];
+
+			if (!MIME_TYPE_RE.test(mime)) {
+				throw new Error(`blob-permission/accept[${idx}]: invalid MIME type (${mime})`);
+			}
+		}
 	}
 
 	return { ...def, type: 'blob-permission' };
@@ -1423,12 +1396,22 @@ export const blobPermission = (def: Omit<LexBlobPermissionBuilder, 'type'>): Lex
 export type AccountAction = 'read' | 'manage';
 export type AccountAttribute = 'email' | 'repo' | 'status';
 
+/**
+ * builder definition for account permissions
+ */
 export interface LexAccountPermissionBuilder {
 	type: 'account-permission';
+	/** targeted account attribute */
 	attr: AccountAttribute;
+	/** permitted action */
 	action?: AccountAction;
 }
 
+/**
+ * builds an account permission definition
+ * @param def permission definition parameters
+ * @returns account permission builder definition
+ */
 export const accountPermission = (
 	def: Omit<LexAccountPermissionBuilder, 'type'>,
 ): LexAccountPermissionBuilder => {
@@ -1437,11 +1420,20 @@ export const accountPermission = (
 
 export type IdentityAttribute = 'handle' | '*';
 
+/**
+ * builder definition for identity permissions
+ */
 export interface LexIdentityPermissionBuilder {
 	type: 'identity-permission';
+	/** targeted identity attribute */
 	attr: IdentityAttribute;
 }
 
+/**
+ * builds an identity permission definition
+ * @param def permission definition parameters
+ * @returns identity permission builder definition
+ */
 export const identityPermission = (
 	def: Omit<LexIdentityPermissionBuilder, 'type'>,
 ): LexIdentityPermissionBuilder => {
@@ -1455,7 +1447,7 @@ export type LexPermissionBuilder =
 	| LexAccountPermissionBuilder
 	| LexIdentityPermissionBuilder;
 
-const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): LexPermission => {
+const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.LexPermission => {
 	switch (def.type) {
 		case 'repo-permission': {
 			const { collection, action } = def;
@@ -1471,7 +1463,7 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): Le
 
 					const defPath = ctx.toplevelDefs.get(item);
 					if (defPath === undefined) {
-						throw new Error(`${ctx.dotPath}/collection/${index} must be defined as a top-level definition`);
+						throw new Error(`${ctx.dotPath}/collection/${index}: must be defined as a top-level definition`);
 					}
 
 					return toLexUri(defPath);
@@ -1499,7 +1491,7 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): Le
 
 					const defPath = ctx.toplevelDefs.get(item);
 					if (defPath === undefined) {
-						throw new Error(`${ctx.dotPath}/lxm/${index} must be defined as a top-level definition`);
+						throw new Error(`${ctx.dotPath}/lxm/${index}: must be defined as a top-level definition`);
 					}
 
 					return toLexUri(defPath);
@@ -1543,73 +1535,259 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): Le
 		}
 	}
 };
+// #endregion
 
+// #region Primary types
+/**
+ * builder definition for a record object
+ */
+export interface LexRecordBuilder extends Annotations {
+	type: 'record';
+	/** record key type */
+	key?: 'tid' | 'nsid' | 'any' | `literal:${string}`;
+	/** object schema for the record */
+	record: LexObjectBuilder;
+}
+
+/**
+ * builds a record definition
+ * @param def record definition parameters
+ * @returns record builder definition
+ */
+export const record = (def: Omit<LexRecordBuilder, 'type'>): LexRecordBuilder => {
+	return { ...def, type: 'record' };
+};
+
+const buildRecordSchema = (ctx: BuildContext, def: LexRecordBuilder): t.LexRecord => {
+	return {
+		description: def.description,
+		key: def.key,
+		record: buildObjectSchema(delve(ctx, 'record'), def.record),
+		type: 'record',
+	};
+};
+
+/**
+ * builder definition for an XRPC query endpoint
+ */
+export interface LexXrpcQueryBuilder extends Annotations {
+	type: 'query';
+	/** HTTP query parameters */
+	parameters?: LexXrpcParametersBuilder;
+	/** response body definition */
+	output?: XrpcBody;
+	/** possible errors */
+	errors?: XrpcError[];
+}
+
+/**
+ * builds a query definition
+ * @param def optional query definition options
+ * @returns query builder definition
+ */
+export const query = (def: Omit<LexXrpcQueryBuilder, 'type'> = {}): LexXrpcQueryBuilder => {
+	const { output } = def;
+
+	if (output !== undefined) {
+		const encoding = output.encoding;
+
+		if (!DELIMITED_MIME_TYPE_RE.test(encoding)) {
+			throw new Error(`query/output/encoding: value must be a comma-delimited list of MIME types`);
+		}
+	}
+
+	return { ...def, type: 'query' };
+};
+
+const buildQuerySchema = (ctx: BuildContext, def: LexXrpcQueryBuilder): t.LexXrpcQuery => {
+	return {
+		description: def.description,
+		errors: def.errors,
+		output: def.output ? buildXrpcBodySchema(delve(ctx, 'output'), def.output) : undefined,
+		parameters: def.parameters
+			? buildXrpcParametersSchema(delve(ctx, 'parameters'), def.parameters)
+			: undefined,
+		type: 'query',
+	};
+};
+
+/**
+ * builder definition for an XRPC procedure endpoint
+ */
+export interface LexXrpcProcedureBuilder extends Annotations {
+	type: 'procedure';
+	/** HTTP query parameters */
+	parameters?: LexXrpcParametersBuilder;
+	/** request body definition */
+	input?: XrpcBody;
+	/** response body definition */
+	output?: XrpcBody;
+	/** possible errors */
+	errors?: XrpcError[];
+}
+
+/**
+ * builds a procedure definition
+ * @param def optional procedure definition options
+ * @returns procedure builder definition
+ */
+export const procedure = (def: Omit<LexXrpcProcedureBuilder, 'type'> = {}): LexXrpcProcedureBuilder => {
+	const { input, output } = def;
+
+	if (input !== undefined) {
+		const encoding = input.encoding;
+
+		if (!DELIMITED_MIME_TYPE_RE.test(encoding)) {
+			throw new Error(`procedure/input/encoding: value must be a comma-delimited list of MIME types`);
+		}
+	}
+
+	if (output !== undefined) {
+		const encoding = output.encoding;
+
+		if (!DELIMITED_MIME_TYPE_RE.test(encoding)) {
+			throw new Error(`procedure/output/encoding: value must be a comma-delimited list of MIME types`);
+		}
+	}
+
+	return { ...def, type: 'procedure' };
+};
+
+const buildProcedureSchema = (ctx: BuildContext, def: LexXrpcProcedureBuilder): t.LexXrpcProcedure => {
+	return {
+		description: def.description,
+		errors: def.errors,
+		input: def.input ? buildXrpcBodySchema(delve(ctx, 'input'), def.input) : undefined,
+		output: def.output ? buildXrpcBodySchema(delve(ctx, 'output'), def.output) : undefined,
+		parameters: def.parameters
+			? buildXrpcParametersSchema(delve(ctx, 'parameters'), def.parameters)
+			: undefined,
+		type: 'procedure',
+	};
+};
+
+/**
+ * builder definition for an XRPC subscription endpoint
+ */
+export interface LexXrpcSubscriptionBuilder extends Annotations {
+	type: 'subscription';
+	/** HTTP query parameters */
+	parameters?: LexXrpcParametersBuilder;
+	/** event message definition */
+	message?: XrpcSubscriptionMessage;
+	/** possible errors */
+	errors?: XrpcError[];
+}
+
+/**
+ * builds a subscription definition
+ * @param def optional subscription definition options
+ * @returns subscription builder definition
+ */
+export const subscription = (def?: Omit<LexXrpcSubscriptionBuilder, 'type'>): LexXrpcSubscriptionBuilder => {
+	return { ...def, type: 'subscription' };
+};
+
+const buildSubscriptionSchema = (
+	ctx: BuildContext,
+	def: LexXrpcSubscriptionBuilder,
+): t.LexXrpcSubscription => {
+	return {
+		description: def.description,
+		errors: def.errors,
+		message: def.message ? buildSubscriptionMessageSchema(delve(ctx, 'message'), def.message) : undefined,
+		parameters: def.parameters
+			? buildXrpcParametersSchema(delve(ctx, 'parameters'), def.parameters)
+			: undefined,
+		type: 'subscription',
+	};
+};
+
+/**
+ * builder definition for a permission set
+ */
 export interface LexPermissionSetBuilder extends Annotations {
 	type: 'permission-set';
+	/** short title for the permission set */
 	title?: string;
-	'title:lang'?: LexLang;
+	/** localized titles */
+	'title:lang'?: t.LexLang;
+	/** detailed description of the permission set */
 	detail?: string;
-	'detail:lang'?: LexLang;
+	/** localized details */
+	'detail:lang'?: t.LexLang;
+	/** permission entries in this set */
 	permissions: LexPermissionBuilder[];
 }
 
+/**
+ * builds a permission set definition
+ * @param def permission set definition parameters
+ * @returns permission set builder definition
+ */
 export const permissionSet = (def: Omit<LexPermissionSetBuilder, 'type'>): LexPermissionSetBuilder => {
 	const { permissions } = def;
 
 	if (permissions.length === 0) {
-		throw new Error(`permission-set: permissions array can't be empty`);
+		throw new Error(`permission-set/permissions: array can't be empty`);
 	}
 
 	return { ...def, type: 'permission-set' };
 };
 
-const buildPermissionSetSchema = (ctx: BuildContext, def: LexPermissionSetBuilder): LexPermissionSet => {
+const buildPermissionSetSchema = (ctx: BuildContext, def: LexPermissionSetBuilder): t.LexPermissionSet => {
 	return {
-		'detail:lang': def['detail:lang'],
-		'title:lang': def['title:lang'],
 		description: def.description,
+		'detail:lang': def['detail:lang'],
 		detail: def.detail,
 		permissions: def.permissions.map((perm, index) => {
 			return buildPermissionSchema(delve(ctx, `permissions/${index}`), perm);
 		}),
+		'title:lang': def['title:lang'],
 		title: def.title,
 		type: 'permission-set',
 	};
 };
 
-export type FieldWrapper<T> = {
-	type: 'field-wrapper';
-	wrapped: T;
-	required: boolean;
-	nullable: boolean;
-};
-
-export type MaybeFieldWrapper<T> = T | FieldWrapper<T>;
-
+// #region Document
 type MainType =
+	| LexRecordBuilder
 	| LexXrpcQueryBuilder
 	| LexXrpcProcedureBuilder
 	| LexXrpcSubscriptionBuilder
-	| LexRecordBuilder
 	| LexPermissionSetBuilder;
 
-type DefType =
-	| LexObjectBuilder
-	| LexArrayBuilder
-	| LexTokenBuilder
-	| LexIpldBuilder
-	| LexBlobBuilder
-	| LexPrimitiveBuilder;
+type DefType = LexConcreteBuilder | LexTokenBuilder | LexUnknownBuilder | LexContainerBuilder;
 
+/**
+ * builder definition for a lexicon document
+ */
 export interface LexDocumentBuilder {
-	id: string;
+	/** nsid for this document */
+	id: Nsid;
+	/** optional revision number */
 	revision?: number;
+	/** short description of the document */
 	description?: string;
+	/** named definitions within the document */
 	defs: Record<string, MainType | DefType>;
 }
 
+/**
+ * validates a lexicon document definition
+ * @param doc document definition parameters
+ * @returns lexicon document builder definition
+ */
 export const document = (doc: LexDocumentBuilder): LexDocumentBuilder => {
-	for (const [defId, def] of Object.entries(doc.defs)) {
+	const { defs } = doc;
+
+	for (const defId in defs) {
+		if (!KEY_RE.test(defId)) {
+			throw new Error(`${doc.id}/defs: invalid "${defId}" definition id`);
+		}
+
+		const def = defs[defId];
+
 		if (
 			defId !== 'main' &&
 			(def.type === 'record' ||
@@ -1637,8 +1815,9 @@ const collectToplevelDefs = (documents: LexDocumentBuilder[]): Map<DefType | Mai
 	return map;
 };
 
-const buildDefSchema = (ctx: BuildContext, def: MainType | DefType): LexUserType => {
+const buildDefSchema = (ctx: BuildContext, def: MainType | DefType): t.LexUserType => {
 	switch (def.type) {
+		// Primary
 		case 'record': {
 			return buildRecordSchema(ctx, def);
 		}
@@ -1655,14 +1834,15 @@ const buildDefSchema = (ctx: BuildContext, def: MainType | DefType): LexUserType
 			return buildPermissionSetSchema(ctx, def);
 		}
 
-		case 'object': {
-			return buildObjectSchema(ctx, def);
+		// Concrete
+		case 'boolean': {
+			return buildBooleanSchema(ctx, def);
 		}
-		case 'array': {
-			return buildArraySchema(ctx, def);
+		case 'integer': {
+			return buildIntegerSchema(ctx, def);
 		}
-		case 'token': {
-			return buildTokenSchema(ctx, def);
+		case 'string': {
+			return buildStringSchema(ctx, def);
 		}
 		case 'bytes': {
 			return buildBytesSchema(ctx, def);
@@ -1673,29 +1853,38 @@ const buildDefSchema = (ctx: BuildContext, def: MainType | DefType): LexUserType
 		case 'blob': {
 			return buildBlobSchema(ctx, def);
 		}
-		case 'boolean': {
-			return buildBooleanSchema(ctx, def);
-		}
-		case 'integer': {
-			return buildIntegerSchema(ctx, def);
-		}
-		case 'string': {
-			return buildStringSchema(ctx, def);
+
+		// Meta
+		case 'token': {
+			return buildTokenSchema(ctx, def);
 		}
 		case 'unknown': {
 			return buildUnknownSchema(ctx, def);
 		}
+
+		// Container
+		case 'object': {
+			return buildObjectSchema(ctx, def);
+		}
+		case 'array': {
+			return buildArraySchema(ctx, def);
+		}
 	}
 };
 
-export const build = (options: { documents: LexDocumentBuilder[] }): Record<string, LexiconDoc> => {
+/**
+ * builds lexicon documents into lexicon JSON schema objects
+ * @param options collection of document builders to compile
+ * @returns map of nsid to compiled lexicon document
+ */
+export const build = (options: { documents: LexDocumentBuilder[] }): Record<string, t.LexiconDoc> => {
 	const documents = options.documents;
 
 	const toplevelDefs = collectToplevelDefs(documents);
-	const result: Record<string, LexiconDoc> = {};
+	const result: Record<string, t.LexiconDoc> = {};
 
 	for (const doc of documents) {
-		const defs: Record<string, LexUserType> = {};
+		const defs: Record<string, t.LexUserType> = {};
 
 		for (const [defId, defValue] of Object.entries(doc.defs)) {
 			const ctx: BuildContext = {
@@ -1718,3 +1907,4 @@ export const build = (options: { documents: LexDocumentBuilder[] }): Record<stri
 
 	return result;
 };
+// #endregion

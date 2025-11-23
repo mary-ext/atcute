@@ -17,7 +17,8 @@
 	],
 	"exports": {
 		".": "./dist/index.js",
-		"./builder": "./dist/builder.js"
+		"./builder": "./dist/builder.js",
+		"./validations": "./dist/validations.js"
 	},
 	"sideEffects": false,
 	"scripts": {
@@ -31,8 +32,10 @@
 		"@badrap/valita": "^0.4.6"
 	},
 	"devDependencies": {
+		"@valibot/to-json-schema": "^1.3.0",
 		"@vitest/coverage-v8": "^4.0.7",
 		"tschema": "^3.2.0",
+		"valibot": "^1.1.0",
 		"vitest": "^4.0.7"
 	}
 }
