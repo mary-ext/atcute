@@ -11,7 +11,7 @@ export default defineLexiconConfig({
 		sources: [
 			{
 				type: 'git',
-				remote: 'https://github.com/mary-ext/tangled.sh-mirror.git',
+				remote: 'https://tangled.org/tangled.org/core.git',
 				pattern: ['lexicons/**/*.json'],
 			},
 		],
