@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 1.2.4
+
+### Patch Changes
+
+- 630623c: pass default TItem type to NullableSchema
+
 ## 1.2.3
 
 ### Patch Changes

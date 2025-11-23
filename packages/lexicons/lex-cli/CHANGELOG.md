@@ -1,5 +1,18 @@
 # @atcute/lex-cli
 
+## 2.3.3
+
+### Patch Changes
+
+- 860334b: validate lex.config.js
+- a612431: align with latest lexicon-doc types
+- Updated dependencies [4a7e8dc]
+- Updated dependencies [d319bb1]
+- Updated dependencies [d319bb1]
+- Updated dependencies [2d7c5d8]
+- Updated dependencies [082683e]
+  - @atcute/lexicon-doc@2.0.0
+
 ## 2.3.2
 
 ### Patch Changes

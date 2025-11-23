@@ -1,5 +1,89 @@
 # @atcute/lexicon-doc
 
+## 2.0.0
+
+### Major Changes
+
+- d319bb1: align lexicon document validation schemas closer with the specification
+
+  we were originally following @atproto/lexicon, but this has been a source of confusion when
+  cross-validating against the official specification document.
+
+  the only notable deviation is the differentiation between a "field type definition" (LexField) and
+  an "inlinable field type definition" (LexDefinableField), you can't nest an object inside another
+  object without a ref in between.
+
+  this change should not be a concern if you are only relying on `lexiconDoc` schema.
+
+- 082683e: make lexicon document validation lenient
+
+  the `lexiconDoc` schema will no longer perform constraint checks that ensures that all of the
+  definitions in the document is nonambiguous (like ensuring that default string values don't go
+  beyond its specified maxLength), all constraint checks are now performed by `refine*` functions.
+
+  you can get the previous functionality back by passing the resulting parsed document to
+  `refineLexiconDoc` with the second parameter set to true (which enables performing nested checks.)
+
+  ```ts
+  const doc = lexiconDoc.parse(input);
+  const issues = refineLexiconDoc(doc, true);
+  //    ^? RefineIssue[]
+  ```
+
+  the side-benefit is that this allows lexicon documents to be partly salvagable by runtime-based
+  validators, they'd have the ability to only throw on definitions that are actually being used in
+  the validation process.
+
+### Minor Changes
+
+- d319bb1: add RecordValidator for record validations using remote schemas
+
+  this is useful for PDS implementations that wants to validate a record that a user is putting into
+  their repository but don't have local copies of its schema.
+
+  ```ts
+  import { RecordValidator } from '@atcute/lexicon-doc/validations';
+
+  // lexicon documents retrieved from the network or loaded from disk
+  const docs = {
+  	'app.bsky.feed.post': {
+  		lexicon: 1,
+  		id: 'app.bsky.feed.post',
+  		defs: {
+  			main: {
+  				type: 'record',
+  				record: {
+  					type: 'object',
+  					required: ['text', 'createdAt'],
+  					properties: {
+  						text: { type: 'string', maxLength: 300 },
+  						createdAt: { type: 'string', format: 'datetime' },
+  					},
+  				},
+  			},
+  		},
+  	},
+  };
+
+  const validator = new RecordValidator(docs, 'app.bsky.feed.post');
+
+  validator.parse({
+  	key: '3m6bkzurm4c7w',
+  	object: {
+  		$type: 'app.bsky.feed.post',
+  		text: 'hello world',
+  		createdAt: '2024-01-01T00:00:00.000Z',
+  	},
+  });
+  ```
+
+### Patch Changes
+
+- 4a7e8dc: add additionalProperties to lexicon documents
+- 2d7c5d8: allow passing records/XRPC methods to permissions
+- Updated dependencies [630623c]
+  - @atcute/lexicons@1.2.4
+
 ## 1.3.0
 
 ### Minor Changes

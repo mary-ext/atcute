@@ -1,5 +1,18 @@
 # @atcute/lexicon-resolver
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [4a7e8dc]
+- Updated dependencies [630623c]
+- Updated dependencies [d319bb1]
+- Updated dependencies [d319bb1]
+- Updated dependencies [2d7c5d8]
+- Updated dependencies [082683e]
+  - @atcute/lexicon-doc@2.0.0
+  - @atcute/lexicons@1.2.4
+
 ## 0.1.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @atcute/cbor
 
+## 2.2.8
+
+### Patch Changes
+
+- 7d3a159: perf improvements
+
 ## 2.2.7
 
 ### Patch Changes
