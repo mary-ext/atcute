@@ -31,9 +31,7 @@ export function getAllWorkspacePackages(): PackageJsonData[] {
 				relpath: p,
 			}) as PackageJsonData;
 		})
-		.filter(
-			(p) => !p.private,
-		);
+		.filter((p) => !p.private);
 }
 
 export function computePackageSizeInformation(
@@ -56,7 +54,8 @@ export function computePackageSizeInformation(
 	if (!pkg.exports) return pkgSizeInformation;
 
 	// Non-web packages
-	if (pkg.name.endsWith('-node') || pkg.name.endsWith('-bun') || pkg.name.endsWith('-deno')) return pkgSizeInformation;
+	if (pkg.name.endsWith('-node') || pkg.name.endsWith('-bun') || pkg.name.endsWith('-deno'))
+		return pkgSizeInformation;
 
 	for (const entry in pkg.exports) {
 		if (!Object.hasOwn(pkg.exports, entry)) continue;

@@ -198,11 +198,11 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 					continue jump;
 				}
 
-				value = []
+				value = [];
 				break;
 			}
 			case 5: {
-				value = {}
+				value = {};
 				if (arg > 0) {
 					// We'll read the key of the first item here.
 					const first = decodeStringKey(state);

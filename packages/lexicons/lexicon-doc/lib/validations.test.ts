@@ -1,6 +1,18 @@
 import { describe, expect, test } from 'vitest';
 
-import { array, blob, boolean, build, bytes, cidLink, document, integer, object, required, string } from './builder.js';
+import {
+	array,
+	blob,
+	boolean,
+	build,
+	bytes,
+	cidLink,
+	document,
+	integer,
+	object,
+	required,
+	string,
+} from './builder.js';
 import type * as t from './types.js';
 import { RecordValidator } from './validations.js';
 
