@@ -1,3 +1,4 @@
+import { isAtprotoAudience } from '@atcute/identity';
 import { isLanguageCode, isNsid } from '@atcute/lexicons/syntax';
 
 import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
@@ -711,42 +712,148 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 
 	switch (resource) {
 		case 'repo': {
-			const collection = spec.collection;
-			if (Array.isArray(collection) && collection.length === 0) {
+			const { collection } = spec;
+
+			if (!Array.isArray(collection)) {
+				issues.push({
+					message: `collection must be an array`,
+					path: ['collection'],
+				});
+			} else if (collection.length === 0) {
 				issues.push({
 					message: `collection can't be empty`,
 					path: ['collection'],
 				});
+			} else {
+				for (let idx = 0, len = collection.length; idx < len; idx++) {
+					const entry = collection[idx];
+
+					if (typeof entry !== 'string') {
+						issues.push({
+							message: `collection entries must be strings`,
+							path: ['collection', idx],
+						});
+					} else if (!isNsid(entry)) {
+						issues.push({
+							message: `invalid collection nsid`,
+							path: ['collection', idx],
+						});
+					}
+				}
 			}
+
 			break;
 		}
 		case 'rpc': {
-			const lxm = spec.lxm;
-			const aud = spec.aud;
+			const { lxm, aud, inheritAud } = spec;
 
-			if (Array.isArray(lxm) && lxm.length === 0) {
+			if (!Array.isArray(lxm)) {
+				issues.push({
+					message: `lxm must be an array`,
+					path: ['lxm'],
+				});
+			} else if (lxm.length === 0) {
 				issues.push({
 					message: `lxm can't be empty`,
 					path: ['lxm'],
 				});
+			} else {
+				if (aud === '*' && lxm.includes('*')) {
+					issues.push({
+						message: `aud and lxm can't both be wildcards`,
+						path: ['aud'],
+					});
+				}
+
+				for (let idx = 0, len = lxm.length; idx < len; idx++) {
+					const entry = lxm[idx];
+
+					if (typeof entry !== 'string') {
+						issues.push({
+							message: `lxm entries must be strings`,
+							path: ['lxm', idx],
+						});
+						continue;
+					}
+
+					if (entry !== '*' && !isNsid(entry)) {
+						issues.push({
+							message: `invalid lxm nsid`,
+							path: ['lxm', idx],
+						});
+					}
+				}
 			}
 
-			if (aud === '*' && lxm === '*') {
+			if (inheritAud !== undefined && typeof inheritAud !== 'boolean') {
 				issues.push({
-					message: `aud and lxm can't both be wildcards`,
+					message: `inheritAud must be a boolean`,
+					path: ['inheritAud'],
+				});
+			} else if (inheritAud) {
+				if (aud !== undefined) {
+					issues.push({
+						message: `aud can't be set when inheritAud is enabled`,
+						path: ['aud'],
+					});
+				}
+			} else if (aud === undefined) {
+				issues.push({
+					message: `aud must be set when inheritAud is disabled`,
+					path: ['aud'],
+				});
+			} else if (typeof aud !== 'string') {
+				issues.push({
+					message: `aud must be a string`,
+					path: ['aud'],
+				});
+			} else if (aud !== '*' && !isAtprotoAudience(aud)) {
+				issues.push({
+					message: `invalid audience`,
 					path: ['aud'],
 				});
 			}
+
 			break;
 		}
 		case 'blob': {
-			const accept = spec.accept;
-			if (Array.isArray(accept) && accept.length === 0) {
+			const { accept } = spec;
+
+			if (!Array.isArray(accept)) {
+				issues.push({
+					message: `accept must be an array`,
+					path: ['accept'],
+				});
+			} else if (accept.length === 0) {
 				issues.push({
 					message: `accept can't be empty`,
 					path: ['accept'],
 				});
+			} else if (accept.includes('*/*')) {
+				if (accept.length > 1) {
+					issues.push({
+						message: `no other MIME types can be specified when a wildcard is present`,
+						path: ['accept'],
+					});
+				}
+			} else {
+				for (let idx = 0, len = accept.length; idx < len; idx++) {
+					const entry = accept[idx];
+
+					if (typeof entry !== 'string') {
+						issues.push({
+							message: `accept entries must be strings`,
+							path: ['accept', idx],
+						});
+					} else if (!MIME_TYPE_RE.test(entry)) {
+						issues.push({
+							message: `invalid MIME type`,
+							path: ['accept', idx],
+						});
+					}
+				}
 			}
+
 			break;
 		}
 	}

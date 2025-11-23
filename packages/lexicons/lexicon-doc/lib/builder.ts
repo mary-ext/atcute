@@ -1327,7 +1327,9 @@ export interface LexRpcPermissionBuilder {
 	/** allowed rpc methods or wildcard */
 	lxm: '*' | (Nsid | LexXrpcQueryBuilder | LexXrpcProcedureBuilder | LexXrpcSubscriptionBuilder)[];
 	/** allowed audience or wildcard */
-	aud: '*' | AtprotoAudience;
+	aud?: '*' | AtprotoAudience;
+	/** inherit the audience from the including permission scope */
+	inheritAud?: boolean;
 }
 
 /**
@@ -1336,7 +1338,7 @@ export interface LexRpcPermissionBuilder {
  * @returns rpc permission builder definition
  */
 export const rpcPermission = (def: Omit<LexRpcPermissionBuilder, 'type'>): LexRpcPermissionBuilder => {
-	const { lxm, aud } = def;
+	const { lxm, aud, inheritAud = false } = def;
 
 	if (Array.isArray(lxm)) {
 		if (lxm.length === 0) {
@@ -1346,6 +1348,14 @@ export const rpcPermission = (def: Omit<LexRpcPermissionBuilder, 'type'>): LexRp
 
 	if (aud === '*' && lxm === '*') {
 		throw new Error(`rpc-permission: aud and lxm can't both be '*'`);
+	}
+
+	if (inheritAud) {
+		if (aud !== undefined) {
+			throw new Error(`rpc-permission: aud can't be set when inheritAud is enabled`);
+		}
+	} else if (aud === undefined) {
+		throw new Error(`rpc-permission: aud must be set when inheritAud is disabled`);
 	}
 
 	return { ...def, type: 'rpc-permission' };
@@ -1478,7 +1488,7 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.
 			};
 		}
 		case 'rpc-permission': {
-			const { lxm, aud } = def;
+			const { lxm, aud, inheritAud } = def;
 
 			let builtLxm: string[];
 			if (lxm === '*') {
@@ -1500,6 +1510,7 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.
 
 			return {
 				aud: aud,
+				inheritAud: inheritAud,
 				lxm: builtLxm,
 				resource: 'rpc',
 				type: 'permission',

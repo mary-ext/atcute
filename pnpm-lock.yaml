@@ -505,6 +505,9 @@ importers:
 
   packages/lexicons/lexicon-doc:
     dependencies:
+      '@atcute/identity':
+        specifier: ^1.1.2
+        version: 1.1.2
       '@atcute/lexicons':
         specifier: workspace:*
         version: link:../lexicons
@@ -922,6 +925,9 @@ packages:
   '@atcute/frontpage@file:packages/definitions/frontpage':
     resolution: {directory: packages/definitions/frontpage, type: directory}
 
+  '@atcute/identity@1.1.2':
+    resolution: {integrity: sha512-vn0RN7SUF6N0sEPG9yyT6a0MzpfVS8BhsiLtB8OeS4qp2rLMQW33pelCpNitP1N+fq03MFlDGzs5p7K4qMs4cA==}
+
   '@atcute/leaflet@file:packages/definitions/leaflet':
     resolution: {directory: packages/definitions/leaflet, type: directory}
 
@@ -930,6 +936,9 @@ packages:
 
   '@atcute/lexicons@1.2.2':
     resolution: {integrity: sha512-bgEhJq5Z70/0TbK5sx+tAkrR8FsCODNiL2gUEvS5PuJfPxmFmRYNWaMGehxSPaXWpU2+Oa9ckceHiYbrItDTkA==}
+
+  '@atcute/lexicons@1.2.4':
+    resolution: {integrity: sha512-s6fl/SVjQMv7jiitLCcZ434X+VrTsJt7Fl9iJg8WXHJIELRz/U0sNUoP++oWd7bvPy1Vcd2Wnm+YtTm/Zn7AIQ==}
 
   '@atcute/microcosm@file:packages/definitions/microcosm':
     resolution: {directory: packages/definitions/microcosm, type: directory}
@@ -3806,6 +3815,11 @@ snapshots:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
+  '@atcute/identity@1.1.2':
+    dependencies:
+      '@atcute/lexicons': 1.2.4
+      '@badrap/valita': 0.4.6
+
   '@atcute/leaflet@file:packages/definitions/leaflet':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
@@ -3817,6 +3831,11 @@ snapshots:
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
   '@atcute/lexicons@1.2.2':
+    dependencies:
+      '@standard-schema/spec': 1.0.0
+      esm-env: 1.2.2
+
+  '@atcute/lexicons@1.2.4':
     dependencies:
       '@standard-schema/spec': 1.0.0
       esm-env: 1.2.2
