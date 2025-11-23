@@ -23,7 +23,7 @@ export const isAtprotoAudience = (input: string): input is AtprotoAudience => {
 		return false;
 	}
 
-	return FRAGMENT_RE.test(input.slice(isep + 1)) && isAtprotoAudience(input.slice(0, isep));
+	return FRAGMENT_RE.test(input.slice(isep + 1)) && isAtprotoDid(input.slice(0, isep));
 };
 
 /**
