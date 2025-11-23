@@ -1093,7 +1093,7 @@ export const cidLink = (): CidLinkSchema => {
 
 // #region Nullable schema
 
-export interface NullableSchema<TItem extends BaseSchema>
+export interface NullableSchema<TItem extends BaseSchema = BaseSchema>
 	extends BaseSchema<InferInput<TItem> | null, InferOutput<TItem> | null> {
 	readonly type: 'nullable';
 	readonly wrapped: TItem;
