@@ -601,7 +601,7 @@ export const refineLexObject = (spec: t.LexObject, deep: boolean = false): Refin
 			for (const key of required) {
 				if (properties[key] === undefined) {
 					issues.push({
-						message: `required fields not defined`,
+						message: `required field not defined`,
 						path: ['properties', key],
 					});
 				}
@@ -1043,7 +1043,7 @@ export const refineLexiconDoc = (spec: t.LexiconDoc, deep: boolean = false): Ref
 				def.type === 'permission-set')
 		) {
 			issues.push({
-				message: `records, procedures, queries, subscriptions and permission sets must be the main definition`,
+				message: `${def.type} must be the main definition`,
 				path: [prop],
 			});
 		}
