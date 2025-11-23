@@ -3,12 +3,9 @@ import { dirname as getDirname, relative as getRelativePath } from 'node:path/po
 import * as prettier from 'prettier';
 
 import type {
-	LexArray,
-	LexBlob,
+	LexDefinableField,
 	LexiconDoc,
-	LexIpldType,
 	LexObject,
-	LexPrimitive,
 	LexRecord,
 	LexRefVariant,
 	LexUnknown,
@@ -177,6 +174,10 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 					result = `${PURE} v.literal(${lit(stripMainHash(defUri))})`;
 					break;
 				}
+				case 'permission-set': {
+					// skip permission sets
+					continue;
+				}
 				default: {
 					result = generateType(imports, defUri, def);
 					break;
@@ -248,11 +249,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 					}
 
 					if (def.message?.schema) {
-						if (def.message?.schema.type === 'object') {
-							file.sinterfaces += `export interface $message extends v.InferInput<${camelcased}Schema['message']> {}\n`;
-						} else {
-							file.sinterfaces += `export type $message = v.InferInput<${camelcased}Schema['message']>;\n`;
-						}
+						file.sinterfaces += `export type $message = v.InferInput<${camelcased}Schema['message']>;\n`;
 					}
 
 					break;
@@ -400,15 +397,9 @@ const generateXrpcSubscription = (imports: ImportSet, defUri: string, spec: LexX
 	inner += `"params": ${params},`;
 
 	if (schema) {
-		if (schema.type === 'object') {
-			const res = generateObject(imports, defUri, schema, 'none');
+		const res = generateType(imports, defUri, schema);
 
-			inner += `"message": ${res},`;
-		} else {
-			const res = generateType(imports, defUri, schema);
-
-			inner += `get "message" () { return ${res} },`;
-		}
+		inner += `get "message" () { return ${res} },`;
 	} else {
 		inner += `"message": null,`;
 	}
@@ -687,12 +678,7 @@ const generateJsdocField = (spec: LexUserType | LexRefVariant | LexUnknown) => {
 	return res;
 };
 
-const generateType = (
-	imports: ImportSet,
-	defUri: string,
-	spec: LexArray | LexPrimitive | LexIpldType | LexRefVariant | LexBlob,
-	lazy = false,
-): string => {
+const generateType = (imports: ImportSet, defUri: string, spec: LexDefinableField, lazy = false): string => {
 	switch (spec.type) {
 		// LexRefVariant
 		case 'ref': {
@@ -933,9 +919,7 @@ const generateType = (
 	}
 };
 
-const isRefVariant = (
-	spec: LexArray | LexPrimitive | LexIpldType | LexRefVariant | LexBlob,
-): spec is LexRefVariant => {
+const isRefVariant = (spec: LexDefinableField): spec is LexRefVariant => {
 	const type = spec.type;
 	return type === 'ref' || type === 'union';
 };

@@ -1,7 +1,7 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
-import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
+import { lexiconDoc, refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 
 import { object } from '@optique/core/constructs';
 import { command, constant, option } from '@optique/core/primitives';
@@ -163,6 +163,17 @@ if (result.type === 'generate') {
 
 			for (const issue of result.issues) {
 				console.log(`- ${issue.code} at .${issue.path.join('.')}`);
+			}
+
+			process.exit(1);
+		}
+
+		const issues = refineLexiconDoc(result.value, true);
+		if (issues.length > 0) {
+			console.error(pc.bold(pc.red(`lint validation failed for "${filename}"`)));
+
+			for (const issue of issues) {
+				console.log(`- ${issue.message} at .${issue.path.join('.')}`);
 			}
 
 			process.exit(1);
