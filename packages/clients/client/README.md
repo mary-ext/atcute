@@ -2,9 +2,10 @@
 
 lightweight and cute API client for AT Protocol.
 
-- **small**, the bare minimum is ~1 kB gzipped with the full package at ~2.4 kB gzipped.
-- **no runtime validation**, type definitions match actual HTTP responses, the server is assumed to
-  be trusted in returning valid responses.
+- **small**, the bare minimum is ~1.1 kB gzipped, with validation at ~3 kB gzipped.
+- **optional runtime validation**, by default there's no runtime validation as the server is assumed
+  to be trusted in returning valid responses, but you can opt-in to validation using the `call()`
+  method with lexicon schemas. validation code is automatically tree-shaken when not used.
 
 ```ts
 import { Client, CredentialManager, ok, simpleFetchHandler } from '@atcute/client';
@@ -63,6 +64,25 @@ import type {} from '@atcute/bluesky';
 	}
 }
 
+// with runtime validation
+import { AppBskyActorGetProfile } from '@atcute/bluesky';
+
+{
+	const handler = simpleFetchHandler({ service: 'https://public.api.bsky.app' });
+	const rpc = new Client({ handler });
+
+	const { ok, data } = await rpc.call(AppBskyActorGetProfile, {
+		params: {
+			actor: 'bsky.app',
+		},
+	});
+
+	if (ok) {
+		console.log(data.displayName);
+		// -> "Bluesky"
+	}
+}
+
 // performing authenticated requests
 {
 	const manager = new CredentialManager({ service: 'https://bsky.social' });
@@ -93,8 +113,8 @@ installing one of these definition packages.
 - [`@atcute/bluemoji`](../../definitions/bluemoji): `blue.moji.*` schema definitions
 - [`@atcute/bluesky`](../../definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions
 - [`@atcute/frontpage`](../../definitions/frontpage): `fyi.unravel.frontpage.*` schema definitions
-- [`@atcute/lexicon-community`](../../definitions/lexicon-community): `community.lexicon.\*`
-  schema definitions
+- [`@atcute/lexicon-community`](../../definitions/lexicon-community): `community.lexicon.\*` schema
+  definitions
 - [`@atcute/microcosm`](../../definitions/microcosm): `blue.microcosm.*` and `com.bad-example.*`
   schema definitions
 - [`@atcute/ozone`](../../definitions/ozone): `tools.ozone.*` schema definitions

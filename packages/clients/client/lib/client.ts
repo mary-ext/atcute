@@ -1,5 +1,6 @@
 import type { Did } from '@atcute/lexicons';
 import type { XRPCProcedures, XRPCQueries } from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
 import type {
 	InferInput,
 	InferOutput,
@@ -90,6 +91,25 @@ export type ProcedureRequestOptions<TDef> = BaseRequestOptions &
 				params?: Record<string, unknown>;
 			});
 
+export type CallRequestOptions<TMeta> = BaseRequestOptions & {
+	as?: ResponseFormat | null;
+} & (TMeta extends XRPCQueryMetadata<infer Params, any, any>
+		? // query
+			Params extends ObjectSchema
+			? { params: InferInput<Params> }
+			: { params?: Record<string, unknown> }
+		: TMeta extends XRPCProcedureMetadata<infer Params, infer Input, any, any>
+			? // procedure
+				(Params extends ObjectSchema
+					? { params: InferInput<Params> }
+					: { params?: Record<string, unknown> }) &
+					(Input extends XRPCLexBodyParam
+						? { input: InferInput<Input['schema']> }
+						: Input extends XRPCBlobBodyParam
+							? { input: Blob | ArrayBuffer | ArrayBufferView | ReadableStream }
+							: { input?: Record<string, unknown> | Blob | ArrayBuffer | ArrayBufferView | ReadableStream })
+			: never);
+
 type InternalRequestOptions = BaseRequestOptions & {
 	as?: ResponseFormat | null;
 	params?: Record<string, unknown>;
@@ -145,6 +165,11 @@ type UnknownClientResponse = { status: number; headers: Headers } & (
 	| { ok: true; data: unknown }
 	| { ok: false; data: XRPCErrorPayload }
 );
+
+// #endregion
+
+// #region Type definitions for call method
+type Namespaced<T> = { mainSchema: T };
 
 // #endregion
 
@@ -225,6 +250,78 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 
 	post(name: string, options: InternalRequestOptions = {}) {
 		return this.#perform('post', name, options);
+	}
+
+	/**
+	 * performs an XRPC call with schema validation
+	 * @param schema the lexicon schema for the endpoint, or a namespace containing mainSchema
+	 * @param options call options
+	 */
+	call<TMeta extends XRPCQueryMetadata | XRPCProcedureMetadata, TInit extends CallRequestOptions<TMeta>>(
+		schema: TMeta | Namespaced<TMeta>,
+		...options: HasRequiredKeys<TInit> extends true ? [init: TInit] : [init?: TInit]
+	): Promise<ClientResponse<TMeta, TInit>>;
+
+	async call(schema: any, options: any = {}): Promise<any> {
+		// early bailout for tree-shaking when schemas aren't used
+		if (!v.xrpcSchemaGenerated) {
+			return;
+		}
+
+		// extract mainSchema if namespace was passed
+		if ('mainSchema' in schema) {
+			schema = schema.mainSchema;
+		}
+
+		if (schema.params !== null) {
+			const paramsResult = v.safeParse(schema.params, options.params);
+			if (!paramsResult.ok) {
+				throw new ClientValidationError('params', paramsResult);
+			}
+		}
+
+		if (schema.type === 'xrpc_procedure' && schema.input?.type === 'lex') {
+			const inputResult = v.safeParse(schema.input.schema, options.input);
+			if (!inputResult.ok) {
+				throw new ClientValidationError('input', inputResult);
+			}
+		}
+
+		const isQuery = schema.type === 'xrpc_query';
+		const method = isQuery ? 'get' : 'post';
+
+		const format =
+			options.as !== undefined
+				? options.as
+				: schema.output?.type === 'lex'
+					? 'json'
+					: schema.output?.type === 'blob'
+						? 'blob'
+						: null;
+
+		const response = await this.#perform(method, schema.nsid, {
+			params: options.params,
+			input: isQuery ? undefined : options.input,
+			as: format,
+			signal: options.signal,
+			headers: options.headers,
+		});
+
+		if (format === 'json' && response.ok && schema.output?.type === 'lex') {
+			const outputResult = v.safeParse(schema.output.schema, response.data);
+			if (!outputResult.ok) {
+				throw new ClientValidationError('output', outputResult);
+			}
+
+			return {
+				ok: true,
+				status: response.status,
+				headers: response.headers,
+				data: outputResult.value,
+			};
+		}
+
+		return response;
 	}
 
 	async #perform(
@@ -456,6 +553,22 @@ export class ClientResponseError extends Error {
 
 		this.status = status;
 		this.headers = headers;
+	}
+}
+
+/** represents a validation error during typed calls */
+export class ClientValidationError extends Error {
+	/** validation target (params, input, or output) */
+	readonly target: 'params' | 'input' | 'output';
+	/** validation result */
+	readonly result: v.Err;
+
+	constructor(target: 'params' | 'input' | 'output', result: v.Err) {
+		super(`validation failed for ${target}: ${result.message}`);
+
+		this.name = 'ClientValidationError';
+		this.target = target;
+		this.result = result;
 	}
 }
 
