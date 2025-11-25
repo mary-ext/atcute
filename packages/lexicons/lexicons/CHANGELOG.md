@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 1.2.5
+
+### Patch Changes
+
+- 03a13b3: add internal variable for XRPC query/procedure schema usage
+
 ## 1.2.4
 
 ### Patch Changes

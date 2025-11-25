@@ -1,5 +1,21 @@
 # @atcute/frontpage
 
+## 2.0.0
+
+### Major Changes
+
+- 4ade55d: pull latest Frontpage lexicons
+
+  normally this would've been a patch change, but this change alters Frontpage's types are exported
+  to accomodate for the new `fyi.frontpage.*` namespace.
+
+  another major change may occur if the old namespace is fully removed.
+
+### Patch Changes
+
+- Updated dependencies [03a13b3]
+  - @atcute/lexicons@1.2.5
+
 ## 1.0.5
 
 ### Patch Changes

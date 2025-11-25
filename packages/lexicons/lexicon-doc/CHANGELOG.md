@@ -1,5 +1,12 @@
 # @atcute/lexicon-doc
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [03a13b3]
+  - @atcute/lexicons@1.2.5
+
 ## 2.0.1
 
 ### Patch Changes

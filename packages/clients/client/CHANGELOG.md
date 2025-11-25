@@ -1,5 +1,37 @@
 # @atcute/client
 
+## 4.1.0
+
+### Minor Changes
+
+- 64a4511: opt-in runtime validation for XRPC calls
+
+  by default, `@atcute/client` assumes the server is trusted and skips runtime validation. you can
+  now opt into validation using the new `call()` method with lexicon schemas.
+
+  ```ts
+  import { Client, simpleFetchHandler } from '@atcute/client';
+  import * as AppBskyActorGetProfile from '@atcute/bluesky/types/actor/getProfile';
+
+  const client = new Client({
+  	handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }),
+  });
+
+  // validates params, input, and output against lexicon schema
+  const { ok, data } = await client.call(AppBskyActorGetProfile, {
+  	params: { actor: 'bsky.app' },
+  });
+  ```
+
+  validation failures throw `ClientValidationError` with detailed error information.
+
+  validation code is automatically tree-shaken when not used.
+
+### Patch Changes
+
+- Updated dependencies [03a13b3]
+  - @atcute/lexicons@1.2.5
+
 ## 4.0.5
 
 ### Patch Changes
@@ -112,7 +144,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 
