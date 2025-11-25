@@ -32,9 +32,9 @@
 	"devDependencies": {
 		"@atcute/car": "workspace:^",
 		"@badrap/valita": "^0.4.6",
-		"@types/node": "^22.19.0",
-		"@vitest/coverage-v8": "^4.0.7",
-		"vitest": "^4.0.7"
+		"@types/node": "^22.19.1",
+		"@vitest/coverage-v8": "^4.0.14",
+		"vitest": "^4.0.14"
 	},
 	"dependencies": {
 		"@atcute/cbor": "workspace:^",

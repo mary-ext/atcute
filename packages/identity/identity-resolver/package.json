@@ -37,7 +37,7 @@
 	},
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
-		"@vitest/coverage-v8": "^4.0.7",
-		"vitest": "^4.0.7"
+		"@vitest/coverage-v8": "^4.0.14",
+		"vitest": "^4.0.14"
 	}
 }

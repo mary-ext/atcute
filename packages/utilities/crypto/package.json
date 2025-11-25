@@ -41,11 +41,11 @@
 	},
 	"devDependencies": {
 		"@noble/curves": "^1.9.7",
-		"@types/node": "^22.19.0",
-		"@vitest/browser-playwright": "^4.0.7",
-		"@vitest/coverage-v8": "^4.0.7",
-		"playwright": "^1.56.1",
-		"vitest": "^4.0.7"
+		"@types/node": "^22.19.1",
+		"@vitest/browser-playwright": "^4.0.14",
+		"@vitest/coverage-v8": "^4.0.14",
+		"playwright": "^1.57.0",
+		"vitest": "^4.0.14"
 	},
 	"dependencies": {
 		"@atcute/multibase": "workspace:^",
