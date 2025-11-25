@@ -19,6 +19,14 @@ import {
 	lazyProperty,
 } from './utils.js';
 
+/**
+ * flag indicating whether xrpc schema generation helpers are used. set to true
+ * when query() or procedure() is called. this enables conditional tree-shaking
+ * of validation code when schemas are not used.
+ * @deprecated internal flag for tree-shaking, do not use directly
+ */
+export let xrpcSchemaGenerated = false;
+
 type Identity<T> = T;
 type Flatten<T> = Identity<{ [K in keyof T]: T[K] }>;
 
@@ -1833,6 +1841,8 @@ export const procedure = <
 ): XRPCProcedureMetadata<TParams, TInput, TOutput, TNsid> => {
 	// `schema` can be a getter, and we'd have to resolve that getter.
 
+	xrpcSchemaGenerated = true;
+
 	return {
 		kind: 'metadata',
 		type: 'xrpc_procedure',
@@ -1897,6 +1907,8 @@ export const query = <
 	},
 ): XRPCQueryMetadata<TParams, TOutput, TNsid> => {
 	// `schema` can be a getter, and we'd have to resolve that getter.
+
+	xrpcSchemaGenerated = true;
 
 	return {
 		kind: 'metadata',
