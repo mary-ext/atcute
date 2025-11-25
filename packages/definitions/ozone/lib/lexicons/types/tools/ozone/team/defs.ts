@@ -12,7 +12,11 @@ const _memberSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(AppBskyActorDefs.profileViewDetailedSchema);
 	},
 	role: /*#__PURE__*/ v.string<
-		'#roleAdmin' | '#roleModerator' | '#roleTriage' | '#roleVerifier' | (string & {})
+		| 'tools.ozone.team.defs#roleAdmin'
+		| 'tools.ozone.team.defs#roleModerator'
+		| 'tools.ozone.team.defs#roleTriage'
+		| 'tools.ozone.team.defs#roleVerifier'
+		| (string & {})
 	>(),
 	updatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });

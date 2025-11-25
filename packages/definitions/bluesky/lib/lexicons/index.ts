@@ -8,6 +8,10 @@ export * as AppBskyActorPutPreferences from './types/app/bsky/actor/putPreferenc
 export * as AppBskyActorSearchActors from './types/app/bsky/actor/searchActors.js';
 export * as AppBskyActorSearchActorsTypeahead from './types/app/bsky/actor/searchActorsTypeahead.js';
 export * as AppBskyActorStatus from './types/app/bsky/actor/status.js';
+export * as AppBskyAgeassuranceBegin from './types/app/bsky/ageassurance/begin.js';
+export * as AppBskyAgeassuranceDefs from './types/app/bsky/ageassurance/defs.js';
+export * as AppBskyAgeassuranceGetConfig from './types/app/bsky/ageassurance/getConfig.js';
+export * as AppBskyAgeassuranceGetState from './types/app/bsky/ageassurance/getState.js';
 export * as AppBskyBookmarkCreateBookmark from './types/app/bsky/bookmark/createBookmark.js';
 export * as AppBskyBookmarkDefs from './types/app/bsky/bookmark/defs.js';
 export * as AppBskyBookmarkDeleteBookmark from './types/app/bsky/bookmark/deleteBookmark.js';

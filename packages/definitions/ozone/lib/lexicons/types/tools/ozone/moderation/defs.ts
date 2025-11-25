@@ -1,5 +1,6 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+import * as AppBskyAgeassuranceDefs from '@atcute/bluesky/types/app/ageassurance/defs';
 import * as ChatBskyConvoDefs from '@atcute/bluesky/types/chat/convo/defs';
 import * as ComAtprotoAdminDefs from '@atcute/atproto/types/admin/defs';
 import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
@@ -76,6 +77,9 @@ const _accountStrikeSchema = /*#__PURE__*/ v.object({
 });
 const _ageAssuranceEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#ageAssuranceEvent')),
+	get access() {
+		return /*#__PURE__*/ v.optional(AppBskyAgeassuranceDefs.accessSchema);
+	},
 	/**
 	 * The unique identifier for this instance of the age assurance flow, in UUID format.
 	 */
@@ -89,6 +93,10 @@ const _ageAssuranceEventSchema = /*#__PURE__*/ v.object({
 	 */
 	completeUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**
+	 * The ISO 3166-1 alpha-2 country code provided when beginning the Age Assurance flow.
+	 */
+	countryCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
 	 * The date and time of this write operation.
 	 */
 	createdAt: /*#__PURE__*/ v.datetimeString(),
@@ -101,7 +109,11 @@ const _ageAssuranceEventSchema = /*#__PURE__*/ v.object({
 	 */
 	initUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**
-	 * The status of the age assurance process.
+	 * The ISO 3166-2 region code provided when beginning the Age Assurance flow.
+	 */
+	regionCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * The status of the Age Assurance process.
 	 */
 	status: /*#__PURE__*/ v.string<'assured' | 'pending' | 'unknown' | (string & {})>(),
 });
@@ -109,6 +121,9 @@ const _ageAssuranceOverrideEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#ageAssuranceOverrideEvent'),
 	),
+	get access() {
+		return /*#__PURE__*/ v.optional(AppBskyAgeassuranceDefs.accessSchema);
+	},
 	/**
 	 * Comment describing the reason for the override.
 	 */
@@ -746,7 +761,11 @@ const _scheduledActionViewSchema = /*#__PURE__*/ v.object({
 	updatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _subjectReviewStateSchema = /*#__PURE__*/ v.string<
-	'#reviewClosed' | '#reviewEscalated' | '#reviewNone' | '#reviewOpen' | (string & {})
+	| 'tools.ozone.moderation.defs#reviewClosed'
+	| 'tools.ozone.moderation.defs#reviewEscalated'
+	| 'tools.ozone.moderation.defs#reviewNone'
+	| 'tools.ozone.moderation.defs#reviewOpen'
+	| (string & {})
 >();
 const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#subjectStatusView')),
