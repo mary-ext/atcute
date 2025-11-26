@@ -20,8 +20,8 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"pull": "lex-cli pull -c ./lex.config.js",
-		"generate": "rm -r ./lib/lexicons/; lex-cli generate -c ./lex.config.js",
+		"pull": "lex-cli pull",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {

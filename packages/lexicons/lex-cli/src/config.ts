@@ -1,3 +1,4 @@
+import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import * as url from 'node:url';
 
@@ -98,8 +99,33 @@ export interface NormalizedConfig extends LexiconConfig {
 	root: string;
 }
 
-export const loadConfig = async (configPath: string): Promise<NormalizedConfig> => {
-	const configFilename = path.resolve(configPath);
+export const loadConfig = async (configPath?: string): Promise<NormalizedConfig> => {
+	let configFilename: string | undefined;
+
+	if (configPath) {
+		configFilename = path.resolve(configPath);
+	} else {
+		// try to find lex.config.js or lex.config.ts in the current directory
+		const candidates = ['lex.config.js', 'lex.config.ts'];
+
+		for (const candidate of candidates) {
+			const candidatePath = path.resolve(candidate);
+			try {
+				await fs.access(candidatePath);
+				configFilename = candidatePath;
+				break;
+			} catch {
+				// file doesn't exist, try next candidate
+			}
+		}
+
+		if (!configFilename) {
+			console.error(pc.bold(pc.red(`config file not found`)));
+			console.error(`looked for: ${candidates.join(', ')}`);
+			process.exit(1);
+		}
+	}
+
 	const configDirname = path.dirname(configFilename);
 
 	let rawConfig: unknown;

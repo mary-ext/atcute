@@ -20,7 +20,7 @@ export default defineLexiconConfig({
 then run the tool:
 
 ```
-npm exec lex-cli generate -c ./lex.config.js
+npm exec lex-cli generate
 ```
 
 ## pulling lexicons
@@ -53,15 +53,15 @@ export default defineLexiconConfig({
 pull the lexicons to disk, then generate types from them:
 
 ```
-npm exec lex-cli pull -c ./lex.config.js
-npm exec lex-cli generate -c ./lex.config.js
+npm exec lex-cli pull
+npm exec lex-cli generate
 ```
 
 ## publishing your schemas
 
-if you're packaging your generated schemas as a publishable library, add the `atcute:lexicons`
-field to your package.json. this allows other projects to automatically discover and import your
-schemas without manual configuration.
+if you're packaging your generated schemas as a publishable library, add the `atcute:lexicons` field
+to your package.json. this allows other projects to automatically discover and import your schemas
+without manual configuration.
 
 ```json
 {
