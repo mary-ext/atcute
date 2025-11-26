@@ -571,7 +571,7 @@ const generateObject = (
 
 	for (const [prop, propSpec] of sortedEntries) {
 		const lazy = isRefVariant(propSpec.type === 'array' ? propSpec.items : propSpec);
-		const optional = !required.has(prop) && !('default' in propSpec);
+		const optional = !required.has(prop) && !('default' in propSpec && propSpec.default !== undefined);
 		const nulled = nullable.has(prop);
 
 		let call = generateType(imports, path, propSpec, lazy);

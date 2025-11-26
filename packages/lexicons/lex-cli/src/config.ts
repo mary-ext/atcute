@@ -54,12 +54,21 @@ const pullConfigSchema = v.object({
 		.assert((value) => value.length > 0, `must include at least one source`),
 });
 
+const exportConfigSchema = v.object({
+	outdir: v.string().assert((value) => value.length > 0, `must not be empty`),
+	files: v
+		.array(v.string().assert((value) => value.length > 0, `must not be empty`))
+		.optional(),
+	clean: v.boolean().optional(),
+});
+
 export type GitSourceConfig = v.Infer<typeof gitSourceConfigSchema>;
 export type AtprotoNsidsSourceConfig = v.Infer<typeof atprotoNsidsSourceConfigSchema>;
 export type AtprotoAuthoritySourceConfig = v.Infer<typeof atprotoAuthoritySourceConfigSchema>;
 export type AtprotoSourceConfig = v.Infer<typeof atprotoSourceConfigSchema>;
 export type SourceConfig = v.Infer<typeof sourceConfigSchema>;
 export type PullConfig = v.Infer<typeof pullConfigSchema>;
+export type ExportConfig = v.Infer<typeof exportConfigSchema>;
 
 const isValidLexiconPattern = (pattern: string): boolean => {
 	if (pattern.endsWith('.*')) {
@@ -117,6 +126,7 @@ export const lexiconConfigSchema = v.object({
 		.partial()
 		.optional(),
 	pull: pullConfigSchema.optional(),
+	export: exportConfigSchema.optional(),
 });
 
 export type LexiconConfig = v.Infer<typeof lexiconConfigSchema>;

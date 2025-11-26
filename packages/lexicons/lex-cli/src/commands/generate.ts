@@ -1,8 +1,6 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
-import { lexiconDoc, refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
-
 import { merge, object } from '@optique/core/constructs';
 import { message } from '@optique/core/message';
 import { type InferValue } from '@optique/core/parser';
@@ -11,6 +9,7 @@ import pc from 'picocolors';
 
 import { generateLexiconApi, type ImportMapping } from '../codegen.js';
 import { loadConfig } from '../config.js';
+import { loadLexicons } from '../lexicon-loader.js';
 import { packageJsonSchema } from '../lexicon-metadata.js';
 import { sharedOptions } from '../shared-options.js';
 
@@ -144,54 +143,9 @@ export const runGenerate = async (args: GenerateCommand): Promise<void> => {
 	const importMappings = config.imports ? await resolveImportsToMappings(config.imports, config.root) : [];
 	const allMappings = [...importMappings, ...(config.mappings ?? [])];
 
-	const documents: LexiconDoc[] = [];
-
-	for await (const filename of fs.glob(config.files, { cwd: config.root })) {
-		let source: string;
-		try {
-			source = await fs.readFile(path.join(config.root, filename), 'utf8');
-		} catch (err) {
-			console.error(pc.bold(pc.red(`file read error with "${filename}"`)));
-			console.error(err);
-
-			process.exit(1);
-		}
-
-		let json: unknown;
-		try {
-			json = JSON.parse(source);
-		} catch (err) {
-			console.error(pc.bold(pc.red(`json parse error in "${filename}"`)));
-			console.error(err);
-
-			process.exit(1);
-		}
-
-		const result = lexiconDoc.try(json, { mode: 'strip' });
-		if (!result.ok) {
-			console.error(pc.bold(pc.red(`schema validation failed for "${filename}"`)));
-			console.error(result.message);
-
-			for (const issue of result.issues) {
-				console.log(`- ${issue.code} at .${issue.path.join('.')}`);
-			}
-
-			process.exit(1);
-		}
-
-		const issues = refineLexiconDoc(result.value, true);
-		if (issues.length > 0) {
-			console.error(pc.bold(pc.red(`lint validation failed for "${filename}"`)));
-
-			for (const issue of issues) {
-				console.log(`- ${issue.message} at .${issue.path.join('.')}`);
-			}
-
-			process.exit(1);
-		}
-
-		documents.push(result.value);
-	}
+	// load lexicons from files
+	const loaded = await loadLexicons(config.files, config.root);
+	const documents = loaded.map((l) => l.doc);
 
 	const generationResult = await generateLexiconApi({
 		documents: documents,
