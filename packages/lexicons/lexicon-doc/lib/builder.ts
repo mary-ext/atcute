@@ -698,6 +698,7 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexStrin
 		type: 'string',
 		const: builtConstValue,
 		default: builtDefaultValue,
+		description: def.description,
 		enum: builtEnumValues,
 		format: def.format,
 		knownValues: builtKnownValues,
