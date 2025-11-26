@@ -295,6 +295,9 @@ importers:
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../lexicons/lex-cli
+      '@atcute/lexicon-doc':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicon-doc
       '@atcute/microcosm':
         specifier: 'file:'
         version: file:packages/definitions/microcosm

@@ -20,8 +20,9 @@
 		"./types/com/bad-example/*": "./dist/lexicons/types/com/bad-example/*.js"
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc -b",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
+		"export": "lex-cli export",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
@@ -29,7 +30,8 @@
 	},
 	"devDependencies": {
 		"@atcute/microcosm": "file:",
-		"@atcute/lex-cli": "workspace:^"
+		"@atcute/lex-cli": "workspace:^",
+		"@atcute/lexicon-doc": "workspace:^"
 	},
 	"atcute:lexicons": {
 		"mappings": {

@@ -1,6 +1,10 @@
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['lexicons/**/*.json'],
+	files: ['lexicons-src/**/*.ts'],
 	outdir: 'lib/lexicons/',
+	export: {
+		outdir: 'lexicons/',
+		clean: true,
+	},
 });
