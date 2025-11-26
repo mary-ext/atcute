@@ -1,5 +1,11 @@
 # @atcute/lexicon-doc
 
+## 2.0.3
+
+### Patch Changes
+
+- 90690b8: fix missing description in string definitions
+
 ## 2.0.2
 
 ### Patch Changes

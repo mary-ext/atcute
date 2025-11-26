@@ -1,5 +1,72 @@
 # @atcute/lex-cli
 
+## 2.5.0
+
+### Minor Changes
+
+- 67d570c: generate code from lexicon builders
+
+  you can now author lexicons with `@atcute/lexicon-doc/builder` and have lex-cli consume them
+  directly! update your `files` array to point to the TypeScript/JavaScript source files and it'll
+  import them and build it for you.
+
+  ```ts
+  export default defineLexiconConfig({
+  	files: ['lexicons-src/**/*.ts'],
+  	// ...
+  });
+  ```
+
+  if you want to get the actual lexicon documents out of them, you can configure the export command.
+
+  ```ts
+  export default defineLexiconConfig({
+  	// ...
+  	export: {
+  		outdir: 'lexicons/',
+  		clean: true,
+  	},
+  });
+  ```
+
+### Patch Changes
+
+- cba74d3: add atproto pull source
+
+  you can now pull lexicons directly from the AT Protocol network
+
+  ```ts
+  export default defineLexiconConfig({
+  	files: ['lexicons/**/*.json'],
+  	outdir: 'src/lexicons/',
+  	pull: {
+  		outdir: 'lexicons/',
+  		sources: [
+  			{
+  				type: 'atproto',
+  				mode: 'nsids',
+  				nsids: ['app.bsky.feed.post', 'app.bsky.actor.profile'],
+  			},
+  			{
+  				type: 'atproto',
+  				mode: 'authority',
+  				authority: 'atproto-lexicons.bsky.social',
+  				pattern: ['com.atproto.*'],
+  			},
+  		],
+  	},
+  });
+  ```
+
+- 7f63ece: add config auto-discovery
+
+  given that config files are pretty much a required part of lex-cli, the CLI tool now attempts to
+  search for the presence of `lex.config.js` or `lex.config.ts` when a config file is not explicitly
+  specified.
+
+- Updated dependencies [90690b8]
+  - @atcute/lexicon-doc@2.0.3
+
 ## 2.4.0
 
 ### Minor Changes
