@@ -49,6 +49,33 @@ type Literal = string | number | boolean;
 
 const lit: (val: Literal | Literal[]) => string = JSON.stringify;
 
+interface LexPath {
+	nsid: string;
+	defId: string;
+}
+
+const toLexUri = (path: LexPath): string => {
+	const { nsid, defId } = path;
+	return defId === 'main' ? nsid : `${nsid}#${defId}`;
+};
+
+const resolvePath = (from: LexPath, ref: string): LexPath => {
+	const index = ref.indexOf('#');
+
+	// nsid (no hash)
+	if (index === -1) {
+		return { nsid: ref, defId: 'main' };
+	}
+
+	// #defId (local ref)
+	if (index === 0) {
+		return { nsid: from.nsid, defId: ref.slice(1) };
+	}
+
+	// nsid#defId (full ref)
+	return { nsid: ref.slice(0, index), defId: ref.slice(index + 1) };
+};
+
 const resolveExternalImport = (nsid: string, mappings: ImportMapping[]): ImportMapping | undefined => {
 	return mappings.find((mapping) => {
 		return mapping.nsid.some((pattern) => {
@@ -111,7 +138,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 		for (const defId of sortedDefIds) {
 			const def = doc.defs[defId];
-			const defUri = `${doc.id}#${defId}`;
+			const path: LexPath = { nsid: doc.id, defId };
 
 			const camelcased = toCamelCase(defId);
 			const varname = `${camelcased}Schema`;
@@ -119,59 +146,59 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 			let result: string;
 			switch (def.type) {
 				case 'query': {
-					result = generateXrpcQuery(imports, defUri, def);
+					result = generateXrpcQuery(imports, path, def);
 
 					file.imports += `import type {} from '@atcute/lexicons/ambient';\n`;
 
 					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
 					file.ambients += `  interface XRPCQueries {\n`;
-					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}Schema;\n`;
+					file.ambients += `    ${lit(toLexUri(path))}: ${camelcased}Schema;\n`;
 					file.ambients += `  }\n`;
 					file.ambients += `}`;
 					break;
 				}
 				case 'procedure': {
-					result = generateXrpcProcedure(imports, defUri, def);
+					result = generateXrpcProcedure(imports, path, def);
 
 					file.imports += `import type {} from '@atcute/lexicons/ambient';\n`;
 
 					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
 					file.ambients += `  interface XRPCProcedures {\n`;
-					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}Schema;\n`;
+					file.ambients += `    ${lit(toLexUri(path))}: ${camelcased}Schema;\n`;
 					file.ambients += `  }\n`;
 					file.ambients += `}`;
 					break;
 				}
 				case 'subscription': {
-					result = generateXrpcSubscription(imports, defUri, def);
+					result = generateXrpcSubscription(imports, path, def);
 
 					file.imports += `import type {} from '@atcute/lexicons/ambient';\n`;
 
 					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
 					file.ambients += `  interface XRPCSubscriptions {\n`;
-					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}Schema;\n`;
+					file.ambients += `    ${lit(toLexUri(path))}: ${camelcased}Schema;\n`;
 					file.ambients += `  }\n`;
 					file.ambients += `}`;
 					break;
 				}
 				case 'object': {
-					result = generateObject(imports, defUri, def);
+					result = generateObject(imports, path, def);
 					break;
 				}
 				case 'record': {
-					result = generateRecord(imports, defUri, def);
+					result = generateRecord(imports, path, def);
 
 					file.imports += `import type {} from '@atcute/lexicons/ambient';\n`;
 
 					file.ambients += `declare module '@atcute/lexicons/ambient' {\n`;
 					file.ambients += `  interface Records {\n`;
-					file.ambients += `    ${lit(stripMainHash(defUri))}: ${camelcased}Schema;\n`;
+					file.ambients += `    ${lit(toLexUri(path))}: ${camelcased}Schema;\n`;
 					file.ambients += `  }\n`;
 					file.ambients += `}`;
 					break;
 				}
 				case 'token': {
-					result = `${PURE} v.literal(${lit(stripMainHash(defUri))})`;
+					result = `${PURE} v.literal(${lit(toLexUri(path))})`;
 					break;
 				}
 				case 'permission-set': {
@@ -179,7 +206,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 					continue;
 				}
 				default: {
-					result = generateType(imports, defUri, def);
+					result = generateType(imports, path, def);
 					break;
 				}
 			}
@@ -372,42 +399,42 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 	return { files };
 };
 
-const generateXrpcQuery = (imports: ImportSet, defUri: string, spec: LexXrpcQuery): string => {
-	const params = generateXrpcParameters(imports, defUri, spec.parameters);
-	const output = generateXrpcBody(imports, defUri, spec.output);
+const generateXrpcQuery = (imports: ImportSet, path: LexPath, spec: LexXrpcQuery): string => {
+	const params = generateXrpcParameters(imports, path, spec.parameters);
+	const output = generateXrpcBody(imports, path, spec.output);
 
-	return `${PURE} v.query(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "output": ${output} })`;
+	return `${PURE} v.query(${lit(toLexUri(path))}, {\n"params": ${params}, "output": ${output} })`;
 };
 
-const generateXrpcProcedure = (imports: ImportSet, defUri: string, spec: LexXrpcProcedure): string => {
-	const params = generateXrpcParameters(imports, defUri, spec.parameters);
-	const input = generateXrpcBody(imports, defUri, spec.input);
-	const output = generateXrpcBody(imports, defUri, spec.output);
+const generateXrpcProcedure = (imports: ImportSet, path: LexPath, spec: LexXrpcProcedure): string => {
+	const params = generateXrpcParameters(imports, path, spec.parameters);
+	const input = generateXrpcBody(imports, path, spec.input);
+	const output = generateXrpcBody(imports, path, spec.output);
 
-	return `${PURE} v.procedure(${lit(stripMainHash(defUri))}, {\n"params": ${params}, "input": ${input}, "output": ${output} })`;
+	return `${PURE} v.procedure(${lit(toLexUri(path))}, {\n"params": ${params}, "input": ${input}, "output": ${output} })`;
 };
 
-const generateXrpcSubscription = (imports: ImportSet, defUri: string, spec: LexXrpcSubscription): string => {
+const generateXrpcSubscription = (imports: ImportSet, path: LexPath, spec: LexXrpcSubscription): string => {
 	const schema = spec.message?.schema;
 
-	const params = generateXrpcParameters(imports, defUri, spec.parameters);
+	const params = generateXrpcParameters(imports, path, spec.parameters);
 
 	let inner = ``;
 
 	inner += `"params": ${params},`;
 
 	if (schema) {
-		const res = generateType(imports, defUri, schema);
+		const res = generateType(imports, path, schema);
 
 		inner += `get "message" () { return ${res} },`;
 	} else {
 		inner += `"message": null,`;
 	}
 
-	return `${PURE} v.subscription(${lit(stripMainHash(defUri))}, {\n${inner}})`;
+	return `${PURE} v.subscription(${lit(toLexUri(path))}, {\n${inner}})`;
 };
 
-const generateXrpcBody = (imports: ImportSet, defUri: string, spec: LexXrpcBody | undefined): string => {
+const generateXrpcBody = (imports: ImportSet, path: LexPath, spec: LexXrpcBody | undefined): string => {
 	if (spec === undefined) {
 		return `null`;
 	}
@@ -421,11 +448,11 @@ const generateXrpcBody = (imports: ImportSet, defUri: string, spec: LexXrpcBody 
 		inner += `"type": "lex",`;
 
 		if (schema.type === 'object') {
-			const res = generateObject(imports, defUri, schema, 'none');
+			const res = generateObject(imports, path, schema, 'none');
 
 			inner += `"schema": ${res},`;
 		} else {
-			const res = generateType(imports, defUri, schema);
+			const res = generateType(imports, path, schema);
 
 			inner += `get "schema" () { return ${res} },`;
 		}
@@ -452,7 +479,7 @@ const generateXrpcBody = (imports: ImportSet, defUri: string, spec: LexXrpcBody 
 
 const generateXrpcParameters = (
 	imports: ImportSet,
-	defUri: string,
+	path: LexPath,
 	spec: LexXrpcParameters | undefined,
 ): string => {
 	if (spec === undefined) {
@@ -489,11 +516,11 @@ const generateXrpcParameters = (
 		properties: transformedProperties ?? originalProperties,
 	};
 
-	return generateObject(imports, defUri, mask, 'none');
+	return generateObject(imports, path, mask, 'none');
 };
 
-const generateRecord = (imports: ImportSet, defUri: string, spec: LexRecord): string => {
-	const schema = generateObject(imports, defUri, spec.record, 'required');
+const generateRecord = (imports: ImportSet, path: LexPath, spec: LexRecord): string => {
+	const schema = generateObject(imports, path, spec.record, 'required');
 
 	let key = `${PURE} v.string()`;
 	if (spec.key) {
@@ -511,7 +538,7 @@ const generateRecord = (imports: ImportSet, defUri: string, spec: LexRecord): st
 
 const generateObject = (
 	imports: ImportSet,
-	defUri: string,
+	path: LexPath,
 	spec: LexObject,
 	writeType: 'required' | 'optional' | 'none' = 'optional',
 ): string => {
@@ -522,11 +549,11 @@ const generateObject = (
 
 	switch (writeType) {
 		case 'optional': {
-			inner += `"$type": ${PURE} v.optional(${PURE} v.literal(${lit(stripMainHash(defUri))})),`;
+			inner += `"$type": ${PURE} v.optional(${PURE} v.literal(${lit(toLexUri(path))})),`;
 			break;
 		}
 		case 'required': {
-			inner += `"$type": ${PURE} v.literal(${lit(stripMainHash(defUri))}),`;
+			inner += `"$type": ${PURE} v.literal(${lit(toLexUri(path))}),`;
 			break;
 		}
 	}
@@ -547,7 +574,7 @@ const generateObject = (
 		const optional = !required.has(prop) && !('default' in propSpec);
 		const nulled = nullable.has(prop);
 
-		let call = generateType(imports, defUri, propSpec, lazy);
+		let call = generateType(imports, path, propSpec, lazy);
 
 		if (nulled) {
 			call = `${PURE} v.nullable(${call})`;
@@ -678,62 +705,50 @@ const generateJsdocField = (spec: LexUserType | LexRefVariant | LexUnknown) => {
 	return res;
 };
 
-const generateType = (imports: ImportSet, defUri: string, spec: LexDefinableField, lazy = false): string => {
+const generateType = (imports: ImportSet, path: LexPath, spec: LexDefinableField, lazy = false): string => {
 	switch (spec.type) {
 		// LexRefVariant
 		case 'ref': {
-			const ref = spec.ref;
+			const refPath = resolvePath(path, spec.ref);
 
-			if (ref.startsWith('#')) {
-				const id = ref.slice(1);
-
-				return `${toCamelCase(id)}Schema`;
-			} else {
-				const [ns, id = 'main'] = ref.split('#');
-				if (ns === stripHash(defUri)) {
-					return `${toCamelCase(id)}Schema`;
-				}
-
-				imports.add(ns);
-
-				return `${toTitleCase(ns)}.${toCamelCase(id)}Schema`;
+			if (refPath.nsid === path.nsid) {
+				return `${toCamelCase(refPath.defId)}Schema`;
 			}
+
+			imports.add(refPath.nsid);
+			return `${toTitleCase(refPath.nsid)}.${toCamelCase(refPath.defId)}Schema`;
 		}
 		case 'union': {
-			const normalizedRefs = spec.refs
-				.map((ref): string => {
-					if (ref.startsWith('#')) {
-						return ref;
-					}
-
-					const [ns, id = 'main'] = ref.split('#');
-					if (ns === stripHash(defUri)) {
-						return `#${id}`;
-					}
-
-					return `${ns}#${id}`;
+			const refs = spec.refs
+				.map((ref) => {
+					const refPath = resolvePath(path, ref);
+					return { path: refPath, uri: toLexUri(refPath) };
 				})
-				.sort();
+				.sort((a, b) => {
+					if (a.uri < b.uri) {
+						return -1;
+					}
+					if (a.uri > b.uri) {
+						return 1;
+					}
 
-			const refs = normalizedRefs.map((ref): string => {
-				if (ref.startsWith('#')) {
-					const id = ref.slice(1);
+					return 0;
+				})
+				.map(({ path: refPath }): string => {
+					if (refPath.nsid === path.nsid) {
+						return `${toCamelCase(refPath.defId)}Schema`;
+					}
 
-					return `${toCamelCase(id)}Schema`;
-				} else {
-					const [ns, id = 'main'] = ref.split('#');
-					imports.add(ns);
-
-					return `${toTitleCase(ns)}.${toCamelCase(id)}Schema`;
-				}
-			});
+					imports.add(refPath.nsid);
+					return `${toTitleCase(refPath.nsid)}.${toCamelCase(refPath.defId)}Schema`;
+				});
 
 			return `${PURE} v.variant([${refs.join(', ')}]${spec.closed ? `, true` : ``})`;
 		}
 
 		// LexArray
 		case 'array': {
-			let item = generateType(imports, defUri, spec.items);
+			let item = generateType(imports, path, spec.items);
 			if (!lazy && (spec.items.type === 'ref' || spec.items.type === 'union')) {
 				item = `(() => { return ${item}; })`;
 			}
@@ -922,19 +937,6 @@ const generateType = (imports: ImportSet, defUri: string, spec: LexDefinableFiel
 const isRefVariant = (spec: LexDefinableField): spec is LexRefVariant => {
 	const type = spec.type;
 	return type === 'ref' || type === 'union';
-};
-
-const stripHash = (defUri: string): string => {
-	const index = defUri.indexOf('#');
-	if (index === -1) {
-		return defUri;
-	}
-
-	return defUri.slice(0, index);
-};
-
-const stripMainHash = (defUri: string): string => {
-	return defUri.endsWith('#main') ? defUri.slice(0, -'#main'.length) : defUri;
 };
 
 const toTitleCase = (v: string): string => {
