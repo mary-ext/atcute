@@ -5,7 +5,8 @@ import * as url from 'node:url';
 import * as v from '@badrap/valita';
 import pc from 'picocolors';
 
-import { isNsid } from '@atcute/lexicons/syntax';
+import { isAtprotoDid } from '@atcute/identity';
+import { isHandle, isNsid } from '@atcute/lexicons/syntax';
 
 import type { ImportMapping } from './codegen.js';
 
@@ -32,7 +33,9 @@ const atprotoNsidsSourceConfigSchema = v.object({
 const atprotoAuthoritySourceConfigSchema = v.object({
 	type: v.literal('atproto'),
 	mode: v.literal('authority'),
-	authority: v.string().assert((value) => value.length > 0, `must not be empty`),
+	authority: v
+		.string()
+		.assert((value) => isHandle(value) || isAtprotoDid(value), `must a valid at-identifier`),
 	pattern: v
 		.array(
 			v
@@ -56,9 +59,7 @@ const pullConfigSchema = v.object({
 
 const exportConfigSchema = v.object({
 	outdir: v.string().assert((value) => value.length > 0, `must not be empty`),
-	files: v
-		.array(v.string().assert((value) => value.length > 0, `must not be empty`))
-		.optional(),
+	files: v.array(v.string().assert((value) => value.length > 0, `must not be empty`)).optional(),
 	clean: v.boolean().optional(),
 });
 

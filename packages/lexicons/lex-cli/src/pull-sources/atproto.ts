@@ -1,4 +1,3 @@
-import { refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 import { getPdsEndpoint, isAtprotoDid } from '@atcute/identity';
 import type { DidDocumentResolver } from '@atcute/identity-resolver';
 import {
@@ -9,11 +8,15 @@ import {
 	WebDidDocumentResolver,
 	WellKnownHandleResolver,
 } from '@atcute/identity-resolver';
+import { refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
+import { DohJsonLexiconAuthorityResolver, LexiconSchemaResolver } from '@atcute/lexicon-resolver';
 import {
-	DohJsonLexiconAuthorityResolver,
-	LexiconSchemaResolver,
-} from '@atcute/lexicon-resolver';
-import { isHandle, type AtprotoDid, type Nsid } from '@atcute/lexicons/syntax';
+	isHandle,
+	isNsid,
+	parseCanonicalResourceUri,
+	type AtprotoDid,
+	type Nsid,
+} from '@atcute/lexicons/syntax';
 import pc from 'picocolors';
 
 import type { AtprotoSourceConfig } from '../config.js';
@@ -29,7 +32,7 @@ import type { PullResult, SourceLocation } from './types.js';
 const discoverLexiconsForAuthority = async (
 	authority: AtprotoDid,
 	didResolver: DidDocumentResolver,
-): Promise<string[]> => {
+): Promise<Nsid[]> => {
 	// resolve DID to get PDS endpoint
 	const didDocument = await didResolver.resolve(authority);
 	const pdsEndpoint = getPdsEndpoint(didDocument);
@@ -39,7 +42,7 @@ const discoverLexiconsForAuthority = async (
 	}
 
 	// call com.atproto.repo.listRecords to get all lexicon schema records
-	const nsids: string[] = [];
+	const nsids: Nsid[] = [];
 	let cursor: string | undefined;
 
 	do {
@@ -66,11 +69,17 @@ const discoverLexiconsForAuthority = async (
 
 		// extract NSIDs from record keys (the rkey in at://did/collection/rkey)
 		for (const record of data.records) {
-			const parts = record.uri.split('/');
-			const rkey = parts[parts.length - 1];
-			if (rkey) {
-				nsids.push(rkey);
+			const r = parseCanonicalResourceUri(record.uri);
+			if (!r.ok) {
+				continue;
 			}
+
+			const nsid = r.value.rkey;
+			if (!isNsid(nsid)) {
+				continue;
+			}
+
+			nsids.push(nsid);
 		}
 
 		cursor = data.cursor;
@@ -114,31 +123,34 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 	const pulled = new Map<string, { nsid: string; doc: LexiconDoc; location: SourceLocation }>();
 	const errors: Array<{ nsid: string; error: Error }> = [];
 
-	let nsidsToFetch: string[];
+	let nsids: Nsid[];
 	let authorityDid: AtprotoDid | null = null;
 	let sourceDesc: string;
+	let sourceName: string | null = null;
 
-	// determine which NSIDs to fetch
 	if (source.mode === 'nsids') {
-		// mode 1: explicit NSID list
-		nsidsToFetch = source.nsids;
-		sourceDesc = `atproto (${nsidsToFetch.length} nsids)`;
+		nsids = source.nsids;
+		sourceDesc = `atproto (${nsids.length} nsids)`;
 	} else {
 		// mode 2: authority-based
 		// step 2a: resolve authority (handle -> DID if needed)
 		let resolvedDid: AtprotoDid;
+		const handle = isHandle(source.authority) ? source.authority : null;
+
 		try {
 			if (isAtprotoDid(source.authority)) {
 				resolvedDid = source.authority;
-			} else if (isHandle(source.authority)) {
-				resolvedDid = await handleResolver.resolve(source.authority);
+			} else if (handle) {
+				resolvedDid = await handleResolver.resolve(handle);
 			} else {
 				console.error(pc.bold(pc.red(`invalid authority: ${source.authority}`)));
 				console.error(`must be a valid DID or handle`);
 				process.exit(1);
 			}
+
 			authorityDid = resolvedDid;
 			sourceDesc = `atproto (authority: ${authorityDid})`;
+			sourceName = handle ?? authorityDid;
 		} catch (err) {
 			console.error(pc.bold(pc.red(`failed to resolve authority: ${source.authority}`)));
 			console.error(err);
@@ -147,16 +159,16 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 
 		// step 2b: discover all lexicons for this authority
 		try {
-			nsidsToFetch = await discoverLexiconsForAuthority(authorityDid, didResolver);
+			nsids = await discoverLexiconsForAuthority(authorityDid, didResolver);
 		} catch (err) {
-			console.error(pc.bold(pc.red(`failed to discover lexicons for authority: ${authorityDid}`)));
+			console.error(pc.bold(pc.red(`failed to discover lexicons for ${sourceName}`)));
 			console.error(err);
 			process.exit(1);
 		}
 
 		// step 2c: filter by pattern if specified
 		if (source.pattern) {
-			nsidsToFetch = nsidsToFetch.filter((nsid) => {
+			nsids = nsids.filter((nsid) => {
 				return source.pattern!.some((pattern) => {
 					if (pattern.endsWith('.*')) {
 						const prefix = pattern.slice(0, -2);
@@ -167,13 +179,14 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 			});
 		}
 
-		if (nsidsToFetch.length === 0) {
-			console.warn(pc.yellow(`warning: no lexicons found for authority ${authorityDid}`));
+		if (nsids.length === 0) {
+			console.warn(pc.yellow(`warning: no lexicons found for ${sourceName}`));
 		}
 	}
 
 	// fetch each NSID
-	for (const nsid of nsidsToFetch) {
+	let fetchedCount = 0;
+	for (const nsid of nsids) {
 		try {
 			// step 1: resolve authority from NSID (DNS)
 			const resolvedAuthority = await authorityResolver.resolve(nsid as Nsid);
@@ -207,6 +220,8 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 				doc: resolved.schema,
 				location,
 			});
+			fetchedCount++;
+			console.log(`${pc.green('+')} ${nsid}`);
 		} catch (err) {
 			// best-effort: collect errors but continue
 			errors.push({ nsid, error: err as Error });
@@ -220,6 +235,9 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 			console.warn(`  - ${nsid}: ${error.message}`);
 		}
 	}
+
+	const suffix = sourceName ? ` from ${pc.cyan(sourceName)}` : '';
+	console.log(`pulled ${pc.cyan(fetchedCount.toString())} lexicons${suffix}`);
 
 	return { pulled };
 };
