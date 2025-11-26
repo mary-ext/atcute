@@ -1,0 +1,38 @@
+{
+	"id": "blog.pckt.block.orderedList",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["content"],
+			"properties": {
+				"attrs": {
+					"ref": "#orderedListAttrs",
+					"type": "ref",
+					"description": "Optional attributes for the ordered list"
+				},
+				"content": {
+					"type": "array",
+					"items": {
+						"ref": "blog.pckt.block.listItem",
+						"type": "ref"
+					},
+					"description": "Array of list items"
+				}
+			}
+		},
+		"orderedListAttrs": {
+			"type": "object",
+			"properties": {
+				"start": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "Starting number for the ordered list"
+				}
+			},
+			"description": "Ordered list attributes"
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Ordered numbered list. Each item can contain rich content including nested lists. Numbering can start at any positive integer."
+}

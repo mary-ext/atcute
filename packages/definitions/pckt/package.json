@@ -1,0 +1,47 @@
+{
+	"type": "module",
+	"name": "@atcute/pckt",
+	"version": "0.1.0",
+	"description": "pckt (blog.pckt.*) schema definitions",
+	"keywords": [
+		"atcute",
+		"atproto",
+		"pckt"
+	],
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/definitions/pckt"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js",
+		"./types/*": "./dist/lexicons/types/blog/pckt/*.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"pull": "lex-cli pull",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/atproto": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/lex-cli": "workspace:^"
+	},
+	"atcute:lexicons": {
+		"mappings": {
+			"blog.pckt.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
+	}
+}

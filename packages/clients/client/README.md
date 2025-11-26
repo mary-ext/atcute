@@ -118,5 +118,6 @@ installing one of these definition packages.
 - [`@atcute/microcosm`](../../definitions/microcosm): `blue.microcosm.*` and `com.bad-example.*`
   schema definitions
 - [`@atcute/ozone`](../../definitions/ozone): `tools.ozone.*` schema definitions
+- [`@atcute/pckt`](../../definitions/pckt): `blog.pckt.*` schema definitions
 - [`@atcute/tangled`](../../definitions/tangled): `sh.tangled.*` schema definitions
 - [`@atcute/whitewind`](../../definitions/whitewind): `com.whtwnd.*` schema definitions

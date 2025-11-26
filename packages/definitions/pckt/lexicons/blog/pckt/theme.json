@@ -1,0 +1,62 @@
+{
+	"id": "blog.pckt.theme",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["light", "dark"],
+			"properties": {
+				"dark": {
+					"ref": "#palette",
+					"type": "ref",
+					"description": "Dark mode color palette"
+				},
+				"font": {
+					"type": "string",
+					"maxLength": 100,
+					"description": "Font family name (optional)"
+				},
+				"light": {
+					"ref": "#palette",
+					"type": "ref",
+					"description": "Light mode color palette"
+				}
+			},
+			"description": "Theme configuration for a blog publication"
+		},
+		"palette": {
+			"type": "object",
+			"required": ["link", "text", "accent", "background", "surfaceHover"],
+			"properties": {
+				"link": {
+					"type": "string",
+					"maxLength": 7,
+					"description": "Link color (hex value)"
+				},
+				"text": {
+					"type": "string",
+					"maxLength": 7,
+					"description": "Primary text color (hex value)"
+				},
+				"accent": {
+					"type": "string",
+					"maxLength": 7,
+					"description": "Accent color (hex value)"
+				},
+				"background": {
+					"type": "string",
+					"maxLength": 7,
+					"description": "Background color (hex value)"
+				},
+				"surfaceHover": {
+					"type": "string",
+					"maxLength": 7,
+					"description": "Surface hover color (hex value)"
+				}
+			},
+			"description": "Color palette with CSS hex values"
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Theme record for blog publications with light and dark mode color schemes."
+}

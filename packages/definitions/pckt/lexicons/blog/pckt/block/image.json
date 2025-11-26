@@ -1,0 +1,76 @@
+{
+	"id": "blog.pckt.block.image",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["attrs"],
+			"properties": {
+				"attrs": {
+					"ref": "#imageAttrs",
+					"type": "ref",
+					"description": "Image attributes"
+				}
+			}
+		},
+		"imageAttrs": {
+			"type": "object",
+			"required": ["src"],
+			"properties": {
+				"alt": {
+					"type": "string",
+					"maxLength": 1000,
+					"description": "Alternative text description for accessibility and screen readers",
+					"maxGraphemes": 300
+				},
+				"src": {
+					"type": "string",
+					"maxLength": 2000,
+					"description": "Image source URL or blob reference (blob:CID format for AT Protocol blobs)"
+				},
+				"blob": {
+					"type": "blob",
+					"accept": ["image/*"],
+					"maxSize": 10000000,
+					"description": "AT Protocol blob reference (10MB max). Used when image is uploaded to PDS."
+				},
+				"align": {
+					"enum": ["left", "center", "right"],
+					"type": "string",
+					"description": "Horizontal alignment of the image within its container"
+				},
+				"title": {
+					"type": "string",
+					"maxLength": 500,
+					"description": "Optional image title displayed on hover",
+					"maxGraphemes": 200
+				},
+				"aspectRatio": {
+					"ref": "#aspectRatio",
+					"type": "ref",
+					"description": "Image aspect ratio for proper layout before loading"
+				}
+			},
+			"description": "Image attributes"
+		},
+		"aspectRatio": {
+			"type": "object",
+			"required": ["width", "height"],
+			"properties": {
+				"width": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "Width component of aspect ratio"
+				},
+				"height": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "Height component of aspect ratio"
+				}
+			},
+			"description": "Image aspect ratio represented as width and height dimensions"
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "An image block for displaying visual content. Supports both external URLs and AT Protocol blob storage with automatic aspect ratio preservation."
+}

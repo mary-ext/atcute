@@ -1,0 +1,41 @@
+{
+	"id": "blog.pckt.block.heading",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["attrs"],
+			"properties": {
+				"attrs": {
+					"ref": "#headingAttrs",
+					"type": "ref",
+					"description": "Heading attributes"
+				},
+				"content": {
+					"type": "array",
+					"items": {
+						"refs": ["blog.pckt.block.text", "blog.pckt.block.hardBreak"],
+						"type": "union",
+						"closed": false
+					},
+					"description": "Inline content of the heading (text with optional formatting)"
+				}
+			}
+		},
+		"headingAttrs": {
+			"type": "object",
+			"required": ["level"],
+			"properties": {
+				"level": {
+					"type": "integer",
+					"maximum": 6,
+					"minimum": 1,
+					"description": "Heading level from 1 (most important) to 6 (least important)"
+				}
+			},
+			"description": "Heading attributes"
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "A heading block with hierarchical levels (H1-H6). Headings provide document structure and semantic meaning for accessibility and navigation."
+}

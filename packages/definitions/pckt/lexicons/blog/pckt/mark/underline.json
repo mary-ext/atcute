@@ -1,0 +1,11 @@
+{
+	"id": "blog.pckt.mark.underline",
+	"defs": {
+		"main": {
+			"type": "object"
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Underline text formatting. Adds a line beneath the text, typically used for emphasis or to indicate hyperlinks."
+}

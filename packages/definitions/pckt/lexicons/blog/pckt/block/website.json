@@ -1,0 +1,32 @@
+{
+	"id": "blog.pckt.block.website",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["src"],
+			"properties": {
+				"src": {
+					"type": "string",
+					"format": "uri",
+					"description": "The URL of the website"
+				},
+				"title": {
+					"type": "string",
+					"description": "The title of the website or page"
+				},
+				"description": {
+					"type": "string",
+					"description": "A brief description of the website or page"
+				},
+				"previewImage": {
+					"type": "string",
+					"format": "uri",
+					"description": "URL of the preview image"
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "A website link preview with title, description, and optional preview image"
+}

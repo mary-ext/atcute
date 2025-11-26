@@ -1,0 +1,22 @@
+{
+	"id": "blog.pckt.block.bulletList",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["content"],
+			"properties": {
+				"content": {
+					"type": "array",
+					"items": {
+						"ref": "blog.pckt.block.listItem",
+						"type": "ref"
+					},
+					"description": "Array of list items"
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Unordered list with bullet points. Each item can contain rich content including nested lists."
+}

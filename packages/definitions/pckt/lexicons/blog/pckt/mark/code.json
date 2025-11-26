@@ -1,0 +1,11 @@
+{
+	"id": "blog.pckt.mark.code",
+	"defs": {
+		"main": {
+			"type": "object"
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Inline code formatting. Renders text in a monospace font with distinct styling, used for code snippets within regular text."
+}

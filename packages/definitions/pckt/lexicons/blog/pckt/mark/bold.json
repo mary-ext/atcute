@@ -1,0 +1,11 @@
+{
+	"id": "blog.pckt.mark.bold",
+	"defs": {
+		"main": {
+			"type": "object"
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Bold text formatting. Renders text with a heavier weight, typically used for emphasis or to highlight important content."
+}

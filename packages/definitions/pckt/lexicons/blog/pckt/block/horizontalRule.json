@@ -1,0 +1,11 @@
+{
+	"id": "blog.pckt.block.horizontalRule",
+	"defs": {
+		"main": {
+			"type": "object"
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Horizontal line that visually separates sections of content. Creates a thematic break between blocks."
+}

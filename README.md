@@ -55,6 +55,7 @@ featuring:
 | [`lexicon-community`](./packages/definitions/lexicon-community): `community.lexicon.*` schema definitions              |
 | [`microcosm`](./packages/definitions/microcosm): `blue.microcosm.*` and `com.bad-example.*` schema definitions         |
 | [`ozone`](./packages/definitions/ozone): `tools.ozone.*` schema definitions                                            |
+| [`pckt`](./packages/definitions/pckt): `blog.pckt.*` schema definitions                                                |
 | [`tangled`](./packages/definitions/tangled): `sh.tangled.*` schema definitions                                         |
 | [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` schema definitions                                     |
 | **Identity packages**                                                                                                  |

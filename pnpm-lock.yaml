@@ -321,6 +321,19 @@ importers:
         specifier: 'file:'
         version: file:packages/definitions/ozone
 
+  packages/definitions/pckt:
+    dependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../atproto
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+    devDependencies:
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../../lexicons/lex-cli
+
   packages/definitions/tangled:
     dependencies:
       '@atcute/atproto':

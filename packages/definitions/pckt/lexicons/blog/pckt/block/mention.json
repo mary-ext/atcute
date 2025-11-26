@@ -1,0 +1,19 @@
+{
+	"id": "blog.pckt.block.mention",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["did"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did",
+					"description": "The DID of the mentioned user (e.g., did:plc:abc123xyz). This is the canonical reference that persists even if the user changes their handle, following app.bsky.richtext.facet#mention"
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "An inline mention node that references an ATProto user, following the app.bsky.richtext.facet#mention structure. Mentions create interactive references to Bluesky users within text content."
+}
