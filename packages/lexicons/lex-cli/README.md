@@ -25,14 +25,19 @@ npm exec lex-cli generate
 
 ## pulling lexicons
 
-configure sources to be pulled locally before code generation. pulled files are written using their
-nsids (e.g., `app.bsky.feed.post` becomes `app/bsky/feed/post.json`).
+you can pull lexicon files from other sources.
+
+### git sources
+
+pull lexicons from git repositories using sparse checkout:
 
 ```ts
 // file: lex.config.js
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
 	pull: {
 		outdir: 'lexicons/',
 		clean: true,
@@ -45,10 +50,37 @@ export default defineLexiconConfig({
 			},
 		],
 	},
-	files: ['lexicons/**/*.json'],
-	outdir: 'src/lexicons/',
 });
 ```
+
+### atproto sources
+
+pull lexicons directly from the AT Protocol network.
+
+```ts
+export default defineLexiconConfig({
+	files: ['lexicons/**/*.json'],
+	outdir: 'src/lexicons/',
+	pull: {
+		outdir: 'lexicons/',
+		sources: [
+			{
+				type: 'atproto',
+				mode: 'nsids',
+				nsids: ['app.bsky.feed.post', 'app.bsky.actor.profile'],
+			},
+			{
+				type: 'atproto',
+				mode: 'authority',
+				authority: 'atproto-lexicons.bsky.social',
+				pattern: ['com.atproto.*'],
+			},
+		],
+	},
+});
+```
+
+### running the pull command
 
 pull the lexicons to disk, then generate types from them:
 

@@ -1,10 +1,18 @@
+import * as fs from 'node:fs/promises';
+import * as path from 'node:path';
+
+import { lexiconDoc, refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 import { merge, object } from '@optique/core/constructs';
 import { message } from '@optique/core/message';
 import { type InferValue } from '@optique/core/parser';
 import { command, constant } from '@optique/core/primitives';
+import pc from 'picocolors';
+import prettier from 'prettier';
 
-import { loadConfig } from '../config.js';
-import { runPull as runPullImpl } from '../pull.js';
+import { loadConfig, type NormalizedConfig, type PullConfig, type SourceConfig } from '../config.js';
+import { pullAtprotoSource } from '../pull-sources/atproto.js';
+import { pullGitSource } from '../pull-sources/git.js';
+import type { PullResult, PulledLexicon, SourceLocation } from '../pull-sources/types.js';
 import { sharedOptions } from '../shared-options.js';
 
 export const pullCommandSchema = command(
@@ -23,11 +31,201 @@ export const pullCommandSchema = command(
 
 export type PullCommand = InferValue<typeof pullCommandSchema>;
 
+interface SourceRevision {
+	source: SourceConfig;
+	rev?: string;
+}
+
+const ensurePullConfig = (config: NormalizedConfig): PullConfig => {
+	if (!config.pull) {
+		console.error(pc.bold(pc.red(`pull configuration missing`)));
+		process.exit(1);
+	}
+
+	return config.pull;
+};
+
+const parseLexiconFile = async (loc: SourceLocation): Promise<LexiconDoc> => {
+	let source: string;
+
+	try {
+		source = await fs.readFile(loc.absolutePath, 'utf8');
+	} catch (err) {
+		console.error(
+			pc.bold(pc.red(`file read error for ${loc.relativePath} when pulling ${loc.sourceDescription}`)),
+		);
+		console.error(`found in ${loc.absolutePath}`);
+		console.error(err);
+		process.exit(1);
+	}
+
+	let json: unknown;
+	try {
+		json = JSON.parse(source);
+	} catch (err) {
+		console.error(
+			pc.bold(pc.red(`json parse error in ${loc.relativePath} when pulling ${loc.sourceDescription}`)),
+		);
+		console.error(`found in ${loc.absolutePath}`);
+		console.error(err);
+		process.exit(1);
+	}
+
+	const result = lexiconDoc.try(json, { mode: 'passthrough' });
+	if (!result.ok) {
+		console.error(
+			pc.bold(
+				pc.red(`schema validation failed for ${loc.relativePath} when pulling ${loc.sourceDescription}`),
+			),
+		);
+		console.error(`found in ${loc.absolutePath}`);
+		console.error(result.message);
+
+		for (const issue of result.issues) {
+			console.log(`- ${issue.code} at .${issue.path.join('.')}`);
+		}
+
+		process.exit(1);
+	}
+
+	const issues = refineLexiconDoc(result.value, true);
+	if (issues.length > 0) {
+		console.error(
+			pc.bold(pc.red(`lint validation failed for ${loc.relativePath} when pulling ${loc.sourceDescription}`)),
+		);
+		console.error(`found in ${loc.absolutePath}`);
+
+		for (const issue of issues) {
+			console.log(`- ${issue.message} at .${issue.path.join('.')}`);
+		}
+
+		process.exit(1);
+	}
+
+	return result.value;
+};
+
+const writeLexicon = async (
+	outdir: string,
+	nsid: string,
+	doc: LexiconDoc,
+	prettierConfig: prettier.Options | null,
+): Promise<void> => {
+	const nsidPath = nsid.replaceAll('.', '/');
+	const target = path.join(outdir, `${nsidPath}.json`);
+	const dirname = path.dirname(target);
+
+	const code = await prettier.format(JSON.stringify(doc, null, 2), {
+		...(prettierConfig ?? {}),
+		parser: 'json',
+	});
+
+	await fs.mkdir(dirname, { recursive: true });
+	await fs.writeFile(target, code);
+};
+
+const pullSource = async (source: SourceConfig): Promise<PullResult> => {
+	switch (source.type) {
+		case 'git': {
+			return pullGitSource(source, parseLexiconFile);
+		}
+		case 'atproto': {
+			return pullAtprotoSource(source);
+		}
+	}
+};
+
+const writeSourceReadme = async (
+	outdir: string,
+	revisions: SourceRevision[],
+	prettierConfig: prettier.Options | null,
+): Promise<void> => {
+	const lines = [
+		'# lexicon sources',
+		'',
+		'this directory contains lexicon documents pulled from the following sources:',
+		'',
+	];
+
+	for (const { source, rev } of revisions) {
+		switch (source.type) {
+			case 'git': {
+				lines.push(`- ${source.remote}${source.ref ? ` (ref: ${source.ref})` : ``}`);
+				if (rev) {
+					lines.push(`  - commit: ${rev}`);
+				}
+				break;
+			}
+			case 'atproto': {
+				if (source.mode === 'nsids') {
+					lines.push(`- atproto (nsids: ${source.nsids.join(', ')})`);
+				} else {
+					lines.push(
+						`- atproto (authority: ${source.authority}${source.pattern ? `, pattern: ${source.pattern.join(', ')}` : ''})`,
+					);
+				}
+				break;
+			}
+		}
+	}
+
+	lines.push('');
+
+	const content = lines.join('\n');
+	const formatted = await prettier.format(content, {
+		...(prettierConfig ?? {}),
+		parser: 'markdown',
+	});
+
+	await fs.writeFile(path.join(outdir, 'README.md'), formatted);
+};
+
 /**
  * runs the pull command to fetch lexicon documents from configured sources
  * @param args parsed command arguments
  */
 export const runPull = async (args: PullCommand): Promise<void> => {
 	const config = await loadConfig(args.config);
-	await runPullImpl(config);
+	const pullConfig = ensurePullConfig(config);
+
+	const outdir = path.resolve(config.root, pullConfig.outdir);
+	const prettierConfig = await prettier.resolveConfig(config.root, { editorconfig: true });
+
+	const seen = new Map<string, SourceLocation>();
+	const collected: PulledLexicon[] = [];
+	const sourceRevisions: SourceRevision[] = [];
+
+	for (const source of pullConfig.sources) {
+		const result = await pullSource(source);
+
+		sourceRevisions.push({ source, rev: result.rev });
+
+		for (const [nsid, entry] of result.pulled) {
+			const existing = seen.get(nsid);
+
+			if (existing) {
+				console.error(pc.bold(pc.red(`duplicate lexicon "${nsid}"`)));
+				console.error(`- found ${entry.location.relativePath} from ${entry.location.sourceDescription}`);
+				console.error(`  at ${entry.location.absolutePath}`);
+				console.error(`- already found ${existing.relativePath} from ${existing.sourceDescription}`);
+				console.error(`  at ${existing.absolutePath}`);
+				process.exit(1);
+			}
+
+			seen.set(nsid, entry.location);
+			collected.push(entry);
+		}
+	}
+
+	if (pullConfig.clean) {
+		await fs.rm(outdir, { recursive: true, force: true });
+	}
+
+	await fs.mkdir(outdir, { recursive: true });
+
+	for (const entry of collected) {
+		await writeLexicon(outdir, entry.nsid, entry.doc, prettierConfig);
+	}
+
+	await writeSourceReadme(outdir, sourceRevisions, prettierConfig);
 };

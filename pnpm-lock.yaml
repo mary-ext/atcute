@@ -474,9 +474,21 @@ importers:
 
   packages/lexicons/lex-cli:
     dependencies:
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../../identity/identity
+      '@atcute/identity-resolver':
+        specifier: workspace:^
+        version: link:../../identity/identity-resolver
       '@atcute/lexicon-doc':
         specifier: workspace:^
         version: link:../lexicon-doc
+      '@atcute/lexicon-resolver':
+        specifier: workspace:^
+        version: link:../lexicon-resolver
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../lexicons
       '@badrap/valita':
         specifier: ^0.4.6
         version: 0.4.6
@@ -493,9 +505,6 @@ importers:
         specifier: ^3.6.2
         version: 3.6.2
     devDependencies:
-      '@atcute/lexicons':
-        specifier: workspace:^
-        version: link:../lexicons
       '@types/node':
         specifier: ^22.19.1
         version: 22.19.1

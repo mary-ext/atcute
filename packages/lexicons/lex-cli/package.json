@@ -26,7 +26,11 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
+		"@atcute/identity": "workspace:^",
+		"@atcute/identity-resolver": "workspace:^",
 		"@atcute/lexicon-doc": "workspace:^",
+		"@atcute/lexicon-resolver": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
 		"@badrap/valita": "^0.4.6",
 		"@optique/core": "^0.6.3",
 		"@optique/run": "^0.6.3",
@@ -34,7 +38,6 @@
 		"prettier": "^3.6.2"
 	},
 	"devDependencies": {
-		"@atcute/lexicons": "workspace:^",
 		"@types/node": "^22.19.1",
 		"tschema": "^3.2.0"
 	}

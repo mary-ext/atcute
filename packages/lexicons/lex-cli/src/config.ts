@@ -21,7 +21,30 @@ const gitSourceConfigSchema = v.object({
 		.assert((value) => value.length > 0, `must include at least one glob pattern`),
 });
 
-const sourceConfigSchema = v.union(gitSourceConfigSchema);
+const atprotoNsidsSourceConfigSchema = v.object({
+	type: v.literal('atproto'),
+	mode: v.literal('nsids'),
+	nsids: v
+		.array(v.string().assert((value) => isNsid(value), `must be valid nsid`))
+		.assert((value) => value.length > 0, `must include at least one nsid`),
+});
+
+const atprotoAuthoritySourceConfigSchema = v.object({
+	type: v.literal('atproto'),
+	mode: v.literal('authority'),
+	authority: v.string().assert((value) => value.length > 0, `must not be empty`),
+	pattern: v
+		.array(
+			v
+				.string()
+				.assert((value) => isValidLexiconPattern(value), `must be valid nsid or pattern ending with .*`),
+		)
+		.optional(),
+});
+
+const atprotoSourceConfigSchema = v.union(atprotoNsidsSourceConfigSchema, atprotoAuthoritySourceConfigSchema);
+
+const sourceConfigSchema = v.union(gitSourceConfigSchema, atprotoSourceConfigSchema);
 
 const pullConfigSchema = v.object({
 	outdir: v.string().assert((value) => value.length > 0, `must not be empty`),
@@ -32,6 +55,9 @@ const pullConfigSchema = v.object({
 });
 
 export type GitSourceConfig = v.Infer<typeof gitSourceConfigSchema>;
+export type AtprotoNsidsSourceConfig = v.Infer<typeof atprotoNsidsSourceConfigSchema>;
+export type AtprotoAuthoritySourceConfig = v.Infer<typeof atprotoAuthoritySourceConfigSchema>;
+export type AtprotoSourceConfig = v.Infer<typeof atprotoSourceConfigSchema>;
 export type SourceConfig = v.Infer<typeof sourceConfigSchema>;
 export type PullConfig = v.Infer<typeof pullConfigSchema>;
 
