@@ -62,3 +62,5 @@ the packages are organized into categories under `packages/`:
   repositories or other reference materials that can help inform implementation decisions
 - you are encouraged to ask questions when uncertain about a given plan or requirement, there is no
   penalty and avoiding assumptions is important than seeming knowledgeable
+- during plan mode, discuss the plans before finalizing/exiting plan mode to allow for additional
+  context or follow-up questions to be provided
