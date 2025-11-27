@@ -64,7 +64,7 @@ export class LexiconSchemaResolver {
 			});
 
 			if (!response.ok) {
-				throw new FailedResponseError(response.status, `got http ${response.status}`);
+				throw new FailedResponseError(response);
 			}
 
 			carBytes = await response.bytes();
