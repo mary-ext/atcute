@@ -115,7 +115,9 @@ const loadModuleBuilder = async (absolutePath: string, relativePath: string): Pr
 
 	const defaultExport = (mod as any)?.default;
 	if (!isLexDocumentBuilder(defaultExport)) {
-		console.error(pc.bold(pc.red(`module "${relativePath}" default export is not a valid LexDocumentBuilder`)));
+		console.error(
+			pc.bold(pc.red(`module "${relativePath}" default export is not a valid LexDocumentBuilder`)),
+		);
 		console.error(`expected default export to be a LexDocumentBuilder (object with 'id' and 'defs')`);
 		process.exit(1);
 	}

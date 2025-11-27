@@ -25,9 +25,18 @@ export default document({
 			description: 'count many-to-many relationships with secondary link paths',
 			parameters: params({
 				properties: {
-					subject: required(string({ format: 'uri', description: 'the primary target being linked to (at-uri, did, or uri)' })),
+					subject: required(
+						string({
+							format: 'uri',
+							description: 'the primary target being linked to (at-uri, did, or uri)',
+						}),
+					),
 					source: required(string({ description: 'collection and path specification for the primary link' })),
-					pathToOther: required(string({ description: 'path to the secondary link in the many-to-many record (e.g., \'otherThing.uri\')' })),
+					pathToOther: required(
+						string({
+							description: "path to the secondary link in the many-to-many record (e.g., 'otherThing.uri')",
+						}),
+					),
 					did: array({
 						description: 'filter links to those from specific users',
 						items: string({ format: 'did' }),
