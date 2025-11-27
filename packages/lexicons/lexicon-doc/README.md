@@ -97,3 +97,32 @@ validator.parse({
 	},
 });
 ```
+
+## JSON schema
+
+this package also provides JSON schemas for authoring lexicon documents, add a `$schema` property to
+your document:
+
+```json
+{
+	"$schema": "https://unpkg.com/@atcute/lexicon-doc/schema/lexicon-doc.schema.json",
+	"lexicon": 1,
+	"id": "com.example.link",
+	"defs": {
+		"main": {
+			"type": "record",
+			"description": "a link submission",
+			"key": "tid",
+			"record": {
+				"type": "object",
+				"required": ["url", "createdAt"],
+				"properties": {
+					"title": { "type": "string", "maxLength": 300 },
+					"url": { "type": "string", "format": "uri" },
+					"createdAt": { "type": "string", "format": "datetime" }
+				}
+			}
+		}
+	}
+}
+```
