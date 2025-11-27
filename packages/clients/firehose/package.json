@@ -31,6 +31,6 @@
 		"type-fest": "^4.41.0"
 	},
 	"devDependencies": {
-		"@atcute/atproto": "^3.1.9"
+		"@atcute/atproto": "workspace:^"
 	}
 }
