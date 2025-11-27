@@ -1,15 +1,12 @@
 import { describe, expect, test } from 'vitest';
 
 import {
-	accountPermission,
 	array,
 	blob,
-	blobPermission,
 	boolean,
 	build,
 	bytes,
 	document,
-	identityPermission,
 	integer,
 	nullable,
 	object,
@@ -991,41 +988,6 @@ describe('builder', () => {
 			});
 		});
 
-		describe('blobPermission', () => {
-			test('accepts array of mime types', () => {
-				expect(() => blobPermission({ accept: ['image/png', 'image/jpeg'] })).not.toThrow();
-			});
-
-			test('accepts wildcards in array', () => {
-				expect(() => blobPermission({ accept: ['*/*'] })).not.toThrow();
-				expect(() => blobPermission({ accept: ['image/*'] })).not.toThrow();
-			});
-
-			test('throws on empty array', () => {
-				expect(() => blobPermission({ accept: [] })).toThrow("blob-permission/accept: value can't be empty");
-			});
-		});
-
-		describe('accountPermission', () => {
-			test('accepts valid attributes', () => {
-				expect(() => accountPermission({ attr: 'email' })).not.toThrow();
-				expect(() => accountPermission({ attr: 'repo' })).not.toThrow();
-				expect(() => accountPermission({ attr: 'status' })).not.toThrow();
-			});
-
-			test('accepts actions', () => {
-				expect(() => accountPermission({ attr: 'email', action: 'read' })).not.toThrow();
-				expect(() => accountPermission({ attr: 'email', action: 'manage' })).not.toThrow();
-			});
-		});
-
-		describe('identityPermission', () => {
-			test('accepts valid attributes', () => {
-				expect(() => identityPermission({ attr: 'handle' })).not.toThrow();
-				expect(() => identityPermission({ attr: '*' })).not.toThrow();
-			});
-		});
-
 		describe('permissionSet', () => {
 			test('accepts permissions array', () => {
 				expect(() =>
@@ -1113,85 +1075,6 @@ describe('builder', () => {
 							resource: 'rpc',
 							lxm: ['com.example.method'],
 							aud: 'did:web:example.com#bsky_appview',
-						},
-					],
-				});
-			});
-
-			test('builds blob permission', () => {
-				const docs = build({
-					documents: [
-						document({
-							id: 'com.example.scope',
-							defs: {
-								main: permissionSet({
-									permissions: [blobPermission({ accept: ['image/png', 'image/jpeg'] })],
-								}),
-							},
-						}),
-					],
-				});
-
-				expect(docs['com.example.scope'].defs.main).toEqual({
-					type: 'permission-set',
-					permissions: [
-						{
-							type: 'permission',
-							resource: 'blob',
-							accept: ['image/png', 'image/jpeg'],
-						},
-					],
-				});
-			});
-
-			test('builds account permission', () => {
-				const docs = build({
-					documents: [
-						document({
-							id: 'com.example.scope',
-							defs: {
-								main: permissionSet({
-									permissions: [accountPermission({ attr: 'email', action: 'manage' })],
-								}),
-							},
-						}),
-					],
-				});
-
-				expect(docs['com.example.scope'].defs.main).toEqual({
-					type: 'permission-set',
-					permissions: [
-						{
-							type: 'permission',
-							resource: 'account',
-							attr: 'email',
-							action: 'manage',
-						},
-					],
-				});
-			});
-
-			test('builds identity permission', () => {
-				const docs = build({
-					documents: [
-						document({
-							id: 'com.example.scope',
-							defs: {
-								main: permissionSet({
-									permissions: [identityPermission({ attr: 'handle' })],
-								}),
-							},
-						}),
-					],
-				});
-
-				expect(docs['com.example.scope'].defs.main).toEqual({
-					type: 'permission-set',
-					permissions: [
-						{
-							type: 'permission',
-							resource: 'identity',
-							attr: 'handle',
 						},
 					],
 				});

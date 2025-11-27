@@ -1362,101 +1362,7 @@ export const rpcPermission = (def: Omit<LexRpcPermissionBuilder, 'type'>): LexRp
 	return { ...def, type: 'rpc-permission' };
 };
 
-export type BlobAccept = `${string}/${string}`;
-
-/**
- * builder definition for blob permissions
- */
-export interface LexBlobPermissionBuilder {
-	type: 'blob-permission';
-	/** accepted MIME types */
-	accept: BlobAccept[];
-}
-
-/**
- * builds a blob permission definition
- * @param def permission definition parameters
- * @returns blob permission builder definition
- */
-export const blobPermission = (def: Omit<LexBlobPermissionBuilder, 'type'>): LexBlobPermissionBuilder => {
-	const { accept } = def;
-
-	if (accept.length === 0) {
-		throw new Error(`blob-permission/accept: value can't be empty`);
-	}
-
-	if (accept.includes('*/*')) {
-		if (accept.length > 1) {
-			throw new Error(
-				`blob-permission/accept: no other MIME types can be specified when a wildcard is present`,
-			);
-		}
-	} else {
-		for (let idx = 0, len = accept.length; idx < len; idx++) {
-			const mime = accept[idx];
-
-			if (!MIME_TYPE_RE.test(mime)) {
-				throw new Error(`blob-permission/accept[${idx}]: invalid MIME type (${mime})`);
-			}
-		}
-	}
-
-	return { ...def, type: 'blob-permission' };
-};
-
-export type AccountAction = 'read' | 'manage';
-export type AccountAttribute = 'email' | 'repo' | 'status';
-
-/**
- * builder definition for account permissions
- */
-export interface LexAccountPermissionBuilder {
-	type: 'account-permission';
-	/** targeted account attribute */
-	attr: AccountAttribute;
-	/** permitted action */
-	action?: AccountAction;
-}
-
-/**
- * builds an account permission definition
- * @param def permission definition parameters
- * @returns account permission builder definition
- */
-export const accountPermission = (
-	def: Omit<LexAccountPermissionBuilder, 'type'>,
-): LexAccountPermissionBuilder => {
-	return { ...def, type: 'account-permission' };
-};
-
-export type IdentityAttribute = 'handle' | '*';
-
-/**
- * builder definition for identity permissions
- */
-export interface LexIdentityPermissionBuilder {
-	type: 'identity-permission';
-	/** targeted identity attribute */
-	attr: IdentityAttribute;
-}
-
-/**
- * builds an identity permission definition
- * @param def permission definition parameters
- * @returns identity permission builder definition
- */
-export const identityPermission = (
-	def: Omit<LexIdentityPermissionBuilder, 'type'>,
-): LexIdentityPermissionBuilder => {
-	return { ...def, type: 'identity-permission' };
-};
-
-export type LexPermissionBuilder =
-	| LexRepoPermissionBuilder
-	| LexRpcPermissionBuilder
-	| LexBlobPermissionBuilder
-	| LexAccountPermissionBuilder
-	| LexIdentityPermissionBuilder;
+export type LexPermissionBuilder = LexRepoPermissionBuilder | LexRpcPermissionBuilder;
 
 const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.LexPermission => {
 	switch (def.type) {
@@ -1514,34 +1420,6 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.
 				inheritAud: inheritAud,
 				lxm: builtLxm,
 				resource: 'rpc',
-				type: 'permission',
-			};
-		}
-		case 'blob-permission': {
-			const { accept } = def;
-
-			return {
-				accept: accept,
-				resource: 'blob',
-				type: 'permission',
-			};
-		}
-		case 'account-permission': {
-			const { attr, action } = def;
-
-			return {
-				action: action,
-				attr: attr,
-				resource: 'account',
-				type: 'permission',
-			};
-		}
-		case 'identity-permission': {
-			const { attr } = def;
-
-			return {
-				attr: attr,
-				resource: 'identity',
 				type: 'permission',
 			};
 		}

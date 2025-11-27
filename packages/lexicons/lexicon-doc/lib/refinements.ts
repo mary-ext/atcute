@@ -816,45 +816,11 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 
 			break;
 		}
-		case 'blob': {
-			const { accept } = spec;
-
-			if (!Array.isArray(accept)) {
-				issues.push({
-					message: `accept must be an array`,
-					path: ['accept'],
-				});
-			} else if (accept.length === 0) {
-				issues.push({
-					message: `accept can't be empty`,
-					path: ['accept'],
-				});
-			} else if (accept.includes('*/*')) {
-				if (accept.length > 1) {
-					issues.push({
-						message: `no other MIME types can be specified when a wildcard is present`,
-						path: ['accept'],
-					});
-				}
-			} else {
-				for (let idx = 0, len = accept.length; idx < len; idx++) {
-					const entry = accept[idx];
-
-					if (typeof entry !== 'string') {
-						issues.push({
-							message: `accept entries must be strings`,
-							path: ['accept', idx],
-						});
-					} else if (!MIME_TYPE_RE.test(entry)) {
-						issues.push({
-							message: `invalid MIME type`,
-							path: ['accept', idx],
-						});
-					}
-				}
-			}
-
-			break;
+		default: {
+			issues.push({
+				message: `invalid permission resource '${resource}'`,
+				path: ['resource'],
+			});
 		}
 	}
 
