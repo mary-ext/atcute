@@ -60,7 +60,7 @@ the packages are organized into categories under `packages/`:
 - the `.research/` directory serves as a workspace for temporary experiments, analysis, and planning
   materials. create it if necessary (it's gitignored). this directory may contain cloned
   repositories or other reference materials that can help inform implementation decisions
-- you are encouraged to ask questions when uncertain about a given plan or requirement, there is no
-  penalty and avoiding assumptions is important than seeming knowledgeable
+- don't make assumptions or speculate about code, plans, or requirements without exploring first;
+  pause and ask for clarification when you're still unsure after looking into it
 - during plan mode, discuss the plans before finalizing/exiting plan mode to allow for additional
   context or follow-up questions to be provided
