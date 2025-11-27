@@ -160,8 +160,8 @@ importers:
         version: 4.41.0
     devDependencies:
       '@atcute/atproto':
-        specifier: ^3.1.9
-        version: 3.1.9
+        specifier: workspace:^
+        version: link:../../definitions/atproto
 
   packages/clients/jetstream:
     dependencies:
@@ -531,10 +531,10 @@ importers:
   packages/lexicons/lexicon-doc:
     dependencies:
       '@atcute/identity':
-        specifier: ^1.1.3
-        version: 1.1.3
+        specifier: workspace:^
+        version: link:../../identity/identity
       '@atcute/lexicons':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../lexicons
       '@badrap/valita':
         specifier: ^0.4.6
@@ -935,9 +935,6 @@ importers:
 
 packages:
 
-  '@atcute/atproto@3.1.9':
-    resolution: {integrity: sha512-DyWwHCTdR4hY2BPNbLXgVmm7lI+fceOwWbE4LXbGvbvVtSn+ejSVFaAv01Ra3kWDha0whsOmbJL8JP0QPpf1+w==}
-
   '@atcute/atproto@file:packages/definitions/atproto':
     resolution: {directory: packages/definitions/atproto, type: directory}
 
@@ -950,17 +947,11 @@ packages:
   '@atcute/frontpage@file:packages/definitions/frontpage':
     resolution: {directory: packages/definitions/frontpage, type: directory}
 
-  '@atcute/identity@1.1.3':
-    resolution: {integrity: sha512-oIqPoI8TwWeQxvcLmFEZLdN2XdWcaLVtlm8pNk0E72As9HNzzD9pwKPrLr3rmTLRIoULPPFmq9iFNsTeCIU9ng==}
-
   '@atcute/leaflet@file:packages/definitions/leaflet':
     resolution: {directory: packages/definitions/leaflet, type: directory}
 
   '@atcute/lexicon-community@file:packages/definitions/lexicon-community':
     resolution: {directory: packages/definitions/lexicon-community, type: directory}
-
-  '@atcute/lexicons@1.2.5':
-    resolution: {integrity: sha512-9yO9WdgxW8jZ7SbzUycH710z+JmsQ9W9n5S6i6eghYju32kkluFmgBeS47r8e8p2+Dv4DemS7o/3SUGsX9FR5Q==}
 
   '@atcute/microcosm@file:packages/definitions/microcosm':
     resolution: {directory: packages/definitions/microcosm, type: directory}
@@ -3833,10 +3824,6 @@ packages:
 
 snapshots:
 
-  '@atcute/atproto@3.1.9':
-    dependencies:
-      '@atcute/lexicons': 1.2.5
-
   '@atcute/atproto@file:packages/definitions/atproto':
     dependencies:
       '@atcute/lexicons': link:packages/lexicons/lexicons
@@ -3857,11 +3844,6 @@ snapshots:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
-  '@atcute/identity@1.1.3':
-    dependencies:
-      '@atcute/lexicons': 1.2.5
-      '@badrap/valita': 0.4.6
-
   '@atcute/leaflet@file:packages/definitions/leaflet':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
@@ -3871,11 +3853,6 @@ snapshots:
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/lexicons': link:packages/lexicons/lexicons
-
-  '@atcute/lexicons@1.2.5':
-    dependencies:
-      '@standard-schema/spec': 1.0.0
-      esm-env: 1.2.2
 
   '@atcute/microcosm@file:packages/definitions/microcosm':
     dependencies:
@@ -5734,7 +5711,7 @@ snapshots:
 
   '@types/bn.js@5.2.0':
     dependencies:
-      '@types/node': 24.10.1
+      '@types/node': 22.19.1
 
   '@types/bun@1.3.3':
     dependencies:
@@ -5766,6 +5743,7 @@ snapshots:
   '@types/node@24.10.1':
     dependencies:
       undici-types: 7.16.0
+    optional: true
 
   '@types/ws@8.18.1':
     dependencies:
@@ -6055,7 +6033,7 @@ snapshots:
 
   bun-types@1.3.3:
     dependencies:
-      '@types/node': 24.10.1
+      '@types/node': 22.19.1
 
   bytes@3.1.2: {}
 
@@ -7431,7 +7409,8 @@ snapshots:
 
   undici-types@6.21.0: {}
 
-  undici-types@7.16.0: {}
+  undici-types@7.16.0:
+    optional: true
 
   undici@6.22.0: {}
 

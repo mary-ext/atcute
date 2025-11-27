@@ -28,8 +28,8 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"@atcute/identity": "^1.1.3",
-		"@atcute/lexicons": "workspace:*",
+		"@atcute/identity": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
 		"@badrap/valita": "^0.4.6"
 	},
 	"devDependencies": {
