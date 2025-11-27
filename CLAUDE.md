@@ -16,9 +16,11 @@ the packages are organized into categories under `packages/`:
 
 ## development notes
 
-### tool management
+### project management
 
 - tools like Node.js, Bun and pnpm are managed by mise, to run them, use `mise exec -- pnpm ...`
+- run pnpm commands inside their package directory, e.g.
+  `cd packages/lexicons/lexicons; mise exec -- pnpm run build`
 
 ### code writing
 
@@ -44,7 +46,7 @@ the packages are organized into categories under `packages/`:
 ### testing
 
 - Vitest is the standard test runner, though some packages may still be using bun test
-- run them via `pnpm run --filter <package> test ...`
+- run tests via `pnpm run test`
 
 ### commits
 
