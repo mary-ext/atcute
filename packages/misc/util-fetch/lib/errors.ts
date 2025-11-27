@@ -5,11 +5,12 @@ export class FetchResponseError extends Error {
 export class FailedResponseError extends FetchResponseError {
 	override name = 'FailedResponseError';
 
-	constructor(
-		public status: number,
-		reason: string,
-	) {
-		super(reason);
+	constructor(public response: Response) {
+		super(`got http ${response.status}`);
+	}
+
+	get status(): number {
+		return this.response.status;
 	}
 }
 

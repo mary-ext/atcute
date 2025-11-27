@@ -18,11 +18,7 @@ export const isResponseOk = async (response: Response): Promise<Response> => {
 		return response;
 	}
 
-	if (response.body) {
-		await response.body.cancel();
-	}
-
-	throw new err.FailedResponseError(response.status, `got http ${response.status}`);
+	throw new err.FailedResponseError(response);
 };
 
 export const readResponseAsText =
