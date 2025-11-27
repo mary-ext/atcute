@@ -23,6 +23,67 @@ then run the tool:
 npm exec lex-cli generate
 ```
 
+## authoring lexicons with TypeScript
+
+instead of writing lexicons as JSON documents, you can author them programmatically using the
+builder functions from `@atcute/lexicon-doc/builder`.
+
+```ts
+// file: lexicons-src/com/example/bookmark.ts
+import { array, document, object, record, required, string } from '@atcute/lexicon-doc/builder';
+
+export default document({
+	id: 'com.example.bookmark',
+	defs: {
+		main: record({
+			key: 'tid',
+			description: 'a saved link to come back to later',
+			record: object({
+				properties: {
+					subject: required(string({ format: 'uri' })),
+					createdAt: required(string({ format: 'datetime' })),
+					tags: array({ items: string(), description: 'tags for organizing bookmarks' }),
+				},
+			}),
+		}),
+	},
+});
+```
+
+update your config to point to TypeScript files:
+
+```ts
+// file: lex.config.js
+import { defineLexiconConfig } from '@atcute/lex-cli';
+
+export default defineLexiconConfig({
+	files: ['lexicons-src/**/*.ts'],
+	outdir: 'src/lexicons/',
+});
+```
+
+### exporting lexicons to JSON
+
+if you need the actual JSON lexicon documents (e.g., for publishing or sharing), configure the
+export command:
+
+```ts
+export default defineLexiconConfig({
+	files: ['lexicons-src/**/*.ts'],
+	outdir: 'src/lexicons/',
+	export: {
+		outdir: 'lexicons/',
+		clean: true,
+	},
+});
+```
+
+then run:
+
+```
+npm exec lex-cli export
+```
+
 ## pulling lexicons
 
 you can pull lexicon files from other sources.

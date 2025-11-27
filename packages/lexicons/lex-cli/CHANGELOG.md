@@ -7,21 +7,47 @@
 - 67d570c: generate code from lexicon builders
 
   you can now author lexicons with `@atcute/lexicon-doc/builder` and have lex-cli consume them
-  directly! update your `files` array to point to the TypeScript/JavaScript source files and it'll
-  import them and build it for you.
+  directly!
+
+  ```ts
+  // file: lexicons-src/com/example/bookmark.ts
+  import { array, document, object, record, required, string } from '@atcute/lexicon-doc/builder';
+
+  export default document({
+  	id: 'com.example.bookmark',
+  	defs: {
+  		main: record({
+  			key: 'tid',
+  			description: 'a saved link to come back to later',
+  			record: object({
+  				properties: {
+  					subject: required(string({ format: 'uri' })),
+  					createdAt: required(string({ format: 'datetime' })),
+  					tags: array({ items: string(), description: 'tags for organizing bookmarks' }),
+  				},
+  			}),
+  		}),
+  	},
+  });
+  ```
+
+  update your `files` array to point to the TypeScript/JavaScript source files and it'll import them
+  and build it for you.
 
   ```ts
   export default defineLexiconConfig({
   	files: ['lexicons-src/**/*.ts'],
-  	// ...
+  	outdir: 'src/lexicons/',
   });
   ```
 
-  if you want to get the actual lexicon documents out of them, you can configure the export command.
+  if you want to get the actual lexicon documents out of them, you can configure the export command
+  and run `lex-cli export`.
 
   ```ts
   export default defineLexiconConfig({
-  	// ...
+  	files: ['lexicons-src/**/*.ts'],
+  	outdir: 'src/lexicons/',
   	export: {
   		outdir: 'lexicons/',
   		clean: true,
