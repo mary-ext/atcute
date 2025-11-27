@@ -1,5 +1,11 @@
 # @atcute/lexicon-resolver
 
+## 0.1.5
+
+### Patch Changes
+
+- 11e4e0b: fix stale FailedResponseError construct
+
 ## 0.1.4
 
 ### Patch Changes
