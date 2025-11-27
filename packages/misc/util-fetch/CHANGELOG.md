@@ -1,5 +1,11 @@
 # @atcute/util-fetch
 
+## 1.0.4
+
+### Patch Changes
+
+- 71d9744: expose response in FailedResponseError
+
 ## 1.0.3
 
 ### Patch Changes

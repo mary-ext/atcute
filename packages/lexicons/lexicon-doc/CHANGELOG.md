@@ -1,5 +1,13 @@
 # @atcute/lexicon-doc
 
+## 2.0.4
+
+### Patch Changes
+
+- 61a57f7: fix dependency constraint
+- 30fcaaf: remove permissions that can't be represented in a permission set
+- 30fcaaf: issue refinement error for incorrect permission resource
+
 ## 2.0.3
 
 ### Patch Changes

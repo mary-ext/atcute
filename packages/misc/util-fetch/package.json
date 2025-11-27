@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/util-fetch",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "internal fetch utilities",
 	"keywords": [
 		"atproto",
