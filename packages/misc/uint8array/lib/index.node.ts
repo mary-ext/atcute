@@ -49,46 +49,91 @@ export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, len
 
 const _fromCharCode = String.fromCharCode;
 
+// fully unrolled short string decoder, inspired by cbor-x
+// returns null if non-ASCII byte encountered, signaling fallback to utf8Slice
+const _shortString = (from: Uint8Array, p: number, length: number): string | null => {
+	if (length < 4) {
+		if (length < 2) {
+			if (length === 0) return '';
+			const a = from[p];
+			if (a & 0x80) return null;
+			return _fromCharCode(a);
+		}
+		const a = from[p];
+		const b = from[p + 1];
+		if ((a | b) & 0x80) return null;
+		if (length === 2) return _fromCharCode(a, b);
+		const c = from[p + 2];
+		if (c & 0x80) return null;
+		return _fromCharCode(a, b, c);
+	}
+	const a = from[p];
+	const b = from[p + 1];
+	const c = from[p + 2];
+	const d = from[p + 3];
+	if ((a | b | c | d) & 0x80) return null;
+	if (length < 8) {
+		if (length === 4) return _fromCharCode(a, b, c, d);
+		const e = from[p + 4];
+		if (e & 0x80) return null;
+		if (length === 5) return _fromCharCode(a, b, c, d, e);
+		const f = from[p + 5];
+		if (f & 0x80) return null;
+		if (length === 6) return _fromCharCode(a, b, c, d, e, f);
+		const g = from[p + 6];
+		if (g & 0x80) return null;
+		return _fromCharCode(a, b, c, d, e, f, g);
+	}
+	const e = from[p + 4];
+	const f = from[p + 5];
+	const g = from[p + 6];
+	const h = from[p + 7];
+	if ((e | f | g | h) & 0x80) return null;
+	if (length < 12) {
+		if (length === 8) return _fromCharCode(a, b, c, d, e, f, g, h);
+		const i = from[p + 8];
+		if (i & 0x80) return null;
+		if (length === 9) return _fromCharCode(a, b, c, d, e, f, g, h, i);
+		const j = from[p + 9];
+		if (j & 0x80) return null;
+		if (length === 10) return _fromCharCode(a, b, c, d, e, f, g, h, i, j);
+		const k = from[p + 10];
+		if (k & 0x80) return null;
+		return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k);
+	}
+	const i = from[p + 8];
+	const j = from[p + 9];
+	const k = from[p + 10];
+	const l = from[p + 11];
+	if ((i | j | k | l) & 0x80) return null;
+	if (length === 12) return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l);
+	const m = from[p + 12];
+	if (m & 0x80) return null;
+	if (length === 13) return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m);
+	const n = from[p + 13];
+	if (n & 0x80) return null;
+	if (length === 14) return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n);
+	const o = from[p + 14];
+	if (o & 0x80) return null;
+	return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o);
+};
+
+/**
+ * decodes a UTF-8 string from a given buffer
+ * @param from source buffer
+ * @param offset byte offset to start reading from
+ * @param length number of bytes to read
+ * @returns decoded string
+ */
 export const decodeUtf8From = (
 	from: Uint8Array,
 	offset: number = 0,
 	length: number = from.length,
 ): string => {
-	// for short strings, avoid utf8Slice overhead by using fromCharCode directly
-	if (length <= 24) {
-		const end = offset + length;
-		let str = '';
-		let idx = offset;
-
-		// process 4 bytes at a time
-		for (; idx + 3 < end; idx += 4) {
-			const a = from[idx];
-			const b = from[idx + 1];
-			const c = from[idx + 2];
-			const d = from[idx + 3];
-
-			if ((a | b | c | d) & 0x80) {
-				// non-ASCII, fall back to utf8Slice for the rest
-				return str + _utf8Slice.call(from, idx, end);
-			}
-
-			str += _fromCharCode(a, b, c, d);
-		}
-
-		// process remaining bytes
-		for (; idx < end; idx++) {
-			const x = from[idx];
-
-			if (x & 0x80) {
-				return str + _utf8Slice.call(from, idx, end);
-			}
-
-			str += _fromCharCode(x);
-		}
-
-		return str;
+	if (length <= 15) {
+		const result = _shortString(from, offset, length);
+		if (result !== null) return result;
 	}
-
 	return _utf8Slice.call(from, offset, offset + length);
 };
 
