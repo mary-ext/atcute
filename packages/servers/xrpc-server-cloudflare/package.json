@@ -25,6 +25,6 @@
 		"@atcute/xrpc-server": "workspace:^"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20251125.0"
+		"@cloudflare/workers-types": "^4.20251127.0"
 	}
 }
