@@ -34,7 +34,7 @@ the packages are organized into categories under `packages/`:
 
 - documentations include README, code comments, commit messages, changesets
 - any writing should be in lowercase, except for proper nouns, acronyms and 'I'
-- keep comments focused on explaining _why_ rather than _what_
+- only comment non-trivial code, focusing on _why_ rather than _what_
 - write comments and JSDoc in lowercase (except proper nouns, acronyms, and 'I')
 - add JSDoc comments to all new exported functions, methods, classes, fields, and enums
 - JSDoc should include proper annotations:
