@@ -1,4 +1,4 @@
-import { expect, it } from 'bun:test';
+import { expect, it } from 'vitest';
 import * as fc from 'fast-check';
 
 import { tokenize, type Token } from './index.js';

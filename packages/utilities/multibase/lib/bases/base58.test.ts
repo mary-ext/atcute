@@ -1,6 +1,16 @@
-import { expect, it, mock } from 'bun:test';
+import { expect, it, vi } from 'vitest';
 
 import { fromBase58Btc, toBase58Btc } from './base58.js';
+
+vi.mock('@atcute/uint8array', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@atcute/uint8array')>();
+	return {
+		...actual,
+		allocUnsafe: (size: number): Uint8Array => {
+			return crypto.getRandomValues(new Uint8Array(size));
+		},
+	};
+});
 
 const inputs = [
 	{
@@ -27,14 +37,6 @@ const inputs = [
 		encoded: `117paNL19xttacUY`,
 	},
 ];
-
-mock.module('@atcute/uint8array', () => {
-	return {
-		allocUnsafe: (size: number): Uint8Array => {
-			return crypto.getRandomValues(new Uint8Array(size));
-		},
-	};
-});
 
 it('can encode', () => {
 	for (const { buffer, encoded } of inputs) {

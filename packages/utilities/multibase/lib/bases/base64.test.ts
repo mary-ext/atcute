@@ -1,4 +1,4 @@
-import { expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
 	fromBase64 as fromBase64Node,
@@ -31,6 +31,19 @@ import {
 	toBase64Url as toBase64UrlPolyfill,
 } from './base64-web-polyfill.js';
 
+vi.mock('@atcute/uint8array', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@atcute/uint8array')>();
+	return {
+		...actual,
+		allocUnsafe: (size: number): Uint8Array => {
+			return crypto.getRandomValues(new Uint8Array(size));
+		},
+	};
+});
+
+// native methods only available in Node.js 22.1+ or modern browsers
+const hasNativeMethods = typeof Uint8Array.prototype.toBase64 === 'function';
+
 const inputs = [
 	{
 		buffer: Uint8Array.from([63, 63, 63, 63]),
@@ -41,50 +54,62 @@ const inputs = [
 	},
 ];
 
-mock.module('@atcute/uint8array', () => {
-	return {
-		allocUnsafe: (size: number): Uint8Array => {
-			return crypto.getRandomValues(new Uint8Array(size));
-		},
-	};
+describe('polyfill', () => {
+	it('can encode', () => {
+		for (const input of inputs) {
+			expect(toBase64Polyfill(input.buffer)).toEqual(input.base64);
+			expect(toBase64PadPolyfill(input.buffer)).toEqual(input.base64pad);
+			expect(toBase64UrlPolyfill(input.buffer)).toEqual(input.base64url);
+			expect(toBase64UrlPadPolyfill(input.buffer)).toEqual(input.base64urlpad);
+		}
+	});
+
+	it('can decode', () => {
+		for (const input of inputs) {
+			expect(fromBase64Polyfill(input.base64)).toEqual(input.buffer);
+			expect(fromBase64PadPolyfill(input.base64pad)).toEqual(input.buffer);
+			expect(fromBase64UrlPolyfill(input.base64url)).toEqual(input.buffer);
+			expect(fromBase64UrlPadPolyfill(input.base64urlpad)).toEqual(input.buffer);
+		}
+	});
 });
 
-it('can encode', () => {
-	for (const input of inputs) {
-		expect(toBase64Polyfill(input.buffer)).toEqual(input.base64);
-		expect(toBase64Node(input.buffer)).toEqual(input.base64);
-		expect(toBase64Native(input.buffer)).toEqual(input.base64);
+describe('node', () => {
+	it('can encode', () => {
+		for (const input of inputs) {
+			expect(toBase64Node(input.buffer)).toEqual(input.base64);
+			expect(toBase64PadNode(input.buffer)).toEqual(input.base64pad);
+			expect(toBase64UrlNode(input.buffer)).toEqual(input.base64url);
+			expect(toBase64UrlPadNode(input.buffer)).toEqual(input.base64urlpad);
+		}
+	});
 
-		expect(toBase64PadPolyfill(input.buffer)).toEqual(input.base64pad);
-		expect(toBase64PadNode(input.buffer)).toEqual(input.base64pad);
-		expect(toBase64PadNative(input.buffer)).toEqual(input.base64pad);
-
-		expect(toBase64UrlPolyfill(input.buffer)).toEqual(input.base64url);
-		expect(toBase64UrlNode(input.buffer)).toEqual(input.base64url);
-		expect(toBase64UrlNative(input.buffer)).toEqual(input.base64url);
-
-		expect(toBase64UrlPadPolyfill(input.buffer)).toEqual(input.base64urlpad);
-		expect(toBase64UrlPadNode(input.buffer)).toEqual(input.base64urlpad);
-		expect(toBase64UrlPadNative(input.buffer)).toEqual(input.base64urlpad);
-	}
+	it('can decode', () => {
+		for (const input of inputs) {
+			expect(fromBase64Node(input.base64)).toEqual(input.buffer);
+			expect(fromBase64PadNode(input.base64pad)).toEqual(input.buffer);
+			expect(fromBase64UrlNode(input.base64url)).toEqual(input.buffer);
+			expect(fromBase64UrlPadNode(input.base64urlpad)).toEqual(input.buffer);
+		}
+	});
 });
 
-it('can decode', () => {
-	for (const input of inputs) {
-		expect(fromBase64Polyfill(input.base64)).toEqual(input.buffer);
-		expect(fromBase64Node(input.base64)).toEqual(input.buffer);
-		expect(fromBase64Native(input.base64)).toEqual(input.buffer);
+describe.skipIf(!hasNativeMethods)('native', () => {
+	it('can encode', () => {
+		for (const input of inputs) {
+			expect(toBase64Native(input.buffer)).toEqual(input.base64);
+			expect(toBase64PadNative(input.buffer)).toEqual(input.base64pad);
+			expect(toBase64UrlNative(input.buffer)).toEqual(input.base64url);
+			expect(toBase64UrlPadNative(input.buffer)).toEqual(input.base64urlpad);
+		}
+	});
 
-		expect(fromBase64PadPolyfill(input.base64pad)).toEqual(input.buffer);
-		expect(fromBase64PadNode(input.base64pad)).toEqual(input.buffer);
-		expect(fromBase64PadNative(input.base64pad)).toEqual(input.buffer);
-
-		expect(fromBase64UrlPolyfill(input.base64url)).toEqual(input.buffer);
-		expect(fromBase64UrlNode(input.base64url)).toEqual(input.buffer);
-		expect(fromBase64UrlNative(input.base64url)).toEqual(input.buffer);
-
-		expect(fromBase64UrlPadPolyfill(input.base64urlpad)).toEqual(input.buffer);
-		expect(fromBase64UrlPadNode(input.base64urlpad)).toEqual(input.buffer);
-		expect(fromBase64UrlPadNative(input.base64urlpad)).toEqual(input.buffer);
-	}
+	it('can decode', () => {
+		for (const input of inputs) {
+			expect(fromBase64Native(input.base64)).toEqual(input.buffer);
+			expect(fromBase64PadNative(input.base64pad)).toEqual(input.buffer);
+			expect(fromBase64UrlNative(input.base64url)).toEqual(input.buffer);
+			expect(fromBase64UrlPadNative(input.base64urlpad)).toEqual(input.buffer);
+		}
+	});
 });

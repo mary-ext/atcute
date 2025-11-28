@@ -1,8 +1,21 @@
-import { expect, it, mock } from 'bun:test';
+import { describe, expect, it, vi } from 'vitest';
 
 import { fromBase16 as fromBase16Node, toBase16 as toBase16Node } from './base16-node.js';
 import { fromBase16 as fromBase16Native, toBase16 as toBase16Native } from './base16-web-native.js';
 import { fromBase16 as fromBase16Polyfill, toBase16 as toBase16Polyfill } from './base16-web-polyfill.js';
+
+vi.mock('@atcute/uint8array', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@atcute/uint8array')>();
+	return {
+		...actual,
+		allocUnsafe: (size: number): Uint8Array => {
+			return crypto.getRandomValues(new Uint8Array(size));
+		},
+	};
+});
+
+// native methods only available in Node.js 22.1+ or modern browsers
+const hasNativeMethods = typeof Uint8Array.prototype.toHex === 'function';
 
 const inputs = [
 	{
@@ -30,26 +43,44 @@ const inputs = [
 	},
 ];
 
-mock.module('@atcute/uint8array', () => {
-	return {
-		allocUnsafe: (size: number): Uint8Array => {
-			return crypto.getRandomValues(new Uint8Array(size));
-		},
-	};
+describe('polyfill', () => {
+	it('can encode', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(toBase16Polyfill(buffer)).toEqual(encoded);
+		}
+	});
+
+	it('can decode', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(fromBase16Polyfill(encoded)).toEqual(buffer);
+		}
+	});
 });
 
-it('can encode', () => {
-	for (const { buffer, encoded } of inputs) {
-		expect(toBase16Polyfill(buffer)).toEqual(encoded);
-		expect(toBase16Node(buffer)).toEqual(encoded);
-		expect(toBase16Native(buffer)).toEqual(encoded);
-	}
+describe('node', () => {
+	it('can encode', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(toBase16Node(buffer)).toEqual(encoded);
+		}
+	});
+
+	it('can decode', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(fromBase16Node(encoded)).toEqual(buffer);
+		}
+	});
 });
 
-it('can decode', () => {
-	for (const { buffer, encoded } of inputs) {
-		expect(fromBase16Polyfill(encoded)).toEqual(buffer);
-		expect(fromBase16Node(encoded)).toEqual(buffer);
-		expect(fromBase16Native(encoded)).toEqual(buffer);
-	}
+describe.skipIf(!hasNativeMethods)('native', () => {
+	it('can encode', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(toBase16Native(buffer)).toEqual(encoded);
+		}
+	});
+
+	it('can decode', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(fromBase16Native(encoded)).toEqual(buffer);
+		}
+	});
 });

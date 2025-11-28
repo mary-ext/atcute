@@ -1,4 +1,4 @@
-import { expect, it } from 'bun:test';
+import { expect, it } from 'vitest';
 import { segmentize } from './index.js';
 
 it('does utf8 slicing', () => {

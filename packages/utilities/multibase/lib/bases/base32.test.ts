@@ -1,6 +1,12 @@
-import { expect, it, mock } from 'bun:test';
+import { expect, it, vi } from 'vitest';
 
 import { fromBase32, toBase32 } from './base32.js';
+
+vi.mock('@atcute/uint8array', () => ({
+	allocUnsafe: (size: number): Uint8Array => {
+		return crypto.getRandomValues(new Uint8Array(size));
+	},
+}));
 
 const inputs = [
 	{
@@ -24,14 +30,6 @@ const inputs = [
 		encoded: `aaahszltebwwc3tjeaqq`,
 	},
 ];
-
-mock.module('@atcute/uint8array', () => {
-	return {
-		allocUnsafe: (size: number): Uint8Array => {
-			return crypto.getRandomValues(new Uint8Array(size));
-		},
-	};
-});
 
 it('can encode', () => {
 	const encoder = new TextEncoder();

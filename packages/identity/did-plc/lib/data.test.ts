@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 
 import { processIndexedEntryLog } from './data.js';
 import { indexedEntryLog } from './typedefs.js';
@@ -82,8 +82,8 @@ describe('processIndexedEntryLog()', () => {
 			},
 		]);
 
+		// test passes if no error is thrown
 		await processIndexedEntryLog('did:plc:oky5czdrnfjpqslsw2a5iclo', log);
-		expect().pass();
 	});
 
 	it('validates an operation log containing a nullified op', async () => {

@@ -1,4 +1,4 @@
-import { expect, it, describe } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 
 import * as CID from '@atcute/cid';
 import { fromBase64, toBase16 } from '@atcute/multibase';
