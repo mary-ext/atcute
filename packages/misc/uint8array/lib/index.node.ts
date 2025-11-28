@@ -47,11 +47,48 @@ export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, len
 	return _utf8Write.call(to, str, offset, length);
 };
 
+const _fromCharCode = String.fromCharCode;
+
 export const decodeUtf8From = (
 	from: Uint8Array,
 	offset: number = 0,
 	length: number = from.length,
 ): string => {
+	// for short strings, avoid utf8Slice overhead by using fromCharCode directly
+	if (length <= 24) {
+		const end = offset + length;
+		let str = '';
+		let idx = offset;
+
+		// process 4 bytes at a time
+		for (; idx + 3 < end; idx += 4) {
+			const a = from[idx];
+			const b = from[idx + 1];
+			const c = from[idx + 2];
+			const d = from[idx + 3];
+
+			if ((a | b | c | d) & 0x80) {
+				// non-ASCII, fall back to utf8Slice for the rest
+				return str + _utf8Slice.call(from, idx, end);
+			}
+
+			str += _fromCharCode(a, b, c, d);
+		}
+
+		// process remaining bytes
+		for (; idx < end; idx++) {
+			const x = from[idx];
+
+			if (x & 0x80) {
+				return str + _utf8Slice.call(from, idx, end);
+			}
+
+			str += _fromCharCode(x);
+		}
+
+		return str;
+	}
+
 	return _utf8Slice.call(from, offset, offset + length);
 };
 
