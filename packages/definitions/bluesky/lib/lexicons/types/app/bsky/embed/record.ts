@@ -60,9 +60,9 @@ const _viewRecordSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.array(
 				/*#__PURE__*/ v.variant([
-					viewSchema,
 					AppBskyEmbedExternal.viewSchema,
 					AppBskyEmbedImages.viewSchema,
+					viewSchema,
 					AppBskyEmbedRecordWithMedia.viewSchema,
 					AppBskyEmbedVideo.viewSchema,
 				]),
