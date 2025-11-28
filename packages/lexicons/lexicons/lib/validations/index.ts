@@ -523,8 +523,9 @@ export const literal = <T extends Literal>(value: T): LiteralSchema<T> => {
 	};
 };
 
-export interface LiteralEnumSchema<TEnums extends readonly Literal[] = []>
-	extends BaseSchema<TEnums[number]> {
+export interface LiteralEnumSchema<TEnums extends readonly Literal[] = []> extends BaseSchema<
+	TEnums[number]
+> {
 	readonly type: 'literal_enum';
 	readonly expected: TEnums;
 }
@@ -635,8 +636,10 @@ export const integer = (): IntegerSchema => {
 
 // #region Integer constraints
 
-export interface IntegerRangeConstraint<TMin extends number = number, TMax extends number = number>
-	extends BaseConstraint<number> {
+export interface IntegerRangeConstraint<
+	TMin extends number = number,
+	TMax extends number = number,
+> extends BaseConstraint<number> {
 	readonly type: 'integer_range';
 	readonly min: TMin;
 	readonly max: TMax;
@@ -700,8 +703,9 @@ export interface StringSchema<T extends string = string> extends BaseSchema<T> {
 	readonly format: null;
 }
 
-export interface FormattedStringSchema<TFormat extends keyof StringFormatMap = keyof StringFormatMap>
-	extends BaseSchema<StringFormatMap[TFormat]> {
+export interface FormattedStringSchema<
+	TFormat extends keyof StringFormatMap = keyof StringFormatMap,
+> extends BaseSchema<StringFormatMap[TFormat]> {
 	readonly type: 'string';
 	readonly format: TFormat;
 }
@@ -1002,8 +1006,10 @@ export const bytes = (): BytesSchema => {
 };
 
 // #region IPLD bytes constraint
-export interface BytesSizeConstraint<TMinLength extends number = number, TMaxLength extends number = number>
-	extends BaseConstraint<interfaces.Bytes> {
+export interface BytesSizeConstraint<
+	TMinLength extends number = number,
+	TMaxLength extends number = number,
+> extends BaseConstraint<interfaces.Bytes> {
 	readonly type: 'bytes_size';
 	readonly minSize: TMinLength;
 	readonly maxSize: TMaxLength;
@@ -1101,8 +1107,10 @@ export const cidLink = (): CidLinkSchema => {
 
 // #region Nullable schema
 
-export interface NullableSchema<TItem extends BaseSchema = BaseSchema>
-	extends BaseSchema<InferInput<TItem> | null, InferOutput<TItem> | null> {
+export interface NullableSchema<TItem extends BaseSchema = BaseSchema> extends BaseSchema<
+	InferInput<TItem> | null,
+	InferOutput<TItem> | null
+> {
 	readonly type: 'nullable';
 	readonly wrapped: TItem;
 }
@@ -1268,8 +1276,10 @@ export const array = <TItem extends BaseSchema>(item: TItem | (() => TItem)): Ar
 
 // #region Array constraints
 
-export interface ArrayLengthConstraint<TMinLength extends number = number, TMaxLength extends number = number>
-	extends BaseConstraint<unknown[]> {
+export interface ArrayLengthConstraint<
+	TMinLength extends number = number,
+	TMaxLength extends number = number,
+> extends BaseConstraint<unknown[]> {
 	readonly type: 'array_length';
 	readonly minLength: TMinLength;
 	readonly maxLength: TMaxLength;
@@ -1360,8 +1370,9 @@ type InferObjectOutput<TShape extends ObjectShape> = Flatten<
 	}
 >;
 
-export interface ObjectSchema<TShape extends LooseObjectShape = LooseObjectShape>
-	extends BaseSchema<Record<string, unknown>> {
+export interface ObjectSchema<TShape extends LooseObjectShape = LooseObjectShape> extends BaseSchema<
+	Record<string, unknown>
+> {
 	readonly type: 'object';
 	readonly shape: Readonly<TShape>;
 
@@ -1594,8 +1605,9 @@ export type RecordObjectShape = {
 export type RecordKeySchema = StringSchema | FormattedStringSchema | LiteralSchema<string>;
 export type RecordObjectSchema = ObjectSchema<RecordObjectShape>;
 
-export interface RecordSchema<TObject extends ObjectSchema, TKey extends RecordKeySchema>
-	extends BaseSchema<Record<string, unknown>> {
+export interface RecordSchema<TObject extends ObjectSchema, TKey extends RecordKeySchema> extends BaseSchema<
+	Record<string, unknown>
+> {
 	readonly type: 'record';
 	readonly key: TKey;
 	readonly object: TObject;

@@ -206,17 +206,12 @@ export interface accessSchema extends access$schematype {}
 export interface configSchema extends config$schematype {}
 export interface configRegionSchema extends configRegion$schematype {}
 export interface configRegionRuleDefaultSchema extends configRegionRuleDefault$schematype {}
-export interface configRegionRuleIfAccountNewerThanSchema
-	extends configRegionRuleIfAccountNewerThan$schematype {}
-export interface configRegionRuleIfAccountOlderThanSchema
-	extends configRegionRuleIfAccountOlderThan$schematype {}
+export interface configRegionRuleIfAccountNewerThanSchema extends configRegionRuleIfAccountNewerThan$schematype {}
+export interface configRegionRuleIfAccountOlderThanSchema extends configRegionRuleIfAccountOlderThan$schematype {}
 export interface configRegionRuleIfAssuredOverAgeSchema extends configRegionRuleIfAssuredOverAge$schematype {}
-export interface configRegionRuleIfAssuredUnderAgeSchema
-	extends configRegionRuleIfAssuredUnderAge$schematype {}
-export interface configRegionRuleIfDeclaredOverAgeSchema
-	extends configRegionRuleIfDeclaredOverAge$schematype {}
-export interface configRegionRuleIfDeclaredUnderAgeSchema
-	extends configRegionRuleIfDeclaredUnderAge$schematype {}
+export interface configRegionRuleIfAssuredUnderAgeSchema extends configRegionRuleIfAssuredUnderAge$schematype {}
+export interface configRegionRuleIfDeclaredOverAgeSchema extends configRegionRuleIfDeclaredOverAge$schematype {}
+export interface configRegionRuleIfDeclaredUnderAgeSchema extends configRegionRuleIfDeclaredUnderAge$schematype {}
 export interface eventSchema extends event$schematype {}
 export interface stateSchema extends state$schematype {}
 export interface stateMetadataSchema extends stateMetadata$schematype {}
@@ -247,18 +242,24 @@ export type Access = v.InferInput<typeof accessSchema>;
 export interface Config extends v.InferInput<typeof configSchema> {}
 export interface ConfigRegion extends v.InferInput<typeof configRegionSchema> {}
 export interface ConfigRegionRuleDefault extends v.InferInput<typeof configRegionRuleDefaultSchema> {}
-export interface ConfigRegionRuleIfAccountNewerThan
-	extends v.InferInput<typeof configRegionRuleIfAccountNewerThanSchema> {}
-export interface ConfigRegionRuleIfAccountOlderThan
-	extends v.InferInput<typeof configRegionRuleIfAccountOlderThanSchema> {}
-export interface ConfigRegionRuleIfAssuredOverAge
-	extends v.InferInput<typeof configRegionRuleIfAssuredOverAgeSchema> {}
-export interface ConfigRegionRuleIfAssuredUnderAge
-	extends v.InferInput<typeof configRegionRuleIfAssuredUnderAgeSchema> {}
-export interface ConfigRegionRuleIfDeclaredOverAge
-	extends v.InferInput<typeof configRegionRuleIfDeclaredOverAgeSchema> {}
-export interface ConfigRegionRuleIfDeclaredUnderAge
-	extends v.InferInput<typeof configRegionRuleIfDeclaredUnderAgeSchema> {}
+export interface ConfigRegionRuleIfAccountNewerThan extends v.InferInput<
+	typeof configRegionRuleIfAccountNewerThanSchema
+> {}
+export interface ConfigRegionRuleIfAccountOlderThan extends v.InferInput<
+	typeof configRegionRuleIfAccountOlderThanSchema
+> {}
+export interface ConfigRegionRuleIfAssuredOverAge extends v.InferInput<
+	typeof configRegionRuleIfAssuredOverAgeSchema
+> {}
+export interface ConfigRegionRuleIfAssuredUnderAge extends v.InferInput<
+	typeof configRegionRuleIfAssuredUnderAgeSchema
+> {}
+export interface ConfigRegionRuleIfDeclaredOverAge extends v.InferInput<
+	typeof configRegionRuleIfDeclaredOverAgeSchema
+> {}
+export interface ConfigRegionRuleIfDeclaredUnderAge extends v.InferInput<
+	typeof configRegionRuleIfDeclaredUnderAgeSchema
+> {}
 export interface Event extends v.InferInput<typeof eventSchema> {}
 export interface State extends v.InferInput<typeof stateSchema> {}
 export interface StateMetadata extends v.InferInput<typeof stateMetadataSchema> {}

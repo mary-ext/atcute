@@ -55,13 +55,12 @@ export interface AuthorizationServerMetadata {
 	client_id_metadata_document_supported?: boolean;
 }
 
-export interface PersistedAuthorizationServerMetadata
-	extends Pick<
-		AuthorizationServerMetadata,
-		| 'issuer'
-		| 'authorization_endpoint'
-		| 'introspection_endpoint'
-		| 'pushed_authorization_request_endpoint'
-		| 'revocation_endpoint'
-		| 'token_endpoint'
-	> {}
+export interface PersistedAuthorizationServerMetadata extends Pick<
+	AuthorizationServerMetadata,
+	| 'issuer'
+	| 'authorization_endpoint'
+	| 'introspection_endpoint'
+	| 'pushed_authorization_request_endpoint'
+	| 'revocation_endpoint'
+	| 'token_endpoint'
+> {}

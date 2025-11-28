@@ -600,8 +600,7 @@ export interface personalDetailsPrefSchema extends personalDetailsPref$schematyp
 export interface postInteractionSettingsPrefSchema extends postInteractionSettingsPref$schematype {}
 export interface preferencesSchema extends preferences$schematype {}
 export interface profileAssociatedSchema extends profileAssociated$schematype {}
-export interface profileAssociatedActivitySubscriptionSchema
-	extends profileAssociatedActivitySubscription$schematype {}
+export interface profileAssociatedActivitySubscriptionSchema extends profileAssociatedActivitySubscription$schematype {}
 export interface profileAssociatedChatSchema extends profileAssociatedChat$schematype {}
 export interface profileViewSchema extends profileView$schematype {}
 export interface profileViewBasicSchema extends profileViewBasic$schematype {}
@@ -669,8 +668,9 @@ export interface PersonalDetailsPref extends v.InferInput<typeof personalDetails
 export interface PostInteractionSettingsPref extends v.InferInput<typeof postInteractionSettingsPrefSchema> {}
 export interface Preferences extends v.InferInput<typeof preferencesSchema> {}
 export interface ProfileAssociated extends v.InferInput<typeof profileAssociatedSchema> {}
-export interface ProfileAssociatedActivitySubscription
-	extends v.InferInput<typeof profileAssociatedActivitySubscriptionSchema> {}
+export interface ProfileAssociatedActivitySubscription extends v.InferInput<
+	typeof profileAssociatedActivitySubscriptionSchema
+> {}
 export interface ProfileAssociatedChat extends v.InferInput<typeof profileAssociatedChatSchema> {}
 export interface ProfileView extends v.InferInput<typeof profileViewSchema> {}
 export interface ProfileViewBasic extends v.InferInput<typeof profileViewBasicSchema> {}

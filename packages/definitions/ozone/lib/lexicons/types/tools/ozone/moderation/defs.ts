@@ -1065,8 +1065,9 @@ export interface AccountStrike extends v.InferInput<typeof accountStrikeSchema> 
 export interface AgeAssuranceEvent extends v.InferInput<typeof ageAssuranceEventSchema> {}
 export interface AgeAssuranceOverrideEvent extends v.InferInput<typeof ageAssuranceOverrideEventSchema> {}
 export interface BlobView extends v.InferInput<typeof blobViewSchema> {}
-export interface CancelScheduledTakedownEvent
-	extends v.InferInput<typeof cancelScheduledTakedownEventSchema> {}
+export interface CancelScheduledTakedownEvent extends v.InferInput<
+	typeof cancelScheduledTakedownEventSchema
+> {}
 export interface IdentityEvent extends v.InferInput<typeof identityEventSchema> {}
 export interface ImageDetails extends v.InferInput<typeof imageDetailsSchema> {}
 export interface ModEventAcknowledge extends v.InferInput<typeof modEventAcknowledgeSchema> {}
@@ -1104,8 +1105,9 @@ export type ReviewClosed = v.InferInput<typeof reviewClosedSchema>;
 export type ReviewEscalated = v.InferInput<typeof reviewEscalatedSchema>;
 export type ReviewNone = v.InferInput<typeof reviewNoneSchema>;
 export type ReviewOpen = v.InferInput<typeof reviewOpenSchema>;
-export interface RevokeAccountCredentialsEvent
-	extends v.InferInput<typeof revokeAccountCredentialsEventSchema> {}
+export interface RevokeAccountCredentialsEvent extends v.InferInput<
+	typeof revokeAccountCredentialsEventSchema
+> {}
 export interface ScheduleTakedownEvent extends v.InferInput<typeof scheduleTakedownEventSchema> {}
 export interface ScheduledActionView extends v.InferInput<typeof scheduledActionViewSchema> {}
 export type SubjectReviewState = v.InferInput<typeof subjectReviewStateSchema>;
