@@ -1,17 +1,21 @@
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
 import * as ipld from '@ipld/dag-cbor';
-import * as cborx from 'cbor-x/index-no-eval'; // doesn't do new Function nor native acceleration
+import * as cborx from 'cbor-x';
 import * as atcute from './index.js';
 
 const OBJECT = await fetch(
-	'https://tangled.org/@mary.my.id/atcute/raw/trunk/lexdocs/bluesky/app/bsky/actor/defs.json',
+	'https://tangled.org/@mary.my.id/atcute/raw/trunk/packages/definitions/ozone/lexicons/tools/ozone/moderation/defs.json',
 ).then((r) => r.json());
+
+if (OBJECT.id !== 'tools.ozone.moderation.defs') {
+	throw new Error(`invalid`);
+}
 
 const BUFFER = atcute.encode(OBJECT);
 
-const getBuffer = () => new Uint8Array([...BUFFER]);
-const getObject = () => ({ ...OBJECT });
+const getBuffer = () => structuredClone(BUFFER);
+const getObject = () => structuredClone({ ...OBJECT });
 
 summary(() => {
 	bench('cbor-x encode', function* () {
