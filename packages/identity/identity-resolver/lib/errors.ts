@@ -84,3 +84,9 @@ export class AmbiguousHandleError extends HandleResolutionError {
 	}
 }
 // #endregion
+
+// #region Actor resolution errors
+export class ActorResolutionError extends Error {
+	override name = 'ActorResolutionError';
+}
+// #endregion

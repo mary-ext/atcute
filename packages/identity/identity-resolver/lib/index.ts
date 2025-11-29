@@ -1,3 +1,5 @@
+export * from './actor/local.js';
+
 export * from './did/composite.js';
 export * from './did/methods/plc.js';
 export * from './did/methods/web.js';
