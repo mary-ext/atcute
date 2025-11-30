@@ -30,6 +30,7 @@ the packages are organized into categories under `packages/`:
 - prefer arrow functions
 - use braces for control statements, even single-line bodies
 - use bare blocks `{ }` to group related code and limit variable scope
+- use template literals for user-facing strings and error messages
 
 ### documentation
 
