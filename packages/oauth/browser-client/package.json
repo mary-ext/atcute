@@ -20,19 +20,14 @@
 	"sideEffects": false,
 	"scripts": {
 		"build": "tsc --project tsconfig.build.json",
-		"postbuild": "node ./scripts/ensure-files.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
 		"@atcute/client": "workspace:^",
-		"@atcute/identity": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
 		"nanoid": "^5.1.6"
-	},
-	"devDependencies": {
-		"@atcute/atproto": "workspace:^"
 	}
 }
