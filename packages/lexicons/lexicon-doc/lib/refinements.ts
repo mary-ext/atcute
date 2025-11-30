@@ -1,4 +1,3 @@
-import { isAtprotoAudience } from '@atcute/identity';
 import { isLanguageCode, isNsid } from '@atcute/lexicons/syntax';
 
 import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
@@ -701,6 +700,8 @@ export const refineLexXrpcParameters = (spec: t.LexXrpcParameters, deep: boolean
 	return refineLexObject({ type: 'object', required: spec.required, properties: spec.properties }, deep);
 };
 
+const REPO_ACTIONS: string[] = ['create', 'update', 'delete'];
+
 /**
  * validates constraints in lexicon permission definitions.
  * @param spec permission definition to validate
@@ -712,8 +713,9 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 
 	switch (resource) {
 		case 'repo': {
-			const { collection } = spec;
+			const { collection, action } = spec as { collection?: unknown; action?: unknown };
 
+			// validate collection
 			if (!Array.isArray(collection)) {
 				issues.push({
 					message: `collection must be an array`,
@@ -733,6 +735,11 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 							message: `collection entries must be strings`,
 							path: ['collection', idx],
 						});
+					} else if (entry === '*') {
+						issues.push({
+							message: `collection can't be a wildcard`,
+							path: ['collection', idx],
+						});
 					} else if (!isNsid(entry)) {
 						issues.push({
 							message: `invalid collection nsid`,
@@ -742,11 +749,38 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 				}
 			}
 
+			// validate action
+			if (action !== undefined) {
+				if (!Array.isArray(action)) {
+					issues.push({
+						message: `action must be an array`,
+						path: ['action'],
+					});
+				} else {
+					for (let idx = 0, len = action.length; idx < len; idx++) {
+						const entry = action[idx];
+
+						if (typeof entry !== 'string') {
+							issues.push({
+								message: `action entries must be strings`,
+								path: ['action', idx],
+							});
+						} else if (!REPO_ACTIONS.includes(entry)) {
+							issues.push({
+								message: `invalid action`,
+								path: ['action', idx],
+							});
+						}
+					}
+				}
+			}
+
 			break;
 		}
 		case 'rpc': {
-			const { lxm, aud, inheritAud } = spec;
+			const { lxm, aud, inheritAud } = spec as { lxm?: unknown; aud?: unknown; inheritAud?: unknown };
 
+			// validate lxm
 			if (!Array.isArray(lxm)) {
 				issues.push({
 					message: `lxm must be an array`,
@@ -758,13 +792,6 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 					path: ['lxm'],
 				});
 			} else {
-				if (aud === '*' && lxm.includes('*')) {
-					issues.push({
-						message: `aud and lxm can't both be wildcards`,
-						path: ['aud'],
-					});
-				}
-
 				for (let idx = 0, len = lxm.length; idx < len; idx++) {
 					const entry = lxm[idx];
 
@@ -776,7 +803,12 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 						continue;
 					}
 
-					if (entry !== '*' && !isNsid(entry)) {
+					if (entry === '*') {
+						issues.push({
+							message: `lxm can't be a wildcard`,
+							path: ['lxm', idx],
+						});
+					} else if (!isNsid(entry)) {
 						issues.push({
 							message: `invalid lxm nsid`,
 							path: ['lxm', idx],
@@ -785,6 +817,7 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 				}
 			}
 
+			// validate inheritAud and aud
 			if (inheritAud !== undefined && typeof inheritAud !== 'boolean') {
 				issues.push({
 					message: `inheritAud must be a boolean`,
@@ -807,9 +840,9 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 					message: `aud must be a string`,
 					path: ['aud'],
 				});
-			} else if (aud !== '*' && !isAtprotoAudience(aud)) {
+			} else if (aud !== '*') {
 				issues.push({
-					message: `invalid audience`,
+					message: `aud must be a wildcard`,
 					path: ['aud'],
 				});
 			}

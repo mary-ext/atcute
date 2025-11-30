@@ -1,4 +1,4 @@
-import { type AtprotoAudience, type Nsid } from '@atcute/lexicons/syntax';
+import { type Nsid } from '@atcute/lexicons/syntax';
 
 import type * as t from './types.js';
 
@@ -1298,8 +1298,8 @@ export type RepoAction = 'create' | 'update' | 'delete';
 export interface LexRepoPermissionBuilder {
 	type: 'repo-permission';
 	/** collections this permission covers */
-	collection: '*' | (Nsid | LexRecordBuilder)[];
-	/** allowed actions */
+	collection: (Nsid | LexRecordBuilder)[];
+	/** allowed actions; if omitted, all operations are permitted */
 	action?: RepoAction[];
 }
 
@@ -1311,10 +1311,8 @@ export interface LexRepoPermissionBuilder {
 export const repoPermission = (def: Omit<LexRepoPermissionBuilder, 'type'>): LexRepoPermissionBuilder => {
 	const { collection } = def;
 
-	if (Array.isArray(collection)) {
-		if (collection.length === 0) {
-			throw new Error(`repo-permission/collection: value can't be empty`);
-		}
+	if (collection.length === 0) {
+		throw new Error(`repo-permission/collection: value can't be empty`);
 	}
 
 	return { ...def, type: 'repo-permission' };
@@ -1325,10 +1323,10 @@ export const repoPermission = (def: Omit<LexRepoPermissionBuilder, 'type'>): Lex
  */
 export interface LexRpcPermissionBuilder {
 	type: 'rpc-permission';
-	/** allowed rpc methods or wildcard */
-	lxm: '*' | (Nsid | LexXrpcQueryBuilder | LexXrpcProcedureBuilder | LexXrpcSubscriptionBuilder)[];
-	/** allowed audience or wildcard */
-	aud?: '*' | AtprotoAudience;
+	/** allowed rpc methods */
+	lxm: (Nsid | LexXrpcQueryBuilder | LexXrpcProcedureBuilder | LexXrpcSubscriptionBuilder)[];
+	/** audience */
+	aud?: '*';
 	/** inherit the audience from the including permission scope */
 	inheritAud?: boolean;
 }
@@ -1341,14 +1339,8 @@ export interface LexRpcPermissionBuilder {
 export const rpcPermission = (def: Omit<LexRpcPermissionBuilder, 'type'>): LexRpcPermissionBuilder => {
 	const { lxm, aud, inheritAud = false } = def;
 
-	if (Array.isArray(lxm)) {
-		if (lxm.length === 0) {
-			throw new Error(`rpc-permission/lxm: value can't be empty`);
-		}
-	}
-
-	if (aud === '*' && lxm === '*') {
-		throw new Error(`rpc-permission: aud and lxm can't both be '*'`);
+	if (lxm.length === 0) {
+		throw new Error(`rpc-permission/lxm: value can't be empty`);
 	}
 
 	if (inheritAud) {
@@ -1369,23 +1361,18 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.
 		case 'repo-permission': {
 			const { collection, action } = def;
 
-			let builtCollection: string[];
-			if (collection === '*') {
-				builtCollection = ['*'];
-			} else {
-				builtCollection = collection.map((item, index) => {
-					if (typeof item === 'string') {
-						return item;
-					}
+			const builtCollection = collection.map((item, index) => {
+				if (typeof item === 'string') {
+					return item;
+				}
 
-					const defPath = ctx.toplevelDefs.get(item);
-					if (defPath === undefined) {
-						throw new Error(`${ctx.dotPath}/collection/${index}: must be defined as a top-level definition`);
-					}
+				const defPath = ctx.toplevelDefs.get(item);
+				if (defPath === undefined) {
+					throw new Error(`${ctx.dotPath}/collection/${index}: must be defined as a top-level definition`);
+				}
 
-					return toLexUri(defPath);
-				});
-			}
+				return toLexUri(defPath);
+			});
 
 			return {
 				action: action,
@@ -1397,23 +1384,18 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.
 		case 'rpc-permission': {
 			const { lxm, aud, inheritAud } = def;
 
-			let builtLxm: string[];
-			if (lxm === '*') {
-				builtLxm = ['*'];
-			} else {
-				builtLxm = lxm.map((item, index) => {
-					if (typeof item === 'string') {
-						return item;
-					}
+			const builtLxm = lxm.map((item, index) => {
+				if (typeof item === 'string') {
+					return item;
+				}
 
-					const defPath = ctx.toplevelDefs.get(item);
-					if (defPath === undefined) {
-						throw new Error(`${ctx.dotPath}/lxm/${index}: must be defined as a top-level definition`);
-					}
+				const defPath = ctx.toplevelDefs.get(item);
+				if (defPath === undefined) {
+					throw new Error(`${ctx.dotPath}/lxm/${index}: must be defined as a top-level definition`);
+				}
 
-					return toLexUri(defPath);
-				});
-			}
+				return toLexUri(defPath);
+			});
 
 			return {
 				aud: aud,
