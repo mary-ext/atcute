@@ -28,7 +28,8 @@ the packages are organized into categories under `packages/`:
 - use tabs for indentation, spaces allowed for diagrams in comments
 - use single quotes and add trailing commas
 - prefer arrow functions
-- write blocks for control statements
+- use braces for control statements, even single-line bodies
+- use bare blocks `{ }` to group related code and limit variable scope
 
 ### documentation
 
