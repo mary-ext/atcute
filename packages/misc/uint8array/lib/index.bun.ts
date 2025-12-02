@@ -3,6 +3,8 @@ import { allocUnsafe as _allocUnsafe, concatArrayBuffers as _concat } from 'bun'
 import { Buffer as NodeBuffer } from 'node:buffer';
 import { hash as _hash, timingSafeEqual as _timingSafeEqual } from 'node:crypto';
 
+const _byteLength = /*#__PURE__*/ NodeBuffer.byteLength;
+
 const _compare = /*#__PURE__*/ NodeBuffer.prototype.compare;
 const _equals = /*#__PURE__*/ NodeBuffer.prototype.equals;
 const _utf8Slice = /*#__PURE__*/ NodeBuffer.prototype.utf8Slice;
@@ -142,6 +144,15 @@ export const decodeUtf8From = (
 		if (result !== null) return result;
 	}
 	return _utf8Slice.call(from, offset, offset + length);
+};
+
+/**
+ * calculates the UTF-8 byte length of a string
+ * @param str string to measure
+ * @returns byte length when encoded as UTF-8
+ */
+export const getUtf8Length = (str: string): number => {
+	return _byteLength(str, 'utf8');
 };
 
 export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuffer>> => {

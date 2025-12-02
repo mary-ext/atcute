@@ -226,6 +226,54 @@ export const decodeUtf8From = (
 };
 
 /**
+ * calculates the UTF-8 byte length of a string
+ * @param str string to measure
+ * @returns byte length when encoded as UTF-8
+ */
+export const getUtf8Length = (str: string): number => {
+	const len = str.length;
+
+	let u16pos = 0;
+	let u8pos = 0;
+
+	// ASCII fast-path: batch process 4 chars at a time
+	while (u16pos + 3 < len) {
+		const a = str.charCodeAt(u16pos);
+		const b = str.charCodeAt(u16pos + 1);
+		const c = str.charCodeAt(u16pos + 2);
+		const d = str.charCodeAt(u16pos + 3);
+
+		if ((a | b | c | d) >= 0x80) {
+			break;
+		}
+
+		u16pos += 4;
+		u8pos += 4;
+	}
+
+	// handle remaining chars
+	while (u16pos < len) {
+		const code = str.charCodeAt(u16pos);
+
+		if (code < 0x80) {
+			u16pos += 1;
+			u8pos += 1;
+		} else if (code < 0x800) {
+			u16pos += 1;
+			u8pos += 2;
+		} else if (code < 0xd800 || code > 0xdbff) {
+			u16pos += 1;
+			u8pos += 3;
+		} else {
+			u16pos += 2;
+			u8pos += 4;
+		}
+	}
+
+	return u8pos;
+};
+
+/**
  * get a SHA-256 digest of this buffer
  */
 export const toSha256 = async (buffer: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> => {

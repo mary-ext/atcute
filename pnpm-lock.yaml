@@ -624,7 +624,11 @@ importers:
         specifier: ^4.0.14
         version: 4.0.14(@types/node@24.10.1)(@vitest/browser-playwright@4.0.14)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
 
-  packages/misc/uint8array: {}
+  packages/misc/uint8array:
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.3.3
+        version: 1.3.3
 
   packages/misc/util-fetch:
     dependencies:
@@ -637,9 +641,6 @@ importers:
       '@atcute/client':
         specifier: workspace:^
         version: link:../../clients/client
-      '@atcute/identity':
-        specifier: workspace:^
-        version: link:../../identity/identity
       '@atcute/identity-resolver':
         specifier: workspace:^
         version: link:../../identity/identity-resolver
