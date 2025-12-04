@@ -76,6 +76,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 const _preferencesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.publication#preferences')),
 	/**
+	 * Whether to display credit line on the publication
+	 * @default true
+	 */
+	showCredit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+	/**
 	 * Whether documents from this publication should appear in public discover feeds
 	 * @default true
 	 */

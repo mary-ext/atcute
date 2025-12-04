@@ -71,6 +71,11 @@
 		"preferences": {
 			"type": "object",
 			"properties": {
+				"showCredit": {
+					"type": "boolean",
+					"default": true,
+					"description": "Whether to display credit line on the publication"
+				},
 				"showInDiscover": {
 					"type": "boolean",
 					"default": true,

@@ -2,10 +2,11 @@
 	"id": "blog.pckt.block.hardBreak",
 	"defs": {
 		"main": {
-			"type": "object"
+			"type": "object",
+			"required": [],
+			"properties": {}
 		}
 	},
 	"$type": "com.atproto.lexicon.schema",
-	"lexicon": 1,
-	"description": "Hard line break within inline content. Forces text to continue on a new line without creating a new paragraph."
+	"lexicon": 1
 }
