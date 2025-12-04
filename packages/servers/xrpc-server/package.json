@@ -20,7 +20,7 @@
 		"./middlewares/cors": "./dist/middlewares/cors.js"
 	},
 	"scripts": {
-		"build": "tsc --project tsconfig.build.json",
+		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

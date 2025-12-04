@@ -23,7 +23,7 @@
 	},
 	"sideEffects": false,
 	"scripts": {
-		"build": "tsc --project tsconfig.build.json",
+		"build": "tsgo --project tsconfig.build.json",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {

@@ -24,7 +24,7 @@
 		"./types/*": "./dist/lexicons/types/*.js"
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsgo",
 		"pull": "lex-cli pull",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
 		"prepublish": "rm -rf dist; pnpm run build"

@@ -18,7 +18,7 @@
 		".": "./dist/index.js"
 	},
 	"scripts": {
-		"build": "tsc --project tsconfig.build.json",
+		"build": "tsgo --project tsconfig.build.json",
 		"test": "bun test",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

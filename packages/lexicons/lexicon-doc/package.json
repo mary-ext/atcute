@@ -22,7 +22,7 @@
 	},
 	"sideEffects": false,
 	"scripts": {
-		"build": "pnpm run generate:schema && tsc --project tsconfig.build.json",
+		"build": "pnpm run generate:schema && tsgo --project tsconfig.build.json",
 		"generate:schema": "node scripts/generate-schema.js",
 		"test": "vitest --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"

@@ -21,7 +21,7 @@
 		".": "./dist/index.js"
 	},
 	"scripts": {
-		"build": "pnpm run generate:schema && tsc",
+		"build": "pnpm run generate:schema && tsgo",
 		"generate:schema": "node scripts/generate-schema.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

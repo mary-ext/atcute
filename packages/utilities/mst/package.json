@@ -25,7 +25,7 @@
 	"sideEffects": false,
 	"scripts": {
 		"generate-tests": "cd mst-test-suite && mise exec -- uv run python scripts/generate_exhaustive_cars.py",
-		"build": "tsc --project tsconfig.build.json",
+		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest run",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

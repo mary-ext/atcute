@@ -16,6 +16,6 @@
 		".": "./dist/index.js"
 	},
 	"scripts": {
-		"build": "tsc"
+		"build": "tsgo"
 	}
 }

@@ -11,7 +11,7 @@
 	},
 	"bin": "./cli.mjs",
 	"scripts": {
-		"build": "tsc"
+		"build": "tsgo"
 	},
 	"dependencies": {
 		"esbuild": "^0.25.12",

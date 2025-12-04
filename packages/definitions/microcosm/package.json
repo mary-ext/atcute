@@ -20,7 +20,7 @@
 		"./types/com/bad-example/*": "./dist/lexicons/types/com/bad-example/*.js"
 	},
 	"scripts": {
-		"build": "tsc -b",
+		"build": "tsgo -b",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
 		"export": "lex-cli export",
 		"prepublish": "rm -rf dist; pnpm run build"

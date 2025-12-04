@@ -25,7 +25,7 @@
 		"./types/chat/*": "./dist/lexicons/types/chat/bsky/*.js"
 	},
 	"scripts": {
-		"build": "tsc --project tsconfig.build.json",
+		"build": "tsgo --project tsconfig.build.json",
 		"pull": "lex-cli pull",
 		"test": "vitest",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
