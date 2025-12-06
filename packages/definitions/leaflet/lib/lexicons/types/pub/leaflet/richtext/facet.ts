@@ -1,6 +1,10 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
+const _atMentionSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#atMention')),
+	atURI: /*#__PURE__*/ v.genericUriString(),
+});
 const _boldSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#bold')),
 });
@@ -17,6 +21,10 @@ const _byteSliceSchema = /*#__PURE__*/ v.object({
 });
 const _codeSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#code')),
+});
+const _didMentionSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#didMention')),
+	did: /*#__PURE__*/ v.didString(),
 });
 const _highlightSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#highlight')),
@@ -37,8 +45,10 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	get features() {
 		return /*#__PURE__*/ v.array(
 			/*#__PURE__*/ v.variant([
+				atMentionSchema,
 				boldSchema,
 				codeSchema,
+				didMentionSchema,
 				highlightSchema,
 				idSchema,
 				italicSchema,
@@ -59,9 +69,11 @@ const _underlineSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#underline')),
 });
 
+type atMention$schematype = typeof _atMentionSchema;
 type bold$schematype = typeof _boldSchema;
 type byteSlice$schematype = typeof _byteSliceSchema;
 type code$schematype = typeof _codeSchema;
+type didMention$schematype = typeof _didMentionSchema;
 type highlight$schematype = typeof _highlightSchema;
 type id$schematype = typeof _idSchema;
 type italic$schematype = typeof _italicSchema;
@@ -70,9 +82,11 @@ type main$schematype = typeof _mainSchema;
 type strikethrough$schematype = typeof _strikethroughSchema;
 type underline$schematype = typeof _underlineSchema;
 
+export interface atMentionSchema extends atMention$schematype {}
 export interface boldSchema extends bold$schematype {}
 export interface byteSliceSchema extends byteSlice$schematype {}
 export interface codeSchema extends code$schematype {}
+export interface didMentionSchema extends didMention$schematype {}
 export interface highlightSchema extends highlight$schematype {}
 export interface idSchema extends id$schematype {}
 export interface italicSchema extends italic$schematype {}
@@ -81,9 +95,11 @@ export interface mainSchema extends main$schematype {}
 export interface strikethroughSchema extends strikethrough$schematype {}
 export interface underlineSchema extends underline$schematype {}
 
+export const atMentionSchema = _atMentionSchema as atMentionSchema;
 export const boldSchema = _boldSchema as boldSchema;
 export const byteSliceSchema = _byteSliceSchema as byteSliceSchema;
 export const codeSchema = _codeSchema as codeSchema;
+export const didMentionSchema = _didMentionSchema as didMentionSchema;
 export const highlightSchema = _highlightSchema as highlightSchema;
 export const idSchema = _idSchema as idSchema;
 export const italicSchema = _italicSchema as italicSchema;
@@ -92,9 +108,11 @@ export const mainSchema = _mainSchema as mainSchema;
 export const strikethroughSchema = _strikethroughSchema as strikethroughSchema;
 export const underlineSchema = _underlineSchema as underlineSchema;
 
+export interface AtMention extends v.InferInput<typeof atMentionSchema> {}
 export interface Bold extends v.InferInput<typeof boldSchema> {}
 export interface ByteSlice extends v.InferInput<typeof byteSliceSchema> {}
 export interface Code extends v.InferInput<typeof codeSchema> {}
+export interface DidMention extends v.InferInput<typeof didMentionSchema> {}
 export interface Highlight extends v.InferInput<typeof highlightSchema> {}
 export interface Id extends v.InferInput<typeof idSchema> {}
 export interface Italic extends v.InferInput<typeof italicSchema> {}
