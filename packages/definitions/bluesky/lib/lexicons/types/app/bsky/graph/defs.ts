@@ -99,6 +99,22 @@ const _notFoundActorSchema = /*#__PURE__*/ v.object({
 const _referencelistSchema = /*#__PURE__*/ v.literal('app.bsky.graph.defs#referencelist');
 const _relationshipSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#relationship')),
+	/**
+	 * if the actor is blocked by this DID, contains the AT-URI of the block record
+	 */
+	blockedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	/**
+	 * if the actor is blocked by this DID via a block list, contains the AT-URI of the listblock record
+	 */
+	blockedByList: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	/**
+	 * if the actor blocks this DID, this is the AT-URI of the block record
+	 */
+	blocking: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	/**
+	 * if the actor blocks this DID via a block list, this is the AT-URI of the listblock record
+	 */
+	blockingByList: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	did: /*#__PURE__*/ v.didString(),
 	/**
 	 * if the actor is followed by this DID, contains the AT-URI of the follow record

@@ -126,8 +126,9 @@ const _ageAssuranceOverrideEventSchema = /*#__PURE__*/ v.object({
 	},
 	/**
 	 * Comment describing the reason for the override.
+	 * @minLength 1
 	 */
-	comment: /*#__PURE__*/ v.string(),
+	comment: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1)]),
 	/**
 	 * The status to be set for the user decided by a moderator, overriding whatever value the user had previously. Use reset to default to original state.
 	 */
@@ -685,8 +686,9 @@ const _revokeAccountCredentialsEventSchema = /*#__PURE__*/ v.object({
 	),
 	/**
 	 * Comment describing the reason for the revocation.
+	 * @minLength 1
 	 */
-	comment: /*#__PURE__*/ v.string(),
+	comment: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1)]),
 });
 const _scheduleTakedownEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
