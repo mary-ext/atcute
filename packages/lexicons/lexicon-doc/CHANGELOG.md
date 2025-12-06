@@ -1,5 +1,11 @@
 # @atcute/lexicon-doc
 
+## 2.0.5
+
+### Patch Changes
+
+- 32c0da6: rectify permission set validation once again
+
 ## 2.0.4
 
 ### Patch Changes

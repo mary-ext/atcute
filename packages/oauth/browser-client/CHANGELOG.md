@@ -1,5 +1,19 @@
 # @atcute/oauth-browser-client
 
+## 2.0.2
+
+### Patch Changes
+
+- 18afebb: replace IdentityResolver with ActorResolver
+
+  not marking the functions as deprecated yet, I think those can come later.
+
+- Updated dependencies [a562b63]
+- Updated dependencies [9c8a343]
+- Updated dependencies [1b2c79f]
+  - @atcute/uint8array@1.0.6
+  - @atcute/identity-resolver@1.2.0
+
 ## 2.0.1
 
 ### Patch Changes

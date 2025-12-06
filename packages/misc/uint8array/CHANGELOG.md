@@ -1,5 +1,12 @@
 # @atcute/uint8array
 
+## 1.0.6
+
+### Patch Changes
+
+- a562b63: add getUtf8Length
+- 1b2c79f: improve UTF-8 decode for Node.js
+
 ## 1.0.5
 
 ### Patch Changes
