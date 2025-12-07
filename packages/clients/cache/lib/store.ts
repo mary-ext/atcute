@@ -1,0 +1,459 @@
+import type { BaseSchema, InferOutput, ObjectSchema, VariantSchema } from '@atcute/lexicons/validations';
+
+import {
+	isArraySchema,
+	isNullableSchema,
+	isObjectSchema,
+	isOptionalSchema,
+	isVariantSchema,
+} from './predicates.js';
+import type { EntityDefinition, EntitySubscriber, EntityTypeId, TypeSubscriber } from './types.js';
+import { getTypeIdFromSchema } from './types.js';
+
+type AnyEntityDefinition = EntityDefinition<ObjectSchema>;
+
+interface EntityStoreEntry {
+	definition: AnyEntityDefinition;
+	entities: Map<string, WeakRef<object>>;
+	subscribers: Map<string, Set<EntitySubscriber<unknown>>>;
+	typeSubscribers: Set<TypeSubscriber<unknown>>;
+}
+
+export interface NormalizedCacheOptions {
+	wrapEntity?: (entity: unknown) => unknown;
+}
+
+/**
+ * normalized cache store for AT Protocol responses
+ */
+export class NormalizedCache {
+	#stores = new Map<EntityTypeId, EntityStoreEntry>();
+	#schemaToTypeId = new Map<ObjectSchema, EntityTypeId>();
+	#wrapEntity: ((entity: unknown) => unknown) | undefined;
+	#registry = new FinalizationRegistry<{ typeId: EntityTypeId; key: string }>((held) => {
+		const store = this.#stores.get(held.typeId);
+		if (store) {
+			const ref = store.entities.get(held.key);
+			// only delete if the ref is actually dead (not replaced with a new one)
+			if (ref !== undefined && ref.deref() === undefined) {
+				store.entities.delete(held.key);
+			}
+		}
+	});
+
+	constructor(options?: NormalizedCacheOptions) {
+		this.#wrapEntity = options?.wrapEntity;
+	}
+
+	#getTypeId(schema: ObjectSchema): EntityTypeId | undefined {
+		let typeId = this.#schemaToTypeId.get(schema);
+		if (typeId === undefined) {
+			typeId = getTypeIdFromSchema(schema);
+			if (typeId !== undefined) {
+				this.#schemaToTypeId.set(schema, typeId);
+			}
+		}
+		return typeId;
+	}
+
+	#getStore(schema: ObjectSchema): EntityStoreEntry | undefined {
+		const typeId = this.#getTypeId(schema);
+		return typeId ? this.#stores.get(typeId) : undefined;
+	}
+
+	#notifySubscribers(store: EntityStoreEntry, key: string, entity: object | undefined): void {
+		// notify entity-specific subscribers
+		const entitySubs = store.subscribers.get(key);
+		if (entitySubs) {
+			for (const cb of entitySubs) {
+				cb(entity);
+			}
+		}
+
+		// notify type subscribers
+		for (const cb of store.typeSubscribers) {
+			cb(key, entity);
+		}
+	}
+
+	#upsertEntity(
+		typeId: EntityTypeId,
+		key: string,
+		incoming: object,
+		merge: ((existing: any, incoming: any) => any) | undefined,
+	): object {
+		const store = this.#stores.get(typeId)!;
+		const existingRef = store.entities.get(key);
+		const existing = existingRef?.deref();
+
+		if (existing !== undefined) {
+			// merge incoming into existing
+			const merged = merge ? merge(existing, incoming) : incoming;
+			Object.assign(existing, merged);
+			this.#notifySubscribers(store, key, existing);
+			return existing;
+		}
+
+		// new entity - wrap and store it
+		const entity: any = this.#wrapEntity ? this.#wrapEntity(incoming) : incoming;
+		store.entities.set(key, new WeakRef(entity));
+		this.#registry.register(entity, { typeId, key });
+		this.#notifySubscribers(store, key, entity);
+		return entity;
+	}
+
+	#resolveVariantMember(schema: VariantSchema, data: Record<string, unknown>): ObjectSchema | undefined {
+		const type = data.$type as string | undefined;
+		if (type === undefined) {
+			return undefined;
+		}
+
+		for (const member of schema.members) {
+			const memberTypeId = getTypeIdFromSchema(member as ObjectSchema);
+			if (memberTypeId === type) {
+				return member as ObjectSchema;
+			}
+		}
+
+		return undefined;
+	}
+
+	#walkAndExtract(schema: BaseSchema, data: unknown): unknown {
+		if (data === null || data === undefined) {
+			return data;
+		}
+
+		if (isObjectSchema(schema)) {
+			// check if this is a registered entity type
+			const typeId = this.#getTypeId(schema);
+			const isEntity = typeId !== undefined && this.#stores.has(typeId);
+
+			let entity = data as Record<string, unknown>;
+			if (isEntity) {
+				const store = this.#stores.get(typeId)!;
+				const key = store.definition.key(entity);
+				entity = this.#upsertEntity(typeId, key, entity, store.definition.merge) as Record<string, unknown>;
+			}
+
+			// walk nested properties
+			const shape = schema.shape;
+			let cloned = false;
+
+			for (const propName in shape) {
+				const propSchema = shape[propName];
+				const propValue = entity[propName];
+
+				if (propValue !== undefined) {
+					const extracted = this.#walkAndExtract(propSchema, propValue);
+					if (extracted !== propValue) {
+						// only mutate entities in-place; clone non-entities on first modification
+						if (!isEntity && !cloned) {
+							entity = { ...entity };
+							cloned = true;
+						}
+
+						entity[propName] = extracted;
+					}
+				}
+			}
+
+			return entity;
+		}
+
+		if (isArraySchema(schema)) {
+			const prev = data as unknown[];
+
+			let modified = false;
+			const next: unknown[] = [];
+
+			for (let i = 0; i < prev.length; i++) {
+				const item = prev[i];
+				const extracted = this.#walkAndExtract(schema.item, item);
+
+				next.push(extracted);
+
+				if (extracted !== item) {
+					modified = true;
+				}
+			}
+
+			return modified ? next : prev;
+		}
+
+		if (isVariantSchema(schema)) {
+			const objectData = data as Record<string, unknown>;
+
+			const member = this.#resolveVariantMember(schema, objectData);
+			if (member) {
+				return this.#walkAndExtract(member, data);
+			}
+
+			return data;
+		}
+
+		if (isOptionalSchema(schema) || isNullableSchema(schema)) {
+			return this.#walkAndExtract(schema.wrapped, data);
+		}
+
+		// primitive types - return as-is
+		return data;
+	}
+
+	/**
+	 * register an entity type for normalization
+	 * @param definition entity definition with schema, key extractor, and optional merge function
+	 */
+	define<T extends ObjectSchema>(definition: EntityDefinition<T>): void {
+		const typeId = getTypeIdFromSchema(definition.schema);
+		if (typeId === undefined) {
+			throw new Error('schema must have a $type literal field');
+		}
+
+		if (this.#stores.has(typeId)) {
+			throw new Error(`entity type "${typeId}" is already defined`);
+		}
+
+		this.#stores.set(typeId, {
+			definition: definition as unknown as AnyEntityDefinition,
+			entities: new Map(),
+			subscribers: new Map(),
+			typeSubscribers: new Set(),
+		});
+
+		this.#schemaToTypeId.set(definition.schema, typeId);
+	}
+
+	/**
+	 * walk response using schema, normalize and cache entities
+	 * @param schema the response schema
+	 * @param data the response data
+	 * @returns response with cached entity refs swapped in
+	 */
+	normalize<T extends BaseSchema>(schema: T, data: InferOutput<T>): InferOutput<T> {
+		return this.#walkAndExtract(schema, data) as InferOutput<T>;
+	}
+
+	/**
+	 * create a reusable normalizer function for a schema
+	 * @param schema the response schema
+	 * @returns function that normalizes data according to schema
+	 */
+	normalizer<T extends BaseSchema>(schema: T): (data: InferOutput<T>) => InferOutput<T> {
+		return (data) => this.#walkAndExtract(schema, data) as InferOutput<T>;
+	}
+
+	/**
+	 * get entity from cache by schema and key
+	 * @param schema the entity schema
+	 * @param key the entity key
+	 * @returns the cached entity or undefined if not found/collected
+	 */
+	get<T extends ObjectSchema>(schema: T, key: string): InferOutput<T> | undefined {
+		const store = this.#getStore(schema);
+		if (!store) {
+			return undefined;
+		}
+
+		const ref = store.entities.get(key);
+		return ref?.deref() as InferOutput<T> | undefined;
+	}
+
+	/**
+	 * check if entity exists in cache
+	 * @param schema the entity schema
+	 * @param key the entity key
+	 */
+	has(schema: ObjectSchema, key: string): boolean {
+		const store = this.#getStore(schema);
+		if (!store) {
+			return false;
+		}
+
+		const ref = store.entities.get(key);
+		return ref?.deref() !== undefined;
+	}
+
+	/**
+	 * get all cached entities of a type
+	 * @param schema the entity schema
+	 * @returns map of key to entity (only includes live refs)
+	 */
+	getAll<T extends ObjectSchema>(schema: T): Map<string, InferOutput<T>> {
+		const store = this.#getStore(schema);
+		const result = new Map<string, InferOutput<T>>();
+
+		if (!store) {
+			return result;
+		}
+
+		for (const [key, ref] of store.entities) {
+			const entity = ref.deref();
+			if (entity !== undefined) {
+				result.set(key, entity as InferOutput<T>);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * set entity directly in cache
+	 * @param schema the entity schema
+	 * @param key the entity key
+	 * @param entity the entity to cache
+	 */
+	set<T extends ObjectSchema>(schema: T, key: string, entity: InferOutput<T>): void {
+		const typeId = this.#getTypeId(schema);
+		if (typeId === undefined || !this.#stores.has(typeId)) {
+			throw new Error('schema is not registered');
+		}
+
+		const store = this.#stores.get(typeId)!;
+		const existingRef = store.entities.get(key);
+		const existing = existingRef?.deref();
+
+		if (existing !== undefined) {
+			Object.assign(existing, entity);
+			this.#notifySubscribers(store, key, existing);
+		} else {
+			const wrapped: any = this.#wrapEntity ? this.#wrapEntity(entity) : entity;
+			store.entities.set(key, new WeakRef(wrapped));
+			this.#registry.register(wrapped, { typeId, key });
+			this.#notifySubscribers(store, key, wrapped);
+		}
+	}
+
+	/**
+	 * update entity with updater function
+	 * @param schema the entity schema
+	 * @param key the entity key
+	 * @param updater function that returns updated entity
+	 * @returns true if entity was found and updated
+	 */
+	update<T extends ObjectSchema>(
+		schema: T,
+		key: string,
+		updater: (entity: InferOutput<T>) => InferOutput<T>,
+	): boolean {
+		const store = this.#getStore(schema);
+		if (!store) {
+			return false;
+		}
+
+		const ref = store.entities.get(key);
+		const existing = ref?.deref() as InferOutput<T> | undefined;
+
+		if (existing === undefined) {
+			return false;
+		}
+
+		const updated = updater(existing);
+		Object.assign(existing, updated);
+		this.#notifySubscribers(store, key, existing);
+		return true;
+	}
+
+	/**
+	 * delete entity from cache
+	 * @param schema the entity schema
+	 * @param key the entity key
+	 * @returns true if entity was found and deleted
+	 */
+	delete(schema: ObjectSchema, key: string): boolean {
+		const store = this.#getStore(schema);
+		if (!store) {
+			return false;
+		}
+
+		const existed = store.entities.has(key);
+		store.entities.delete(key);
+
+		if (existed) {
+			this.#notifySubscribers(store, key, undefined);
+		}
+
+		return existed;
+	}
+
+	/**
+	 * delete all entities of a type
+	 * @param schema the entity schema
+	 */
+	deleteType(schema: ObjectSchema): void {
+		const store = this.#getStore(schema);
+		if (!store) {
+			return;
+		}
+
+		const keys = [...store.entities.keys()];
+		store.entities.clear();
+
+		for (const key of keys) {
+			this.#notifySubscribers(store, key, undefined);
+		}
+	}
+
+	/** clear entire cache */
+	clear(): void {
+		for (const [_typeId, store] of this.#stores) {
+			const keys = [...store.entities.keys()];
+			store.entities.clear();
+
+			for (const key of keys) {
+				this.#notifySubscribers(store, key, undefined);
+			}
+		}
+	}
+
+	/**
+	 * subscribe to changes for a specific entity
+	 * @param schema the entity schema
+	 * @param key the entity key
+	 * @param callback called when entity changes
+	 * @returns unsubscribe function
+	 */
+	subscribe<T extends ObjectSchema>(
+		schema: T,
+		key: string,
+		callback: EntitySubscriber<InferOutput<T>>,
+	): () => void {
+		const store = this.#getStore(schema);
+		if (!store) {
+			throw new Error('schema is not registered');
+		}
+
+		let subs = store.subscribers.get(key);
+		if (!subs) {
+			subs = new Set();
+			store.subscribers.set(key, subs);
+		}
+
+		subs.add(callback as EntitySubscriber<unknown>);
+
+		return () => {
+			subs!.delete(callback as EntitySubscriber<unknown>);
+			if (subs!.size === 0) {
+				store.subscribers.delete(key);
+			}
+		};
+	}
+
+	/**
+	 * subscribe to all changes for an entity type
+	 * @param schema the entity schema
+	 * @param callback called when any entity of this type changes
+	 * @returns unsubscribe function
+	 */
+	subscribeType<T extends ObjectSchema>(schema: T, callback: TypeSubscriber<InferOutput<T>>): () => void {
+		const store = this.#getStore(schema);
+		if (!store) {
+			throw new Error('schema is not registered');
+		}
+
+		store.typeSubscribers.add(callback as TypeSubscriber<unknown>);
+
+		return () => {
+			store.typeSubscribers.delete(callback as TypeSubscriber<unknown>);
+		};
+	}
+}

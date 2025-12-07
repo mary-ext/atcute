@@ -119,6 +119,19 @@ importers:
         specifier: workspace:^
         version: link:../../utilities/tid
 
+  packages/clients/cache:
+    dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+    devDependencies:
+      '@atcute/bluesky':
+        specifier: workspace:^
+        version: link:../../definitions/bluesky
+      vitest:
+        specifier: ^4.0.14
+        version: 4.0.14(@types/node@24.10.1)(@vitest/browser-playwright@4.0.14)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
+
   packages/clients/client:
     dependencies:
       '@atcute/identity':
