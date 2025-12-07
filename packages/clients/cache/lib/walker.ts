@@ -91,7 +91,7 @@ export class WalkerCache {
 				return identity;
 			}
 
-			return (data) => (data === undefined ? data : innerWalker(data));
+			return createOptionalWalker(innerWalker);
 		}
 
 		if (isNullableSchema(schema)) {
@@ -100,7 +100,7 @@ export class WalkerCache {
 				return identity;
 			}
 
-			return (data) => (data === null ? data : innerWalker(data));
+			return createNullableWalker(innerWalker);
 		}
 
 		// primitive types - no walking needed
@@ -136,34 +136,7 @@ export class WalkerCache {
 			return identity;
 		}
 
-		return (data) => {
-			// if entity, upsert to get cached reference (mutate in place)
-			// if not entity, clone on first property change
-			let entity = data as Record<string, unknown>;
-			let cloned = entityTypeId !== undefined;
-
-			if (entityTypeId !== undefined) {
-				entity = ctx.upsertEntity(entityTypeId, entity) as Record<string, unknown>;
-			}
-
-			if (propWalkers !== undefined) {
-				for (const [name, walk] of propWalkers) {
-					const propValue = entity[name];
-					const walked = walk(propValue);
-
-					if (walked !== propValue) {
-						if (entityTypeId === undefined && !cloned) {
-							entity = { ...entity };
-							cloned = true;
-						}
-
-						entity[name] = walked;
-					}
-				}
-			}
-
-			return entity;
-		};
+		return createObjectWalker(ctx, entityTypeId, propWalkers);
 	}
 
 	#buildArrayWalker(schema: { item: BaseSchema }): WalkFn {
@@ -173,25 +146,7 @@ export class WalkerCache {
 			return identity;
 		}
 
-		return (data) => {
-			const prev = data as unknown[];
-			let next: unknown[] | undefined;
-
-			for (let i = 0; i < prev.length; i++) {
-				const item = prev[i];
-				const walked = itemWalker(item);
-
-				if (walked !== item) {
-					if (next === undefined) {
-						next = prev.slice();
-					}
-
-					next[i] = walked;
-				}
-			}
-
-			return next ?? prev;
-		};
+		return createArrayWalker(itemWalker);
 	}
 
 	#buildVariantWalker(schema: VariantSchema): WalkFn {
@@ -217,16 +172,88 @@ export class WalkerCache {
 			return identity;
 		}
 
-		return (data) => {
-			const obj = data as Record<string, unknown>;
-			const type = obj.$type as string | undefined;
-
-			if (type === undefined) {
-				return data;
-			}
-
-			const memberWalker = walkerMap[type];
-			return memberWalker ? memberWalker(data) : data;
-		};
+		return createVariantWalker(walkerMap);
 	}
 }
+
+/** creates an object walker with minimal closure scope */
+const createObjectWalker = (
+	ctx: WalkerContext,
+	entityTypeId: EntityTypeId | undefined,
+	propWalkers: [string, WalkFn][] | undefined,
+): WalkFn => {
+	return (data) => {
+		let entity = data as Record<string, unknown>;
+		let cloned = entityTypeId !== undefined;
+
+		if (entityTypeId !== undefined) {
+			entity = ctx.upsertEntity(entityTypeId, entity) as Record<string, unknown>;
+		}
+
+		if (propWalkers !== undefined) {
+			for (const [name, walk] of propWalkers) {
+				const propValue = entity[name];
+				const walked = walk(propValue);
+
+				if (walked !== propValue) {
+					if (entityTypeId === undefined && !cloned) {
+						entity = { ...entity };
+						cloned = true;
+					}
+
+					entity[name] = walked;
+				}
+			}
+		}
+
+		return entity;
+	};
+};
+
+/** creates an array walker with minimal closure scope */
+const createArrayWalker = (itemWalker: WalkFn): WalkFn => {
+	return (data) => {
+		const prev = data as unknown[];
+		let next: unknown[] | undefined;
+
+		for (let i = 0; i < prev.length; i++) {
+			const item = prev[i];
+			const walked = itemWalker(item);
+
+			if (walked !== item) {
+				if (next === undefined) {
+					next = prev.slice();
+				}
+
+				next[i] = walked;
+			}
+		}
+
+		return next ?? prev;
+	};
+};
+
+/** creates a variant walker with minimal closure scope */
+const createVariantWalker = (walkerMap: Record<string, WalkFn>): WalkFn => {
+	return (data) => {
+		const obj = data as Record<string, unknown>;
+		const type = obj.$type as string | undefined;
+
+		if (type === undefined) {
+			return data;
+		}
+
+		const memberWalker = walkerMap[type];
+		return memberWalker ? memberWalker(data) : data;
+	};
+};
+
+/** creates an optional walker with minimal closure scope */
+const createOptionalWalker = (innerWalker: WalkFn): WalkFn => {
+	return (data) => (data === undefined ? data : innerWalker(data));
+};
+
+/** creates a nullable walker with minimal closure scope */
+const createNullableWalker = (innerWalker: WalkFn): WalkFn => {
+	return (data) => (data === null ? data : innerWalker(data));
+};
