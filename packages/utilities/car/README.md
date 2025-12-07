@@ -1,6 +1,6 @@
 # @atcute/car
 
-content-addressable archive (CAR) reader for AT Protocol.
+content-addressable archive (CAR) codec for AT Protocol.
 
 ```sh
 npm install @atcute/car
@@ -62,5 +62,20 @@ const roots = car.roots;
 for (const entry of car) {
 	entry;
 	// ^? CarEntry { cid: CidLink {}, bytes: Uint8Array {}, ... }
+}
+```
+
+### writing
+
+```ts
+import { writeCarStream } from '@atcute/car';
+
+const blocks = async function* () {
+	yield { cid: commitCid.bytes, data: commitBytes };
+	yield { cid: nodeCid.bytes, data: nodeBytes };
+};
+
+for await (const chunk of writeCarStream([rootCid], blocks())) {
+	stream.write(chunk);
 }
 ```

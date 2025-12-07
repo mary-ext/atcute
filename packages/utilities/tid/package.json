@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "@atcute/tid",
 	"version": "1.0.3",
-	"description": "atproto timestamp identifier identifier codec library",
+	"description": "atproto timestamp identifier codec library",
 	"keywords": [
 		"atproto",
 		"codec"

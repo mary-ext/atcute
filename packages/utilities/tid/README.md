@@ -22,7 +22,7 @@ const tid = TID.now();
 
 // create from specific timestamp (microseconds) and clock ID
 const custom = TID.create(1724171495793000, 512);
-// -> "3l25zusnsfcta"
+// -> "3l25zusnsfck2"
 ```
 
 ### parsing TIDs

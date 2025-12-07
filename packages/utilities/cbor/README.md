@@ -32,10 +32,13 @@ const cbor = encode(record);
 ### decoding
 
 ```ts
-import { decode } from '@atcute/cbor';
+import { decode, decodeFirst } from '@atcute/cbor';
 
 const record = decode(cborBytes);
 // -> { $type: 'app.bsky.feed.post', ... }
+
+// decode from a buffer containing multiple values
+const [value, remainder] = decodeFirst(cborBytes);
 ```
 
 ## notes

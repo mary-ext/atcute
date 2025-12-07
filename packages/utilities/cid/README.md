@@ -24,6 +24,9 @@ const cid = await CID.create(0x71, cborBytes);
 
 // create from raw data
 const rawCid = await CID.create(0x55, rawBytes);
+
+// create an empty CID (zero-length digest)
+const empty = CID.createEmpty(0x71);
 ```
 
 ### parsing CIDs
@@ -61,4 +64,24 @@ CID.toBinary(cid);
 import * as CID from '@atcute/cid';
 
 CID.equals(cidA, cidB); // true if same content hash
+```
+
+### CidLink wrapper
+
+for JSON serialization compatible with atproto's data model:
+
+```ts
+import { toCidLink, fromCidLink, isCidLink } from '@atcute/cid';
+
+// convert Cid to CidLink (has $link property)
+const link = toCidLink(cid);
+// -> { $link: "bafyrei..." }
+
+// convert back to Cid
+const cid = fromCidLink(link);
+
+// type guard
+if (isCidLink(value)) {
+	console.log(value.$link);
+}
 ```

@@ -8,7 +8,7 @@ export interface PublicKey {
 	readonly jwtAlg: string;
 
 	/**
-	 * Verifies a signature against a provided data
+	 * Verifies a signature against provided data
 	 */
 	verify(sig: Uint8Array, data: Uint8Array, options?: VerifyOptions): Promise<boolean>;
 
@@ -19,7 +19,7 @@ export interface PublicKey {
 	 * - `jwk`: serialized to JWK (JSON Web Key)
 	 * - `multikey`: serialized to multikey string
 	 * - `raw`: as raw bytes
-	 * - `rawHex` serialized to base16 string
+	 * - `rawHex`: serialized to base16 string
 	 */
 	exportPublicKey(format: 'did'): Promise<DidKeyString>;
 	exportPublicKey(format: 'jwk'): Promise<JsonWebKey>;
