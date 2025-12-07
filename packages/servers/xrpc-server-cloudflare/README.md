@@ -2,6 +2,10 @@
 
 Cloudflare Workers WebSocket adapter for `@atcute/xrpc-server`.
 
+```sh
+npm install @atcute/xrpc-server-cloudflare
+```
+
 ```ts
 import { XRPCRouter } from '@atcute/xrpc-server';
 import { createCloudflareWebSocket } from '@atcute/xrpc-server-cloudflare';

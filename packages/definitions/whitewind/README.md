@@ -2,6 +2,10 @@
 
 [WhiteWind](https://whtwnd.com) (com.whtwnd.\*) schema definitions
 
+```sh
+npm install @atcute/whitewind
+```
+
 ## usage
 
 ```ts

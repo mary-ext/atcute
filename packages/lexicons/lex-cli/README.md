@@ -1,6 +1,10 @@
 # @atcute/lex-cli
 
-command line tool for generating TypeScript schemas out of lexicon documents
+generate TypeScript schemas from lexicon documents.
+
+```sh
+npm install @atcute/lex-cli
+```
 
 ## quick start
 

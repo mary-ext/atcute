@@ -2,6 +2,10 @@
 
 [Bluesky](https://bsky.app) (app.bsky.\* and chat.bsky.\*) schema definitions
 
+```sh
+npm install @atcute/bluesky
+```
+
 ## usage
 
 ```ts

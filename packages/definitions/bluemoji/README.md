@@ -2,6 +2,10 @@
 
 [Bluemoji](https://github.com/aendra-rininsland/bluemoji) (blue.moji.\*) schema definitions
 
+```sh
+npm install @atcute/bluemoji
+```
+
 ## usage
 
 ```ts

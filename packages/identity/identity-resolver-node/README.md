@@ -1,9 +1,20 @@
 # @atcute/identity-resolver-node
 
-additional atproto identity resolvers for Node.js
+Node.js handle resolver using native DNS.
+
+```sh
+npm install @atcute/identity-resolver-node
+```
+
+provides `NodeDnsHandleResolver` which resolves handles via DNS TXT records using Node.js's native
+`dns` module, avoiding the need for HTTP-based resolution.
+
+## usage
 
 ```ts
-// handle resolution
+import { CompositeHandleResolver, WellKnownHandleResolver } from '@atcute/identity-resolver';
+import { NodeDnsHandleResolver } from '@atcute/identity-resolver-node';
+
 const handleResolver = new CompositeHandleResolver({
 	strategy: 'race',
 	methods: {
@@ -12,25 +23,14 @@ const handleResolver = new CompositeHandleResolver({
 	},
 });
 
-try {
-	const handle = await didResolver.resolve('bsky.app');
-	//    ^? 'did:plc:z72i7hdynmk6r22z27h6tvur'
-} catch (err) {
-	if (err instanceof DidNotFoundError) {
-		// handle returned no did
-	}
-	if (err instanceof InvalidResolvedHandleError) {
-		// handle returned a did, but isn't a valid atproto did
-	}
-	if (err instanceof AmbiguousHandleError) {
-		// handle returned multiple did values
-	}
-	if (err instanceof FailedHandleResolutionError) {
-		// handle resolution had thrown something unexpected (fetch error)
-	}
+const did = await handleResolver.resolve('bsky.app');
+// -> 'did:plc:z72i7hdynmk6r22z27h6tvur'
+```
 
-	if (err instanceof HandleResolutionError) {
-		// the errors above extend this class, so you can do a catch-all.
-	}
-}
+### custom nameservers
+
+```ts
+const resolver = new NodeDnsHandleResolver({
+	nameservers: ['8.8.8.8', '8.8.4.4'],
+});
 ```

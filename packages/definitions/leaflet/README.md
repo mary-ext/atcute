@@ -2,6 +2,10 @@
 
 [Leaflet](https://leaflet.pub/) (pub.leaflet.\*) schema definitions
 
+```sh
+npm install @atcute/leaflet
+```
+
 ## usage
 
 ```ts

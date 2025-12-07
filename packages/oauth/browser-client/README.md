@@ -1,32 +1,47 @@
 # @atcute/oauth-browser-client
 
-minimal OAuth browser client implementation for AT Protocol.
+minimal OAuth browser client for AT Protocol.
 
-- **only the bare minimum**: enough code to get authentication reasonably working, with only one
-  happy path is supported (only ES256 keys for DPoP. PKCE and DPoP-bound PAR is required.)
-- **does not use IndexedDB**: makes the library work under Safari's lockdown mode, and has less
-  maintenance headache overall, but it also means this is "less secure" (it won't be able to use
-  non-exportable keys as recommended by [DPoP specification][idb-dpop-spec].)
-- **not well-tested**: it has been used in personal projects and by friends for quite some time, but
-  hasn't seen any use outside of that. using the [reference implementation][oauth-atproto-lib] is
-  recommended if you are unsure about the implications presented here.
+```sh
+npm install @atcute/oauth-browser-client
+```
 
-[idb-dpop-spec]: https://datatracker.ietf.org/doc/html/rfc9449#section-2-4
-[oauth-atproto-lib]: https://npm.im/@atproto/oauth-client-browser
+## client metadata
+
+your app needs an OAuth client metadata document hosted at a public URL. this tells authorization
+servers about your app:
+
+```json
+{
+	"client_id": "https://example.com/oauth-client-metadata.json",
+	"client_name": "My App",
+	"client_uri": "https://example.com",
+	"redirect_uris": ["https://example.com/oauth/callback"],
+	"scope": "atproto transition:generic",
+	"grant_types": ["authorization_code", "refresh_token"],
+	"response_types": ["code"],
+	"token_endpoint_auth_method": "none",
+	"application_type": "web",
+	"dpop_bound_access_tokens": true
+}
+```
+
+the `client_id` must be the URL where this document is hosted. see the
+[OAuth client metadata spec](https://docs.bsky.app/docs/advanced-guides/oauth-client#client-metadata)
+for all available fields.
 
 ## usage
 
-### setup
+### configuration
 
-initialize the client by importing and calling `configureOAuth` with the client ID and redirect URL,
-along with the resolvers that will be used to resolve and verify account details. this call should
-be placed before any other calls you make with this library.
+call `configureOAuth` before using any other functions from this library:
 
 ```ts
-import { configureOAuth, defaultIdentityResolver } from '@atcute/oauth-browser-client';
+import { configureOAuth } from '@atcute/oauth-browser-client';
 
 import {
 	CompositeDidDocumentResolver,
+	LocalActorResolver,
 	PlcDidDocumentResolver,
 	WebDidDocumentResolver,
 	XrpcHandleResolver,
@@ -37,16 +52,8 @@ configureOAuth({
 		client_id: 'https://example.com/oauth-client-metadata.json',
 		redirect_uri: 'https://example.com/oauth/callback',
 	},
-	identityResolver: defaultIdentityResolver({
-		// AT Protocol handles resolve via DNS TXT record or HTTP well-known endpoints.
-		// since web apps lack direct DNS access and face CORS restrictions, we're using
-		// Bluesky's AppView for this example.
-		//
-		// NOTE: Bluesky may log handle resolutions and requester info per their privacy
-		// policy. consider the privacy implications of this arrangement and change this
-		// setup if unsuitable for your use case.
+	identityResolver: new LocalActorResolver({
 		handleResolver: new XrpcHandleResolver({ serviceUrl: 'https://public.api.bsky.app' }),
-
 		didDocumentResolver: new CompositeDidDocumentResolver({
 			methods: {
 				plc: new PlcDidDocumentResolver(),
@@ -57,104 +64,61 @@ configureOAuth({
 });
 ```
 
-### starting an authorization flow
+> [!NOTE]  
+> this example uses Bluesky's AppView for handle resolution since web apps lack direct DNS access.
+> Bluesky may log handle resolutions per their privacy policy - consider the implications for your
+> use case.
 
-we can start authorization by calling `createAuthorizationUrl` with the intended account's
-identifier or service along with the scope of the authorization, which should either match the one
-in your client metadata, or a reduced set of it.
+### starting authorization
 
 ```ts
 import { createAuthorizationUrl } from '@atcute/oauth-browser-client';
 
 const authUrl = await createAuthorizationUrl({
 	target: { type: 'account', identifier: 'mary.my.id' },
-	//   or { type: 'pds', serviceUrl: 'https://bsky.social' }
 	scope: 'atproto transition:generic transition:chat.bsky',
 });
 
-// recommended to wait for the browser to persist local storage before proceeding
-await sleep(200);
-
-// redirect the user to sign in and authorize the app
+await sleep(200); // let browser persist local storage
 window.location.assign(authUrl);
-
-// if this is on an async function, ideally the function should never ever resolve.
-// the only way it should resolve at this point is if the user aborted the authorization
-// by returning back to this page (thanks to back-forward page caching)
-await new Promise((_resolve, reject) => {
-	const listener = () => {
-		reject(new Error(`user aborted the login request`));
-	};
-
-	window.addEventListener('pageshow', listener, { once: true });
-});
 ```
 
 ### finalizing authorization
 
-once the user has been redirected to your redirect URL, we can call `finalizeAuthorization` with the
-parameters that have been provided.
+on your redirect URL, extract the parameters and finalize:
 
 ```ts
 import { XRPC } from '@atcute/client';
 import { OAuthUserAgent, finalizeAuthorization } from '@atcute/oauth-browser-client';
 
-// `createAuthorizationUrl` asks for the server to redirect here with the
-// parameters assigned in the hash, not the search string.
+// server redirects with params in hash, not search string
 const params = new URLSearchParams(location.hash.slice(1));
 
-// this is optional, but after retrieving the parameters, we should ideally
-// scrub it from history to prevent this authorization state to be replayed,
-// just for good measure.
+// scrub params from URL to prevent replay
 history.replaceState(null, '', location.pathname + location.search);
 
-// you'd be given a session object that you can then pass to OAuthUserAgent!
-const session = await finalizeAuthorization(params);
-
-// now you can start making requests!
+const { session } = await finalizeAuthorization(params);
 const agent = new OAuthUserAgent(session);
+const rpc = new XRPC({ handler: agent });
 
-// pass it onto the XRPC so you can make RPC calls with the PDS.
-{
-	const rpc = new XRPC({ handler: agent });
-
-	const { data } = await rpc.get('com.atproto.identity.resolveHandle', {
-		params: {
-			handle: 'mary.my.id',
-		},
-	});
-}
-
-// or, use it directly!
-{
-	const response = await agent.handle('/xrpc/com.atproto.identity.resolveHandle?handle=mary.my.id');
-}
+const { data } = await rpc.get('com.atproto.identity.resolveHandle', {
+	params: { handle: 'mary.my.id' },
+});
 ```
 
-the `session` object returned by `finalizeAuthorization` should not be stored anywhere else, as it
-is already persisted in the internal database. you are expected to keep track of who's signed in and
-who was last signed in for your own UI, as the sessions stored by the database is not guaranteed to
-be permanent (mostly if they don't come with a refresh token.)
+the session is persisted internally - don't store it elsewhere. track signed-in DIDs yourself for
+your UI, as sessions without refresh tokens may expire.
 
-### resuming existing sessions
-
-you can resume existing sessions by calling `getSession` with the DID identifier you intend to
-resume.
+### resuming sessions
 
 ```ts
-import { XRPC } from '@atcute/client';
 import { OAuthUserAgent, getSession } from '@atcute/oauth-browser-client';
 
 const session = await getSession('did:plc:ia76kvnndjutgedggx2ibrem', { allowStale: true });
-
 const agent = new OAuthUserAgent(session);
-const rpc = new XRPC({ handler: agent });
 ```
 
-### removing sessions
-
-you can manually remove sessions via `deleteStoredSession`, but ideally, you should revoke the token
-first before doing so.
+### signing out
 
 ```ts
 import { OAuthUserAgent, deleteStoredSession, getSession } from '@atcute/oauth-browser-client';
@@ -164,32 +128,25 @@ const did = 'did:plc:ia76kvnndjutgedggx2ibrem';
 try {
 	const session = await getSession(did, { allowStale: true });
 	const agent = new OAuthUserAgent(session);
-
 	await agent.signOut();
-} catch (err) {
-	// `signOut` also deletes the session, we only serve as fallback if it fails.
-	deleteStoredSession(did);
+} catch {
+	deleteStoredSession(did); // fallback if signOut fails
 }
 ```
 
-## confidential client mode (optional)
+## confidential client mode
 
-by default, `@atcute/oauth-browser-client` operates as a **public client**, resulting in shorter
-session lifetimes by authorization servers as it's deemed to be unable to securely store
-credentials.
+by default, this library operates as a **public client** with shorter session lifetimes. for
+longer-lived sessions, set up a [client assertion backend][client-assertion-backend] to enable
+**confidential client mode**.
 
-if you want longer-lived sessions and better security controls, you can enable **confidential client
-mode** by setting up a [client assertion backend](client-assertion-backend).
+[client-assertion-backend]:
+	https://github.com/bluesky-social/proposals/tree/main/0010-client-assertion-backend
 
-[client-assertion-backend]: https://github.com/bluesky-social/proposals/tree/main/0010-client-assertion-backend
-
-### setup
-
-configure the client with a function to fetch client assertions from your backend:
+add `fetchClientAssertion` to your config. the backend API is entirely up to you - this is just one
+example:
 
 ```ts
-import { configureOAuth } from '@atcute/oauth-browser-client';
-
 configureOAuth({
 	// ... existing config
 
@@ -198,15 +155,11 @@ configureOAuth({
 
 		const response = await fetch('https://example.com/api/client-assertion', {
 			method: 'POST',
-			headers: {
-				dpop: dpop,
-				'content-type': 'application/json',
-			},
+			headers: { dpop, 'content-type': 'application/json' },
 			body: JSON.stringify({ jkt, aud }),
 		});
 
 		const data = await response.json();
-
 		return {
 			client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
 			client_assertion: data.assertion,
@@ -215,127 +168,41 @@ configureOAuth({
 });
 ```
 
-the backend API is completely up to you—there's no standardized spec. design it however works best
-for your infrastructure (authentication, request format, error handling, etc.)
+your backend validates the DPoP proof and signs a client assertion JWT containing `iss`, `sub` (both
+your client ID), `aud` (authorization server), `exp`, `jti` (unique nonce), and `cnf: { jkt }` (the
+allowed key thumbprint).
 
-your backend needs to validate the incoming DPoP proof and sign a client assertion JWT with the
-following interface:
+update your client metadata for confidential mode - replace `token_endpoint_auth_method` with
+`private_key_jwt`, add `token_endpoint_auth_signing_alg: "ES256"`, and add a `jwks_uri` pointing to
+your public keys.
 
-```ts
-interface ClientAssertionJwt {
-	/** your client ID */
-	iss: string;
-	/** also your client ID */
-	sub: string;
-	/** the authorization server receiving this token */
-	aud: string;
-	/** when this token expires  */
-	exp: number;
-	/** unique nonce */
-	jti: string;
-	/** asserts that this jkt is allowed */
-	cnf: { jkt: string };
-}
-```
+## local development with Vite
 
-you're able to use the `jkt` to refuse assertions when necessary (suspicious activity, compromised
-code, etc.)
-
-### client metadata updates
-
-your OAuth client metadata document must also be updated for confidential clients:
-
-```json
-{
-	"client_id": "https://example.com/oauth-client-metadata.json",
-	"client_name": "My App",
-	"redirect_uris": ["https://example.com/oauth/callback"],
-	"scope": "atproto transition:generic",
-	"token_endpoint_auth_method": "private_key_jwt",
-	"token_endpoint_auth_signing_alg": "ES256",
-	"jwks_uri": "https://example.com/oauth-jwks.json"
-}
-```
-
-the `jwks_uri` should expose the public keys used to sign client assertions. it should return a JSON
-Web Key Set (JWKS) document:
-
-```json
-{
-	"keys": [
-		{
-			"kty": "EC",
-			"crv": "P-256",
-			"x": "base64url-encoded-x-coordinate",
-			"y": "base64url-encoded-y-coordinate",
-			"use": "sig",
-			"kid": "key-identifier",
-			"alg": "ES256"
-		}
-	]
-}
-```
-
-the public keys in the JWKS must correspond to the private keys your backend uses to sign client
-assertions. multiple keys can be listed to support key rotation.
-
-## additional guide
-
-### configuring your Vite project
-
-you might want to configure the server options in your Vite config so you'll never end up visiting
-your app in `localhost`, which is specifically forbidden by AT Protocol's OAuth, let's change it so
-it'll always use `127.0.0.1`:
+AT Protocol OAuth forbids `localhost` - use `127.0.0.1` instead:
 
 ```ts
-/// vite.config.ts
+// vite.config.ts
 import { defineConfig } from 'vite';
+import metadata from './public/oauth-client-metadata.json' with { type: 'json' };
 
 const SERVER_HOST = '127.0.0.1';
 const SERVER_PORT = 12520;
 
 export default defineConfig({
-	server: {
-		host: SERVER_HOST,
-		port: SERVER_PORT,
-	},
-});
-```
-
-additionally, to make it easier to develop locally and deploy to production, you should consider
-adding a plugin that'll inject the necessary values for you through environment variables:
-
-```ts
-/// vite.config.ts
-import metadata from './public/oauth-client-metadata.json' with { type: 'json' };
-
-export default defineConfig({
-	// ...
-
+	server: { host: SERVER_HOST, port: SERVER_PORT },
 	plugins: [
-		// injects OAuth-related environment variables
 		{
 			config(_conf, { command }) {
 				if (command === 'build') {
 					process.env.VITE_OAUTH_CLIENT_ID = metadata.client_id;
 					process.env.VITE_OAUTH_REDIRECT_URI = metadata.redirect_uris[0];
 				} else {
-					const redirectUri = (() => {
-						const url = new URL(metadata.redirect_uris[0]);
-						return `http://${SERVER_HOST}:${SERVER_PORT}${url.pathname}`;
-					})();
-
-					const clientId =
-						`http://localhost` +
-						`?redirect_uri=${encodeURIComponent(redirectUri)}` +
+					const redirectUri = `http://${SERVER_HOST}:${SERVER_PORT}${new URL(metadata.redirect_uris[0]).pathname}`;
+					process.env.VITE_OAUTH_CLIENT_ID =
+						`http://localhost?redirect_uri=${encodeURIComponent(redirectUri)}` +
 						`&scope=${encodeURIComponent(metadata.scope)}`;
-
-					process.env.VITE_DEV_SERVER_PORT = '' + SERVER_PORT;
-					process.env.VITE_OAUTH_CLIENT_ID = clientId;
 					process.env.VITE_OAUTH_REDIRECT_URI = redirectUri;
 				}
-
-				process.env.VITE_CLIENT_URI = metadata.client_uri;
 				process.env.VITE_OAUTH_SCOPE = metadata.scope;
 			},
 		},
@@ -343,25 +210,7 @@ export default defineConfig({
 });
 ```
 
-we'll augment the type declarations to get type-checking on it:
-
-```ts
-/// src/vite-env.d.ts
-
-interface ImportMetaEnv {
-	readonly VITE_DEV_SERVER_PORT?: string;
-	readonly VITE_CLIENT_URI: string;
-	readonly VITE_OAUTH_CLIENT_ID: string;
-	readonly VITE_OAUTH_REDIRECT_URI: string;
-	readonly VITE_OAUTH_SCOPE: string;
-}
-
-interface ImportMeta {
-	readonly env: ImportMetaEnv;
-}
-```
-
-et voilà! you can now use this to configure the client.
+then use environment variables in your code:
 
 ```ts
 configureOAuth({
@@ -371,13 +220,15 @@ configureOAuth({
 	},
 	// ...
 });
-
-// ... later during sign-in process
-const authUrl = await createAuthorizationUrl({
-	// ...
-	scope: import.meta.env.VITE_OAUTH_SCOPE,
-});
 ```
 
-adjust the code here as necessary, the plugin adds more environment variables than what is actually
-needed, you can remove them if you don't think you'd need it.
+## caveats
+
+- **minimal implementation**: only ES256 DPoP keys, requires PKCE and DPoP-bound PAR
+- **no IndexedDB**: works in Safari lockdown mode but can't use non-exportable keys as [recommended
+  by DPoP spec][dpop-spec]
+- **limited testing**: works in personal projects but consider the [reference
+  implementation][oauth-atproto-lib] for production
+
+[dpop-spec]: https://datatracker.ietf.org/doc/html/rfc9449#section-2-4
+[oauth-atproto-lib]: https://npm.im/@atproto/oauth-client-browser

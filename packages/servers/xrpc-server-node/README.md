@@ -2,6 +2,10 @@
 
 Node.js WebSocket adapter for `@atcute/xrpc-server`.
 
+```sh
+npm install @atcute/xrpc-server-node
+```
+
 ```ts
 import { serve } from '@hono/node-server';
 import { XRPCRouter } from '@atcute/xrpc-server';

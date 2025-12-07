@@ -1,15 +1,23 @@
 # @atcute/bluesky-search-parser
 
-parse Bluesky's search syntax
+tokenizer for Bluesky's search query syntax.
+
+```sh
+npm install @atcute/bluesky-search-parser
+```
+
+useful for building search UIs that need to parse and manipulate search queries, such as
+highlighting operators or extracting filter values.
 
 ```ts
-const result = tokenize(`from:me hello "foo bar"`);
+import { tokenize } from '@atcute/bluesky-search-parser';
 
-expect(result).toEqual([
-	{ type: 'word', value: 'from:me' },
-	{ type: 'whitespace', value: ' ' },
-	{ type: 'word', value: 'hello' },
-	{ type: 'whitespace', value: ' ' },
-	{ type: 'quoted', value: '"foo bar"' },
-]);
+const tokens = tokenize(`from:me hello "foo bar"`);
+// [
+//   { type: 'word', value: 'from:me' },
+//   { type: 'whitespace', value: ' ' },
+//   { type: 'word', value: 'hello' },
+//   { type: 'whitespace', value: ' ' },
+//   { type: 'quoted', value: '"foo bar"' },
+// ]
 ```

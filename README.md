@@ -1,134 +1,115 @@
 # atcute
 
-a collection of lightweight TypeScript packages for AT Protocol, the protocol powering Bluesky,
-featuring:
+lightweight TypeScript packages for [AT Protocol](https://atproto.com), the protocol powering
+Bluesky.
 
-- an [API client][client] for making typed HTTP requests, with support for lexicons like
-  [WhiteWind][whitewind] or [Bluemoji][bluemoji]
-- an [OAuth client for SPA applications][oauth-browser-client] for authentication use-cases
-- a grab bag of utility packages:
-  - codec libraries for [DASL][dasl] data formats, a strict subset of IPLD specifications, like
-    CIDv1, DAG-CBOR and CAR, but tailored specifically for atproto
-  - codec for atproto's timestamp identifiers
-  - cryptography library for signing and verification of signatures in atproto
-  - schema validators for DID documents, and verification of did:plc operations
-  - Bluesky-specific helpers like [a rich text builder][bluesky-richtext-builder] and [a post thread
-    builder][bluesky-threading]
-
-[bluemoji]: ./packages/definitions/bluemoji
-[bluesky-richtext-builder]: ./packages/bluesky/richtext-builder
-[bluesky-threading]: ./packages/bluesky/threading
-[client]: ./packages/core/client
-[oauth-browser-client]: ./packages/oauth/browser-client
-[whitewind]: ./packages/definitions/whitewind
-[dasl]: https://dasl.ing/
-[ipld]: https://ipld.io/
-[skyware]: https://skyware.js.org/
-
----
-
-| Packages                                                                                                               |
-| ---------------------------------------------------------------------------------------------------------------------- |
-| **Client packages**                                                                                                    |
-| [`client`](./packages/clients/client): XRPC HTTP client library                                                        |
-| [`firehose`](./packages/clients/firehose): XRPC subscriptions client library                                           |
-| [`jetstream`](./packages/clients/jetstream): Jetstream client                                                          |
-| **Server packages**                                                                                                    |
-| [`xrpc-server`](./packages/servers/xrpc-server): web framework                                                         |
-| [`xrpc-server-bun`](./packages/servers/xrpc-server-bun): Bun WebSocket adapter                                         |
-| [`xrpc-server-cloudflare`](./packages/servers/xrpc-server-cloudflare): Cloudflare Workers WebSocket adapter            |
-| [`xrpc-server-deno`](./packages/servers/xrpc-server-deno): Deno WebSocket adapter                                      |
-| [`xrpc-server-node`](./packages/servers/xrpc-server-node): Node.js WebSocket adapter                                   |
-| **OAuth packages**                                                                                                     |
-| [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth browser client implementation                 |
-| **Lexicon packages**                                                                                                   |
-| [`lex-cli`](./packages/lexicons/lex-cli): CLI tool to generate schema definitions                                      |
-| [`lexicon-doc`](./packages/lexicons/lexicon-doc): type definitions and schemas for lexicon documents                   |
-| [`lexicon-resolver`](./packages/lexicons/lexicon-resolver): lexicon authority resolution and schema retrieval          |
-| [`lexicons`](./packages/lexicons/lexicons): core lexicon types, interfaces, and schema validations                     |
-| **Lexicon definition packages**                                                                                        |
-| [`atproto`](./packages/definitions/atproto): `com.atproto.*` schema definitions                                        |
-| [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*` schema definitions                                        |
-| [`bluesky`](./packages/definitions/bluesky): `app.bsky.*` and `chat.bsky.*` schema definitions                         |
-| [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*` schema definitions                          |
-| [`leaflet`](./packages/definitions/leaflet): `pub.leaflet.*` schema definitions                                        |
-| [`lexicon-community`](./packages/definitions/lexicon-community): `community.lexicon.*` schema definitions              |
-| [`microcosm`](./packages/definitions/microcosm): `blue.microcosm.*` and `com.bad-example.*` schema definitions         |
-| [`ozone`](./packages/definitions/ozone): `tools.ozone.*` schema definitions                                            |
-| [`pckt`](./packages/definitions/pckt): `blog.pckt.*` schema definitions                                                |
-| [`tangled`](./packages/definitions/tangled): `sh.tangled.*` schema definitions                                         |
-| [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` schema definitions                                     |
-| **Identity packages**                                                                                                  |
-| [`did-plc`](./packages/identity/did-plc): validations, type definitions and schemas for did:plc operations             |
-| [`identity`](./packages/identity/identity): syntax, type definitions and schemas for handles, DIDs and DID documents   |
-| [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution                       |
-| [`identity-resolver-node`](./packages/identity/identity-resolver-node): additional identity resolvers for Node.js      |
-| **Utility packages**                                                                                                   |
-| [`car`](./packages/utilities/car): DASL CAR codec                                                                      |
-| [`cbor`](./packages/utilities/cbor): DASL dCBOR42 codec                                                                |
-| [`cid`](./packages/utilities/cid): DASL CID codec                                                                      |
-| [`crypto`](./packages/utilities/crypto): cryptographic utilities                                                       |
-| [`mst`](./packages/utilities/mst): atproto MST manipulation utilities                                                  |
-| [`multibase`](./packages/utilities/multibase): multibase utilities                                                     |
-| [`repo`](./packages/utilities/repo): read AT Protocol repository exports                                               |
-| [`tid`](./packages/utilities/tid): atproto timestamp identifier codec                                                  |
-| [`varint`](./packages/utilities/varint): protobuf-style LEB128 varint codec                                            |
-| **Bluesky-specific packages**                                                                                          |
-| [`bluesky-moderation`](./packages/bluesky/moderation): interprets Bluesky's content moderation labels                  |
-| [`bluesky-richtext-builder`](./packages/bluesky/richtext-builder): builder pattern for Bluesky's rich text facets      |
-| [`bluesky-richtext-parser`](./packages/bluesky/richtext-parser): parse Bluesky's (extended) rich text syntax           |
-| [`bluesky-richtext-segmenter`](./packages/bluesky/richtext-segmenter): segments Bluesky's rich text facets into tokens |
-| [`bluesky-threading`](./packages/bluesky/threading): create Bluesky threads containing multiple posts with one write   |
-
-## contribution guide
-
-this monorepo uses [`mise`](https://mise.jdx.dev) to handle versioning, although it doesn't really
-matter. Node.js LTS is necessary to use the `internal-dev-env` package for testing the `client`
-package with the official PDS distribution, but otherwise you can (and should) use the latest
-available version.
+## quick start
 
 ```sh
-# Install all the recommended runtimes
+npm install @atcute/client @atcute/bluesky
+```
+
+```ts
+import { Client, simpleFetchHandler } from '@atcute/client';
+import type {} from '@atcute/bluesky';
+
+const client = new Client({
+	handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }),
+});
+
+const { data } = await client.get('app.bsky.actor.getProfile', {
+	params: { actor: 'bsky.app' },
+});
+
+console.log(data.displayName);
+// -> Bluesky
+```
+
+for authenticated requests, see the [client docs](./packages/clients/client) or use the
+[OAuth browser client](./packages/oauth/browser-client) for web apps.
+
+## packages
+
+| Packages                                                                                                    |
+| ----------------------------------------------------------------------------------------------------------- |
+| **Client packages**                                                                                         |
+| [`client`](./packages/clients/client): XRPC HTTP client                                                     |
+| [`firehose`](./packages/clients/firehose): XRPC subscription client                                         |
+| [`jetstream`](./packages/clients/jetstream): Jetstream WebSocket client                                     |
+| [`cache`](./packages/clients/cache): normalized cache store                                                 |
+| **Server packages**                                                                                         |
+| [`xrpc-server`](./packages/servers/xrpc-server): XRPC web framework                                         |
+| [`xrpc-server-bun`](./packages/servers/xrpc-server-bun): Bun WebSocket adapter                              |
+| [`xrpc-server-cloudflare`](./packages/servers/xrpc-server-cloudflare): Cloudflare Workers WebSocket adapter |
+| [`xrpc-server-deno`](./packages/servers/xrpc-server-deno): Deno WebSocket adapter                           |
+| [`xrpc-server-node`](./packages/servers/xrpc-server-node): Node.js WebSocket adapter                        |
+| **OAuth packages**                                                                                          |
+| [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth client for SPAs                    |
+| **Lexicon packages**                                                                                        |
+| [`lex-cli`](./packages/lexicons/lex-cli): generate TypeScript from lexicon schemas                          |
+| [`lexicon-doc`](./packages/lexicons/lexicon-doc): parse and author lexicon documents                        |
+| [`lexicon-resolver`](./packages/lexicons/lexicon-resolver): resolve lexicons from the network               |
+| [`lexicons`](./packages/lexicons/lexicons): core types and schema validation                                |
+| **Lexicon definition packages**                                                                             |
+| [`atproto`](./packages/definitions/atproto): `com.atproto.*`                                                |
+| [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*`                                                |
+| [`bluesky`](./packages/definitions/bluesky): `app.bsky.*`, `chat.bsky.*`                                    |
+| [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*`                                  |
+| [`leaflet`](./packages/definitions/leaflet): `pub.leaflet.*`                                                |
+| [`lexicon-community`](./packages/definitions/lexicon-community): `community.lexicon.*`                      |
+| [`microcosm`](./packages/definitions/microcosm): `blue.microcosm.*`, `com.bad-example.*`                    |
+| [`ozone`](./packages/definitions/ozone): `tools.ozone.*`                                                    |
+| [`pckt`](./packages/definitions/pckt): `blog.pckt.*`                                                        |
+| [`tangled`](./packages/definitions/tangled): `sh.tangled.*`                                                 |
+| [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*`                                             |
+| **Identity packages**                                                                                       |
+| [`identity`](./packages/identity/identity): handle, DID and DID document types                              |
+| [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution            |
+| [`identity-resolver-node`](./packages/identity/identity-resolver-node): Node.js DNS-based handle resolver   |
+| [`did-plc`](./packages/identity/did-plc): did:plc operation validation                                      |
+| **Utility packages**                                                                                        |
+| [`car`](./packages/utilities/car): CAR archive codec                                                        |
+| [`cbor`](./packages/utilities/cbor): deterministic CBOR codec                                               |
+| [`cid`](./packages/utilities/cid): content identifier codec                                                 |
+| [`crypto`](./packages/utilities/crypto): signing and verification                                           |
+| [`mst`](./packages/utilities/mst): merkle search tree utilities                                             |
+| [`multibase`](./packages/utilities/multibase): base32/base64 encoding                                       |
+| [`repo`](./packages/utilities/repo): repository export reader                                               |
+| [`tid`](./packages/utilities/tid): timestamp identifier codec                                               |
+| [`varint`](./packages/utilities/varint): LEB128 varint codec                                                |
+| **Bluesky-specific packages**                                                                               |
+| [`bluesky-moderation`](./packages/bluesky/moderation): content moderation interpretation                    |
+| [`bluesky-richtext-builder`](./packages/bluesky/richtext-builder): rich text facet builder                  |
+| [`bluesky-richtext-parser`](./packages/bluesky/richtext-parser): parse rich text syntax                     |
+| [`bluesky-richtext-segmenter`](./packages/bluesky/richtext-segmenter): segment text by facets               |
+| [`bluesky-search-parser`](./packages/bluesky/search-parser): search query tokenizer                         |
+| [`bluesky-threading`](./packages/bluesky/threading): atomic thread publishing                               |
+
+## contributing
+
+this monorepo uses [mise](https://mise.jdx.dev) for runtime versioning and pnpm for package
+management.
+
+```sh
+# install runtimes
 mise install
 
-# Runs all the build scripts
+# build all packages
 pnpm run -r build
 
-# Pull in the latest ATProto/Ozone/Bluesky lexicons, and generate the type declarations
-pnpm run pull
+# pull latest lexicons and regenerate definitions
+pnpm run -r pull
 pnpm run -r generate
 ```
 
-### checking package sizes
+### package size reporting
 
-to observe the size of packages (both install size and bundled size), there is a `pkg-size-report`
-tool doing just that. you can also save the package sizes at a given time and inspect the impact of
-changes to the final bundle size. the tool uses `esbuild` to produce a minified bundle to get the
-size of each entrypoint.
+check bundle sizes with the `pkg-size-report` tool:
 
-<!-- prettier-ignore-start -->
-<!-- Otherwise it wrecks the gfm alertbox ugh -->
-
-> [!WARNING]
-> run `pnpm run -r build` before running the command. otherwise, the command **may not run**, or **give bad measurements**.
-
-<!-- prettier-ignore-end -->
+> [!WARNING] run `pnpm run -r build` first, otherwise measurements may be inaccurate.
 
 ```sh
-# See the size of packages.
-# If package sizes were saved previously, will also show the diff.
-pnpm pkg-size-report
-
-# Save esbuild metafiles and package size information.
-pnpm pkg-size-report --save
-
-# Save just esbuild metafiles.
-pnpm pkg-size-report --save-meta
-
-# Show only the packages whose size have changed.
-pnpm pkg-size-report --compare
-
-# Keep the result bundle produced by esbuild.
-# Will be left in /tmp/[...]--[pkgname]--[random]
-pnpm pkg-size-report --keep-builds
+pnpm pkg-size-report           # show sizes (and diff if previously saved)
+pnpm pkg-size-report --save    # save current sizes for comparison
+pnpm pkg-size-report --compare # show only changed packages
 ```

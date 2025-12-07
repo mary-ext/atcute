@@ -1,18 +1,64 @@
 # @atcute/cid
 
-lightweight [DASL CID][dasl-cid] codec library for AT Protocol.
+content identifier (CID) codec for AT Protocol.
+
+```sh
+npm install @atcute/cid
+```
+
+this library implements DASL's [CID][dasl-cid] format used by AT Protocol to address resources by
+their contents.
 
 [dasl-cid]: https://dasl.ing/cid.html
+
+## usage
+
+### creating CIDs
 
 ```ts
 import * as CID from '@atcute/cid';
 
+// create a CID from DAG-CBOR data
+const cid = await CID.create(0x71, cborBytes);
+// -> { version: 1, codec: 113, digest: { ... }, bytes: Uint8Array(36) }
+
+// create from raw data
+const rawCid = await CID.create(0x55, rawBytes);
+```
+
+### parsing CIDs
+
+```ts
+import * as CID from '@atcute/cid';
+
+// parse from base32 string
 const cid = CID.fromString('bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee');
-//    ^? { version: 1, codec: 113, digest: { ... }, bytes: Uint8Array(36) }
 
-// Creating a CID containing CBOR data
-const cid = await CID.create(0x71, buffer);
+// parse from binary (with 0x00 prefix)
+const cid = CID.fromBinary(bytes);
 
-// Serializing CID into string
-CID.toString(cid); // -> bafyrei...
+// parse from raw CID bytes
+const cid = CID.decode(cidBytes);
+```
+
+### serializing CIDs
+
+```ts
+import * as CID from '@atcute/cid';
+
+// to base32 string
+CID.toString(cid);
+// -> "bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee"
+
+// to binary (with 0x00 prefix)
+CID.toBinary(cid);
+// -> Uint8Array(37)
+```
+
+### comparing CIDs
+
+```ts
+import * as CID from '@atcute/cid';
+
+CID.equals(cidA, cidB); // true if same content hash
 ```

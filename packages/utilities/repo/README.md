@@ -1,6 +1,14 @@
 # @atcute/repo
 
-read AT Protocol repository exports
+read AT Protocol repository exports.
+
+```sh
+npm install @atcute/repo
+```
+
+AT Protocol stores user data in repositories - Merkle tree structures containing records organized
+by collection. this package reads repository CAR exports (from `com.atproto.sync.getRepo` or
+account exports) and iterates over the records.
 
 ## usage
 

@@ -2,6 +2,10 @@
 
 [Tangled](https://tangled.sh/) (sh.tangled.\*) schema definitions
 
+```sh
+npm install @atcute/tangled
+```
+
 ## usage
 
 ```ts

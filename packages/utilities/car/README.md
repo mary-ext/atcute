@@ -1,6 +1,13 @@
 # @atcute/car
 
-lightweight [DASL CAR (content-addressable archives)][dasl-car] codec library for AT Protocol.
+content-addressable archive (CAR) reader for AT Protocol.
+
+```sh
+npm install @atcute/car
+```
+
+this library implements DASL's [CAR][dasl-car] format used by AT Protocol to store and transfer
+repository data.
 
 [dasl-car]: https://dasl.ing/car.html
 

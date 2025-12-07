@@ -1,6 +1,12 @@
 # @atcute/multibase
 
-provides various base codecs used in atproto ecosystem
+base encoding utilities for AT Protocol.
+
+```sh
+npm install @atcute/multibase
+```
+
+provides various base codecs used in the atproto ecosystem:
 
 - base16
 - base32

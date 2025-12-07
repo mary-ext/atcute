@@ -2,6 +2,10 @@
 
 [Frontpage](https://frontpage.fyi/) (fyi.unravel.frontpage.\*) schema definitions
 
+```sh
+npm install @atcute/frontpage
+```
+
 ## usage
 
 ```ts

@@ -1,6 +1,10 @@
 # @atcute/xrpc-server
 
-a small web framework for handling XRPC operations.
+web framework for XRPC servers.
+
+```sh
+npm install @atcute/xrpc-server
+```
 
 ## quick start
 
@@ -49,7 +53,7 @@ now we can build a server using the TypeScript schemas:
 ```ts
 // file: src/index.js
 import { XRPCRouter, json } from '@atcute/xrpc-server';
-import { cors } from '@atucte/xrpc-server/middlewares/cors';
+import { cors } from '@atcute/xrpc-server/middlewares/cors';
 
 import { ComExampleGreet } from './lexicons/index.js';
 

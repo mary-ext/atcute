@@ -1,6 +1,14 @@
 # @atcute/lexicon-doc
 
-type definitions and schemas for atproto lexicon documents
+parse and author atproto lexicon documents.
+
+```sh
+npm install @atcute/lexicon-doc
+```
+
+## usage
+
+### parsing lexicon documents
 
 ```ts
 import { findExternalReferences, lexiconDoc } from '@atcute/lexicon-doc';

@@ -2,6 +2,10 @@
 
 [Ozone](https://ozone.tools) (tools.ozone.\*) schema definitions
 
+```sh
+npm install @atcute/ozone
+```
+
 ## usage
 
 ```ts

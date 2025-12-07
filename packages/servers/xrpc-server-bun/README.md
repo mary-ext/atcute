@@ -2,6 +2,10 @@
 
 Bun WebSocket adapter for `@atcute/xrpc-server`.
 
+```sh
+npm install @atcute/xrpc-server-bun
+```
+
 ```ts
 import { XRPCRouter } from '@atcute/xrpc-server';
 import { createBunWebSocket } from '@atcute/xrpc-server-bun';

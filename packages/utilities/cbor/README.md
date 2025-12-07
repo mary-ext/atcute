@@ -1,25 +1,19 @@
 # @atcute/cbor
 
-lightweight [DASL dCBOR42 (deterministic CBOR with tag 42)][dasl-dcbor42] codec library for AT
-Protocol.
+deterministic CBOR codec for AT Protocol.
 
-the specific profile being implemented is [IPLD DAG-CBOR][ipld-dag-cbor], with some additional notes
-to keep in mind:
+```sh
+npm install @atcute/cbor
+```
 
-- `undefined` types are still forbidden, except for when they are in a `map` type, where fields will
-  be omitted instead, which makes it easier to construct objects to then pass to the encoder.
-- `byte` and `link` types are represented by atproto's [lex-json][atproto-data-model] interfaces,
-  but because these involve string codec and parsing, they are done lazily by `BytesWrapper` and
-  `CidLinkWrapper` instances.
-  - use `fromBytes` and `fromCidLink` to convert them to Uint8Array or CID interface respectively,
-    without hitting the string conversion path.
-  - use `toBytes` and `toCidLink` for the other direction.
-- integers can't exceed JavaScript's safe integer range, no bigint conversions will occur as they
-  will be thrown instead if encountered.
+this library implements DASL's [DRISL][dasl-drisl] format used by AT Protocol for encoding records
+and repository data.
 
-[atproto-data-model]: https://atproto.com/specs/data-model
-[dasl-dcbor42]: https://dasl.ing/dcbor42.html
-[ipld-dag-cbor]: https://ipld.io/specs/codecs/dag-cbor/spec
+[dasl-drisl]: https://dasl.ing/drisl.html
+
+## usage
+
+### encoding
 
 ```ts
 import { encode } from '@atcute/cbor';
@@ -32,7 +26,26 @@ const record = {
 };
 
 const cbor = encode(record);
-//    ^? Uint8Array(90) [ ... ]
+// -> Uint8Array(90)
 ```
 
-Implementation based on the excellent [`microcbor` library](https://github.com/joeltg/microcbor).
+### decoding
+
+```ts
+import { decode } from '@atcute/cbor';
+
+const record = decode(cborBytes);
+// -> { $type: 'app.bsky.feed.post', ... }
+```
+
+## notes
+
+- `undefined` values are omitted from maps (making it easier to construct objects)
+- bytes and CID links use lazy wrappers (`BytesWrapper`, `CidLinkWrapper`) compatible with atproto's
+  [lex-json][atproto-data-model] format
+- use `toBytes`/`fromBytes` and `toCidLink`/`fromCidLink` to convert between lex-json and raw types
+- integers must be within JavaScript's safe integer range (no bigint support)
+
+[atproto-data-model]: https://atproto.com/specs/data-model
+
+based on [`microcbor`](https://github.com/joeltg/microcbor).

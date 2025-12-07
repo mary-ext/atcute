@@ -1,167 +1,165 @@
 # @atcute/bluesky-moderation
 
-interprets Bluesky's content moderation labels.
+interpret Bluesky content moderation labels and user preferences.
+
+```sh
+npm install @atcute/bluesky-moderation
+```
+
+evaluates posts, profiles, lists, and other content against moderation labels, mutes, blocks, and
+keyword filters to determine how they should be displayed.
+
+## usage
+
+### basic flow
+
+1. fetch user preferences and labeler definitions
+2. run moderation functions on content
+3. get display restrictions for your UI context
 
 ```ts
-import type { XRPC } from '@atcute/client';
-import type { AppBskyActorDefs, AppBskyFeedDefs, AppBskyLabelerDefs, At } from '@atcute/client/lexicons';
-
 import {
 	DisplayContext,
 	getDisplayRestrictions,
 	interpretLabelerDefinitions,
-	interpretMutedWordPreferences,
-	LabelPreference,
 	moderatePost,
 	type ModerationPreferences,
 } from '@atcute/bluesky-moderation';
 
-declare const rpc: XRPC;
+// 1. set up preferences (see "loading preferences" below)
+const prefs: ModerationPreferences = { ... };
+const labelDefs = interpretLabelerDefinitions(labelers);
 
-// first, let's get the user's preferences
-const labelerDids = new Set<At.Did>([
-	// Bluesky moderation service
-	'did:plc:ar7c4by46qjdydhdevvrndac',
-]);
+// 2. moderate content
+const decision = moderatePost(post, {
+	viewerDid: 'did:plc:...',
+	prefs,
+	labelDefs,
+});
 
-const modPrefs: ModerationPreferences = {
+// 3. get display restrictions for your context
+const ui = getDisplayRestrictions(decision, DisplayContext.ContentList);
+
+if (ui.filters.length > 0) {
+	// don't show this post in feeds
+}
+
+if (ui.blurs.length > 0) {
+	// hide behind a content warning
+
+	if (ui.noOverride) {
+		// don't allow user to reveal
+	}
+}
+
+if (ui.alerts.length > 0 || ui.informs.length > 0) {
+	// show warning badges
+}
+```
+
+### display contexts
+
+use different contexts depending on where content appears:
+
+```ts
+// in feeds/lists
+getDisplayRestrictions(decision, DisplayContext.ContentList);
+
+// viewing full post
+getDisplayRestrictions(decision, DisplayContext.ContentView);
+
+// media (images/videos)
+getDisplayRestrictions(decision, DisplayContext.ProfileMedia);
+
+// profile lists
+getDisplayRestrictions(decision, DisplayContext.ProfileList);
+
+// viewing full profile
+getDisplayRestrictions(decision, DisplayContext.ProfileView);
+
+// profile name/avatar
+getDisplayRestrictions(decision, DisplayContext.ProfileName);
+```
+
+### loading preferences
+
+```ts
+import {
+	interpretLabelerDefinitions,
+	interpretMutedWordPreferences,
+	LabelPreference,
+	type ModerationPreferences,
+} from '@atcute/bluesky-moderation';
+
+// fetch user preferences
+const { data } = await rpc.get('app.bsky.actor.getPreferences', {});
+
+const prefs: ModerationPreferences = {
 	adultContentEnabled: false,
 	globalLabelPrefs: {},
-	prefsByLabelers: {
-		'did:plc:ar7c4by46qjdydhdevvrndac': {
-			labelPrefs: {},
-		},
-	},
+	prefsByLabelers: {},
 	keywordFilters: [],
 	hiddenPosts: [],
 	temporaryMutes: [],
 };
 
-{
-	const { data } = await rpc.get('app.bsky.actor.getPreferences', {});
+for (const pref of data.preferences) {
+	switch (pref.$type) {
+		case 'app.bsky.actor.defs#adultContentPref':
+			prefs.adultContentEnabled = pref.enabled;
+			break;
 
-	const labelPrefs: AppBskyActorDefs.ContentLabelPref[] = [];
+		case 'app.bsky.actor.defs#contentLabelPref':
+			// map visibility to LabelPreference
+			const labelPref =
+				pref.visibility === 'hide'
+					? LabelPreference.Hide
+					: pref.visibility === 'warn'
+						? LabelPreference.Warn
+						: LabelPreference.Ignore;
 
-	const globalLabelPrefs = (modPrefs.globalLabelPrefs ??= {});
-	const prefsByLabelers = (modPrefs.prefsByLabelers ??= {});
+			if (pref.labelerDid) {
+				prefs.prefsByLabelers[pref.labelerDid] ??= { labelPrefs: {} };
+				prefs.prefsByLabelers[pref.labelerDid].labelPrefs[pref.label] = labelPref;
+			} else {
+				prefs.globalLabelPrefs[pref.label] = labelPref;
+			}
+			break;
 
-	for (const pref of data.preferences) {
-		switch (pref.$type) {
-			case 'app.bsky.actor.defs#adultContentPref': {
-				modPrefs.adultContentEnabled = pref.enabled;
-				break;
-			}
-			case 'app.bsky.actor.defs#labelersPref': {
-				for (const labeler of pref.labelers) {
-					prefsByLabelers[labeler.did] ??= { labelPrefs: {} };
-					labelerDids.add(labeler.did);
-				}
+		case 'app.bsky.actor.defs#mutedWordsPref':
+			prefs.keywordFilters = interpretMutedWordPreferences(pref);
+			break;
 
-				break;
-			}
-			case 'app.bsky.actor.defs#contentLabelPref': {
-				labelPrefs.push(pref);
-				break;
-			}
-			case 'app.bsky.actor.defs#mutedWordsPref': {
-				modPrefs.keywordFilters = interpretMutedWordPreferences(pref);
-				break;
-			}
-			case 'app.bsky.actor.defs#hiddenPostsPref': {
-				modPrefs.hiddenPosts = pref.items as At.CanonicalResourceUri[];
-				break;
-			}
-		}
-	}
-
-	for (const { labelerDid, label, visibility } of labelPrefs) {
-		let pref: LabelPreference | undefined;
-		switch (visibility) {
-			case 'show':
-			case 'ignore': {
-				pref = LabelPreference.Ignore;
-				break;
-			}
-			case 'warn': {
-				pref = LabelPreference.Warn;
-				break;
-			}
-			case 'hide': {
-				pref = LabelPreference.Hide;
-				break;
-			}
-		}
-
-		if (labelerDid === undefined) {
-			globalLabelPrefs[label] = pref;
-		} else if (labelerDid in prefsByLabelers) {
-			const labelerPref = prefsByLabelers[labelerDid]!;
-
-			labelerPref.labelPrefs[label] = pref;
-		}
+		case 'app.bsky.actor.defs#hiddenPostsPref':
+			prefs.hiddenPosts = pref.items;
+			break;
 	}
 }
 
-// grab labeler's definitions
-let labelers: AppBskyLabelerDefs.LabelerViewDetailed[] = [];
+// fetch labeler definitions
+const { data: labelerData } = await rpc.get('app.bsky.labeler.getServices', {
+	params: { dids: [...labelerDids], detailed: true },
+});
 
-{
-	const { data } = await rpc.get('app.bsky.labeler.getServices', {
-		params: {
-			dids: [...labelerDids],
-			detailed: true,
-		},
-	});
+const labelDefs = interpretLabelerDefinitions(
+	labelerData.views.filter((v) => v.$type === 'app.bsky.labeler.defs#labelerViewDetailed'),
+);
+```
 
-	labelers = data.views.filter((view) => view.$type === 'app.bsky.labeler.defs#labelerViewDetailed');
-}
+### moderating different content types
 
-// interpret the labeler's definitions into something the library can understand
-const labelDefs = interpretLabelerDefinitions(labelers);
+```ts
+import {
+	moderateFeedGenerator,
+	moderateList,
+	moderateNotification,
+	moderatePost,
+	moderateProfile,
+} from '@atcute/bluesky-moderation';
 
-// then we call the appropriate moderation functions
-{
-	declare const post: AppBskyFeedDefs.PostView;
-
-	const mod = moderatePost(post, {
-		viewerDid: 'did:plc:xyz',
-		labelDefs,
-		prefs: modPrefs,
-	});
-
-	// when displaying the post in feeds...
-	{
-		const ui = getDisplayRestrictions(mod, DisplayContext.ContentList);
-
-		if (ui.filters.length > 0) {
-			// don't include the post in the feed
-		}
-
-		if (ui.blurs.length > 0) {
-			// hide the post behind a cover
-
-			if (ui.noOverride) {
-				// don't allow the cover to be removed
-			}
-		}
-
-		if (ui.alerts.length > 0 || ui.informs.length > 0) {
-			// show warning/inform badges in the post
-		}
-	}
-
-	// when displaying an expanded version of the post...
-	{
-		const ui = getDisplayRestrictions(mod, DisplayContext.ContentView);
-
-		// ...
-	}
-
-	// when displaying images/videos of a post...
-	{
-		const ui = getDisplayRestrictions(mod, DisplayContext.ProfileMedia);
-
-		// ...
-	}
-}
+const postDecision = moderatePost(post, opts);
+const profileDecision = moderateProfile(profile, opts);
+const listDecision = moderateList(list, opts);
+const feedDecision = moderateFeedGenerator(feed, opts);
+const notifDecision = moderateNotification(notification, opts);
 ```

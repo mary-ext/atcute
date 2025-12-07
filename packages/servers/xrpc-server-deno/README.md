@@ -2,6 +2,10 @@
 
 Deno WebSocket adapter for `@atcute/xrpc-server`.
 
+```sh
+npm install @atcute/xrpc-server-deno
+```
+
 ```ts
 import { XRPCRouter } from '@atcute/xrpc-server';
 import { createDenoWebSocket } from '@atcute/xrpc-server-deno';

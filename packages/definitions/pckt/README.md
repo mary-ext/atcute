@@ -2,6 +2,10 @@
 
 [pckt](https://pckt.blog) (blog.pckt.\*) schema definitions
 
+```sh
+npm install @atcute/pckt
+```
+
 ## usage
 
 ```ts

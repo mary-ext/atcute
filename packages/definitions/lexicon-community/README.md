@@ -3,6 +3,10 @@
 [Lexicon Community](https://github.com/lexicon-community/lexicon) (community.lexicon.\*) schema
 definitions
 
+```sh
+npm install @atcute/lexicon-community
+```
+
 ## usage
 
 ```ts

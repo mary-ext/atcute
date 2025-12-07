@@ -2,6 +2,10 @@
 
 [AT Protocol](https://atproto.com) (com.atproto.\*) schema definitions
 
+```sh
+npm install @atcute/atproto
+```
+
 ## usage
 
 ```ts
