@@ -21,7 +21,7 @@ export default defineLexiconConfig({
 });
 ```
 
-then run the tool:
+then run the tool (it automatically finds `lex.config.js` or `lex.config.ts`):
 
 ```
 npm exec lex-cli generate
@@ -138,7 +138,7 @@ export default defineLexiconConfig({
 				type: 'atproto',
 				mode: 'authority',
 				authority: 'atproto-lexicons.bsky.social',
-				pattern: ['com.atproto.*'],
+				pattern: ['com.atproto.*'], // optional
 			},
 		],
 	},

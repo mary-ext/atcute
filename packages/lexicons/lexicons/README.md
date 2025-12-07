@@ -42,7 +42,7 @@ isNsid('app.bsky.feed.post'); // true
 isNsid('com.atproto.repo.createRecord'); // true
 
 // CID format (content identifiers)
-isCid('bafyreib2rxk3rybk3aobmv5cjuql3setrnhyfnxq...'); // true
+isCid('bafyreigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'); // true
 
 // TID format (timestamp identifiers)
 isTid('3jzfcijpj2z2a'); // true
@@ -71,11 +71,17 @@ import { parseResourceUri, parseCanonicalResourceUri } from '@atcute/lexicons/sy
 
 // parse any AT URI (handle or DID authority)
 const uri = parseResourceUri('at://alice.bsky.social/app.bsky.feed.post/123');
-// -> { repo: 'alice.bsky.social', collection: 'app.bsky.feed.post', rkey: '123' }
+if (uri.ok) {
+	console.log(uri.value.repo); // 'alice.bsky.social'
+	console.log(uri.value.collection); // 'app.bsky.feed.post'
+	console.log(uri.value.rkey); // '123'
+}
 
 // parse canonical AT URI (DID authority only)
 const canonical = parseCanonicalResourceUri('at://did:plc:123/app.bsky.feed.post/abc');
-// -> { repo: 'did:plc:123', collection: 'app.bsky.feed.post', rkey: 'abc' }
+if (canonical.ok) {
+	console.log(canonical.value.repo); // 'did:plc:123'
+}
 ```
 
 ### branded types

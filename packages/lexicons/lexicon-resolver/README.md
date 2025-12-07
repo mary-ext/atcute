@@ -45,7 +45,7 @@ const schemaResolver = new LexiconSchemaResolver({
 });
 
 const resolved = await schemaResolver.resolve(authority, 'app.bsky.feed.post');
-// -> { uri: string, cid: string, schema: LexiconDoc }
+// -> { uri: string, cid: string, rawSchema: unknown, schema: LexiconDoc }
 ```
 
 ### error handling
