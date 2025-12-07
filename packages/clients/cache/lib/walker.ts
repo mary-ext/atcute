@@ -183,11 +183,10 @@ export class WalkerCache {
 
 				if (walked !== item) {
 					if (next === undefined) {
-						next = prev.slice(0, i);
+						next = prev.slice();
 					}
-					next.push(walked);
-				} else if (next !== undefined) {
-					next.push(walked);
+
+					next[i] = walked;
 				}
 			}
 
