@@ -3,12 +3,42 @@
 lightweight and cute API client for AT Protocol.
 
 ```sh
-npm install @atcute/client
+npm install @atcute/client @atcute/bluesky
 ```
 
-## definition packages
+## prerequisites
 
-by default, the client has no type definitions for queries or procedures.
+the client requires a definition package to know what queries and procedures are available. install
+one alongside the client:
+
+```sh
+npm install @atcute/client @atcute/bluesky
+```
+
+then register the type definitions using one of these methods:
+
+```jsonc
+// tsconfig.json
+{
+	"compilerOptions": {
+		"types": ["@atcute/bluesky"],
+	},
+}
+```
+
+```ts
+// env.d.ts
+/// <reference types="@atcute/bluesky" />
+```
+
+```ts
+// or as an import in your entrypoint
+import type {} from '@atcute/bluesky';
+```
+
+now the XRPC methods will have full type information for the registered schemas.
+
+available packages:
 
 | package                                                            | schemas                                 |
 | ------------------------------------------------------------------ | --------------------------------------- |
@@ -22,6 +52,8 @@ by default, the client has no type definitions for queries or procedures.
 | [`@atcute/microcosm`](../../definitions/microcosm)                 | `blue.microcosm.*`, `com.bad-example.*` |
 | [`@atcute/pckt`](../../definitions/pckt)                           | `blog.pckt.*`                           |
 | [`@atcute/lexicon-community`](../../definitions/lexicon-community) | `community.lexicon.*`                   |
+
+you can register multiple packages to combine their types.
 
 ## usage
 
