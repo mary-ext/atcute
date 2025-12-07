@@ -140,8 +140,7 @@ by default, this library operates as a **public client** with shorter session li
 longer-lived sessions, set up a [client assertion backend][client-assertion-backend] to enable
 **confidential client mode**.
 
-[client-assertion-backend]:
-	https://github.com/bluesky-social/proposals/tree/main/0010-client-assertion-backend
+[client-assertion-backend]: https://github.com/bluesky-social/proposals/tree/main/0010-client-assertion-backend
 
 add `fetchClientAssertion` to your config. the backend API is entirely up to you - this is just one
 example:

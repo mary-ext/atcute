@@ -3,10 +3,11 @@
 Deno WebSocket adapter for [`@atcute/xrpc-server`](../xrpc-server/).
 
 ```sh
-deno add jsr:@aspect/xrpc-server-deno
+deno add npm:@atcute/xrpc-server-deno
 ```
 
-see the [subscriptions section](../xrpc-server/#subscriptions) in the main package for usage details.
+see the [subscriptions section](../xrpc-server/#subscriptions) in the main package for usage
+details.
 
 ```ts
 import { XRPCRouter } from '@atcute/xrpc-server';

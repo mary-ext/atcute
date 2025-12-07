@@ -318,7 +318,10 @@ describe('NormalizedCache', () => {
 			const result = cache.normalize(outputSchema, response);
 
 			// author should be normalized
-			const author = cache.get(AppBskyActorDefs.profileViewBasicSchema, sampleFeedResponse.feed[0].post.author.did);
+			const author = cache.get(
+				AppBskyActorDefs.profileViewBasicSchema,
+				sampleFeedResponse.feed[0].post.author.did,
+			);
 			expect(author).toBeDefined();
 			expect(author?.handle).toBe('thatmc.bsky.social');
 
@@ -382,7 +385,9 @@ describe('NormalizedCache', () => {
 			const result1 = normalizeResponse(response1);
 
 			expect(cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0].post.uri)).toBeDefined();
-			expect(result1.feed[0].post).toBe(cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0].post.uri));
+			expect(result1.feed[0].post).toBe(
+				cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0].post.uri),
+			);
 
 			// use the same normalizer again
 			const response2 = structuredClone(sampleFeedResponse);
