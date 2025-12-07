@@ -46,7 +46,7 @@ const renderSegment = (segment: RichtextSegment, index: number) => {
 		return <span key={index}>{text}</span>;
 	}
 
-	// segments can have multiple features, but typically just one
+	// segments can have multiple features, use the first one
 	const feature = features[0];
 
 	switch (feature.$type) {

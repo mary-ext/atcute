@@ -129,7 +129,7 @@ class RichtextBuilder {
 	/**
 	 * Add inline hashtag to the rich text
 	 * @param tag The tag, without the pound prefix
-	 * @returns THe builder instance, for chaining
+	 * @returns The builder instance, for chaining
 	 */
 	addTag(tag: string): this {
 		return this.addDecoratedText('#' + tag, { $type: 'app.bsky.richtext.facet#tag', tag: tag });

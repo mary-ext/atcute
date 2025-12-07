@@ -62,23 +62,23 @@ if (ui.alerts.length > 0 || ui.informs.length > 0) {
 use different contexts depending on where content appears:
 
 ```ts
-// in feeds/lists
+// content in feeds/lists
 getDisplayRestrictions(decision, DisplayContext.ContentList);
 
-// viewing full post
+// content in expanded view
 getDisplayRestrictions(decision, DisplayContext.ContentView);
 
-// media (images/videos)
-getDisplayRestrictions(decision, DisplayContext.ProfileMedia);
+// images/videos in content
+getDisplayRestrictions(decision, DisplayContext.ContentMedia);
 
-// profile lists
+// profile in lists
 getDisplayRestrictions(decision, DisplayContext.ProfileList);
 
-// viewing full profile
+// profile in expanded view
 getDisplayRestrictions(decision, DisplayContext.ProfileView);
 
-// profile name/avatar
-getDisplayRestrictions(decision, DisplayContext.ProfileName);
+// profile avatar/banner
+getDisplayRestrictions(decision, DisplayContext.ProfileMedia);
 ```
 
 ### loading preferences

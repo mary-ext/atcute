@@ -216,7 +216,7 @@ const flattenToText = (tokens: Token[]): string => {
 | `link`      | `url`, `children` | markdown link with nested tokens |
 | `strong`    | `children`        | \*\*bold\*\*                     |
 | `emphasis`  | `children`        | \_italic\_                       |
-| `underline` | `children`        | \*\*underline\*\*                |
+| `underline` | `children`        | \_\_underline\_\_                |
 | `delete`    | `children`        | \~~strikethrough~~               |
 | `code`      | `content`         | \`inline code`                   |
 | `escape`    | `escaped`         | backslash escape                 |
