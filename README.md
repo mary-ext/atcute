@@ -51,17 +51,17 @@ for authenticated requests, see the [client docs](./packages/clients/client) or 
 | [`lexicon-resolver`](./packages/lexicons/lexicon-resolver): resolve lexicons from the network               |
 | [`lexicons`](./packages/lexicons/lexicons): core types and schema validation                                |
 | **Lexicon definition packages**                                                                             |
-| [`atproto`](./packages/definitions/atproto): `com.atproto.*`                                                |
-| [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*`                                                |
-| [`bluesky`](./packages/definitions/bluesky): `app.bsky.*`, `chat.bsky.*`                                    |
-| [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*`                                  |
-| [`leaflet`](./packages/definitions/leaflet): `pub.leaflet.*`                                                |
-| [`lexicon-community`](./packages/definitions/lexicon-community): `community.lexicon.*`                      |
-| [`microcosm`](./packages/definitions/microcosm): `blue.microcosm.*`, `com.bad-example.*`                    |
-| [`ozone`](./packages/definitions/ozone): `tools.ozone.*`                                                    |
-| [`pckt`](./packages/definitions/pckt): `blog.pckt.*`                                                        |
-| [`tangled`](./packages/definitions/tangled): `sh.tangled.*`                                                 |
-| [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*`                                             |
+| [`atproto`](./packages/definitions/atproto): `com.atproto.*` definitions                                    |
+| [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*` definitions                                    |
+| [`bluesky`](./packages/definitions/bluesky): `app.bsky.*`, `chat.bsky.*` definitions                        |
+| [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*` definitions                      |
+| [`leaflet`](./packages/definitions/leaflet): `pub.leaflet.*` definitions                                    |
+| [`lexicon-community`](./packages/definitions/lexicon-community): `community.lexicon.*` definitions          |
+| [`microcosm`](./packages/definitions/microcosm): `blue.microcosm.*`, `com.bad-example.*` definitions        |
+| [`ozone`](./packages/definitions/ozone): `tools.ozone.*` definitions                                        |
+| [`pckt`](./packages/definitions/pckt): `blog.pckt.*` definitions                                            |
+| [`tangled`](./packages/definitions/tangled): `sh.tangled.*` definitions                                     |
+| [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` definitions                                 |
 | **Identity packages**                                                                                       |
 | [`identity`](./packages/identity/identity): handle, DID and DID document types                              |
 | [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution            |
