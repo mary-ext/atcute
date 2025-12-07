@@ -1,21 +1,23 @@
 # @atcute/xrpc-server-bun
 
-Bun WebSocket adapter for `@atcute/xrpc-server`.
+Bun WebSocket adapter for [`@atcute/xrpc-server`](../xrpc-server/).
 
 ```sh
 npm install @atcute/xrpc-server-bun
 ```
 
+see the [subscriptions section](../xrpc-server/#subscriptions) in the main package for usage details.
+
 ```ts
 import { XRPCRouter } from '@atcute/xrpc-server';
 import { createBunWebSocket } from '@atcute/xrpc-server-bun';
 
-import { ComAtprotoSyncSubscribeRepos } from './lexicons/index.js';
+import { ComExampleSubscribe } from './lexicons/index.js';
 
-const { adapter, wrap } = createBunWebSocket();
-const router = new XRPCRouter({ websocket: adapter });
+const ws = createBunWebSocket();
+const router = new XRPCRouter({ websocket: ws.adapter });
 
-router.addSubscription(ComAtprotoSyncSubscribeRepos.mainSchema, {
+router.addSubscription(ComExampleSubscribe.mainSchema, {
 	async *handler({ params, signal }) {
 		while (!signal.aborted) {
 			yield {
@@ -25,5 +27,5 @@ router.addSubscription(ComAtprotoSyncSubscribeRepos.mainSchema, {
 	},
 });
 
-export default router satisfies Bun.Serve;
+export default ws.wrap(router);
 ```
