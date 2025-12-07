@@ -34,18 +34,18 @@ export type * from './types.js';
 
 /**
  * Create post records and publish them
- * @param rpc An authenticated Bluesky RPC client
+ * @param client An authenticated Bluesky RPC client
  * @param thread Composed thread
  * @returns An array of post records that were published
  */
 export async function publishThread(
-	rpc: Client,
-	thread: Omit<ComposedThread, 'rpc'>,
+	client: Client,
+	thread: Omit<ComposedThread, 'client'>,
 ): Promise<$type.enforce<ComAtprotoRepoApplyWrites.Create>[]> {
-	const records = await createThread({ ...thread, client: rpc });
+	const records = await createThread({ ...thread, client: client });
 
 	await ok(
-		rpc.post('com.atproto.repo.applyWrites', {
+		client.post('com.atproto.repo.applyWrites', {
 			signal: thread.signal,
 			input: {
 				repo: thread.author,

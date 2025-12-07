@@ -190,7 +190,7 @@ export interface ComposedThread {
 	/**
 	 * The post it should reply to, accepts either an AT-URI of the post, a view
 	 * of the post, or an embed view of the post. Supplying an AT-URI requires you
-	 * to also supply an PRC instance for it to be able to make query calls.
+	 * to also supply an RPC instance for it to be able to make query calls.
 	 */
 	reply?: string | AppBskyFeedDefs.PostView | AppBskyEmbedRecord.ViewRecord;
 	/**
