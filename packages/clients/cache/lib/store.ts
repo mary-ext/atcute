@@ -1,14 +1,8 @@
-import type { BaseSchema, InferOutput, ObjectSchema, VariantSchema } from '@atcute/lexicons/validations';
+import type { BaseSchema, InferOutput, ObjectSchema } from '@atcute/lexicons/validations';
 
-import {
-	isArraySchema,
-	isNullableSchema,
-	isObjectSchema,
-	isOptionalSchema,
-	isVariantSchema,
-} from './predicates.js';
 import type { EntityDefinition, EntitySubscriber, EntityTypeId, TypeSubscriber } from './types.js';
 import { getTypeIdFromSchema } from './types.js';
+import { WalkerCache } from './walker.js';
 
 type AnyEntityDefinition = EntityDefinition<ObjectSchema>;
 
@@ -27,9 +21,16 @@ export interface NormalizedCacheOptions {
  * normalized cache store for AT Protocol responses
  */
 export class NormalizedCache {
-	#stores = new Map<EntityTypeId, EntityStoreEntry>();
 	#schemaToTypeId = new Map<ObjectSchema, EntityTypeId>();
+
+	#stores = new Map<EntityTypeId, EntityStoreEntry>();
 	#wrapEntity: ((entity: unknown) => unknown) | undefined;
+
+	#walkerCache = new WalkerCache({
+		isEntityType: (typeId) => this.#stores.has(typeId),
+		upsertEntity: (typeId, incoming) => this.#upsertEntity(typeId, incoming),
+	});
+
 	#registry = new FinalizationRegistry<{ typeId: EntityTypeId; key: string }>((held) => {
 		const store = this.#stores.get(held.typeId);
 		if (store) {
@@ -76,18 +77,16 @@ export class NormalizedCache {
 		}
 	}
 
-	#upsertEntity(
-		typeId: EntityTypeId,
-		key: string,
-		incoming: object,
-		merge: ((existing: any, incoming: any) => any) | undefined,
-	): object {
+	#upsertEntity(typeId: EntityTypeId, incoming: object): object {
 		const store = this.#stores.get(typeId)!;
+		const key = store.definition.key(incoming);
+
 		const existingRef = store.entities.get(key);
 		const existing = existingRef?.deref();
 
 		if (existing !== undefined) {
 			// merge incoming into existing
+			const merge = store.definition.merge;
 			const merged = merge ? merge(existing, incoming) : incoming;
 			Object.assign(existing, merged);
 			this.#notifySubscribers(store, key, existing);
@@ -100,103 +99,6 @@ export class NormalizedCache {
 		this.#registry.register(entity, { typeId, key });
 		this.#notifySubscribers(store, key, entity);
 		return entity;
-	}
-
-	#resolveVariantMember(schema: VariantSchema, data: Record<string, unknown>): ObjectSchema | undefined {
-		const type = data.$type as string | undefined;
-		if (type === undefined) {
-			return undefined;
-		}
-
-		for (const member of schema.members) {
-			const memberTypeId = getTypeIdFromSchema(member as ObjectSchema);
-			if (memberTypeId === type) {
-				return member as ObjectSchema;
-			}
-		}
-
-		return undefined;
-	}
-
-	#walkAndExtract(schema: BaseSchema, data: unknown): unknown {
-		if (data === null || data === undefined) {
-			return data;
-		}
-
-		if (isObjectSchema(schema)) {
-			// check if this is a registered entity type
-			const typeId = this.#getTypeId(schema);
-			const isEntity = typeId !== undefined && this.#stores.has(typeId);
-
-			let entity = data as Record<string, unknown>;
-			if (isEntity) {
-				const store = this.#stores.get(typeId)!;
-				const key = store.definition.key(entity);
-				entity = this.#upsertEntity(typeId, key, entity, store.definition.merge) as Record<string, unknown>;
-			}
-
-			// walk nested properties
-			const shape = schema.shape;
-			let cloned = false;
-
-			for (const propName in shape) {
-				const propSchema = shape[propName];
-				const propValue = entity[propName];
-
-				if (propValue !== undefined) {
-					const extracted = this.#walkAndExtract(propSchema, propValue);
-					if (extracted !== propValue) {
-						// only mutate entities in-place; clone non-entities on first modification
-						if (!isEntity && !cloned) {
-							entity = { ...entity };
-							cloned = true;
-						}
-
-						entity[propName] = extracted;
-					}
-				}
-			}
-
-			return entity;
-		}
-
-		if (isArraySchema(schema)) {
-			const prev = data as unknown[];
-
-			let modified = false;
-			const next: unknown[] = [];
-
-			for (let i = 0; i < prev.length; i++) {
-				const item = prev[i];
-				const extracted = this.#walkAndExtract(schema.item, item);
-
-				next.push(extracted);
-
-				if (extracted !== item) {
-					modified = true;
-				}
-			}
-
-			return modified ? next : prev;
-		}
-
-		if (isVariantSchema(schema)) {
-			const objectData = data as Record<string, unknown>;
-
-			const member = this.#resolveVariantMember(schema, objectData);
-			if (member) {
-				return this.#walkAndExtract(member, data);
-			}
-
-			return data;
-		}
-
-		if (isOptionalSchema(schema) || isNullableSchema(schema)) {
-			return this.#walkAndExtract(schema.wrapped, data);
-		}
-
-		// primitive types - return as-is
-		return data;
 	}
 
 	/**
@@ -221,6 +123,9 @@ export class NormalizedCache {
 		});
 
 		this.#schemaToTypeId.set(definition.schema, typeId);
+
+		// invalidate cached walkers since entity types changed
+		this.#walkerCache.invalidate();
 	}
 
 	/**
@@ -230,7 +135,7 @@ export class NormalizedCache {
 	 * @returns response with cached entity refs swapped in
 	 */
 	normalize<T extends BaseSchema>(schema: T, data: InferOutput<T>): InferOutput<T> {
-		return this.#walkAndExtract(schema, data) as InferOutput<T>;
+		return this.#walkerCache.getWalker(schema)(data) as InferOutput<T>;
 	}
 
 	/**
@@ -239,7 +144,7 @@ export class NormalizedCache {
 	 * @returns function that normalizes data according to schema
 	 */
 	normalizer<T extends BaseSchema>(schema: T): (data: InferOutput<T>) => InferOutput<T> {
-		return (data) => this.#walkAndExtract(schema, data) as InferOutput<T>;
+		return (data) => this.normalize(schema, data);
 	}
 
 	/**
