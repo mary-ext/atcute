@@ -10,7 +10,7 @@ export const ATPROTO_WEB_DID_RE =
 
 /**
  * checks if input is a did:web identifier, note that you should probably use
- * `isAtprotoDidWeb` for atproto-related cases as atproto only supports a subset
+ * `isAtprotoWebDid` for atproto-related cases as atproto only supports a subset
  * of the did:web specification (namely, no custom paths)
  */
 export const isWebDid = (input: string): input is Did<'web'> => {

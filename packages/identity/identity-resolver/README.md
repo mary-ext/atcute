@@ -208,7 +208,7 @@ by default, did:plc resolution uses `https://plc.directory`. you can specify a d
 
 ```ts
 const plcResolver = new PlcDidDocumentResolver({
-	plcUrl: 'https://plc.wtf', // mirror of plc.directory
+	apiUrl: 'https://plc.wtf', // mirror of plc.directory
 });
 ```
 
