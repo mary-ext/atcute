@@ -106,7 +106,8 @@ pnpm run -r generate
 
 check bundle sizes with the `pkg-size-report` tool:
 
-> [!WARNING] run `pnpm run -r build` first, otherwise measurements may be inaccurate.
+> [!WARNING]  
+> run `pnpm run -r build` first, otherwise measurements may be inaccurate.
 
 ```sh
 pnpm pkg-size-report           # show sizes (and diff if previously saved)
