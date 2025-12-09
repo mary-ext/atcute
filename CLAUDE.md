@@ -50,14 +50,6 @@ the packages are organized into categories under `packages/`:
 - Vitest is the standard test runner, though some packages may still be using bun test
 - run tests via `pnpm run test`
 
-### commits
-
-- don't do any commits, but do stop if you think the user should make a git commit/changeset now
-- suggest commit messages, the commit messages use Conventional Commit, and is written like
-  `[type]([package?]): [message]` where package may be optional.
-- suggest changesets for any notable changes, with a brief summary of the change and an optional
-  description of why specifically the change was made with example code demonstrating it
-
 ### misc
 
 - Claude Code's Bash tool persists directory changes (`cd`) across calls
