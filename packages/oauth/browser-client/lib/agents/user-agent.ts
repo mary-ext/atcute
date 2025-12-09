@@ -56,7 +56,7 @@ export class OAuthUserAgent implements FetchHandlerObject {
 
 		headers.set('authorization', `${session.token.type} ${session.token.access}`);
 
-		let response = await this.#fetch(url, { ...init, headers });
+		let response = await this.#fetch(url.href, { ...init, headers });
 		if (!isInvalidTokenResponse(response)) {
 			return response;
 		}
@@ -79,7 +79,7 @@ export class OAuthUserAgent implements FetchHandlerObject {
 		url = new URL(pathname, session.info.aud);
 		headers.set('authorization', `${session.token.type} ${session.token.access}`);
 
-		return await this.#fetch(url, { ...init, headers });
+		return await this.#fetch(url.href, { ...init, headers });
 	}
 }
 

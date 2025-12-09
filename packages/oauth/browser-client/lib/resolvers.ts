@@ -38,7 +38,7 @@ export const resolveFromService = async (
 
 const getProtectedResourceMetadata = async (host: string): Promise<ProtectedResourceMetadata> => {
 	const url = new URL(`/.well-known/oauth-protected-resource`, host);
-	const response = await fetch(url, {
+	const response = await fetch(url.href, {
 		redirect: 'manual',
 		headers: {
 			accept: 'application/json',
@@ -59,7 +59,7 @@ const getProtectedResourceMetadata = async (host: string): Promise<ProtectedReso
 
 const getAuthorizationServerMetadata = async (host: string): Promise<AuthorizationServerMetadata> => {
 	const url = new URL(`/.well-known/oauth-authorization-server`, host);
-	const response = await fetch(url, {
+	const response = await fetch(url.href, {
 		redirect: 'manual',
 		headers: {
 			accept: 'application/json',

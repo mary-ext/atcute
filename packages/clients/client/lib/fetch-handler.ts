@@ -25,6 +25,6 @@ export const simpleFetchHandler = ({
 }: SimpleFetchHandlerOptions): FetchHandler => {
 	return async (pathname, init) => {
 		const url = new URL(pathname, service);
-		return await _fetch(url, init);
+		return await _fetch(url.href, init);
 	};
 };

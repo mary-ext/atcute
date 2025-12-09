@@ -54,7 +54,7 @@ const discoverLexiconsForAuthority = async (
 			url.searchParams.set('cursor', cursor);
 		}
 
-		const response = await fetch(url, {
+		const response = await fetch(url.href, {
 			headers: { accept: 'application/json' },
 		});
 
