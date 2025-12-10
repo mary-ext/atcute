@@ -1,5 +1,11 @@
 # @atcute/client
 
+## 4.1.1
+
+### Patch Changes
+
+- 387b291: do not pass URL instances to fetch()
+
 ## 4.1.0
 
 ### Minor Changes
@@ -144,7 +150,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 

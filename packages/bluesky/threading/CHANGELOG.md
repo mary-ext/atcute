@@ -1,5 +1,15 @@
 # @atcute/bluesky-threading
 
+## 5.0.5
+
+### Patch Changes
+
+- f8fa7ce: fix incorrect omit on publishThread
+- Updated dependencies [387b291]
+- Updated dependencies [9459e91]
+  - @atcute/client@4.1.1
+  - @atcute/bluesky@3.2.13
+
 ## 5.0.4
 
 ### Patch Changes

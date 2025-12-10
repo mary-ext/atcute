@@ -1,5 +1,13 @@
 # @atcute/oauth-browser-client
 
+## 2.0.3
+
+### Patch Changes
+
+- 387b291: do not pass URL instances to fetch()
+- Updated dependencies [387b291]
+  - @atcute/client@4.1.1
+
 ## 2.0.2
 
 ### Patch Changes

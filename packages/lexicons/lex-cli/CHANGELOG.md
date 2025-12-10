@@ -1,5 +1,11 @@
 # @atcute/lex-cli
 
+## 2.5.1
+
+### Patch Changes
+
+- 387b291: do not pass URL instances to fetch()
+
 ## 2.5.0
 
 ### Minor Changes

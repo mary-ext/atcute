@@ -1,5 +1,11 @@
 # @atcute/crypto
 
+## 2.3.0
+
+### Minor Changes
+
+- 4574af8: allow exporting keys imported via PrivateKeyExportable classes
+
 ## 2.2.6
 
 ### Patch Changes
