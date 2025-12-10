@@ -21,6 +21,20 @@
 					"createdAt": {
 						"type": "string",
 						"format": "datetime"
+					},
+					"mentions": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "did"
+						}
+					},
+					"references": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "at-uri"
+						}
 					}
 				}
 			}

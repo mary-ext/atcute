@@ -9,6 +9,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		body: /*#__PURE__*/ v.string(),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		issue: /*#__PURE__*/ v.resourceUriString(),
+		mentions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
+		references: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString())),
 		replyTo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	}),
 );

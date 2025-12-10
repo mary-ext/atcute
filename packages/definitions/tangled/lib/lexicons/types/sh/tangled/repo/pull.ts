@@ -8,7 +8,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.pull'),
 		body: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		mentions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
 		patch: /*#__PURE__*/ v.string(),
+		references: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString())),
 		get source() {
 			return /*#__PURE__*/ v.optional(sourceSchema);
 		},

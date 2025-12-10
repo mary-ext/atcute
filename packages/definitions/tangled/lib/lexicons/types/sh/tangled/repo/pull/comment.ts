@@ -8,7 +8,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.pull.comment'),
 		body: /*#__PURE__*/ v.string(),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		mentions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
 		pull: /*#__PURE__*/ v.resourceUriString(),
+		references: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString())),
 	}),
 );
 

@@ -8,6 +8,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.issue'),
 		body: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
+		mentions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
+		references: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString())),
 		repo: /*#__PURE__*/ v.resourceUriString(),
 		title: /*#__PURE__*/ v.string(),
 	}),

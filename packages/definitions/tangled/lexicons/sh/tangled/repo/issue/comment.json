@@ -25,6 +25,20 @@
 					"replyTo": {
 						"type": "string",
 						"format": "at-uri"
+					},
+					"mentions": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "did"
+						}
+					},
+					"references": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "at-uri"
+						}
 					}
 				}
 			}
