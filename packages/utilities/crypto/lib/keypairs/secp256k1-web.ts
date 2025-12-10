@@ -139,6 +139,19 @@ export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey implement
 		return new Secp256k1PrivateKeyExportable(privateKeyBytes, publicKeyBytes);
 	}
 
+	static override async importRaw(
+		privateKeyBytes: Uint8Array,
+		publicKeyBytes?: Uint8Array,
+	): Promise<Secp256k1PrivateKeyExportable> {
+		const keypair = new Secp256k1PrivateKeyExportable(privateKeyBytes, publicKeyBytes ?? getPublicKey(privateKeyBytes));
+
+		if (publicKeyBytes) {
+			await checkKeypairRelationship(keypair);
+		}
+
+		return keypair;
+	}
+
 	exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPrivateKey(format: 'multikey'): Promise<string>;
 	exportPrivateKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;

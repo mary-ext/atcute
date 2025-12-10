@@ -173,6 +173,33 @@ class NodeSecp256k1PrivateKeyExportable extends NodeSecp256k1PrivateKey implemen
 		return new NodeSecp256k1PrivateKeyExportable(keypair.privateKey, keypair.publicKey);
 	}
 
+	static override async importRaw(
+		privateKeyBytes: Uint8Array,
+		publicKeyBytes?: Uint8Array,
+	): Promise<NodeSecp256k1PrivateKeyExportable> {
+		const privateKey = createPrivateKey({
+			key: Buffer.concat([PKCS8_PRIVATE_KEY_PREFIX, privateKeyBytes]),
+			format: 'der',
+			type: 'pkcs8',
+		});
+
+		const publicKey = publicKeyBytes
+			? createPublicKey({
+					key: Buffer.concat([SPKI_PREFIX, publicKeyBytes]),
+					format: 'der',
+					type: 'spki',
+				})
+			: createPublicKey(privateKey);
+
+		const keypair = new NodeSecp256k1PrivateKeyExportable(privateKey, publicKey);
+
+		if (publicKeyBytes) {
+			await checkKeypairRelationship(keypair);
+		}
+
+		return keypair;
+	}
+
 	exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPrivateKey(format: 'multikey'): Promise<string>;
 	exportPrivateKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;

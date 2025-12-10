@@ -250,6 +250,78 @@ export class P256PrivateKeyExportable extends P256PrivateKey implements PrivateK
 		return new P256PrivateKeyExportable(keypair.privateKey, keypair.publicKey);
 	}
 
+	static override async importRaw(
+		privateKeyBytes: Uint8Array,
+		publicKeyBytes?: Uint8Array,
+	): Promise<P256PrivateKeyExportable> {
+		const pkcs8 = concat([PKCS8_PRIVATE_KEY_PREFIX, privateKeyBytes]);
+
+		// always import as extractable for exportable keys
+		const privateKey = await crypto.subtle.importKey('pkcs8', pkcs8, ECDSA_ALG, true, ['sign']);
+
+		let publicKey: CryptoKey;
+
+		if (publicKeyBytes) {
+			if (!SUPPORTS_COMPRESSED_EC_KEYS) {
+				publicKey = await crypto.subtle.importKey(
+					'raw',
+					uncompressP256Point(publicKeyBytes),
+					ECDSA_ALG,
+					true,
+					['verify'],
+				);
+			} else {
+				publicKey = await crypto.subtle.importKey(
+					'spki',
+					concat([SPKI_PREFIX, publicKeyBytes]),
+					ECDSA_ALG,
+					true,
+					['verify'],
+				);
+			}
+		} else {
+			publicKey = await deriveEcPublicKeyFromPrivateKey(privateKey, ['verify']);
+		}
+
+		const keypair = new P256PrivateKeyExportable(privateKey, publicKey);
+
+		if (publicKeyBytes) {
+			await checkKeypairRelationship(keypair);
+		}
+
+		return keypair;
+	}
+
+	static override async importCryptoKey(
+		privateKey: CryptoKey,
+		publicKey?: CryptoKey,
+	): Promise<P256PrivateKeyExportable> {
+		assertType((privateKey.algorithm as any).namedCurve === 'P-256', '1st key is not an ECDSA P-256 key');
+		assertType(privateKey.type === 'private', '1st key is not a private key');
+		assertType(privateKey.extractable, 'private key must be extractable');
+
+		if (publicKey) {
+			assertType((publicKey.algorithm as any).namedCurve === 'P-256', '2nd key is not an ECDSA P-256 key');
+			assertType(publicKey.type === 'public', '2nd key is not a public key');
+			assertType(publicKey.extractable, 'public key must be extractable');
+		}
+
+		const keypair = new P256PrivateKeyExportable(
+			privateKey,
+			publicKey ?? (await deriveEcPublicKeyFromPrivateKey(privateKey, ['verify'])),
+		);
+
+		if (publicKey) {
+			await checkKeypairRelationship(keypair);
+		}
+
+		return keypair;
+	}
+
+	static override async importCryptoKeyPair(keypair: CryptoKeyPair): Promise<P256PrivateKeyExportable> {
+		return await this.importCryptoKey(keypair.privateKey, keypair.publicKey);
+	}
+
 	exportPrivateKey(format: 'jwk'): Promise<JsonWebKey>;
 	exportPrivateKey(format: 'multikey'): Promise<string>;
 	exportPrivateKey(format: 'raw'): Promise<Uint8Array<ArrayBuffer>>;
