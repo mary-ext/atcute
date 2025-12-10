@@ -58,6 +58,21 @@ const _contentLabelPrefSchema = /*#__PURE__*/ v.object({
 	labelerDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	visibility: /*#__PURE__*/ v.string<'hide' | 'ignore' | 'show' | 'warn' | (string & {})>(),
 });
+const _declaredAgePrefSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#declaredAgePref')),
+	/**
+	 * Indicates if the user has declared that they are over 13 years of age.
+	 */
+	isOverAge13: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Indicates if the user has declared that they are over 16 years of age.
+	 */
+	isOverAge16: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Indicates if the user has declared that they are over 18 years of age.
+	 */
+	isOverAge18: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+});
 const _feedViewPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#feedViewPref')),
 	/**
@@ -248,6 +263,7 @@ const _preferencesSchema = /*#__PURE__*/ v.array(() => {
 		adultContentPrefSchema,
 		bskyAppStatePrefSchema,
 		contentLabelPrefSchema,
+		declaredAgePrefSchema,
 		feedViewPrefSchema,
 		hiddenPostsPrefSchema,
 		interestsPrefSchema,
@@ -553,6 +569,7 @@ type adultContentPref$schematype = typeof _adultContentPrefSchema;
 type bskyAppProgressGuide$schematype = typeof _bskyAppProgressGuideSchema;
 type bskyAppStatePref$schematype = typeof _bskyAppStatePrefSchema;
 type contentLabelPref$schematype = typeof _contentLabelPrefSchema;
+type declaredAgePref$schematype = typeof _declaredAgePrefSchema;
 type feedViewPref$schematype = typeof _feedViewPrefSchema;
 type hiddenPostsPref$schematype = typeof _hiddenPostsPrefSchema;
 type interestsPref$schematype = typeof _interestsPrefSchema;
@@ -586,6 +603,7 @@ export interface adultContentPrefSchema extends adultContentPref$schematype {}
 export interface bskyAppProgressGuideSchema extends bskyAppProgressGuide$schematype {}
 export interface bskyAppStatePrefSchema extends bskyAppStatePref$schematype {}
 export interface contentLabelPrefSchema extends contentLabelPref$schematype {}
+export interface declaredAgePrefSchema extends declaredAgePref$schematype {}
 export interface feedViewPrefSchema extends feedViewPref$schematype {}
 export interface hiddenPostsPrefSchema extends hiddenPostsPref$schematype {}
 export interface interestsPrefSchema extends interestsPref$schematype {}
@@ -619,6 +637,7 @@ export const adultContentPrefSchema = _adultContentPrefSchema as adultContentPre
 export const bskyAppProgressGuideSchema = _bskyAppProgressGuideSchema as bskyAppProgressGuideSchema;
 export const bskyAppStatePrefSchema = _bskyAppStatePrefSchema as bskyAppStatePrefSchema;
 export const contentLabelPrefSchema = _contentLabelPrefSchema as contentLabelPrefSchema;
+export const declaredAgePrefSchema = _declaredAgePrefSchema as declaredAgePrefSchema;
 export const feedViewPrefSchema = _feedViewPrefSchema as feedViewPrefSchema;
 export const hiddenPostsPrefSchema = _hiddenPostsPrefSchema as hiddenPostsPrefSchema;
 export const interestsPrefSchema = _interestsPrefSchema as interestsPrefSchema;
@@ -654,6 +673,7 @@ export interface AdultContentPref extends v.InferInput<typeof adultContentPrefSc
 export interface BskyAppProgressGuide extends v.InferInput<typeof bskyAppProgressGuideSchema> {}
 export interface BskyAppStatePref extends v.InferInput<typeof bskyAppStatePrefSchema> {}
 export interface ContentLabelPref extends v.InferInput<typeof contentLabelPrefSchema> {}
+export interface DeclaredAgePref extends v.InferInput<typeof declaredAgePrefSchema> {}
 export interface FeedViewPref extends v.InferInput<typeof feedViewPrefSchema> {}
 export interface HiddenPostsPref extends v.InferInput<typeof hiddenPostsPrefSchema> {}
 export interface InterestsPref extends v.InferInput<typeof interestsPrefSchema> {}

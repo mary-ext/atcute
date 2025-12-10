@@ -16,6 +16,15 @@ export * as AppBskyBookmarkCreateBookmark from './types/app/bsky/bookmark/create
 export * as AppBskyBookmarkDefs from './types/app/bsky/bookmark/defs.js';
 export * as AppBskyBookmarkDeleteBookmark from './types/app/bsky/bookmark/deleteBookmark.js';
 export * as AppBskyBookmarkGetBookmarks from './types/app/bsky/bookmark/getBookmarks.js';
+export * as AppBskyContactDefs from './types/app/bsky/contact/defs.js';
+export * as AppBskyContactDismissMatch from './types/app/bsky/contact/dismissMatch.js';
+export * as AppBskyContactGetMatches from './types/app/bsky/contact/getMatches.js';
+export * as AppBskyContactGetSyncStatus from './types/app/bsky/contact/getSyncStatus.js';
+export * as AppBskyContactImportContacts from './types/app/bsky/contact/importContacts.js';
+export * as AppBskyContactRemoveData from './types/app/bsky/contact/removeData.js';
+export * as AppBskyContactSendNotification from './types/app/bsky/contact/sendNotification.js';
+export * as AppBskyContactStartPhoneVerification from './types/app/bsky/contact/startPhoneVerification.js';
+export * as AppBskyContactVerifyPhone from './types/app/bsky/contact/verifyPhone.js';
 export * as AppBskyEmbedDefs from './types/app/bsky/embed/defs.js';
 export * as AppBskyEmbedExternal from './types/app/bsky/embed/external.js';
 export * as AppBskyEmbedImages from './types/app/bsky/embed/images.js';
