@@ -52,6 +52,7 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 	 * The reason why this notification was delivered - e.g. your post was liked, or you received a new follower.
 	 */
 	reason: /*#__PURE__*/ v.string<
+		| 'contact-match'
 		| 'follow'
 		| 'like'
 		| 'like-via-repost'
