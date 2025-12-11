@@ -3,35 +3,21 @@
 	"defs": {
 		"main": {
 			"type": "object",
-			"properties": {
-				"attrs": {
-					"ref": "#codeBlockAttrs",
-					"type": "ref",
-					"description": "Code block attributes"
-				},
-				"content": {
-					"type": "array",
-					"items": {
-						"ref": "blog.pckt.block.text",
-						"type": "ref"
-					},
-					"description": "Array of text nodes containing the code"
-				}
-			}
-		},
-		"codeBlockAttrs": {
-			"type": "object",
+			"required": ["plaintext"],
 			"properties": {
 				"language": {
 					"type": "string",
 					"maxLength": 50,
-					"description": "Programming language for syntax highlighting (e.g., 'javascript', 'python', 'php')"
+					"description": "Programming language for syntax highlighting"
+				},
+				"plaintext": {
+					"type": "string",
+					"description": "The code content"
 				}
-			},
-			"description": "Code block attributes"
+			}
 		}
 	},
 	"$type": "com.atproto.lexicon.schema",
 	"lexicon": 1,
-	"description": "Preformatted code block with optional syntax highlighting. Preserves whitespace and displays code in a monospace font."
+	"description": "Preformatted code block with optional syntax highlighting."
 }

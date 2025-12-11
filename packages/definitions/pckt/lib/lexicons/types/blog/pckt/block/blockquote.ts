@@ -1,14 +1,14 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
-import * as BlogPcktBlockParagraph from './paragraph.js';
+import * as BlogPcktBlockText from './text.js';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.blockquote')),
 	/**
-	 * Array of paragraph content
+	 * Array of text blocks
 	 */
 	get content() {
-		return /*#__PURE__*/ v.array(/*#__PURE__*/ v.variant([BlogPcktBlockParagraph.mainSchema]));
+		return /*#__PURE__*/ v.array(/*#__PURE__*/ v.variant([BlogPcktBlockText.mainSchema]));
 	},
 });
 

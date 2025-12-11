@@ -5,10 +5,10 @@
 			"type": "object",
 			"required": ["content"],
 			"properties": {
-				"attrs": {
-					"ref": "#orderedListAttrs",
-					"type": "ref",
-					"description": "Optional attributes for the ordered list"
+				"start": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "Starting number for the ordered list (default: 1)"
 				},
 				"content": {
 					"type": "array",
@@ -19,20 +19,9 @@
 					"description": "Array of list items"
 				}
 			}
-		},
-		"orderedListAttrs": {
-			"type": "object",
-			"properties": {
-				"start": {
-					"type": "integer",
-					"minimum": 1,
-					"description": "Starting number for the ordered list"
-				}
-			},
-			"description": "Ordered list attributes"
 		}
 	},
 	"$type": "com.atproto.lexicon.schema",
 	"lexicon": 1,
-	"description": "Ordered numbered list. Each item can contain rich content including nested lists. Numbering can start at any positive integer."
+	"description": "Ordered numbered list. Each item can contain rich content including nested lists."
 }

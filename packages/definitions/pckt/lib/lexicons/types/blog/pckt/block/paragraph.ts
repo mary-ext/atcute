@@ -3,6 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 import * as BlogPcktBlockHardBreak from './hardBreak.js';
 import * as BlogPcktBlockMention from './mention.js';
 import * as BlogPcktBlockText from './text.js';
+import * as BlogPcktRichtextFacet from '../richtext/facet.js';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.paragraph')),
@@ -19,6 +20,12 @@ const _mainSchema = /*#__PURE__*/ v.object({
 				]),
 			),
 		);
+	},
+	/**
+	 * Facets for text formatting and features within this paragraph
+	 */
+	get facets() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(BlogPcktRichtextFacet.mainSchema));
 	},
 });
 

@@ -3,12 +3,18 @@
 	"defs": {
 		"main": {
 			"type": "object",
-			"required": ["did"],
+			"required": ["did", "handle"],
 			"properties": {
 				"did": {
 					"type": "string",
 					"format": "did",
 					"description": "The DID of the mentioned user (e.g., did:plc:abc123xyz). This is the canonical reference that persists even if the user changes their handle, following app.bsky.richtext.facet#mention"
+				},
+				"handle": {
+					"type": "string",
+					"format": "handle",
+					"maxLength": 253,
+					"description": "The handle of the mentioned user at the time of mention (e.g., alice.bsky.social). Used for display text and byte offset calculation in facets."
 				}
 			}
 		}

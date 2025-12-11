@@ -4,6 +4,14 @@
 		"main": {
 			"type": "object",
 			"properties": {
+				"facets": {
+					"type": "array",
+					"items": {
+						"ref": "blog.pckt.richtext.facet",
+						"type": "ref"
+					},
+					"description": "Facets for text formatting and features within this paragraph"
+				},
 				"content": {
 					"type": "array",
 					"items": {

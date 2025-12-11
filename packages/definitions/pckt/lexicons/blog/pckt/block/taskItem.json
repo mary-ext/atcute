@@ -3,37 +3,25 @@
 	"defs": {
 		"main": {
 			"type": "object",
-			"required": ["attrs", "content"],
+			"required": ["checked", "content"],
 			"properties": {
-				"attrs": {
-					"ref": "#taskItemAttrs",
-					"type": "ref",
-					"description": "Task item attributes"
+				"checked": {
+					"type": "boolean",
+					"description": "Whether the task is completed"
 				},
 				"content": {
 					"type": "array",
 					"items": {
-						"refs": ["blog.pckt.block.paragraph"],
+						"refs": ["blog.pckt.block.text"],
 						"type": "union",
 						"closed": false
 					},
-					"description": "Array of paragraph content"
+					"description": "Array of text blocks"
 				}
 			}
-		},
-		"taskItemAttrs": {
-			"type": "object",
-			"required": ["checked"],
-			"properties": {
-				"checked": {
-					"type": "boolean",
-					"description": "Whether the task is checked or unchecked"
-				}
-			},
-			"description": "Task item attributes"
 		}
 	},
 	"$type": "com.atproto.lexicon.schema",
 	"lexicon": 1,
-	"description": "Individual task item with checkbox state. Contains rich text content that describes the task."
+	"description": "Individual task item with checkbox state."
 }
