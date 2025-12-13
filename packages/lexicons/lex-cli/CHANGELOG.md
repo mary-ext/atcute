@@ -1,5 +1,11 @@
 # @atcute/lex-cli
 
+## 2.5.2
+
+### Patch Changes
+
+- 6f5906f: only generate files with contents
+
 ## 2.5.1
 
 ### Patch Changes
