@@ -143,7 +143,10 @@ export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey implement
 		privateKeyBytes: Uint8Array,
 		publicKeyBytes?: Uint8Array,
 	): Promise<Secp256k1PrivateKeyExportable> {
-		const keypair = new Secp256k1PrivateKeyExportable(privateKeyBytes, publicKeyBytes ?? getPublicKey(privateKeyBytes));
+		const keypair = new Secp256k1PrivateKeyExportable(
+			privateKeyBytes,
+			publicKeyBytes ?? getPublicKey(privateKeyBytes),
+		);
 
 		if (publicKeyBytes) {
 			await checkKeypairRelationship(keypair);
