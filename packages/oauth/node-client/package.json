@@ -1,0 +1,42 @@
+{
+	"type": "module",
+	"name": "@atcute/oauth-node-client",
+	"version": "0.1.0",
+	"description": "atproto OAuth client for Node.js",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/oauth/node-client"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsgo --project tsconfig.build.json",
+		"test": "vitest",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/client": "workspace:^",
+		"@atcute/identity": "workspace:^",
+		"@atcute/identity-resolver": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
+		"@atcute/multibase": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
+		"@atcute/util-fetch": "workspace:^",
+		"@badrap/valita": "^0.4.6",
+		"jose": "^6.1.3",
+		"nanoid": "^5.1.6"
+	},
+	"devDependencies": {
+		"@types/node": "^22.19.1",
+		"vitest": "^4.0.15"
+	}
+}

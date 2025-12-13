@@ -1,0 +1,22 @@
+{
+	"type": "module",
+	"name": "node-client-example",
+	"private": true,
+	"scripts": {
+		"dev": "bun run --hot src/index.ts",
+		"setup:env": "bun run scripts/setup-env.ts"
+	},
+	"dependencies": {
+		"@atcute/atproto": "workspace:*",
+		"@atcute/client": "workspace:*",
+		"@atcute/identity-resolver": "workspace:*",
+		"@atcute/identity-resolver-node": "workspace:^",
+		"@atcute/lexicons": "workspace:*",
+		"@atcute/oauth-node-client": "workspace:*",
+		"hono": "^4.11.0",
+		"nanoid": "^5.1.6"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	}
+}
