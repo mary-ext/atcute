@@ -88,7 +88,7 @@ window.location.assign(authUrl);
 on your redirect URL, extract the parameters and finalize:
 
 ```ts
-import { XRPC } from '@atcute/client';
+import { Client } from '@atcute/client';
 import { OAuthUserAgent, finalizeAuthorization } from '@atcute/oauth-browser-client';
 
 // server redirects with params in hash, not search string
@@ -99,7 +99,7 @@ history.replaceState(null, '', location.pathname + location.search);
 
 const { session } = await finalizeAuthorization(params);
 const agent = new OAuthUserAgent(session);
-const rpc = new XRPC({ handler: agent });
+const rpc = new Client({ handler: agent });
 
 const { data } = await rpc.get('com.atproto.identity.resolveHandle', {
 	params: { handle: 'mary.my.id' },
