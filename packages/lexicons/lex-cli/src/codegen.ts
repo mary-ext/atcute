@@ -106,6 +106,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 
 	const map: DocumentMap = new Map(documents.map((doc) => [doc.id, doc]));
 	const files: SourceFile[] = [];
+	const generatedIds = new Set<string>();
 
 	for (const doc of documents) {
 		const filename = `types/${doc.id.replaceAll('.', '/')}.ts`;
@@ -353,31 +354,40 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 			}
 		}
 
-		files.push({
-			filename: filename,
-			code:
-				file.imports +
-				`\n\n` +
-				file.rawschemas +
-				`\n\n` +
-				file.schemadefs +
-				`\n\n` +
-				file.schemas +
-				`\n\n` +
-				file.exports +
-				`\n\n` +
-				file.interfaces +
-				`\n\n` +
-				file.sinterfaces +
-				`\n\n` +
-				file.ambients,
-		});
+		// skip files that only have imports and no actual content
+		if (file.exports) {
+			generatedIds.add(doc.id);
+
+			files.push({
+				filename: filename,
+				code:
+					file.imports +
+					`\n\n` +
+					file.rawschemas +
+					`\n\n` +
+					file.schemadefs +
+					`\n\n` +
+					file.schemas +
+					`\n\n` +
+					file.exports +
+					`\n\n` +
+					file.interfaces +
+					`\n\n` +
+					file.sinterfaces +
+					`\n\n` +
+					file.ambients,
+			});
+		}
 	}
 
 	{
 		let code = ``;
 
 		for (const doc of map.values()) {
+			if (!generatedIds.has(doc.id)) {
+				continue;
+			}
+
 			code += `export * as ${toTitleCase(doc.id)} from ${lit(`./types/${doc.id.replaceAll('.', '/')}${importExt}`)};\n`;
 		}
 
