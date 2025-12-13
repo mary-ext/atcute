@@ -78,10 +78,6 @@ export const confidentialClientMetadataSchema = v
 			if (isLocalHostname(jwksUrl.hostname)) {
 				return v.err({ message: `jwks_uri hostname is invalid`, path: ['jwks_uri'] });
 			}
-
-			if (jwksUrl.origin !== clientIdUrl.origin) {
-				return v.err({ message: `jwks_uri must have the same origin as the client_id`, path: ['jwks_uri'] });
-			}
 		}
 
 		// for discoverable clients, client_uri (if provided) must be same-origin parent of client_id

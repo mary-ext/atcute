@@ -103,10 +103,10 @@ describe('buildClientMetadata', () => {
 			const keyset = new Keyset([key]);
 			const metadata: ConfidentialClientMetadata = {
 				...createValidMetadata(),
-				jwks_uri: 'https://other.example/.well-known/jwks.json',
+				jwks_uri: 'https://other.example.com/.well-known/jwks.json',
 			};
 
-			expect(() => buildClientMetadata(metadata, keyset)).toThrow();
+			expect(() => buildClientMetadata(metadata, keyset)).not.toThrow();
 		});
 	});
 });
