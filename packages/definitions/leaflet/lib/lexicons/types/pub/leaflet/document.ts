@@ -31,6 +31,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		},
 		publication: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 		publishedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+		tags: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.array(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 50)]),
+			),
+		),
 		get theme() {
 			return /*#__PURE__*/ v.optional(PubLeafletPublication.themeSchema);
 		},
