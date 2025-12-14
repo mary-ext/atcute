@@ -38,7 +38,7 @@ the packages are organized into categories under `packages/`:
 - any writing should be in lowercase, except for proper nouns, acronyms and 'I'
 - only comment non-trivial code, focusing on _why_ rather than _what_
 - write comments and JSDoc in lowercase (except proper nouns, acronyms, and 'I')
-- add JSDoc comments to all new exported functions, methods, classes, fields, and enums
+- add JSDoc comments to new publicly exported functions, methods, classes, fields, and enums
 - JSDoc should include proper annotations:
   - use `@param` for parameters (no dashes after param names)
   - use `@returns` for return values
