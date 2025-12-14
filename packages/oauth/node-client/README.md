@@ -1,20 +1,28 @@
 # @atcute/oauth-node-client
 
-atproto OAuth client for Node.js (and other server runtimes)
+atproto OAuth client for Node.js (and other server runtimes). this package implements a
+**confidential client** that authenticates using `private_key_jwt`.
 
 ```sh
 npm install @atcute/oauth-node-client
 ```
 
-## key management
+## usage
 
-this package is for **confidential clients**. it authenticates to the token endpoint using
-`private_key_jwt`, which means you need a persistent private key in production (not an ephemeral key
-generated at startup).
+examples below use Hono, but any web framework with `Request`/`Response` style works.
 
-one convenient pattern is to keep a committed `.env` with empty placeholders, and generate a
-developer-specific `.env.local` that is never checked in. the script below only fills empty values
-and refuses to overwrite non-empty ones.
+```ts
+import { Hono } from 'hono';
+
+const app = new Hono();
+```
+
+### key management
+
+confidential clients require a persistent private key, so we need one to be generated.
+
+one pattern is to keep a committed `.env` with empty placeholders and generate a developer-specific
+`.env.local` that is never checked in:
 
 1. create `.env` with an empty value:
 
@@ -96,65 +104,10 @@ import { importJwkKey } from '@atcute/oauth-node-client';
 const keyset = await Promise.all([importJwkKey(process.env.PRIVATE_KEY_JWK!)]);
 ```
 
-## stores
-
-you provide storage for sessions and authorization state:
-
-- sessions are keyed by the user's DID and should be long-lived
-- states are keyed by the OAuth `state` value and should be short-lived (~10 minutes)
-
-for development or single-instance deployments, `MemoryStore` is fine, but for real deployments
-you'll likely want a shared store (e.g. Redis) and a distributed lock.
-
-the minimal shape is the exported `Store` interface:
-
-```ts
-const stores: OAuthClientStores = {
-	sessions: {
-		async get(did, options) {
-			// ...
-		},
-		async set(did, session) {
-			// ...
-		},
-		async delete(did) {
-			// ...
-		},
-		async clear() {},
-	},
-	states: {
-		async get(stateId, options) {
-			// ...
-		},
-		async set(stateId, state) {
-			// ...
-		},
-		async delete(stateId) {
-			// ...
-		},
-		async clear() {},
-	},
-};
-```
-
-your `states` store should apply TTL expiration (about 10 minutes) and your `sessions` store should
-be durable across restarts.
-
-## usage
-
-examples below use Hono (web `Request`/`Response` style), but any web framework works.
-
-```ts
-import { Hono } from 'hono';
-
-const app = new Hono();
-```
-
 ### create an OAuth client
 
 ```ts
-import type { ConfidentialClientMetadata } from '@atcute/oauth-node-client';
-import { OAuthClient, importJwkKey } from '@atcute/oauth-node-client';
+import { MemoryStore, OAuthClient, importJwkKey } from '@atcute/oauth-node-client';
 import {
 	CompositeDidDocumentResolver,
 	CompositeHandleResolver,
@@ -181,7 +134,11 @@ const oauth = new OAuthClient({
 	keyset,
 
 	stores: {
-		// ...
+		// sessions are keyed by DID - should be durable across restarts.
+		// states are keyed by OAuth state value - should have ~10 minute TTL.
+		// MemoryStore works for development; use Redis or similar in production.
+		sessions: new MemoryStore(),
+		states: new MemoryStore(),
 	},
 
 	actorResolver: new LocalActorResolver({
@@ -266,4 +223,39 @@ or, if you already have an `OAuthSession`:
 
 ```ts
 await session.signOut();
+```
+
+## custom stores
+
+for production deployments, implement the `Store` interface with a shared store like Redis:
+
+```ts
+import type { OAuthClientStores } from '@atcute/oauth-node-client';
+
+const stores: OAuthClientStores = {
+	sessions: {
+		async get(did, options) {
+			// ...
+		},
+		async set(did, session) {
+			// ...
+		},
+		async delete(did) {
+			// ...
+		},
+		async clear() {},
+	},
+	states: {
+		async get(stateId, options) {
+			// ...
+		},
+		async set(stateId, state) {
+			// ...
+		},
+		async delete(stateId) {
+			// ...
+		},
+		async clear() {},
+	},
+};
 ```
