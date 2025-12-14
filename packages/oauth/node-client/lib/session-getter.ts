@@ -10,7 +10,7 @@ import {
 import type { OAuthServerFactory } from './oauth-server-factory.js';
 import type { SessionStore, StoredSession } from './types/sessions.js';
 import { CachedGetter, type GetCachedOptions } from './utils/cached-getter.js';
-import { type LockFunction, requestLock as defaultRequestLock } from './utils/lock.js';
+import type { LockFunction } from './utils/lock.js';
 
 export type { SessionStore, StoredSession };
 
@@ -37,7 +37,13 @@ export interface SessionGetterOptions {
 	sessionStore: SessionStore;
 	/** server factory for creating OAuthServerAgent */
 	serverFactory: OAuthServerFactory;
-	/** lock function for preventing concurrent refresh */
+	/**
+	 * lock function for coordinating token refresh across processes.
+	 *
+	 * only needed for multi-process/distributed deployments where multiple
+	 * instances might try to refresh the same session concurrently.
+	 * single-process deployments can omit this.
+	 */
 	requestLock?: LockFunction;
 }
 
@@ -49,10 +55,10 @@ export interface SessionGetterOptions {
  */
 export class SessionGetter extends CachedGetter<Did, StoredSession> {
 	private readonly listeners = new Set<SessionEventListener>();
-	private readonly requestLock: LockFunction;
+	private readonly requestLock: LockFunction | undefined;
 
 	constructor(options: SessionGetterOptions) {
-		const { sessionStore, serverFactory, requestLock = defaultRequestLock } = options;
+		const { sessionStore, serverFactory, requestLock } = options;
 
 		super(
 			// getter function - refreshes the token
@@ -191,11 +197,16 @@ export class SessionGetter extends CachedGetter<Did, StoredSession> {
 	}
 
 	override async get(sub: Did, options?: GetCachedOptions): Promise<StoredSession> {
-		// use lock to prevent concurrent refresh for the same sub
-		const session = await this.requestLock(`oauth-session-${sub}`, async () => {
-			const signal = options?.signal ?? AbortSignal.timeout(30_000);
-			return super.get(sub, { ...options, signal });
-		});
+		const signal = options?.signal ?? AbortSignal.timeout(30_000);
+
+		let session: StoredSession;
+		if (this.requestLock) {
+			session = await this.requestLock(`oauth-session-${sub}`, async () => {
+				return await super.get(sub, { ...options, signal });
+			});
+		} else {
+			session = await super.get(sub, { ...options, signal });
+		}
 
 		if (sub !== session.tokenSet.sub) {
 			throw new Error('token set does not match the expected sub');
