@@ -12,6 +12,9 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/misc/util-fetch"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"files": [
 		"dist/",
 		"lib/",

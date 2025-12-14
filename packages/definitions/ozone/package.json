@@ -14,6 +14,9 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/ozone"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"files": [
 		"dist/",
 		"lib/",

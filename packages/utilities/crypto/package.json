@@ -16,6 +16,9 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/crypto"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"files": [
 		"dist/",
 		"lib/",

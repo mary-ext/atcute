@@ -12,6 +12,9 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/identity/identity-resolver-node"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"files": [
 		"dist/",
 		"lib/",

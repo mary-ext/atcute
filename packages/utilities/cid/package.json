@@ -13,6 +13,9 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/cid"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"files": [
 		"dist/",
 		"lib/",

@@ -8,6 +8,9 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/microcosm"
 	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"files": [
 		"dist/",
 		"lib/",
