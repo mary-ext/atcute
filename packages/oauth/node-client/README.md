@@ -118,8 +118,6 @@ import {
 } from '@atcute/identity-resolver';
 import { NodeDnsHandleResolver } from '@atcute/identity-resolver-node';
 
-const keyset = await Promise.all([importJwkKey(process.env.PRIVATE_KEY_JWK!)]);
-
 const oauth = new OAuthClient({
 	metadata: {
 		// this must be the URL where you serve `oauth.metadata` (below).
@@ -131,7 +129,7 @@ const oauth = new OAuthClient({
 		jwks_uri: 'https://example.com/jwks.json',
 	},
 
-	keyset,
+	keyset: await Promise.all([importJwkKey(process.env.PRIVATE_KEY_JWK!)]),
 
 	stores: {
 		// sessions are keyed by DID - should be durable across restarts.
@@ -139,6 +137,13 @@ const oauth = new OAuthClient({
 		// MemoryStore works for development; use Redis or similar in production.
 		sessions: new MemoryStore(),
 		states: new MemoryStore(),
+	},
+	// optional: custom lock for coordinating token refresh across processes.
+	// defaults to in-memory, which works for single-process deployments.
+	// for multi-process/clustered deployments, provide a distributed lock
+	// (e.g., Redis-based) to prevent concurrent refresh for the same session.
+	async requestLock(name, fn) {
+		// ...
 	},
 
 	actorResolver: new LocalActorResolver({
