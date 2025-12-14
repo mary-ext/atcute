@@ -1,7 +1,7 @@
 # @atcute/oauth-node-client
 
-atproto OAuth client for Node.js (and other server runtimes). this package implements a
-**confidential client** that authenticates using `private_key_jwt`.
+atproto OAuth client for Node.js (plus Deno, Bun, and other server runtimes). this package
+implements a **confidential client** that authenticates using `private_key_jwt`.
 
 ```sh
 npm install @atcute/oauth-node-client
@@ -208,9 +208,9 @@ restore a session by DID. this will refresh tokens if needed.
 import { Client } from '@atcute/client';
 
 const session = await oauth.restore(did);
-const rpc = new Client({ handler: session });
+const client = new Client({ handler: session });
 
-const { data } = await rpc.get('com.atproto.server.getSession');
+const { data } = await client.get('com.atproto.server.getSession');
 ```
 
 ### signing out
