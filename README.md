@@ -36,6 +36,7 @@ for authenticated requests, see the [client docs](./packages/clients/client) or 
 | [`client`](./packages/clients/client): XRPC HTTP client                                                     |
 | [`firehose`](./packages/clients/firehose): XRPC subscription client                                         |
 | [`jetstream`](./packages/clients/jetstream): Jetstream WebSocket client                                     |
+| [`tap`](./packages/clients/tap): Tap WebSocket client                                                       |
 | [`cache`](./packages/clients/cache): normalized cache store                                                 |
 | **Server packages**                                                                                         |
 | [`xrpc-server`](./packages/servers/xrpc-server): XRPC web framework                                         |
@@ -45,6 +46,7 @@ for authenticated requests, see the [client docs](./packages/clients/client) or 
 | [`xrpc-server-node`](./packages/servers/xrpc-server-node): Node.js WebSocket adapter                        |
 | **OAuth packages**                                                                                          |
 | [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth client for SPAs                    |
+| [`oauth-node-client`](./packages/oauth/node-client): OAuth client for Node.js                               |
 | **Lexicon packages**                                                                                        |
 | [`lex-cli`](./packages/lexicons/lex-cli): generate TypeScript from lexicon schemas                          |
 | [`lexicon-doc`](./packages/lexicons/lexicon-doc): parse and author lexicon documents                        |

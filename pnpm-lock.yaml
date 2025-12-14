@@ -206,6 +206,46 @@ importers:
         specifier: ^4.41.0
         version: 4.41.0
 
+  packages/clients/tap:
+    dependencies:
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../../identity/identity
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+      '@atcute/multibase':
+        specifier: workspace:^
+        version: link:../../utilities/multibase
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../../misc/uint8array
+      '@badrap/valita':
+        specifier: ^0.4.6
+        version: 0.4.6
+      '@mary-ext/event-iterator':
+        specifier: ^1.0.0
+        version: 1.0.0
+      '@mary-ext/simple-event-emitter':
+        specifier: ^1.0.0
+        version: 1.0.0
+      partysocket:
+        specifier: ^1.1.6
+        version: 1.1.6
+      type-fest:
+        specifier: ^4.41.0
+        version: 4.41.0
+    devDependencies:
+      '@types/ws':
+        specifier: ^8.18.1
+        version: 8.18.1
+      vitest:
+        specifier: ^4.0.14
+        version: 4.0.15(@types/node@24.10.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
+      ws:
+        specifier: ^8.18.3
+        version: 8.18.3
+
   packages/definitions/atproto:
     dependencies:
       '@atcute/lexicons':
@@ -6159,6 +6199,14 @@ snapshots:
     optionalDependencies:
       vite: 7.2.4(@types/node@22.19.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
 
+  '@vitest/mocker@4.0.15(vite@7.2.4(@types/node@24.10.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0))':
+    dependencies:
+      '@vitest/spy': 4.0.15
+      estree-walker: 3.0.3
+      magic-string: 0.30.21
+    optionalDependencies:
+      vite: 7.2.4(@types/node@24.10.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
+
   '@vitest/pretty-format@4.0.14':
     dependencies:
       tinyrainbow: 3.0.3
@@ -7873,6 +7921,43 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.19.1
+    transitivePeerDependencies:
+      - jiti
+      - less
+      - lightningcss
+      - msw
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - terser
+      - tsx
+      - yaml
+
+  vitest@4.0.15(@types/node@24.10.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0):
+    dependencies:
+      '@vitest/expect': 4.0.15
+      '@vitest/mocker': 4.0.15(vite@7.2.4(@types/node@24.10.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0))
+      '@vitest/pretty-format': 4.0.15
+      '@vitest/runner': 4.0.15
+      '@vitest/snapshot': 4.0.15
+      '@vitest/spy': 4.0.15
+      '@vitest/utils': 4.0.15
+      es-module-lexer: 1.7.0
+      expect-type: 1.2.2
+      magic-string: 0.30.21
+      obug: 2.1.1
+      pathe: 2.0.3
+      picomatch: 4.0.3
+      std-env: 3.10.0
+      tinybench: 2.9.0
+      tinyexec: 1.0.2
+      tinyglobby: 0.2.15
+      tinyrainbow: 3.0.3
+      vite: 7.2.4(@types/node@24.10.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 24.10.1
     transitivePeerDependencies:
       - jiti
       - less
