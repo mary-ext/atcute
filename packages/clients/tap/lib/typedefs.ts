@@ -14,16 +14,42 @@ const integer = v
 	.number()
 	.assert((input) => input >= 0 && Number.isSafeInteger(input), `must be a nonnegative integer`);
 
-const recordEventDataSchema = v.object({
+const recordEventCreateDataSchema = v.object({
 	did: didString,
 	rev: tidString,
 	collection: nsidString,
 	rkey: rkeyString,
-	action: v.union(v.literal('create'), v.literal('update'), v.literal('delete')),
+	action: v.literal('create'),
+	cid: v.string(),
 	record: v.record(v.unknown()).optional(),
-	cid: v.string().optional(),
 	live: v.boolean(),
 });
+
+const recordEventUpdateDataSchema = v.object({
+	did: didString,
+	rev: tidString,
+	collection: nsidString,
+	rkey: rkeyString,
+	action: v.literal('update'),
+	cid: v.string(),
+	record: v.record(v.unknown()).optional(),
+	live: v.boolean(),
+});
+
+const recordEventDeleteDataSchema = v.object({
+	did: didString,
+	rev: tidString,
+	collection: nsidString,
+	rkey: rkeyString,
+	action: v.literal('delete'),
+	live: v.boolean(),
+});
+
+const recordEventDataSchema = v.union(
+	recordEventCreateDataSchema,
+	recordEventUpdateDataSchema,
+	recordEventDeleteDataSchema,
+);
 
 const identityEventDataSchema = v.object({
 	did: didString,
@@ -77,19 +103,47 @@ export const flattenTapEvent = (wire: v.Infer<typeof tapEventWireSchema>): t.Tap
 		}
 
 		case 'record': {
-			return {
-				id: wire.id,
-				type: 'record',
-				live: wire.record.live,
+			switch (wire.record.action) {
+				case 'create':
+				case 'update': {
+					return {
+						id: wire.id,
+						type: 'record',
+						live: wire.record.live,
 
-				rev: wire.record.rev,
-				did: wire.record.did,
-				collection: wire.record.collection,
-				rkey: wire.record.rkey,
-				cid: wire.record.cid,
-				action: wire.record.action,
-				record: wire.record.record,
-			};
+						rev: wire.record.rev,
+						did: wire.record.did,
+						collection: wire.record.collection,
+						rkey: wire.record.rkey,
+
+						action: wire.record.action,
+						cid: wire.record.cid,
+						record: wire.record.record,
+					};
+				}
+
+				case 'delete': {
+					return {
+						id: wire.id,
+						type: 'record',
+						live: wire.record.live,
+
+						rev: wire.record.rev,
+						did: wire.record.did,
+						collection: wire.record.collection,
+						rkey: wire.record.rkey,
+
+						action: 'delete',
+					};
+				}
+
+				default: {
+					wire.record satisfies never;
+
+					const obj = wire.record as any;
+					throw new Error(`unknown "${obj.action}" action`);
+				}
+			}
 		}
 
 		default: {

@@ -5,7 +5,7 @@ export type TapRecordAction = 'create' | 'update' | 'delete';
 
 export type TapRepoStatus = 'active' | 'takendown' | 'suspended' | 'deactivated' | 'deleted';
 
-export interface TapRecordEvent {
+export interface TapRecordBaseEvent {
 	id: number;
 	type: 'record';
 
@@ -14,10 +14,33 @@ export interface TapRecordEvent {
 	rev: Tid;
 	collection: Nsid;
 	rkey: RecordKey;
-	action: TapRecordAction;
-	record?: Record<string, unknown>;
-	cid?: string;
 }
+
+export interface TapRecordCreateEvent extends TapRecordBaseEvent {
+	action: 'create';
+	cid: string;
+
+	/**
+	 * record may be omitted if tap fails to decode the record body but still has a cid.
+	 */
+	record?: Record<string, unknown>;
+}
+
+export interface TapRecordUpdateEvent extends TapRecordBaseEvent {
+	action: 'update';
+	cid: string;
+
+	/**
+	 * record may be omitted if tap fails to decode the record body but still has a cid.
+	 */
+	record?: Record<string, unknown>;
+}
+
+export interface TapRecordDeleteEvent extends TapRecordBaseEvent {
+	action: 'delete';
+}
+
+export type TapRecordEvent = TapRecordCreateEvent | TapRecordUpdateEvent | TapRecordDeleteEvent;
 
 export interface TapIdentityEvent {
 	id: number;
