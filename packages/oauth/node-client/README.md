@@ -9,7 +9,7 @@ npm install @atcute/oauth-node-client
 
 ## usage
 
-examples below use Hono, but any web framework with `Request`/`Response` style works.
+examples below use Hono, but any web framework works.
 
 ```ts
 import { Hono } from 'hono';
