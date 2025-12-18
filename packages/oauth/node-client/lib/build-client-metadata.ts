@@ -30,7 +30,7 @@ export const buildClientMetadata = (
 		tos_uri: conf.tos_uri,
 		logo_uri: conf.logo_uri,
 		redirect_uris: conf.redirect_uris,
-		scope: conf.scope,
+		scope: Array.isArray(conf.scope) ? conf.scope.join(' ') : conf.scope,
 
 		application_type: 'web',
 		subject_type: 'public',

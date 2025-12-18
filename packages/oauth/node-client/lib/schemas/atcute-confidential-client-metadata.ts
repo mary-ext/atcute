@@ -31,22 +31,45 @@ export const confidentialClientMetadataSchema = v
 				return true;
 			}, `redirect URIs must not contain credentials`),
 
-		/** space-separated scope string (must include "atproto") */
-		scope: atprotoOAuthScopeSchema.chain((input) => {
-			const scopes = input.split(/\s+/);
+		/**
+		 * OAuth scope - either:
+		 * - a space-separated string (must include "atproto")
+		 * - an array of scope strings ('atproto' is added automatically)
+		 */
+		scope: v.union(
+			atprotoOAuthScopeSchema.chain((input) => {
+				const scopes = input.split(/\s+/);
 
-			for (let i = 0, len = scopes.length; i < len; i++) {
-				const aka = scopes[i];
+				for (let i = 0, len = scopes.length; i < len; i++) {
+					const aka = scopes[i];
 
-				for (let j = 0; j < i; j++) {
-					if (aka === scopes[j]) {
-						return v.err(`duplicate "${aka}" scope`);
+					for (let j = 0; j < i; j++) {
+						if (aka === scopes[j]) {
+							return v.err(`duplicate "${aka}" scope`);
+						}
 					}
 				}
-			}
 
-			return v.ok(input);
-		}),
+				return v.ok(input);
+			}),
+			v.array(v.string()).chain((input) => {
+				if (!input.includes('atproto')) {
+					input = ['atproto', ...input];
+				}
+
+				for (let i = 0, len = input.length; i < len; i++) {
+					const aka = input[i];
+
+					for (let j = 0; j < i; j++) {
+						if (aka === input[j]) {
+							return v.err(`duplicate "${aka}" scope`);
+						}
+					}
+				}
+
+				return v.ok(input);
+			}),
+		),
 
 		/** optional client homepage */
 		client_uri: webUriSchema.optional(),

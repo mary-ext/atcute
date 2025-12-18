@@ -1,4 +1,5 @@
 export { buildClientMetadata } from './build-client-metadata.js';
+export * as scope from './scope.js';
 export {
 	OAuthClient,
 	type AuthorizationResult,

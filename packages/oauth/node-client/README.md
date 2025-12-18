@@ -107,7 +107,7 @@ const keyset = await Promise.all([importJwkKey(process.env.PRIVATE_KEY_JWK!)]);
 ### create an OAuth client
 
 ```ts
-import { MemoryStore, OAuthClient, importJwkKey } from '@atcute/oauth-node-client';
+import { MemoryStore, OAuthClient, importJwkKey, scope } from '@atcute/oauth-node-client';
 import {
 	CompositeDidDocumentResolver,
 	CompositeHandleResolver,
@@ -120,11 +120,26 @@ import { NodeDnsHandleResolver } from '@atcute/identity-resolver-node';
 
 const oauth = new OAuthClient({
 	metadata: {
-		// this must be the URL where you serve `oauth.metadata` (below).
+		// this must be the URL where you serve `oauth.metadata`.
 		client_id: 'https://example.com/oauth-client-metadata.json',
 		redirect_uris: ['https://example.com/oauth/callback'],
-		scope: 'atproto transition:generic',
-		// optional: if set, this must be the URL where you serve `oauth.jwks` (below).
+		// scopes; shown here is an example for a full-featured Bluesky client.
+		scope: [
+			scope.include({
+				nsid: 'app.bsky.authFullApp',
+				aud: 'did:web:api.bsky.app#bsky_appview',
+			}),
+			scope.include({
+				nsid: 'chat.bsky.authFullChatClient',
+				aud: 'did:web:api.bsky.chat#bsky_chat',
+			}),
+
+			scope.rpc({ lxm: ['com.atproto.moderation.createReport'], aud: '*' }),
+			scope.blob({ accept: ['image/*', 'video/*'] }),
+			scope.account({ attr: 'email', action: 'manage' }),
+			scope.identity({ attr: 'handle' }),
+		],
+		// optional: if set, this must be the URL where you serve `oauth.jwks`.
 		// must be same-origin as client_id. if omitted, `oauth.metadata` will inline jwks instead.
 		jwks_uri: 'https://example.com/jwks.json',
 	},
