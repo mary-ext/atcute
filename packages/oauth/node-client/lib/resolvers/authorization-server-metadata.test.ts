@@ -77,9 +77,7 @@ describe('AuthorizationServerMetadataResolver', () => {
 			});
 
 			// http is only allowed for loopback addresses, but allowHttp must be true
-			await expect(resolver.resolve('http://localhost:3000')).rejects.toThrow(
-				'http issuer not allowed',
-			);
+			await expect(resolver.resolve('http://localhost:3000')).rejects.toThrow('http issuer not allowed');
 		});
 
 		it('should allow http issuers when allowHttp is true', async () => {

@@ -5,11 +5,7 @@ import { MemoryStore } from '../utils/memory-store.js';
 import { createDpopFetch } from './fetch-dpop.js';
 import { generateDpopKey } from './generate-key.js';
 
-const createMockResponse = (
-	status: number,
-	body?: unknown,
-	headers?: Record<string, string>,
-): Response => {
+const createMockResponse = (status: number, body?: unknown, headers?: Record<string, string>): Response => {
 	return new Response(body ? JSON.stringify(body) : null, {
 		status,
 		headers: {
@@ -56,9 +52,9 @@ describe('createDpopFetch', () => {
 		it('should cache nonce from response', async () => {
 			const key = await generateDpopKey();
 			const nonces = new MemoryStore<string, string>({});
-			const mockFetch = vi.fn().mockResolvedValue(
-				createMockResponse(200, { ok: true }, { 'DPoP-Nonce': 'server-nonce-123' }),
-			);
+			const mockFetch = vi
+				.fn()
+				.mockResolvedValue(createMockResponse(200, { ok: true }, { 'DPoP-Nonce': 'server-nonce-123' }));
 
 			const dpopFetch = createDpopFetch({ key, nonces, fetch: mockFetch });
 

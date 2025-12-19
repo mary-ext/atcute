@@ -66,7 +66,10 @@ describe('scope builders', () => {
 
 		it('builds multiple lxm with DID audience', () => {
 			expect(
-				scope.rpc({ lxm: ['com.example.method1', 'com.example.method2'], aud: 'did:web:example.com#service' }),
+				scope.rpc({
+					lxm: ['com.example.method1', 'com.example.method2'],
+					aud: 'did:web:example.com#service',
+				}),
 			).toBe('rpc?aud=did:web:example.com%23service&lxm=com.example.method1&lxm=com.example.method2');
 		});
 	});

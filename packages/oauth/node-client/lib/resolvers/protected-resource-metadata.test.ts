@@ -79,9 +79,7 @@ describe('ProtectedResourceMetadataResolver', () => {
 				fetch: vi.fn(),
 			});
 
-			await expect(resolver.resolve('http://localhost:3000')).rejects.toThrow(
-				'http resource not allowed',
-			);
+			await expect(resolver.resolve('http://localhost:3000')).rejects.toThrow('http resource not allowed');
 		});
 
 		it('should allow http resources when allowHttp is true', async () => {
@@ -109,9 +107,7 @@ describe('ProtectedResourceMetadataResolver', () => {
 				fetch: mockFetch,
 			});
 
-			await expect(resolver.resolve('https://pds.example.com')).rejects.toThrow(
-				'unexpected status 404',
-			);
+			await expect(resolver.resolve('https://pds.example.com')).rejects.toThrow('unexpected status 404');
 		});
 
 		it('should throw on resource mismatch', async () => {
@@ -123,9 +119,7 @@ describe('ProtectedResourceMetadataResolver', () => {
 				fetch: mockFetch,
 			});
 
-			await expect(resolver.resolve('https://pds.example.com')).rejects.toThrow(
-				'resource mismatch',
-			);
+			await expect(resolver.resolve('https://pds.example.com')).rejects.toThrow('resource mismatch');
 		});
 
 		it('should throw on invalid protocol', async () => {
@@ -134,9 +128,7 @@ describe('ProtectedResourceMetadataResolver', () => {
 				fetch: vi.fn(),
 			});
 
-			await expect(resolver.resolve('ftp://pds.example.com')).rejects.toThrow(
-				'invalid resource protocol',
-			);
+			await expect(resolver.resolve('ftp://pds.example.com')).rejects.toThrow('invalid resource protocol');
 		});
 	});
 });
