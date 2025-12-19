@@ -116,7 +116,7 @@ const writeLexicon = async (
 	const dirname = path.dirname(target);
 
 	const code = await prettier.format(JSON.stringify(doc, null, 2), {
-		...(prettierConfig ?? {}),
+		...prettierConfig,
 		parser: 'json',
 	});
 
@@ -173,7 +173,7 @@ const writeSourceReadme = async (
 
 	const content = lines.join('\n');
 	const formatted = await prettier.format(content, {
-		...(prettierConfig ?? {}),
+		...prettierConfig,
 		parser: 'markdown',
 	});
 

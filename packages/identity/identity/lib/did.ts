@@ -3,7 +3,7 @@ import type { AtprotoAudience, AtprotoDid, Did } from '@atcute/lexicons/syntax';
 import { isPlcDid } from './methods/plc.js';
 import { isAtprotoWebDid } from './methods/web.js';
 
-const FRAGMENT_RE = /^(?:[A-Za-z0-9\-._~!$&'()*+,;=:@\/?]|%[0-9A-Fa-f]{2})*$/;
+const FRAGMENT_RE = /^(?:[A-Za-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})*$/;
 
 /**
  * checks if it's a DID identifier that is supported by atproto

@@ -61,7 +61,7 @@ const writeLexicon = async (
 	const dirname = path.dirname(target);
 
 	const code = await prettier.format(JSON.stringify(doc, null, 2), {
-		...(prettierConfig ?? {}),
+		...prettierConfig,
 		parser: 'json',
 	});
 

@@ -477,7 +477,7 @@ expect.addEqualityTesters([
 		const bIsHeaders = b instanceof Headers;
 
 		if (aIsHeaders && bIsHeaders) {
-			return this.equals(Object.fromEntries([...a.entries()]), Object.fromEntries([...b.entries()]));
+			return this.equals(Object.fromEntries(a.entries()), Object.fromEntries(b.entries()));
 		}
 
 		if (aIsHeaders === bIsHeaders) {

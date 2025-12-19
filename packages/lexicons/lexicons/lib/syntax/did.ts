@@ -10,7 +10,7 @@ export type AtprotoDid = Did<'plc' | 'web'>;
 
 export type AtprotoAudience = `${AtprotoDid}#${string}`;
 
-const DID_RE = /^did:([a-z]+):([a-zA-Z0-9._:%\-]*[a-zA-Z0-9._\-])$/;
+const DID_RE = /^did:([a-z]+):([a-zA-Z0-9._:%-]*[a-zA-Z0-9._-])$/;
 
 // #__NO_SIDE_EFFECTS__
 export const isDid = (input: unknown): input is Did => {
