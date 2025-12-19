@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, type AsymmetricMatchersContaining } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { decode, decodeFirst } from '@atcute/cbor';
 import * as v from '@atcute/lexicons/validations';
@@ -1122,6 +1122,7 @@ describe('XRPCRouter', () => {
 			const router = new XRPCRouter({ websocket: adapter, handleSubscriptionException });
 
 			router.addSubscription(subscriptionSchema, {
+				// oxlint-disable-next-line require-yield
 				async *handler() {
 					throw new Error('boom');
 				},

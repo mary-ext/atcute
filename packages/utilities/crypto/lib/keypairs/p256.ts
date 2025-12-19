@@ -1,3 +1,5 @@
+// oxlint-disable no-useless-spread
+
 import { toBase16 } from '@atcute/multibase';
 import { concat } from '@atcute/uint8array';
 

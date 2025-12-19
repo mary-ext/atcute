@@ -98,7 +98,7 @@ class Queue<T> implements Iterable<T> {
 	 * returns an iterator that drains all values from the queue
 	 */
 	drain(): IterableIterator<T, undefined, undefined> {
-		// deno-lint-ignore no-this-alias
+		// oxlint-disable-next-line no-this-alias
 		const self = this;
 
 		return {

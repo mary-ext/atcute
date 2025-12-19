@@ -232,7 +232,7 @@ export class XRPCRouter {
 						let raw: any;
 						try {
 							raw = await request.json();
-						} catch (err) {
+						} catch {
 							return invalidRequest(`invalid request body (failed to parse json)`);
 						}
 

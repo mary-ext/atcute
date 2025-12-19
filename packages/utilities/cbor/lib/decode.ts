@@ -194,6 +194,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 			}
 			case 4: {
 				if (arg > 0) {
+					// oxlint-disable-next-line no-new-array
 					stack = { t: 1, c: (value = new Array(arg)), k: null, r: arg, n: stack };
 					continue jump;
 				}

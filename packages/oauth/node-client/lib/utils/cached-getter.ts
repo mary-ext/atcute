@@ -111,7 +111,7 @@ export class CachedGetter<K, V> {
 	async getStored(key: K, options?: GetOptions): Promise<V | undefined> {
 		try {
 			return await this.store.get(key, options);
-		} catch (err) {
+		} catch {
 			return undefined;
 		}
 	}

@@ -102,7 +102,7 @@ export const allowsEval = /*#__PURE__*/ lazy((): boolean => {
 		const F = Function;
 		new F('');
 		return true;
-	} catch (_) {
+	} catch {
 		return false;
 	}
 });

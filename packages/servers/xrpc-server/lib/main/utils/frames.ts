@@ -65,7 +65,7 @@ export const omitMessageType = (message: unknown): unknown => {
 	}
 
 	const obj = message as Record<string, unknown>;
-	const { $type, ...rest } = obj;
+	const { $type: _type, ...rest } = obj;
 
 	return rest;
 };

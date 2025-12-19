@@ -80,7 +80,7 @@ class Stack<T> implements Iterable<T> {
 	 * returns an iterator that drains all the values from stack
 	 */
 	drain(): IterableIterator<T, undefined, undefined> {
-		// deno-lint-ignore no-this-alias
+		// oxlint-disable-next-line no-this-alias
 		const self = this;
 
 		return {

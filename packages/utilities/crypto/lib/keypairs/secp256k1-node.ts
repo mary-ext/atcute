@@ -1,3 +1,5 @@
+// oxlint-disable no-useless-spread
+
 import {
 	type KeyObject,
 	createPrivateKey,

@@ -119,6 +119,8 @@ export const didDocument: v.Type<t.DidDocument> = v
 
 		if (services?.length) {
 			const len = services.length;
+
+			// oxlint-disable-next-line no-new-array
 			const identifiers = new Array(len);
 
 			for (let i = 0; i < len; i++) {
