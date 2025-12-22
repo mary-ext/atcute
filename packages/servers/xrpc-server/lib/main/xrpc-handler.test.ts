@@ -132,4 +132,27 @@ describe('createXrpcHandler', () => {
 		expect(response.status).toBe(400);
 		expect(mock).not.toHaveBeenCalled();
 	});
+
+	it('passes router options to the router', async () => {
+		const querySchema = v.query('com.example.query', {
+			params: null,
+			output: null,
+		});
+
+		const handleNotFound = vi.fn(() => new Response('not found', { status: 418 }));
+
+		const fetch = createXrpcHandler({
+			lxm: querySchema,
+			handler: vi.fn(),
+			routerOptions: {
+				handleNotFound: handleNotFound,
+			},
+		});
+
+		const request = new Request('https://example.com/other', { method: 'GET' });
+		const response = await fetch(request);
+
+		expect(handleNotFound).toHaveBeenCalledExactlyOnceWith(request);
+		expect(response.status).toBe(418);
+	});
 });

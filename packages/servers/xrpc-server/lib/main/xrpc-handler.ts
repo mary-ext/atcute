@@ -6,13 +6,15 @@ import { unwrapLxm, type Namespaced } from './utils/namespaced.js';
 
 type XrpcHandlerRouterOptions = Pick<XRPCRouterOptions, 'middlewares' | 'handleNotFound' | 'handleException'>;
 
-export type XrpcQueryHandlerOptions<TQuery extends XRPCQueryMetadata> = XrpcHandlerRouterOptions & {
+export type XrpcQueryHandlerOptions<TQuery extends XRPCQueryMetadata> = {
 	lxm: TQuery | Namespaced<TQuery>;
+	routerOptions?: XrpcHandlerRouterOptions;
 } & QueryConfig<TQuery>;
 
 export type XrpcProcedureHandlerOptions<TProcedure extends XRPCProcedureMetadata> =
-	XrpcHandlerRouterOptions & {
+	{
 		lxm: TProcedure | Namespaced<TProcedure>;
+		routerOptions?: XrpcHandlerRouterOptions;
 	} & ProcedureConfig<TProcedure>;
 
 export type XrpcHandlerOptions =
@@ -31,7 +33,7 @@ export function createXrpcHandler<TProcedure extends XRPCProcedureMetadata>(
 	options: XrpcProcedureHandlerOptions<TProcedure>,
 ): (request: Request) => Promise<Response>;
 export function createXrpcHandler(options: XrpcHandlerOptions): (request: Request) => Promise<Response> {
-	const { lxm, handler, ...routerOptions } = options;
+	const { lxm, handler, routerOptions } = options;
 
 	const router = new XRPCRouter(routerOptions);
 
