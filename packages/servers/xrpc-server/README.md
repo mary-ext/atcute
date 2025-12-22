@@ -97,6 +97,26 @@ serve({ fetch: router.fetch, port: 3000 }, (info) => {
 });
 ```
 
+### standalone handlers
+
+if you only need a single XRPC operation, you can skip creating a router and export a handler
+directly:
+
+```ts
+import { createXrpcHandler, json } from '@atcute/xrpc-server';
+
+import { AppBskyFeedGetFeedSkeleton } from './lexicons/index.js';
+
+export default createXrpcHandler({
+	lxm: AppBskyFeedGetFeedSkeleton.mainSchema,
+	async handler({ params }) {
+		return json({ feed: [] });
+	},
+});
+```
+
+requests should be routed to `/xrpc/<nsid>`.
+
 ### error handling
 
 throw `XRPCError` in handlers to return error responses:
