@@ -5,6 +5,10 @@ import { oauthClientIdDiscoverableSchema } from './oauth-client-id-discoverable.
 import { httpsUriSchema, nonLocalWebUriSchema, webUriSchema } from './uri.js';
 import { isLocalHostname } from './utils.js';
 
+const SINGLE_SCOPE_RE = /^[\x21\x23-\x5B\x5D-\x7E]+$/;
+
+const singleScopeSchema = v.string().assert((input) => SINGLE_SCOPE_RE.test(input), `invalid OAuth scope`);
+
 /**
  * user-facing client metadata for configuring a confidential OAuth client.
  *
@@ -52,7 +56,7 @@ export const confidentialClientMetadataSchema = v
 
 				return v.ok(input);
 			}),
-			v.array(v.string()).chain((input) => {
+			v.array(singleScopeSchema).chain((input) => {
 				if (!input.includes('atproto')) {
 					input = ['atproto', ...input];
 				}
