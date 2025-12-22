@@ -202,6 +202,36 @@ describe('XRPCRouter', () => {
 			}
 		});
 
+		it('handles namespaced queries', async () => {
+			const querySchema = v.query('com.example.query', {
+				params: v.object({
+					repo: v.didString(),
+					limit: v.optional(v.integer(), 50),
+				}),
+				output: null,
+			});
+
+			const mock = vi.fn();
+
+			const router = new XRPCRouter();
+			router.addQuery({ mainSchema: querySchema }, { handler: mock });
+
+			const request = new Request(
+				'https://example.com/xrpc/com.example.query?repo=did:web:example.com&limit=10',
+				{ method: 'GET' },
+			);
+			const response = await router.fetch(request);
+
+			expect(response.status).toBe(200);
+			expect(mock).toHaveBeenCalledExactlyOnceWith({
+				request,
+				params: {
+					repo: 'did:web:example.com',
+					limit: 10,
+				},
+			});
+		});
+
 		it('handles queries returning json', async () => {
 			const querySchema = v.query('com.example.query', {
 				params: null,

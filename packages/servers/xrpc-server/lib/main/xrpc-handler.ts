@@ -2,16 +2,17 @@ import type { XRPCProcedureMetadata, XRPCQueryMetadata } from '@atcute/lexicons/
 
 import { XRPCRouter, type XRPCRouterOptions } from './router.js';
 import type { ProcedureConfig, QueryConfig } from './types/operation.js';
+import { unwrapLxm, type Namespaced } from './utils/namespaced.js';
 
 type XrpcHandlerRouterOptions = Pick<XRPCRouterOptions, 'middlewares' | 'handleNotFound' | 'handleException'>;
 
 export type XrpcQueryHandlerOptions<TQuery extends XRPCQueryMetadata> = XrpcHandlerRouterOptions & {
-	lxm: TQuery;
+	lxm: TQuery | Namespaced<TQuery>;
 } & QueryConfig<TQuery>;
 
 export type XrpcProcedureHandlerOptions<TProcedure extends XRPCProcedureMetadata> =
 	XrpcHandlerRouterOptions & {
-		lxm: TProcedure;
+		lxm: TProcedure | Namespaced<TProcedure>;
 	} & ProcedureConfig<TProcedure>;
 
 export type XrpcHandlerOptions =
@@ -34,13 +35,15 @@ export function createXrpcHandler(options: XrpcHandlerOptions): (request: Reques
 
 	const router = new XRPCRouter(routerOptions);
 
-	switch (lxm.type) {
+	const schema = unwrapLxm(lxm);
+
+	switch (schema.type) {
 		case 'xrpc_query': {
-			router.addQuery(lxm, { handler: handler as QueryConfig<XRPCQueryMetadata>['handler'] });
+			router.addQuery(schema, { handler: handler as QueryConfig<XRPCQueryMetadata>['handler'] });
 			break;
 		}
 		case 'xrpc_procedure': {
-			router.addProcedure(lxm, { handler: handler as ProcedureConfig<XRPCProcedureMetadata>['handler'] });
+			router.addProcedure(schema, { handler: handler as ProcedureConfig<XRPCProcedureMetadata>['handler'] });
 			break;
 		}
 	}

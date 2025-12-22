@@ -17,6 +17,7 @@ import type {
 import type { WebSocketAdapter } from './types/websocket.js';
 import { encodeErrorFrame, encodeMessageFrame, extractMessageType, omitMessageType } from './utils/frames.js';
 import { createAsyncMiddlewareRunner, type Middleware } from './utils/middlewares.js';
+import { unwrapLxm, type Namespaced } from './utils/namespaced.js';
 import { constructMimeValidator } from './utils/request-input.js';
 import { constructParamsHandler } from './utils/request-params.js';
 import { invalidRequest, validationError } from './utils/response.js';
@@ -131,31 +132,40 @@ export class XRPCRouter {
 	}
 
 	/** @deprecated use `addQuery` and `addProcedure` instead */
-	add<TQuery extends XRPCQueryMetadata>(query: TQuery, config: QueryConfig<TQuery>): void;
+	add<TQuery extends XRPCQueryMetadata>(query: TQuery | Namespaced<TQuery>, config: QueryConfig<TQuery>): void;
 	add<TProcedure extends XRPCProcedureMetadata>(
-		procedure: TProcedure,
+		procedure: TProcedure | Namespaced<TProcedure>,
 		config: ProcedureConfig<TProcedure>,
 	): void;
-	add(operation: XRPCQueryMetadata | XRPCProcedureMetadata, config: any): void {
-		switch (operation.type) {
+	add(
+		operation:
+			| XRPCQueryMetadata
+			| XRPCProcedureMetadata
+			| Namespaced<XRPCQueryMetadata | XRPCProcedureMetadata>,
+		config: any,
+	): void {
+		const schema = unwrapLxm(operation);
+
+		switch (schema.type) {
 			case 'xrpc_query': {
-				return this.addQuery(operation, config);
+				return this.addQuery(schema, config);
 			}
 			case 'xrpc_procedure': {
-				return this.addProcedure(operation, config);
+				return this.addProcedure(schema, config);
 			}
 		}
 	}
 
 	addQuery<TQuery extends XRPCQueryMetadata, TConfig extends QueryConfig<TQuery>>(
-		query: TQuery,
+		query: TQuery | Namespaced<TQuery>,
 		config: TConfig,
 	): void {
-		const handleParams = query.params ? constructParamsHandler(query.params) : null;
+		const querySchema = unwrapLxm(query);
+		const handleParams = querySchema.params ? constructParamsHandler(querySchema.params) : null;
 
 		const handler = config.handler;
 
-		this.#handlers[query.nsid] = {
+		this.#handlers[querySchema.nsid] = {
 			method: 'GET',
 			handler: async ({ request, url }) => {
 				let params: Record<string, Literal | Literal[]>;
@@ -188,18 +198,19 @@ export class XRPCRouter {
 	}
 
 	addProcedure<TProcedure extends XRPCProcedureMetadata, TConfig extends ProcedureConfig<TProcedure>>(
-		procedure: TProcedure,
+		procedure: TProcedure | Namespaced<TProcedure>,
 		config: TConfig,
 	): void {
-		const handleParams = procedure.params ? constructParamsHandler(procedure.params) : null;
-		const validateInputType = procedure.input ? constructMimeValidator(procedure.input) : null;
+		const procedureSchema = unwrapLxm(procedure);
+		const handleParams = procedureSchema.params ? constructParamsHandler(procedureSchema.params) : null;
+		const validateInputType = procedureSchema.input ? constructMimeValidator(procedureSchema.input) : null;
 
-		const requiresInput = procedure.input !== null;
-		const inputSchema = procedure.input?.type === 'lex' ? procedure.input.schema : null;
+		const requiresInput = procedureSchema.input !== null;
+		const inputSchema = procedureSchema.input?.type === 'lex' ? procedureSchema.input.schema : null;
 
 		const handler = config.handler;
 
-		this.#handlers[procedure.nsid] = {
+		this.#handlers[procedureSchema.nsid] = {
 			method: 'POST',
 			handler: async ({ request, url }) => {
 				let params: Record<string, Literal | Literal[]>;
@@ -269,15 +280,18 @@ export class XRPCRouter {
 	addSubscription<
 		TSubscription extends XRPCSubscriptionMetadata,
 		TConfig extends SubscriptionConfig<TSubscription>,
-	>(subscription: TSubscription, config: TConfig): void {
+	>(subscription: TSubscription | Namespaced<TSubscription>, config: TConfig): void {
 		const websocket = this.#websocket;
 		if (websocket === undefined) {
 			throw new Error(`WebSocket adapter not configured`);
 		}
 
-		const nsid = subscription.nsid;
+		const subscriptionSchema = unwrapLxm(subscription);
+		const nsid = subscriptionSchema.nsid;
 
-		const handleParams = subscription.params ? constructParamsHandler(subscription.params) : null;
+		const handleParams = subscriptionSchema.params
+			? constructParamsHandler(subscriptionSchema.params)
+			: null;
 		const handler = config.handler;
 
 		this.#handlers[nsid] = {

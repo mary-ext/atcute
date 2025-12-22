@@ -58,13 +58,13 @@ import { ComExampleGreet, ComExampleCreatePost } from './lexicons/index.js';
 
 const router = new XRPCRouter({ middlewares: [cors()] });
 
-router.addQuery(ComExampleGreet.mainSchema, {
+router.addQuery(ComExampleGreet, {
 	async handler({ params }) {
 		return json({ message: `hello ${params.name}!` });
 	},
 });
 
-router.addProcedure(ComExampleCreatePost.mainSchema, {
+router.addProcedure(ComExampleCreatePost, {
 	async handler({ input }) {
 		const post = await db.createPost(input);
 		return json(post);
@@ -104,11 +104,10 @@ directly:
 
 ```ts
 import { createXrpcHandler, json } from '@atcute/xrpc-server';
-
-import { AppBskyFeedGetFeedSkeleton } from './lexicons/index.js';
+import { AppBskyFeedGetFeedSkeleton } from '@atcute/bluesky';
 
 export default createXrpcHandler({
-	lxm: AppBskyFeedGetFeedSkeleton.mainSchema,
+	lxm: AppBskyFeedGetFeedSkeleton,
 	async handler({ params }) {
 		return json({ feed: [] });
 	},
@@ -124,7 +123,7 @@ throw `XRPCError` in handlers to return error responses:
 ```ts
 import { XRPCError } from '@atcute/xrpc-server';
 
-router.addQuery(ComExampleGetPost.mainSchema, {
+router.addQuery(ComExampleGetPost, {
 	async handler({ params, request }) {
 		const session = await getSession(request);
 		if (!session) {
@@ -168,7 +167,7 @@ const ws = createBunWebSocket();
 
 const router = new XRPCRouter({ websocket: ws.adapter });
 
-router.addSubscription(ComExampleSubscribe.mainSchema, {
+router.addSubscription(ComExampleSubscribe, {
 	async *handler({ params, signal }) {
 		// yield messages until the client disconnects
 		while (!signal.aborted) {
@@ -194,7 +193,7 @@ for subscription errors, use `XRPCSubscriptionError`:
 ```ts
 import { XRPCSubscriptionError } from '@atcute/xrpc-server';
 
-router.addSubscription(ComExampleSubscribe.mainSchema, {
+router.addSubscription(ComExampleSubscribe, {
 	async *handler({ params }) {
 		if (params.cursor && isCursorTooOld(params.cursor)) {
 			throw new XRPCSubscriptionError({
@@ -248,7 +247,7 @@ const verifyServiceAuth = async (request: Request, lxm: string): Promise<Verifie
 	return result.value;
 };
 
-router.addQuery(ComExampleProtectedEndpoint.mainSchema, {
+router.addQuery(ComExampleProtectedEndpoint, {
 	async handler({ request }) {
 		const auth = await verifyServiceAuth(request, 'com.example.protectedEndpoint');
 		return json({ caller: auth.issuer });
