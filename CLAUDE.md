@@ -50,15 +50,19 @@ the packages are organized into categories under `packages/`:
 - Vitest is the standard test runner, though some packages may still be using bun test
 - run tests via `pnpm run test`
 
-### misc
+### working style
 
-- Claude Code's Bash tool persists directory changes (`cd`) across calls
-- Claude Code's Task tool (subagents for exploration, planning, etc.) may not always be accurate;
-  verify the subagent's findings when needed
-- the `.research/` directory serves as a workspace for temporary experiments, analysis, and planning
-  materials. create it if necessary (it's gitignored). this directory may contain cloned
-  repositories or other reference materials that can help inform implementation decisions
+- `.research/` directory serves as a workspace for temporary experiments, analysis, and planning
+  materials. create if not present (it's gitignored). this directory may contain cloned repositories
+  or other reference materials that can help inform implementation decisions
+- this document is intentionally incomplete; discover everything else in the repo
 - don't make assumptions or speculate about code, plans, or requirements without exploring first;
   pause and ask for clarification when you're still unsure after looking into it
-- during plan mode, discuss the plans before finalizing/exiting plan mode to allow for additional
-  context or follow-up questions to be provided
+- in plan mode, present the plan for review before exiting to allow for feedback or follow-up
+  questions
+
+### Claude Code-specific
+
+- Bash tool persists directory changes (`cd`) across calls
+- Task tool (subagents for exploration, planning, etc.) may not always be accurate; verify subagent
+  findings when needed
