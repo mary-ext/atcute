@@ -63,6 +63,7 @@ the packages are organized into categories under `packages/`:
 
 ### Claude Code-specific
 
-- Bash tool persists directory changes (`cd`) across calls
+- Bash tool persists directory changes (`cd`) across calls; keep track of your current working
+  directory when writing relative paths or use absolute paths
 - Task tool (subagents for exploration, planning, etc.) may not always be accurate; verify subagent
   findings when needed
