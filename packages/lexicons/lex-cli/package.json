@@ -35,13 +35,13 @@
 		"@atcute/lexicon-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@badrap/valita": "^0.4.6",
-		"@optique/core": "^0.6.3",
-		"@optique/run": "^0.6.3",
+		"@optique/core": "^0.6.6",
+		"@optique/run": "^0.6.6",
 		"picocolors": "^1.1.1",
-		"prettier": "^3.7.1"
+		"prettier": "^3.7.4"
 	},
 	"devDependencies": {
-		"@types/node": "^22.19.1",
+		"@types/node": "^22.19.3",
 		"tschema": "^3.2.0"
 	}
 }

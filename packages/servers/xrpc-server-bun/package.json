@@ -31,6 +31,6 @@
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/cbor": "workspace:^",
-		"@types/bun": "^1.3.3"
+		"@types/bun": "^1.3.5"
 	}
 }

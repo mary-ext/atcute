@@ -39,9 +39,9 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@types/node": "^22.19.1",
-		"@vitest/coverage-v8": "^4.0.14",
-		"vitest": "^4.0.14"
+		"@types/node": "^22.19.3",
+		"@vitest/coverage-v8": "^4.0.16",
+		"vitest": "^4.0.16"
 	},
 	"dependencies": {
 		"@atcute/uint8array": "workspace:^"

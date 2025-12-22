@@ -34,10 +34,10 @@
 	},
 	"devDependencies": {
 		"@ipld/dag-cbor": "^9.2.5",
-		"@types/node": "^22.19.1",
-		"@vitest/coverage-v8": "^4.0.14",
+		"@types/node": "^22.19.3",
+		"@vitest/coverage-v8": "^4.0.16",
 		"cbor-x": "^1.6.0",
-		"vitest": "^4.0.14"
+		"vitest": "^4.0.16"
 	},
 	"dependencies": {
 		"@atcute/cid": "workspace:^",
