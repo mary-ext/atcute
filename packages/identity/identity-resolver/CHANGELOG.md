@@ -1,5 +1,11 @@
 # @atcute/identity-resolver
 
+## 1.2.1
+
+### Patch Changes
+
+- 10ec011: properly validate Cloudflare DoH responses
+
 ## 1.2.0
 
 ### Minor Changes
