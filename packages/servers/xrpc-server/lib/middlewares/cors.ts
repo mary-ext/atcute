@@ -5,6 +5,8 @@ export interface CORSOptions {
 	exposedHeaders?: string[];
 	/** Additional headers to allow */
 	allowedHeaders?: string[];
+	/** NSID prefixes to exclude from CORS handling */
+	exclude?: string[];
 }
 
 const DEFAULT_EXPOSED_HEADERS = [
@@ -27,6 +29,8 @@ const DEFAULT_ALLOWED_HEADERS = [
 	'atproto-proxy',
 ];
 
+const RE_XRPC_NSID = /^\/xrpc\/([^?]*)/;
+
 export const cors = (options: CORSOptions = {}): FetchMiddleware => {
 	const exposedHeaders = Array.from(
 		new Set([...DEFAULT_EXPOSED_HEADERS, ...(options.exposedHeaders?.map((h) => h.toLowerCase()) || [])]),
@@ -38,7 +42,29 @@ export const cors = (options: CORSOptions = {}): FetchMiddleware => {
 		.sort()
 		.join(',');
 
+	const exclude = options.exclude;
+
 	return async (request, next) => {
+		// check if this NSID should be excluded from CORS handling
+		if (exclude) {
+			const url = new URL(request.url);
+			const match = RE_XRPC_NSID.exec(url.pathname);
+
+			if (match) {
+				const nsid = match[1];
+				const excluded = exclude.some((pattern) => {
+					if (pattern.endsWith('.*')) {
+						return nsid.startsWith(pattern.slice(0, -1));
+					}
+					return nsid === pattern;
+				});
+
+				if (excluded) {
+					return next(request);
+				}
+			}
+		}
+
 		const origin = request.headers.get('origin') || '*';
 
 		// Handle preflight requests
