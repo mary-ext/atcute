@@ -27,7 +27,8 @@ the packages are organized into categories under `packages/`:
 - new files should be in kebab-case
 - use tabs for indentation, spaces allowed for diagrams in comments
 - use single quotes and add trailing commas
-- prefer arrow functions
+- prefer arrow functions, but use regular methods in classes unless arrow functions are necessary
+  (e.g., when passing the method as a callback that needs `this` binding)
 - use braces for control statements, even single-line bodies
 - use bare blocks `{ }` to group related code and limit variable scope
 - use template literals for user-facing strings and error messages
