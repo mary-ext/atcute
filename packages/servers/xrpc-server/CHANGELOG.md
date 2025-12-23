@@ -1,5 +1,12 @@
 # @atcute/xrpc-server
 
+## 0.1.4
+
+### Patch Changes
+
+- 3c4fcf3: standalone XRPC query/procedure handlers
+- 65f4e74: handle namespace import
+
 ## 0.1.3
 
 ### Minor Changes
