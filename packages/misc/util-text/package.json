@@ -1,0 +1,34 @@
+{
+	"type": "module",
+	"name": "@atcute/util-text",
+	"version": "0.0.1",
+	"description": "internal text utilities",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/misc/util-text"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": {
+			"react-native": "./dist/index.rn.js",
+			"default": "./dist/index.js"
+		}
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsgo --project tsconfig.build.json",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"unicode-segmenter": "^0.14.4"
+	}
+}
