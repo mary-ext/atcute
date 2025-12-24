@@ -958,31 +958,25 @@ describe('builder', () => {
 		});
 
 		describe('rpcPermission', () => {
-			test('accepts array of lxm with aud', () => {
+			test('accepts array of lxm with wildcard aud', () => {
 				expect(() =>
 					rpcPermission({
 						lxm: ['com.example.method1', 'com.example.method2'],
-						aud: 'did:web:example.com#bsky_appview',
+						aud: '*',
 					}),
 				).not.toThrow();
 			});
 
-			test('accepts wildcard aud with specific lxm', () => {
+			test('accepts single lxm with wildcard aud', () => {
 				expect(() => rpcPermission({ lxm: ['com.example.method'], aud: '*' })).not.toThrow();
 			});
 
-			test('accepts wildcard lxm with specific aud', () => {
-				expect(() => rpcPermission({ lxm: '*', aud: 'did:web:example.com#bsky_appview' })).not.toThrow();
-			});
-
-			test('throws on both wildcards', () => {
-				expect(() => rpcPermission({ lxm: '*', aud: '*' })).toThrow(
-					"rpc-permission: aud and lxm can't both be '*'",
-				);
+			test('accepts lxm with inherit aud', () => {
+				expect(() => rpcPermission({ lxm: ['com.example.method'], aud: 'inherit' })).not.toThrow();
 			});
 
 			test('throws on empty lxm array', () => {
-				expect(() => rpcPermission({ lxm: [], aud: 'did:web:example.com#bsky_appview' })).toThrow(
+				expect(() => rpcPermission({ lxm: [], aud: '*' })).toThrow(
 					"rpc-permission/lxm: value can't be empty",
 				);
 			});
@@ -1059,7 +1053,7 @@ describe('builder', () => {
 							defs: {
 								main: permissionSet({
 									permissions: [
-										rpcPermission({ lxm: ['com.example.method'], aud: 'did:web:example.com#bsky_appview' }),
+										rpcPermission({ lxm: ['com.example.method'], aud: '*' }),
 									],
 								}),
 							},
@@ -1074,7 +1068,7 @@ describe('builder', () => {
 							type: 'permission',
 							resource: 'rpc',
 							lxm: ['com.example.method'],
-							aud: 'did:web:example.com#bsky_appview',
+							aud: '*',
 						},
 					],
 				});
@@ -1094,7 +1088,7 @@ describe('builder', () => {
 									'detail:lang': { en: 'This is a test scope', 'pt-BR': 'Este é um escopo de teste' },
 									permissions: [
 										repoPermission({ collection: ['com.example.foo'] }),
-										rpcPermission({ lxm: '*', aud: 'did:web:example.com#bsky_appview' }),
+										rpcPermission({ lxm: ['com.example.bar'], aud: '*' }),
 									],
 								}),
 							},
@@ -1118,8 +1112,8 @@ describe('builder', () => {
 						{
 							type: 'permission',
 							resource: 'rpc',
-							lxm: ['*'],
-							aud: 'did:web:example.com#bsky_appview',
+							lxm: ['com.example.bar'],
+							aud: '*',
 						},
 					],
 				});
@@ -1220,7 +1214,7 @@ describe('builder', () => {
 							id: 'com.example.scope',
 							defs: {
 								main: permissionSet({
-									permissions: [rpcPermission({ lxm: [getMethod], aud: 'did:web:example.com#bsky_appview' })],
+									permissions: [rpcPermission({ lxm: [getMethod], aud: '*' })],
 								}),
 							},
 						}),
@@ -1234,7 +1228,7 @@ describe('builder', () => {
 							type: 'permission',
 							resource: 'rpc',
 							lxm: ['com.example.getPost'],
-							aud: 'did:web:example.com#bsky_appview',
+							aud: '*',
 						},
 					],
 				});
@@ -1329,7 +1323,7 @@ describe('builder', () => {
 								defs: {
 									main: permissionSet({
 										permissions: [
-											rpcPermission({ lxm: [getMethod], aud: 'did:web:example.com#bsky_appview' }),
+											rpcPermission({ lxm: [getMethod], aud: '*' }),
 										],
 									}),
 								},
