@@ -21,6 +21,7 @@ the packages are organized into categories under `packages/`:
 - tools like Node.js, Bun and pnpm are managed by mise, to run them, use `mise exec -- pnpm ...`
 - run pnpm commands inside their package directory, e.g.
   `cd packages/lexicons/lexicons; mise exec -- pnpm run build`
+- check `pnpm view <package>` before adding a new dependency
 
 ### code writing
 
@@ -32,6 +33,7 @@ the packages are organized into categories under `packages/`:
 - use braces for control statements, even single-line bodies
 - use bare blocks `{ }` to group related code and limit variable scope
 - use template literals for user-facing strings and error messages
+- use `// #region <name>` and `// #endregion` to denote regions when a file needs to contain a lot of code
 
 ### documentation
 
