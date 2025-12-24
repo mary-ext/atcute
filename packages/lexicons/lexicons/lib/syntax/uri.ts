@@ -1,4 +1,4 @@
-import { getUtf8Length } from '../validations/utils.js';
+import { getUtf8Length } from '@atcute/uint8array';
 
 /**
  * represents a generic URI

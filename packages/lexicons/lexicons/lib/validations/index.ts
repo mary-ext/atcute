@@ -1,3 +1,6 @@
+import { getUtf8Length } from '@atcute/uint8array';
+import { getGraphemeLength } from '@atcute/util-text';
+
 import type { StandardSchemaV1 } from '@standard-schema/spec';
 
 import * as syntax from '../syntax/index.js';
@@ -9,15 +12,7 @@ import type { $type } from '../types/brand.js';
 
 import { assert } from '../utils.js';
 
-import {
-	allowsEval,
-	getGraphemeLength,
-	getUtf8Length,
-	isArray,
-	isObject,
-	lazy,
-	lazyProperty,
-} from './utils.js';
+import { allowsEval, isArray, isObject, lazy, lazyProperty } from './utils.js';
 
 /**
  * flag indicating whether xrpc schema generation helpers are used. set to true

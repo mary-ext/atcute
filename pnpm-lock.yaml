@@ -610,6 +610,12 @@ importers:
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../lexicons
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../../misc/uint8array
+      '@atcute/util-text':
+        specifier: workspace:^
+        version: link:../../misc/util-text
       '@badrap/valita':
         specifier: ^0.4.6
         version: 0.4.6
@@ -666,6 +672,12 @@ importers:
 
   packages/lexicons/lexicons:
     dependencies:
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../../misc/uint8array
+      '@atcute/util-text':
+        specifier: workspace:^
+        version: link:../../misc/util-text
       '@standard-schema/spec':
         specifier: ^1.1.0
         version: 1.1.0
@@ -697,6 +709,12 @@ importers:
       '@badrap/valita':
         specifier: ^0.4.6
         version: 0.4.6
+
+  packages/misc/util-text:
+    dependencies:
+      unicode-segmenter:
+        specifier: ^0.14.4
+        version: 0.14.4
 
   packages/oauth/browser-client:
     dependencies:

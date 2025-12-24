@@ -33,6 +33,8 @@
 	"dependencies": {
 		"@atcute/identity": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
+		"@atcute/util-text": "workspace:^",
 		"@badrap/valita": "^0.4.6"
 	},
 	"devDependencies": {

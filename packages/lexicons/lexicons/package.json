@@ -37,6 +37,8 @@
 		"vitest": "^4.0.16"
 	},
 	"dependencies": {
+		"@atcute/uint8array": "workspace:^",
+		"@atcute/util-text": "workspace:^",
 		"@standard-schema/spec": "^1.1.0",
 		"esm-env": "^1.2.2"
 	}
