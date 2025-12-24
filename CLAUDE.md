@@ -33,7 +33,8 @@ the packages are organized into categories under `packages/`:
 - use braces for control statements, even single-line bodies
 - use bare blocks `{ }` to group related code and limit variable scope
 - use template literals for user-facing strings and error messages
-- use `// #region <name>` and `// #endregion` to denote regions when a file needs to contain a lot of code
+- use `// #region <name>` and `// #endregion` to denote regions when a file needs to contain a lot
+  of code
 
 ### documentation
 
@@ -66,7 +67,7 @@ the packages are organized into categories under `packages/`:
 
 ### Claude Code-specific
 
-- Bash tool persists directory changes (`cd`) across calls; keep track of your current working
-  directory when writing relative paths or use absolute paths
+- Bash tool persists directory changes (`cd`) across calls; always specify cd with absolute paths to
+  be sure
 - Task tool (subagents for exploration, planning, etc.) may not always be accurate; verify subagent
   findings when needed
