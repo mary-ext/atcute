@@ -1,5 +1,14 @@
 # @atcute/lexicon-doc
 
+## 2.0.6
+
+### Patch Changes
+
+- 1bba4f3: alter rpcPermission aud
+- f737494: make use of util-text dependency for grapheme counting
+- Updated dependencies [f737494]
+  - @atcute/lexicons@1.2.6
+
 ## 2.0.5
 
 ### Patch Changes

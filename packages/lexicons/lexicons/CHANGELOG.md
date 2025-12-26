@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 1.2.6
+
+### Patch Changes
+
+- f737494: make use of util-text dependency for grapheme counting
+
 ## 1.2.5
 
 ### Patch Changes

@@ -1,5 +1,21 @@
 # @atcute/did-plc
 
+## 0.3.0
+
+### Minor Changes
+
+- b01eb65: add `signOperation` and `signTombstone` functions for signing unsigned PLC operations
+- b01eb65: add `PlcClient` for interacting with plc.directory API
+
+  includes new types `PlcState` and `SequencedEntry` for API responses
+
+- b01eb65: add `deriveDidFromGenesisOp` to derive did:plc identifier from genesis operation
+
+### Patch Changes
+
+- Updated dependencies [f737494]
+  - @atcute/lexicons@1.2.6
+
 ## 0.2.0
 
 ### Minor Changes
