@@ -37,8 +37,9 @@ export interface Commit {
 	did: string;
 	data: CidLink;
 	rev: string;
-	prev: CidLink | null;
 	sig: Bytes;
+	/** backwards compatibility with v2, history bookkeeping is not required */
+	prev: CidLink | null;
 }
 
 /**
