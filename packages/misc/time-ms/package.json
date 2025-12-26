@@ -1,0 +1,45 @@
+{
+	"type": "module",
+	"name": "@atcute/time-ms",
+	"version": "1.0.0",
+	"description": "high precision system time helper",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/utilities/time-ms"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"prebuilds/",
+		"src/",
+		"binding.gyp",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": {
+			"node": "./dist/index.node.js",
+			"default": "./dist/index.js"
+		}
+	},
+	"sideEffects": false,
+	"scripts": {
+		"install": "node-gyp-build",
+		"build:native": "prebuildify --napi --strip",
+		"build": "tsgo --project tsconfig.build.json",
+		"test": "vitest",
+		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
+	},
+	"devDependencies": {
+		"prebuildify": "^6.0.1",
+		"vitest": "^4.0.16"
+	},
+	"dependencies": {
+		"@types/node": "^22.19.3",
+		"node-gyp-build": "^4.8.4"
+	}
+}

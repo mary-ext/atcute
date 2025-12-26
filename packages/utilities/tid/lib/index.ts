@@ -1,6 +1,8 @@
+import { now as getNow } from '@atcute/time-ms';
 import { s32decode, s32encode } from './s32.js';
 
-let lastTimestamp: number = 0;
+let lastTimestamp = 0;
+let lastCurrentTime = 0;
 
 const TID_RE = /^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{12}$/;
 
@@ -30,16 +32,19 @@ export const create = (timestamp: number, clockid: number): string => {
  * Return a TID based on current time
  */
 export const now = (): string => {
-	// we need these two aspects, which Date.now() doesn't provide:
-	// - monotonically increasing time
-	// - microsecond precision
+	const currentTime = getNow();
+	let timestamp: number;
 
-	// while `performance.timeOrigin + performance.now()` could be used here, they
-	// seem to have cross-browser differences, not sure on that yet.
+	if (currentTime === lastCurrentTime) {
+		// same time; increment to avoid collision
+		timestamp = lastTimestamp + 1;
+	} else {
+		// time changed
+		timestamp = currentTime;
+		lastCurrentTime = currentTime;
+	}
 
-	let timestamp = Math.max(Date.now() * 1_000, lastTimestamp);
-	lastTimestamp = timestamp + 1;
-
+	lastTimestamp = timestamp;
 	return createRaw(timestamp, Math.floor(Math.random() * 1023));
 };
 

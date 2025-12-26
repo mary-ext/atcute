@@ -30,6 +30,9 @@
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
+	"dependencies": {
+		"@atcute/time-ms": "workspace:^"
+	},
 	"devDependencies": {
 		"vitest": "^4.0.16"
 	}
