@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/util-text",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"description": "internal text utilities",
 	"license": "0BSD",
 	"repository": {
