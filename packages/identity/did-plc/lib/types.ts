@@ -71,3 +71,26 @@ export type IndexedEntryLog = [
 	genesis: IndexedEntry<CompatibleOperation>,
 	...IndexedEntry<OperationOrTombstone>[],
 ];
+
+// #region client response types
+
+/**
+ * current identity state derived from the did:plc operation log
+ */
+export interface PlcState {
+	did: DidPlcString;
+	rotationKeys: DidKeyString[];
+	verificationMethods: Record<string, DidKeyString>;
+	alsoKnownAs: string[];
+	services: Record<string, Service>;
+}
+
+/**
+ * operation entry with sequence number from /export endpoint
+ */
+export interface SequencedEntry extends IndexedEntry {
+	type: 'sequenced_op';
+	seq: number;
+}
+
+// #endregion

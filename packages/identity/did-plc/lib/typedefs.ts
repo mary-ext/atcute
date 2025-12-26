@@ -120,3 +120,18 @@ export const indexedEntryLog: v.Type<t.IndexedEntryLog> = v
 	.tuple([_indexedEntry.extend({ operation: compatibleOperation })])
 	.concat(v.array(_indexedEntry.extend({ operation: operationOrTombstone })));
 // #endregion
+
+// #region Client response schemas
+export const plcState: v.Type<t.PlcState> = v.object({
+	did: didPlcString,
+	rotationKeys: v.array(didKeyString),
+	verificationMethods: v.record(permissiveDidKeyString),
+	alsoKnownAs: v.array(v.string()),
+	services: v.record(service),
+});
+
+export const sequencedEntry: v.Type<t.SequencedEntry> = _indexedEntry.extend({
+	type: v.literal('sequenced_op'),
+	seq: v.number(),
+});
+// #endregion

@@ -1,15 +1,54 @@
 # @atcute/did-plc
 
-validate and process did:plc operation logs.
+validate, sign, and interact with did:plc operations.
 
 ```sh
 npm install @atcute/did-plc
 ```
 
 did:plc is a self-certifying DID method where the audit log serves as the source of truth. this
-package validates that operations are properly signed and chained.
+package validates that operations are properly signed and chained, and provides utilities for
+creating and submitting new operations.
 
 ## usage
+
+### using the client
+
+```ts
+import { PlcClient } from '@atcute/did-plc';
+
+const client = new PlcClient();
+
+// fetch DID document
+const doc = await client.getDocument('did:plc:ragtjsm2j2vknwkz3zp4oxrd');
+
+// fetch current identity state
+const state = await client.getState('did:plc:ragtjsm2j2vknwkz3zp4oxrd');
+
+// fetch operation log
+const log = await client.getOperationLog('did:plc:ragtjsm2j2vknwkz3zp4oxrd');
+
+// fetch last operation
+const lastOp = await client.getLastOperation('did:plc:ragtjsm2j2vknwkz3zp4oxrd');
+
+// submit a signed operation
+await client.submitOperation('did:plc:ragtjsm2j2vknwkz3zp4oxrd', signedOperation);
+```
+
+### signing operations
+
+```ts
+import { signOperation, signTombstone, deriveDidFromGenesisOp } from '@atcute/did-plc';
+
+// sign an unsigned operation
+const signedOp = await signOperation(unsignedOp, rotationKey);
+
+// sign a tombstone
+const signedTombstone = await signTombstone(unsignedTombstone, rotationKey);
+
+// derive did:plc from genesis operation
+const did = await deriveDidFromGenesisOp(signedGenesisOp);
+```
 
 ### validating audit logs
 

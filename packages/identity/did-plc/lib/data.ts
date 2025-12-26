@@ -1,13 +1,11 @@
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 import { isKeyDid } from '@atcute/identity';
-import { toBase32 } from '@atcute/multibase';
-import { toSha256 } from '@atcute/uint8array';
 
 import { DISPUTE_WINDOW } from './constants.js';
 import * as err from './errors.js';
 import * as t from './types.js';
-import { isSignedOperationValid, normalizeOp } from './utils.js';
+import { deriveDidFromGenesisOp, isSignedOperationValid, normalizeOp } from './utils.js';
 
 // soft constraint limits for incoming operations
 const MAX_OP_BYTES = 4000;
@@ -148,13 +146,12 @@ export const processIndexedEntry = async (
 
 		// Check if CID and DID matches
 		{
-			const opBytes = CBOR.encode(proposed.operation);
-
-			const expectedDid = `did:plc:${toBase32(await toSha256(opBytes)).slice(0, 24)}`;
+			const expectedDid = await deriveDidFromGenesisOp(proposed.operation);
 			if (expectedDid !== did) {
 				throw new err.GenesisHashError(proposed, did);
 			}
 
+			const opBytes = CBOR.encode(proposed.operation);
 			const expectedCid = CID.toString(await CID.create(CID.CODEC_DCBOR, opBytes));
 			if (expectedCid !== proposed.cid) {
 				throw new err.InvalidHashError(proposed, expectedCid);
