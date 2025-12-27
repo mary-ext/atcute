@@ -1,10 +1,14 @@
 import { fromBase32, toBase32 } from '@atcute/multibase';
 import { allocUnsafe, toSha256, equals as isBufferEqual } from '@atcute/uint8array';
 
+/** CID version, always `1` for CIDv1 */
 export const CID_VERSION = 1;
+/** multicodec for SHA-256 hash */
 export const HASH_SHA256 = 0x12;
 
+/** multicodec for raw binary data */
 export const CODEC_RAW = 0x55;
+/** multicodec for DAG-CBOR encoded data */
 export const CODEC_DCBOR = 0x71;
 
 /** @internal */
@@ -34,8 +38,13 @@ export interface Cid {
 // a SHA-256 CIDv1 is always going to be 36 bytes, that's 4 bytes for the
 // header, and 32 bytes for the digest itself.
 
-export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid> => {
-	const digest = await toSha256(data);
+/**
+ * creates a CID from a pre-computed SHA-256 digest
+ * @param codec multicodec type for the data
+ * @param digest raw SHA-256 hash bytes (must be 32 bytes)
+ * @returns CID object
+ */
+export const fromDigest = (codec: 0x55 | 0x71, digest: Uint8Array): Cid => {
 	if (digest.length !== 32) {
 		throw new RangeError(`invalid digest length`);
 	}
@@ -49,7 +58,7 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 
 	bytes.set(digest, 4);
 
-	const cid: Cid = {
+	return {
 		version: CID_VERSION,
 		codec: codec,
 		digest: {
@@ -58,10 +67,24 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 		},
 		bytes: bytes,
 	};
-
-	return cid;
 };
 
+/**
+ * creates a CID by hashing the provided data with SHA-256
+ * @param codec multicodec type for the data
+ * @param data raw data to hash
+ * @returns CID object
+ */
+export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid> => {
+	const digest = await toSha256(data);
+	return fromDigest(codec, digest);
+};
+
+/**
+ * creates an empty CID with a zero-length digest
+ * @param codec multicodec type for the data
+ * @returns CID object with empty digest
+ */
 export const createEmpty = (codec: 0x55 | 0x71): Cid => {
 	const bytes = Uint8Array.from([CID_VERSION, codec, HASH_SHA256, 0]);
 	const digest = bytes.subarray(4);
@@ -79,6 +102,12 @@ export const createEmpty = (codec: 0x55 | 0x71): Cid => {
 	return cid;
 };
 
+/**
+ * decodes a CID from bytes, returning the CID and any remaining bytes
+ * @param bytes raw CID bytes
+ * @returns tuple of decoded CID and remainder bytes
+ * @throws {RangeError} if the bytes are too short or contain invalid values
+ */
 export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8Array] => {
 	const length = bytes.length;
 
@@ -124,6 +153,12 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 	return [cid, bytes.subarray(4 + digestSize)];
 };
 
+/**
+ * decodes a CID from bytes, expecting no remainder
+ * @param bytes raw CID bytes
+ * @returns decoded CID
+ * @throws {RangeError} if the bytes are invalid or contain extra data
+ */
 export const decode = (bytes: Uint8Array): Cid => {
 	const [cid, remainder] = decodeFirst(bytes);
 
@@ -134,6 +169,13 @@ export const decode = (bytes: Uint8Array): Cid => {
 	return cid;
 };
 
+/**
+ * parses a CID from a multibase base32 string
+ * @param input base32-encoded CID string (with 'b' prefix)
+ * @returns decoded CID
+ * @throws {SyntaxError} if the string is not a valid multibase base32 string
+ * @throws {RangeError} if the string length is invalid
+ */
 export const fromString = (input: string): Cid => {
 	if (input.length < 2 || input[0] !== 'b') {
 		throw new SyntaxError(`not a multibase base32 string`);
@@ -152,6 +194,11 @@ export const fromString = (input: string): Cid => {
 	return cid;
 };
 
+/**
+ * encodes a CID to a multibase base32 string
+ * @param cid CID to encode
+ * @returns base32-encoded string with 'b' prefix
+ */
 export const toString = (cid: Cid): string => {
 	let str = CID_STRINGIFY_CACHE.get(cid);
 	if (str === undefined) {
@@ -163,6 +210,13 @@ export const toString = (cid: Cid): string => {
 	return str;
 };
 
+/**
+ * parses a CID from binary format (with 0x00 prefix)
+ * @param input binary CID bytes with 0x00 prefix
+ * @returns decoded CID
+ * @throws {RangeError} if the byte length is invalid
+ * @throws {SyntaxError} if the prefix byte is not 0x00
+ */
 export const fromBinary = (input: Uint8Array): Cid => {
 	// 4 bytes + 1 byte for the 0x00 prefix
 	// 36 bytes + 1 byte for the 0x00 prefix
@@ -178,6 +232,11 @@ export const fromBinary = (input: Uint8Array): Cid => {
 	return decode(bytes);
 };
 
+/**
+ * encodes a CID to binary format (with 0x00 prefix)
+ * @param cid CID to encode
+ * @returns binary CID bytes with 0x00 prefix
+ */
 export const toBinary = (cid: Cid): Uint8Array => {
 	const bytes = allocUnsafe(1 + cid.bytes.length);
 	bytes[0] = 0;
@@ -186,6 +245,12 @@ export const toBinary = (cid: Cid): Uint8Array => {
 	return bytes;
 };
 
+/**
+ * checks if two CIDs are equal
+ * @param a first CID
+ * @param b second CID
+ * @returns true if the CIDs have identical bytes
+ */
 export const equals = (a: Cid, b: Cid): boolean => {
 	return isBufferEqual(a.bytes, b.bytes);
 };
