@@ -32,6 +32,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
+		"@atcute/internal-dev-env": "workspace:^",
 		"@vitest/coverage-v8": "^4.0.16",
 		"vitest": "^4.0.16"
 	},

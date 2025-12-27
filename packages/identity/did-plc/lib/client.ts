@@ -1,38 +1,89 @@
 import type { DidDocument } from '@atcute/identity';
 import { defs as identityDefs } from '@atcute/identity';
-import { FailedResponseError, isResponseOk, parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
+import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
 import * as defs from './typedefs.js';
 import * as t from './types.js';
 
 const MAX_RESPONSE_SIZE = 64 * 1024;
 
+export interface PlcErrorBody {
+	message: string;
+}
+
+/**
+ * error thrown when the plc server returns a non-ok response
+ */
+export class PlcClientError extends Error {
+	override readonly name = 'PlcClientError';
+
+	constructor(
+		public status: number,
+		public body: PlcErrorBody | null,
+		message: string,
+	) {
+		super(message);
+	}
+
+	/**
+	 * creates a PlcClientError from a failed fetch response
+	 * @param response the failed response
+	 * @returns the error with parsed body if available
+	 */
+	static async fromResponse(response: Response): Promise<PlcClientError> {
+		const status = response.status;
+		let body: PlcErrorBody | null = null;
+		let message = `got http ${status}`;
+
+		try {
+			const text = await response.text();
+			const json = JSON.parse(text);
+
+			if (typeof json.message === 'string') {
+				body = { message: json.message };
+				message = json.message;
+			}
+		} catch {
+			// failed to parse response body, use default message
+		}
+
+		return new PlcClientError(status, body, message);
+	}
+}
+
+const assertResponseOk = async (response: Response): Promise<Response> => {
+	if (response.ok) {
+		return response;
+	}
+	throw await PlcClientError.fromResponse(response);
+};
+
 const handleDocument = pipe(
-	isResponseOk,
+	assertResponseOk,
 	parseResponseAsJson(/^application\/(did\+ld\+)?json$/, MAX_RESPONSE_SIZE),
 	validateJsonWith(identityDefs.didDocument, { mode: 'passthrough' }),
 );
 
 const handlePlcState = pipe(
-	isResponseOk,
+	assertResponseOk,
 	parseResponseAsJson(/^application\/json$/, MAX_RESPONSE_SIZE),
 	validateJsonWith(defs.plcState, { mode: 'passthrough' }),
 );
 
 const handleOperationLog = pipe(
-	isResponseOk,
+	assertResponseOk,
 	parseResponseAsJson(/^application\/json$/, MAX_RESPONSE_SIZE),
 	validateJsonWith(defs.operationLog, { mode: 'passthrough' }),
 );
 
 const handleIndexedEntryLog = pipe(
-	isResponseOk,
+	assertResponseOk,
 	parseResponseAsJson(/^application\/json$/, MAX_RESPONSE_SIZE),
 	validateJsonWith(defs.indexedEntryLog, { mode: 'passthrough' }),
 );
 
 const handleLastOperation = pipe(
-	isResponseOk,
+	assertResponseOk,
 	parseResponseAsJson(/^application\/json$/, MAX_RESPONSE_SIZE),
 	validateJsonWith(defs.compatibleOperationOrTombstone, { mode: 'passthrough' }),
 );
@@ -69,7 +120,7 @@ export class PlcClient {
 	async getDocument(did: t.DidPlcString, options?: PlcRequestOptions): Promise<DidDocument> {
 		const url = new URL(`/${encodeURIComponent(did)}`, this.serviceUrl);
 
-		const response = await this.#fetch(url, {
+		const response = await (0, this.#fetch)(url, {
 			signal: options?.signal,
 			headers: { accept: 'application/did+ld+json,application/json' },
 		});
@@ -87,7 +138,7 @@ export class PlcClient {
 	async getState(did: t.DidPlcString, options?: PlcRequestOptions): Promise<t.PlcState> {
 		const url = new URL(`/${encodeURIComponent(did)}/data`, this.serviceUrl);
 
-		const response = await this.#fetch(url, {
+		const response = await (0, this.#fetch)(url, {
 			signal: options?.signal,
 			headers: { accept: 'application/json' },
 		});
@@ -105,7 +156,7 @@ export class PlcClient {
 	async getOperationLog(did: t.DidPlcString, options?: PlcRequestOptions): Promise<t.OperationLog> {
 		const url = new URL(`/${encodeURIComponent(did)}/log`, this.serviceUrl);
 
-		const response = await this.#fetch(url, {
+		const response = await (0, this.#fetch)(url, {
 			signal: options?.signal,
 			headers: { accept: 'application/json' },
 		});
@@ -123,7 +174,7 @@ export class PlcClient {
 	async getAuditLog(did: t.DidPlcString, options?: PlcRequestOptions): Promise<t.IndexedEntryLog> {
 		const url = new URL(`/${encodeURIComponent(did)}/log/audit`, this.serviceUrl);
 
-		const response = await this.#fetch(url, {
+		const response = await (0, this.#fetch)(url, {
 			signal: options?.signal,
 			headers: { accept: 'application/json' },
 		});
@@ -144,7 +195,7 @@ export class PlcClient {
 	): Promise<t.CompatibleOperationOrTombstone> {
 		const url = new URL(`/${encodeURIComponent(did)}/log/last`, this.serviceUrl);
 
-		const response = await this.#fetch(url, {
+		const response = await (0, this.#fetch)(url, {
 			signal: options?.signal,
 			headers: { accept: 'application/json' },
 		});
@@ -166,7 +217,7 @@ export class PlcClient {
 	): Promise<void> {
 		const url = new URL(`/${encodeURIComponent(did)}`, this.serviceUrl);
 
-		const response = await this.#fetch(url, {
+		const response = await (0, this.#fetch)(url, {
 			method: 'POST',
 			signal: options?.signal,
 			headers: { 'content-type': 'application/json' },
@@ -174,7 +225,7 @@ export class PlcClient {
 		});
 
 		if (!response.ok) {
-			throw new FailedResponseError(response);
+			throw await PlcClientError.fromResponse(response);
 		}
 	}
 
@@ -186,10 +237,14 @@ export class PlcClient {
 	async ping(options?: PlcRequestOptions): Promise<boolean> {
 		const url = new URL('/_health', this.serviceUrl);
 
-		const response = await this.#fetch(url, {
-			signal: options?.signal,
-		});
+		try {
+			const response = await (0, this.#fetch)(url, {
+				signal: options?.signal,
+			});
 
-		return response.ok;
+			return response.ok;
+		} catch {
+			return false;
+		}
 	}
 }

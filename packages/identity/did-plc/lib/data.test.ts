@@ -1,7 +1,10 @@
+import { Secp256k1PrivateKeyExportable } from '@atcute/crypto';
 import { describe, expect, it } from 'vitest';
 
 import { processIndexedEntryLog } from './data.js';
 import { indexedEntryLog } from './typedefs.js';
+import type * as t from './types.js';
+import { deriveDidFromGenesisOp, isSignedOperationValid, signOperation } from './utils.js';
 
 describe('processIndexedEntryLog()', () => {
 	it('validates an operation log', async () => {
@@ -255,5 +258,151 @@ describe('processIndexedEntryLog()', () => {
   ],
 }
 `);
+	});
+});
+
+describe('genesis operation', () => {
+	it('derives correct DID from genesis operation', async () => {
+		const rotationKey = await Secp256k1PrivateKeyExportable.createKeypair();
+		const signingKey = await Secp256k1PrivateKeyExportable.createKeypair();
+
+		const rotationKeyDid = await rotationKey.exportPublicKey('did');
+		const signingKeyDid = await signingKey.exportPublicKey('did');
+
+		const unsignedOp: t.UnsignedOperation = {
+			type: 'plc_operation',
+			prev: null,
+			alsoKnownAs: ['at://test.handle'],
+			rotationKeys: [rotationKeyDid],
+			services: {
+				atproto_pds: {
+					type: 'AtprotoPersonalDataServer',
+					endpoint: 'https://pds.example.com',
+				},
+			},
+			verificationMethods: {
+				atproto: signingKeyDid,
+			},
+		};
+
+		const signedOp = await signOperation(unsignedOp, rotationKey);
+		const did = await deriveDidFromGenesisOp(signedOp);
+
+		// DID should start with did:plc: and have 24 character suffix
+		expect(did).toMatch(/^did:plc:[a-z2-7]{24}$/);
+	});
+
+	it('produces consistent DID for the same operation', async () => {
+		const rotationKey = await Secp256k1PrivateKeyExportable.createKeypair();
+		const signingKey = await Secp256k1PrivateKeyExportable.createKeypair();
+
+		const rotationKeyDid = await rotationKey.exportPublicKey('did');
+		const signingKeyDid = await signingKey.exportPublicKey('did');
+
+		const unsignedOp: t.UnsignedOperation = {
+			type: 'plc_operation',
+			prev: null,
+			alsoKnownAs: ['at://test.handle'],
+			rotationKeys: [rotationKeyDid],
+			services: {
+				atproto_pds: {
+					type: 'AtprotoPersonalDataServer',
+					endpoint: 'https://pds.example.com',
+				},
+			},
+			verificationMethods: {
+				atproto: signingKeyDid,
+			},
+		};
+
+		const signedOp = await signOperation(unsignedOp, rotationKey);
+		const did1 = await deriveDidFromGenesisOp(signedOp);
+		const did2 = await deriveDidFromGenesisOp(signedOp);
+
+		expect(did1).toBe(did2);
+	});
+
+	it('produces different DIDs for different operations', async () => {
+		const key1 = await Secp256k1PrivateKeyExportable.createKeypair();
+		const key2 = await Secp256k1PrivateKeyExportable.createKeypair();
+
+		const key1Did = await key1.exportPublicKey('did');
+		const key2Did = await key2.exportPublicKey('did');
+
+		const unsignedOp1: t.UnsignedOperation = {
+			type: 'plc_operation',
+			prev: null,
+			alsoKnownAs: ['at://alice.test'],
+			rotationKeys: [key1Did],
+			services: {
+				atproto_pds: {
+					type: 'AtprotoPersonalDataServer',
+					endpoint: 'https://pds.example.com',
+				},
+			},
+			verificationMethods: {
+				atproto: key1Did,
+			},
+		};
+
+		const unsignedOp2: t.UnsignedOperation = {
+			type: 'plc_operation',
+			prev: null,
+			alsoKnownAs: ['at://bob.test'],
+			rotationKeys: [key2Did],
+			services: {
+				atproto_pds: {
+					type: 'AtprotoPersonalDataServer',
+					endpoint: 'https://pds.example.com',
+				},
+			},
+			verificationMethods: {
+				atproto: key2Did,
+			},
+		};
+
+		const signedOp1 = await signOperation(unsignedOp1, key1);
+		const signedOp2 = await signOperation(unsignedOp2, key2);
+
+		const did1 = await deriveDidFromGenesisOp(signedOp1);
+		const did2 = await deriveDidFromGenesisOp(signedOp2);
+
+		expect(did1).not.toBe(did2);
+	});
+
+	it('validates signature correctly', async () => {
+		const rotationKey = await Secp256k1PrivateKeyExportable.createKeypair();
+		const signingKey = await Secp256k1PrivateKeyExportable.createKeypair();
+		const wrongKey = await Secp256k1PrivateKeyExportable.createKeypair();
+
+		const rotationKeyDid = await rotationKey.exportPublicKey('did');
+		const signingKeyDid = await signingKey.exportPublicKey('did');
+		const wrongKeyDid = await wrongKey.exportPublicKey('did');
+
+		const unsignedOp: t.UnsignedOperation = {
+			type: 'plc_operation',
+			prev: null,
+			alsoKnownAs: ['at://test.handle'],
+			rotationKeys: [rotationKeyDid],
+			services: {
+				atproto_pds: {
+					type: 'AtprotoPersonalDataServer',
+					endpoint: 'https://pds.example.com',
+				},
+			},
+			verificationMethods: {
+				atproto: signingKeyDid,
+			},
+		};
+
+		const signedOp = await signOperation(unsignedOp, rotationKey);
+
+		// should validate with correct rotation key
+		const validSigner = await isSignedOperationValid([rotationKeyDid], signedOp);
+		expect(validSigner).toBe(rotationKeyDid);
+
+		// should not validate with wrong key
+		const invalidSigner = await isSignedOperationValid([wrongKeyDid], signedOp);
+		expect(invalidSigner).toBeNull();
 	});
 });
