@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/mst",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "atproto MST manipulation utilities",
 	"keywords": [
 		"atproto",
