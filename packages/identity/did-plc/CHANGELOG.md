@@ -1,5 +1,11 @@
 # @atcute/did-plc
 
+## 0.3.1
+
+### Patch Changes
+
+- cc1f10d: add proper error handling and tests
+
 ## 0.3.0
 
 ### Minor Changes
