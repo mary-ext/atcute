@@ -1,4 +1,5 @@
 export * from './types.js';
+export * from './key.js';
 export * from './node.js';
 export * from './node-store.js';
 export * from './node-wrangler.js';

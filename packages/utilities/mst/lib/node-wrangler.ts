@@ -1,5 +1,6 @@
 import type { CidLink } from '@atcute/cid';
 
+import { assertMstKey } from './key.js';
 import { NodeStore } from './node-store.js';
 import { MSTNode, getKeyHeight } from './node.js';
 
@@ -51,6 +52,7 @@ export class NodeWrangler {
 	 * @returns the new root CID
 	 */
 	async putRecord(rootCid: string | null, key: string, val: CidLink): Promise<string> {
+		assertMstKey(key);
 		const root = await this.ns.get(rootCid);
 
 		if (root.isEmpty) {
@@ -76,6 +78,7 @@ export class NodeWrangler {
 	 * @returns the new root CID
 	 */
 	async deleteRecord(rootCid: string | null, key: string): Promise<string> {
+		assertMstKey(key);
 		const root = await this.ns.get(rootCid);
 
 		// Note: the seemingly redundant outer .get().cid is required to transform

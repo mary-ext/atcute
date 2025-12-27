@@ -3,6 +3,7 @@ import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
 
+import { assertMstKey } from './key.js';
 import { isNodeData, type NodeData, type TreeEntry } from './types.js';
 
 /**
@@ -111,6 +112,7 @@ export class MSTNode {
 				throw new TypeError(`malformed MST node; invalid key sort order`);
 			}
 
+			assertMstKey(key);
 			keys.push(key);
 			values.push(entry.v);
 			subtrees.push(entry.t);

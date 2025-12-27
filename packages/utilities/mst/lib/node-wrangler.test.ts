@@ -67,7 +67,7 @@ describe('NodeWrangler', () => {
 
 		let rootCid: string | null = null;
 
-		const keys = ['a', 'b', 'c', 'd'];
+		const keys = ['coll/a', 'coll/b', 'coll/c', 'coll/d'];
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
@@ -170,7 +170,7 @@ describe('NodeWrangler', () => {
 		let rootCid: string | null = null;
 
 		// add several keys
-		const keys = ['a', 'b', 'c', 'd', 'e'];
+		const keys = ['coll/a', 'coll/b', 'coll/c', 'coll/d', 'coll/e'];
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
@@ -178,8 +178,8 @@ describe('NodeWrangler', () => {
 		}
 
 		// delete some keys
-		rootCid = await wrangler.deleteRecord(rootCid, 'b');
-		rootCid = await wrangler.deleteRecord(rootCid, 'd');
+		rootCid = await wrangler.deleteRecord(rootCid, 'coll/b');
+		rootCid = await wrangler.deleteRecord(rootCid, 'coll/d');
 
 		// verify remaining entries
 		const walker = await NodeWalker.create(store, rootCid);
@@ -189,9 +189,9 @@ describe('NodeWrangler', () => {
 		}
 
 		expect(entries.length).toBe(3);
-		expect(entries[0][0]).toBe('a');
-		expect(entries[1][0]).toBe('c');
-		expect(entries[2][0]).toBe('e');
+		expect(entries[0][0]).toBe('coll/a');
+		expect(entries[1][0]).toBe('coll/c');
+		expect(entries[2][0]).toBe('coll/e');
 	});
 
 	it('should maintain sort order across operations', async () => {
@@ -201,7 +201,7 @@ describe('NodeWrangler', () => {
 		let rootCid: string | null = null;
 
 		// add keys in random order
-		const keys = ['e', 'b', 'd', 'a', 'c'];
+		const keys = ['coll/e', 'coll/b', 'coll/d', 'coll/a', 'coll/c'];
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
@@ -216,11 +216,11 @@ describe('NodeWrangler', () => {
 		}
 
 		expect(entries.length).toBe(5);
-		expect(entries[0][0]).toBe('a');
-		expect(entries[1][0]).toBe('b');
-		expect(entries[2][0]).toBe('c');
-		expect(entries[3][0]).toBe('d');
-		expect(entries[4][0]).toBe('e');
+		expect(entries[0][0]).toBe('coll/a');
+		expect(entries[1][0]).toBe('coll/b');
+		expect(entries[2][0]).toBe('coll/c');
+		expect(entries[3][0]).toBe('coll/d');
+		expect(entries[4][0]).toBe('coll/e');
 	});
 
 	it('should handle deleting from a tree with multiple levels', async () => {
@@ -230,7 +230,7 @@ describe('NodeWrangler', () => {
 		let rootCid: string | null = null;
 
 		// add many keys to create a multi-level tree
-		const keys = Array.from({ length: 20 }, (_, i) => `key-${i.toString().padStart(3, '0')}`);
+		const keys = Array.from({ length: 20 }, (_, i) => `coll/${i.toString().padStart(3, '0')}`);
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
