@@ -91,9 +91,18 @@ export type ProcedureRequestOptions<TDef> = BaseRequestOptions &
 				params?: Record<string, unknown>;
 			});
 
-export type CallRequestOptions<TMeta> = BaseRequestOptions & {
-	as?: ResponseFormat | null;
-} & (TMeta extends XRPCQueryMetadata<infer Params, any, any>
+export type CallRequestOptions<TMeta> = BaseRequestOptions &
+	// as is required if the endpoint returns blob, optional otherwise
+	(TMeta extends XRPCQueryMetadata<any, infer Output, any>
+		? Output extends XRPCBlobBodyParam
+			? { as: ResponseFormat | null }
+			: { as?: ResponseFormat | null }
+		: TMeta extends XRPCProcedureMetadata<any, any, infer Output, any>
+			? Output extends XRPCBlobBodyParam
+				? { as: ResponseFormat | null }
+				: { as?: ResponseFormat | null }
+			: { as?: ResponseFormat | null }) &
+	(TMeta extends XRPCQueryMetadata<infer Params, any, any>
 		? // query
 			Params extends ObjectSchema
 			? { params: InferInput<Params> }
@@ -144,10 +153,14 @@ export type SuccessClientResponse<TDef, TInit> = BaseClientResponse & {
 			: TFormat extends null
 				? null
 				: never
-		: TDef extends XRPCQueryMetadata<any, infer Body extends XRPCLexBodyParam, any>
-			? InferOutput<Body['schema']>
-			: TDef extends XRPCProcedureMetadata<any, any, infer Body extends XRPCLexBodyParam, any>
+		: TDef extends XRPCQueryMetadata<any, infer Body, any>
+			? Body extends XRPCLexBodyParam
 				? InferOutput<Body['schema']>
+				: null
+			: TDef extends XRPCProcedureMetadata<any, any, infer Body, any>
+				? Body extends XRPCLexBodyParam
+					? InferOutput<Body['schema']>
+					: null
 				: never;
 };
 
@@ -290,14 +303,16 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 		const isQuery = schema.type === 'xrpc_query';
 		const method = isQuery ? 'get' : 'post';
 
+		if (options.as === undefined && schema.output?.type === 'blob') {
+			throw new TypeError(`\`as\` option is required for endpoints returning blobs`);
+		}
+
 		const format =
 			options.as !== undefined
 				? options.as
 				: schema.output?.type === 'lex'
 					? 'json'
-					: schema.output?.type === 'blob'
-						? 'blob'
-						: null;
+					: null;
 
 		const response = await this.#perform(method, schema.nsid, {
 			params: options.params,

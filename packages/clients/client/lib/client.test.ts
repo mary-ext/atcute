@@ -454,6 +454,33 @@ describe('call method with validation', () => {
 		if (noOutputResponse.ok) {
 			assertType<null>(noOutputResponse.data);
 		}
+
+		// query with blob output requires `as` to be specified
+		const blobOutputSchema = v.query('com.example.blobQuery', {
+			params: null,
+			output: {
+				type: 'blob',
+			},
+		});
+
+		const blobOutputHandler = vi.fn<FetchHandler>(() => Promise.resolve(new Response(new Blob(['test']))));
+		const blobOutputClient = new Client({ handler: blobOutputHandler });
+
+		// @ts-expect-error - `as` is required for blob output
+		await expect(blobOutputClient.call(blobOutputSchema)).rejects.toThrow(
+			'`as` option is required for endpoints returning blobs',
+		);
+
+		// with `as` specified, it works
+		const blobOutputResponse = await blobOutputClient.call(blobOutputSchema, { as: 'blob' });
+		if (blobOutputResponse.ok) {
+			assertType<Blob>(blobOutputResponse.data);
+		}
+
+		const bytesOutputResponse = await blobOutputClient.call(blobOutputSchema, { as: 'bytes' });
+		if (bytesOutputResponse.ok) {
+			assertType<Uint8Array>(bytesOutputResponse.data);
+		}
 	});
 });
 
