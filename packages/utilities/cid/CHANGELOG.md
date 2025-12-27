@@ -1,5 +1,11 @@
 # @atcute/cid
 
+## 2.3.0
+
+### Minor Changes
+
+- 8f59979: fromDigest function
+
 ## 2.2.6
 
 ### Patch Changes

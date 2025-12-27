@@ -1,5 +1,11 @@
 # @atcute/xrpc-server
 
+## 0.1.6
+
+### Patch Changes
+
+- e3a71f2: allow passing headers into XRPCError
+
 ## 0.1.5
 
 ### Patch Changes

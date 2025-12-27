@@ -1,5 +1,11 @@
 # @atcute/client
 
+## 4.1.2
+
+### Patch Changes
+
+- 54d7769: require `as` to be passed in call() for endpoints expected to return blobs
+
 ## 4.1.1
 
 ### Patch Changes
@@ -150,7 +156,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 
