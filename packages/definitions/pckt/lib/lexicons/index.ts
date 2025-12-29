@@ -10,7 +10,6 @@ export * as BlogPcktBlockImage from './types/blog/pckt/block/image.js';
 export * as BlogPcktBlockListItem from './types/blog/pckt/block/listItem.js';
 export * as BlogPcktBlockMention from './types/blog/pckt/block/mention.js';
 export * as BlogPcktBlockOrderedList from './types/blog/pckt/block/orderedList.js';
-export * as BlogPcktBlockParagraph from './types/blog/pckt/block/paragraph.js';
 export * as BlogPcktBlockTaskItem from './types/blog/pckt/block/taskItem.js';
 export * as BlogPcktBlockTaskList from './types/blog/pckt/block/taskList.js';
 export * as BlogPcktBlockText from './types/blog/pckt/block/text.js';

@@ -6,92 +6,20 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["title", "blocks", "publication"],
+				"required": ["document", "site"],
 				"properties": {
-					"slug": {
+					"site": {
 						"type": "string",
-						"maxLength": 500,
-						"description": "URL-friendly slug for the document (used to construct canonical URL)"
+						"format": "uri"
 					},
-					"tags": {
-						"type": "array",
-						"items": {
-							"type": "string",
-							"maxLength": 100,
-							"maxGraphemes": 50
-						},
-						"maxLength": 20,
-						"description": "Optional tags for categorization and discovery"
-					},
-					"cover": {
-						"type": "blob",
-						"accept": ["image/*"],
-						"maxSize": 10000000,
-						"description": "Optional cover/featured image (10MB max)"
-					},
-					"title": {
-						"type": "string",
-						"maxLength": 1280,
-						"description": "Document title/headline",
-						"maxGraphemes": 128
-					},
-					"blocks": {
-						"type": "array",
-						"items": {
-							"refs": [
-								"blog.pckt.block.paragraph",
-								"blog.pckt.block.heading",
-								"blog.pckt.block.image",
-								"blog.pckt.block.bulletList",
-								"blog.pckt.block.orderedList",
-								"blog.pckt.block.listItem",
-								"blog.pckt.block.taskList",
-								"blog.pckt.block.taskItem",
-								"blog.pckt.block.blockquote",
-								"blog.pckt.block.codeBlock",
-								"blog.pckt.block.horizontalRule",
-								"blog.pckt.block.blueskyEmbed"
-							],
-							"type": "union",
-							"closed": false
-						},
-						"description": "Structured content blocks composing the document body"
-					},
-					"images": {
-						"type": "array",
-						"items": {
-							"type": "blob",
-							"accept": ["image/*"],
-							"maxSize": 10000000
-						},
-						"description": "Blob references for images used within the document content"
-					},
-					"bodyPlain": {
-						"type": "string",
-						"maxLength": 100000,
-						"description": "Plain text representation of the document content for search and preview",
-						"maxGraphemes": 50000
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "datetime",
-						"description": "Timestamp when the document was last modified"
-					},
-					"publication": {
+					"document": {
 						"ref": "com.atproto.repo.strongRef",
-						"type": "ref",
-						"description": "Reference to the parent publication this document belongs to"
-					},
-					"publishedAt": {
-						"type": "string",
-						"format": "datetime",
-						"description": "Timestamp when the document was first published"
+						"type": "ref"
 					}
 				}
 			}
 		}
 	},
 	"$type": "com.atproto.lexicon.schema",
-	"lexicon": 1,
-	"description": "A long-form blog document with rich content. Documents belong to a publication (blog) and contain structured content blocks, metadata, and optional media. This is the primary record type for blog posts."
+	"lexicon": 1
 }

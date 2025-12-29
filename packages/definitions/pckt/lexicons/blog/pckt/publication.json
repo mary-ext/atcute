@@ -6,86 +6,16 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["name", "basePath", "createdAt"],
+				"required": ["publication"],
 				"properties": {
-					"icon": {
-						"type": "blob",
-						"accept": ["image/png", "image/jpeg", "image/webp", "image/gif"],
-						"maxSize": 500000,
-						"description": "Publication icon/avatar image"
-					},
-					"name": {
-						"type": "string",
-						"maxLength": 200,
-						"description": "Publication name/title",
-						"maxGraphemes": 100
-					},
-					"theme": {
-						"refs": ["blog.pckt.theme"],
-						"type": "union",
-						"closed": false,
-						"description": "Theme configuration as an open union; accepts blog.pckt.theme and future types."
-					},
-					"basePath": {
-						"type": "string",
-						"format": "uri",
-						"maxLength": 2000,
-						"description": "Base URL path for the publication (e.g., https://blog.pckt.blog)"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "datetime",
-						"description": "Timestamp when the publication was first created"
-					},
-					"updatedAt": {
-						"type": "string",
-						"format": "datetime",
-						"description": "Timestamp when the publication was last updated (optional)"
-					},
-					"extensions": {
-						"type": "array",
-						"items": {
-							"refs": [],
-							"type": "union",
-							"closed": false,
-							"description": "Open union of extension objects identified by $type (NSID)."
-						},
-						"maxLength": 10,
-						"description": "Extension objects (open union) for additional features"
-					},
-					"description": {
-						"type": "string",
-						"maxLength": 2000,
-						"description": "Publication description or tagline",
-						"maxGraphemes": 500
-					},
-					"preferences": {
-						"ref": "#preferences",
-						"type": "ref",
-						"description": "Publication preferences and settings"
+					"publication": {
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
 					}
 				}
-			},
-			"description": "Record declaring a publication"
-		},
-		"preferences": {
-			"type": "object",
-			"properties": {
-				"showCredit": {
-					"type": "boolean",
-					"default": true,
-					"description": "Whether to display credit line on the publication"
-				},
-				"showInDiscover": {
-					"type": "boolean",
-					"default": true,
-					"description": "Whether documents from this publication should appear in public discover feeds"
-				}
-			},
-			"description": "Publication preferences and discovery settings"
+			}
 		}
 	},
 	"$type": "com.atproto.lexicon.schema",
-	"lexicon": 1,
-	"description": "A publication (blog) record representing a collection of documents. Contains metadata, branding, theme configuration, and optional extensions. Publications serve as the parent container for blog documents."
+	"lexicon": 1
 }
