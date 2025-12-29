@@ -12,6 +12,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('pub.leaflet.document'),
 		author: /*#__PURE__*/ v.actorIdentifierString(),
 		/**
+		 * @accept image/png, image/jpeg, image/webp
+		 * @maxSize 1000000
+		 */
+		coverImage: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		/**
 		 * @maxLength 3000
 		 * @maxGraphemes 300
 		 */
