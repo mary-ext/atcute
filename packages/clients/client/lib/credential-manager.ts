@@ -139,12 +139,12 @@ export class CredentialManager implements FetchHandlerObject {
 			return (0, this.fetch)(url, init);
 		}
 
-		headers.set('authorization', `Bearer ${this.session.accessJwt}`);
+		const initialToken = this.session.accessJwt;
+		headers.set('authorization', `Bearer ${initialToken}`);
 
 		const initialResponse = await (0, this.fetch)(url, { ...init, headers });
-		const isExpired = await isExpiredTokenResponse(initialResponse);
 
-		if (!isExpired) {
+		if (initialResponse.status !== 401 && !(await isExpiredTokenResponse(initialResponse))) {
 			return initialResponse;
 		}
 
@@ -155,15 +155,24 @@ export class CredentialManager implements FetchHandlerObject {
 		}
 
 		// return initial response if:
-		// - the above refreshSession failed and cleared the session
-		// - provided request body was a stream, which can't be resent once consumed
-		if (!this.session || init.body instanceof ReadableStream) {
+		// - request was aborted
+		// - refresh failed and cleared the session
+		// - token didn't actually change (refresh failed silently)
+		// - request body was a stream (can't be resent)
+		const updatedToken = this.session?.accessJwt;
+		if (
+			init.signal?.aborted ||
+			!updatedToken ||
+			updatedToken === initialToken ||
+			init.body instanceof ReadableStream
+		) {
 			return initialResponse;
 		}
 
-		// set the new token and retry the request
-		headers.set('authorization', `Bearer ${this.session.accessJwt}`);
+		// cancel initial response to avoid resource leaks (Node.js)
+		await initialResponse.body?.cancel();
 
+		headers.set('authorization', `Bearer ${updatedToken}`);
 		return await (0, this.fetch)(url, { ...init, headers });
 	}
 
@@ -186,16 +195,29 @@ export class CredentialManager implements FetchHandlerObject {
 		});
 
 		if (!response.ok) {
-			switch (response.data.error) {
-				case 'ExpiredToken':
-				case 'InvalidToken': {
-					this.session = undefined;
-					this.#onExpired?.(currentSession);
-					break;
-				}
+			const isExpired =
+				response.status === 401 ||
+				response.data.error === 'ExpiredToken' ||
+				response.data.error === 'InvalidToken';
+
+			if (isExpired) {
+				this.session = undefined;
+				this.#onExpired?.(currentSession);
 			}
 
 			throw new ClientResponseError(response);
+		}
+
+		// DID must not change during refresh
+		if (response.data.did !== currentSession.did) {
+			this.session = undefined;
+			this.#onExpired?.(currentSession);
+			throw new ClientResponseError({ status: 401, data: { error: 'InvalidDID' } });
+		}
+
+		// protect against concurrent session updates
+		if (this.session !== currentSession) {
+			throw new Error('concurrent session update detected');
 		}
 
 		this.#updateSession({ ...currentSession, ...response.data });
@@ -234,20 +256,36 @@ export class CredentialManager implements FetchHandlerObject {
 	 * @param session session data, taken from `AtpAuth#session` after login
 	 */
 	async resume(session: AtpSessionData): Promise<AtpSessionData> {
+		// protect against concurrent resume of the same session
+		if (session.refreshJwt === this.session?.refreshJwt) {
+			await this.#refreshSessionPromise;
+			if (!this.session || session.did !== this.session.did) {
+				throw new ClientResponseError({ status: 401, data: { error: 'InvalidToken' } });
+			}
+			return this.session;
+		}
+
 		const now = Date.now() / 1_000 + 60 * 5;
 
 		const refreshToken = decodeJwt(session.refreshJwt) as AtpRefreshJwt;
-
-		if (now >= refreshToken.exp) {
+		if (now >= refreshToken.exp || refreshToken.sub !== session.did) {
 			throw new ClientResponseError({ status: 401, data: { error: 'InvalidToken' } });
 		}
 
 		const accessToken = decodeJwt(session.accessJwt) as AtpAccessJwt;
+		if (accessToken.sub !== session.did) {
+			throw new ClientResponseError({ status: 401, data: { error: 'InvalidToken' } });
+		}
+
+		// set the session and clear any stale refresh promise
 		this.session = session;
+		this.#refreshSessionPromise = undefined;
 
 		if (now >= accessToken.exp) {
+			// access token expired, need to refresh
 			await this.#refreshSession();
 		} else {
+			// access token still valid, fetch session info in background
 			const promise = ok(
 				this.#server.get('com.atproto.server.getSession', {
 					headers: {
@@ -284,8 +322,9 @@ export class CredentialManager implements FetchHandlerObject {
 	 * @returns session data
 	 */
 	async login(options: AuthLoginOptions): Promise<AtpSessionData> {
-		// Reset the session
+		// reset the session
 		this.session = undefined;
+		this.#refreshSessionPromise = undefined;
 
 		const session = await ok(
 			this.#server.post('com.atproto.server.createSession', {
@@ -299,6 +338,30 @@ export class CredentialManager implements FetchHandlerObject {
 		);
 
 		return this.#updateSession(session);
+	}
+
+	/**
+	 * sign out of the current session, invalidating it server-side
+	 */
+	async logout(): Promise<void> {
+		const currentSession = this.session;
+		if (!currentSession) {
+			return;
+		}
+
+		this.session = undefined;
+		this.#refreshSessionPromise = undefined;
+
+		try {
+			await this.#server.post('com.atproto.server.deleteSession', {
+				as: null,
+				headers: {
+					authorization: `Bearer ${currentSession.refreshJwt}`,
+				},
+			});
+		} catch {
+			// ignore errors - session is already cleared locally
+		}
 	}
 }
 
