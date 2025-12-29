@@ -1127,9 +1127,12 @@ importers:
         specifier: workspace:^
         version: link:../../misc/time-ms
     devDependencies:
+      '@types/node':
+        specifier: ^22.19.3
+        version: 22.19.3
       vitest:
         specifier: ^4.0.16
-        version: 4.0.16(@types/node@25.0.3)(@vitest/browser-playwright@4.0.16)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
+        version: 4.0.16(@types/node@22.19.3)(@vitest/browser-playwright@4.0.16)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
 
   packages/utilities/varint:
     devDependencies:

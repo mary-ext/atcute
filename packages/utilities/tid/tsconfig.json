@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"types": [],
+		"types": ["node"],
 		"outDir": "dist/",
 		"esModuleInterop": true,
 		"skipLibCheck": true,
@@ -18,7 +18,10 @@
 		"module": "NodeNext",
 		"sourceMap": true,
 		"declaration": true,
-		"declarationMap": true
+		"declarationMap": true,
+		"paths": {
+			"#platform/random": ["./lib/random-web.ts"]
+		}
 	},
 	"include": ["lib"]
 }

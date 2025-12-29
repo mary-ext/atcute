@@ -24,6 +24,12 @@
 	"exports": {
 		".": "./dist/index.js"
 	},
+	"imports": {
+		"#platform/random": {
+			"node": "./dist/random-node.js",
+			"default": "./dist/random-web.js"
+		}
+	},
 	"sideEffects": false,
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
@@ -34,6 +40,7 @@
 		"@atcute/time-ms": "workspace:^"
 	},
 	"devDependencies": {
+		"@types/node": "^22.19.3",
 		"vitest": "^4.0.16"
 	}
 }

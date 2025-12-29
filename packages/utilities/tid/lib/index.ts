@@ -1,4 +1,6 @@
 import { now as getNow } from '@atcute/time-ms';
+
+import { random } from '#platform/random';
 import { s32decode, s32encode } from './s32.js';
 
 let lastTimestamp = 0;
@@ -45,7 +47,7 @@ export const now = (): string => {
 	}
 
 	lastTimestamp = timestamp;
-	return createRaw(timestamp, Math.floor(Math.random() * 1023));
+	return createRaw(timestamp, random(1024));
 };
 
 /**
