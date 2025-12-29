@@ -12,6 +12,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.refreshSession
 			active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			did: /*#__PURE__*/ v.didString(),
 			didDoc: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+			email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			emailAuthFactor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			emailConfirmed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			handle: /*#__PURE__*/ v.handleString(),
 			refreshJwt: /*#__PURE__*/ v.string(),
 			/**

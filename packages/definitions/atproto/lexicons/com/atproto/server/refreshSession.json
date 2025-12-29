@@ -28,6 +28,15 @@
 						"didDoc": {
 							"type": "unknown"
 						},
+						"email": {
+							"type": "string"
+						},
+						"emailConfirmed": {
+							"type": "boolean"
+						},
+						"emailAuthFactor": {
+							"type": "boolean"
+						},
 						"active": {
 							"type": "boolean"
 						},
@@ -42,6 +51,12 @@
 			"errors": [
 				{
 					"name": "AccountTakedown"
+				},
+				{
+					"name": "InvalidToken"
+				},
+				{
+					"name": "ExpiredToken"
 				}
 			]
 		}
