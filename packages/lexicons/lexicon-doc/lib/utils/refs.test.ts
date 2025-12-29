@@ -353,10 +353,8 @@ describe('findExternalReferences', () => {
 					type: 'subscription',
 					message: {
 						schema: {
-							type: 'object',
-							properties: {
-								event: { type: 'ref', ref: 'com.example.event#main' },
-							},
+							type: 'union',
+							refs: ['com.example.event#main'],
 						},
 					},
 				},

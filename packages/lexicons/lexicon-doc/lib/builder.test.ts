@@ -935,10 +935,6 @@ describe('builder', () => {
 
 	describe('permissions', () => {
 		describe('repoPermission', () => {
-			test('accepts wildcard collection', () => {
-				expect(() => repoPermission({ collection: '*' })).not.toThrow();
-			});
-
 			test('accepts array of collections', () => {
 				expect(() => repoPermission({ collection: ['com.example.foo', 'com.example.bar'] })).not.toThrow();
 			});
@@ -1264,7 +1260,7 @@ describe('builder', () => {
 									permissions: [
 										rpcPermission({
 											lxm: [getMethod, 'com.example.updatePost', postMethod, subMethod],
-											aud: 'did:web:example.com#bsky_appview',
+											aud: '*',
 										}),
 									],
 								}),
@@ -1285,7 +1281,7 @@ describe('builder', () => {
 								'com.example.createPost',
 								'com.example.subscribePosts',
 							],
-							aud: 'did:web:example.com#bsky_appview',
+							aud: '*',
 						},
 					],
 				});
