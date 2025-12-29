@@ -11,11 +11,10 @@ export type XrpcQueryHandlerOptions<TQuery extends XRPCQueryMetadata> = {
 	routerOptions?: XrpcHandlerRouterOptions;
 } & QueryConfig<TQuery>;
 
-export type XrpcProcedureHandlerOptions<TProcedure extends XRPCProcedureMetadata> =
-	{
-		lxm: TProcedure | Namespaced<TProcedure>;
-		routerOptions?: XrpcHandlerRouterOptions;
-	} & ProcedureConfig<TProcedure>;
+export type XrpcProcedureHandlerOptions<TProcedure extends XRPCProcedureMetadata> = {
+	lxm: TProcedure | Namespaced<TProcedure>;
+	routerOptions?: XrpcHandlerRouterOptions;
+} & ProcedureConfig<TProcedure>;
 
 export type XrpcHandlerOptions =
 	| XrpcQueryHandlerOptions<XRPCQueryMetadata>

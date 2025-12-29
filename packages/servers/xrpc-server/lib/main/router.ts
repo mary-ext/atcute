@@ -132,7 +132,10 @@ export class XRPCRouter {
 	}
 
 	/** @deprecated use `addQuery` and `addProcedure` instead */
-	add<TQuery extends XRPCQueryMetadata>(query: TQuery | Namespaced<TQuery>, config: QueryConfig<TQuery>): void;
+	add<TQuery extends XRPCQueryMetadata>(
+		query: TQuery | Namespaced<TQuery>,
+		config: QueryConfig<TQuery>,
+	): void;
 	add<TProcedure extends XRPCProcedureMetadata>(
 		procedure: TProcedure | Namespaced<TProcedure>,
 		config: ProcedureConfig<TProcedure>,
@@ -289,9 +292,7 @@ export class XRPCRouter {
 		const subscriptionSchema = unwrapLxm(subscription);
 		const nsid = subscriptionSchema.nsid;
 
-		const handleParams = subscriptionSchema.params
-			? constructParamsHandler(subscriptionSchema.params)
-			: null;
+		const handleParams = subscriptionSchema.params ? constructParamsHandler(subscriptionSchema.params) : null;
 		const handler = config.handler;
 
 		this.#handlers[nsid] = {

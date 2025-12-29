@@ -307,12 +307,7 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 			throw new TypeError(`\`as\` option is required for endpoints returning blobs`);
 		}
 
-		const format =
-			options.as !== undefined
-				? options.as
-				: schema.output?.type === 'lex'
-					? 'json'
-					: null;
+		const format = options.as !== undefined ? options.as : schema.output?.type === 'lex' ? 'json' : null;
 
 		const response = await this.#perform(method, schema.nsid, {
 			params: options.params,

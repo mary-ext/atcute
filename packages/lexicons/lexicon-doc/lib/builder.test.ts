@@ -1052,9 +1052,7 @@ describe('builder', () => {
 							id: 'com.example.scope',
 							defs: {
 								main: permissionSet({
-									permissions: [
-										rpcPermission({ lxm: ['com.example.method'], aud: '*' }),
-									],
+									permissions: [rpcPermission({ lxm: ['com.example.method'], aud: '*' })],
 								}),
 							},
 						}),
@@ -1322,9 +1320,7 @@ describe('builder', () => {
 								id: 'com.example.scope',
 								defs: {
 									main: permissionSet({
-										permissions: [
-											rpcPermission({ lxm: [getMethod], aud: '*' }),
-										],
+										permissions: [rpcPermission({ lxm: [getMethod], aud: '*' })],
 									}),
 								},
 							}),
