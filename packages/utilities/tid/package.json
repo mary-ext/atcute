@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/tid",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "atproto timestamp identifier codec library",
 	"keywords": [
 		"atproto",

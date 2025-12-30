@@ -1,5 +1,29 @@
 # @atcute/client
 
+## 4.2.0
+
+### Minor Changes
+
+- 5aa68c3: add `logout()` method to CredentialManager to properly invalidate sessions server-side
+
+### Patch Changes
+
+- 5aa68c3: add concurrent session protection in CredentialManager:
+  - protect against concurrent `resume()` of the same session
+  - detect concurrent session updates in `#refreshSessionInner()`
+  - clear `#refreshSessionPromise` before login to prevent stale refreshes
+
+- 5aa68c3: treat 401 responses as expired tokens (checked synchronously before async ExpiredToken
+  check)
+- 5aa68c3: improve retry logic in CredentialManager fetch handler:
+  - check if request was aborted before retrying
+  - compare tokens to detect if refresh actually happened
+  - cancel response body before retrying to prevent resource leaks
+
+- 5aa68c3: add DID validation in CredentialManager:
+  - detect DID mismatch during token refresh
+  - validate JWT `sub` claims match session DID on resume
+
 ## 4.1.2
 
 ### Patch Changes
@@ -156,7 +180,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 

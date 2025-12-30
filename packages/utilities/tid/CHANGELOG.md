@@ -1,5 +1,11 @@
 # @atcute/tid
 
+## 1.1.1
+
+### Patch Changes
+
+- 5f6813a: use secure random for clockid
+
 ## 1.1.0
 
 ### Minor Changes

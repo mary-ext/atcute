@@ -1,5 +1,13 @@
 # @atcute/leaflet
 
+## 1.0.15
+
+### Patch Changes
+
+- cd65daa: pull latest Leaflet lexicons
+- Updated dependencies [336313e]
+  - @atcute/atproto@3.1.10
+
 ## 1.0.14
 
 ### Patch Changes
