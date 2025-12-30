@@ -1,6 +1,6 @@
 # @atcute/time-ms
 
-high precision system time
+high precision system time, returns in microseconds (messed up the package name!)
 
 ```sh
 npm install @atcute/time-ms
