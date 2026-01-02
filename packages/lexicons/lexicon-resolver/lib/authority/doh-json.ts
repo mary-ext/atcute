@@ -51,7 +51,7 @@ const result = v.object({
 	/** Authority */
 	Authority: v.array(authority).optional(),
 	/** Comment from the DNS server */
-	Comment: v.string().optional(),
+	Comment: v.union(v.string(), v.array(v.string())).optional(),
 });
 
 const SUBDOMAIN = '_lexicon';
