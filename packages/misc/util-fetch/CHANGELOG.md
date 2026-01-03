@@ -1,5 +1,11 @@
 # @atcute/util-fetch
 
+## 1.0.5
+
+### Patch Changes
+
+- 2f34ad8: shared DoH JSON fetch utilities
+
 ## 1.0.4
 
 ### Patch Changes

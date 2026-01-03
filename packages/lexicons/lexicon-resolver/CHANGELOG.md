@@ -1,5 +1,13 @@
 # @atcute/lexicon-resolver
 
+## 0.1.6
+
+### Patch Changes
+
+- 2f34ad8: shared DoH JSON fetch utilities
+- Updated dependencies [2f34ad8]
+  - @atcute/util-fetch@1.0.5
+
 ## 0.1.5
 
 ### Patch Changes

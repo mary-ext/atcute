@@ -1,5 +1,13 @@
 # @atcute/identity-resolver
 
+## 1.2.2
+
+### Patch Changes
+
+- 2f34ad8: shared DoH JSON fetch utilities
+- Updated dependencies [2f34ad8]
+  - @atcute/util-fetch@1.0.5
+
 ## 1.2.1
 
 ### Patch Changes
