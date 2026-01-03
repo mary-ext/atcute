@@ -29,6 +29,6 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"unicode-segmenter": "^0.14.4"
+		"unicode-segmenter": "^0.14.5"
 	}
 }
