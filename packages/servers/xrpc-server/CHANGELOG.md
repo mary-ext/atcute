@@ -1,5 +1,11 @@
 # @atcute/xrpc-server
 
+## 0.1.7
+
+### Patch Changes
+
+- dfae819: handle PNA requests in CORS middleware
+
 ## 0.1.6
 
 ### Patch Changes
