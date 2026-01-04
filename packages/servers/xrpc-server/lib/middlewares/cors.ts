@@ -7,6 +7,8 @@ export interface CORSOptions {
 	allowedHeaders?: string[];
 	/** NSID prefixes to exclude from CORS handling */
 	exclude?: string[];
+	/** allow requests from private networks (e.g., localhost to a local server) */
+	allowPrivateNetwork?: boolean;
 }
 
 const DEFAULT_EXPOSED_HEADERS = [
@@ -43,6 +45,7 @@ export const cors = (options: CORSOptions = {}): FetchMiddleware => {
 		.join(',');
 
 	const exclude = options.exclude;
+	const allowPrivateNetwork = options.allowPrivateNetwork;
 
 	return async (request, next) => {
 		// check if this NSID should be excluded from CORS handling
@@ -75,6 +78,10 @@ export const cors = (options: CORSOptions = {}): FetchMiddleware => {
 
 			if (allowedHeaders) {
 				headers.set('access-control-allow-headers', allowedHeaders);
+			}
+
+			if (allowPrivateNetwork && request.headers.get('access-control-request-private-network') === 'true') {
+				headers.set('access-control-allow-private-network', 'true');
 			}
 
 			return new Response(null, { status: 204, headers: headers });
