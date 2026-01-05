@@ -1,5 +1,11 @@
 # @atcute/client
 
+## 4.2.1
+
+### Patch Changes
+
+- c20907b: set `duplex: 'half'` when a ReadableStream is passed
+
 ## 4.2.0
 
 ### Minor Changes
@@ -180,7 +186,12 @@
     get them.
 
     ```ts
-    import type { InferInput, InferOutput, InferXRPCBodyInput, InferXRPCBodyOutput } from '@atcute/lexicons';
+    import type {
+    	InferInput,
+    	InferOutput,
+    	InferXRPCBodyInput,
+    	InferXRPCBodyOutput,
+    } from '@atcute/lexicons';
 
     import type { AppBskyActorSearchActors } from '@atcute/bluesky';
 
