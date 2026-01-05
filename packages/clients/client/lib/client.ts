@@ -356,6 +356,7 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 				'content-type': input && !isWebInput ? 'application/json' : null,
 				'atproto-proxy': _constructProxyHeader(this.proxy),
 			}),
+			duplex: input instanceof ReadableStream ? 'half' : undefined,
 		});
 
 		{
