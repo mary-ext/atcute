@@ -30,6 +30,7 @@ describe('createXrpcHandler', () => {
 		expect(response.status).toBe(200);
 		expect(mock).toHaveBeenCalledExactlyOnceWith({
 			request,
+			signal: request.signal,
 			params: {
 				repo: 'did:web:example.com',
 				limit: 10,
@@ -62,6 +63,7 @@ describe('createXrpcHandler', () => {
 		expect(response.status).toBe(200);
 		expect(mock).toHaveBeenCalledExactlyOnceWith({
 			request,
+			signal: request.signal,
 			params: {
 				repo: 'did:web:example.com',
 				limit: 10,
@@ -100,6 +102,7 @@ describe('createXrpcHandler', () => {
 		expect(response.status).toBe(200);
 		expect(mock).toHaveBeenCalledExactlyOnceWith({
 			request,
+			signal: request.signal,
 			params: {},
 			input: { text: 'hello' },
 		});

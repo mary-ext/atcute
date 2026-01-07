@@ -133,6 +133,7 @@ describe('XRPCRouter', () => {
 				expect(response.status).toBe(200);
 				expect(mock).toHaveBeenCalledExactlyOnceWith({
 					request,
+					signal: request.signal,
 					params: {
 						repo: 'did:web:example.com',
 						limit: 50,
@@ -152,6 +153,7 @@ describe('XRPCRouter', () => {
 				expect(response.status).toBe(200);
 				expect(mock).toHaveBeenCalledExactlyOnceWith({
 					request,
+					signal: request.signal,
 					params: {
 						repo: 'did:web:example.com',
 						limit: 100,
@@ -225,6 +227,7 @@ describe('XRPCRouter', () => {
 			expect(response.status).toBe(200);
 			expect(mock).toHaveBeenCalledExactlyOnceWith({
 				request,
+				signal: request.signal,
 				params: {
 					repo: 'did:web:example.com',
 					limit: 10,
@@ -401,6 +404,7 @@ describe('XRPCRouter', () => {
 				expect(response.status).toBe(200);
 				expect(mock).toHaveBeenCalledExactlyOnceWith({
 					request,
+					signal: request.signal,
 					params: {
 						dids: ['did:web:example.com'],
 						limit: 50,
@@ -420,6 +424,7 @@ describe('XRPCRouter', () => {
 				expect(response.status).toBe(200);
 				expect(mock).toHaveBeenCalledExactlyOnceWith({
 					request,
+					signal: request.signal,
 					params: {
 						dids: ['did:web:example.com'],
 						limit: 100,
@@ -656,6 +661,7 @@ describe('XRPCRouter', () => {
 				expect(response.status).toBe(200);
 				expect(mock).toHaveBeenCalledExactlyOnceWith({
 					request: request,
+					signal: request.signal,
 					params: {},
 					input: {
 						did: 'did:web:example.com',
@@ -706,6 +712,7 @@ describe('XRPCRouter', () => {
 				expect(response.status).toBe(200);
 				expect(mock).toHaveBeenCalledExactlyOnceWith({
 					request: request,
+					signal: request.signal,
 					params: {},
 					input: undefined,
 				});
@@ -793,6 +800,7 @@ describe('XRPCRouter', () => {
 				expect(response.status).toBe(200);
 				expect(mock).toHaveBeenCalledExactlyOnceWith({
 					request: request,
+					signal: request.signal,
 					params: {},
 					input: undefined,
 				});

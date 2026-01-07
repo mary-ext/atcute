@@ -186,6 +186,7 @@ export class XRPCRouter {
 
 				const context: UnknownOperationContext = {
 					request: request,
+					signal: request.signal,
 					params: params,
 				};
 
@@ -265,6 +266,7 @@ export class XRPCRouter {
 
 				const context: UnknownOperationContext = {
 					request: request,
+					signal: request.signal,
 					params: params,
 					input: input,
 				};

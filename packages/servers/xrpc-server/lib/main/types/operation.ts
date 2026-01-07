@@ -15,6 +15,7 @@ import type { JSONResponse } from '../response.js';
 
 export type UnknownOperationContext = {
 	request: Request;
+	signal: AbortSignal;
 	params: Record<string, Literal | Literal[]>;
 	input?: Record<string, unknown>;
 };
@@ -23,6 +24,7 @@ export type UnknownOperationContext = {
 
 export type QueryContext<TQuery extends XRPCQueryMetadata> = {
 	request: Request;
+	signal: AbortSignal;
 } & (TQuery['params'] extends ObjectSchema
 	? {
 			params: InferOutput<TQuery['params']>;
@@ -47,18 +49,19 @@ export type QueryConfig<TQuery extends XRPCQueryMetadata = XRPCQueryMetadata> = 
 
 // #region Procedure
 
-export type ProcedureContext<TProcedure extends XRPCProcedureMetadata> =
-	(TProcedure['input'] extends XRPCBlobBodyParam
+export type ProcedureContext<TProcedure extends XRPCProcedureMetadata> = {
+	signal: AbortSignal;
+} & (TProcedure['input'] extends XRPCBlobBodyParam
+	? {
+			request: Request & { readonly body: ReadableStream<Uint8Array> };
+		}
+	: TProcedure['input'] extends XRPCLexBodyParam
 		? {
-				request: Request & { readonly body: ReadableStream<Uint8Array> };
+				request: Request & { readonly body: null };
 			}
-		: TProcedure['input'] extends XRPCLexBodyParam
-			? {
-					request: Request & { readonly body: null };
-				}
-			: {
-					request: Request;
-				}) &
+		: {
+				request: Request;
+			}) &
 		(TProcedure['params'] extends ObjectSchema
 			? {
 					params: InferOutput<TProcedure['params']>;
