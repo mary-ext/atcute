@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/xrpc-server",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"description": "a small web framework for handling XRPC operations",
 	"license": "0BSD",
 	"repository": {

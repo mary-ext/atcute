@@ -1,5 +1,11 @@
 # @atcute/xrpc-server
 
+## 0.1.8
+
+### Patch Changes
+
+- 47d73b4: pass request signal to context
+
 ## 0.1.7
 
 ### Patch Changes
