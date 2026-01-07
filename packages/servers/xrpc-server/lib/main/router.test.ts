@@ -324,6 +324,41 @@ describe('XRPCRouter', () => {
 				});
 			}
 		});
+
+		it('does not invoke exception handler on aborted requests', async () => {
+			const querySchema = v.query('com.example.query', {
+				params: null,
+				output: null,
+			});
+
+			const exceptionHandler = vi.fn();
+			const router = new XRPCRouter({
+				handleException: exceptionHandler,
+			});
+
+			router.addQuery(querySchema, {
+				async handler({ signal }) {
+					await new Promise((_resolve, reject) => {
+						signal.addEventListener('abort', () => reject(signal.reason));
+					});
+				},
+			});
+
+			const controller = new AbortController();
+			const request = new Request('https://example.com/xrpc/com.example.query', {
+				method: 'GET',
+				signal: controller.signal,
+			});
+
+			const responsePromise = router.fetch(request);
+			controller.abort();
+
+			const response = await responsePromise;
+
+			expect(response.status).toBe(499);
+			expect(response.body).toBeNull();
+			expect(exceptionHandler).not.toHaveBeenCalled();
+		});
 	});
 
 	describe('procedure', () => {

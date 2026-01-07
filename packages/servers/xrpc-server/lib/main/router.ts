@@ -127,6 +127,10 @@ export class XRPCRouter {
 
 			return response;
 		} catch (err) {
+			if (request.signal.aborted) {
+				return new Response(null, { status: 499 });
+			}
+
 			return this.#handleException(err, request);
 		}
 	}
