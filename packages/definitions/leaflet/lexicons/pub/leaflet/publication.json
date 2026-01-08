@@ -61,6 +61,11 @@
 					"type": "ref",
 					"ref": "pub.leaflet.theme.backgroundImage"
 				},
+				"pageWidth": {
+					"type": "integer",
+					"minimum": 0,
+					"maximum": 1600
+				},
 				"primary": {
 					"type": "union",
 					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"]

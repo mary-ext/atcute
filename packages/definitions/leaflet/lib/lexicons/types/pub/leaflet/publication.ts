@@ -68,6 +68,13 @@ const _themeSchema = /*#__PURE__*/ v.object({
 			/*#__PURE__*/ v.variant([PubLeafletThemeColor.rgbSchema, PubLeafletThemeColor.rgbaSchema]),
 		);
 	},
+	/**
+	 * @minimum 0
+	 * @maximum 1600
+	 */
+	pageWidth: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 1600)]),
+	),
 	get primary() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.variant([PubLeafletThemeColor.rgbSchema, PubLeafletThemeColor.rgbaSchema]),
