@@ -26,6 +26,10 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsersS
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			dids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
+			/**
+			 * Snowflake for this recommendation, use when submitting recommendation events.
+			 */
+			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		}),
 	},
 });

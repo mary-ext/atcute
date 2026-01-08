@@ -25,6 +25,10 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsers'
 			get actors() {
 				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);
 			},
+			/**
+			 * Snowflake for this recommendation, use when submitting recommendation events.
+			 */
+			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		}),
 	},
 });

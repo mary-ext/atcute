@@ -465,6 +465,7 @@ const _savedFeedsPrefV2Schema = /*#__PURE__*/ v.object({
 });
 const _statusViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#statusView')),
+	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	/**
 	 * An optional embed associated with the status.
 	 */
@@ -484,6 +485,7 @@ const _statusViewSchema = /*#__PURE__*/ v.object({
 	 * The status for the account.
 	 */
 	status: /*#__PURE__*/ v.string<'app.bsky.actor.status#live' | (string & {})>(),
+	uri: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _threadViewPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#threadViewPref')),
