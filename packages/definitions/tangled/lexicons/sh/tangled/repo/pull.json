@@ -9,7 +9,7 @@
 			"key": "tid",
 			"record": {
 				"type": "object",
-				"required": ["target", "title", "patch", "createdAt"],
+				"required": ["target", "title", "patchBlob", "createdAt"],
 				"properties": {
 					"target": {
 						"type": "ref",
@@ -22,7 +22,13 @@
 						"type": "string"
 					},
 					"patch": {
-						"type": "string"
+						"type": "string",
+						"description": "(deprecated) use patchBlob instead"
+					},
+					"patchBlob": {
+						"type": "blob",
+						"accept": ["text/x-patch"],
+						"description": "patch content"
 					},
 					"source": {
 						"type": "ref",
