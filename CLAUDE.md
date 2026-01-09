@@ -56,9 +56,10 @@ the packages are organized into categories under `packages/`:
 
 ### working style
 
-- `.research/` directory serves as a workspace for temporary experiments, analysis, and planning
-  materials. create if not present (it's gitignored). this directory may contain cloned repositories
-  or other reference materials that can help inform implementation decisions
+- `.research/` directory in the project root serves as a workspace for temporary experiments,
+  analysis, and planning materials. create if not present (it's gitignored). this directory may
+  contain cloned repositories or other reference materials that can help inform implementation
+  decisions
 - this document is intentionally incomplete; discover everything else in the repo
 - don't make assumptions or speculate about code, plans, or requirements without exploring first;
   pause and ask for clarification when you're still unsure after looking into it
