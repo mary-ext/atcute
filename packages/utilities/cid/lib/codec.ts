@@ -15,7 +15,7 @@ export const CODEC_DCBOR = 0x71;
 export const CID_STRINGIFY_CACHE = new WeakMap<Cid, string>();
 
 /**
- * Represents a Content Identifier (CID), in particular, a limited subset of
+ * represents a Content Identifier (CID), in particular, a limited subset of
  * CIDv1 as described by DASL specifications.
  * https://dasl.ing/cid.html
  */
@@ -81,37 +81,13 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 };
 
 /**
- * creates an empty CID with a zero-length digest
- * @param codec multicodec type for the data
- * @returns CID object with empty digest
- */
-export const createEmpty = (codec: 0x55 | 0x71): Cid => {
-	const bytes = Uint8Array.from([CID_VERSION, codec, HASH_SHA256, 0]);
-	const digest = bytes.subarray(4);
-
-	const cid: Cid = {
-		version: CID_VERSION,
-		codec: codec,
-		digest: {
-			codec: HASH_SHA256,
-			contents: digest,
-		},
-		bytes: bytes,
-	};
-
-	return cid;
-};
-
-/**
  * decodes a CID from bytes, returning the CID and any remaining bytes
  * @param bytes raw CID bytes
  * @returns tuple of decoded CID and remainder bytes
  * @throws {RangeError} if the bytes are too short or contain invalid values
  */
 export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8Array] => {
-	const length = bytes.length;
-
-	if (length < 4) {
+	if (bytes.length < 36) {
 		throw new RangeError(`cid too short`);
 	}
 
@@ -132,12 +108,8 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 		throw new RangeError(`incorrect cid digest codec (got 0x${digestType.toString(16)})`);
 	}
 
-	if (digestSize !== 32 && digestSize !== 0) {
+	if (digestSize !== 32) {
 		throw new RangeError(`incorrect cid digest size (got ${digestSize})`);
-	}
-
-	if (length < 4 + digestSize) {
-		throw new RangeError(`cid too short`);
 	}
 
 	const cid: Cid = {
@@ -145,12 +117,12 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 		codec: codec,
 		digest: {
 			codec: digestType,
-			contents: bytes.subarray(4, 4 + digestSize),
+			contents: bytes.subarray(4, 36),
 		},
-		bytes: bytes.subarray(0, 4 + digestSize),
+		bytes: bytes.subarray(0, 36),
 	};
 
-	return [cid, bytes.subarray(4 + digestSize)];
+	return [cid, bytes.subarray(36)];
 };
 
 /**
@@ -177,14 +149,9 @@ export const decode = (bytes: Uint8Array): Cid => {
  * @throws {RangeError} if the string length is invalid
  */
 export const fromString = (input: string): Cid => {
-	if (input.length < 2 || input[0] !== 'b') {
-		throw new SyntaxError(`not a multibase base32 string`);
-	}
-
-	// 4 bytes in base32 = 7 characters + 1 character for the prefix
 	// 36 bytes in base32 = 58 characters + 1 character for the prefix
-	if (input.length !== 59 && input.length !== 8) {
-		throw new RangeError(`cid too short`);
+	if (input.length !== 59 || input[0] !== 'b') {
+		throw new SyntaxError(`not a valid cid string`);
 	}
 
 	const bytes = fromBase32(input.slice(1));
@@ -218,18 +185,12 @@ export const toString = (cid: Cid): string => {
  * @throws {SyntaxError} if the prefix byte is not 0x00
  */
 export const fromBinary = (input: Uint8Array): Cid => {
-	// 4 bytes + 1 byte for the 0x00 prefix
 	// 36 bytes + 1 byte for the 0x00 prefix
-	if (input.length !== 37 && input.length !== 5) {
-		throw new RangeError(`cid bytes too short`);
+	if (input.length !== 37 || input[0] !== 0) {
+		throw new SyntaxError(`invalid binary cid`);
 	}
 
-	if (input[0] !== 0) {
-		throw new SyntaxError(`incorrect binary cid`);
-	}
-
-	const bytes = input.subarray(1);
-	return decode(bytes);
+	return decode(input.subarray(1));
 };
 
 /**

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { create, createEmpty, decode, fromString, toString } from './codec.js';
+import { create, decode, fromString, toString } from './codec.js';
 
 describe('fromString', () => {
 	it('parses a CIDv1 string', () => {
@@ -23,24 +23,14 @@ describe('fromString', () => {
 		});
 	});
 
-	it('parses an empty CIDv1 string', () => {
-		const cid = fromString('bafyreaa');
-
-		expect(cid).toEqual({
-			version: 1,
-			codec: 113,
-			digest: {
-				codec: 18,
-				contents: Uint8Array.from([]),
-			},
-			bytes: Uint8Array.from([1, 113, 18, 0]),
-		});
-	});
-
 	it('fails on non-v1 CID string', () => {
 		expect(() => fromString('QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n')).toThrow(
-			`not a multibase base32 string`,
+			`not a valid cid string`,
 		);
+	});
+
+	it('fails on empty CID string', () => {
+		expect(() => fromString('bafyreaa')).toThrow(`not a valid cid string`);
 	});
 });
 
@@ -70,34 +60,17 @@ describe('decode', () => {
 		});
 	});
 
-	it('decodes an empty CIDv1', () => {
+	it('fails on empty CIDv1', () => {
 		const buf = Uint8Array.from([1, 113, 18, 0]);
-
-		const cid = decode(buf);
-
-		expect(cid).toEqual({
-			version: 1,
-			codec: 113,
-			digest: {
-				codec: 18,
-				contents: Uint8Array.from([]),
-			},
-			bytes: Uint8Array.from([1, 113, 18, 0]),
-		});
+		expect(() => decode(buf)).toThrow(`cid too short`);
 	});
 });
 
-describe('create', () => [
+describe('create', () => {
 	it('creates a CIDv1 string', async () => {
 		const contents = new TextEncoder().encode('abc');
 		const cid = await create(113, contents);
 
 		expect(toString(cid)).toBe('bafyreif2pall7dybz7vecqka3zo24irdwabwdi4wc55jznaq75q7eaavvu');
-	}),
-
-	it('creates an empty CIDv1 string', () => {
-		const cid = createEmpty(113);
-
-		expect(toString(cid)).toBe('bafyreaa');
-	}),
-]);
+	});
+});

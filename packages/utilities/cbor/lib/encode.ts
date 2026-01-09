@@ -17,7 +17,7 @@ interface State {
 const _max = Math.max;
 
 const _isInteger = Number.isInteger;
-const _isNaN = Number.isNaN;
+const _isFinite = Number.isFinite;
 
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
 const MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER;
@@ -135,8 +135,8 @@ const writeFloat = (state: State, val: number): void => {
 };
 
 const writeNumber = (state: State, val: number): void => {
-	if (_isNaN(val)) {
-		throw new RangeError(`NaN values not supported`);
+	if (!_isFinite(val)) {
+		throw new RangeError(`NaN and Infinity values not supported`);
 	}
 
 	if (val > MAX_SAFE_INTEGER || val < MIN_SAFE_INTEGER) {

@@ -132,12 +132,12 @@ const readHeader = (reader: SyncByteReader): CarHeader => {
 };
 
 const readCid = (reader: SyncByteReader): CID.Cid => {
-	const head = reader.exactly(4, false);
+	const bytes = reader.exactly(36, true);
 
-	const version = head[0];
-	const codec = head[1];
-	const digestType = head[2];
-	const digestSize = head[3];
+	const version = bytes[0];
+	const codec = bytes[1];
+	const digestType = bytes[2];
+	const digestSize = bytes[3];
 
 	if (version !== CID.CID_VERSION) {
 		throw new RangeError(`incorrect cid version (got v${version})`);
@@ -151,22 +151,17 @@ const readCid = (reader: SyncByteReader): CID.Cid => {
 		throw new RangeError(`incorrect cid digest type (got 0x${digestType.toString(16)})`);
 	}
 
-	if (digestSize !== 32 && digestSize !== 0) {
+	if (digestSize !== 32) {
 		throw new RangeError(`incorrect cid digest size (got ${digestSize})`);
 	}
 
-	const bytes = reader.exactly(4 + digestSize, true);
-	const digest = bytes.subarray(4, 4 + digestSize);
-
-	const cid: CID.Cid = {
+	return {
 		version: version,
 		codec: codec,
 		digest: {
 			codec: digestType,
-			contents: digest,
+			contents: bytes.subarray(4, 36),
 		},
 		bytes: bytes,
 	};
-
-	return cid;
 };
