@@ -7,12 +7,24 @@ npm install @atcute/repo
 ```
 
 AT Protocol stores user data in repositories - Merkle tree structures containing records organized
-by collection. this package reads repository CAR exports (from `com.atproto.sync.getRepo` or
-account exports) and iterates over the records.
+by collection. this package reads repository CAR exports (from `com.atproto.sync.getRepo` or account
+exports) and iterates over the records.
 
 ## usage
 
 ### streaming usage
+
+> [!NOTE]  
+> PDS implementations, including the reference PDS, may not emit blocks in the efficient order
+> specified by [Sync v1.1][sync-1.1]. the streaming reader compensates by buffering internally, so
+> memory usage may be higher than expected.
+>
+> streaming may still be useful when responsiveness matters, such as web apps that want to display
+> records as they arrive rather than waiting for the entire CAR to load.
+>
+> this library intends to enforce efficient block ordering once Sync v1.1 is finalized.
+
+[sync-1.1]: https://github.com/bluesky-social/proposals/blob/main/0006-sync-iteration/README.md
 
 ```ts
 import { fromStream } from '@atcute/repo';
