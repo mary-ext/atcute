@@ -62,20 +62,20 @@ export type ProcedureContext<TProcedure extends XRPCProcedureMetadata> = {
 		: {
 				request: Request;
 			}) &
-		(TProcedure['params'] extends ObjectSchema
-			? {
-					params: InferOutput<TProcedure['params']>;
-				}
-			: {
-					// params
-				}) &
-		(TProcedure['input'] extends XRPCLexBodyParam
-			? {
-					input: InferOutput<TProcedure['input']['schema']>;
-				}
-			: {
-					// input
-				});
+	(TProcedure['params'] extends ObjectSchema
+		? {
+				params: InferOutput<TProcedure['params']>;
+			}
+		: {
+				// params
+			}) &
+	(TProcedure['input'] extends XRPCLexBodyParam
+		? {
+				input: InferOutput<TProcedure['input']['schema']>;
+			}
+		: {
+				// input
+			});
 
 export type ProcedureHandler<TProcedure extends XRPCProcedureMetadata> = (
 	context: ProcedureContext<TProcedure>,
