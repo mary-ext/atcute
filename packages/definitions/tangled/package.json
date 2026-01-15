@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/tangled",
-	"version": "1.0.13",
+	"version": "1.0.14",
 	"description": "Tangled (sh.tangled.*) schema definitions",
 	"keywords": [
 		"atcute",

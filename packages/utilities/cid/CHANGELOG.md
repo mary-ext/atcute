@@ -1,5 +1,14 @@
 # @atcute/cid
 
+## 2.4.0
+
+### Minor Changes
+
+- 0795806: update to DASL spec 2025-10-20
+  - remove support for empty CIDs (zero-length digests), which were removed from the spec
+  - reject `Infinity` values in CBOR encoder (in addition to `NaN`)
+  - optimize streamed CAR reader by removing buffer concatenation for CID reads
+
 ## 2.3.0
 
 ### Minor Changes
