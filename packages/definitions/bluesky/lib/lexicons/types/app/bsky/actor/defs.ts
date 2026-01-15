@@ -147,6 +147,18 @@ const _labelersPrefSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.array(labelerPrefItemSchema);
 	},
 });
+const _liveEventPreferencesSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#liveEventPreferences')),
+	/**
+	 * A list of feed IDs that the user has hidden from live events.
+	 */
+	hiddenFeedIds: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+	/**
+	 * Whether to hide all feeds from live events.
+	 * @default false
+	 */
+	hideAllFeeds: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+});
 const _mutedWordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#mutedWord')),
 	/**
@@ -268,6 +280,7 @@ const _preferencesSchema = /*#__PURE__*/ v.array(() => {
 		hiddenPostsPrefSchema,
 		interestsPrefSchema,
 		labelersPrefSchema,
+		liveEventPreferencesSchema,
 		mutedWordsPrefSchema,
 		personalDetailsPrefSchema,
 		postInteractionSettingsPrefSchema,
@@ -480,6 +493,10 @@ const _statusViewSchema = /*#__PURE__*/ v.object({
 	 * True if the status is not expired, false if it is expired. Only present if expiration was set.
 	 */
 	isActive: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * True if the user's go-live access has been disabled by a moderator, false otherwise.
+	 */
+	isDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	record: /*#__PURE__*/ v.unknown(),
 	/**
 	 * The status for the account.
@@ -578,6 +595,7 @@ type interestsPref$schematype = typeof _interestsPrefSchema;
 type knownFollowers$schematype = typeof _knownFollowersSchema;
 type labelerPrefItem$schematype = typeof _labelerPrefItemSchema;
 type labelersPref$schematype = typeof _labelersPrefSchema;
+type liveEventPreferences$schematype = typeof _liveEventPreferencesSchema;
 type mutedWord$schematype = typeof _mutedWordSchema;
 type mutedWordTarget$schematype = typeof _mutedWordTargetSchema;
 type mutedWordsPref$schematype = typeof _mutedWordsPrefSchema;
@@ -612,6 +630,7 @@ export interface interestsPrefSchema extends interestsPref$schematype {}
 export interface knownFollowersSchema extends knownFollowers$schematype {}
 export interface labelerPrefItemSchema extends labelerPrefItem$schematype {}
 export interface labelersPrefSchema extends labelersPref$schematype {}
+export interface liveEventPreferencesSchema extends liveEventPreferences$schematype {}
 export interface mutedWordSchema extends mutedWord$schematype {}
 export interface mutedWordTargetSchema extends mutedWordTarget$schematype {}
 export interface mutedWordsPrefSchema extends mutedWordsPref$schematype {}
@@ -646,6 +665,7 @@ export const interestsPrefSchema = _interestsPrefSchema as interestsPrefSchema;
 export const knownFollowersSchema = _knownFollowersSchema as knownFollowersSchema;
 export const labelerPrefItemSchema = _labelerPrefItemSchema as labelerPrefItemSchema;
 export const labelersPrefSchema = _labelersPrefSchema as labelersPrefSchema;
+export const liveEventPreferencesSchema = _liveEventPreferencesSchema as liveEventPreferencesSchema;
 export const mutedWordSchema = _mutedWordSchema as mutedWordSchema;
 export const mutedWordTargetSchema = _mutedWordTargetSchema as mutedWordTargetSchema;
 export const mutedWordsPrefSchema = _mutedWordsPrefSchema as mutedWordsPrefSchema;
@@ -682,6 +702,7 @@ export interface InterestsPref extends v.InferInput<typeof interestsPrefSchema> 
 export interface KnownFollowers extends v.InferInput<typeof knownFollowersSchema> {}
 export interface LabelerPrefItem extends v.InferInput<typeof labelerPrefItemSchema> {}
 export interface LabelersPref extends v.InferInput<typeof labelersPrefSchema> {}
+export interface LiveEventPreferences extends v.InferInput<typeof liveEventPreferencesSchema> {}
 export interface MutedWord extends v.InferInput<typeof mutedWordSchema> {}
 export type MutedWordTarget = v.InferInput<typeof mutedWordTargetSchema>;
 export interface MutedWordsPref extends v.InferInput<typeof mutedWordsPrefSchema> {}

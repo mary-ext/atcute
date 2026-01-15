@@ -25,6 +25,11 @@ export * as AppBskyContactRemoveData from './types/app/bsky/contact/removeData.j
 export * as AppBskyContactSendNotification from './types/app/bsky/contact/sendNotification.js';
 export * as AppBskyContactStartPhoneVerification from './types/app/bsky/contact/startPhoneVerification.js';
 export * as AppBskyContactVerifyPhone from './types/app/bsky/contact/verifyPhone.js';
+export * as AppBskyDraftCreateDraft from './types/app/bsky/draft/createDraft.js';
+export * as AppBskyDraftDefs from './types/app/bsky/draft/defs.js';
+export * as AppBskyDraftDeleteDraft from './types/app/bsky/draft/deleteDraft.js';
+export * as AppBskyDraftGetDrafts from './types/app/bsky/draft/getDrafts.js';
+export * as AppBskyDraftUpdateDraft from './types/app/bsky/draft/updateDraft.js';
 export * as AppBskyEmbedDefs from './types/app/bsky/embed/defs.js';
 export * as AppBskyEmbedExternal from './types/app/bsky/embed/external.js';
 export * as AppBskyEmbedImages from './types/app/bsky/embed/images.js';
