@@ -8,6 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(PubLeafletRichtextFacet.mainSchema));
 	},
 	plaintext: /*#__PURE__*/ v.string(),
+	textSize: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['default', 'large', 'small'])),
 });
 
 type main$schematype = typeof _mainSchema;
