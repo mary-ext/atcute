@@ -1,0 +1,22 @@
+{
+	"id": "blog.pckt.content",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["items"],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"refs": [],
+						"type": "union",
+						"closed": false
+					},
+					"description": "Array of content blocks"
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}

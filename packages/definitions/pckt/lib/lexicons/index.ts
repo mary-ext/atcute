@@ -14,6 +14,7 @@ export * as BlogPcktBlockTaskItem from './types/blog/pckt/block/taskItem.js';
 export * as BlogPcktBlockTaskList from './types/blog/pckt/block/taskList.js';
 export * as BlogPcktBlockText from './types/blog/pckt/block/text.js';
 export * as BlogPcktBlockWebsite from './types/blog/pckt/block/website.js';
+export * as BlogPcktContent from './types/blog/pckt/content.js';
 export * as BlogPcktDocument from './types/blog/pckt/document.js';
 export * as BlogPcktPublication from './types/blog/pckt/publication.js';
 export * as BlogPcktRichtextFacet from './types/blog/pckt/richtext/facet.js';
