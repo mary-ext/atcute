@@ -26,11 +26,8 @@
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
-	"dependencies": {
-		"@atcute/bluesky": "workspace:^",
-		"@atcute/lexicons": "workspace:^"
-	},
 	"devDependencies": {
+		"@atcute/bluesky": "workspace:^",
 		"@vitest/coverage-v8": "^4.0.16",
 		"vitest": "^4.0.16"
 	}

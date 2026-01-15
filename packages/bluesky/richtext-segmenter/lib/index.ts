@@ -1,25 +1,23 @@
-import type { AppBskyRichtextFacet } from '@atcute/bluesky';
-
-type UnwrapArray<T> = T extends (infer V)[] ? V : never;
-
-export type Facet = AppBskyRichtextFacet.Main;
-export type FacetFeature = UnwrapArray<Facet['features']>;
-
-export interface RichtextSegment {
-	text: string;
-	features: FacetFeature[] | undefined;
+export interface Facet<F = unknown> {
+	index: { byteStart: number; byteEnd: number };
+	features: F[];
 }
 
-const segment = (text: string, features: FacetFeature[] | undefined): RichtextSegment => {
+export interface RichtextSegment<F = unknown> {
+	text: string;
+	features: F[] | undefined;
+}
+
+const segment = <F>(text: string, features: F[] | undefined): RichtextSegment<F> => {
 	return { text, features: text.length > 0 ? features : undefined };
 };
 
-export const segmentize = (text: string, facets: Facet[] | undefined): RichtextSegment[] => {
+export const segmentize = <F>(text: string, facets: Facet<F>[] | undefined): RichtextSegment<F>[] => {
 	if (facets === undefined || facets.length === 0) {
 		return [segment(text, undefined)];
 	}
 
-	const segments: RichtextSegment[] = [];
+	const segments: RichtextSegment<F>[] = [];
 	const utf16Length = text.length;
 	let utf16Cursor = 0;
 	let utf8Cursor = 0;

@@ -1,5 +1,6 @@
-import { expect, it } from 'vitest';
-import { segmentize } from './index.js';
+import { expect, expectTypeOf, it } from 'vitest';
+import type { AppBskyRichtextFacet } from '@atcute/bluesky';
+import { segmentize, type Facet, type RichtextSegment } from './index.js';
 
 it('does utf8 slicing', () => {
 	expect(
@@ -59,4 +60,37 @@ it('does not allow end<start', () => {
 			features: undefined,
 		},
 	]);
+});
+
+type BlueskyFeature = AppBskyRichtextFacet.Main['features'][number];
+
+it('infers feature type from facets', () => {
+	const facets: AppBskyRichtextFacet.Main[] = [];
+	const result = segmentize('hello', facets);
+
+	expectTypeOf(result).toEqualTypeOf<RichtextSegment<BlueskyFeature>[]>();
+});
+
+it('works with custom feature types', () => {
+	interface CustomFeature {
+		$type: 'custom#feature';
+		value: number;
+	}
+
+	const facets: Facet<CustomFeature>[] = [
+		{ index: { byteStart: 0, byteEnd: 5 }, features: [{ $type: 'custom#feature', value: 42 }] },
+	];
+	const result = segmentize('hello', facets);
+
+	expectTypeOf(result).toEqualTypeOf<RichtextSegment<CustomFeature>[]>();
+});
+
+it('returns unknown feature type when facets is undefined', () => {
+	const result = segmentize('hello', undefined);
+
+	expectTypeOf(result).toEqualTypeOf<RichtextSegment<unknown>[]>();
+});
+
+it('accepts bluesky facets as compatible with Facet interface', () => {
+	expectTypeOf<AppBskyRichtextFacet.Main>().toExtend<Facet<BlueskyFeature>>();
 });
