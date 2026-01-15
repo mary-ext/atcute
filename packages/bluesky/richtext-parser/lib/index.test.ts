@@ -437,6 +437,199 @@ it('topics', () => {
 	]);
 });
 
+it('cashtags', () => {
+	expect(tokenize('$AAPL')).toEqual([
+		{
+			name: 'AAPL',
+			raw: '$AAPL',
+			type: 'cashtag',
+		},
+	]);
+
+	expect(tokenize('＄AAPL')).toEqual([
+		{
+			name: 'AAPL',
+			raw: '＄AAPL',
+			type: 'cashtag',
+		},
+	]);
+
+	expect(tokenize('$aapl')).toEqual([
+		{
+			name: 'aapl',
+			raw: '$aapl',
+			type: 'cashtag',
+		},
+	]);
+
+	expect(tokenize('$BTC')).toEqual([
+		{
+			name: 'BTC',
+			raw: '$BTC',
+			type: 'cashtag',
+		},
+	]);
+
+	expect(tokenize('$DOGE2')).toEqual([
+		{
+			name: 'DOGE2',
+			raw: '$DOGE2',
+			type: 'cashtag',
+		},
+	]);
+
+	expect(tokenize('$LONGNAME')).toEqual([
+		{
+			name: 'LONGNAME',
+			raw: '$LONGNAME',
+			type: 'cashtag',
+		},
+	]);
+
+	// too long - doesn't match (no boundary after 8 chars)
+	expect(tokenize('$TOOLONGNAME')).toEqual([
+		{
+			content: '$TOOLONGNAME',
+			raw: '$TOOLONGNAME',
+			type: 'text',
+		},
+	]);
+
+	// must start with letter
+	expect(tokenize('$123')).toEqual([
+		{
+			content: '$123',
+			raw: '$123',
+			type: 'text',
+		},
+	]);
+
+	expect(tokenize('hello$AAPL')).toEqual([
+		{
+			content: 'hello$AAPL',
+			raw: 'hello$AAPL',
+			type: 'text',
+		},
+	]);
+
+	expect(tokenize('hello($AAPL')).toEqual([
+		{
+			content: 'hello(',
+			raw: 'hello(',
+			type: 'text',
+		},
+		{
+			name: 'AAPL',
+			raw: '$AAPL',
+			type: 'cashtag',
+		},
+	]);
+
+	expect(tokenize('$AAPL.')).toEqual([
+		{
+			name: 'AAPL',
+			raw: '$AAPL',
+			type: 'cashtag',
+		},
+		{
+			content: '.',
+			raw: '.',
+			type: 'text',
+		},
+	]);
+
+	expect(tokenize('$AAPL$')).toEqual([
+		{
+			content: '$AAPL$',
+			raw: '$AAPL$',
+			type: 'text',
+		},
+	]);
+
+	expect(tokenize('hello $AAPL$')).toEqual([
+		{
+			content: 'hello ',
+			raw: 'hello $AAPL$',
+			type: 'text',
+		},
+	]);
+
+	expect(tokenize('$AAPL.$')).toEqual([
+		{
+			name: 'AAPL',
+			raw: '$AAPL',
+			type: 'cashtag',
+		},
+		{
+			content: '.',
+			raw: '.$',
+			type: 'text',
+		},
+	]);
+
+	expect(tokenize('$AAPL hello')).toEqual([
+		{
+			name: 'AAPL',
+			raw: '$AAPL',
+			type: 'cashtag',
+		},
+		{
+			content: ' hello',
+			raw: ' hello',
+			type: 'text',
+		},
+	]);
+
+	expect(tokenize('hello $AAPL hello')).toEqual([
+		{
+			content: 'hello ',
+			raw: 'hello ',
+			type: 'text',
+		},
+		{
+			name: 'AAPL',
+			raw: '$AAPL',
+			type: 'cashtag',
+		},
+		{
+			content: ' hello',
+			raw: ' hello',
+			type: 'text',
+		},
+	]);
+
+	expect(tokenize('hello $AAPL')).toEqual([
+		{
+			content: 'hello ',
+			raw: 'hello ',
+			type: 'text',
+		},
+		{
+			name: 'AAPL',
+			raw: '$AAPL',
+			type: 'cashtag',
+		},
+	]);
+
+	expect(tokenize('$AAPL $MSFT')).toEqual([
+		{
+			name: 'AAPL',
+			raw: '$AAPL',
+			type: 'cashtag',
+		},
+		{
+			content: ' ',
+			raw: ' ',
+			type: 'text',
+		},
+		{
+			name: 'MSFT',
+			raw: '$MSFT',
+			type: 'cashtag',
+		},
+	]);
+});
+
 it('autolinks', () => {
 	expect(tokenize('https://example.com')).toEqual([
 		{

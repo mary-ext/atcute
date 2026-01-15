@@ -5,6 +5,8 @@ const MENTION_RE = /^[@＠]([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,}))
 const TOPIC_RE =
 	/^(?:#(?!\ufe0f|\u20e3)|＃)([\p{N}]*[\p{L}\p{M}\p{Pc}][\p{L}\p{M}\p{Pc}\p{N}]*)($|\s|\p{P})/u;
 
+const CASHTAG_RE = /^[$＄]([A-Za-z][A-Za-z0-9]{0,7})($|\s|\p{P})/u;
+
 const EMOTE_RE = /^:([\w-]+):/;
 
 const AUTOLINK_RE = /^https?:\/\/[\S]+/;
@@ -26,7 +28,7 @@ const DELETE_RE = /^~~((?:\\[^]|~(?!~)|[^~\\]|\s(?!~~))+?)~~/;
 const CODE_RE = /^(`+)([^]*?[^`])\1(?!`)/;
 const CODE_ESCAPE_BACKTICKS_RE = /^ (?= *`)|(` *) $/g;
 
-const TEXT_RE = /^[^]+?(?:(?=$|[~*_`:\\[]|https?:\/\/)|(?<=\s|[(){}/\\[\]\-|:;'".,=+])(?=[@＠#＃]))/;
+const TEXT_RE = /^[^]+?(?:(?=$|[~*_`:\\[]|https?:\/\/)|(?<=\s|[(){}/\\[\]\-|:;'".,=+])(?=[@＠#＃$＄]))/;
 
 export interface EscapeToken {
 	type: 'escape';
@@ -42,6 +44,12 @@ export interface MentionToken {
 
 export interface TopicToken {
 	type: 'topic';
+	raw: string;
+	name: string;
+}
+
+export interface CashtagToken {
+	type: 'cashtag';
 	raw: string;
 	name: string;
 }
@@ -105,6 +113,7 @@ export type Token =
 	| EscapeToken
 	| MentionToken
 	| TopicToken
+	| CashtagToken
 	| EmoteToken
 	| AutolinkToken
 	| LinkToken
@@ -146,6 +155,19 @@ const tokenizeTopic = (src: string): TopicToken | undefined => {
 
 		return {
 			type: 'topic',
+			raw: suffix > 0 ? match[0].slice(0, -suffix) : match[0],
+			name: match[1],
+		};
+	}
+};
+
+const tokenizeCashtag = (src: string): CashtagToken | undefined => {
+	const match = CASHTAG_RE.exec(src);
+	if (match && match[2] !== '$') {
+		const suffix = match[2].length;
+
+		return {
+			type: 'cashtag',
 			raw: suffix > 0 ? match[0].slice(0, -suffix) : match[0],
 			name: match[1],
 		};
@@ -296,6 +318,7 @@ export const tokenize = (src: string): Token[] => {
 				tokenizeAutolink(src) ||
 				tokenizeMention(src) ||
 				tokenizeTopic(src) ||
+				tokenizeCashtag(src) ||
 				tokenizeEmote(src) ||
 				tokenizeLink(src) ||
 				tokenizeEmStrongU(src) ||
