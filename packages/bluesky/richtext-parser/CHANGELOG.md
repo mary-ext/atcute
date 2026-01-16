@@ -1,5 +1,11 @@
 # @atcute/bluesky-richtext-parser
 
+## 2.1.0
+
+### Minor Changes
+
+- 98aef69: parse cashtag syntax
+
 ## 2.0.1
 
 ### Patch Changes
