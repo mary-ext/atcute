@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"types": ["node"],
+		"types": ["bun"],
 		"outDir": "dist/",
 		"esModuleInterop": true,
 		"skipLibCheck": true,

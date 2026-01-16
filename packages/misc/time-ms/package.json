@@ -23,6 +23,7 @@
 	"exports": {
 		".": {
 			"deno": "./dist/index.deno.js",
+			"bun": "./dist/index.bun.js",
 			"node": "./dist/index.node.js",
 			"default": "./dist/index.js"
 		}
@@ -40,7 +41,7 @@
 		"vitest": "^4.0.16"
 	},
 	"dependencies": {
-		"@types/node": "^22.19.3",
+		"@types/bun": "^1.3.6",
 		"node-gyp-build": "^4.8.4"
 	}
 }
