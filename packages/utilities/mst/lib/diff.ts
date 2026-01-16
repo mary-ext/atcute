@@ -2,7 +2,6 @@ import type { CidLink } from '@atcute/cid';
 
 import type { NodeStore } from './node-store.js';
 import { NodeWalker } from './node-walker.js';
-import { MSTNode } from './node.js';
 
 /**
  * Type of change to a record
@@ -155,7 +154,8 @@ async function* iterNodeCids(walker: NodeWalker): AsyncGenerator<string> {
 	}
 }
 
-const EMPTY_NODE_CID = (await MSTNode.empty().cid()).$link;
+// precomputed from `(await MSTNode.empty().cid()).$link`
+const EMPTY_NODE_CID = 'bafyreie5737gdxlw5i64vzichcalba3z2v5n6icifvx5xytvske7mr3hpm';
 
 /**
  * Efficiently computes the difference between two MSTs
