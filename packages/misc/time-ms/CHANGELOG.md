@@ -1,5 +1,11 @@
 # @atcute/time-ms
 
+## 1.2.0
+
+### Minor Changes
+
+- 07a3100: Bun FFI support
+
 ## 1.1.0
 
 ### Minor Changes

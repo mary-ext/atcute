@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "@atcute/time-ms",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "high precision system time helper",
 	"license": "0BSD",
 	"repository": {
