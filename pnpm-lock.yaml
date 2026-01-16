@@ -74,14 +74,10 @@ importers:
         version: 4.0.16(@types/node@25.0.3)(@vitest/browser-playwright@4.0.16)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
 
   packages/bluesky/richtext-segmenter:
-    dependencies:
+    devDependencies:
       '@atcute/bluesky':
         specifier: workspace:^
         version: link:../../definitions/bluesky
-      '@atcute/lexicons':
-        specifier: workspace:^
-        version: link:../../lexicons/lexicons
-    devDependencies:
       '@vitest/coverage-v8':
         specifier: ^4.0.16
         version: 4.0.16(@vitest/browser@4.0.16(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0))(vitest@4.0.16))(vitest@4.0.16)
@@ -675,6 +671,22 @@ importers:
       vitest:
         specifier: ^4.0.16
         version: 4.0.16(@types/node@25.0.3)(@vitest/browser-playwright@4.0.16)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
+
+  packages/lexicons/lexicon-resolver-node:
+    dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../lexicons
+    devDependencies:
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../../identity/identity
+      '@atcute/lexicon-resolver':
+        specifier: workspace:^
+        version: link:../lexicon-resolver
+      '@types/node':
+        specifier: ^22.19.3
+        version: 22.19.3
 
   packages/lexicons/lexicons:
     dependencies:
@@ -6486,7 +6498,7 @@ snapshots:
 
   '@types/bn.js@5.2.0':
     dependencies:
-      '@types/node': 25.0.3
+      '@types/node': 22.19.3
 
   '@types/bun@1.3.5':
     dependencies:
@@ -6838,7 +6850,7 @@ snapshots:
 
   bun-types@1.3.5:
     dependencies:
-      '@types/node': 25.0.3
+      '@types/node': 22.19.3
 
   bytes@3.1.2: {}
 
