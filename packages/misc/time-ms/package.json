@@ -22,6 +22,7 @@
 	],
 	"exports": {
 		".": {
+			"deno": "./dist/index.deno.js",
 			"node": "./dist/index.node.js",
 			"default": "./dist/index.js"
 		}
