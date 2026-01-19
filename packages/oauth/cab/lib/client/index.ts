@@ -1,20 +1,12 @@
 import { Client, simpleFetchHandler } from '@atcute/client';
+import type { ClientAssertionFetcher } from '@atcute/oauth-browser-client';
 
-// import lexicon types to augment XRPCProcedures
-import '../lexicons/index.js';
-
-import type {
-	ClientAssertionCredentials,
-	ClientAssertionFetcher,
-	FetchClientAssertionParams,
-} from './types.js';
-
-const CLIENT_ASSERTION_TYPE_JWT_BEARER = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+import type {} from '../lexicons/index.js';
 
 /**
  * options for creating a CAB fetcher
  */
-export interface CreateCABFetcherOptions {
+export interface CreateCabFetcherOptions {
 	/** URL of CAB backend (defaults to location.origin) */
 	service?: string | URL;
 	/** optional custom fetch implementation */
@@ -29,7 +21,7 @@ export interface CreateCABFetcherOptions {
  * @param options fetcher configuration
  * @returns client assertion fetcher for use with oauth-browser-client
  */
-export const createCABFetcher = (options: CreateCABFetcherOptions = {}): ClientAssertionFetcher => {
+export const createCabFetcher = (options: CreateCabFetcherOptions = {}): ClientAssertionFetcher => {
 	const serviceUrl = new URL(options.service ?? location.origin);
 
 	const client = new Client({
@@ -39,7 +31,7 @@ export const createCABFetcher = (options: CreateCABFetcherOptions = {}): ClientA
 		}),
 	});
 
-	return async (params: FetchClientAssertionParams): Promise<ClientAssertionCredentials> => {
+	return async (params) => {
 		const { aud, createDpopProof } = params;
 
 		// build the endpoint URL for DPoP proof (htu is origin + pathname only)
@@ -76,11 +68,8 @@ export const createCABFetcher = (options: CreateCABFetcherOptions = {}): ClientA
 		const { client_assertion } = response.data;
 
 		return {
+			client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
 			client_assertion,
-			client_assertion_type: CLIENT_ASSERTION_TYPE_JWT_BEARER,
 		};
 	};
 };
-
-// re-export types for convenience
-export type { ClientAssertionCredentials, ClientAssertionFetcher, FetchClientAssertionParams };

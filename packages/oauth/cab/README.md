@@ -67,11 +67,11 @@ export default router;
 ### client-side (browser)
 
 ```ts
-import { createCABFetcher } from '@atcute/oauth-cab/client';
+import { createCabFetcher } from '@atcute/oauth-cab/client';
 import { configureOAuth } from '@atcute/oauth-browser-client';
 
 configureOAuth({
 	// ... other options
-	fetchClientAssertion: createCABFetcher(), // defaults to location.origin
+	fetchClientAssertion: createCabFetcher(), // defaults to location.origin
 });
 ```
