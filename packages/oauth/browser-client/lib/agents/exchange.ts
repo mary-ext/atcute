@@ -1,12 +1,12 @@
 import { nanoid } from 'nanoid';
 
 import type { ActorIdentifier } from '@atcute/lexicons';
+import type { OAuthAuthorizationServerMetadata } from '@atcute/oauth-types';
 
 import { createES256Key } from '../dpop.js';
 import { CLIENT_ID, database, REDIRECT_URI } from '../environment.js';
 import { AuthorizationError, LoginError } from '../errors.js';
 import type { ResolvedIdentity } from '../types/identity.js';
-import type { AuthorizationServerMetadata } from '../types/server.js';
 import type { Session } from '../types/token.js';
 import { generatePKCE } from '../utils/runtime.js';
 
@@ -35,7 +35,7 @@ export interface AuthorizeOptions {
 export const createAuthorizationUrl = async (options: AuthorizeOptions): Promise<URL> => {
 	const { target, scope, state = null, ...reqs } = options;
 
-	let resolved: { identity?: ResolvedIdentity; metadata: AuthorizationServerMetadata };
+	let resolved: { identity?: ResolvedIdentity; metadata: OAuthAuthorizationServerMetadata };
 	switch (target.type) {
 		case 'account': {
 			resolved = await resolveFromIdentifier(target.identifier);

@@ -1,13 +1,13 @@
 import type { Did } from '@atcute/lexicons';
+import type { AtprotoOAuthTokenResponse, OAuthParResponse } from '@atcute/oauth-types';
 
 import { createDPoPFetch, createDPoPSignage } from '../dpop.js';
 import { CLIENT_ID, fetchClientAssertion, REDIRECT_URI } from '../environment.js';
 import { FetchResponseError, OAuthResponseError, TokenRefreshError } from '../errors.js';
 import { resolveFromIdentifier } from '../resolvers.js';
 import type { DPoPKey } from '../types/dpop.js';
-import type { OAuthParResponse } from '../types/par.js';
 import type { PersistedAuthorizationServerMetadata } from '../types/server.js';
-import type { ExchangeInfo, OAuthTokenResponse, TokenInfo } from '../types/token.js';
+import type { ExchangeInfo, TokenInfo } from '../types/token.js';
 import { pick } from '../utils/misc.js';
 import { extractContentType } from '../utils/response.js';
 
@@ -26,7 +26,7 @@ export class OAuthServerAgent {
 		endpoint: 'pushed_authorization_request',
 		payload: Record<string, unknown>,
 	): Promise<OAuthParResponse>;
-	async request(endpoint: 'token', payload: Record<string, unknown>): Promise<OAuthTokenResponse>;
+	async request(endpoint: 'token', payload: Record<string, unknown>): Promise<AtprotoOAuthTokenResponse>;
 	async request(endpoint: 'revocation', payload: Record<string, unknown>): Promise<any>;
 	async request(endpoint: 'introspection', payload: Record<string, unknown>): Promise<any>;
 	async request(endpoint: string, payload: Record<string, unknown>): Promise<any> {
@@ -120,7 +120,7 @@ export class OAuthServerAgent {
 		}
 	}
 
-	#processTokenResponse(res: OAuthTokenResponse): TokenInfo {
+	#processTokenResponse(res: AtprotoOAuthTokenResponse): TokenInfo {
 		if (!res.sub) {
 			throw new TypeError(`missing sub field in token response`);
 		}
@@ -140,7 +140,9 @@ export class OAuthServerAgent {
 		};
 	}
 
-	async #processExchangeResponse(res: OAuthTokenResponse): Promise<{ info: ExchangeInfo; token: TokenInfo }> {
+	async #processExchangeResponse(
+		res: AtprotoOAuthTokenResponse,
+	): Promise<{ info: ExchangeInfo; token: TokenInfo }> {
 		const sub = res.sub;
 		if (!sub) {
 			throw new TypeError(`missing sub field in token response`);

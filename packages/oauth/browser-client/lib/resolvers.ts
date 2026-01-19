@@ -1,15 +1,15 @@
 import type { ActorIdentifier } from '@atcute/lexicons';
+import type { OAuthAuthorizationServerMetadata, OAuthProtectedResourceMetadata } from '@atcute/oauth-types';
 
 import { identityResolver } from './environment.js';
 import { ResolverError } from './errors.js';
 import type { ResolvedIdentity } from './types/identity.js';
-import type { AuthorizationServerMetadata, ProtectedResourceMetadata } from './types/server.js';
 import { extractContentType } from './utils/response.js';
 import { isValidUrl } from './utils/strings.js';
 
 export const resolveFromIdentifier = async (
 	ident: ActorIdentifier,
-): Promise<{ identity: ResolvedIdentity; metadata: AuthorizationServerMetadata }> => {
+): Promise<{ identity: ResolvedIdentity; metadata: OAuthAuthorizationServerMetadata }> => {
 	const identity = await identityResolver.resolve(ident);
 
 	return {
@@ -20,14 +20,14 @@ export const resolveFromIdentifier = async (
 
 export const resolveFromService = async (
 	host: string,
-): Promise<{ metadata: AuthorizationServerMetadata }> => {
+): Promise<{ metadata: OAuthAuthorizationServerMetadata }> => {
 	try {
 		const metadata = await getMetadataFromResourceServer(host);
 		return { metadata };
 	} catch (err) {
 		if (err instanceof ResolverError) {
 			try {
-				const metadata = await getAuthorizationServerMetadata(host);
+				const metadata = await getOAuthAuthorizationServerMetadata(host);
 				return { metadata };
 			} catch {}
 		}
@@ -36,7 +36,7 @@ export const resolveFromService = async (
 	}
 };
 
-const getProtectedResourceMetadata = async (host: string): Promise<ProtectedResourceMetadata> => {
+const getOAuthProtectedResourceMetadata = async (host: string): Promise<OAuthProtectedResourceMetadata> => {
 	const url = new URL(`/.well-known/oauth-protected-resource`, host);
 	const response = await fetch(url.href, {
 		redirect: 'manual',
@@ -49,7 +49,7 @@ const getProtectedResourceMetadata = async (host: string): Promise<ProtectedReso
 		throw new ResolverError(`unexpected response`);
 	}
 
-	const metadata = (await response.json()) as ProtectedResourceMetadata;
+	const metadata = (await response.json()) as OAuthProtectedResourceMetadata;
 	if (metadata.resource !== url.origin) {
 		throw new ResolverError(`unexpected issuer`);
 	}
@@ -57,7 +57,9 @@ const getProtectedResourceMetadata = async (host: string): Promise<ProtectedReso
 	return metadata;
 };
 
-const getAuthorizationServerMetadata = async (host: string): Promise<AuthorizationServerMetadata> => {
+const getOAuthAuthorizationServerMetadata = async (
+	host: string,
+): Promise<OAuthAuthorizationServerMetadata> => {
 	const url = new URL(`/.well-known/oauth-authorization-server`, host);
 	const response = await fetch(url.href, {
 		redirect: 'manual',
@@ -70,7 +72,7 @@ const getAuthorizationServerMetadata = async (host: string): Promise<Authorizati
 		throw new ResolverError(`unexpected response`);
 	}
 
-	const metadata = (await response.json()) as AuthorizationServerMetadata;
+	const metadata = (await response.json()) as OAuthAuthorizationServerMetadata;
 	if (metadata.issuer !== url.origin) {
 		throw new ResolverError(`unexpected issuer`);
 	}
@@ -93,7 +95,7 @@ const getAuthorizationServerMetadata = async (host: string): Promise<Authorizati
 };
 
 const getMetadataFromResourceServer = async (input: string) => {
-	const rs_metadata = await getProtectedResourceMetadata(input);
+	const rs_metadata = await getOAuthProtectedResourceMetadata(input);
 
 	if (rs_metadata.authorization_servers?.length !== 1) {
 		throw new ResolverError(`expected exactly one authorization server in the listing`);
@@ -101,7 +103,7 @@ const getMetadataFromResourceServer = async (input: string) => {
 
 	const issuer = rs_metadata.authorization_servers[0];
 
-	const as_metadata = await getAuthorizationServerMetadata(issuer);
+	const as_metadata = await getOAuthAuthorizationServerMetadata(issuer);
 
 	if (as_metadata.protected_resources) {
 		if (!as_metadata.protected_resources.includes(rs_metadata.resource)) {

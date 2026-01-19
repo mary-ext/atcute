@@ -1,7 +1,7 @@
 import type { Did } from '@atcute/lexicons';
+import type { OAuthAuthorizationServerMetadata } from '@atcute/oauth-types';
 
 import type { DPoPKey } from '../types/dpop.js';
-import type { AuthorizationServerMetadata } from '../types/server.js';
 import type { SimpleStore } from '../types/store.js';
 import type { Session } from '../types/token.js';
 import { locks } from '../utils/runtime.js';
@@ -28,7 +28,7 @@ interface Schema {
 		key: string;
 		value: {
 			dpopKey: DPoPKey;
-			metadata: AuthorizationServerMetadata;
+			metadata: OAuthAuthorizationServerMetadata;
 			verifier?: string;
 			state?: unknown;
 		};
