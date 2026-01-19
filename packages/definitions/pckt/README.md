@@ -14,9 +14,10 @@ import { is } from '@atcute/lexicons';
 
 const publication: BlogPcktPublication.Main = {
 	$type: 'blog.pckt.publication',
-	name: 'my blog',
-	basePath: 'https://example.pckt.blog',
-	createdAt: new Date().toISOString(),
+	publication: {
+		uri: 'at://did:plc:z72i7hdynmk6r22z27h6tvur/site.standard.publication/3mcrfiixja3uw',
+		cid: 'bafyreih2jc2tysdwsw4r3rq5rcbagu7mmpmvguqffjup4px5bwsxljcqo4',
+	},
 };
 
 is(BlogPcktPublication.mainSchema, publication);
