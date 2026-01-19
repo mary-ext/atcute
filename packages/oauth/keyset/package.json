@@ -1,0 +1,35 @@
+{
+	"type": "module",
+	"name": "@atcute/oauth-keyset",
+	"version": "0.1.0",
+	"description": "keyset management for AT Protocol OAuth",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/oauth/keyset"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"sideEffects": false,
+	"scripts": {
+		"build": "tsgo --project tsconfig.build.json",
+		"test": "vitest",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"jose": "^6.1.3"
+	},
+	"devDependencies": {
+		"vitest": "^4.0.16"
+	}
+}
