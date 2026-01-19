@@ -13,9 +13,9 @@ that issues DPoP-bound client assertions.
 
 ### server-side (CAB backend)
 
-> **note:** the CAB endpoint should only accept requests from your client's origin(s) to prevent
-> other websites from abusing it. serving the endpoint from the same origin as your web application
-> is the simplest way to enforce this.
+> [!WARNING]  
+> the CAB endpoint should only accept requests from your client's origin. if you have CORS
+> middleware set up, you should exclude `/xrpc/dev.atcute.oauth.getClientAssertion` from it.
 
 #### with XRPC router
 
