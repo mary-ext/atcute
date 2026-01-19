@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import type { AtprotoAuthorizationServerMetadata } from '../schemas/atproto-authorization-server-metadata.js';
+import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
+
 import { MemoryStore } from '../utils/memory-store.js';
 
 import { AuthorizationServerMetadataResolver } from './authorization-server-metadata.js';

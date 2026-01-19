@@ -1,4 +1,29 @@
-export { buildClientMetadata } from './build-client-metadata.js';
+export {
+	exportJwkKey,
+	exportPkcs8Key,
+	generatePrivateKey,
+	importJwkKey,
+	importPkcs8Key,
+	Keyset,
+	type ImportKeyOptions,
+	type KeySearchOptions,
+	type PrivateKey,
+	type SigningAlgorithm,
+} from '@atcute/oauth-keyset';
+
+export {
+	buildClientMetadata,
+	CLIENT_ASSERTION_TYPE_JWT_BEARER,
+	FALLBACK_ALG,
+	type AtprotoAuthorizationServerMetadata,
+	type AtprotoProtectedResourceMetadata,
+	type ConfidentialClientMetadata,
+	type OAuthAuthorizationServerMetadata,
+	type OAuthClientMetadata,
+	type OAuthProtectedResourceMetadata,
+	type OAuthResponseMode,
+} from '@atcute/oauth-types';
+
 export * as scope from './scope.js';
 export {
 	OAuthClient,
@@ -14,16 +39,6 @@ export {
 
 export { OAuthSession } from './oauth-session.js';
 export type { SessionEvent, SessionEventListener } from './session-getter.js';
-
-export {
-	exportJwkKey,
-	exportPkcs8Key,
-	generatePrivateKey,
-	importJwkKey,
-	importPkcs8Key,
-} from './keyset/import-key.js';
-export { Keyset } from './keyset/keyset.js';
-export type { ImportKeyOptions, PrivateKey, SigningAlgorithm } from './keyset/types.js';
 
 export {
 	AuthMethodUnsatisfiableError,
@@ -45,9 +60,3 @@ export type { ProtectedResourceMetadataCache } from './resolvers/protected-resou
 export type { SessionStore, StoredSession } from './types/sessions.js';
 export type { StateStore, StoredState } from './types/states.js';
 export type { TokenSet } from './types/token-set.js';
-
-export type { ConfidentialClientMetadata } from './schemas/atcute-confidential-client-metadata.js';
-export type { AtprotoAuthorizationServerMetadata } from './schemas/atproto-authorization-server-metadata.js';
-export type { AtprotoProtectedResourceMetadata } from './schemas/atproto-protected-resource-metadata.js';
-export type { OAuthClientMetadata } from './schemas/oauth-client-metadata.js';
-export type { OAuthResponseMode } from './schemas/oauth-response-mode.js';

@@ -1,11 +1,11 @@
 import type { JWK } from 'jose';
 
-import { Keyset } from './keyset/keyset.js';
+import type { AtprotoAuthorizationServerMetadata, OAuthClientMetadata } from '@atcute/oauth-types';
+import type { Keyset } from '@atcute/oauth-keyset';
+
 import { type ClientAuthMethod, negotiateClientAuth } from './oauth-client-auth.js';
 import { OAuthServerAgent } from './oauth-server-agent.js';
 import { OAuthResolver } from './resolvers/index.js';
-import type { AtprotoAuthorizationServerMetadata } from './schemas/atproto-authorization-server-metadata.js';
-import type { OAuthClientMetadata } from './schemas/oauth-client-metadata.js';
 import type { Store } from './utils/store.js';
 
 export interface OAuthServerFactoryOptions {

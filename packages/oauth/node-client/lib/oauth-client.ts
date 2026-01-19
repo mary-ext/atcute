@@ -3,14 +3,18 @@ import { nanoid } from 'nanoid';
 
 import type { ActorResolver } from '@atcute/identity-resolver';
 import type { ActorIdentifier, Did } from '@atcute/lexicons';
+import {
+	buildClientMetadata,
+	FALLBACK_ALG,
+	type ConfidentialClientMetadata,
+	type OAuthClientMetadata,
+	type OAuthResponseMode,
+} from '@atcute/oauth-types';
+import { Keyset, type PrivateKey } from '@atcute/oauth-keyset';
 
-import { buildClientMetadata } from './build-client-metadata.js';
-import { FALLBACK_ALG } from './constants.js';
 import type { DpopNonceCache } from './dpop/fetch-dpop.js';
 import { generateDpopKey } from './dpop/generate-key.js';
 import { OAuthCallbackError, TokenRevokedError } from './errors.js';
-import { Keyset } from './keyset/keyset.js';
-import type { PrivateKey } from './keyset/types.js';
 import { OAuthServerAgent } from './oauth-server-agent.js';
 import { OAuthServerFactory } from './oauth-server-factory.js';
 import { OAuthSession } from './oauth-session.js';
@@ -24,9 +28,6 @@ import {
 	ProtectedResourceMetadataResolver,
 	type ProtectedResourceMetadataCache,
 } from './resolvers/protected-resource-metadata.js';
-import type { ConfidentialClientMetadata } from './schemas/atcute-confidential-client-metadata.js';
-import type { OAuthClientMetadata } from './schemas/oauth-client-metadata.js';
-import type { OAuthResponseMode } from './schemas/oauth-response-mode.js';
 import { SessionGetter, type SessionEventListener } from './session-getter.js';
 import type { SessionStore } from './types/sessions.js';
 import type { StateStore, StoredState } from './types/states.js';

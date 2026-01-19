@@ -1,10 +1,12 @@
 import { SignJWT } from 'jose';
 import { nanoid } from 'nanoid';
 
-import { CLIENT_ASSERTION_TYPE_JWT_BEARER, FALLBACK_ALG } from './constants.js';
-import type { Keyset } from './keyset/keyset.js';
-import type { PrivateKey } from './keyset/types.js';
-import type { OAuthAuthorizationServerMetadata } from './schemas/oauth-authorization-server-metadata.js';
+import {
+	CLIENT_ASSERTION_TYPE_JWT_BEARER,
+	FALLBACK_ALG,
+	type OAuthAuthorizationServerMetadata,
+} from '@atcute/oauth-types';
+import type { Keyset, PrivateKey } from '@atcute/oauth-keyset';
 
 export { CLIENT_ASSERTION_TYPE_JWT_BEARER };
 

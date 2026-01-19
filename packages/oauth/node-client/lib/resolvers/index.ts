@@ -1,8 +1,8 @@
 import type { ActorResolver, ResolvedActor } from '@atcute/identity-resolver';
 import type { ActorIdentifier } from '@atcute/lexicons';
+import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
 
 import { OAuthResolverError } from '../errors.js';
-import type { AtprotoAuthorizationServerMetadata } from '../schemas/atproto-authorization-server-metadata.js';
 
 import { AuthorizationServerMetadataResolver } from './authorization-server-metadata.js';
 import { ProtectedResourceMetadataResolver } from './protected-resource-metadata.js';

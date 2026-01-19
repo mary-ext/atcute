@@ -1,25 +1,26 @@
 import type { JWK } from 'jose';
 
 import type { Did } from '@atcute/lexicons';
+import {
+	atprotoOAuthTokenResponseSchema,
+	oauthParResponseSchema,
+	type AtprotoAuthorizationServerMetadata,
+	type AtprotoOAuthTokenResponse,
+	type OAuthClientMetadata,
+	type OAuthParResponse,
+} from '@atcute/oauth-types';
+import type { Keyset } from '@atcute/oauth-keyset';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
 import { JSON_MIME, PAR_RESPONSE_MAX_SIZE, TOKEN_RESPONSE_MAX_SIZE } from './constants.js';
 import { createDpopFetch } from './dpop/fetch-dpop.js';
 import { OAuthResponseError, TokenRefreshError } from './errors.js';
-import { Keyset } from './keyset/keyset.js';
 import {
 	createClientAssertionFactory,
 	type ClientAuthMethod,
 	type ClientCredentialsFactory,
 } from './oauth-client-auth.js';
 import { OAuthResolver } from './resolvers/index.js';
-import type { AtprotoAuthorizationServerMetadata } from './schemas/atproto-authorization-server-metadata.js';
-import {
-	atprotoOAuthTokenResponseSchema,
-	type AtprotoOAuthTokenResponse,
-} from './schemas/atproto-oauth-token-response.js';
-import type { OAuthClientMetadata } from './schemas/oauth-client-metadata.js';
-import { oauthParResponseSchema, type OAuthParResponse } from './schemas/oauth-par-response.js';
 import type { TokenSet } from './types/token-set.js';
 import type { Store } from './utils/store.js';
 

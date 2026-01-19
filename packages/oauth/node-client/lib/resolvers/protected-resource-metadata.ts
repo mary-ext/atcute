@@ -1,11 +1,11 @@
+import {
+	atprotoProtectedResourceMetadataValidator,
+	type AtprotoProtectedResourceMetadata,
+} from '@atcute/oauth-types';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
 import { JSON_MIME, PR_METADATA_MAX_SIZE } from '../constants.js';
 import { OAuthResolverError } from '../errors.js';
-import {
-	atprotoProtectedResourceMetadataValidator,
-	type AtprotoProtectedResourceMetadata,
-} from '../schemas/atproto-protected-resource-metadata.js';
 import { CachedGetter, type GetCachedOptions } from '../utils/cached-getter.js';
 import type { Store } from '../utils/store.js';
 

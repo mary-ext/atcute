@@ -1,14 +1,13 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import type { Did } from '@atcute/lexicons';
+import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
+import { generatePrivateKey, Keyset } from '@atcute/oauth-keyset';
 
 import { generateDpopKey } from './dpop/generate-key.js';
 import { OAuthResponseError, TokenRefreshError } from './errors.js';
-import { generatePrivateKey } from './keyset/import-key.js';
-import { Keyset } from './keyset/keyset.js';
 import { OAuthServerAgent, type OAuthServerAgentOptions } from './oauth-server-agent.js';
 import type { OAuthResolver } from './resolvers/index.js';
-import type { AtprotoAuthorizationServerMetadata } from './schemas/atproto-authorization-server-metadata.js';
 import { MemoryStore } from './utils/memory-store.js';
 
 const createMockMetadata = (): AtprotoAuthorizationServerMetadata => ({

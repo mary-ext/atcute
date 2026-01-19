@@ -1,12 +1,12 @@
+import {
+	atprotoAuthorizationServerMetadataValidator,
+	oauthIssuerIdentifierSchema,
+	type AtprotoAuthorizationServerMetadata,
+} from '@atcute/oauth-types';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
 import { AS_METADATA_MAX_SIZE, JSON_MIME } from '../constants.js';
 import { OAuthResolverError } from '../errors.js';
-import {
-	atprotoAuthorizationServerMetadataValidator,
-	type AtprotoAuthorizationServerMetadata,
-} from '../schemas/atproto-authorization-server-metadata.js';
-import { oauthIssuerIdentifierSchema } from '../schemas/oauth-issuer-identifier.js';
 import { CachedGetter, type GetCachedOptions } from '../utils/cached-getter.js';
 import type { Store } from '../utils/store.js';
 

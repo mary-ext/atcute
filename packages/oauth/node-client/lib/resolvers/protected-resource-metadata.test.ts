@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import type { AtprotoProtectedResourceMetadata } from '../schemas/atproto-protected-resource-metadata.js';
+import type { AtprotoProtectedResourceMetadata } from '@atcute/oauth-types';
+
 import { MemoryStore } from '../utils/memory-store.js';
 
 import { ProtectedResourceMetadataResolver } from './protected-resource-metadata.js';
