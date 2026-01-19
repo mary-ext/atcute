@@ -2,8 +2,6 @@
 
 keyset management for AT Protocol OAuth.
 
-## installation
-
 ```sh
 npm install @atcute/oauth-keyset
 ```
@@ -69,7 +67,3 @@ const key = keyset.find({ alg: 'ES256' });
 // find a key for signing with server negotiation
 const { key, alg } = keyset.findForSigning(['ES256', 'ES384']);
 ```
-
-## license
-
-0BSD

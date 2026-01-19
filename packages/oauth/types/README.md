@@ -2,8 +2,6 @@
 
 OAuth types and schemas for AT Protocol.
 
-## installation
-
 ```sh
 npm install @atcute/oauth-types
 ```
@@ -27,76 +25,24 @@ const metadata = buildClientMetadata(
 );
 ```
 
-### using schemas
+### validating data
 
 ```ts
 import {
 	confidentialClientMetadataSchema,
-	oauthClientMetadataSchema,
 	oauthTokenResponseSchema,
-	oauthAuthorizationServerMetadataSchema,
+	atprotoAuthorizationServerMetadataSchema,
 } from '@atcute/oauth-types';
 
-// validate input
+// validate client metadata
 const result = confidentialClientMetadataSchema.try(input);
 if (result.ok) {
 	console.log(result.value);
 }
+
+// validate token response
+const tokenResult = oauthTokenResponseSchema.try(response);
+
+// validate authorization server metadata
+const asResult = atprotoAuthorizationServerMetadataSchema.try(metadata);
 ```
-
-## exports
-
-- `buildClientMetadata` - builds atproto client metadata from configuration
-- `FALLBACK_ALG` - default algorithm per atproto spec ('ES256')
-- `CLIENT_ASSERTION_TYPE_JWT_BEARER` - JWT bearer assertion type
-
-### schemas
-
-**client metadata:**
-
-- `confidentialClientMetadataSchema` - user-facing metadata input
-- `oauthClientMetadataSchema` - full OAuth client metadata
-
-**tokens:**
-
-- `oauthTokenResponseSchema` - OAuth token response
-- `oauthTokenTypeSchema` - token type (Bearer, DPoP)
-- `atprotoOAuthTokenResponseSchema` - AT Protocol token response
-
-**authorization server:**
-
-- `oauthAuthorizationServerMetadataSchema` - OAuth AS metadata
-- `atprotoAuthorizationServerMetadataSchema` - AT Protocol AS metadata
-- `oauthIssuerIdentifierSchema` - issuer identifier
-
-**protected resource:**
-
-- `oauthProtectedResourceMetadataSchema` - OAuth PRM
-- `atprotoProtectedResourceMetadataSchema` - AT Protocol PRM
-
-**PAR:**
-
-- `oauthParResponseSchema` - PAR response
-- `oauthCodeChallengeMethodSchema` - code challenge method (S256, plain)
-- `oauthResponseModeSchema` - response mode
-
-**authorization:**
-
-- `oauthAuthorizationDetailsSchema` - authorization details
-
-**keys:**
-
-- `jwkSchema`, `jwkPubSchema` - JWK schemas
-- `jwksSchema`, `jwksPubSchema` - JWKS schemas
-
-**URIs:**
-
-- `urlSchema`, `httpsUriSchema`, `webUriSchema`, etc.
-
-**other:**
-
-- `oauthScopeSchema`, `oauthGrantTypeSchema`, etc.
-
-## license
-
-0BSD
