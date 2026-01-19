@@ -1,5 +1,9 @@
 import { Buffer as NodeBuffer } from 'node:buffer';
-import { hash as _hash, randomFillSync as _randomFillSync, timingSafeEqual as _timingSafeEqual } from 'node:crypto';
+import {
+	hash as _hash,
+	randomFillSync as _randomFillSync,
+	timingSafeEqual as _timingSafeEqual,
+} from 'node:crypto';
 
 const _alloc = /*#__PURE__*/ NodeBuffer.alloc;
 const _allocUnsafe = /*#__PURE__*/ NodeBuffer.allocUnsafe;
