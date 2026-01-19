@@ -1,0 +1,50 @@
+{
+	"type": "module",
+	"name": "@atcute/standard-site",
+	"version": "0.0.0",
+	"description": "standard.site (site.standard.*) schema definitions",
+	"keywords": [
+		"atcute",
+		"atproto",
+		"standard.site"
+	],
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/definitions/standard-site"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"exports": {
+		".": "./dist/index.js",
+		"./types/*": "./dist/lexicons/types/site/standard/*.js"
+	},
+	"scripts": {
+		"build": "tsgo",
+		"pull": "lex-cli pull",
+		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/atproto": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/lex-cli": "workspace:^"
+	},
+	"atcute:lexicons": {
+		"mappings": {
+			"site.standard.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
+	}
+}

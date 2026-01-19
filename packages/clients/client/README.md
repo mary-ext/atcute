@@ -51,6 +51,7 @@ available packages:
 | [`@atcute/tangled`](../../definitions/tangled)                     | `sh.tangled.*`                          |
 | [`@atcute/microcosm`](../../definitions/microcosm)                 | `blue.microcosm.*`, `com.bad-example.*` |
 | [`@atcute/pckt`](../../definitions/pckt)                           | `blog.pckt.*`                           |
+| [`@atcute/standard-site`](../../definitions/standard-site)         | `site.standard.*`                       |
 | [`@atcute/lexicon-community`](../../definitions/lexicon-community) | `community.lexicon.*`                   |
 
 you can register multiple packages to combine their types.

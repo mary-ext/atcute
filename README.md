@@ -62,6 +62,7 @@ for authenticated requests, see the [client docs](./packages/clients/client) or 
 | [`microcosm`](./packages/definitions/microcosm): `blue.microcosm.*`, `com.bad-example.*` definitions        |
 | [`ozone`](./packages/definitions/ozone): `tools.ozone.*` definitions                                        |
 | [`pckt`](./packages/definitions/pckt): `blog.pckt.*` definitions                                            |
+| [`standard-site`](./packages/definitions/standard-site): `site.standard.*` definitions                      |
 | [`tangled`](./packages/definitions/tangled): `sh.tangled.*` definitions                                     |
 | [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` definitions                                 |
 | **Identity packages**                                                                                       |
