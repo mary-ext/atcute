@@ -158,3 +158,12 @@ export const getUtf8Length = (str: string): number => {
 export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuffer>> => {
 	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
 };
+
+/**
+ * generates cryptographically secure random bytes
+ * @param size number of bytes to generate
+ * @returns buffer filled with random bytes
+ */
+export const randomBytes = (size: number): Uint8Array<ArrayBuffer> => {
+	return crypto.getRandomValues(new Uint8Array(size));
+};

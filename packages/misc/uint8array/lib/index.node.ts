@@ -1,5 +1,5 @@
 import { Buffer as NodeBuffer } from 'node:buffer';
-import { hash as _hash, timingSafeEqual as _timingSafeEqual } from 'node:crypto';
+import { hash as _hash, randomFillSync as _randomFillSync, timingSafeEqual as _timingSafeEqual } from 'node:crypto';
 
 const _alloc = /*#__PURE__*/ NodeBuffer.alloc;
 const _allocUnsafe = /*#__PURE__*/ NodeBuffer.allocUnsafe;
@@ -150,4 +150,13 @@ export const getUtf8Length = (str: string): number => {
 
 export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuffer>> => {
 	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
+};
+
+/**
+ * generates cryptographically secure random bytes
+ * @param size number of bytes to generate
+ * @returns buffer filled with random bytes
+ */
+export const randomBytes = (size: number): Uint8Array<ArrayBuffer> => {
+	return _randomFillSync(toUint8Array(_allocUnsafe(size))) as Uint8Array<ArrayBuffer>;
 };
