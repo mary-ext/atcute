@@ -1,7 +1,8 @@
 import * as v from '@badrap/valita';
+import { importJWK, jwtVerify } from 'jose';
+
 import { fromBase64Url, toBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
-import { importJWK, jwtVerify } from 'jose';
 
 import type { DpopNonce } from './dpop-nonce.js';
 
@@ -135,7 +136,7 @@ export const verifyDPoP = async (
 	options: DPoPVerifyOptions,
 ): Promise<DPoPVerifyResult> => {
 	if (!dpopHeader) {
-		throw new DPoPVerifyError('missing DPoP header', 'missing');
+		throw new DPoPVerifyError(`missing DPoP header`, 'missing');
 	}
 
 	const { method, url, nonce: dpopNonce, maxClockSkew = 60 } = options;
@@ -143,7 +144,7 @@ export const verifyDPoP = async (
 	// parse the JWT
 	const parts = dpopHeader.split('.');
 	if (parts.length !== 3) {
-		throw new DPoPVerifyError('invalid DPoP proof format', 'invalid');
+		throw new DPoPVerifyError(`invalid DPoP proof format`, 'invalid');
 	}
 
 	// parse and validate header
@@ -152,7 +153,7 @@ export const verifyDPoP = async (
 		const raw = decodeBase64UrlJson(parts[0]);
 		header = dpopHeaderSchema.parse(raw, { mode: 'passthrough' });
 	} catch {
-		throw new DPoPVerifyError('invalid DPoP header', 'invalid');
+		throw new DPoPVerifyError(`invalid DPoP header`, 'invalid');
 	}
 
 	const { jwk, alg } = header;
@@ -165,9 +166,10 @@ export const verifyDPoP = async (
 		payload = dpopPayloadSchema.parse(result.payload, { mode: 'passthrough' });
 	} catch (err) {
 		if (err instanceof v.ValitaError) {
-			throw new DPoPVerifyError('invalid DPoP payload', 'invalid');
+			throw new DPoPVerifyError(`invalid DPoP payload`, 'invalid');
 		}
-		throw new DPoPVerifyError('DPoP signature verification failed', 'invalid');
+
+		throw new DPoPVerifyError(`DPoP signature verification failed`, 'invalid');
 	}
 
 	const { htm, htu, iat, nonce: proofNonce } = payload;
@@ -183,16 +185,16 @@ export const verifyDPoP = async (
 
 	const now = Math.floor(Date.now() / 1000);
 	if (iat > now + maxClockSkew) {
-		throw new DPoPVerifyError('DPoP proof issued in the future', 'invalid');
+		throw new DPoPVerifyError(`DPoP proof issued in the future`, 'invalid');
 	}
 	if (iat < now - maxClockSkew) {
-		throw new DPoPVerifyError('DPoP proof expired', 'expired');
+		throw new DPoPVerifyError(`DPoP proof expired`, 'expired');
 	}
 
 	// validate nonce if configured
 	if (dpopNonce) {
 		if (!proofNonce || !(await dpopNonce.check(proofNonce))) {
-			throw new DPoPVerifyError('invalid or missing DPoP nonce', 'nonce_required');
+			throw new DPoPVerifyError(`invalid or missing DPoP nonce`, 'nonce_required');
 		}
 	}
 

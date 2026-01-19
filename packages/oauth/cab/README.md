@@ -17,39 +17,29 @@ that issues DPoP-bound client assertions.
 > other websites from abusing it. serving the endpoint from the same origin as your web application
 > is the simplest way to enforce this.
 
-#### standalone handler
-
-```ts
-import { createCabHandler, Keyset, generatePrivateKey } from '@atcute/oauth-cab/server';
-
-// create keyset
-const keyset = new Keyset([await generatePrivateKey('my-key')]);
-
-// create handler (returns undefined for non-matching paths)
-const handler = await createCabHandler({
-	clientId: 'https://example.com/client-metadata.json',
-	keyset,
-	// dpopSecret: false,        // disable DPoP nonce requirement
-	// dpopSecret: 'hex-secret', // shared secret for multi-instance deployments
-});
-
-// use with Hono
-app.all('*', async (c, next) => {
-	const res = await handler(c.req.raw);
-	if (res === undefined) {
-		return next();
-	}
-	return res;
-});
-```
-
 #### with XRPC router
 
 ```ts
-import { registerCab, Keyset, generatePrivateKey } from '@atcute/oauth-cab/server';
+import {
+	buildClientMetadata,
+	generatePrivateKey,
+	Keyset,
+	registerCab,
+} from '@atcute/oauth-cab/server';
 import { XRPCRouter, cors } from '@atcute/xrpc-server';
 
 const keyset = new Keyset([await generatePrivateKey('my-key')]);
+
+const metadata = buildClientMetadata(
+	{
+		client_id: 'https://example.com/oauth-client-metadata.json',
+		redirect_uris: ['https://example.com/oauth/callback'],
+		scope: 'atproto transition:generic',
+		client_name: 'my app',
+		jwks_uri: 'https://example.com/jwks.json',
+	},
+	keyset,
+);
 
 const router = new XRPCRouter({
 	// if using CORS middleware, exclude CAB endpoint (it should be same-origin)
@@ -57,11 +47,71 @@ const router = new XRPCRouter({
 });
 
 await registerCab(router, {
-	clientId: 'https://example.com/client-metadata.json',
+	client_id: metadata.client_id,
 	keyset,
+	// dpopSecret: false,
+	// dpopSecret: 'hex-secret'
 });
 
-export default router;
+export default {
+	async fetch(request: Request): Promise<Response> {
+		const url = new URL(request.url);
+
+		if (url.pathname === '/oauth-client-metadata.json') {
+			return Response.json(metadata);
+		}
+		if (url.pathname === '/jwks.json') {
+			return Response.json(keyset.publicJwks);
+		}
+
+		return router.fetch(request);
+	},
+};
+```
+
+#### standalone handler
+
+```ts
+import {
+	buildClientMetadata,
+	createCabHandler,
+	generatePrivateKey,
+	Keyset,
+} from '@atcute/oauth-cab/server';
+
+// create keyset
+const keyset = new Keyset([await generatePrivateKey('my-key')]);
+
+// build client metadata
+const metadata = buildClientMetadata(
+	{
+		client_id: 'https://example.com/oauth-client-metadata.json',
+		redirect_uris: ['https://example.com/oauth/callback'],
+		scope: 'atproto transition:generic',
+		client_name: 'my app',
+		jwks_uri: 'https://example.com/jwks.json',
+	},
+	keyset,
+);
+
+// create handler (returns undefined for non-matching paths)
+const handler = await createCabHandler({
+	client_id: metadata.client_id,
+	keyset,
+	// dpopSecret: false,
+	// dpopSecret: 'hex-secret',
+});
+
+// use with Hono
+app.get('/oauth-client-metadata.json', (c) => c.json(metadata));
+app.get('/jwks.json', (c) => c.json(keyset.publicJwks));
+app.all('*', async (c, next) => {
+	const res = await handler(c.req.raw);
+	if (res === undefined) {
+		return next();
+	}
+	return res;
+});
 ```
 
 ### client-side (browser)

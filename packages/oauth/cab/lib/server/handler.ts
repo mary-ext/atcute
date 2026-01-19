@@ -13,14 +13,12 @@ import { createClientAssertion } from './client-assertion.js';
 import { DpopNonce, type DpopSecret } from './dpop-nonce.js';
 import { DPoPVerifyError, verifyDPoP } from './dpop-verifier.js';
 
-const CAB_PATH = '/xrpc/dev.atcute.oauth.getClientAssertion';
-
 /**
  * options for creating a CAB handler
  */
 export interface CabOptions {
 	/** OAuth client ID */
-	clientId: string;
+	client_id: string;
 	/** client's private keyset */
 	keyset: Keyset;
 	/**
@@ -37,7 +35,7 @@ export interface CabOptions {
 const createCabProcedure = async (
 	options: CabOptions,
 ): Promise<ProcedureConfig<DevAtcuteOauthGetClientAssertion.mainSchema>> => {
-	const { clientId, keyset, dpopSecret, serverAlgs } = options;
+	const { client_id, keyset, dpopSecret, serverAlgs } = options;
 
 	const dpopNonce = dpopSecret === false ? undefined : await DpopNonce.create(dpopSecret);
 
@@ -48,7 +46,7 @@ const createCabProcedure = async (
 
 			// get fresh nonce for response headers
 			const nextNonce = dpopNonce ? await dpopNonce.next() : undefined;
-			const headers: HeadersInit | undefined = nextNonce ? { 'DPoP-Nonce': nextNonce } : undefined;
+			const headers: HeadersInit | undefined = nextNonce ? { 'dpop-nonce': nextNonce } : undefined;
 
 			// verify DPoP proof (includes nonce validation if configured)
 			let jkt: string;
@@ -69,7 +67,7 @@ const createCabProcedure = async (
 
 			// create client assertion
 			const assertion = await createClientAssertion({
-				clientId,
+				clientId: client_id,
 				audience: aud,
 				jkt,
 				keyset,
@@ -92,6 +90,8 @@ export const registerCab = async (router: XRPCRouter, options: CabOptions): Prom
 	router.addProcedure(DevAtcuteOauthGetClientAssertion.mainSchema, config);
 };
 
+const CAB_PATH = `/xrpc/${DevAtcuteOauthGetClientAssertion.mainSchema.nsid}`;
+
 /**
  * creates a standalone CAB handler.
  *
@@ -103,10 +103,9 @@ export const registerCab = async (router: XRPCRouter, options: CabOptions): Prom
 export const createCabHandler = async (
 	options: CabOptions,
 ): Promise<(request: Request) => Promise<Response> | undefined> => {
-	const config = await createCabProcedure(options);
 	const handler = createXrpcHandler({
 		lxm: DevAtcuteOauthGetClientAssertion.mainSchema,
-		...config,
+		...(await createCabProcedure(options)),
 	});
 
 	return (request: Request): Promise<Response> | undefined => {
@@ -114,6 +113,7 @@ export const createCabHandler = async (
 		if (url.pathname !== CAB_PATH) {
 			return undefined;
 		}
+
 		return handler(request);
 	};
 };
