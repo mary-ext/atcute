@@ -65,6 +65,8 @@ the packages are organized into categories under `packages/`:
   pause and ask for clarification when you're still unsure after looking into it
 - in plan mode, present the plan for review before exiting to allow for feedback or follow-up
   questions
+- when debugging problems, isolate the root cause first before attempting fixes: add logging,
+  reproduce the issue, narrow down the scope, and confirm the exact source of the problem
 
 ### Claude Code-specific
 
