@@ -47,9 +47,9 @@ export class OAuthServerAgent {
 			const assertion = await fetchClientAssertion({
 				jkt: jkt,
 				aud: this.#metadata.issuer,
-				createDpopProof: async (url) => {
+				createDpopProof: async (url, nonce) => {
 					const sign = createDPoPSignage(this.#dpopKey);
-					return await sign('POST', url, undefined, undefined);
+					return await sign('POST', url, nonce, undefined);
 				},
 			});
 

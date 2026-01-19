@@ -15,9 +15,10 @@ export interface FetchClientAssertionParams {
 	 * create a DPoP proof to prove you possess the key for the claimed jkt.
 	 *
 	 * @param htu origin and pathname to your backend
+	 * @param nonce optional DPoP nonce from the server
 	 * @returns DPoP proof that can be included in the assertion
 	 */
-	createDpopProof: (htu: string) => Promise<string>;
+	createDpopProof: (htu: string, nonce?: string) => Promise<string>;
 }
 
 export type ClientAssertionFetcher = (
