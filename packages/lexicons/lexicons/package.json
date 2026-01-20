@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/lexicons",
 	"version": "1.2.6",
 	"description": "AT Protocol core lexicon types and schema validations",
@@ -8,15 +7,14 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/lexicons/lexicons"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js",
 		"./ambient": "./dist/ambient.js",
@@ -24,22 +22,24 @@
 		"./syntax": "./dist/syntax/index.js",
 		"./validations": "./dist/validations/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
-	},
-	"devDependencies": {
-		"@atcute/cbor": "workspace:^",
-		"@atcute/multibase": "workspace:^",
-		"@vitest/coverage-v8": "^4.0.16",
-		"vitest": "^4.0.16"
 	},
 	"dependencies": {
 		"@atcute/uint8array": "workspace:^",
 		"@atcute/util-text": "workspace:^",
 		"@standard-schema/spec": "^1.1.0",
 		"esm-env": "^1.2.2"
+	},
+	"devDependencies": {
+		"@atcute/cbor": "workspace:^",
+		"@atcute/multibase": "workspace:^",
+		"@vitest/coverage-v8": "^4.0.16",
+		"vitest": "^4.0.16"
 	}
 }

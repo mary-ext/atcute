@@ -1,5 +1,6 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyEmbedRecord from '../../../app/bsky/embed/record.js';
 import * as AppBskyRichtextFacet from '../../../app/bsky/richtext/facet.js';
 import * as ChatBskyActorDefs from '../actor/defs.js';

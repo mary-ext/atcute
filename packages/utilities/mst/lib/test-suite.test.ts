@@ -1,11 +1,11 @@
-import * as v from '@badrap/valita';
-import { beforeAll, describe, expect, it } from 'vitest';
-
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
 import * as CAR from '@atcute/car';
 import * as CID from '@atcute/cid';
+
+import * as v from '@badrap/valita';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import { DeltaType, mstDiff, recordDiff } from './diff.js';
 import { NodeStore } from './node-store.js';

@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/frontpage",
 	"version": "2.0.0",
 	"description": "Frontpage (fyi.unravel.frontpage.*) schema definitions",
@@ -13,18 +12,19 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/frontpage"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js",
 		"./types/*": "./dist/lexicons/types/*.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo",

@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/identity-resolver-node",
 	"version": "1.0.3",
 	"description": "additional atproto identity resolvers for Node.js",
@@ -12,33 +11,34 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/identity/identity-resolver-node"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
-	"peerDependencies": {
-		"@atcute/identity": "^1.0.0",
-		"@atcute/identity-resolver": "^1.0.0"
+	"dependencies": {
+		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
 		"@types/node": "^22.19.3"
 	},
-	"dependencies": {
-		"@atcute/lexicons": "workspace:^"
+	"peerDependencies": {
+		"@atcute/identity": "^1.0.0",
+		"@atcute/identity-resolver": "^1.0.0"
 	}
 }

@@ -1,8 +1,8 @@
-import { bench, do_not_optimize, run, summary } from 'mitata';
-
 import { is } from '@atcute/lexicons';
 
 import * as atproto from '@atproto/api';
+import { bench, do_not_optimize, run, summary } from 'mitata';
+
 import * as atcute from './lexicons/index.js';
 
 summary(() => {

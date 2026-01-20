@@ -3,10 +3,12 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 
 import type { LexiconDoc } from '@atcute/lexicon-doc';
+
 import pc from 'picocolors';
 
-import { runGit, GitError } from '../git.js';
 import type { GitSourceConfig } from '../config.js';
+import { runGit, GitError } from '../git.js';
+
 import type { PullResult, PulledLexicon, SourceLocation } from './types.js';
 
 /**

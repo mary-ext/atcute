@@ -1,10 +1,9 @@
+import { decodeUtf8From } from '@atcute/uint8array';
+
 import { EventIterator } from '@mary-ext/event-iterator';
 import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
-
 import type { ReadonlyDeep } from 'type-fest';
-
-import { decodeUtf8From } from '@atcute/uint8array';
 
 import { flattenTapEvent, tapEventWireSchema } from './typedefs.js';
 import type { TapEvent, TapSubscribeOptions, TapSubscriptionMessage } from './types.js';

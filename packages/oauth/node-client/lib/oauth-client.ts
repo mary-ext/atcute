@@ -1,8 +1,6 @@
-import type { JWK } from 'jose';
-import { nanoid } from 'nanoid';
-
 import type { ActorResolver } from '@atcute/identity-resolver';
 import type { ActorIdentifier, Did } from '@atcute/lexicons';
+import { Keyset, type PrivateKey } from '@atcute/oauth-keyset';
 import {
 	buildClientMetadata,
 	FALLBACK_ALG,
@@ -11,7 +9,9 @@ import {
 	type OAuthPrompt,
 	type OAuthResponseMode,
 } from '@atcute/oauth-types';
-import { Keyset, type PrivateKey } from '@atcute/oauth-keyset';
+
+import type { JWK } from 'jose';
+import { nanoid } from 'nanoid';
 
 import type { DpopNonceCache } from './dpop/fetch-dpop.js';
 import { generateDpopKey } from './dpop/generate-key.js';

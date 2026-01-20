@@ -1,5 +1,6 @@
 import { toBase16, toBase64Url } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
+
 import { getPublicKey, Point, signAsync, utils, verify } from '@noble/secp256k1';
 
 import type { DidKeyString, PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.js';

@@ -1,7 +1,6 @@
 # @atcute/cache
 
-> [!WARNING]
-> experimental package - API may change
+> [!WARNING] experimental package - API may change
 
 normalized cache store for AT Protocol.
 
@@ -81,9 +80,12 @@ const unsubscribe = cache.subscribe(AppBskyFeedDefs.postViewSchema, postUri, (po
 });
 
 // subscribe to all entities of a type
-const unsubscribeType = cache.subscribeType(AppBskyActorDefs.profileViewBasicSchema, (key, profile) => {
-	console.log(`profile ${key} changed:`, profile);
-});
+const unsubscribeType = cache.subscribeType(
+	AppBskyActorDefs.profileViewBasicSchema,
+	(key, profile) => {
+		console.log(`profile ${key} changed:`, profile);
+	},
+);
 
 // clean up when done
 unsubscribe();

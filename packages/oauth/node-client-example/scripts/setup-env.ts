@@ -3,6 +3,7 @@ import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 import { exportJwkKey, generatePrivateKey } from '@atcute/oauth-node-client';
+
 import { nanoid } from 'nanoid';
 
 const ensureEnvLocal = async (): Promise<string> => {

@@ -1,9 +1,8 @@
-import type { Client } from '@atcute/client';
-import type { Blob as AtBlob, Did, GenericUri, ResourceUri } from '@atcute/lexicons';
-
 import type * as AppBskyEmbedRecord from '@atcute/bluesky/types/app/embed/record';
 import type * as AppBskyFeedDefs from '@atcute/bluesky/types/app/feed/defs';
 import type * as AppBskyRichtextFacet from '@atcute/bluesky/types/app/richtext/facet';
+import type { Client } from '@atcute/client';
+import type { Blob as AtBlob, Did, GenericUri, ResourceUri } from '@atcute/lexicons';
 
 /** Interface containing aspect ratio of the media */
 export interface MediaAspectRatio {

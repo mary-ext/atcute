@@ -1,7 +1,7 @@
-import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
-import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
+import type {} from '@atcute/lexicons';
+import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
 
 const _goingSchema = /*#__PURE__*/ v.literal('community.lexicon.calendar.rsvp#going');
 const _interestedSchema = /*#__PURE__*/ v.literal('community.lexicon.calendar.rsvp#interested');

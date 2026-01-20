@@ -1,8 +1,8 @@
-import * as v from '@badrap/valita';
-import { importJWK, jwtVerify } from 'jose';
-
 import { fromBase64Url, toBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
+
+import * as v from '@badrap/valita';
+import { importJWK, jwtVerify } from 'jose';
 
 import type { DpopNonce } from './dpop-nonce.js';
 

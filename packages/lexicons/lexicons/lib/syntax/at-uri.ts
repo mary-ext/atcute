@@ -1,9 +1,9 @@
+import { type Result } from '../utils.js';
+
 import { isActorIdentifier, type ActorIdentifier } from './at-identifier.js';
 import { isDid, type Did } from './did.js';
 import { isNsid, type Nsid } from './nsid.js';
 import { isRecordKey, type RecordKey } from './record-key.js';
-
-import { type Result } from '../utils.js';
 
 /**
  * represents a general AT Protocol URI, representing either an entire

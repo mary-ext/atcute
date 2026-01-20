@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/atproto",
 	"version": "3.1.10",
 	"description": "AT Protocol (com.atproto.*) schema definitions",
@@ -12,18 +11,19 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/atproto"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js",
 		"./types/*": "./dist/lexicons/types/com/atproto/*.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo",

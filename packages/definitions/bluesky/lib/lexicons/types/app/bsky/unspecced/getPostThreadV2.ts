@@ -1,7 +1,9 @@
 import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyFeedDefs from '../feed/defs.js';
+
 import * as AppBskyUnspeccedDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadV2', {

@@ -1,6 +1,3 @@
-import { ClientResponseError, ok, type Client } from '@atcute/client';
-import type { $type, Blob as AtBlob, CanonicalResourceUri, ResourceUri } from '@atcute/lexicons';
-
 import type * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import type * as ComAtprotoRepoApplyWrites from '@atcute/atproto/types/repo/applyWrites';
 import type * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
@@ -16,12 +13,12 @@ import type * as AppBskyFeedPost from '@atcute/bluesky/types/app/feed/post';
 import type * as AppBskyFeedThreadgate from '@atcute/bluesky/types/app/feed/threadgate';
 import type {} from '@atcute/bluesky/types/app/graph/getList';
 import type {} from '@atcute/bluesky/types/app/graph/getStarterPack';
-
+import { ClientResponseError, ok, type Client } from '@atcute/client';
+import type { $type, Blob as AtBlob, CanonicalResourceUri, ResourceUri } from '@atcute/lexicons';
 import * as TID from '@atcute/tid';
 
 import { serializeRecordCid } from './cbor.js';
 import { getNow } from './time.js';
-
 import type {
 	ComposedThread,
 	ComposedThreadgate,

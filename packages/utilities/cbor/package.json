@@ -1,20 +1,16 @@
 {
-	"type": "module",
 	"name": "@atcute/cbor",
 	"version": "2.3.0",
 	"description": "lightweight DASL dCBOR42 codec library for AT Protocol",
 	"keywords": [
 		"atproto",
-		"dasl",
-		"cbor"
+		"cbor",
+		"dasl"
 	],
 	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/cbor"
-	},
-	"publishConfig": {
-		"access": "public"
 	},
 	"files": [
 		"dist/",
@@ -22,15 +18,24 @@
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js",
 		"./bytes": "./dist/bytes.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/cid": "workspace:^",
+		"@atcute/multibase": "workspace:^",
+		"@atcute/uint8array": "workspace:^"
 	},
 	"devDependencies": {
 		"@ipld/dag-cbor": "^9.2.5",
@@ -38,10 +43,5 @@
 		"@vitest/coverage-v8": "^4.0.16",
 		"cbor-x": "^1.6.0",
 		"vitest": "^4.0.16"
-	},
-	"dependencies": {
-		"@atcute/cid": "workspace:^",
-		"@atcute/multibase": "workspace:^",
-		"@atcute/uint8array": "workspace:^"
 	}
 }

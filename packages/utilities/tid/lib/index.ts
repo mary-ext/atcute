@@ -1,6 +1,7 @@
 import { now as getNow } from '@atcute/time-ms';
 
 import { random } from '#platform/random';
+
 import { s32decode, s32encode } from './s32.js';
 
 let lastTimestamp = 0;

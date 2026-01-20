@@ -6,6 +6,7 @@ import {
 	FailedAuthorityResolutionError,
 	InvalidResolvedAuthorityError,
 } from '../errors.js';
+
 import { DohJsonLexiconAuthorityResolver } from './doh-json.js';
 
 const DOH_URL = 'https://dns.resolver.com/dns-query';

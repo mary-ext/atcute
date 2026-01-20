@@ -2,9 +2,7 @@ import { safeParse, type XRPCSubscriptionMetadata } from '@atcute/lexicons/valid
 
 import { EventIterator } from '@mary-ext/event-iterator';
 import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
-
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
-
 import type { ReadonlyDeep } from 'type-fest';
 
 import { addTypeToBody, decodeFrame } from './frame-decoder.js';

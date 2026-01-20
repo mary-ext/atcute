@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'vitest';
-
 import * as CID from '@atcute/cid';
 import { fromBase64, toBase16 } from '@atcute/multibase';
 
-import { decode, decodeFirst, encode, toBytes, toCidLink } from './index.js';
+import { describe, expect, it } from 'vitest';
+
 import { getOrderedObjectKeys } from './encode.js';
+import { decode, decodeFirst, encode, toBytes, toCidLink } from './index.js';
 
 const utf8e = new TextEncoder();
 // const utf8d = new TextDecoder();

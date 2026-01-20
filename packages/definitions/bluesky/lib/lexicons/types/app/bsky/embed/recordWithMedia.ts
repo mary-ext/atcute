@@ -1,5 +1,6 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyEmbedExternal from './external.js';
 import * as AppBskyEmbedImages from './images.js';
 import * as AppBskyEmbedRecord from './record.js';

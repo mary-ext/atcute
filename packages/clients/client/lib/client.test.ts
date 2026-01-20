@@ -1,6 +1,6 @@
-import { assertType, describe, expect, it, vi } from 'vitest';
-
 import * as v from '@atcute/lexicons/validations';
+
+import { assertType, describe, expect, it, vi } from 'vitest';
 
 import { Client, ClientValidationError } from './client.js';
 import type { FetchHandler } from './fetch-handler.js';

@@ -1,5 +1,6 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as PubLeafletBlocksHeader from './header.js';
 import * as PubLeafletBlocksImage from './image.js';
 import * as PubLeafletBlocksText from './text.js';

@@ -1,8 +1,9 @@
-import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
-import * as AppBskyActorDefs from '../actor/defs.js';
 import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import * as ComAtprotoModerationDefs from '@atcute/atproto/types/moderation/defs';
+import type {} from '@atcute/lexicons';
+import * as v from '@atcute/lexicons/validations';
+
+import * as AppBskyActorDefs from '../actor/defs.js';
 
 const _labelerPoliciesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.labeler.defs#labelerPolicies')),

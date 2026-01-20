@@ -2,7 +2,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"fmt": "PRETTIER_EXPERIMENTAL_CLI=1 prettier --cache --write .",
+		"fmt": "oxfmt",
 		"lint": "oxlint --type-aware"
 	},
 	"devDependencies": {
@@ -12,6 +12,7 @@
 		"@prettier/plugin-oxc": "^0.1.3",
 		"@typescript/native-preview": "7.0.0-dev.20260119.1",
 		"mitata": "^1.0.34",
+		"oxfmt": "^0.26.0",
 		"oxlint": "^1.36.0",
 		"oxlint-tsgolint": "^0.11.1",
 		"pkg-size-report": "workspace:^",

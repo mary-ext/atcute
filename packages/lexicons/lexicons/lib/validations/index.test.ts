@@ -1,7 +1,7 @@
-import { assert, describe, expect, it, vi } from 'vitest';
-
 import { toBytes } from '@atcute/cbor';
 import { fromBase64 } from '@atcute/multibase';
+
+import { assert, describe, expect, it, vi } from 'vitest';
 
 import * as v from './index.js';
 import { allowsEval } from './utils.js';

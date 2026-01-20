@@ -1,5 +1,7 @@
+import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyActorDefs from '../actor/defs.js';
 import * as AppBskyEmbedExternal from '../embed/external.js';
 import * as AppBskyEmbedImages from '../embed/images.js';
@@ -8,7 +10,6 @@ import * as AppBskyEmbedRecordWithMedia from '../embed/recordWithMedia.js';
 import * as AppBskyEmbedVideo from '../embed/video.js';
 import * as AppBskyGraphDefs from '../graph/defs.js';
 import * as AppBskyRichtextFacet from '../richtext/facet.js';
-import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 
 const _blockedAuthorSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#blockedAuthor')),

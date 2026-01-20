@@ -1,5 +1,6 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as ToolsOzoneModerationDefs from '../moderation/defs.js';
 
 const _verificationViewSchema = /*#__PURE__*/ v.object({

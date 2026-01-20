@@ -1,7 +1,7 @@
-import { nanoid } from 'nanoid';
-
 import { toBase64Url } from '@atcute/multibase';
 import { encodeUtf8, toSha256 } from '@atcute/uint8array';
+
+import { nanoid } from 'nanoid';
 
 export const locks: LockManager | undefined = typeof navigator !== 'undefined' ? navigator.locks : undefined;
 

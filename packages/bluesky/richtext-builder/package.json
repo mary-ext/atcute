@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/bluesky-richtext-builder",
 	"version": "2.0.4",
 	"description": "builder pattern for Bluesky's rich text facets",
@@ -8,19 +7,20 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/bluesky/richtext-builder"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"prepublish": "rm -rf dist; pnpm run build"

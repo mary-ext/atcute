@@ -1,6 +1,7 @@
 import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
+
 import * as CommunityLexiconLocationAddress from '../location/address.js';
 import * as CommunityLexiconLocationFsq from '../location/fsq.js';
 import * as CommunityLexiconLocationGeo from '../location/geo.js';

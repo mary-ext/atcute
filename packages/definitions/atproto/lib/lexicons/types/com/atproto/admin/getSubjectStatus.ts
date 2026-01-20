@@ -1,8 +1,10 @@
 import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
-import * as ComAtprotoAdminDefs from './defs.js';
+import * as v from '@atcute/lexicons/validations';
+
 import * as ComAtprotoRepoStrongRef from '../repo/strongRef.js';
+
+import * as ComAtprotoAdminDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.admin.getSubjectStatus', {
 	params: /*#__PURE__*/ v.object({

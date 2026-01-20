@@ -1,6 +1,6 @@
-import type { JWK } from 'jose';
-
 import type { Did } from '@atcute/lexicons';
+
+import type { JWK } from 'jose';
 
 import type { ClientAuthMethod } from '../oauth-client-auth.js';
 import type { Store } from '../utils/store.js';

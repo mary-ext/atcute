@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/tangled",
 	"version": "1.0.14",
 	"description": "Tangled (sh.tangled.*) schema definitions",
@@ -13,18 +12,19 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/tangled"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js",
 		"./types/*": "./dist/lexicons/types/sh/tangled/*.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo",

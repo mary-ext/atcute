@@ -1,6 +1,6 @@
-import { expect } from 'vitest';
-
 import type { ComAtprotoLabelDefs } from '@atcute/client/lexicons';
+
+import { expect } from 'vitest';
 
 import { LabelPreference, type DisplayRestrictions, type ModerationOptions } from '../../lib/index.js';
 

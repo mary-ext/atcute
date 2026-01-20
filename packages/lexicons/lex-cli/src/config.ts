@@ -2,11 +2,11 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import * as url from 'node:url';
 
-import * as v from '@badrap/valita';
-import pc from 'picocolors';
-
 import { isAtprotoDid } from '@atcute/identity';
 import { isHandle, isNsid } from '@atcute/lexicons/syntax';
+
+import * as v from '@badrap/valita';
+import pc from 'picocolors';
 
 import type { ImportMapping } from './codegen.js';
 

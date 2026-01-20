@@ -1,7 +1,8 @@
-import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
-import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
+import type {} from '@atcute/lexicons';
+import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
+
 import * as PubLeafletPagesCanvas from './pages/canvas.js';
 import * as PubLeafletPagesLinearDocument from './pages/linearDocument.js';
 import * as PubLeafletPublication from './publication.js';

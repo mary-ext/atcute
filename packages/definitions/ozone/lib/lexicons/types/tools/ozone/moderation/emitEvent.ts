@@ -1,8 +1,9 @@
-import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
-import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoAdminDefs from '@atcute/atproto/types/admin/defs';
 import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
+import type {} from '@atcute/lexicons';
+import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
+
 import * as ToolsOzoneModerationDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent', {

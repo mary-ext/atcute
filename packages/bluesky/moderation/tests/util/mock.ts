@@ -1,5 +1,3 @@
-import type { $type, Did, GenericUri, Handle, ResourceUri } from '@atcute/lexicons';
-
 import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 import type {
 	AppBskyActorDefs,
@@ -9,6 +7,7 @@ import type {
 	AppBskyGraphDefs,
 	AppBskyNotificationListNotifications,
 } from '@atcute/bluesky';
+import type { $type, Did, GenericUri, Handle, ResourceUri } from '@atcute/lexicons';
 
 const FAKE_CID = 'bafyreiclp443lavogvhj3d2ob2cxbfuscni2k5jk7bebjzg7khl3esabwq';
 

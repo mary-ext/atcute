@@ -1,12 +1,12 @@
-import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
-import * as AppBskyAgeassuranceDefs from '@atcute/bluesky/types/app/ageassurance/defs';
-import * as ChatBskyConvoDefs from '@atcute/bluesky/types/chat/convo/defs';
 import * as ComAtprotoAdminDefs from '@atcute/atproto/types/admin/defs';
 import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import * as ComAtprotoModerationDefs from '@atcute/atproto/types/moderation/defs';
 import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import * as ComAtprotoServerDefs from '@atcute/atproto/types/server/defs';
+import * as AppBskyAgeassuranceDefs from '@atcute/bluesky/types/app/ageassurance/defs';
+import * as ChatBskyConvoDefs from '@atcute/bluesky/types/chat/convo/defs';
+import type {} from '@atcute/lexicons';
+import * as v from '@atcute/lexicons/validations';
 
 const _accountEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#accountEvent')),

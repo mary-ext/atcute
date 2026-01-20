@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-
 import type { ComAtprotoLabelDefs } from '@atcute/atproto';
+
+import { describe, expect, it } from 'vitest';
 
 import {
 	DisplayContext,

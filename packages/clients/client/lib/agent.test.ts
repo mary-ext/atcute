@@ -1,7 +1,7 @@
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
-
 import { TestNetwork } from '@atcute/internal-dev-env';
 import type { Handle } from '@atcute/lexicons';
+
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { Client, ok } from './client.js';
 import { CredentialManager, type AtpSessionData } from './credential-manager.js';

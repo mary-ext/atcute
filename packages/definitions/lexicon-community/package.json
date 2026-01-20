@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/lexicon-community",
 	"version": "1.1.4",
 	"description": "Lexicon Community (community.lexicon.*) schema definitions",
@@ -8,18 +7,19 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/lexicon-community"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js",
 		"./types/": "./dist/lexicons/types/community/lexicon/*.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo",
@@ -32,8 +32,8 @@
 		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
-		"@atcute/lexicon-community": "file:",
-		"@atcute/lex-cli": "workspace:^"
+		"@atcute/lex-cli": "workspace:^",
+		"@atcute/lexicon-community": "file:"
 	},
 	"atcute:lexicons": {
 		"mappings": {

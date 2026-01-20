@@ -1,5 +1,3 @@
-import * as v from '@badrap/valita';
-
 import { isAtprotoDid } from '@atcute/identity';
 import type { AtprotoDid, Handle } from '@atcute/lexicons/syntax';
 import {
@@ -9,6 +7,8 @@ import {
 	pipe,
 	validateJsonWith,
 } from '@atcute/util-fetch';
+
+import * as v from '@badrap/valita';
 
 import * as err from '../../errors.js';
 import type { HandleResolver, ResolveHandleOptions } from '../../types.js';

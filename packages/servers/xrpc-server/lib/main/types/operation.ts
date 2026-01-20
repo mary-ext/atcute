@@ -10,7 +10,6 @@ import type {
 } from '@atcute/lexicons/validations';
 
 import type { Literal, Promisable } from '../../types/misc.js';
-
 import type { JSONResponse } from '../response.js';
 
 export type UnknownOperationContext = {

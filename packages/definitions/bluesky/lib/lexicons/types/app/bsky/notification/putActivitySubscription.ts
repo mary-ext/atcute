@@ -1,6 +1,7 @@
 import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyNotificationDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.notification.putActivitySubscription', {

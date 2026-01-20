@@ -1,6 +1,6 @@
+import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
-import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.poll')),

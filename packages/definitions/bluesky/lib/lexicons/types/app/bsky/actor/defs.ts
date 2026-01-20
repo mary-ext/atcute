@@ -1,12 +1,13 @@
+import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
+import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyEmbedExternal from '../embed/external.js';
 import * as AppBskyFeedPostgate from '../feed/postgate.js';
 import * as AppBskyFeedThreadgate from '../feed/threadgate.js';
 import * as AppBskyGraphDefs from '../graph/defs.js';
 import * as AppBskyNotificationDefs from '../notification/defs.js';
-import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
-import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 
 const _adultContentPrefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#adultContentPref')),

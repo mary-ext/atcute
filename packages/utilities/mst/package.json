@@ -1,20 +1,16 @@
 {
-	"type": "module",
 	"name": "@atcute/mst",
 	"version": "0.1.2",
 	"description": "atproto MST manipulation utilities",
 	"keywords": [
 		"atproto",
-		"repo",
-		"mst"
+		"mst",
+		"repo"
 	],
 	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/mst"
-	},
-	"publishConfig": {
-		"access": "public"
 	},
 	"files": [
 		"dist/",
@@ -22,15 +18,24 @@
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"generate-tests": "cd mst-test-suite && mise exec -- uv run python scripts/generate_exhaustive_cars.py",
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest run",
 		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/cbor": "workspace:^",
+		"@atcute/cid": "workspace:^",
+		"@atcute/uint8array": "workspace:^"
 	},
 	"devDependencies": {
 		"@atcute/car": "workspace:^",
@@ -38,10 +43,5 @@
 		"@types/node": "^22.19.3",
 		"@vitest/coverage-v8": "^4.0.16",
 		"vitest": "^4.0.16"
-	},
-	"dependencies": {
-		"@atcute/cbor": "workspace:^",
-		"@atcute/cid": "workspace:^",
-		"@atcute/uint8array": "workspace:^"
 	}
 }

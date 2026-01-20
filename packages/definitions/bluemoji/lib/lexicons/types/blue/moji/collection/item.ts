@@ -1,7 +1,7 @@
-import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
-import type {} from '@atcute/lexicons/ambient';
 import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
+import type {} from '@atcute/lexicons';
+import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
 
 const _blob_v0Schema = /*#__PURE__*/ v.blob();
 const _bytes_v0Schema = /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.bytes(), [

@@ -6,7 +6,8 @@ Cloudflare Workers WebSocket adapter for [`@atcute/xrpc-server`](../xrpc-server/
 npm install @atcute/xrpc-server-cloudflare
 ```
 
-see the [subscriptions section](../xrpc-server/#subscriptions) in the main package for usage details.
+see the [subscriptions section](../xrpc-server/#subscriptions) in the main package for usage
+details.
 
 ```ts
 import { XRPCRouter } from '@atcute/xrpc-server';

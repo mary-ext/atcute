@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
-
 import * as CID from '@atcute/cid';
 import { encodeUtf8 } from '@atcute/uint8array';
+
+import { describe, expect, it } from 'vitest';
 
 import { NodeStore } from './node-store.js';
 import { NodeWrangler } from './node-wrangler.js';

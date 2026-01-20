@@ -1,6 +1,6 @@
+import * as AppBskyActorDefs from '@atcute/bluesky/types/app/actor/defs';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
-import * as AppBskyActorDefs from '@atcute/bluesky/types/app/actor/defs';
 
 const _memberSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.team.defs#member')),

@@ -1,20 +1,16 @@
 {
-	"type": "module",
 	"name": "@atcute/lexicon-resolver",
 	"version": "0.1.6",
 	"description": "atproto lexicon authority resolution",
 	"keywords": [
 		"atproto",
-		"lexicon",
-		"did"
+		"did",
+		"lexicon"
 	],
 	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/lexicons/lexicon-resolver"
-	},
-	"publishConfig": {
-		"access": "public"
 	},
 	"files": [
 		"dist/",
@@ -22,18 +18,18 @@
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
-	},
-	"peerDependencies": {
-		"@atcute/identity": "^1.1.0",
-		"@atcute/identity-resolver": "^1.1.3"
 	},
 	"dependencies": {
 		"@atcute/crypto": "workspace:^",
@@ -48,5 +44,9 @@
 		"@atcute/identity-resolver": "workspace:^",
 		"@vitest/coverage-v8": "^4.0.16",
 		"vitest": "^4.0.16"
+	},
+	"peerDependencies": {
+		"@atcute/identity": "^1.1.0",
+		"@atcute/identity-resolver": "^1.1.3"
 	}
 }

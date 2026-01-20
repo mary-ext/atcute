@@ -1,15 +1,17 @@
+import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
+import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyActorDefs from '../actor/defs.js';
+import * as AppBskyFeedDefs from '../feed/defs.js';
+import * as AppBskyGraphDefs from '../graph/defs.js';
+import * as AppBskyLabelerDefs from '../labeler/defs.js';
+
 import * as AppBskyEmbedExternal from './external.js';
 import * as AppBskyEmbedImages from './images.js';
 import * as AppBskyEmbedRecordWithMedia from './recordWithMedia.js';
 import * as AppBskyEmbedVideo from './video.js';
-import * as AppBskyFeedDefs from '../feed/defs.js';
-import * as AppBskyGraphDefs from '../graph/defs.js';
-import * as AppBskyLabelerDefs from '../labeler/defs.js';
-import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
-import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.record')),

@@ -1,6 +1,6 @@
 import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
 
 const _conflictInfoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.mergeCheck#conflictInfo')),

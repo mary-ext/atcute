@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/lex-cli",
 	"version": "2.5.2",
 	"description": "cli tool to generate type definitions for atcute",
@@ -8,20 +7,21 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/lexicons/lex-cli"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
+	"bin": "./cli.mjs",
 	"files": [
+		"cli.mjs",
 		"dist/",
+		"schema/",
 		"src/",
 		"!src/**/*.bench.ts",
-		"!src/**/*.test.ts",
-		"cli.mjs",
-		"schema/"
+		"!src/**/*.test.ts"
 	],
-	"bin": "./cli.mjs",
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "pnpm run generate:schema && tsgo",

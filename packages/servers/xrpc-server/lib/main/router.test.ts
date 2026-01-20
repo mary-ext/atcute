@@ -1,7 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import { decode, decodeFirst } from '@atcute/cbor';
 import * as v from '@atcute/lexicons/validations';
+
+import { describe, expect, it, vi } from 'vitest';
 
 import { json } from './response.js';
 import { defaultNotFoundHandler, XRPCRouter } from './router.js';

@@ -1,7 +1,6 @@
-import type { IdentityResolver } from './types/identity.js';
-
 import { createOAuthDatabase, type OAuthDatabase } from './store/db.js';
 import type { ClientAssertionFetcher } from './types/client-assertion.js';
+import type { IdentityResolver } from './types/identity.js';
 
 export let CLIENT_ID: string;
 export let REDIRECT_URI: string;

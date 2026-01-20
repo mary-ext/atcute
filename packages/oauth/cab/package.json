@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/oauth-cab",
 	"version": "0.1.0",
 	"description": "Client Assertion Backend (CAB) for AT Protocol OAuth browser clients",
@@ -8,21 +7,22 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/oauth/cab"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js",
 		"./client": "./dist/client/index.js",
 		"./server": "./dist/server/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo -b",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
@@ -31,7 +31,6 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"@badrap/valita": "^0.4.6",
 		"@atcute/client": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/multibase": "workspace:^",
@@ -39,6 +38,7 @@
 		"@atcute/oauth-types": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
 		"@atcute/xrpc-server": "workspace:^",
+		"@badrap/valita": "^0.4.6",
 		"jose": "^6.1.3",
 		"nanoid": "^5.1.6"
 	},

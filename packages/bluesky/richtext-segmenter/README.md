@@ -20,7 +20,9 @@ const text = 'hello @bsky.app!';
 const facets = [
 	{
 		index: { byteStart: 6, byteEnd: 15 },
-		features: [{ $type: 'app.bsky.richtext.facet#mention', did: 'did:plc:z72i7hdynmk6r22z27h6tvur' }],
+		features: [
+			{ $type: 'app.bsky.richtext.facet#mention', did: 'did:plc:z72i7hdynmk6r22z27h6tvur' },
+		],
 	},
 ];
 

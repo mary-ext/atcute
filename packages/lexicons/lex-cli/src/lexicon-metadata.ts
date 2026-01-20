@@ -1,6 +1,6 @@
-import * as v from '@badrap/valita';
-
 import { isNsid } from '@atcute/lexicons/syntax';
+
+import * as v from '@badrap/valita';
 
 export type LexiconMappingEntryType = 'namespace' | 'named';
 export type LexiconMappingPath = '.' | `./${string}`;

@@ -1,6 +1,7 @@
+import * as fs from 'node:fs';
+
 import type { Metafile } from 'esbuild';
 
-import * as fs from 'node:fs';
 import { PKGSIZE_FOLDER } from './consts.js';
 
 const PKGSIZE_DATA = new URL(`data.json`, PKGSIZE_FOLDER);

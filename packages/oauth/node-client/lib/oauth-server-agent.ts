@@ -1,6 +1,5 @@
-import type { JWK } from 'jose';
-
 import type { Did } from '@atcute/lexicons';
+import type { Keyset } from '@atcute/oauth-keyset';
 import {
 	atprotoOAuthTokenResponseSchema,
 	oauthParResponseSchema,
@@ -9,8 +8,9 @@ import {
 	type OAuthClientMetadata,
 	type OAuthParResponse,
 } from '@atcute/oauth-types';
-import type { Keyset } from '@atcute/oauth-keyset';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
+
+import type { JWK } from 'jose';
 
 import { JSON_MIME, PAR_RESPONSE_MAX_SIZE, TOKEN_RESPONSE_MAX_SIZE } from './constants.js';
 import { createDpopFetch } from './dpop/fetch-dpop.js';

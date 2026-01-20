@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
-
 import { fromString, toCidLink } from '@atcute/cid';
 import { fromBase64 } from '@atcute/multibase';
+
+import { describe, expect, it } from 'vitest';
 
 import { fromUint8Array } from './reader.js';
 import { carEntryTransform, fromStream } from './streamed-reader.js';

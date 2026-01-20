@@ -1,5 +1,5 @@
-import { expect, it } from 'vitest';
 import * as fc from 'fast-check';
+import { expect, it } from 'vitest';
 
 import { tokenize, type Token } from './index.js';
 

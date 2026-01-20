@@ -1,4 +1,5 @@
 import { bench, run, summary, do_not_optimize } from 'mitata';
+
 import { getOrderedObjectKeys } from './encode.js';
 
 const getObject = () => ({

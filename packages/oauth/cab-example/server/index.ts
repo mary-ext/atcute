@@ -1,6 +1,6 @@
-import { env } from 'cloudflare:workers';
-
 import { buildClientMetadata, createCabHandler, importJwkKey, Keyset, scope } from '@atcute/oauth-cab/server';
+
+import { env } from 'cloudflare:workers';
 
 const keyset = new Keyset([await importJwkKey(env.PRIVATE_KEY_JWK)]);
 

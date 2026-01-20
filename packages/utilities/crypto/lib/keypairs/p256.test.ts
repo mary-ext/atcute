@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
-
 import { fromBase58Btc, fromBase64 } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
+
 import { p256 } from '@noble/curves/p256';
+import { describe, expect, it } from 'vitest';
 
 import { parseDidKey } from '../multibase.js';
 

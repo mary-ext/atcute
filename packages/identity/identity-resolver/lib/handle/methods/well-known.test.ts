@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { DidNotFoundError, FailedHandleResolutionError, InvalidResolvedHandleError } from '../../errors.js';
+
 import { WellKnownHandleResolver } from './well-known.js';
 
 describe('WellKnownHandleResolver', () => {

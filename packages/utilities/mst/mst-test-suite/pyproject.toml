@@ -1,7 +1,4 @@
 [project]
 name = "mst-test-suite"
 version = "0.1.0"
-dependencies = [
-    "atmst>=0.0.6",
-    "cbrrr>=1.0.1",
-]
+dependencies = ["atmst>=0.0.6", "cbrrr>=1.0.1"]

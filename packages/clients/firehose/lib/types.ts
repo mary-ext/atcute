@@ -1,8 +1,7 @@
 import type { InferOutput, XRPCSubscriptionMetadata } from '@atcute/lexicons/validations';
+import type { BaseSchema } from '@atcute/lexicons/validations';
 
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
-
-import type { BaseSchema } from '@atcute/lexicons/validations';
 
 /**
  * extracts the params type from an XRPC subscription schema

@@ -1,9 +1,9 @@
-import * as v from '@badrap/valita';
-
 import type { Did, Nsid } from '@atcute/lexicons';
 import { isDid, isNsid } from '@atcute/lexicons/syntax';
 import { fromBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
+
+import * as v from '@badrap/valita';
 
 import type { Result } from '../types/misc.js';
 

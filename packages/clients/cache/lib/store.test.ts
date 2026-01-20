@@ -1,7 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import { AppBskyActorDefs, AppBskyFeedDefs, AppBskyFeedGetFeed } from '@atcute/bluesky';
 import * as v from '@atcute/lexicons/validations';
+
+import { describe, expect, it, vi } from 'vitest';
 
 import { NormalizedCache } from './store.js';
 

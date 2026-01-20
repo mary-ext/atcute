@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/identity-resolver",
 	"version": "1.2.2",
 	"description": "atproto handle and DID document resolution",
@@ -12,26 +11,24 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/identity/identity-resolver"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest run --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
-	},
-	"peerDependencies": {
-		"@atcute/identity": "^1.0.0"
 	},
 	"dependencies": {
 		"@atcute/lexicons": "workspace:^",
@@ -42,5 +39,8 @@
 		"@atcute/identity": "workspace:^",
 		"@vitest/coverage-v8": "^4.0.16",
 		"vitest": "^4.0.16"
+	},
+	"peerDependencies": {
+		"@atcute/identity": "^1.0.0"
 	}
 }

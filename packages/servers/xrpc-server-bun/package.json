@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/xrpc-server-bun",
 	"version": "0.1.1",
 	"description": "Bun WebSocket adapter for @atcute/xrpc-server",
@@ -8,29 +7,30 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/servers/xrpc-server-bun"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "bun test",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
-	"peerDependencies": {
-		"@atcute/xrpc-server": "workspace:^"
-	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/cbor": "workspace:^",
 		"@types/bun": "^1.3.5"
+	},
+	"peerDependencies": {
+		"@atcute/xrpc-server": "workspace:^"
 	}
 }

@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/util-fetch",
 	"version": "1.0.5",
 	"description": "internal fetch utilities",
@@ -12,19 +11,20 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/misc/util-fetch"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"prepublish": "rm -rf dist; pnpm run build"

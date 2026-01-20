@@ -1,6 +1,6 @@
-import * as v from '@badrap/valita';
-
 import { isDid } from '@atcute/lexicons/syntax';
+
+import * as v from '@badrap/valita';
 
 import * as t from './types.js';
 

@@ -1,7 +1,7 @@
-import type { JWK } from 'jose';
-
-import type { AtprotoAuthorizationServerMetadata, OAuthClientMetadata } from '@atcute/oauth-types';
 import type { Keyset } from '@atcute/oauth-keyset';
+import type { AtprotoAuthorizationServerMetadata, OAuthClientMetadata } from '@atcute/oauth-types';
+
+import type { JWK } from 'jose';
 
 import { type ClientAuthMethod, negotiateClientAuth } from './oauth-client-auth.js';
 import { OAuthServerAgent } from './oauth-server-agent.js';

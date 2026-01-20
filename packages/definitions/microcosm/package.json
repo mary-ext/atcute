@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/microcosm",
 	"version": "1.0.0",
 	"description": "Microcosm (blue.microcosm.*, com.bad-example.*) schema definitions",
@@ -8,19 +7,20 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/microcosm"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js",
 		"./types/blue/microcosm/*": "./dist/lexicons/types/blue/microcosm/*.js",
 		"./types/com/bad-example/*": "./dist/lexicons/types/com/bad-example/*.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo -b",
@@ -32,9 +32,9 @@
 		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
-		"@atcute/microcosm": "file:",
 		"@atcute/lex-cli": "workspace:^",
-		"@atcute/lexicon-doc": "workspace:^"
+		"@atcute/lexicon-doc": "workspace:^",
+		"@atcute/microcosm": "file:"
 	},
 	"atcute:lexicons": {
 		"mappings": {

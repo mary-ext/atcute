@@ -1,7 +1,7 @@
-import { bench, do_not_optimize, run, summary } from 'mitata';
-
 import * as ipld from '@ipld/dag-cbor';
 import * as cborx from 'cbor-x';
+import { bench, do_not_optimize, run, summary } from 'mitata';
+
 import * as atcute from './index.js';
 
 const OBJECT = await fetch(

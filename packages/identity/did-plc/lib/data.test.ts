@@ -1,4 +1,5 @@
 import { Secp256k1PrivateKeyExportable } from '@atcute/crypto';
+
 import { describe, expect, it } from 'vitest';
 
 import { processIndexedEntryLog } from './data.js';

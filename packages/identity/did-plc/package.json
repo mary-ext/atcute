@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/did-plc",
 	"version": "0.3.1",
 	"description": "validations, type definitions and schemas for did:plc operations",
@@ -13,28 +12,24 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/identity/did-plc"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
-	},
-	"devDependencies": {
-		"@atcute/internal-dev-env": "workspace:^",
-		"@vitest/coverage-v8": "^4.0.16",
-		"vitest": "^4.0.16"
 	},
 	"dependencies": {
 		"@atcute/cbor": "workspace:^",
@@ -46,5 +41,10 @@
 		"@atcute/uint8array": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
 		"@badrap/valita": "^0.4.6"
+	},
+	"devDependencies": {
+		"@atcute/internal-dev-env": "workspace:^",
+		"@vitest/coverage-v8": "^4.0.16",
+		"vitest": "^4.0.16"
 	}
 }

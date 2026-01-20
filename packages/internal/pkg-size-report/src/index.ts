@@ -1,7 +1,8 @@
 import pc from 'picocolors';
-import { computePackageSizeInformation, getAllWorkspacePackages } from './package.js';
+
 import { readSizeData, saveEsbuildMetafiles, saveSizeData } from './data.js';
 import { computeSizeDiff } from './diff.js';
+import { computePackageSizeInformation, getAllWorkspacePackages } from './package.js';
 
 const TREE_SYM_HAS_NEXT = '├';
 const TREE_SYM_FINAL = '└';

@@ -1,9 +1,10 @@
-import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
-import type {} from '@atcute/lexicons/ambient';
-import * as AppBskyLabelerDefs from './defs.js';
 import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import * as ComAtprotoModerationDefs from '@atcute/atproto/types/moderation/defs';
+import type {} from '@atcute/lexicons';
+import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
+
+import * as AppBskyLabelerDefs from './defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.literal('self'),

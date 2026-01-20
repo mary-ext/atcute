@@ -1,5 +1,4 @@
 import { defs as identityDefs, type DidDocument } from '@atcute/identity';
-
 import type { Did } from '@atcute/lexicons';
 
 import { TapSubscription } from './tap-subscription.js';

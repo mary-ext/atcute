@@ -1,6 +1,6 @@
-import * as v from '@badrap/valita';
-
 import { isAtprotoDid } from '@atcute/identity';
+
+import * as v from '@badrap/valita';
 
 import { atprotoOAuthScopeSchema } from './atproto-oauth-scope.js';
 import { oauthAuthorizationDetailsSchema } from './oauth-authorization-details.js';

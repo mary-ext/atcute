@@ -1,5 +1,6 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyEmbedDefs from './defs.js';
 
 const _imageSchema = /*#__PURE__*/ v.object({

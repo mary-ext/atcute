@@ -2,6 +2,7 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
 import type { LexiconDoc } from '@atcute/lexicon-doc';
+
 import { merge, object } from '@optique/core/constructs';
 import { message } from '@optique/core/message';
 import { type InferValue } from '@optique/core/parser';

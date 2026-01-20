@@ -1,6 +1,7 @@
 import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyActorDefs from '../actor/defs.js';
 
 const _likeSchema = /*#__PURE__*/ v.object({

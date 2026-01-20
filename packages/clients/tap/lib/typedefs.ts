@@ -1,6 +1,6 @@
-import * as v from '@badrap/valita';
-
 import { isDid, isHandle, isNsid, isRecordKey, isTid } from '@atcute/lexicons/syntax';
+
+import * as v from '@badrap/valita';
 
 import type * as t from './types.js';
 

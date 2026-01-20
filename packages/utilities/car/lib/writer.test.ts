@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
-
 import * as CID from '@atcute/cid';
 import { concat, encodeUtf8 } from '@atcute/uint8array';
+
+import { describe, expect, it } from 'vitest';
 
 import type { CarBlock } from './types.js';
 import { serializeCarEntry, serializeCarHeader, writeCarStream } from './writer.js';

@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/lexicon-doc",
 	"version": "2.0.6",
 	"description": "type definitions and schemas for atproto lexicon documents",
@@ -8,22 +7,23 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/lexicons/lexicon-doc"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
-		"schema/",
 		"lib/",
+		"schema/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js",
 		"./builder": "./dist/builder.js",
 		"./validations": "./dist/validations.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "pnpm run generate:schema && tsgo --project tsconfig.build.json",
 		"generate:schema": "node scripts/generate-schema.js",

@@ -1,5 +1,6 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as ComAtprotoServerDefs from '../server/defs.js';
 
 const _accountViewSchema = /*#__PURE__*/ v.object({

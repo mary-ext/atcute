@@ -1,5 +1,6 @@
 import { Secp256k1PrivateKeyExportable } from '@atcute/crypto';
 import { TestPlcServer } from '@atcute/internal-dev-env';
+
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { PlcClient, PlcClientError } from './client.js';

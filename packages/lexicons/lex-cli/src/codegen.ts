@@ -1,7 +1,5 @@
 import { dirname as getDirname, relative as getRelativePath } from 'node:path/posix';
 
-import * as prettier from 'prettier';
-
 import type {
 	LexDefinableField,
 	LexiconDoc,
@@ -16,6 +14,8 @@ import type {
 	LexXrpcQuery,
 	LexXrpcSubscription,
 } from '@atcute/lexicon-doc';
+
+import * as prettier from 'prettier';
 
 export interface SourceFile {
 	filename: string;

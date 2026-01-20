@@ -3,13 +3,10 @@ import { getGraphemeLength } from '@atcute/util-text';
 
 import type { StandardSchemaV1 } from '@standard-schema/spec';
 
-import * as syntax from '../syntax/index.js';
-
 import { _isBytesWrapper } from '../interfaces/bytes.js';
 import * as interfaces from '../interfaces/index.js';
-
+import * as syntax from '../syntax/index.js';
 import type { $type } from '../types/brand.js';
-
 import { assert } from '../utils.js';
 
 import { allowsEval, isArray, isObject, lazy, lazyProperty } from './utils.js';

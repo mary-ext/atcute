@@ -1,4 +1,5 @@
 import type { Did, Handle, Nsid, RecordKey, Tid } from '@atcute/lexicons/syntax';
+
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 
 export type TapRecordAction = 'create' | 'update' | 'delete';

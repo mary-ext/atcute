@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/repo",
 	"version": "0.1.1",
 	"description": "AT Protocol repository decoder for AT Protocol.",
@@ -12,28 +11,24 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/repo"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js"
 	},
-	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest run --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
-	},
-	"devDependencies": {
-		"@atcute/multibase": "workspace:^",
-		"@vitest/coverage-v8": "^4.0.16",
-		"vitest": "^4.0.16"
 	},
 	"dependencies": {
 		"@atcute/car": "workspace:^",
@@ -43,5 +38,10 @@
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/mst": "workspace:^",
 		"@atcute/uint8array": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/multibase": "workspace:^",
+		"@vitest/coverage-v8": "^4.0.16",
+		"vitest": "^4.0.16"
 	}
 }

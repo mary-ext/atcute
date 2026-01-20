@@ -1,16 +1,16 @@
-import { nanoid } from 'nanoid';
-
 import type { ActorIdentifier } from '@atcute/lexicons';
 import type { OAuthAuthorizationServerMetadata, OAuthPrompt } from '@atcute/oauth-types';
+
+import { nanoid } from 'nanoid';
 
 import { createES256Key } from '../dpop.js';
 import { CLIENT_ID, database, REDIRECT_URI } from '../environment.js';
 import { AuthorizationError, LoginError } from '../errors.js';
+import { resolveFromIdentifier, resolveFromService } from '../resolvers.js';
 import type { ResolvedIdentity } from '../types/identity.js';
 import type { Session } from '../types/token.js';
 import { generatePKCE } from '../utils/runtime.js';
 
-import { resolveFromIdentifier, resolveFromService } from '../resolvers.js';
 import { OAuthServerAgent } from './server-agent.js';
 import { storeSession } from './sessions.js';
 

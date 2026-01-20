@@ -6,6 +6,7 @@ import {
 	FailedHandleResolutionError,
 	InvalidResolvedHandleError,
 } from '../../errors.js';
+
 import { DohJsonHandleResolver } from './doh-json.js';
 
 const DOH_URL = 'https://dns.resolver.com/dns-query';

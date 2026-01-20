@@ -1,8 +1,7 @@
 {
-	"private": true,
-	"type": "module",
 	"name": "pkg-size-report",
 	"version": "1.0.2",
+	"private": true,
 	"description": "cli tool to compute and analyze package sizes",
 	"license": "0BSD",
 	"repository": {
@@ -10,6 +9,7 @@
 		"directory": "packages/internal/pkg-size-report"
 	},
 	"bin": "./cli.mjs",
+	"type": "module",
 	"scripts": {
 		"build": "tsgo"
 	},

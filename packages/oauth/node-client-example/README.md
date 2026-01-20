@@ -50,7 +50,8 @@ PUBLIC_URL=https://abc123.ngrok.io bun run dev
 - `PUBLIC_URL` (required) - the https URL where this app is accessible
 - `PORT` (optional) - local listen port (default: `3000`)
 - `PRIVATE_KEY_JWK` (required) - JSON Web Key used for client authentication (`private_key_jwt`)
-- `COOKIE_SECRET` (optional) - secret for signed cookies. `setup:env` generates one; if unset, a secret is derived from `PRIVATE_KEY_JWK`
+- `COOKIE_SECRET` (optional) - secret for signed cookies. `setup:env` generates one; if unset, a
+  secret is derived from `PRIVATE_KEY_JWK`
 
 ## generating a private key
 

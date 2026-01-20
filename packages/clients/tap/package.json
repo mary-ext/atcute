@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/tap",
 	"version": "0.1.1",
 	"description": "an atproto Tap client",
@@ -8,17 +7,18 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/clients/tap"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

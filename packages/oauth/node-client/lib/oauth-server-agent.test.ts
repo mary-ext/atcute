@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import type { Did } from '@atcute/lexicons';
-import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
 import { generatePrivateKey, Keyset } from '@atcute/oauth-keyset';
+import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
+
+import { describe, expect, it, vi } from 'vitest';
 
 import { generateDpopKey } from './dpop/generate-key.js';
 import { OAuthResponseError, TokenRefreshError } from './errors.js';

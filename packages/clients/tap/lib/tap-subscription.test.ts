@@ -1,11 +1,11 @@
+import { decodeUtf8From } from '@atcute/uint8array';
+
+import * as v from '@badrap/valita';
 import { describe, expect, it } from 'vitest';
 import { WebSocketServer, type RawData, type WebSocket } from 'ws';
 
-import * as v from '@badrap/valita';
 import { TapSubscription } from './tap-subscription.js';
 import { flattenTapEvent, tapEventWireSchema, tapRecordEventWireSchema } from './typedefs.js';
-
-import { decodeUtf8From } from '@atcute/uint8array';
 
 type RecordEventWire = v.Infer<typeof tapRecordEventWireSchema>;
 

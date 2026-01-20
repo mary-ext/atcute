@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/xrpc-server",
 	"version": "0.1.8",
 	"description": "a small web framework for handling XRPC operations",
@@ -8,19 +7,20 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/servers/xrpc-server"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/main/index.js",
 		"./auth": "./dist/auth/index.js",
 		"./middlewares/cors": "./dist/middlewares/cors.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

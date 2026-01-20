@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/multibase",
 	"version": "1.1.6",
 	"description": "multibase utilities",
@@ -8,18 +7,14 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/multibase"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
-	"exports": {
-		".": "./dist/index.js"
-	},
+	"type": "module",
+	"sideEffects": false,
 	"imports": {
 		"#bases/base16": {
 			"bun": "./dist/bases/base16-web.js",
@@ -32,18 +27,23 @@
 			"default": "./dist/bases/base64-web.js"
 		}
 	},
-	"sideEffects": false,
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
+	"dependencies": {
+		"@atcute/uint8array": "workspace:^"
+	},
 	"devDependencies": {
 		"@types/node": "^22.19.3",
 		"@vitest/coverage-v8": "^4.0.16",
 		"vitest": "^4.0.16"
-	},
-	"dependencies": {
-		"@atcute/uint8array": "workspace:^"
 	}
 }

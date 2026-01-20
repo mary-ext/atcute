@@ -1,0 +1,41 @@
+{
+	"$schema": "https://unpkg.com/oxfmt/configuration_schema.json",
+
+	"trailingComma": "all",
+	"useTabs": true,
+	"tabWidth": 2,
+	"printWidth": 110,
+	"semi": true,
+	"singleQuote": true,
+	"bracketSpacing": true,
+
+	"experimentalSortImports": {
+		"groups": [["builtin", "bun"], ["atcute"], ["external"], ["parent"], ["sibling", "index"]],
+		"customGroups": [
+			{
+				"groupName": "bun",
+				"elementNamePattern": ["bun", "bun:"]
+			},
+			{
+				"groupName": "atcute",
+				"elementNamePattern": ["@atcute/"]
+			}
+		]
+	},
+
+	"overrides": [
+		{
+			"files": ["tsconfig.json", "tsconfig.*.json"],
+			"options": {
+				"parser": "jsonc"
+			}
+		},
+		{
+			"files": ["*.md"],
+			"options": {
+				"printWidth": 100,
+				"proseWrap": "always"
+			}
+		}
+	]
+}

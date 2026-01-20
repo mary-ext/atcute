@@ -1,6 +1,6 @@
-import { describe, it } from 'vitest';
-
 import { parse } from '@atcute/lexicons';
+
+import { describe, it } from 'vitest';
 
 import { AppBskyFeedDefs, AppBskyFeedPost } from './lexicons/index.js';
 

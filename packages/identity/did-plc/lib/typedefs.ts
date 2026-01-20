@@ -1,8 +1,8 @@
-import * as v from '@badrap/valita';
-
 import * as CID from '@atcute/cid';
 import { parseDidKey } from '@atcute/crypto';
 import { isKeyDid, isPlcDid } from '@atcute/identity';
+
+import * as v from '@badrap/valita';
 
 import * as t from './types.js';
 

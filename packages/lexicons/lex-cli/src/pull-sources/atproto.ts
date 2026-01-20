@@ -17,9 +17,11 @@ import {
 	type AtprotoDid,
 	type Nsid,
 } from '@atcute/lexicons/syntax';
+
 import pc from 'picocolors';
 
 import type { AtprotoSourceConfig } from '../config.js';
+
 import type { PullResult, SourceLocation } from './types.js';
 
 /**

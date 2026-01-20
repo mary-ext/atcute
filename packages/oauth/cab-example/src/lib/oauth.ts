@@ -1,4 +1,3 @@
-import { createCabFetcher } from '@atcute/oauth-cab/client';
 import {
 	CompositeDidDocumentResolver,
 	LocalActorResolver,
@@ -7,6 +6,7 @@ import {
 	XrpcHandleResolver,
 } from '@atcute/identity-resolver';
 import { configureOAuth } from '@atcute/oauth-browser-client';
+import { createCabFetcher } from '@atcute/oauth-cab/client';
 
 const CLIENT_ID = import.meta.env.VITE_OAUTH_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.VITE_OAUTH_REDIRECT_URI;

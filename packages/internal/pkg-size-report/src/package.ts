@@ -1,10 +1,11 @@
-import type { PackageSizeInformation } from './data.js';
-
 import * as fs from 'node:fs';
+
 import { load as parseYaml } from 'js-yaml';
-import { WORKSPACE_ROOT } from './consts.js';
-import { computeFolderSize } from './fs.js';
+
 import { computeBundleInformation } from './bundle.js';
+import { WORKSPACE_ROOT } from './consts.js';
+import type { PackageSizeInformation } from './data.js';
+import { computeFolderSize } from './fs.js';
 
 interface PackageJsonData {
 	folder: URL;

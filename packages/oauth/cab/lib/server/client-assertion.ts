@@ -1,7 +1,7 @@
+import type { Keyset } from '@atcute/oauth-keyset';
+
 import { SignJWT } from 'jose';
 import { nanoid } from 'nanoid';
-
-import type { Keyset } from '@atcute/oauth-keyset';
 
 /**
  * options for creating a client assertion

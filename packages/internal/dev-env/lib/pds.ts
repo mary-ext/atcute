@@ -4,7 +4,6 @@ import path from 'node:path';
 
 import { Secp256k1Keypair, randomStr } from '@atproto/crypto';
 import * as pds from '@atproto/pds';
-
 import getPort from 'get-port';
 import * as ui8 from 'uint8arrays';
 

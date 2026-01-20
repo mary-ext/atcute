@@ -2,8 +2,6 @@ import type { AppBskyGraphDefs } from '@atcute/bluesky';
 import type { Did } from '@atcute/lexicons';
 
 import { DisplayContext, ModerationAction, type BehaviorMapping, type LabelTarget } from './behaviors.js';
-import type { Label, LabelerPreference, ModerationOptions } from './types.js';
-
 import type { KeywordFilter } from './keyword-filter.js';
 import {
 	BUILTIN_LABELS,
@@ -12,6 +10,7 @@ import {
 	LabelPreference,
 	type InterpretedLabelDefinition,
 } from './label.js';
+import type { Label, LabelerPreference, ModerationOptions } from './types.js';
 
 const enum ModerationSeverity {
 	High = 1,

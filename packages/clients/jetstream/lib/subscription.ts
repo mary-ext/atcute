@@ -2,14 +2,12 @@ import type { Did } from '@atcute/lexicons';
 
 import { EventIterator } from '@mary-ext/event-iterator';
 import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
-
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
-
 import type { ReadonlyDeep } from 'type-fest';
 
-import type { JetstreamEvent, JetstreamProcedure } from './types.js';
 import { jetstreamEventSchema } from './typedefs.js';
+import type { JetstreamEvent, JetstreamProcedure } from './types.js';
 
 export interface JetstreamSubscriptionOptions {
 	url: string | string[];

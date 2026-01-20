@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
+
+import { describe, expect, it, vi } from 'vitest';
 
 import { MemoryStore } from '../utils/memory-store.js';
 

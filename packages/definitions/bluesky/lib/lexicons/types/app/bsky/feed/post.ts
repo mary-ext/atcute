@@ -1,14 +1,15 @@
+import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
+import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
+
 import * as AppBskyEmbedExternal from '../embed/external.js';
 import * as AppBskyEmbedImages from '../embed/images.js';
 import * as AppBskyEmbedRecord from '../embed/record.js';
 import * as AppBskyEmbedRecordWithMedia from '../embed/recordWithMedia.js';
 import * as AppBskyEmbedVideo from '../embed/video.js';
 import * as AppBskyRichtextFacet from '../richtext/facet.js';
-import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
-import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 
 const _entitySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.post#entity')),

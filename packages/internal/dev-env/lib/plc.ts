@@ -1,5 +1,4 @@
 import { AppContext, Database, PlcServer } from '@did-plc/server';
-
 import getPort from 'get-port';
 
 export interface PlcServerOptions {

@@ -1,9 +1,9 @@
-import { describe, expect, it } from 'vitest';
-
 import { P256PrivateKeyExportable, Secp256k1PrivateKeyExportable } from '@atcute/crypto';
 import type { Did, Nsid } from '@atcute/lexicons';
 import { fromBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
+
+import { describe, expect, it } from 'vitest';
 
 import { createServiceJwt } from './jwt-creator.js';
 

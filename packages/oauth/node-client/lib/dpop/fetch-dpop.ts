@@ -1,8 +1,8 @@
 import { type JWK, SignJWT } from 'jose';
 import { nanoid } from 'nanoid';
 
-import type { Store } from '../utils/store.js';
 import { sha256 } from '../utils/crypto.js';
+import type { Store } from '../utils/store.js';
 
 /** DPoP nonce cache, keyed by origin */
 export type DpopNonceCache = Store<string, string>;

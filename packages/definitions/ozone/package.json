@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/ozone",
 	"version": "3.1.13",
 	"description": "Ozone (tools.ozone.*) scheam definitions",
@@ -14,18 +13,19 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/ozone"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js",
 		"./types/": "./dist/lexicons/types/tools/ozone/*.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo",

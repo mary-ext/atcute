@@ -1,4 +1,5 @@
 import type { Awaitable } from '../types/misc.js';
+
 import type { GetOptions, Store } from './store.js';
 
 export interface GetCachedOptions {

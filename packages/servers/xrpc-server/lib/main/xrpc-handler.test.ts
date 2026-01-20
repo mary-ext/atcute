@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
-
 import * as v from '@atcute/lexicons/validations';
+
+import { describe, expect, it, vi } from 'vitest';
 
 import { createXrpcHandler } from './xrpc-handler.js';
 

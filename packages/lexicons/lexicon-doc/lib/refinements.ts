@@ -9,7 +9,6 @@ import {
 	validateRecordKey,
 	validateStringFormat,
 } from './internal/validation.js';
-
 import type * as t from './types.js';
 
 export interface RefineIssue {

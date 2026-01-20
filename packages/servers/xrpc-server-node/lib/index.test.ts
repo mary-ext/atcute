@@ -1,10 +1,9 @@
-import { describe, expect, it } from 'vitest';
-
-import { serve, type ServerType } from '@hono/node-server';
-
 import { ComAtprotoLabelDefs, ComAtprotoLabelSubscribeLabels } from '@atcute/atproto';
 import { decode, decodeFirst } from '@atcute/cbor';
 import { XRPCRouter } from '@atcute/xrpc-server';
+
+import { serve, type ServerType } from '@hono/node-server';
+import { describe, expect, it } from 'vitest';
 
 import { createNodeWebSocket, type NodeWebSocket } from './index.js';
 

@@ -1,6 +1,6 @@
 import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
 import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.bad-example.identity.resolveMiniDoc', {
 	params: /*#__PURE__*/ v.object({

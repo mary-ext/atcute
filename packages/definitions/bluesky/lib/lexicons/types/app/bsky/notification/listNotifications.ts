@@ -1,8 +1,9 @@
-import type {} from '@atcute/lexicons';
-import * as v from '@atcute/lexicons/validations';
-import type {} from '@atcute/lexicons/ambient';
-import * as AppBskyActorDefs from '../actor/defs.js';
 import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
+import type {} from '@atcute/lexicons';
+import type {} from '@atcute/lexicons/ambient';
+import * as v from '@atcute/lexicons/validations';
+
+import * as AppBskyActorDefs from '../actor/defs.js';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.listNotifications', {
 	params: /*#__PURE__*/ v.object({

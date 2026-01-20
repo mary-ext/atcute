@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/pckt",
 	"version": "0.1.4",
 	"description": "pckt (blog.pckt.*) schema definitions",
@@ -13,18 +12,19 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/definitions/pckt"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js",
 		"./types/*": "./dist/lexicons/types/blog/pckt/*.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo",

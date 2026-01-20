@@ -1,5 +1,6 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
+
 import * as BlogPcktRichtextFacet from '../richtext/facet.js';
 
 const _mainSchema = /*#__PURE__*/ v.object({

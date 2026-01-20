@@ -1,7 +1,6 @@
-import { bench, run } from 'mitata';
-
-import '@atcute/bluesky/lexicons';
 import type { AppBskyRichtextFacet } from '@atcute/client/lexicons';
+import '@atcute/bluesky/lexicons';
+import { bench, run } from 'mitata';
 
 import { segmentize } from './index.js';
 

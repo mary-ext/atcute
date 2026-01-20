@@ -9,7 +9,6 @@ import type { DidDocumentResolver } from '@atcute/identity-resolver';
 import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 import type { AtprotoDid, Nsid } from '@atcute/lexicons/syntax';
 import { verifyRecord, type VerifiedRecord } from '@atcute/repo';
-
 import { FailedResponseError } from '@atcute/util-fetch';
 
 import { LEXICON_SCHEMA_COLLECTION } from '../constants.js';

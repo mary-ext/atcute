@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/xrpc-server-cloudflare",
 	"version": "0.1.0",
 	"description": "Cloudflare Workers WebSocket adapter for @atcute/xrpc-server",
@@ -8,26 +7,27 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/servers/xrpc-server-cloudflare"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
+	"type": "module",
 	"exports": {
 		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
-	"peerDependencies": {
-		"@atcute/xrpc-server": "workspace:^"
-	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20260103.0"
+	},
+	"peerDependencies": {
+		"@atcute/xrpc-server": "workspace:^"
 	}
 }

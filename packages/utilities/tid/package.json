@@ -1,5 +1,4 @@
 {
-	"type": "module",
 	"name": "@atcute/tid",
 	"version": "1.1.1",
 	"description": "atproto timestamp identifier codec library",
@@ -12,25 +11,26 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/tid"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
-	"exports": {
-		".": "./dist/index.js"
-	},
+	"type": "module",
+	"sideEffects": false,
 	"imports": {
 		"#platform/random": {
 			"node": "./dist/random-node.js",
 			"default": "./dist/random-web.js"
 		}
 	},
-	"sideEffects": false,
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest",

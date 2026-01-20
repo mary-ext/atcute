@@ -1,14 +1,13 @@
 {
-	"type": "module",
 	"name": "@atcute/crypto",
 	"version": "2.3.0",
 	"description": "lightweight atproto cryptographic library",
 	"keywords": [
 		"atproto",
 		"cryptography",
-		"p256",
-		"nistp256",
 		"k256",
+		"nistp256",
+		"p256",
 		"secp256k1"
 	],
 	"license": "0BSD",
@@ -16,18 +15,14 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/utilities/crypto"
 	},
-	"publishConfig": {
-		"access": "public"
-	},
 	"files": [
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
-	"exports": {
-		".": "./dist/index.js"
-	},
+	"type": "module",
+	"sideEffects": false,
 	"imports": {
 		"#keypairs/secp256k1": {
 			"bun": "./dist/keypairs/secp256k1-web.js",
@@ -36,11 +31,21 @@
 			"default": "./dist/keypairs/secp256k1-web.js"
 		}
 	},
-	"sideEffects": false,
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/multibase": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
+		"@noble/secp256k1": "^3.0.0"
 	},
 	"devDependencies": {
 		"@noble/curves": "^1.9.7",
@@ -49,10 +54,5 @@
 		"@vitest/coverage-v8": "^4.0.16",
 		"playwright": "^1.57.0",
 		"vitest": "^4.0.16"
-	},
-	"dependencies": {
-		"@atcute/multibase": "workspace:^",
-		"@atcute/uint8array": "workspace:^",
-		"@noble/secp256k1": "^3.0.0"
 	}
 }

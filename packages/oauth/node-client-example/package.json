@@ -1,7 +1,7 @@
 {
-	"type": "module",
 	"name": "node-client-example",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "bun run --hot src/index.ts",
 		"setup:env": "bun run scripts/setup-env.ts"
