@@ -15,6 +15,7 @@ export {
 	buildClientMetadata,
 	CLIENT_ASSERTION_TYPE_JWT_BEARER,
 	FALLBACK_ALG,
+	scope,
 	type AtprotoAuthorizationServerMetadata,
 	type AtprotoProtectedResourceMetadata,
 	type ConfidentialClientMetadata,
@@ -24,7 +25,6 @@ export {
 	type OAuthResponseMode,
 } from '@atcute/oauth-types';
 
-export * as scope from './scope.js';
 export {
 	OAuthClient,
 	type AuthorizationResult,

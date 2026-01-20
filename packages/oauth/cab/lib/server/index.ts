@@ -15,6 +15,7 @@ export {
 	buildClientMetadata,
 	CLIENT_ASSERTION_TYPE_JWT_BEARER,
 	FALLBACK_ALG,
+	scope,
 	type AtprotoAuthorizationServerMetadata,
 	type AtprotoProtectedResourceMetadata,
 	type ConfidentialClientMetadata,
@@ -29,6 +30,7 @@ export {
 	type ClientAssertionResult,
 	type CreateClientAssertionOptions,
 } from './client-assertion.js';
+export type { DpopSecret } from './dpop-nonce.js';
 export {
 	computeJktFromJwk,
 	DPoPVerifyError,
@@ -38,4 +40,3 @@ export {
 	type DPoPVerifyResult,
 } from './dpop-verifier.js';
 export { createCabHandler, registerCab, type CabOptions } from './handler.js';
-export type { DpopSecret } from './dpop-nonce.js';

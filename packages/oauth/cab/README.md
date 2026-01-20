@@ -20,12 +20,7 @@ that issues DPoP-bound client assertions.
 #### with XRPC router
 
 ```ts
-import {
-	buildClientMetadata,
-	generatePrivateKey,
-	Keyset,
-	registerCab,
-} from '@atcute/oauth-cab/server';
+import { buildClientMetadata, generatePrivateKey, Keyset, registerCab } from '@atcute/oauth-cab/server';
 import { XRPCRouter, cors } from '@atcute/xrpc-server';
 
 const keyset = new Keyset([await generatePrivateKey('my-key')]);
@@ -72,12 +67,7 @@ export default {
 #### standalone handler
 
 ```ts
-import {
-	buildClientMetadata,
-	createCabHandler,
-	generatePrivateKey,
-	Keyset,
-} from '@atcute/oauth-cab/server';
+import { buildClientMetadata, createCabHandler, generatePrivateKey, Keyset } from '@atcute/oauth-cab/server';
 
 // create keyset
 const keyset = new Keyset([await generatePrivateKey('my-key')]);

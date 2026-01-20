@@ -1,6 +1,8 @@
 export { buildClientMetadata } from './build-client-metadata.js';
 export { CLIENT_ASSERTION_TYPE_JWT_BEARER, FALLBACK_ALG } from './constants.js';
 
+export * as scope from './scope.js';
+
 // schemas
 export {
 	confidentialClientMetadataSchema,
