@@ -1,0 +1,18 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "cab-example",
+	"compatibility_date": "2025-09-27",
+	"main": "server/index.ts",
+	"assets": {
+		"not_found_handling": "single-page-application",
+		// route XRPC and metadata endpoints to the Worker
+		"run_worker_first": ["/xrpc/*", "/oauth-client-metadata.json", "/jwks.json"],
+	},
+	"observability": {
+		"enabled": true,
+	},
+	"vars": {
+		// set via `wrangler secret put` or .dev.vars for local dev
+		// "PRIVATE_KEY_JWK": "..."
+	},
+}
