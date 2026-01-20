@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
 		"types": [],
+		"rootDir": "lib/",
 		"outDir": "dist/",
 		"esModuleInterop": true,
 		"skipLibCheck": true,

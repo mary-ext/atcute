@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
 		"types": ["node"],
+		"rootDir": "lib/",
 		"outDir": "dist/",
 		"esModuleInterop": true,
 		"skipLibCheck": true,
