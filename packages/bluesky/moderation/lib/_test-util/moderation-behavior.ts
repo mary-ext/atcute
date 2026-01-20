@@ -1,8 +1,8 @@
-import type { ComAtprotoLabelDefs } from '@atcute/client/lexicons';
+import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 
 import { expect } from 'vitest';
 
-import { LabelPreference, type DisplayRestrictions, type ModerationOptions } from '../../lib/index.js';
+import { LabelPreference, type DisplayRestrictions, type ModerationOptions } from '../index.js';
 
 import * as m from './mock.js';
 

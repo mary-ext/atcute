@@ -1,20 +1,19 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-	DisplayContext,
-	getDisplayRestrictions,
-	LabelPreference,
-	moderatePost,
-	moderateProfile,
-} from '../lib/index.js';
-
-import {
 	ModerationBehaviorSuiteRunner,
 	type ModerationTestSuiteScenario,
 	type SuiteConfigurations,
 	type SuiteScenarios,
 	type SuiteUsers,
-} from './util/moderation-behavior.js';
+} from './_test-util/moderation-behavior.js';
+import {
+	DisplayContext,
+	getDisplayRestrictions,
+	LabelPreference,
+	moderatePost,
+	moderateProfile,
+} from './index.js';
 
 const USERS: SuiteUsers = {
 	self: {

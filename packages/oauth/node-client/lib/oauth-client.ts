@@ -252,7 +252,7 @@ export class OAuthClient {
 		// validate prompt if server advertises supported values
 		if (prompt) {
 			const supported = metadata.prompt_values_supported;
-			if (supported && !supported.includes(prompt)) {
+			if (supported && !supported.includes(prompt as OAuthPrompt)) {
 				throw new TypeError(
 					`prompt "${prompt}" not supported by server (supported: ${supported.join(', ')})`,
 				);

@@ -2,18 +2,18 @@ import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 
 import { describe, expect, it } from 'vitest';
 
+import * as mock from './_test-util/mock.js';
+import { type ModerationTestSuiteResultFlag } from './_test-util/moderation-behavior.js';
 import {
 	DisplayContext,
+	type InterpretedLabelDefinition,
+	LabelPreference,
+	type ModerationOptions,
 	getDisplayRestrictions,
 	interpretLabelValueDefinition,
-	LabelPreference,
 	moderatePost,
-	type InterpretedLabelDefinition,
-	type ModerationOptions,
-} from '../lib/index.js';
-
-import * as mock from './util/mock.js';
-import { type ModerationTestSuiteResultFlag } from './util/moderation-behavior.js';
+	moderateProfile,
+} from './index.js';
 
 interface ScenarioResult {
 	profileList?: ModerationTestSuiteResultFlag[];
@@ -37,24 +37,36 @@ const TESTS: Scenario[] = [
 		blurs: 'content',
 		severity: 'alert',
 		account: {
-			profileList: ['filter'],
-			contentList: ['filter'],
+			profileList: ['filter', 'alert'],
+			profileView: ['alert'],
+			contentList: ['filter', 'blur'],
+			contentView: ['alert'],
 		},
-		profile: {},
+		profile: {
+			profileList: ['alert'],
+			profileView: ['alert'],
+		},
 		post: {
-			contentList: ['filter'],
+			contentList: ['filter', 'blur'],
+			contentView: ['alert'],
 		},
 	},
 	{
 		blurs: 'content',
 		severity: 'inform',
 		account: {
-			profileList: ['filter'],
-			contentList: ['filter'],
+			profileList: ['filter', 'inform'],
+			profileView: ['inform'],
+			contentList: ['filter', 'blur'],
+			contentView: ['inform'],
 		},
-		profile: {},
+		profile: {
+			profileList: ['inform'],
+			profileView: ['inform'],
+		},
 		post: {
-			contentList: ['filter'],
+			contentList: ['filter', 'blur'],
+			contentView: ['inform'],
 		},
 	},
 	{
@@ -62,11 +74,17 @@ const TESTS: Scenario[] = [
 		severity: 'none',
 		account: {
 			profileList: ['filter'],
-			contentList: ['filter'],
+			profileView: [],
+			contentList: ['filter', 'blur'],
+			contentView: [],
 		},
-		profile: {},
+		profile: {
+			profileList: [],
+			profileView: [],
+		},
 		post: {
-			contentList: ['filter'],
+			contentList: ['filter', 'blur'],
+			contentView: [],
 		},
 	},
 
@@ -74,24 +92,38 @@ const TESTS: Scenario[] = [
 		blurs: 'media',
 		severity: 'alert',
 		account: {
-			profileList: ['filter'],
+			profileList: ['filter', 'alert'],
+			profileView: ['alert'],
+			profileMedia: ['blur'],
 			contentList: ['filter'],
 		},
-		profile: {},
+		profile: {
+			profileList: ['alert'],
+			profileView: ['alert'],
+			profileMedia: ['blur'],
+		},
 		post: {
 			contentList: ['filter'],
+			contentMedia: ['blur'],
 		},
 	},
 	{
 		blurs: 'media',
 		severity: 'inform',
 		account: {
-			profileList: ['filter'],
+			profileList: ['filter', 'inform'],
+			profileView: ['inform'],
+			profileMedia: ['blur'],
 			contentList: ['filter'],
 		},
-		profile: {},
+		profile: {
+			profileList: ['inform'],
+			profileView: ['inform'],
+			profileMedia: ['blur'],
+		},
 		post: {
 			contentList: ['filter'],
+			contentMedia: ['blur'],
 		},
 	},
 	{
@@ -99,11 +131,15 @@ const TESTS: Scenario[] = [
 		severity: 'none',
 		account: {
 			profileList: ['filter'],
+			profileMedia: ['blur'],
 			contentList: ['filter'],
 		},
-		profile: {},
+		profile: {
+			profileMedia: ['blur'],
+		},
 		post: {
 			contentList: ['filter'],
+			contentMedia: ['blur'],
 		},
 	},
 
@@ -111,24 +147,36 @@ const TESTS: Scenario[] = [
 		blurs: 'none',
 		severity: 'alert',
 		account: {
-			profileList: ['filter'],
-			contentList: ['filter'],
+			profileList: ['filter', 'alert'],
+			profileView: ['alert'],
+			contentList: ['filter', 'alert'],
+			contentView: ['alert'],
 		},
-		profile: {},
+		profile: {
+			profileList: ['alert'],
+			profileView: ['alert'],
+		},
 		post: {
-			contentList: ['filter'],
+			contentList: ['filter', 'alert'],
+			contentView: ['alert'],
 		},
 	},
 	{
 		blurs: 'none',
 		severity: 'inform',
 		account: {
-			profileList: ['filter'],
-			contentList: ['filter'],
+			profileList: ['filter', 'inform'],
+			profileView: ['inform'],
+			contentList: ['filter', 'inform'],
+			contentView: ['inform'],
 		},
-		profile: {},
+		profile: {
+			profileList: ['inform'],
+			profileView: ['inform'],
+		},
 		post: {
-			contentList: ['filter'],
+			contentList: ['filter', 'inform'],
+			contentView: ['inform'],
 		},
 	},
 	{
@@ -145,7 +193,7 @@ const TESTS: Scenario[] = [
 	},
 ];
 
-describe('Moderation: quote posts', () => {
+describe('Moderation: custom labels', () => {
 	const scenarios = TESTS.flatMap((test) => [
 		{
 			blurs: test.blurs,
@@ -169,59 +217,60 @@ describe('Moderation: quote posts', () => {
 	it.each(scenarios)(
 		'blurs=$blurs, severity=$severity, target=$target',
 		({ blurs, severity, target, expected }) => {
-			let postLabels;
-			let profileLabels;
+			let res;
 			if (target === 'post') {
-				postLabels = [
-					mock.label({
-						val: 'custom',
-						uri: 'at://did:web:carla.test/app.bsky.feed.post/fake',
-						src: 'did:web:labeler.test',
+				res = moderatePost(
+					mock.postView({
+						record: {
+							$type: 'app.bsky.feed.post',
+							text: 'Hello',
+							createdAt: new Date().toISOString(),
+						},
+						author: mock.profileView({
+							handle: 'bob.test',
+							displayName: 'Bob',
+						}),
+						labels: [
+							mock.label({
+								val: 'custom',
+								uri: 'at://did:web:bob.test/app.bsky.feed.post/fake',
+								src: 'did:web:labeler.test',
+							}),
+						],
 					}),
-				];
+					modOpts(blurs, severity),
+				);
 			} else if (target === 'profile') {
-				profileLabels = [
-					mock.label({
-						val: 'custom',
-						uri: 'at://did:web:carla.test/app.bsky.actor.profile/self',
-						src: 'did:web:labeler.test',
+				res = moderateProfile(
+					mock.profileView({
+						handle: 'bob.test',
+						displayName: 'Bob',
+						labels: [
+							mock.label({
+								val: 'custom',
+								uri: 'at://did:web:bob.test/app.bsky.actor.profile/self',
+								src: 'did:web:labeler.test',
+							}),
+						],
 					}),
-				];
+					modOpts(blurs, severity),
+				);
 			} else {
-				profileLabels = [
-					mock.label({
-						val: 'custom',
-						uri: 'did:web:carla.test',
-						src: 'did:web:labeler.test',
+				res = moderateProfile(
+					mock.profileView({
+						handle: 'bob.test',
+						displayName: 'Bob',
+						labels: [
+							mock.label({
+								val: 'custom',
+								uri: 'did:web:bob.test',
+								src: 'did:web:labeler.test',
+							}),
+						],
 					}),
-				];
+					modOpts(blurs, severity),
+				);
 			}
-
-			const post = mock.postView({
-				record: {
-					$type: 'app.bsky.feed.post',
-					text: 'Hello',
-					createdAt: new Date().toISOString(),
-				},
-				embed: mock.embedRecordView({
-					record: mock.post({
-						text: 'Quoted post text',
-					}),
-					labels: postLabels,
-					author: mock.profileView({
-						handle: 'carla.test',
-						displayName: 'Carla',
-						labels: profileLabels,
-					}),
-				}),
-				author: mock.profileView({
-					handle: 'bob.test',
-					displayName: 'Bob',
-				}),
-			});
-
-			const res = moderatePost(post, modOpts(blurs, severity));
-
 			expect(getDisplayRestrictions(res, DisplayContext.ProfileList)).toBeModerationResult(
 				expected.profileList || [],
 			);
