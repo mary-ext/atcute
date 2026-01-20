@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 
 import type { ActorIdentifier } from '@atcute/lexicons';
-import type { OAuthAuthorizationServerMetadata } from '@atcute/oauth-types';
+import type { OAuthAuthorizationServerMetadata, OAuthPrompt } from '@atcute/oauth-types';
 
 import { createES256Key } from '../dpop.js';
 import { CLIENT_ID, database, REDIRECT_URI } from '../environment.js';
@@ -22,7 +22,7 @@ export interface AuthorizeOptions {
 	target: AuthorizeTargetOptions;
 	scope: string;
 	state?: unknown;
-	prompt?: 'none' | 'login' | 'consent' | 'select_account';
+	prompt?: OAuthPrompt | (string & {});
 	display?: 'page' | 'popup' | 'touch' | 'wap';
 	locale?: string;
 }

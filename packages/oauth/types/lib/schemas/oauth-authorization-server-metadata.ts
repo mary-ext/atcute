@@ -2,6 +2,7 @@ import * as v from '@badrap/valita';
 
 import { oauthCodeChallengeMethodSchema } from './oauth-code-challenge-method.js';
 import { oauthIssuerIdentifierSchema } from './oauth-issuer-identifier.js';
+import { oauthPromptSchema } from './oauth-prompt.js';
 import { webUriSchema } from './uri.js';
 
 /**
@@ -25,6 +26,7 @@ export const oauthAuthorizationServerMetadataSchema = v.object({
 	ui_locales_supported: v.array(v.string()).optional(),
 	id_token_signing_alg_values_supported: v.array(v.string()).optional(),
 	display_values_supported: v.array(v.string()).optional(),
+	prompt_values_supported: v.array(oauthPromptSchema).optional(),
 	request_object_signing_alg_values_supported: v.array(v.string()).optional(),
 	authorization_response_iss_parameter_supported: v.boolean().optional(),
 	authorization_details_types_supported: v.array(v.string()).optional(),

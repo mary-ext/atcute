@@ -77,6 +77,7 @@ export {
 	type OAuthCodeChallengeMethod,
 } from './schemas/oauth-code-challenge-method.js';
 export { oauthResponseModeSchema, type OAuthResponseMode } from './schemas/oauth-response-mode.js';
+export { oauthPromptSchema, type OAuthPrompt } from './schemas/oauth-prompt.js';
 
 // authorization details
 export {

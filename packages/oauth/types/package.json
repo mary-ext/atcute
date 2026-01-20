@@ -22,12 +22,13 @@
 	},
 	"sideEffects": false,
 	"scripts": {
-		"build": "tsgo --project tsconfig.build.json",
+		"build": "tsc --project tsconfig.build.json",
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
 		"@atcute/identity": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
 		"@atcute/oauth-keyset": "workspace:^",
 		"@badrap/valita": "^0.4.6"
 	},

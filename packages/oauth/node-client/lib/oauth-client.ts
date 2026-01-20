@@ -8,6 +8,7 @@ import {
 	FALLBACK_ALG,
 	type ConfidentialClientMetadata,
 	type OAuthClientMetadata,
+	type OAuthPrompt,
 	type OAuthResponseMode,
 } from '@atcute/oauth-types';
 import { Keyset, type PrivateKey } from '@atcute/oauth-keyset';
@@ -80,7 +81,7 @@ export interface AuthorizeOptions {
 	/** user-provided state to preserve through flow */
 	state?: unknown;
 	/** OIDC prompt parameter */
-	prompt?: 'none' | 'login' | 'consent' | 'select_account';
+	prompt?: OAuthPrompt | (string & {});
 	/** abort signal */
 	signal?: AbortSignal;
 }
@@ -247,6 +248,16 @@ export class OAuthClient {
 		const { identity, metadata } = resolved;
 
 		signal?.throwIfAborted();
+
+		// validate prompt if server advertises supported values
+		if (prompt) {
+			const supported = metadata.prompt_values_supported;
+			if (supported && !supported.includes(prompt)) {
+				throw new TypeError(
+					`prompt "${prompt}" not supported by server (supported: ${supported.join(', ')})`,
+				);
+			}
+		}
 
 		// generate PKCE and DPoP key
 		const pkce = await generatePkce();
