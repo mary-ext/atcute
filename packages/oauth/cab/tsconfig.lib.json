@@ -1,5 +1,7 @@
 {
 	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.lib.tsbuildinfo",
+		"rootDir": "lib/",
 		"outDir": "dist/",
 		"esModuleInterop": true,
 		"skipLibCheck": true,
@@ -19,6 +21,6 @@
 		"declaration": true,
 		"declarationMap": true
 	},
-	"include": ["lib"],
+	"include": ["lib/"],
 	"exclude": ["lib/**/*.test.ts", "lib/**/*.bench.ts"]
 }
