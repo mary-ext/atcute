@@ -1,3 +1,5 @@
+import type { Nsid } from '@atcute/lexicons';
+
 // #region Concrete types
 /**
  * definition for a boolean field
@@ -378,7 +380,7 @@ export interface LexiconDoc {
 	/** indicates lexicon language version; fixed value of 1 for this version */
 	lexicon: 1;
 	/** the NSID of this lexicon */
-	id: string;
+	id: Nsid;
 	/** optional revision number for versioning */
 	revision?: number;
 	/** short overview of the lexicon, usually one or two sentences */

@@ -3,26 +3,12 @@ import { type Nsid } from '@atcute/lexicons/syntax';
 import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
 import { DELIMITED_MIME_TYPE_RE, KEY_RE, MIME_TYPE_RE, validateStringFormat } from './internal/validation.js';
 import type * as t from './types.js';
+import { formatLexiconRef, type ParsedLexiconRef } from './utils/refs.js';
 
 // #region Utilities
-type LexPath = {
-	nsid: string;
-	defId: string;
-};
-
-const toLexUri = (path: LexPath, from?: LexPath): string => {
-	const { nsid, defId } = path;
-
-	if (from !== undefined && from.nsid === nsid) {
-		return `#${defId}`;
-	}
-
-	return defId === 'main' ? nsid : `${nsid}#${defId}`;
-};
-
 type BuildContext = {
-	toplevelDefs: Map<DefType | MainType, LexPath>;
-	lexPath: LexPath;
+	toplevelDefs: Map<DefType | MainType, ParsedLexiconRef>;
+	lexPath: ParsedLexiconRef;
 	dotPath: string;
 };
 
@@ -38,7 +24,7 @@ const getReference = (ctx: BuildContext, def: DefType | MainType): t.LexRef | un
 
 	return {
 		type: 'ref',
-		ref: toLexUri(defPath, ctx.lexPath),
+		ref: formatLexiconRef(defPath, ctx.lexPath.nsid),
 	};
 };
 
@@ -459,7 +445,7 @@ const resolveStringTokenReference = (ctx: BuildContext, def: LexTokenBuilder): s
 	}
 
 	// don't use the relative path here
-	return toLexUri(defPath);
+	return formatLexiconRef(defPath);
 };
 
 const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexString => {
@@ -921,7 +907,7 @@ const buildUnionSchema = (ctx: BuildContext, def: LexRefUnionBuilder): t.LexRefU
 				throw new Error(`${ctx.dotPath}/refs/${index}: must be defined as a top-level definition`);
 			}
 
-			return toLexUri(defPath, ctx.lexPath);
+			return formatLexiconRef(defPath, ctx.lexPath.nsid);
 		}),
 		type: 'union',
 	};
@@ -1360,7 +1346,7 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.
 					throw new Error(`${ctx.dotPath}/collection/${index}: must be defined as a top-level definition`);
 				}
 
-				return toLexUri(defPath);
+				return formatLexiconRef(defPath);
 			});
 
 			return {
@@ -1383,7 +1369,7 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.
 					throw new Error(`${ctx.dotPath}/lxm/${index}: must be defined as a top-level definition`);
 				}
 
-				return toLexUri(defPath);
+				return formatLexiconRef(defPath);
 			});
 
 			if (aud === 'inherit') {
@@ -1672,8 +1658,8 @@ export const document = (doc: LexDocumentBuilder): LexDocumentBuilder => {
 	return doc;
 };
 
-const collectToplevelDefs = (documents: LexDocumentBuilder[]): Map<DefType | MainType, LexPath> => {
-	const map = new Map<DefType | MainType, LexPath>();
+const collectToplevelDefs = (documents: LexDocumentBuilder[]): Map<DefType | MainType, ParsedLexiconRef> => {
+	const map = new Map<DefType | MainType, ParsedLexiconRef>();
 
 	for (const doc of documents) {
 		for (const [defId, defValue] of Object.entries(doc.defs)) {

@@ -1,3 +1,5 @@
+import { isNsid, type Nsid } from '@atcute/lexicons/syntax';
+
 import * as v from '@badrap/valita';
 
 import * as t from './types.js';
@@ -5,6 +7,8 @@ import * as t from './types.js';
 const integer = v
 	.number()
 	.assert((input) => input >= 0 && Number.isSafeInteger(input), `expected non-negative integer`);
+
+const nsid: v.Type<Nsid> = v.string().assert(isNsid, `expected valid nsid`);
 
 // #region Concrete types
 export const lexBoolean: v.Type<t.LexBoolean> = v.object({
@@ -264,7 +268,7 @@ export const lexUserType: v.Type<t.LexUserType> = v.union(
 
 export const lexiconDoc: v.Type<t.LexiconDoc> = v.object({
 	lexicon: v.literal(1),
-	id: v.string(),
+	id: nsid,
 	revision: integer.optional(),
 	description: v.string().optional(),
 	defs: v.record(lexUserType),

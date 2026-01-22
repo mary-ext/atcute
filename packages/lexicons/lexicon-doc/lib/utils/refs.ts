@@ -1,4 +1,70 @@
+import { isNsid, type Nsid } from '@atcute/lexicons/syntax';
+
 import type { LexiconDoc, LexRefVariant, LexUserType } from '../types.js';
+
+/**
+ * represents a lexicon definition reference
+ * - full NSID: `com.example.lexicon` (refers to #main)
+ * - NSID with fragment: `com.example.lexicon#defId`
+ * - relative ref: `#defId` (requires context NSID to resolve)
+ */
+export type LexiconRef = Nsid | `${Nsid}#${string}` | `#${string}`;
+
+export interface ParsedLexiconRef {
+	nsid: Nsid;
+	defId: string;
+}
+
+/**
+ * formats a parsed lexicon reference back to a string
+ * @param parsed the parsed reference
+ * @param context if provided and matches parsed.nsid, outputs a relative ref (#defId)
+ * @returns formatted lexicon reference string
+ */
+export const formatLexiconRef = (parsed: ParsedLexiconRef, context?: Nsid): string => {
+	const { nsid, defId } = parsed;
+
+	if (context !== undefined && context === nsid) {
+		return `#${defId}`;
+	}
+
+	return defId === 'main' ? nsid : `${nsid}#${defId}`;
+};
+
+/**
+ * parses a lexicon definition reference into its components
+ * @param ref the lexicon reference to parse
+ * @param context context NSID, required for relative refs (e.g., `#defId`)
+ * @returns parsed reference with nsid and defId (defId defaults to 'main' if not specified)
+ * @throws if the ref is invalid or a relative ref is passed without context
+ */
+export const parseLexiconRef = (ref: string, context?: Nsid): ParsedLexiconRef => {
+	const hashIndex = ref.indexOf('#');
+
+	if (hashIndex === 0) {
+		if (context === undefined) {
+			throw new SyntaxError(`relative ref requires context nsid: ${ref}`);
+		}
+
+		return { nsid: context, defId: ref.slice(1) };
+	}
+
+	if (hashIndex === -1) {
+		if (!isNsid(ref)) {
+			throw new SyntaxError(`invalid nsid: ${ref}`);
+		}
+
+		return { nsid: ref, defId: 'main' };
+	}
+
+	const nsid = ref.slice(0, hashIndex);
+	const defId = ref.slice(hashIndex + 1);
+	if (!isNsid(nsid)) {
+		throw new SyntaxError(`invalid nsid in ref: ${nsid}`);
+	}
+
+	return { nsid: nsid, defId };
+};
 
 type SchemaValue = LexUserType | LexRefVariant;
 

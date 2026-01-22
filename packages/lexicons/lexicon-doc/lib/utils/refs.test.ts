@@ -2,7 +2,74 @@ import { describe, expect, it } from 'vitest';
 
 import type { LexiconDoc } from '../types.js';
 
-import { findExternalReferences } from './refs.js';
+import { findExternalReferences, formatLexiconRef, parseLexiconRef } from './refs.js';
+
+describe('formatLexiconRef', () => {
+	it('formats nsid with main defId as bare nsid', () => {
+		const result = formatLexiconRef({ nsid: 'com.example.lexicon', defId: 'main' });
+		expect(result).toBe('com.example.lexicon');
+	});
+
+	it('formats nsid with non-main defId as nsid#defId', () => {
+		const result = formatLexiconRef({ nsid: 'com.example.lexicon', defId: 'viewerState' });
+		expect(result).toBe('com.example.lexicon#viewerState');
+	});
+
+	it('formats as relative ref when context matches nsid', () => {
+		const result = formatLexiconRef(
+			{ nsid: 'com.example.lexicon', defId: 'viewerState' },
+			'com.example.lexicon',
+		);
+		expect(result).toBe('#viewerState');
+	});
+
+	it('formats as absolute ref when context does not match', () => {
+		const result = formatLexiconRef(
+			{ nsid: 'com.example.lexicon', defId: 'viewerState' },
+			'com.example.other',
+		);
+		expect(result).toBe('com.example.lexicon#viewerState');
+	});
+
+	it('formats main defId as relative when context matches', () => {
+		const result = formatLexiconRef({ nsid: 'com.example.lexicon', defId: 'main' }, 'com.example.lexicon');
+		expect(result).toBe('#main');
+	});
+});
+
+describe('parseLexiconRef', () => {
+	it('parses a bare NSID with defId defaulting to main', () => {
+		const result = parseLexiconRef('com.example.lexicon');
+		expect(result).toEqual({ nsid: 'com.example.lexicon', defId: 'main' });
+	});
+
+	it('parses an NSID with fragment', () => {
+		const result = parseLexiconRef('com.example.lexicon#viewerState');
+		expect(result).toEqual({ nsid: 'com.example.lexicon', defId: 'viewerState' });
+	});
+
+	it('parses a relative ref with context', () => {
+		const result = parseLexiconRef('#viewerState', 'com.example.lexicon');
+		expect(result).toEqual({ nsid: 'com.example.lexicon', defId: 'viewerState' });
+	});
+
+	it('throws on relative ref without context', () => {
+		expect(() => parseLexiconRef('#viewerState')).toThrow('relative ref requires context nsid');
+	});
+
+	it('throws on invalid nsid', () => {
+		expect(() => parseLexiconRef('invalid')).toThrow('invalid nsid');
+	});
+
+	it('throws on invalid nsid in ref with fragment', () => {
+		expect(() => parseLexiconRef('invalid#main')).toThrow('invalid nsid in ref');
+	});
+
+	it('handles NSID with explicit #main fragment', () => {
+		const result = parseLexiconRef('app.bsky.feed.post#main');
+		expect(result).toEqual({ nsid: 'app.bsky.feed.post', defId: 'main' });
+	});
+});
 
 describe('findExternalReferences', () => {
 	it('returns empty set for document with no references', () => {

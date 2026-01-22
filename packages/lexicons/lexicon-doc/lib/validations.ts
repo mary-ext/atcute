@@ -15,6 +15,7 @@ import {
 	type RefineIssue,
 } from './refinements.js';
 import type * as t from './types.js';
+import { formatLexiconRef, parseLexiconRef, type ParsedLexiconRef } from './utils/refs.js';
 
 export interface RecordValidatorInput {
 	key: string | null;
@@ -38,7 +39,7 @@ export class RecordValidator {
 
 		const def = getDefinition(ctx, null, path);
 		if (def.type !== 'record') {
-			throw new Error(`${toLexUri(path)} is not a record definition (got ${def.type})`);
+			throw new Error(`${formatLexiconRef(path)} is not a record definition (got ${def.type})`);
 		}
 
 		const validator = v.object({
@@ -83,9 +84,7 @@ const eager = <T>(value: T): Cell<T> => {
 	};
 };
 
-interface LexPath {
-	nsid: string;
-	defId: string;
+interface LexPath extends ParsedLexiconRef {
 	dotPath: string;
 }
 
@@ -94,43 +93,13 @@ interface BuildContext {
 	cache: WeakMap<t.LexUserType, Cell<v.BaseSchema> | null>;
 }
 
-const toLexUri = (path: LexPath) => {
-	const { nsid, defId } = path;
-
-	return defId === 'main' ? nsid : `${nsid}#${defId}`;
-};
-
 const formatPath = (path: LexPath) => {
-	return toLexUri(path) + path.dotPath;
+	return formatLexiconRef(path) + path.dotPath;
 };
 
 const resolvePath = (path: LexPath, ref: string): LexPath => {
-	const index = ref.indexOf('#');
-
-	// nsid
-	if (index === -1) {
-		return {
-			nsid: ref,
-			defId: 'main',
-			dotPath: '',
-		};
-	}
-
-	// #defId
-	if (index === 0) {
-		return {
-			nsid: path.nsid,
-			defId: ref.slice(1),
-			dotPath: '',
-		};
-	}
-
-	// nsid#defId
-	return {
-		nsid: ref.slice(0, index),
-		defId: ref.slice(index + 1),
-		dotPath: '',
-	};
+	const parsed = parseLexiconRef(ref, path.nsid);
+	return { nsid: parsed.nsid, defId: parsed.defId, dotPath: '' };
 };
 
 const getDefinition = (ctx: BuildContext, from: LexPath | null, path: LexPath): t.LexUserType => {
@@ -140,16 +109,18 @@ const getDefinition = (ctx: BuildContext, from: LexPath | null, path: LexPath): 
 			throw new Error(`can't find document: ${path.nsid}`);
 		}
 
-		throw new Error(`${toLexUri(from)} tried to reference a nonexistent document: ${path.nsid}`);
+		throw new Error(`${formatLexiconRef(from)} tried to reference a nonexistent document: ${path.nsid}`);
 	}
 
 	const def = doc.defs[path.defId];
 	if (def === undefined) {
 		if (from === null) {
-			throw new Error(`can't find definition: ${toLexUri(path)}`);
+			throw new Error(`can't find definition: ${formatLexiconRef(path)}`);
 		}
 
-		throw new Error(`${toLexUri(from)} tried to reference a nonexistent definition: ${toLexUri(path)}`);
+		throw new Error(
+			`${formatLexiconRef(from)} tried to reference a nonexistent definition: ${formatLexiconRef(path)}`,
+		);
 	}
 
 	return def;
@@ -426,7 +397,7 @@ const buildLexToken = (ctx: BuildContext, path: LexPath, spec: t.LexToken): Cell
 		return cell;
 	}
 
-	let schema: v.BaseSchema = v.literal(toLexUri(path));
+	let schema: v.BaseSchema = v.literal(formatLexiconRef(path));
 
 	cell = eager(schema);
 	ctx.cache.set(spec, cell);
@@ -512,7 +483,7 @@ const buildLexRefUnion = (ctx: BuildContext, path: LexPath, spec: t.LexRefUnion)
 		}
 
 		throw new Error(
-			`${formatPath(path)}/refs/${idx}: unsupported ref target (${toLexUri(refPath)} -> ${refSpec.type})`,
+			`${formatPath(path)}/refs/${idx}: unsupported ref target (${formatLexiconRef(refPath)} -> ${refSpec.type})`,
 		);
 	});
 
@@ -678,11 +649,11 @@ const buildLexObject = (
 
 		switch (writeType) {
 			case 'optional': {
-				obj.$type = v.optional(v.literal(toLexUri(path)));
+				obj.$type = v.optional(v.literal(formatLexiconRef(path)));
 				break;
 			}
 			case 'required': {
-				obj.$type = v.literal(toLexUri(path));
+				obj.$type = v.literal(formatLexiconRef(path));
 				break;
 			}
 		}

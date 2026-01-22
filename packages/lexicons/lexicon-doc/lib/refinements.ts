@@ -1119,15 +1119,8 @@ const refineUserType = (spec: t.LexUserType, deep: boolean = false): RefineIssue
  * @returns validation issues found
  */
 export const refineLexiconDoc = (spec: t.LexiconDoc, deep: boolean = false): RefineIssue[] => {
-	const { id, defs } = spec;
+	const { defs } = spec;
 	const issues: RefineIssue[] = [];
-
-	if (!isNsid(id)) {
-		issues.push({
-			message: `must be valid NSID`,
-			path: ['id'],
-		});
-	}
 
 	for (const prop in defs) {
 		const def = defs[prop];
