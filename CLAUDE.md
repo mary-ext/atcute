@@ -74,3 +74,31 @@ the packages are organized into categories under `packages/`:
   be sure
 - Task tool (subagents for exploration, planning, etc.) may not always be accurate; verify subagent
   findings when needed
+
+### external repository research
+
+use `@oomfware/cgr` to ask questions about external repositories:
+
+    npx @oomfware/cgr ask [options] <repo>[#branch] <question>
+
+    options:
+      -m, --model <model>   model to use: opus, sonnet, haiku (default: haiku)
+      -w, --with <repo>     additional repository to include, supports #branch (repeatable)
+
+useful repositories for development:
+
+- `github.com/bluesky-social/atproto` for AT Protocol reference implementation, lexicons, XRPC
+- `github.com/bluesky-social/social-app` for Bluesky app patterns, API usage examples
+- `github.com/bluesky-social/feed-generator` for feed generator architecture
+- `github.com/bluesky-social/indigo` for Go implementation, alternative design approaches
+- `github.com/bluesky-social/ozone` for moderation service patterns
+- `github.com/bluesky-social/proposals` for AT Protocol proposals and specifications
+- `github.com/bluesky-social/atproto-website` for AT Protocol spec documentation
+- `github.com/DavidBuchanan314/atmst` for MST implementation in Python (@atcute/mst is derived from
+  this)
+- `github.com/DavidBuchanan314/millipds` for practical atmst usage patterns (Python)
+- `github.com/darobin/dasl.ing` for DASL specification
+- `github.com/did-method-plc/did-method-plc` for DID PLC implementation reference
+
+cgr works best with detailed questions. include file/folder paths when you know them, and reference
+details from previous answers in follow-ups.
