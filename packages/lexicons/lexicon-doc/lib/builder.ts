@@ -1,6 +1,6 @@
 import { type Nsid } from '@atcute/lexicons/syntax';
-
-import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
+import { getUtf8Length, isUtf8LengthInRange } from '@atcute/uint8array';
+import { getGraphemeLength, isGraphemeLengthInRange } from '@atcute/util-text';
 import { DELIMITED_MIME_TYPE_RE, KEY_RE, MIME_TYPE_RE, validateStringFormat } from './internal/validation.js';
 import type * as t from './types.js';
 import { formatLexiconRef, type ParsedLexiconRef } from './utils/refs.js';
@@ -250,36 +250,18 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 			}
 		}
 
-		{
-			const bound = isWithinUtf8Bounds(defaultValue, minLength, maxLength);
-
-			if (bound === 'min') {
-				throw new Error(
-					`string/default: value (${JSON.stringify(defaultValue)}) can't be shorter than minimum length (${minLength})`,
-				);
-			}
-
-			if (bound === 'max') {
-				throw new Error(
-					`string/default: value (${JSON.stringify(defaultValue)}) can't be longer than maximum length (${maxLength})`,
-				);
-			}
+		if (!isUtf8LengthInRange(defaultValue, minLength, maxLength)) {
+			const len = getUtf8Length(defaultValue);
+			throw new Error(
+				`string/default: value (${JSON.stringify(defaultValue)}) length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+			);
 		}
 
-		{
-			const bound = isWithinGraphemeBounds(defaultValue, minGraphemes, maxGraphemes);
-
-			if (bound === 'min') {
-				throw new Error(
-					`string/default: value (${JSON.stringify(defaultValue)}) can't be shorter than minimum graphemes (${minGraphemes})`,
-				);
-			}
-
-			if (bound === 'max') {
-				throw new Error(
-					`string/default: value (${JSON.stringify(defaultValue)}) can't be longer than maximum graphemes (${maxGraphemes})`,
-				);
-			}
+		if (!isGraphemeLengthInRange(defaultValue, minGraphemes, maxGraphemes)) {
+			const len = getGraphemeLength(defaultValue);
+			throw new Error(
+				`string/default: value (${JSON.stringify(defaultValue)}) grapheme length ${len}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+			);
 		}
 
 		if (format !== undefined && !validateStringFormat(defaultValue, format)) {
@@ -299,36 +281,18 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 		}
 
 		if (typeof constValue === 'string') {
-			{
-				const bound = isWithinUtf8Bounds(constValue, minLength, maxLength);
-
-				if (bound === 'min') {
-					throw new Error(
-						`string/const: value (${JSON.stringify(constValue)}) can't be shorter than minimum length (${minLength})`,
-					);
-				}
-
-				if (bound === 'max') {
-					throw new Error(
-						`string/const: value (${JSON.stringify(constValue)}) can't be longer than maximum length (${maxLength})`,
-					);
-				}
+			if (!isUtf8LengthInRange(constValue, minLength, maxLength)) {
+				const len = getUtf8Length(constValue);
+				throw new Error(
+					`string/const: value (${JSON.stringify(constValue)}) length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+				);
 			}
 
-			{
-				const bound = isWithinGraphemeBounds(constValue, minGraphemes, maxGraphemes);
-
-				if (bound === 'min') {
-					throw new Error(
-						`string/const: value (${JSON.stringify(constValue)}) can't be shorter than minimum graphemes (${minGraphemes})`,
-					);
-				}
-
-				if (bound === 'max') {
-					throw new Error(
-						`string/const: value (${JSON.stringify(constValue)}) can't be longer than maximum graphemes (${maxGraphemes})`,
-					);
-				}
+			if (!isGraphemeLengthInRange(constValue, minGraphemes, maxGraphemes)) {
+				const len = getGraphemeLength(constValue);
+				throw new Error(
+					`string/const: value (${JSON.stringify(constValue)}) grapheme length ${len}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+				);
 			}
 
 			if (format !== undefined && !validateStringFormat(constValue, format)) {
@@ -348,36 +312,18 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 			const enumValue = enumValues[idx];
 
 			if (typeof enumValue === 'string') {
-				{
-					const bound = isWithinUtf8Bounds(enumValue, minLength, maxLength);
-
-					if (bound === 'min') {
-						throw new Error(
-							`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) can't be shorter than minimum length (${minLength})`,
-						);
-					}
-
-					if (bound === 'max') {
-						throw new Error(
-							`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) can't be longer than maximum length (${maxLength})`,
-						);
-					}
+				if (!isUtf8LengthInRange(enumValue, minLength, maxLength)) {
+					const len = getUtf8Length(enumValue);
+					throw new Error(
+						`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+					);
 				}
 
-				{
-					const bound = isWithinGraphemeBounds(enumValue, minGraphemes, maxGraphemes);
-
-					if (bound === 'min') {
-						throw new Error(
-							`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) can't have fewer graphemes than minimum graphemes (${minGraphemes})`,
-						);
-					}
-
-					if (bound === 'max') {
-						throw new Error(
-							`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
-						);
-					}
+				if (!isGraphemeLengthInRange(enumValue, minGraphemes, maxGraphemes)) {
+					const graphemeLen = getGraphemeLength(enumValue);
+					throw new Error(
+						`string/enum[${idx}]: value (${JSON.stringify(enumValue)}) grapheme length ${graphemeLen}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+					);
 				}
 
 				if (format !== undefined && !validateStringFormat(enumValue, format)) {
@@ -394,36 +340,18 @@ export const string = (def: Omit<LexStringBuilder, 'type'> = {}): LexStringBuild
 			const knownValue = knownValues[idx];
 
 			if (typeof knownValue === 'string') {
-				{
-					const bound = isWithinUtf8Bounds(knownValue, minLength, maxLength);
-
-					if (bound === 'min') {
-						throw new Error(
-							`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) can't be shorter than minimum length (${minLength})`,
-						);
-					}
-
-					if (bound === 'max') {
-						throw new Error(
-							`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) can't be longer than maximum length (${maxLength})`,
-						);
-					}
+				if (!isUtf8LengthInRange(knownValue, minLength, maxLength)) {
+					const len = getUtf8Length(knownValue);
+					throw new Error(
+						`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+					);
 				}
 
-				{
-					const bound = isWithinGraphemeBounds(knownValue, minGraphemes, maxGraphemes);
-
-					if (bound === 'min') {
-						throw new Error(
-							`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) can't have fewer graphemes than minimum graphemes (${minGraphemes})`,
-						);
-					}
-
-					if (bound === 'max') {
-						throw new Error(
-							`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
-						);
-					}
+				if (!isGraphemeLengthInRange(knownValue, minGraphemes, maxGraphemes)) {
+					const graphemeLen = getGraphemeLength(knownValue);
+					throw new Error(
+						`string/knownValues[${idx}]: value (${JSON.stringify(knownValue)}) grapheme length ${graphemeLen}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+					);
 				}
 
 				if (format !== undefined && !validateStringFormat(knownValue, format)) {
@@ -495,36 +423,18 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexStrin
 
 	// validate resolved const value
 	if (builtConstValue !== undefined && typeof constValue !== 'string') {
-		{
-			const bound = isWithinUtf8Bounds(builtConstValue, minLength, maxLength);
-
-			if (bound === 'min') {
-				throw new Error(
-					`${ctx.dotPath}/const: value (${JSON.stringify(builtConstValue)}) can't be shorter than minimum length (${minLength})`,
-				);
-			}
-
-			if (bound === 'max') {
-				throw new Error(
-					`${ctx.dotPath}/const: value (${JSON.stringify(builtConstValue)}) can't be longer than maximum length (${maxLength})`,
-				);
-			}
+		if (!isUtf8LengthInRange(builtConstValue, minLength, maxLength)) {
+			const len = getUtf8Length(builtConstValue);
+			throw new Error(
+				`${ctx.dotPath}/const: value (${JSON.stringify(builtConstValue)}) length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+			);
 		}
 
-		{
-			const bound = isWithinGraphemeBounds(builtConstValue, minGraphemes, maxGraphemes);
-
-			if (bound === 'min') {
-				throw new Error(
-					`${ctx.dotPath}/const: value (${JSON.stringify(builtConstValue)}) can't be shorter than minimum graphemes (${minGraphemes})`,
-				);
-			}
-
-			if (bound === 'max') {
-				throw new Error(
-					`${ctx.dotPath}/const: value (${JSON.stringify(builtConstValue)}) can't be longer than maximum graphemes (${maxGraphemes})`,
-				);
-			}
+		if (!isGraphemeLengthInRange(builtConstValue, minGraphemes, maxGraphemes)) {
+			const len = getGraphemeLength(builtConstValue);
+			throw new Error(
+				`${ctx.dotPath}/const: value (${JSON.stringify(builtConstValue)}) grapheme length ${len}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+			);
 		}
 
 		if (format !== undefined && !validateStringFormat(builtConstValue, format)) {
@@ -544,36 +454,18 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexStrin
 			throw new Error(`${ctx.dotPath}/default: value must be one of the enum values`);
 		}
 
-		{
-			const bound = isWithinUtf8Bounds(builtDefaultValue, minLength, maxLength);
-
-			if (bound === 'min') {
-				throw new Error(
-					`${ctx.dotPath}/default: value (${JSON.stringify(builtDefaultValue)}) can't be shorter than minimum length (${minLength})`,
-				);
-			}
-
-			if (bound === 'max') {
-				throw new Error(
-					`${ctx.dotPath}/default: value (${JSON.stringify(builtDefaultValue)}) can't be longer than maximum length (${maxLength})`,
-				);
-			}
+		if (!isUtf8LengthInRange(builtDefaultValue, minLength, maxLength)) {
+			const len = getUtf8Length(builtDefaultValue);
+			throw new Error(
+				`${ctx.dotPath}/default: value (${JSON.stringify(builtDefaultValue)}) length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+			);
 		}
 
-		{
-			const bound = isWithinGraphemeBounds(builtDefaultValue, minGraphemes, maxGraphemes);
-
-			if (bound === 'min') {
-				throw new Error(
-					`${ctx.dotPath}/default: value (${JSON.stringify(builtDefaultValue)}) can't be shorter than minimum graphemes (${minGraphemes})`,
-				);
-			}
-
-			if (bound === 'max') {
-				throw new Error(
-					`${ctx.dotPath}/default: value (${JSON.stringify(builtDefaultValue)}) can't be longer than maximum graphemes (${maxGraphemes})`,
-				);
-			}
+		if (!isGraphemeLengthInRange(builtDefaultValue, minGraphemes, maxGraphemes)) {
+			const len = getGraphemeLength(builtDefaultValue);
+			throw new Error(
+				`${ctx.dotPath}/default: value (${JSON.stringify(builtDefaultValue)}) grapheme length ${len}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+			);
 		}
 
 		if (format !== undefined && !validateStringFormat(builtDefaultValue, format)) {
@@ -590,36 +482,18 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexStrin
 			const builtEnumValue = builtEnumValues[idx];
 
 			if (typeof enumValue !== 'string') {
-				{
-					const bound = isWithinUtf8Bounds(builtEnumValue, minLength, maxLength);
-
-					if (bound === 'min') {
-						throw new Error(
-							`${ctx.dotPath}/enum/${idx}: value (${JSON.stringify(builtEnumValue)}) can't be shorter than minimum length (${minLength})`,
-						);
-					}
-
-					if (bound === 'max') {
-						throw new Error(
-							`${ctx.dotPath}/enum/${idx}: value (${JSON.stringify(builtEnumValue)}) can't be longer than maximum length (${maxLength})`,
-						);
-					}
+				if (!isUtf8LengthInRange(builtEnumValue, minLength, maxLength)) {
+					const len = getUtf8Length(builtEnumValue);
+					throw new Error(
+						`${ctx.dotPath}/enum/${idx}: value (${JSON.stringify(builtEnumValue)}) length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+					);
 				}
 
-				{
-					const bound = isWithinGraphemeBounds(builtEnumValue, minGraphemes, maxGraphemes);
-
-					if (bound === 'min') {
-						throw new Error(
-							`${ctx.dotPath}/enum/${idx}: value (${JSON.stringify(builtEnumValue)}) can't have fewer graphemes than minimum graphemes (${minGraphemes})`,
-						);
-					}
-
-					if (bound === 'max') {
-						throw new Error(
-							`${ctx.dotPath}/enum/${idx}: value (${JSON.stringify(builtEnumValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
-						);
-					}
+				if (!isGraphemeLengthInRange(builtEnumValue, minGraphemes, maxGraphemes)) {
+					const graphemeLen = getGraphemeLength(builtEnumValue);
+					throw new Error(
+						`${ctx.dotPath}/enum/${idx}: value (${JSON.stringify(builtEnumValue)}) grapheme length ${graphemeLen}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+					);
 				}
 
 				if (format !== undefined && !validateStringFormat(builtEnumValue, format)) {
@@ -638,36 +512,18 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexStrin
 			const builtKnownValue = builtKnownValues[idx];
 
 			if (typeof knownValue !== 'string') {
-				{
-					const bound = isWithinUtf8Bounds(builtKnownValue, minLength, maxLength);
-
-					if (bound === 'min') {
-						throw new Error(
-							`${ctx.dotPath}/knownValues/${idx}: value (${JSON.stringify(builtKnownValue)}) can't be shorter than minimum length (${minLength})`,
-						);
-					}
-
-					if (bound === 'max') {
-						throw new Error(
-							`${ctx.dotPath}/knownValues/${idx}: value (${JSON.stringify(builtKnownValue)}) can't be longer than maximum length (${maxLength})`,
-						);
-					}
+				if (!isUtf8LengthInRange(builtKnownValue, minLength, maxLength)) {
+					const len = getUtf8Length(builtKnownValue);
+					throw new Error(
+						`${ctx.dotPath}/knownValues/${idx}: value (${JSON.stringify(builtKnownValue)}) length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+					);
 				}
 
-				{
-					const bound = isWithinGraphemeBounds(builtKnownValue, minGraphemes, maxGraphemes);
-
-					if (bound === 'min') {
-						throw new Error(
-							`${ctx.dotPath}/knownValues/${idx}: value (${JSON.stringify(builtKnownValue)}) can't have fewer graphemes than minimum graphemes (${minGraphemes})`,
-						);
-					}
-
-					if (bound === 'max') {
-						throw new Error(
-							`${ctx.dotPath}/knownValues/${idx}: value (${JSON.stringify(builtKnownValue)}) can't have more graphemes than maximum graphemes (${maxGraphemes})`,
-						);
-					}
+				if (!isGraphemeLengthInRange(builtKnownValue, minGraphemes, maxGraphemes)) {
+					const graphemeLen = getGraphemeLength(builtKnownValue);
+					throw new Error(
+						`${ctx.dotPath}/knownValues/${idx}: value (${JSON.stringify(builtKnownValue)}) grapheme length ${graphemeLen}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+					);
 				}
 
 				if (format !== undefined && !validateStringFormat(builtKnownValue, format)) {

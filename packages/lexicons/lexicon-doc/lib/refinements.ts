@@ -1,6 +1,6 @@
 import { isLanguageCode, isNsid } from '@atcute/lexicons/syntax';
-
-import { isWithinGraphemeBounds, isWithinUtf8Bounds } from './internal/utils.js';
+import { getUtf8Length, isUtf8LengthInRange } from '@atcute/uint8array';
+import { getGraphemeLength, isGraphemeLengthInRange } from '@atcute/util-text';
 import {
 	DELIMITED_MIME_TYPE_RE,
 	KEY_RE,
@@ -217,40 +217,20 @@ export const refineLexString = (spec: t.LexString): RefineIssue[] => {
 			});
 		}
 
-		{
-			const bound = isWithinUtf8Bounds(defaultValue, minLength, maxLength);
-
-			if (bound === 'min') {
-				issues.push({
-					message: `default value can't be shorter than minimum string length`,
-					path: ['default'],
-				});
-			}
-
-			if (bound === 'max') {
-				issues.push({
-					message: `default value can't be longer than maximum string length`,
-					path: ['default'],
-				});
-			}
+		if (!isUtf8LengthInRange(defaultValue, minLength, maxLength)) {
+			const len = getUtf8Length(defaultValue);
+			issues.push({
+				message: `default value length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+				path: ['default'],
+			});
 		}
 
-		{
-			const bound = isWithinGraphemeBounds(defaultValue, minLength, maxLength);
-
-			if (bound === 'min') {
-				issues.push({
-					message: `default value can't be shorter than minimum grapheme count`,
-					path: ['default'],
-				});
-			}
-
-			if (bound === 'max') {
-				issues.push({
-					message: `default value can't be longer than minimum grapheme count`,
-					path: ['default'],
-				});
-			}
+		if (!isGraphemeLengthInRange(defaultValue, minGraphemes, maxGraphemes)) {
+			const len = getGraphemeLength(defaultValue);
+			issues.push({
+				message: `default value grapheme length ${len}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+				path: ['default'],
+			});
 		}
 
 		if (format !== undefined && !validateStringFormat(defaultValue, format)) {
@@ -262,40 +242,20 @@ export const refineLexString = (spec: t.LexString): RefineIssue[] => {
 	}
 
 	if (constValue !== undefined) {
-		{
-			const bound = isWithinUtf8Bounds(constValue, minLength, maxLength);
-
-			if (bound === 'min') {
-				issues.push({
-					message: `const value can't be shorter than minimum string length`,
-					path: ['const'],
-				});
-			}
-
-			if (bound === 'max') {
-				issues.push({
-					message: `const value can't be longer than maximum string length`,
-					path: ['const'],
-				});
-			}
+		if (!isUtf8LengthInRange(constValue, minLength, maxLength)) {
+			const len = getUtf8Length(constValue);
+			issues.push({
+				message: `const value length ${len}, must be ${minLength} <= len <= ${maxLength}`,
+				path: ['const'],
+			});
 		}
 
-		{
-			const bound = isWithinGraphemeBounds(constValue, minLength, maxLength);
-
-			if (bound === 'min') {
-				issues.push({
-					message: `const value can't be shorter than minimum grapheme count`,
-					path: ['const'],
-				});
-			}
-
-			if (bound === 'max') {
-				issues.push({
-					message: `const value can't be longer than minimum grapheme count`,
-					path: ['const'],
-				});
-			}
+		if (!isGraphemeLengthInRange(constValue, minGraphemes, maxGraphemes)) {
+			const len = getGraphemeLength(constValue);
+			issues.push({
+				message: `const value grapheme length ${len}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+				path: ['const'],
+			});
 		}
 
 		if (format !== undefined && !validateStringFormat(constValue, format)) {
@@ -310,40 +270,20 @@ export const refineLexString = (spec: t.LexString): RefineIssue[] => {
 		for (let idx = 0, len = enumValues.length; idx < len; idx++) {
 			const enumValue = enumValues[idx];
 
-			{
-				const bound = isWithinUtf8Bounds(enumValue, minLength, maxLength);
-
-				if (bound === 'min') {
-					issues.push({
-						message: `enum value can't be shorter than minimum string length`,
-						path: ['enum', idx],
-					});
-				}
-
-				if (bound === 'max') {
-					issues.push({
-						message: `enum value can't be longer than maximum string length`,
-						path: ['enum', idx],
-					});
-				}
+			if (!isUtf8LengthInRange(enumValue, minLength, maxLength)) {
+				const utf8Len = getUtf8Length(enumValue);
+				issues.push({
+					message: `enum value length ${utf8Len}, must be ${minLength} <= len <= ${maxLength}`,
+					path: ['enum', idx],
+				});
 			}
 
-			{
-				const bound = isWithinGraphemeBounds(enumValue, minGraphemes, maxGraphemes);
-
-				if (bound === 'min') {
-					issues.push({
-						message: `enum value can't have fewer graphemes than minimum grapheme count`,
-						path: ['enum', idx],
-					});
-				}
-
-				if (bound === 'max') {
-					issues.push({
-						message: `enum value can't have more graphemes than maximum grapheme count`,
-						path: ['enum', idx],
-					});
-				}
+			if (!isGraphemeLengthInRange(enumValue, minGraphemes, maxGraphemes)) {
+				const graphemeLen = getGraphemeLength(enumValue);
+				issues.push({
+					message: `enum value grapheme length ${graphemeLen}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+					path: ['enum', idx],
+				});
 			}
 
 			if (format !== undefined && !validateStringFormat(enumValue, format)) {
@@ -359,40 +299,20 @@ export const refineLexString = (spec: t.LexString): RefineIssue[] => {
 		for (let idx = 0, len = knownValues.length; idx < len; idx++) {
 			const knownValue = knownValues[idx];
 
-			{
-				const bound = isWithinUtf8Bounds(knownValue, minLength, maxLength);
-
-				if (bound === 'min') {
-					issues.push({
-						message: `known value can't be shorter than minimum string length`,
-						path: ['known', idx],
-					});
-				}
-
-				if (bound === 'max') {
-					issues.push({
-						message: `known value can't be longer than maximum string length`,
-						path: ['known', idx],
-					});
-				}
+			if (!isUtf8LengthInRange(knownValue, minLength, maxLength)) {
+				const utf8Len = getUtf8Length(knownValue);
+				issues.push({
+					message: `known value length ${utf8Len}, must be ${minLength} <= len <= ${maxLength}`,
+					path: ['known', idx],
+				});
 			}
 
-			{
-				const bound = isWithinGraphemeBounds(knownValue, minGraphemes, maxGraphemes);
-
-				if (bound === 'min') {
-					issues.push({
-						message: `known value can't have fewer graphemes than minimum grapheme count`,
-						path: ['known', idx],
-					});
-				}
-
-				if (bound === 'max') {
-					issues.push({
-						message: `known value can't have more graphemes than maximum grapheme count`,
-						path: ['known', idx],
-					});
-				}
+			if (!isGraphemeLengthInRange(knownValue, minGraphemes, maxGraphemes)) {
+				const graphemeLen = getGraphemeLength(knownValue);
+				issues.push({
+					message: `known value grapheme length ${graphemeLen}, must be ${minGraphemes} <= len <= ${maxGraphemes}`,
+					path: ['known', idx],
+				});
 			}
 
 			if (format !== undefined && !validateStringFormat(knownValue, format)) {

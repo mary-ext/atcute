@@ -305,7 +305,7 @@ describe('builder', () => {
 						}),
 					],
 				}),
-			).toThrow(/com\.example\.test#main\/const:.*can't be shorter than minimum length/);
+			).toThrow(/com\.example\.test#main\/const:.*length \d+, must be 1000 <= len <= Infinity/);
 		});
 
 		test('throws when token default value violates maxLength during build', () => {
@@ -326,7 +326,7 @@ describe('builder', () => {
 						}),
 					],
 				}),
-			).toThrow(/com\.example\.test#main\/default:.*can't be longer than maximum length/);
+			).toThrow(/com\.example\.test#main\/default:.*length \d+, must be 0 <= len <= 5/);
 		});
 
 		test('throws when token enum value violates minLength during build', () => {
@@ -347,7 +347,7 @@ describe('builder', () => {
 						}),
 					],
 				}),
-			).toThrow(/com\.example\.test#main\/enum\/0:.*can't be shorter than minimum length/);
+			).toThrow(/com\.example\.test#main\/enum\/0:.*length \d+, must be 1000 <= len <= Infinity/);
 		});
 
 		test('throws when token knownValues violates maxLength during build', () => {
@@ -368,7 +368,7 @@ describe('builder', () => {
 						}),
 					],
 				}),
-			).toThrow(/com\.example\.test#main\/knownValues\/0:.*can't be longer than maximum length/);
+			).toThrow(/com\.example\.test#main\/knownValues\/0:.*length \d+, must be 0 <= len <= 5/);
 		});
 
 		test('throws when token const value does not match format during build', () => {
@@ -501,13 +501,13 @@ describe('builder', () => {
 
 		test('throws when default is shorter than minLength', () => {
 			expect(() => string({ minLength: 10, default: 'hi' })).toThrow(
-				'string/default: value ("hi") can\'t be shorter than minimum length (10)',
+				'string/default: value ("hi") length 2, must be 10 <= len <= Infinity',
 			);
 		});
 
 		test('throws when default is longer than maxLength', () => {
 			expect(() => string({ maxLength: 5, default: 'hello world' })).toThrow(
-				'string/default: value ("hello world") can\'t be longer than maximum length (5)',
+				'string/default: value ("hello world") length 11, must be 0 <= len <= 5',
 			);
 		});
 
@@ -581,19 +581,19 @@ describe('builder', () => {
 
 		test('throws when enum value is shorter than minLength', () => {
 			expect(() => string({ minLength: 5, enum: ['hi', 'hello', 'world'] })).toThrow(
-				'string/enum[0]: value ("hi") can\'t be shorter than minimum length (5)',
+				'string/enum[0]: value ("hi") length 2, must be 5 <= len <= Infinity',
 			);
 		});
 
 		test('throws when enum value is longer than maxLength', () => {
 			expect(() => string({ maxLength: 5, enum: ['hi', 'hello', 'worlds'] })).toThrow(
-				'string/enum[2]: value ("worlds") can\'t be longer than maximum length (5)',
+				'string/enum[2]: value ("worlds") length 6, must be 0 <= len <= 5',
 			);
 		});
 
 		test('throws when knownValues value is shorter than minLength', () => {
 			expect(() => string({ minLength: 5, knownValues: ['hi', 'hello', 'world'] })).toThrow(
-				'string/knownValues[0]: value ("hi") can\'t be shorter than minimum length (5)',
+				'string/knownValues[0]: value ("hi") length 2, must be 5 <= len <= Infinity',
 			);
 		});
 
