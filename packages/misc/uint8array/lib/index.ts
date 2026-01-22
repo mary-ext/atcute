@@ -274,6 +274,56 @@ export const getUtf8Length = (str: string): number => {
 };
 
 /**
+ * checks if a string's UTF-8 byte length is within a given range.
+ * includes early-exit optimization when exceeding max length.
+ * @param str string to measure
+ * @param min minimum byte length (inclusive)
+ * @param max maximum byte length (inclusive)
+ * @returns true if byte length is within [min, max]
+ */
+export const isUtf8LengthInRange = (str: string, min: number, max: number): boolean => {
+	const len = str.length;
+
+	// fast path: if max possible UTF-8 length is below min, fail
+	if (len * 3 < min) {
+		return false;
+	}
+
+	// fast path: if UTF-16 length satisfies min and max possible satisfies max
+	if (len >= min && len * 3 <= max) {
+		return true;
+	}
+
+	let u16pos = 0;
+	let u8pos = 0;
+
+	while (u16pos < len) {
+		const code = str.charCodeAt(u16pos);
+
+		if (code < 0x80) {
+			u16pos += 1;
+			u8pos += 1;
+		} else if (code < 0x800) {
+			u16pos += 1;
+			u8pos += 2;
+		} else if (code < 0xd800 || code > 0xdbff) {
+			u16pos += 1;
+			u8pos += 3;
+		} else {
+			u16pos += 2;
+			u8pos += 4;
+		}
+
+		// early exit once we exceed max
+		if (u8pos > max) {
+			return false;
+		}
+	}
+
+	return u8pos >= min;
+};
+
+/**
  * get a SHA-256 digest of this buffer
  */
 export const toSha256 = async (buffer: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> => {

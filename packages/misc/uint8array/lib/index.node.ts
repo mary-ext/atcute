@@ -152,6 +152,18 @@ export const getUtf8Length = (str: string): number => {
 	return _byteLength(str, 'utf8');
 };
 
+/**
+ * checks if a string's UTF-8 byte length is within a given range
+ * @param str string to measure
+ * @param min minimum byte length (inclusive)
+ * @param max maximum byte length (inclusive)
+ * @returns true if byte length is within [min, max]
+ */
+export const isUtf8LengthInRange = (str: string, min: number, max: number): boolean => {
+	const len = _byteLength(str, 'utf8');
+	return len >= min && len <= max;
+};
+
 export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuffer>> => {
 	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
 };
