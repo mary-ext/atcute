@@ -1,5 +1,5 @@
-import { getUtf8Length } from '@atcute/uint8array';
-import { getGraphemeLength } from '@atcute/util-text';
+import { isUtf8LengthInRange } from '@atcute/uint8array';
+import { isGraphemeLengthInRange } from '@atcute/util-text';
 
 import type { StandardSchemaV1 } from '@standard-schema/spec';
 
@@ -817,29 +817,7 @@ export const stringLength: {
 		minLength: minLength,
 		maxLength: maxLength,
 		'~run'(input, _flags) {
-			// UTF-8 conversion can be expensive, so we're going to do some safe naive
-			// checks where we assume an upper-bound of the UTF-16 to UTF-8 conversion
-
-			const utf16Len = input.length;
-			const maybeUtf8Len = utf16Len * 3;
-
-			// fail early if estimated upper bound is too small
-			if (maybeUtf8Len < minLength) {
-				return issue;
-			}
-
-			// skip calculation if UTF-16 length already satisfies both constraints
-			if (utf16Len >= minLength && maybeUtf8Len <= maxLength) {
-				return undefined;
-			}
-
-			const utf8Len = getUtf8Length(input);
-
-			if (utf8Len < minLength) {
-				return issue;
-			}
-
-			if (utf8Len > maxLength) {
+			if (!isUtf8LengthInRange(input, minLength, maxLength)) {
 				return issue;
 			}
 
@@ -881,29 +859,7 @@ export const stringGraphemes: {
 		minGraphemes: minGraphemes,
 		maxGraphemes: maxGraphemes,
 		'~run'(input, _flags) {
-			// grapheme conversion is expensive, so we're going to do some safe naive
-			// checks where we assume 1 UTF-16 character = 1 grapheme.
-
-			const utf16Len = input.length;
-
-			// fail early if UTF-16 length is too small
-			if (utf16Len < minGraphemes) {
-				return issue;
-			}
-
-			// if there is no minimum bounds, we can safely skip when UTF-16 is
-			// within the maximum bounds.
-			if (minGraphemes === 0 && utf16Len <= maxGraphemes) {
-				return undefined;
-			}
-
-			const graphemeLen = getGraphemeLength(input);
-
-			if (graphemeLen < minGraphemes) {
-				return issue;
-			}
-
-			if (graphemeLen > maxGraphemes) {
+			if (!isGraphemeLengthInRange(input, minGraphemes, maxGraphemes)) {
 				return issue;
 			}
 
