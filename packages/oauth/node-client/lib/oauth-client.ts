@@ -71,6 +71,8 @@ export type AuthorizeTarget =
 	| { type: 'account'; identifier: ActorIdentifier }
 	| { type: 'pds'; serviceUrl: string };
 
+type OAuthPromptInput = OAuthPrompt | (string & {});
+
 export interface AuthorizeOptions {
 	/** target account (handle or DID) or PDS URL */
 	target: AuthorizeTarget;
@@ -80,8 +82,8 @@ export interface AuthorizeOptions {
 	redirectUri?: string;
 	/** user-provided state to preserve through flow */
 	state?: unknown;
-	/** OIDC prompt parameter */
-	prompt?: OAuthPrompt | (string & {});
+	/** oidc prompt parameter (string or fallback list) */
+	prompt?: OAuthPromptInput | readonly OAuthPromptInput[];
 	/** abort signal */
 	signal?: AbortSignal;
 }
@@ -240,24 +242,20 @@ export class OAuthClient {
 		// resolve target to AS metadata
 		let resolved;
 		if (target.type === 'account') {
-			resolved = await this.resolver.resolveFromIdentity(target.identifier, { signal });
+			resolved = await this.resolver.resolveFromIdentity(target.identifier, {
+				signal,
+			});
 		} else {
-			resolved = await this.resolver.resolveFromService(target.serviceUrl, { signal });
+			resolved = await this.resolver.resolveFromService(target.serviceUrl, {
+				signal,
+			});
 		}
 
 		const { identity, metadata } = resolved;
 
 		signal?.throwIfAborted();
 
-		// validate prompt if server advertises supported values
-		if (prompt) {
-			const supported = metadata.prompt_values_supported;
-			if (supported && !supported.includes(prompt as OAuthPrompt)) {
-				throw new TypeError(
-					`prompt "${prompt}" not supported by server (supported: ${supported.join(', ')})`,
-				);
-			}
-		}
+		const resolvedPrompt = resolvePrompt(prompt, metadata.prompt_values_supported);
 
 		// generate PKCE and DPoP key
 		const pkce = await generatePkce();
@@ -299,8 +297,8 @@ export class OAuthClient {
 		if (identity) {
 			parParams.login_hint = identity.handle !== 'handle.invalid' ? identity.handle : identity.did;
 		}
-		if (prompt) {
-			parParams.prompt = prompt;
+		if (resolvedPrompt) {
+			parParams.prompt = resolvedPrompt;
 		}
 
 		// push authorization request
@@ -432,6 +430,35 @@ export class OAuthClient {
 		return new OAuthSession(server, sub, this.sessionGetter, this.fetch);
 	}
 }
+
+const resolvePrompt = (
+	prompt: OAuthPromptInput | readonly OAuthPromptInput[] | undefined,
+	supported?: readonly OAuthPrompt[],
+): OAuthPromptInput | undefined => {
+	if (!prompt) {
+		return;
+	}
+
+	const candidates = Array.isArray(prompt) ? prompt : [prompt];
+	if (candidates.length === 0) {
+		return;
+	}
+
+	if (!supported) {
+		return candidates[0];
+	}
+
+	for (let i = 0, il = candidates.length; i < il; i++) {
+		const candidate = candidates[i];
+		if (supported.includes(candidate as OAuthPrompt)) {
+			return candidate;
+		}
+	}
+
+	throw new TypeError(
+		`prompt not supported by server (provided: ${candidates.join(', ')}, supported: ${supported.join(', ')})`,
+	);
+};
 
 const parseScope = (scope: string): string[] => {
 	return scope.trim().split(/\s+/);
