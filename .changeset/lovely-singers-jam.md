@@ -1,5 +1,5 @@
 ---
-"@atcute/lexicon-doc": patch
+'@atcute/lexicon-doc': patch
 ---
 
 faster UTF-8 and grapheme length validation

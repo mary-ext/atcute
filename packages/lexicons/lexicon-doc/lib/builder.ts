@@ -1,6 +1,7 @@
 import { type Nsid } from '@atcute/lexicons/syntax';
 import { getUtf8Length, isUtf8LengthInRange } from '@atcute/uint8array';
 import { getGraphemeLength, isGraphemeLengthInRange } from '@atcute/util-text';
+
 import { DELIMITED_MIME_TYPE_RE, KEY_RE, MIME_TYPE_RE, validateStringFormat } from './internal/validation.js';
 import type * as t from './types.js';
 import { formatLexiconRef, type ParsedLexiconRef } from './utils/refs.js';

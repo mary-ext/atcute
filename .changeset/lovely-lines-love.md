@@ -1,5 +1,5 @@
 ---
-"@atcute/uint8array": minor
+'@atcute/uint8array': minor
 ---
 
 add isUtf8LengthInRange function
