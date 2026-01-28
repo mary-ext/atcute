@@ -16,7 +16,9 @@ export type AuthorizationServerMetadataCache = Store<string, AtprotoAuthorizatio
 /** hoisted pipeline for parsing and validating AS metadata */
 const processResponse = pipe(
 	parseResponseAsJson(JSON_MIME, AS_METADATA_MAX_SIZE),
-	validateJsonWith(atprotoAuthorizationServerMetadataValidator, { mode: 'passthrough' }),
+	validateJsonWith(atprotoAuthorizationServerMetadataValidator, {
+		mode: 'passthrough',
+	}),
 );
 
 export interface AuthorizationServerMetadataResolverOptions {
@@ -73,7 +75,7 @@ export class AuthorizationServerMetadataResolver extends CachedGetter<
 		const response = await (0, this.fetch)(metadataUrl, {
 			headers: { accept: 'application/json' },
 			signal: options.signal,
-			redirect: 'error',
+			redirect: 'manual',
 		});
 
 		if (response.status !== 200) {

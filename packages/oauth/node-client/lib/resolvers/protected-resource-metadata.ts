@@ -15,7 +15,9 @@ export type ProtectedResourceMetadataCache = Store<string, AtprotoProtectedResou
 /** hoisted pipeline for parsing and validating protected resource metadata */
 const processResponse = pipe(
 	parseResponseAsJson(JSON_MIME, PR_METADATA_MAX_SIZE),
-	validateJsonWith(atprotoProtectedResourceMetadataValidator, { mode: 'passthrough' }),
+	validateJsonWith(atprotoProtectedResourceMetadataValidator, {
+		mode: 'passthrough',
+	}),
 );
 
 export interface ProtectedResourceMetadataResolverOptions {
@@ -76,7 +78,7 @@ export class ProtectedResourceMetadataResolver extends CachedGetter<
 		const response = await (0, this.fetch)(metadataUrl, {
 			headers: { accept: 'application/json' },
 			signal: options.signal,
-			redirect: 'error',
+			redirect: 'manual',
 		});
 
 		if (response.status !== 200) {
