@@ -1,13 +1,20 @@
-import * as v from '@badrap/valita';
+import * as v from "@badrap/valita";
 
-import { atprotoOAuthScopeSchema } from './atproto-oauth-scope.js';
-import { oauthClientIdDiscoverableSchema } from './oauth-client-id-discoverable.js';
-import { httpsUriSchema, nonLocalWebUriSchema, webUriSchema } from './uri.js';
-import { isLocalHostname } from './utils.js';
+import { atprotoOAuthScopeSchema } from "./atproto-oauth-scope.js";
+import { oauthClientIdDiscoverableSchema } from "./oauth-client-id-discoverable.js";
+import {
+	httpsUriSchema,
+	loopbackUriSchema,
+	nonLocalWebUriSchema,
+	webUriSchema,
+} from "./uri.js";
+import { isLocalHostname } from "./utils.js";
 
 const SINGLE_SCOPE_RE = /^[\x21\x23-\x5B\x5D-\x7E]+$/;
 
-const singleScopeSchema = v.string().assert((input) => SINGLE_SCOPE_RE.test(input), `invalid OAuth scope`);
+const singleScopeSchema = v
+	.string()
+	.assert((input) => SINGLE_SCOPE_RE.test(input), `invalid OAuth scope`);
 
 /**
  * user-facing client metadata for configuring a confidential OAuth client.
@@ -23,7 +30,7 @@ export const confidentialClientMetadataSchema = v
 
 		/** redirect URIs for authorization responses (must be https) */
 		redirect_uris: v
-			.array(httpsUriSchema)
+			.array(v.union(loopbackUriSchema, httpsUriSchema))
 			.assert((arr) => arr.length > 0, `must have at least one redirect URI`)
 			.assert((arr) => {
 				for (const uri of arr) {
@@ -57,8 +64,8 @@ export const confidentialClientMetadataSchema = v
 				return v.ok(input);
 			}),
 			v.array(singleScopeSchema).chain((input) => {
-				if (!input.includes('atproto')) {
-					input = ['atproto', ...input];
+				if (!input.includes("atproto")) {
+					input = ["atproto", ...input];
 				}
 
 				for (let i = 0, len = input.length; i < len; i++) {
@@ -91,19 +98,29 @@ export const confidentialClientMetadataSchema = v
 	})
 	.chain((input) => {
 		const clientIdUrl = new URL(input.client_id);
-		if (isLocalHostname(clientIdUrl.hostname)) {
-			return v.err({ message: `client_id hostname is invalid`, path: ['client_id'] });
-		}
 
 		if (input.jwks_uri) {
-			const jwksUrl = new URL(input.jwks_uri);
+			if (isLocalHostname(clientIdUrl.hostname)) {
+				return v.err({
+					message: `clients with local client_id hostnames must not include a jwks_uri`,
+					path: ["jwks_uri"],
+				});
+			} else {
+				const jwksUrl = new URL(input.jwks_uri);
 
-			if (jwksUrl.username || jwksUrl.password) {
-				return v.err({ message: `jwks_uri must not contain credentials`, path: ['jwks_uri'] });
-			}
+				if (jwksUrl.username || jwksUrl.password) {
+					return v.err({
+						message: `jwks_uri must not contain credentials`,
+						path: ["jwks_uri"],
+					});
+				}
 
-			if (isLocalHostname(jwksUrl.hostname)) {
-				return v.err({ message: `jwks_uri hostname is invalid`, path: ['jwks_uri'] });
+				if (isLocalHostname(jwksUrl.hostname)) {
+					return v.err({
+						message: `jwks_uri hostname is invalid`,
+						path: ["jwks_uri"],
+					});
+				}
 			}
 		}
 
@@ -112,23 +129,29 @@ export const confidentialClientMetadataSchema = v
 			const clientUriUrl = new URL(input.client_uri);
 
 			if (isLocalHostname(clientUriUrl.hostname)) {
-				return v.err({ message: `client_uri hostname is invalid`, path: ['client_uri'] });
+				return v.err({
+					message: `client_uri hostname is invalid`,
+					path: ["client_uri"],
+				});
 			}
 
 			if (clientUriUrl.origin !== clientIdUrl.origin) {
 				return v.err({
 					message: `client_uri must have the same origin as the client_id`,
-					path: ['client_uri'],
+					path: ["client_uri"],
 				});
 			}
 
 			if (clientIdUrl.pathname !== clientUriUrl.pathname) {
-				const prefix = clientUriUrl.pathname.endsWith('/')
+				const prefix = clientUriUrl.pathname.endsWith("/")
 					? clientUriUrl.pathname
 					: `${clientUriUrl.pathname}/`;
 
 				if (!clientIdUrl.pathname.startsWith(prefix)) {
-					return v.err({ message: `client_uri must be a parent URL of the client_id`, path: ['client_uri'] });
+					return v.err({
+						message: `client_uri must be a parent URL of the client_id`,
+						path: ["client_uri"],
+					});
 				}
 			}
 		}
@@ -136,4 +159,6 @@ export const confidentialClientMetadataSchema = v
 		return v.ok(input);
 	});
 
-export type ConfidentialClientMetadata = v.Infer<typeof confidentialClientMetadataSchema>;
+export type ConfidentialClientMetadata = v.Infer<
+	typeof confidentialClientMetadataSchema
+>;
