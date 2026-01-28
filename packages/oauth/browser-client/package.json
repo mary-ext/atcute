@@ -30,8 +30,8 @@
 		"@atcute/identity-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/multibase": "workspace:^",
+		"@atcute/oauth-crypto": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
-		"@atcute/uint8array": "workspace:^",
 		"nanoid": "^5.1.6"
 	}
 }

@@ -1,11 +1,11 @@
 import type { Did } from '@atcute/lexicons';
+import { createDpopProofSigner, importDpopPrivateJwk, type DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { AtprotoOAuthTokenResponse, OAuthParResponse } from '@atcute/oauth-types';
 
-import { createDPoPFetch, createDPoPSignage } from '../dpop.js';
+import { createDPoPFetch } from '../dpop.js';
 import { CLIENT_ID, fetchClientAssertion, REDIRECT_URI } from '../environment.js';
 import { FetchResponseError, OAuthResponseError, TokenRefreshError } from '../errors.js';
 import { resolveFromIdentifier } from '../resolvers.js';
-import type { DPoPKey } from '../types/dpop.js';
 import type { PersistedAuthorizationServerMetadata } from '../types/server.js';
 import type { ExchangeInfo, TokenInfo } from '../types/token.js';
 import { pick } from '../utils/misc.js';
@@ -14,9 +14,9 @@ import { extractContentType } from '../utils/response.js';
 export class OAuthServerAgent {
 	#fetch: typeof fetch;
 	#metadata: PersistedAuthorizationServerMetadata;
-	#dpopKey: DPoPKey;
+	#dpopKey: DpopPrivateJwk;
 
-	constructor(metadata: PersistedAuthorizationServerMetadata, dpopKey: DPoPKey) {
+	constructor(metadata: PersistedAuthorizationServerMetadata, dpopKey: DpopPrivateJwk) {
 		this.#metadata = metadata;
 		this.#dpopKey = dpopKey;
 		this.#fetch = createDPoPFetch(dpopKey, true);
@@ -39,16 +39,12 @@ export class OAuthServerAgent {
 			(endpoint === 'token' || endpoint === 'pushed_authorization_request') &&
 			fetchClientAssertion !== undefined
 		) {
-			const jkt = this.#dpopKey.jkt;
-			if (jkt === undefined) {
-				throw new Error(`DPoP key missing jkt field`);
-			}
+			const signer = importDpopPrivateJwk(this.#dpopKey).then((key) => createDpopProofSigner(key));
 
 			const assertion = await fetchClientAssertion({
-				jkt: jkt,
 				aud: this.#metadata.issuer,
 				createDpopProof: async (url, nonce) => {
-					const sign = createDPoPSignage(this.#dpopKey);
+					const sign = await signer;
 					return await sign('POST', url, nonce, undefined);
 				},
 			});

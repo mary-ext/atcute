@@ -1,12 +1,11 @@
-import type { Keyset, PrivateKey } from '@atcute/oauth-keyset';
+import { createClientAssertion as createClientAssertionJwt } from '@atcute/oauth-crypto';
+import type { ClientAssertionPrivateKey } from '@atcute/oauth-crypto';
+import type { Keyset } from '@atcute/oauth-keyset';
 import {
 	CLIENT_ASSERTION_TYPE_JWT_BEARER,
 	FALLBACK_ALG,
 	type OAuthAuthorizationServerMetadata,
 } from '@atcute/oauth-types';
-
-import { SignJWT } from 'jose';
-import { nanoid } from 'nanoid';
 
 export { CLIENT_ASSERTION_TYPE_JWT_BEARER };
 
@@ -99,7 +98,7 @@ export const createClientAssertionFactory = (
 		throw new Error(`key "${authMethod.kid}" no longer available or compatible`);
 	}
 
-	return () => createClientAssertion(key, clientId, serverMetadata.issuer);
+	return () => createClientCredentials(key, clientId, serverMetadata.issuer);
 };
 
 /**
@@ -111,35 +110,16 @@ export const createClientAssertionFactory = (
  * @returns client credentials for token request
  * @see {@link https://www.rfc-editor.org/rfc/rfc7523.html#section-3}
  */
-const createClientAssertion = async (
-	key: PrivateKey,
+const createClientCredentials = async (
+	key: ClientAssertionPrivateKey,
 	clientId: string,
 	audience: string,
 ): Promise<ClientCredentials> => {
-	const now = Math.floor(Date.now() / 1000);
-
-	const assertion = await new SignJWT({
-		// > The JWT MUST contain an "iss" (issuer) claim that contains a
-		// > unique identifier for the entity that issued the JWT.
-		iss: clientId,
-		// > For client authentication, the subject MUST be the
-		// > "client_id" of the OAuth client.
-		sub: clientId,
-		// > The JWT MUST contain an "aud" (audience) claim containing a value
-		// > that identifies the authorization server as an intended audience.
-		aud: audience,
-		// > The JWT MAY contain a "jti" (JWT ID) claim that provides a
-		// > unique identifier for the token.
-		jti: nanoid(24),
-		// > The JWT MAY contain an "iat" (issued at) claim that
-		// > identifies the time at which the JWT was issued.
-		iat: now,
-		// > The JWT MUST contain an "exp" (expiration time) claim that
-		// > limits the time window during which the JWT can be used.
-		exp: now + 60, // 1 minute
-	})
-		.setProtectedHeader({ alg: key.alg, kid: key.kid })
-		.sign(key.key);
+	const assertion = await createClientAssertionJwt({
+		clientId,
+		audience,
+		key,
+	});
 
 	return {
 		client_id: clientId,

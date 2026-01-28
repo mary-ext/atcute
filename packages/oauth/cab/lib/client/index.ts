@@ -31,9 +31,7 @@ export const createCabFetcher = (options: CreateCabFetcherOptions = {}): ClientA
 		}),
 	});
 
-	return async (params) => {
-		const { aud, createDpopProof } = params;
-
+	return async ({ aud, createDpopProof }) => {
 		// build the endpoint URL for DPoP proof (htu is origin + pathname only)
 		const htu = serviceUrl.origin + '/xrpc/dev.atcute.oauth.getClientAssertion';
 

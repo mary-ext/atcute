@@ -1,6 +1,5 @@
 import type { Did } from '@atcute/lexicons';
-
-import type { JWK } from 'jose';
+import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 
 import type { ClientAuthMethod } from '../oauth-client-auth.js';
 import type { Store } from '../utils/store.js';
@@ -12,7 +11,7 @@ import type { TokenSet } from './token-set.js';
  */
 export interface StoredSession {
 	/** DPoP private key */
-	dpopKey: JWK;
+	dpopKey: DpopPrivateJwk;
 	/** client authentication method */
 	authMethod: ClientAuthMethod;
 	/** token data (includes iss, aud, sub, scope, tokens) */

@@ -1,7 +1,6 @@
+import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import type { AtprotoAuthorizationServerMetadata, OAuthClientMetadata } from '@atcute/oauth-types';
-
-import type { JWK } from 'jose';
 
 import { type ClientAuthMethod, negotiateClientAuth } from './oauth-client-auth.js';
 import { OAuthServerAgent } from './oauth-server-agent.js';
@@ -53,7 +52,7 @@ export class OAuthServerFactory {
 	async fromIssuer(
 		issuer: string,
 		authMethod: ClientAuthMethod,
-		dpopKey: JWK,
+		dpopKey: DpopPrivateJwk,
 		options?: { signal?: AbortSignal; noCache?: boolean },
 	): Promise<OAuthServerAgent> {
 		const serverMetadata = await this.resolver.authorizationServerResolver.resolve(issuer, options);
@@ -71,7 +70,7 @@ export class OAuthServerFactory {
 	fromMetadata(
 		serverMetadata: AtprotoAuthorizationServerMetadata,
 		authMethod: ClientAuthMethod,
-		dpopKey: JWK,
+		dpopKey: DpopPrivateJwk,
 	): OAuthServerAgent {
 		return new OAuthServerAgent({
 			authMethod,
@@ -94,7 +93,10 @@ export class OAuthServerFactory {
 	 * @param dpopKey DPoP private key
 	 * @returns configured OAuthServerAgent
 	 */
-	fromMetadataNewSession(serverMetadata: AtprotoAuthorizationServerMetadata, dpopKey: JWK): OAuthServerAgent {
+	fromMetadataNewSession(
+		serverMetadata: AtprotoAuthorizationServerMetadata,
+		dpopKey: DpopPrivateJwk,
+	): OAuthServerAgent {
 		const authMethod = negotiateClientAuth(serverMetadata, this.keyset);
 		return this.fromMetadata(serverMetadata, authMethod, dpopKey);
 	}

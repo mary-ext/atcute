@@ -22,13 +22,13 @@ that issues DPoP-bound client assertions.
 ```ts
 import {
 	buildClientMetadata,
-	generatePrivateKey,
+	generateClientAssertionKey,
 	Keyset,
 	registerCab,
 } from '@atcute/oauth-cab/server';
 import { XRPCRouter, cors } from '@atcute/xrpc-server';
 
-const keyset = new Keyset([await generatePrivateKey('my-key')]);
+const keyset = new Keyset([await generateClientAssertionKey('my-key')]);
 
 const metadata = buildClientMetadata(
 	{
@@ -75,12 +75,12 @@ export default {
 import {
 	buildClientMetadata,
 	createCabHandler,
-	generatePrivateKey,
+	generateClientAssertionKey,
 	Keyset,
 } from '@atcute/oauth-cab/server';
 
 // create keyset
-const keyset = new Keyset([await generatePrivateKey('my-key')]);
+const keyset = new Keyset([await generateClientAssertionKey('my-key')]);
 
 // build client metadata
 const metadata = buildClientMetadata(

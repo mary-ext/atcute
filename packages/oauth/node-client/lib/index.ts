@@ -1,15 +1,14 @@
+export { Keyset, type KeySearchOptions } from '@atcute/oauth-keyset';
+
 export {
-	exportJwkKey,
-	exportPkcs8Key,
-	generatePrivateKey,
-	importJwkKey,
-	importPkcs8Key,
-	Keyset,
-	type ImportKeyOptions,
-	type KeySearchOptions,
-	type PrivateKey,
-	type SigningAlgorithm,
-} from '@atcute/oauth-keyset';
+	exportPrivateJwk,
+	exportPkcs8PrivateKey,
+	generateClientAssertionKey,
+	importClientAssertionPrivateJwk,
+	importClientAssertionPkcs8,
+	type ClientAssertionPrivateJwk,
+	type ClientAssertionPrivateKey,
+} from '@atcute/oauth-crypto';
 
 export {
 	buildClientMetadata,

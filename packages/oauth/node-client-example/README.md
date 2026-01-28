@@ -64,10 +64,10 @@ bun run setup:env
 for production, generate and store a persistent key:
 
 ```js
-import { generatePrivateKey, exportJwkKey } from '@atcute/oauth-node-client';
+import { exportPrivateJwk, generateClientAssertionKey } from '@atcute/oauth-node-client';
 
-const key = await generatePrivateKey('main', 'ES256');
-const jwk = await exportJwkKey(key);
+const key = await generateClientAssertionKey('main', 'ES256');
+const jwk = await exportPrivateJwk(key);
 console.log(JSON.stringify(jwk));
 ```
 

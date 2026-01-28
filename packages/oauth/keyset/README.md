@@ -11,10 +11,11 @@ npm install @atcute/oauth-keyset
 ### generating keys
 
 ```ts
-import { generatePrivateKey, Keyset } from '@atcute/oauth-keyset';
+import { generateClientAssertionKey } from '@atcute/oauth-crypto';
+import { Keyset } from '@atcute/oauth-keyset';
 
 // generate a new ES256 key
-const key = await generatePrivateKey('my-key-id');
+const key = await generateClientAssertionKey('my-key-id');
 
 // create a keyset with the key
 const keyset = new Keyset([key]);
@@ -23,10 +24,11 @@ const keyset = new Keyset([key]);
 ### importing keys
 
 ```ts
-import { importJwkKey, importPkcs8Key, Keyset } from '@atcute/oauth-keyset';
+import { importClientAssertionPrivateJwk, importClientAssertionPkcs8 } from '@atcute/oauth-crypto';
+import { Keyset } from '@atcute/oauth-keyset';
 
 // import from JWK
-const jwkKey = await importJwkKey({
+const jwkKey = await importClientAssertionPrivateJwk({
 	kty: 'EC',
 	crv: 'P-256',
 	kid: 'my-key',
@@ -34,7 +36,7 @@ const jwkKey = await importJwkKey({
 });
 
 // import from PKCS#8 PEM
-const pemKey = await importPkcs8Key(pemString, {
+const pemKey = await importClientAssertionPkcs8(pemString, {
 	kid: 'my-key',
 	alg: 'ES256',
 });
@@ -45,13 +47,13 @@ const keyset = new Keyset([jwkKey, pemKey]);
 ### exporting keys
 
 ```ts
-import { exportJwkKey, exportPkcs8Key } from '@atcute/oauth-keyset';
+import { exportPrivateJwk, exportPkcs8PrivateKey } from '@atcute/oauth-crypto';
 
 // export to JWK
-const jwk = await exportJwkKey(key);
+const jwk = await exportPrivateJwk(key);
 
 // export to PKCS#8 PEM
-const pem = await exportPkcs8Key(key);
+const pem = await exportPkcs8PrivateKey(key);
 ```
 
 ### using the keyset

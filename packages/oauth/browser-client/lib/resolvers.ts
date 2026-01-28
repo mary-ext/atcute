@@ -1,15 +1,15 @@
+import type { ResolvedActor } from '@atcute/identity-resolver';
 import type { ActorIdentifier } from '@atcute/lexicons';
 import type { OAuthAuthorizationServerMetadata, OAuthProtectedResourceMetadata } from '@atcute/oauth-types';
 
 import { identityResolver } from './environment.js';
 import { ResolverError } from './errors.js';
-import type { ResolvedIdentity } from './types/identity.js';
 import { extractContentType } from './utils/response.js';
 import { isValidUrl } from './utils/strings.js';
 
 export const resolveFromIdentifier = async (
 	ident: ActorIdentifier,
-): Promise<{ identity: ResolvedIdentity; metadata: OAuthAuthorizationServerMetadata }> => {
+): Promise<{ identity: ResolvedActor; metadata: OAuthAuthorizationServerMetadata }> => {
 	const identity = await identityResolver.resolve(ident);
 
 	return {

@@ -1,7 +1,5 @@
+import { createClientAssertion as createClientAssertionJwt } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
-
-import { SignJWT } from 'jose';
-import { nanoid } from 'nanoid';
 
 /**
  * options for creating a client assertion
@@ -41,24 +39,13 @@ export const createClientAssertion = async (
 	const { clientId, audience, jkt, keyset, serverAlgs } = options;
 
 	// find a compatible key
-	const { key, alg } = keyset.findForSigning(serverAlgs);
-
-	const now = Math.floor(Date.now() / 1000);
-
-	const assertion = await new SignJWT({
-		// RFC 7523 claims
-		iss: clientId,
-		sub: clientId,
-		aud: audience,
-		jti: nanoid(24),
-		iat: now,
-		exp: now + 60, // 1 minute
-
-		// DPoP binding (RFC 9449)
-		cnf: { jkt },
-	})
-		.setProtectedHeader({ alg, kid: key.kid })
-		.sign(key.key);
+	const { key } = keyset.findForSigning(serverAlgs);
+	const assertion = await createClientAssertionJwt({
+		clientId,
+		audience,
+		jkt,
+		key,
+	});
 
 	return {
 		client_assertion: assertion,

@@ -14,7 +14,7 @@ import {
 	MemoryStore,
 	OAuthCallbackError,
 	OAuthClient,
-	importJwkKey,
+	importClientAssertionPrivateJwk,
 	type AuthorizeTarget,
 	type StoredState,
 } from '@atcute/oauth-node-client';
@@ -110,7 +110,7 @@ const oauth = new OAuthClient({
 		jwks_uri: new URL('/jwks.json', publicUrl).href,
 	},
 
-	keyset: await Promise.all([importJwkKey(privateKeyJwk)]),
+	keyset: await Promise.all([importClientAssertionPrivateJwk(privateKeyJwk)]),
 
 	actorResolver: new LocalActorResolver({
 		handleResolver: new CompositeHandleResolver({

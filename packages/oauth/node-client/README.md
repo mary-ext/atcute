@@ -37,7 +37,11 @@ import { existsSync } from 'node:fs';
 import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-import { exportJwkKey, generatePrivateKey, importJwkKey } from '@atcute/oauth-node-client';
+import {
+	exportPrivateJwk,
+	generateClientAssertionKey,
+	importClientAssertionPrivateJwk,
+} from '@atcute/oauth-node-client';
 
 const ensureEnvLocal = async () => {
 	const envPath = resolve(process.cwd(), '.env');
@@ -73,11 +77,11 @@ const upsertEnvVar = (input, key, value) => {
 const envLocalPath = await ensureEnvLocal();
 const envLocal = await readFile(envLocalPath, 'utf8');
 
-const privateKey = await generatePrivateKey('main', 'ES256');
-const jwk = await exportJwkKey(privateKey);
+const privateKey = await generateClientAssertionKey('main', 'ES256');
+const jwk = await exportPrivateJwk(privateKey);
 
 // sanity-check that the key parses before writing
-await importJwkKey(jwk);
+await importClientAssertionPrivateJwk(jwk);
 
 const jwkJson = JSON.stringify(jwk);
 const updated = upsertEnvVar(envLocal, 'PRIVATE_KEY_JWK', `'${jwkJson}'`);
@@ -99,15 +103,20 @@ node scripts/setup-env.mjs
 4. create a keyset at runtime:
 
 ```ts
-import { importJwkKey } from '@atcute/oauth-node-client';
+import { importClientAssertionPrivateJwk } from '@atcute/oauth-node-client';
 
-const keyset = await Promise.all([importJwkKey(process.env.PRIVATE_KEY_JWK!)]);
+const keyset = await Promise.all([importClientAssertionPrivateJwk(process.env.PRIVATE_KEY_JWK!)]);
 ```
 
 ### create an OAuth client
 
 ```ts
-import { MemoryStore, OAuthClient, importJwkKey, scope } from '@atcute/oauth-node-client';
+import {
+	MemoryStore,
+	OAuthClient,
+	importClientAssertionPrivateJwk,
+	scope,
+} from '@atcute/oauth-node-client';
 import {
 	CompositeDidDocumentResolver,
 	CompositeHandleResolver,
@@ -144,7 +153,7 @@ const oauth = new OAuthClient({
 		jwks_uri: 'https://example.com/jwks.json',
 	},
 
-	keyset: await Promise.all([importJwkKey(process.env.PRIVATE_KEY_JWK!)]),
+	keyset: await Promise.all([importClientAssertionPrivateJwk(process.env.PRIVATE_KEY_JWK!)]),
 
 	stores: {
 		// sessions are keyed by DID - should be durable across restarts.

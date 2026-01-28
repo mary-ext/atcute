@@ -1,6 +1,8 @@
 import type { ActorResolver } from '@atcute/identity-resolver';
 import type { ActorIdentifier, Did } from '@atcute/lexicons';
-import { Keyset, type PrivateKey } from '@atcute/oauth-keyset';
+import type { ClientAssertionPrivateKey } from '@atcute/oauth-crypto';
+import { generateDpopKey, generatePkce, type PublicJwk } from '@atcute/oauth-crypto';
+import { Keyset } from '@atcute/oauth-keyset';
 import {
 	buildClientMetadata,
 	FALLBACK_ALG,
@@ -10,16 +12,13 @@ import {
 	type OAuthResponseMode,
 } from '@atcute/oauth-types';
 
-import type { JWK } from 'jose';
 import { nanoid } from 'nanoid';
 
 import type { DpopNonceCache } from './dpop/fetch-dpop.js';
-import { generateDpopKey } from './dpop/generate-key.js';
 import { OAuthCallbackError, TokenRevokedError } from './errors.js';
 import { OAuthServerAgent } from './oauth-server-agent.js';
 import { OAuthServerFactory } from './oauth-server-factory.js';
 import { OAuthSession } from './oauth-session.js';
-import { generatePkce } from './pkce.js';
 import {
 	AuthorizationServerMetadataResolver,
 	type AuthorizationServerMetadataCache,
@@ -52,7 +51,7 @@ export interface OAuthClientOptions {
 	/** client metadata */
 	metadata: ConfidentialClientMetadata;
 	/** client's signing keys (or an already constructed keyset) */
-	keyset: Keyset | PrivateKey[];
+	keyset: Keyset | ClientAssertionPrivateKey[];
 	/** identity resolver for DID/handle resolution */
 	actorResolver: ActorResolver;
 	/** storage backends */
@@ -198,7 +197,7 @@ export class OAuthClient {
 	/**
 	 * public JWKS for serving at jwks_uri.
 	 */
-	get jwks(): { keys: readonly JWK[] } {
+	get jwks(): { keys: readonly PublicJwk[] } {
 		return this.keyset.publicJwks;
 	}
 

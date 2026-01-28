@@ -1,4 +1,5 @@
 import type { Did } from '@atcute/lexicons';
+import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import {
 	atprotoOAuthTokenResponseSchema,
@@ -9,8 +10,6 @@ import {
 	type OAuthParResponse,
 } from '@atcute/oauth-types';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
-
-import type { JWK } from 'jose';
 
 import { JSON_MIME, PAR_RESPONSE_MAX_SIZE, TOKEN_RESPONSE_MAX_SIZE } from './constants.js';
 import { createDpopFetch } from './dpop/fetch-dpop.js';
@@ -40,7 +39,7 @@ export interface OAuthServerAgentOptions {
 	/** negotiated client authentication method */
 	authMethod: ClientAuthMethod;
 	/** DPoP private key */
-	dpopKey: JWK;
+	dpopKey: DpopPrivateJwk;
 	/** authorization server metadata */
 	serverMetadata: AtprotoAuthorizationServerMetadata;
 	/** client metadata */
@@ -62,7 +61,7 @@ export interface OAuthServerAgentOptions {
  */
 export class OAuthServerAgent {
 	readonly authMethod: ClientAuthMethod;
-	readonly dpopKey: JWK;
+	readonly dpopKey: DpopPrivateJwk;
 	readonly serverMetadata: AtprotoAuthorizationServerMetadata;
 	readonly clientMetadata: OAuthClientMetadata;
 	readonly oauthResolver: OAuthResolver;

@@ -1,9 +1,9 @@
 import type { Did } from '@atcute/lexicons';
+import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { OAuthAuthorizationServerMetadata } from '@atcute/oauth-types';
 
-import type { DPoPKey } from '../types/dpop.js';
 import type { SimpleStore } from '../types/store.js';
-import type { Session } from '../types/token.js';
+import type { RawSession } from '../types/token.js';
 import { locks } from '../utils/runtime.js';
 
 export interface OAuthDatabaseOptions {
@@ -19,7 +19,7 @@ interface SchemaItem<T> {
 interface Schema {
 	sessions: {
 		key: Did;
-		value: Session;
+		value: RawSession;
 		indexes: {
 			expiresAt: number;
 		};
@@ -27,7 +27,7 @@ interface Schema {
 	states: {
 		key: string;
 		value: {
-			dpopKey: DPoPKey;
+			dpopKey: DpopPrivateJwk;
 			metadata: OAuthAuthorizationServerMetadata;
 			verifier?: string;
 			state?: unknown;

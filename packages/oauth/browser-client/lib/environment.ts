@@ -1,6 +1,7 @@
+import type { ActorResolver } from '@atcute/identity-resolver';
+
 import { createOAuthDatabase, type OAuthDatabase } from './store/db.js';
 import type { ClientAssertionFetcher } from './types/client-assertion.js';
-import type { IdentityResolver } from './types/identity.js';
 
 export let CLIENT_ID: string;
 export let REDIRECT_URI: string;
@@ -9,7 +10,7 @@ export let fetchClientAssertion: ClientAssertionFetcher | undefined;
 
 export let database: OAuthDatabase;
 
-export let identityResolver: IdentityResolver;
+export let identityResolver: ActorResolver;
 
 export interface ConfigureOAuthOptions {
 	/**
@@ -21,7 +22,7 @@ export interface ConfigureOAuthOptions {
 	};
 
 	/** resolves actor identifiers into identity metadata */
-	identityResolver: IdentityResolver;
+	identityResolver: ActorResolver;
 
 	/**
 	 * optional function to fetch DPoP-bound client assertions from your backend.

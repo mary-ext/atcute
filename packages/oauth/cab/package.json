@@ -34,22 +34,21 @@
 		"@atcute/client": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/multibase": "workspace:^",
+		"@atcute/oauth-crypto": "workspace:^",
 		"@atcute/oauth-keyset": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"@atcute/xrpc-server": "workspace:^",
-		"@badrap/valita": "^0.4.6",
-		"jose": "^6.1.3",
-		"nanoid": "^5.1.6"
+		"@atcute/xrpc-server": "workspace:^"
 	},
 	"devDependencies": {
 		"@atcute/lex-cli": "workspace:^",
 		"@atcute/lexicon-doc": "workspace:^",
+		"@atcute/oauth-browser-client": "workspace:^",
 		"@atcute/oauth-cab": "file:",
 		"vitest": "^4.0.16"
 	},
 	"peerDependencies": {
-		"@atcute/oauth-browser-client": "workspace:^"
+		"@atcute/oauth-browser-client": "^2.0.3"
 	},
 	"peerDependenciesMeta": {
 		"@atcute/oauth-browser-client": {

@@ -31,13 +31,11 @@
 		"@atcute/identity": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
-		"@atcute/multibase": "workspace:^",
+		"@atcute/oauth-crypto": "workspace:^",
 		"@atcute/oauth-keyset": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
-		"@atcute/uint8array": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
 		"@badrap/valita": "^0.4.6",
-		"jose": "^6.1.3",
 		"nanoid": "^5.1.6"
 	},
 	"devDependencies": {

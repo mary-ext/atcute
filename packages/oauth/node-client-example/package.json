@@ -7,12 +7,12 @@
 		"setup:env": "bun run scripts/setup-env.ts"
 	},
 	"dependencies": {
-		"@atcute/atproto": "workspace:*",
-		"@atcute/client": "workspace:*",
-		"@atcute/identity-resolver": "workspace:*",
+		"@atcute/atproto": "workspace:^",
+		"@atcute/client": "workspace:^",
+		"@atcute/identity-resolver": "workspace:^",
 		"@atcute/identity-resolver-node": "workspace:^",
-		"@atcute/lexicons": "workspace:*",
-		"@atcute/oauth-node-client": "workspace:*",
+		"@atcute/lexicons": "workspace:^",
+		"@atcute/oauth-node-client": "workspace:^",
 		"hono": "^4.11.3",
 		"nanoid": "^5.1.6"
 	},

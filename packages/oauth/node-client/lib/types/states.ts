@@ -1,6 +1,5 @@
 import type { Did } from '@atcute/lexicons';
-
-import type { JWK } from 'jose';
+import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 
 import type { ClientAuthMethod } from '../oauth-client-auth.js';
 import type { Store } from '../utils/store.js';
@@ -10,7 +9,7 @@ import type { Store } from '../utils/store.js';
  */
 export interface StoredState {
 	/** DPoP private key */
-	dpopKey: JWK;
+	dpopKey: DpopPrivateJwk;
 	/** client authentication method */
 	authMethod: ClientAuthMethod;
 	/** PKCE code verifier */

@@ -1,0 +1,38 @@
+{
+	"name": "@atcute/oauth-crypto",
+	"version": "0.1.0",
+	"description": "crypto helpers for AT Protocol OAuth",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/oauth/crypto"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"type": "module",
+	"sideEffects": false,
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsgo --project tsconfig.build.json",
+		"test": "vitest",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/multibase": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
+		"@badrap/valita": "^0.4.6",
+		"nanoid": "^5.1.6"
+	},
+	"devDependencies": {
+		"vitest": "^4.0.16"
+	}
+}

@@ -1,10 +1,10 @@
 import type { Did } from '@atcute/lexicons';
-import { generatePrivateKey, Keyset } from '@atcute/oauth-keyset';
+import { generateClientAssertionKey, generateDpopKey } from '@atcute/oauth-crypto';
+import { Keyset } from '@atcute/oauth-keyset';
 import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { generateDpopKey } from './dpop/generate-key.js';
 import { OAuthResponseError, TokenRefreshError } from './errors.js';
 import { OAuthServerAgent, type OAuthServerAgentOptions } from './oauth-server-agent.js';
 import type { OAuthResolver } from './resolvers/index.js';
@@ -49,7 +49,7 @@ const createMockOAuthResolver = (overrides?: { issuer?: string; pds?: string }):
 const createServerAgent = async (
 	options?: Partial<OAuthServerAgentOptions> & { mockFetch?: typeof fetch },
 ): Promise<OAuthServerAgent> => {
-	const privateKey = await generatePrivateKey('dpop-key', 'ES256');
+	const privateKey = await generateClientAssertionKey('dpop-key', 'ES256');
 	const dpopKey = await generateDpopKey();
 	const keyset = new Keyset([privateKey]);
 

@@ -1,3 +1,4 @@
+import { DpopVerifyError, verifyDpopProof } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import {
 	createXrpcHandler,
@@ -11,7 +12,6 @@ import { DevAtcuteOauthGetClientAssertion } from '../lexicons/index.js';
 
 import { createClientAssertion } from './client-assertion.js';
 import { DpopNonce, type DpopSecret } from './dpop-nonce.js';
-import { DPoPVerifyError, verifyDPoP } from './dpop-verifier.js';
 
 /**
  * options for creating a CAB handler
@@ -51,14 +51,14 @@ const createCabProcedure = async (
 			// verify DPoP proof (includes nonce validation if configured)
 			let jkt: string;
 			try {
-				const result = await verifyDPoP(request.headers.get('dpop'), {
+				const result = await verifyDpopProof(request.headers.get('dpop'), {
 					method: 'POST',
 					url: htu,
 					nonce: dpopNonce,
 				});
 				jkt = result.jkt;
 			} catch (err) {
-				if (err instanceof DPoPVerifyError) {
+				if (err instanceof DpopVerifyError) {
 					const error = err.code === 'nonce_required' ? 'UseDpopNonce' : 'InvalidDpopProof';
 					throw new InvalidRequestError({ error, headers });
 				}

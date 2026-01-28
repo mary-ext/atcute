@@ -53,7 +53,9 @@ configureOAuth({
 		redirect_uri: 'https://example.com/oauth/callback',
 	},
 	identityResolver: new LocalActorResolver({
-		handleResolver: new XrpcHandleResolver({ serviceUrl: 'https://public.api.bsky.app' }),
+		handleResolver: new XrpcHandleResolver({
+			serviceUrl: 'https://public.api.bsky.app',
+		}),
 		didDocumentResolver: new CompositeDidDocumentResolver({
 			methods: {
 				plc: new PlcDidDocumentResolver(),
@@ -114,7 +116,9 @@ your UI, as sessions without refresh tokens may expire.
 ```ts
 import { OAuthUserAgent, getSession } from '@atcute/oauth-browser-client';
 
-const session = await getSession('did:plc:ia76kvnndjutgedggx2ibrem', { allowStale: true });
+const session = await getSession('did:plc:ia76kvnndjutgedggx2ibrem', {
+	allowStale: true,
+});
 const agent = new OAuthUserAgent(session);
 ```
 
@@ -150,13 +154,14 @@ example:
 configureOAuth({
 	// ... existing config
 
-	async fetchClientAssertion({ jkt, aud, createDpopProof }) {
-		const dpop = await createDpopProof('https://example.com/api/client-assertion');
+	async fetchClientAssertion({ aud, createDpopProof }) {
+		const htu = 'https://example.com/api/client-assertion';
+		const dpop = await createDpopProof(htu);
 
-		const response = await fetch('https://example.com/api/client-assertion', {
+		const response = await fetch(htu, {
 			method: 'POST',
 			headers: { dpop, 'content-type': 'application/json' },
-			body: JSON.stringify({ jkt, aud }),
+			body: JSON.stringify({ aud }),
 		});
 
 		const data = await response.json();
@@ -168,9 +173,9 @@ configureOAuth({
 });
 ```
 
-your backend validates the DPoP proof and signs a client assertion JWT containing `iss`, `sub` (both
-your client ID), `aud` (authorization server), `exp`, `jti` (unique nonce), and `cnf: { jkt }` (the
-allowed key thumbprint).
+your backend validates the dpop proof and signs a client assertion jwt containing `iss`, `sub` (both
+your client id), `aud` (authorization server), `exp`, `jti` (unique nonce), and `cnf: { jkt }` (the
+allowed key thumbprint derived from the proof).
 
 update your client metadata for confidential mode - replace `token_endpoint_auth_method` with
 `private_key_jwt`, add `token_endpoint_auth_signing_alg: "ES256"`, and add a `jwks_uri` pointing to

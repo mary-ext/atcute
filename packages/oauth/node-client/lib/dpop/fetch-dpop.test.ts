@@ -1,9 +1,10 @@
+import { generateDpopKey } from '@atcute/oauth-crypto';
+
 import { describe, expect, it, vi } from 'vitest';
 
 import { MemoryStore } from '../utils/memory-store.js';
 
 import { createDpopFetch } from './fetch-dpop.js';
-import { generateDpopKey } from './generate-key.js';
 
 const createMockResponse = (status: number, body?: unknown, headers?: Record<string, string>): Response => {
 	return new Response(body ? JSON.stringify(body) : null, {
@@ -147,10 +148,19 @@ describe('createDpopFetch', () => {
 
 	describe('error cases', () => {
 		it('should throw if key has no alg', async () => {
-			const key = { kty: 'EC', crv: 'P-256', x: 'x', y: 'y', d: 'd' }; // no alg
+			const key = {
+				kty: 'EC',
+				crv: 'P-256',
+				x: 'x',
+				y: 'y',
+				d: 'd',
+				alg: 'ES256',
+			} as const;
+			const badKey = { ...key };
+			delete (badKey as { alg?: string }).alg;
 			const nonces = new MemoryStore<string, string>({});
 
-			expect(() => createDpopFetch({ key, nonces })).toThrow("DPoP key must have 'alg' field set");
+			expect(() => createDpopFetch({ key: badKey, nonces })).toThrow("DPoP key must have 'alg' field set");
 		});
 
 		it('should throw if key alg not supported by server', async () => {

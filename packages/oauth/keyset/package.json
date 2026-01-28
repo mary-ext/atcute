@@ -27,7 +27,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"jose": "^6.1.3"
+		"@atcute/oauth-crypto": "workspace:^"
 	},
 	"devDependencies": {
 		"vitest": "^4.0.16"

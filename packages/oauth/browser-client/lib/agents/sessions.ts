@@ -2,7 +2,8 @@ import type { Did } from '@atcute/lexicons';
 
 import { database } from '../environment.js';
 import { OAuthResponseError, TokenRefreshError } from '../errors.js';
-import type { Session } from '../types/token.js';
+import type { RawSession, Session } from '../types/token.js';
+import { isLegacyDpopKey, migrateLegacyDpopKey } from '../utils/dpop-key.js';
 import { locks } from '../utils/runtime.js';
 
 import { OAuthServerAgent } from './server-agent.js';
@@ -49,7 +50,7 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 	}
 
 	const run = async (): Promise<PendingItem<Session>> => {
-		const storedSession = database.sessions.get(sub);
+		const storedSession = await migrateSessionIfNeeded(sub, database.sessions.get(sub));
 
 		if (storedSession && allowStored(storedSession)) {
 			// Use the stored value as return value for the current execution
@@ -139,4 +140,24 @@ const onRefreshError = async ({ dpopKey, info, token }: Session) => {
 const isTokenUsable = ({ token }: Session): boolean => {
 	const expires = token.expires_at;
 	return expires == null || Date.now() + 60_000 <= expires;
+};
+
+const migrateSessionIfNeeded = async (
+	sub: Did,
+	session: RawSession | undefined,
+): Promise<Session | undefined> => {
+	if (!session || !isLegacyDpopKey(session.dpopKey)) {
+		return session as Session | undefined;
+	}
+
+	const dpopKey = await migrateLegacyDpopKey(session.dpopKey);
+	const migrated = { ...session, dpopKey };
+
+	try {
+		database.sessions.set(sub, migrated);
+	} catch {
+		// ignore persistence errors
+	}
+
+	return migrated;
 };

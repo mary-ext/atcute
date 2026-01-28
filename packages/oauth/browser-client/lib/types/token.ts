@@ -1,6 +1,8 @@
 import type { Did } from '@atcute/lexicons';
+import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 
-import type { DPoPKey } from './dpop.js';
+import type { LegacyDpopKey } from '../utils/dpop-key.js';
+
 import type { PersistedAuthorizationServerMetadata } from './server.js';
 
 export interface TokenInfo {
@@ -17,8 +19,14 @@ export interface ExchangeInfo {
 	server: PersistedAuthorizationServerMetadata;
 }
 
+export interface RawSession {
+	dpopKey: DpopPrivateJwk | LegacyDpopKey;
+	info: ExchangeInfo;
+	token: TokenInfo;
+}
+
 export interface Session {
-	dpopKey: DPoPKey;
+	dpopKey: DpopPrivateJwk;
 	info: ExchangeInfo;
 	token: TokenInfo;
 }

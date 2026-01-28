@@ -6,11 +6,8 @@ export interface ClientAssertionCredentials {
 }
 
 export interface FetchClientAssertionParams {
-	/** JWK thumbprint of the DPoP key to bind the assertion to */
-	jkt: string;
 	/** authorization server issuer (audience for the assertion) */
 	aud: string;
-
 	/**
 	 * create a DPoP proof to prove you possess the key for the claimed jkt.
 	 *

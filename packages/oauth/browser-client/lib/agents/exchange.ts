@@ -1,15 +1,14 @@
+import type { ResolvedActor } from '@atcute/identity-resolver';
 import type { ActorIdentifier } from '@atcute/lexicons';
+import { generateDpopKey, generatePkce } from '@atcute/oauth-crypto';
 import type { OAuthAuthorizationServerMetadata, OAuthPrompt } from '@atcute/oauth-types';
 
 import { nanoid } from 'nanoid';
 
-import { createES256Key } from '../dpop.js';
 import { CLIENT_ID, database, REDIRECT_URI } from '../environment.js';
 import { AuthorizationError, LoginError } from '../errors.js';
 import { resolveFromIdentifier, resolveFromService } from '../resolvers.js';
-import type { ResolvedIdentity } from '../types/identity.js';
 import type { Session } from '../types/token.js';
-import { generatePKCE } from '../utils/runtime.js';
 
 import { OAuthServerAgent } from './server-agent.js';
 import { storeSession } from './sessions.js';
@@ -35,7 +34,7 @@ export interface AuthorizeOptions {
 export const createAuthorizationUrl = async (options: AuthorizeOptions): Promise<URL> => {
 	const { target, scope, state = null, ...reqs } = options;
 
-	let resolved: { identity?: ResolvedIdentity; metadata: OAuthAuthorizationServerMetadata };
+	let resolved: { identity?: ResolvedActor; metadata: OAuthAuthorizationServerMetadata };
 	switch (target.type) {
 		case 'account': {
 			resolved = await resolveFromIdentifier(target.identifier);
@@ -55,8 +54,8 @@ export const createAuthorizationUrl = async (options: AuthorizeOptions): Promise
 
 	const sid = nanoid(24);
 
-	const pkce = await generatePKCE();
-	const dpopKey = await createES256Key();
+	const pkce = await generatePkce();
+	const dpopKey = await generateDpopKey(['ES256']);
 
 	const params = {
 		display: reqs.display,
