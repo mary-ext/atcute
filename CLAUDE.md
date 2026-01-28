@@ -79,11 +79,14 @@ the packages are organized into categories under `packages/`:
 
 use `@oomfware/cgr` to ask questions about external repositories:
 
-    npx @oomfware/cgr ask [options] <repo>[#branch] <question>
+```
+npx @oomfware/cgr ask [options] <repo>[#branch] <question>
 
-    options:
-      -m, --model <model>   model to use: opus, sonnet, haiku (default: haiku)
-      -w, --with <repo>     additional repository to include, supports #branch (repeatable)
+options:
+  -m, --model <model>   model to use: opus, sonnet, haiku (default: haiku)
+  -d, --deep            clone full history (enables git log/blame/show)
+  -w, --with <repo>     additional repository to include, supports #branch (repeatable)
+```
 
 useful repositories for development:
 

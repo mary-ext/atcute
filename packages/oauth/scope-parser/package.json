@@ -1,0 +1,35 @@
+{
+	"name": "@atcute/oauth-scope-parser",
+	"version": "0.1.0",
+	"description": "OAuth scope parsing and matching for AT Protocol",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/oauth/scope-parser"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"type": "module",
+	"sideEffects": false,
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsgo --project tsconfig.build.json",
+		"test": "vitest",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/lexicons": "workspace:^"
+	},
+	"devDependencies": {
+		"vitest": "^4.0.16"
+	}
+}

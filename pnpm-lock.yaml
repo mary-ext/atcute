@@ -993,6 +993,16 @@ importers:
         specifier: latest
         version: 1.3.6
 
+  packages/oauth/scope-parser:
+    dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+    devDependencies:
+      vitest:
+        specifier: ^4.0.16
+        version: 4.0.16(@types/node@25.0.3)(@vitest/browser-playwright@4.0.16)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
+
   packages/oauth/types:
     dependencies:
       '@atcute/identity':
