@@ -19,5 +19,5 @@ export const fromBase16 = (str: string): Uint8Array<ArrayBuffer> => {
 };
 
 export const toBase16 = (bytes: Uint8Array): string => {
-	return _hexSlice.call(bytes);
+	return _hexSlice.call(bytes, 0, bytes.byteLength);
 };

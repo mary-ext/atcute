@@ -33,7 +33,7 @@ export const fromBase64 = (str: string): Uint8Array<ArrayBuffer> => {
 };
 
 export const toBase64 = (bytes: Uint8Array): string => {
-	return _base64Slice.call(bytes).replaceAll('=', '');
+	return _base64Slice.call(bytes, 0, bytes.byteLength).replaceAll('=', '');
 };
 
 export const fromBase64Pad = (str: string): Uint8Array<ArrayBuffer> => {
@@ -45,7 +45,7 @@ export const fromBase64Pad = (str: string): Uint8Array<ArrayBuffer> => {
 };
 
 export const toBase64Pad = (bytes: Uint8Array): string => {
-	return _base64Slice.call(bytes);
+	return _base64Slice.call(bytes, 0, bytes.byteLength);
 };
 
 export const fromBase64Url = (str: string): Uint8Array<ArrayBuffer> => {
@@ -57,7 +57,7 @@ export const fromBase64Url = (str: string): Uint8Array<ArrayBuffer> => {
 };
 
 export const toBase64Url = (bytes: Uint8Array): string => {
-	return _base64UrlSlice.call(bytes);
+	return _base64UrlSlice.call(bytes, 0, bytes.byteLength);
 };
 
 export const fromBase64UrlPad = (str: string): Uint8Array<ArrayBuffer> => {
@@ -70,6 +70,6 @@ export const fromBase64UrlPad = (str: string): Uint8Array<ArrayBuffer> => {
 
 const PADDING = ['', '===', '==', '='];
 export const toBase64UrlPad = (bytes: Uint8Array): string => {
-	const str = _base64UrlSlice.call(bytes);
+	const str = _base64UrlSlice.call(bytes, 0, bytes.byteLength);
 	return str + PADDING[str.length % 4];
 };
