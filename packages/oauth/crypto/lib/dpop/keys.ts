@@ -15,11 +15,11 @@ export interface ImportDpopKeyOptions {
 }
 
 /**
- * imports a dpop private key from a jwk object or json string.
+ * imports a DPoP private key from a JWK object or JSON string.
  *
- * @param input jwk object or json string
+ * @param input JWK object or JSON string
  * @param options optional alg override
- * @returns imported dpop key
+ * @returns imported DPoP key
  */
 export const importDpopPrivateJwk = async (
 	input: DpopPrivateJwk | string,
@@ -39,11 +39,11 @@ export const importDpopPrivateJwk = async (
 };
 
 /**
- * imports a dpop private key from a pkcs8 pem string.
+ * imports a DPoP private key from a PKCS8 PEM string.
  *
- * @param pem pkcs8 pem string
+ * @param pem PKCS8 PEM string
  * @param options import options
- * @returns imported dpop key
+ * @returns imported DPoP key
  */
 export const importDpopPkcs8 = async (
 	pem: string,

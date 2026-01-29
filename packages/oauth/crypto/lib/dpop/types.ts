@@ -3,7 +3,7 @@ import type { PrivateJwk, PublicJwk, SigningAlgorithm } from '../jwk/types.js';
 export type Awaitable<T> = T | Promise<T>;
 
 /**
- * private jwk for dpop proofs.
+ * private JWK for DPoP proofs.
  */
 export type DpopPrivateJwk = PrivateJwk & {
 	alg: SigningAlgorithm;
@@ -11,7 +11,7 @@ export type DpopPrivateJwk = PrivateJwk & {
 };
 
 /**
- * imported dpop private key, ready for signing.
+ * imported DPoP private key, ready for signing.
  */
 export interface DpopPrivateKey {
 	jwk: DpopPrivateJwk;
@@ -20,7 +20,7 @@ export interface DpopPrivateKey {
 }
 
 /**
- * nonce cache for dpop fetch.
+ * nonce cache for DPoP fetch.
  */
 export interface DpopNonceCache {
 	get(key: string): Awaitable<string | undefined>;

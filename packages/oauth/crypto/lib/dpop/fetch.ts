@@ -4,11 +4,11 @@ import { createDpopProofSigner } from './proof.js';
 import type { DpopPrivateKey, DpopNonceCache } from './types.js';
 
 export interface CreateDpopFetchOptions {
-	/** dpop private key */
+	/** DPoP private key */
 	key: DpopPrivateKey;
 	/** nonce store, keyed by origin */
 	nonces: DpopNonceCache;
-	/** server's supported dpop signing algorithms */
+	/** server's supported DPoP signing algorithms */
 	supportedAlgs?: readonly string[];
 	/**
 	 * is the target an authorization server (true) or resource server (false)?
@@ -20,10 +20,10 @@ export interface CreateDpopFetchOptions {
 }
 
 /**
- * creates a fetch wrapper that adds dpop proofs to requests.
+ * creates a fetch wrapper that adds DPoP proofs to requests.
  *
- * @param options dpop configuration
- * @returns fetch function with dpop support
+ * @param options DPoP configuration
+ * @returns fetch function with DPoP support
  */
 export const createDpopFetch = (options: CreateDpopFetchOptions): typeof globalThis.fetch => {
 	const { key, nonces, supportedAlgs, isAuthServer, fetch = globalThis.fetch } = options;
@@ -105,14 +105,14 @@ const buildHtu = (url: string): string => {
 const negotiateAlg = (key: DpopPrivateKey, supportedAlgs?: readonly string[]): string => {
 	const keyAlg = key.jwk.alg;
 	if (!keyAlg) {
-		throw new Error(`dpop key must have 'alg' field set`);
+		throw new Error(`DPoP key must have 'alg' field set`);
 	}
 
 	if (supportedAlgs?.length) {
 		if (supportedAlgs.includes(keyAlg)) {
 			return keyAlg;
 		}
-		throw new Error(`dpop key algorithm ${keyAlg} not supported by server: ${supportedAlgs.join(', ')}`);
+		throw new Error(`DPoP key algorithm ${keyAlg} not supported by server: ${supportedAlgs.join(', ')}`);
 	}
 
 	return keyAlg;

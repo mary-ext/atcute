@@ -5,7 +5,7 @@ import type { SigningAlgorithm } from '../jwk/types.js';
 import type { DpopPrivateJwk } from './types.js';
 
 /**
- * preferred algorithm order for dpop key generation.
+ * preferred algorithm order for DPoP key generation.
  */
 const PREFERRED_ALGORITHMS: readonly SigningAlgorithm[] = [
 	'ES256',
@@ -39,10 +39,10 @@ const sortAlgorithms = (algs: readonly SigningAlgorithm[]): SigningAlgorithm[] =
 };
 
 /**
- * generates a new dpop private jwk with `alg` set.
+ * generates a new DPoP private JWK with `alg` set.
  *
  * @param supportedAlgs server supported algorithms (optional)
- * @returns private jwk ready for storage
+ * @returns private JWK ready for storage
  */
 export const generateDpopKey = async (supportedAlgs?: readonly string[]): Promise<DpopPrivateJwk> => {
 	const normalized = supportedAlgs?.filter(isSigningAlgorithm) ?? [];
@@ -63,5 +63,5 @@ export const generateDpopKey = async (supportedAlgs?: readonly string[]): Promis
 		}
 	}
 
-	throw new AggregateError(errors, `failed to generate dpop key for any of: ${algs.join(', ')}`);
+	throw new AggregateError(errors, `failed to generate DPoP key for any of: ${algs.join(', ')}`);
 };

@@ -5,10 +5,10 @@ import { signJwt } from '../jwt/index.js';
 import type { DpopPrivateKey } from './types.js';
 
 /**
- * creates a dpop proof signer.
+ * creates a DPoP proof signer.
  *
- * @param key imported dpop key
- * @returns signing function for dpop proofs
+ * @param key imported DPoP key
+ * @returns signing function for DPoP proofs
  */
 export const createDpopProofSigner = (
 	key: DpopPrivateKey,

@@ -9,17 +9,17 @@ export interface CreateClientAssertionOptions {
 	clientId: string;
 	/** authorization server issuer (used as aud) */
 	audience: string;
-	/** jwk thumbprint of the dpop key to bind to (cnf.jkt) */
+	/** JWK thumbprint of the DPoP key to bind to (cnf.jkt) */
 	jkt?: string;
 	/** client assertion signing key */
 	key: ClientAssertionPrivateKey;
 }
 
 /**
- * creates a dpop-bound client assertion per rfc 7523.
+ * creates a DPoP-bound client assertion per RFC 7523.
  *
  * @param options creation options
- * @returns signed client assertion jwt
+ * @returns signed client assertion JWT
  */
 export const createClientAssertion = async (options: CreateClientAssertionOptions): Promise<string> => {
 	const { clientId, audience, jkt, key } = options;
