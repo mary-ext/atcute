@@ -1,4 +1,4 @@
-import { DpopVerifyError, verifyDpopProof } from '@atcute/oauth-crypto';
+import { createClientAssertion, DpopVerifyError, verifyDpopProof } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import {
 	createXrpcHandler,
@@ -10,7 +10,6 @@ import {
 
 import { DevAtcuteOauthGetClientAssertion } from '../lexicons/index.js';
 
-import { createClientAssertion } from './client-assertion.js';
 import { DpopNonce, type DpopSecret } from './dpop-nonce.js';
 
 /**
@@ -66,15 +65,15 @@ const createCabProcedure = async (
 			}
 
 			// create client assertion
+			const { key } = keyset.findForSigning(serverAlgs);
 			const assertion = await createClientAssertion({
-				clientId: client_id,
-				audience: aud,
+				client_id,
+				aud: aud,
 				jkt,
-				keyset,
-				serverAlgs,
+				key,
 			});
 
-			return json({ client_assertion: assertion.client_assertion }, { headers });
+			return json({ client_assertion: assertion }, { headers });
 		},
 	};
 };

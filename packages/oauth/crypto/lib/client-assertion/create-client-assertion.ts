@@ -6,13 +6,13 @@ import { signJwt } from '../jwt/index.js';
 import type { ClientAssertionPrivateJwk } from './types.js';
 
 export interface CreateClientAssertionOptions {
-	/** client id (used as iss and sub) */
-	clientId: string;
-	/** authorization server issuer (used as aud) */
-	audience: string;
-	/** JWK thumbprint of the DPoP key to bind to (cnf.jkt) */
-	jkt?: string;
-	/** client assertion signing key (JWK with `alg` and `kid` set) */
+	/** client id */
+	client_id: string;
+	/** authorization server issuer */
+	aud: string;
+	/** JWK thumbprint of the DPoP key to bind to */
+	jkt: string;
+	/** client assertion signing key */
 	key: ClientAssertionPrivateJwk;
 }
 
@@ -23,7 +23,7 @@ export interface CreateClientAssertionOptions {
  * @returns signed client assertion JWT
  */
 export const createClientAssertion = async (options: CreateClientAssertionOptions): Promise<string> => {
-	const { clientId, audience, jkt, key } = options;
+	const { client_id, aud, jkt, key } = options;
 	const { kid, alg } = key;
 	const { cryptoKey } = await getCachedKeyMaterial(key);
 
@@ -36,9 +36,9 @@ export const createClientAssertion = async (options: CreateClientAssertionOption
 			kid,
 		},
 		payload: {
-			iss: clientId,
-			sub: clientId,
-			aud: audience,
+			iss: client_id,
+			sub: client_id,
+			aud: aud,
 			jti: nanoid(24),
 			iat: now,
 			exp: now + 60,
