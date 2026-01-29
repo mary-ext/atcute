@@ -1,5 +1,5 @@
 import type { Did } from '@atcute/lexicons';
-import { createDpopProofSigner, importDpopPrivateJwk, type DpopPrivateJwk } from '@atcute/oauth-crypto';
+import { createDpopProofSigner, type DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { AtprotoOAuthTokenResponse, OAuthParResponse } from '@atcute/oauth-types';
 
 import { createDPoPFetch } from '../dpop.js';
@@ -39,12 +39,11 @@ export class OAuthServerAgent {
 			(endpoint === 'token' || endpoint === 'pushed_authorization_request') &&
 			fetchClientAssertion !== undefined
 		) {
-			const signer = importDpopPrivateJwk(this.#dpopKey).then((key) => createDpopProofSigner(key));
+			const sign = createDpopProofSigner(this.#dpopKey);
 
 			const assertion = await fetchClientAssertion({
 				aud: this.#metadata.issuer,
 				createDpopProof: async (url, nonce) => {
-					const sign = await signer;
 					return await sign('POST', url, nonce, undefined);
 				},
 			});

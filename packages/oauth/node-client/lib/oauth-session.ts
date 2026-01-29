@@ -1,8 +1,8 @@
 import type { FetchHandlerObject } from '@atcute/client';
 import type { Did } from '@atcute/lexicons';
+import { createDpopFetch } from '@atcute/oauth-crypto';
 import type { AtprotoOAuthScope } from '@atcute/oauth-types';
 
-import { createDpopFetch } from './dpop/fetch-dpop.js';
 import { TokenInvalidError, TokenRevokedError } from './errors.js';
 import type { OAuthServerAgent } from './oauth-server-agent.js';
 import type { SessionGetter } from './session-getter.js';

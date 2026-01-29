@@ -1,5 +1,6 @@
 import type { Did } from '@atcute/lexicons';
-import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
+import type { DpopNonceCache, DpopPrivateJwk } from '@atcute/oauth-crypto';
+import { createDpopFetch } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import {
 	atprotoOAuthTokenResponseSchema,
@@ -12,7 +13,6 @@ import {
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
 import { JSON_MIME, PAR_RESPONSE_MAX_SIZE, TOKEN_RESPONSE_MAX_SIZE } from './constants.js';
-import { createDpopFetch } from './dpop/fetch-dpop.js';
 import { OAuthResponseError, TokenRefreshError } from './errors.js';
 import {
 	createClientAssertionFactory,
@@ -21,7 +21,6 @@ import {
 } from './oauth-client-auth.js';
 import { OAuthResolver } from './resolvers/index.js';
 import type { TokenSet } from './types/token-set.js';
-import type { Store } from './utils/store.js';
 
 const processTokenResponse = pipe(
 	parseResponseAsJson(JSON_MIME, TOKEN_RESPONSE_MAX_SIZE),
@@ -32,8 +31,6 @@ const processParResponse = pipe(
 	parseResponseAsJson(JSON_MIME, PAR_RESPONSE_MAX_SIZE),
 	validateJsonWith(oauthParResponseSchema, { mode: 'passthrough' }),
 );
-
-export type DpopNonceCache = Store<string, string>;
 
 export interface OAuthServerAgentOptions {
 	/** negotiated client authentication method */

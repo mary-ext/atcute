@@ -1,22 +1,29 @@
 import { nanoid } from 'nanoid';
 
+import type { CachedKeyMaterial } from '../internal/key-cache.js';
+import { getCachedKeyMaterial } from '../internal/key-cache.js';
 import { signJwt } from '../jwt/index.js';
 
-import type { DpopPrivateKey } from './types.js';
+import type { DpopPrivateJwk } from './types.js';
 
 /**
  * creates a DPoP proof signer.
  *
- * @param key imported DPoP key
+ * @param jwk DPoP private JWK (with `alg` set)
  * @returns signing function for DPoP proofs
  */
 export const createDpopProofSigner = (
-	key: DpopPrivateKey,
+	jwk: DpopPrivateJwk,
 ): ((htm: string, htu: string, nonce?: string, ath?: string) => Promise<string>) => {
-	const { jwk, publicJwk, key: cryptoKey } = key;
 	const alg = jwk.alg;
 
+	// lazily resolve key material on first sign
+	let materialPromise: Promise<CachedKeyMaterial> | undefined;
+
 	return async (htm: string, htu: string, nonce?: string, ath?: string) => {
+		materialPromise ||= getCachedKeyMaterial(jwk);
+		const { cryptoKey, publicJwk } = await materialPromise;
+
 		const now = Math.floor(Date.now() / 1_000);
 
 		return signJwt({

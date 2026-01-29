@@ -34,10 +34,12 @@ export interface RsaPublicJwk {
 export type PublicJwk = EcPublicJwk | RsaPublicJwk;
 
 export interface EcPrivateJwk extends EcPublicJwk {
+	alg: SigningAlgorithm;
 	d: string;
 }
 
 export interface RsaPrivateJwk extends RsaPublicJwk {
+	alg: SigningAlgorithm;
 	d: string;
 	p?: string;
 	q?: string;

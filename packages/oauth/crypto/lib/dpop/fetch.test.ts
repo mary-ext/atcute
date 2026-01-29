@@ -1,10 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { generateDpopKey } from './generate-key.js';
-import { importDpopPrivateJwk } from './keys.js';
-import type { DpopNonceCache } from './types.js';
-
 import { createDpopFetch } from './fetch.js';
+import { generateDpopKey } from './generate-key.js';
+import type { DpopNonceCache } from './types.js';
 
 const createMemoryNonceCache = (): DpopNonceCache => {
 	const map = new Map<string, string>();
@@ -30,7 +28,7 @@ describe('createDpopFetch', () => {
 	describe('basic DPoP proof', () => {
 		it('should add DPoP header to requests', async () => {
 			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
+			const key = jwk;
 			const nonces = createMemoryNonceCache();
 			const mockFetch = vi.fn().mockResolvedValue(createMockResponse(200, { ok: true }));
 
@@ -45,7 +43,7 @@ describe('createDpopFetch', () => {
 
 		it('should include method and URL in DPoP proof', async () => {
 			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
+			const key = jwk;
 			const nonces = createMemoryNonceCache();
 			const mockFetch = vi.fn().mockResolvedValue(createMockResponse(200));
 
@@ -64,7 +62,7 @@ describe('createDpopFetch', () => {
 	describe('nonce handling', () => {
 		it('should cache nonce from response', async () => {
 			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
+			const key = jwk;
 			const nonces = createMemoryNonceCache();
 			const mockFetch = vi
 				.fn()
@@ -79,7 +77,7 @@ describe('createDpopFetch', () => {
 
 		it('should use cached nonce in subsequent requests', async () => {
 			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
+			const key = jwk;
 			const nonces = createMemoryNonceCache();
 			await nonces.set('https://example.com', 'cached-nonce');
 
@@ -96,7 +94,7 @@ describe('createDpopFetch', () => {
 
 		it('should retry with new nonce on use_dpop_nonce error (resource server)', async () => {
 			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
+			const key = jwk;
 			const nonces = createMemoryNonceCache();
 
 			const mockFetch = vi
@@ -124,7 +122,7 @@ describe('createDpopFetch', () => {
 
 		it('should retry with new nonce on use_dpop_nonce error (auth server)', async () => {
 			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
+			const key = jwk;
 			const nonces = createMemoryNonceCache();
 
 			const mockFetch = vi
@@ -146,7 +144,7 @@ describe('createDpopFetch', () => {
 	describe('access token hash (ath)', () => {
 		it('should include ath when Authorization header has DPoP token', async () => {
 			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
+			const key = jwk;
 			const nonces = createMemoryNonceCache();
 			const mockFetch = vi.fn().mockResolvedValue(createMockResponse(200));
 
@@ -164,22 +162,8 @@ describe('createDpopFetch', () => {
 	});
 
 	describe('error cases', () => {
-		it('should throw if key has no alg', async () => {
-			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
-
-			// manually remove alg to simulate invalid key
-			const badKey = { ...key, jwk: { ...key.jwk } };
-			delete (badKey.jwk as { alg?: string }).alg;
-
-			const nonces = createMemoryNonceCache();
-
-			expect(() => createDpopFetch({ key: badKey, nonces })).toThrow("DPoP key must have 'alg' field set");
-		});
-
 		it('should throw if key alg not supported by server', async () => {
-			const jwk = await generateDpopKey(['ES256']);
-			const key = await importDpopPrivateJwk(jwk);
+			const key = await generateDpopKey(['ES256']);
 			const nonces = createMemoryNonceCache();
 
 			expect(() =>
@@ -195,7 +179,7 @@ describe('createDpopFetch', () => {
 	describe('URL handling', () => {
 		it('should strip query string from htu', async () => {
 			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
+			const key = jwk;
 			const nonces = createMemoryNonceCache();
 			const mockFetch = vi.fn().mockResolvedValue(createMockResponse(200));
 
@@ -210,7 +194,7 @@ describe('createDpopFetch', () => {
 
 		it('should strip fragment from htu', async () => {
 			const jwk = await generateDpopKey();
-			const key = await importDpopPrivateJwk(jwk);
+			const key = jwk;
 			const nonces = createMemoryNonceCache();
 			const mockFetch = vi.fn().mockResolvedValue(createMockResponse(200));
 

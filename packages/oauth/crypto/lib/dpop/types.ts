@@ -1,4 +1,4 @@
-import type { PrivateJwk, PublicJwk, SigningAlgorithm } from '../jwk/types.js';
+import type { PrivateJwk, SigningAlgorithm } from '../jwk/types.js';
 
 export type Awaitable<T> = T | Promise<T>;
 
@@ -9,15 +9,6 @@ export type DpopPrivateJwk = PrivateJwk & {
 	alg: SigningAlgorithm;
 	kid?: string;
 };
-
-/**
- * imported DPoP private key, ready for signing.
- */
-export interface DpopPrivateKey {
-	jwk: DpopPrivateJwk;
-	key: CryptoKey;
-	publicJwk: PublicJwk;
-}
 
 /**
  * nonce cache for DPoP fetch.

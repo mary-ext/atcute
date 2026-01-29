@@ -37,11 +37,7 @@ import { existsSync } from 'node:fs';
 import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-import {
-	exportPrivateJwk,
-	generateClientAssertionKey,
-	importClientAssertionPrivateJwk,
-} from '@atcute/oauth-node-client';
+import { generateClientAssertionKey } from '@atcute/oauth-node-client';
 
 const ensureEnvLocal = async () => {
 	const envPath = resolve(process.cwd(), '.env');
@@ -77,12 +73,8 @@ const upsertEnvVar = (input, key, value) => {
 const envLocalPath = await ensureEnvLocal();
 const envLocal = await readFile(envLocalPath, 'utf8');
 
-const privateKey = await generateClientAssertionKey('main', 'ES256');
-const jwk = await exportPrivateJwk(privateKey);
-
-// sanity-check that the key parses before writing
-await importClientAssertionPrivateJwk(jwk);
-
+// generateClientAssertionKey returns a JWK directly
+const jwk = await generateClientAssertionKey('main', 'ES256');
 const jwkJson = JSON.stringify(jwk);
 const updated = upsertEnvVar(envLocal, 'PRIVATE_KEY_JWK', `'${jwkJson}'`);
 
@@ -103,9 +95,10 @@ node scripts/setup-env.mjs
 4. create a keyset at runtime:
 
 ```ts
-import { importClientAssertionPrivateJwk } from '@atcute/oauth-node-client';
+import type { ClientAssertionPrivateJwk } from '@atcute/oauth-node-client';
 
-const keyset = await Promise.all([importClientAssertionPrivateJwk(process.env.PRIVATE_KEY_JWK!)]);
+// JWKs can be used directly - no import step needed
+const keyset = [JSON.parse(process.env.PRIVATE_KEY_JWK!) as ClientAssertionPrivateJwk];
 ```
 
 ### create an OAuth client
@@ -114,8 +107,8 @@ const keyset = await Promise.all([importClientAssertionPrivateJwk(process.env.PR
 import {
 	MemoryStore,
 	OAuthClient,
-	importClientAssertionPrivateJwk,
 	scope,
+	type ClientAssertionPrivateJwk,
 } from '@atcute/oauth-node-client';
 import {
 	CompositeDidDocumentResolver,
@@ -153,7 +146,8 @@ const oauth = new OAuthClient({
 		jwks_uri: 'https://example.com/jwks.json',
 	},
 
-	keyset: await Promise.all([importClientAssertionPrivateJwk(process.env.PRIVATE_KEY_JWK!)]),
+	// JWKs can be used directly - no import step needed
+	keyset: [JSON.parse(process.env.PRIVATE_KEY_JWK!) as ClientAssertionPrivateJwk],
 
 	stores: {
 		// sessions are keyed by DID - should be durable across restarts.

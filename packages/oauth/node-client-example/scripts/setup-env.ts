@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { copyFile, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-import { exportPrivateJwk, generateClientAssertionKey } from '@atcute/oauth-node-client';
+import { generateClientAssertionKey } from '@atcute/oauth-node-client';
 
 import { nanoid } from 'nanoid';
 
@@ -40,8 +40,7 @@ const upsertEnvVar = (input: string, key: string, value: string): string => {
 const envLocalPath = await ensureEnvLocal();
 const envLocal = await readFile(envLocalPath, 'utf8');
 
-const privateKey = await generateClientAssertionKey('main', 'ES256');
-const jwk = await exportPrivateJwk(privateKey);
+const jwk = await generateClientAssertionKey('main', 'ES256');
 const jwkJson = JSON.stringify(jwk);
 
 const cookieSecret = nanoid(32);

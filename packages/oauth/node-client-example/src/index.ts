@@ -10,11 +10,11 @@ import {
 } from '@atcute/identity-resolver';
 import { NodeDnsHandleResolver } from '@atcute/identity-resolver-node';
 import { isActorIdentifier, isDid, type Did } from '@atcute/lexicons/syntax';
+import type { ClientAssertionPrivateJwk } from '@atcute/oauth-node-client';
 import {
 	MemoryStore,
 	OAuthCallbackError,
 	OAuthClient,
-	importClientAssertionPrivateJwk,
 	type AuthorizeTarget,
 	type StoredState,
 } from '@atcute/oauth-node-client';
@@ -110,7 +110,7 @@ const oauth = new OAuthClient({
 		jwks_uri: new URL('/jwks.json', publicUrl).href,
 	},
 
-	keyset: await Promise.all([importClientAssertionPrivateJwk(privateKeyJwk)]),
+	keyset: [JSON.parse(privateKeyJwk) as ClientAssertionPrivateJwk],
 
 	actorResolver: new LocalActorResolver({
 		handleResolver: new CompositeHandleResolver({

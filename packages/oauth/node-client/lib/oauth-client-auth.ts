@@ -1,5 +1,5 @@
 import { createClientAssertion as createClientAssertionJwt } from '@atcute/oauth-crypto';
-import type { ClientAssertionPrivateKey } from '@atcute/oauth-crypto';
+import type { ClientAssertionPrivateJwk } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import {
 	CLIENT_ASSERTION_TYPE_JWT_BEARER,
@@ -111,7 +111,7 @@ export const createClientAssertionFactory = (
  * @see {@link https://www.rfc-editor.org/rfc/rfc7523.html#section-3}
  */
 const createClientCredentials = async (
-	key: ClientAssertionPrivateKey,
+	key: ClientAssertionPrivateJwk,
 	clientId: string,
 	audience: string,
 ): Promise<ClientCredentials> => {

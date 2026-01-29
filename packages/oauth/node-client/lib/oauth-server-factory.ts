@@ -1,11 +1,10 @@
-import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
+import type { DpopNonceCache, DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import type { AtprotoAuthorizationServerMetadata, OAuthClientMetadata } from '@atcute/oauth-types';
 
 import { type ClientAuthMethod, negotiateClientAuth } from './oauth-client-auth.js';
 import { OAuthServerAgent } from './oauth-server-agent.js';
 import { OAuthResolver } from './resolvers/index.js';
-import type { Store } from './utils/store.js';
 
 export interface OAuthServerFactoryOptions {
 	/** client metadata */
@@ -15,7 +14,7 @@ export interface OAuthServerFactoryOptions {
 	/** client's private keyset */
 	keyset: Keyset;
 	/** DPoP nonce cache, keyed by origin */
-	dpopNonces: Store<string, string>;
+	dpopNonces: DpopNonceCache;
 	/** custom fetch implementation */
 	fetch?: typeof globalThis.fetch;
 }
@@ -29,7 +28,7 @@ export class OAuthServerFactory {
 	readonly clientMetadata: OAuthClientMetadata;
 	readonly resolver: OAuthResolver;
 	readonly keyset: Keyset;
-	readonly dpopNonces: Store<string, string>;
+	readonly dpopNonces: DpopNonceCache;
 	readonly fetch?: typeof globalThis.fetch;
 
 	constructor(options: OAuthServerFactoryOptions) {

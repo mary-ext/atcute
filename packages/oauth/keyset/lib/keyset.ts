@@ -1,4 +1,5 @@
-import type { ClientAssertionPrivateKey, PublicJwk } from '@atcute/oauth-crypto';
+import type { ClientAssertionPrivateJwk, PublicJwk } from '@atcute/oauth-crypto';
+import { derivePublicJwk } from '@atcute/oauth-crypto';
 
 import type { KeySearchOptions } from './types.js';
 
@@ -22,15 +23,16 @@ const PREFERRED_ALGORITHMS = [
  * a collection of private keys for client authentication.
  */
 export class Keyset {
-	private readonly keys: readonly ClientAssertionPrivateKey[];
+	private readonly keys: readonly ClientAssertionPrivateJwk[];
+	private _publicJwks: { keys: readonly PublicJwk[] } | undefined;
 
 	/**
-	 * creates a new keyset from an array of private keys.
+	 * creates a new keyset from an array of private JWKs.
 	 *
-	 * @param keys array of private keys (at least one required)
+	 * @param keys array of private JWKs (at least one required, each with `kid` and `alg` set)
 	 * @throws if keyset is empty or contains duplicate key IDs
 	 */
-	constructor(keys: ClientAssertionPrivateKey[]) {
+	constructor(keys: ClientAssertionPrivateJwk[]) {
 		if (keys.length === 0) {
 			throw new Error(`keyset must contain at least one key`);
 		}
@@ -54,10 +56,11 @@ export class Keyset {
 
 	/**
 	 * public JWKS for serving at client metadata or jwks_uri.
-	 * pre-computed at import time, safe to inline.
+	 * derived lazily on first access, then cached.
 	 */
 	get publicJwks(): { keys: readonly PublicJwk[] } {
-		return { keys: this.keys.map((k) => k.publicJwk) };
+		this._publicJwks ||= { keys: this.keys.map((k) => derivePublicJwk(k, k.kid, k.alg)) };
+		return this._publicJwks;
 	}
 
 	/**
@@ -66,7 +69,7 @@ export class Keyset {
 	 * @param options search criteria (kid and/or alg)
 	 * @returns matching key or undefined
 	 */
-	find(options?: KeySearchOptions): ClientAssertionPrivateKey | undefined {
+	find(options?: KeySearchOptions): ClientAssertionPrivateJwk | undefined {
 		for (const key of this.list(options)) {
 			return key;
 		}
@@ -80,7 +83,7 @@ export class Keyset {
 	 * @returns matching key
 	 * @throws if no matching key is found
 	 */
-	get(options?: KeySearchOptions): ClientAssertionPrivateKey {
+	get(options?: KeySearchOptions): ClientAssertionPrivateJwk {
 		const key = this.find(options);
 		if (!key) {
 			const desc = options?.kid ?? options?.alg ?? 'any';
@@ -94,7 +97,7 @@ export class Keyset {
 	 *
 	 * @param options search criteria (kid and/or alg)
 	 */
-	*list(options?: KeySearchOptions): Generator<ClientAssertionPrivateKey> {
+	*list(options?: KeySearchOptions): Generator<ClientAssertionPrivateJwk> {
 		const { kid, alg } = options ?? {};
 		const algSet = alg == null ? null : new Set(Array.isArray(alg) ? alg : [alg]);
 
@@ -123,7 +126,7 @@ export class Keyset {
 	 * @returns key and negotiated algorithm
 	 * @throws if no compatible key is found
 	 */
-	findForSigning(serverAlgs?: readonly string[]): { key: ClientAssertionPrivateKey; alg: string } {
+	findForSigning(serverAlgs?: readonly string[]): { key: ClientAssertionPrivateJwk; alg: string } {
 		// if server doesn't specify, default to ES256 per atproto spec
 		const algs = serverAlgs ?? ['ES256'];
 
@@ -135,7 +138,7 @@ export class Keyset {
 		return { key, alg: key.alg };
 	}
 
-	[Symbol.iterator](): Iterator<ClientAssertionPrivateKey> {
+	[Symbol.iterator](): Iterator<ClientAssertionPrivateJwk> {
 		return this.keys[Symbol.iterator]();
 	}
 }

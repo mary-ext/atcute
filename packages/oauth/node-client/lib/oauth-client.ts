@@ -1,6 +1,6 @@
 import type { ActorResolver } from '@atcute/identity-resolver';
 import type { ActorIdentifier, Did } from '@atcute/lexicons';
-import type { ClientAssertionPrivateKey } from '@atcute/oauth-crypto';
+import type { ClientAssertionPrivateJwk, DpopNonceCache } from '@atcute/oauth-crypto';
 import { generateDpopKey, generatePkce, type PublicJwk } from '@atcute/oauth-crypto';
 import { Keyset } from '@atcute/oauth-keyset';
 import {
@@ -14,7 +14,6 @@ import {
 
 import { nanoid } from 'nanoid';
 
-import type { DpopNonceCache } from './dpop/fetch-dpop.js';
 import { OAuthCallbackError, TokenRevokedError } from './errors.js';
 import { OAuthServerAgent } from './oauth-server-agent.js';
 import { OAuthServerFactory } from './oauth-server-factory.js';
@@ -51,7 +50,7 @@ export interface OAuthClientOptions {
 	/** client metadata */
 	metadata: ConfidentialClientMetadata;
 	/** client's signing keys (or an already constructed keyset) */
-	keyset: Keyset | ClientAssertionPrivateKey[];
+	keyset: Keyset | ClientAssertionPrivateJwk[];
 	/** identity resolver for DID/handle resolution */
 	actorResolver: ActorResolver;
 	/** storage backends */

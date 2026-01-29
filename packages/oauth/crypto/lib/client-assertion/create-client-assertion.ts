@@ -1,8 +1,9 @@
 import { nanoid } from 'nanoid';
 
+import { getCachedKeyMaterial } from '../internal/key-cache.js';
 import { signJwt } from '../jwt/index.js';
 
-import type { ClientAssertionPrivateKey } from './types.js';
+import type { ClientAssertionPrivateJwk } from './types.js';
 
 export interface CreateClientAssertionOptions {
 	/** client id (used as iss and sub) */
@@ -11,8 +12,8 @@ export interface CreateClientAssertionOptions {
 	audience: string;
 	/** JWK thumbprint of the DPoP key to bind to (cnf.jkt) */
 	jkt?: string;
-	/** client assertion signing key */
-	key: ClientAssertionPrivateKey;
+	/** client assertion signing key (JWK with `alg` and `kid` set) */
+	key: ClientAssertionPrivateJwk;
 }
 
 /**
@@ -23,13 +24,16 @@ export interface CreateClientAssertionOptions {
  */
 export const createClientAssertion = async (options: CreateClientAssertionOptions): Promise<string> => {
 	const { clientId, audience, jkt, key } = options;
+	const { kid, alg } = key;
+	const { cryptoKey } = await getCachedKeyMaterial(key);
+
 	const now = Math.floor(Date.now() / 1000);
 	const cnf = jkt ? { jkt } : undefined;
 
 	return signJwt({
 		header: {
-			alg: key.alg,
-			kid: key.kid,
+			alg,
+			kid,
 		},
 		payload: {
 			iss: clientId,
@@ -40,7 +44,7 @@ export const createClientAssertion = async (options: CreateClientAssertionOption
 			exp: now + 60,
 			cnf,
 		},
-		key: key.key,
-		alg: key.alg,
+		key: cryptoKey,
+		alg,
 	});
 };

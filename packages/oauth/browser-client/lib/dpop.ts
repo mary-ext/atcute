@@ -1,34 +1,13 @@
-import {
-	createDpopProofSigner,
-	importDpopPrivateJwk,
-	sha256Base64Url,
-	type DpopPrivateJwk,
-} from '@atcute/oauth-crypto';
+import { createDpopProofSigner, sha256Base64Url, type DpopPrivateJwk } from '@atcute/oauth-crypto';
 
 import { database } from './environment.js';
 import { extractContentType } from './utils/response.js';
-
-/**
- * creates a dpop proof signer for the given key.
- *
- * @param dpopKey dpop private jwk
- * @returns signer function
- */
-const createDPoPSignage = (dpopKey: DpopPrivateJwk) => {
-	const keyPromise = importDpopPrivateJwk(dpopKey);
-	const signerPromise = keyPromise.then((key) => createDpopProofSigner(key));
-
-	return async (method: string, htu: string, nonce: string | undefined, ath: string | undefined) => {
-		const sign = await signerPromise;
-		return sign(method, htu, nonce, ath);
-	};
-};
 
 export const createDPoPFetch = (dpopKey: DpopPrivateJwk, isAuthServer?: boolean): typeof fetch => {
 	const nonces = database.dpopNonces;
 	const pending = database.inflightDpop;
 
-	const sign = createDPoPSignage(dpopKey);
+	const sign = createDpopProofSigner(dpopKey);
 
 	return async (input, init) => {
 		const request = new Request(input, init);

@@ -1,13 +1,10 @@
 export { Keyset, type KeySearchOptions } from '@atcute/oauth-keyset';
 
 export {
-	exportPrivateJwk,
 	exportPkcs8PrivateKey,
 	generateClientAssertionKey,
-	importClientAssertionPrivateJwk,
 	importClientAssertionPkcs8,
 	type ClientAssertionPrivateJwk,
-	type ClientAssertionPrivateKey,
 } from '@atcute/oauth-crypto';
 
 export {

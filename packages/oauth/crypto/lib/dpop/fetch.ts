@@ -1,11 +1,11 @@
 import { sha256Base64Url } from '../hash/sha256.js';
 
 import { createDpopProofSigner } from './proof.js';
-import type { DpopPrivateKey, DpopNonceCache } from './types.js';
+import type { DpopPrivateJwk, DpopNonceCache } from './types.js';
 
 export interface CreateDpopFetchOptions {
-	/** DPoP private key */
-	key: DpopPrivateKey;
+	/** DPoP private key (JWK with `alg` set) */
+	key: DpopPrivateJwk;
 	/** nonce store, keyed by origin */
 	nonces: DpopNonceCache;
 	/** server's supported DPoP signing algorithms */
@@ -102,11 +102,8 @@ const buildHtu = (url: string): string => {
 	return end === -1 ? url : url.slice(0, end);
 };
 
-const negotiateAlg = (key: DpopPrivateKey, supportedAlgs?: readonly string[]): string => {
-	const keyAlg = key.jwk.alg;
-	if (!keyAlg) {
-		throw new Error(`DPoP key must have 'alg' field set`);
-	}
+const negotiateAlg = (key: DpopPrivateJwk, supportedAlgs?: readonly string[]): string => {
+	const keyAlg = key.alg;
 
 	if (supportedAlgs?.length) {
 		if (supportedAlgs.includes(keyAlg)) {

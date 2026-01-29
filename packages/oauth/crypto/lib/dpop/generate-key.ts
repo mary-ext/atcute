@@ -1,5 +1,6 @@
 import { getGenerateAlgorithm } from '../internal/crypto.js';
 import { exportPrivateJwkFromKey, isSigningAlgorithm } from '../internal/jwk.js';
+import { setCachedKeyMaterial } from '../internal/key-cache.js';
 import type { SigningAlgorithm } from '../jwk/types.js';
 
 import type { DpopPrivateJwk } from './types.js';
@@ -42,7 +43,7 @@ const sortAlgorithms = (algs: readonly SigningAlgorithm[]): SigningAlgorithm[] =
  * generates a new DPoP private JWK with `alg` set.
  *
  * @param supportedAlgs server supported algorithms (optional)
- * @returns private JWK ready for storage
+ * @returns private JWK (with cache pre-warmed)
  */
 export const generateDpopKey = async (supportedAlgs?: readonly string[]): Promise<DpopPrivateJwk> => {
 	const normalized = supportedAlgs?.filter(isSigningAlgorithm) ?? [];
@@ -56,8 +57,12 @@ export const generateDpopKey = async (supportedAlgs?: readonly string[]): Promis
 	for (const alg of algs) {
 		try {
 			const pair = await crypto.subtle.generateKey(getGenerateAlgorithm(alg), true, ['sign', 'verify']);
-			const jwk = await exportPrivateJwkFromKey(pair.privateKey, alg);
-			return jwk as DpopPrivateJwk;
+			const jwk = (await exportPrivateJwkFromKey(pair.privateKey, alg)) as DpopPrivateJwk;
+
+			// pre-populate cache so we don't re-import
+			setCachedKeyMaterial(jwk, pair.privateKey);
+
+			return jwk;
 		} catch (err) {
 			errors.push(err);
 		}

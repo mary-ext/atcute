@@ -1,6 +1,6 @@
 export { computeJktFromJwk } from './compute-jkt.js';
-export { exportPkcs8PrivateKey, exportPrivateJwk } from './keys.js';
-export type { ExportablePrivateKey, ExportedPrivateJwk } from './keys.js';
+export { derivePublicJwk } from '../internal/jwk.js';
+export { exportPkcs8PrivateKey } from './keys.js';
 export type {
 	EcPrivateJwk,
 	EcPublicJwk,

@@ -1,13 +1,10 @@
 export { Keyset, type KeySearchOptions } from '@atcute/oauth-keyset';
 
 export {
-	exportPrivateJwk,
 	exportPkcs8PrivateKey,
 	generateClientAssertionKey,
-	importClientAssertionPrivateJwk,
 	importClientAssertionPkcs8,
 	type ClientAssertionPrivateJwk,
-	type ClientAssertionPrivateKey,
 } from '@atcute/oauth-crypto';
 
 export {
@@ -53,7 +50,6 @@ export type { LockFunction } from './utils/lock.js';
 export { MemoryStore } from './utils/memory-store.js';
 export type { Store } from './utils/store.js';
 
-export type { DpopNonceCache } from './dpop/fetch-dpop.js';
 export type { AuthorizationServerMetadataCache } from './resolvers/authorization-server-metadata.js';
 export type { ProtectedResourceMetadataCache } from './resolvers/protected-resource-metadata.js';
 export type { SessionStore, StoredSession } from './types/sessions.js';
