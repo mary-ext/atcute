@@ -4,8 +4,8 @@ atproto OAuth client for Node.js (plus Deno, Bun, and other server runtimes).
 
 supports both:
 
-- **confidential clients** - authenticate with `private_key_jwt`, longer session lifetimes (up to 180
-  days), requires key management and hosted metadata
+- **confidential clients** - authenticate with `private_key_jwt`, longer session lifetimes (up to
+  180 days), requires key management and hosted metadata
 - **public clients** - no authentication (`token_endpoint_auth_method: 'none'`), shorter sessions (2
   weeks max), simpler setup for CLI tools and local development
 
@@ -308,8 +308,8 @@ const oauth = new OAuthClient({
 ```
 
 loopback redirect URIs must use `127.0.0.1` or `[::1]` (not `localhost`). the port can be any
-available port - authorization servers ignore the port when matching loopback redirect URIs per RFC
-8252.
+available port - authorization servers ignore the port when matching loopback redirect URIs per
+RFC 8252.
 
 see the [node-client-public-example](../node-client-public-example) package for a complete CLI
 example.

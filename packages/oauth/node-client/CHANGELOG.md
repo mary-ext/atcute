@@ -1,5 +1,16 @@
 # @atcute/oauth-node-client
 
+## 1.1.0
+
+### Minor Changes
+
+- 0463193: public client support
+
+### Patch Changes
+
+- Updated dependencies [0463193]
+  - @atcute/oauth-types@0.1.1
+
 ## 1.0.0
 
 ### Major Changes
