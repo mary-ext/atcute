@@ -18,13 +18,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 */
 		coverImage: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
 		/**
-		 * @maxLength 3000
-		 * @maxGraphemes 300
+		 * @maxLength 30000
+		 * @maxGraphemes 3000
 		 */
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-				/*#__PURE__*/ v.stringLength(0, 3000),
-				/*#__PURE__*/ v.stringGraphemes(0, 300),
+				/*#__PURE__*/ v.stringLength(0, 30000),
+				/*#__PURE__*/ v.stringGraphemes(0, 3000),
 			]),
 		),
 		get pages() {
@@ -46,12 +46,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			return /*#__PURE__*/ v.optional(PubLeafletPublication.themeSchema);
 		},
 		/**
-		 * @maxLength 1280
-		 * @maxGraphemes 128
+		 * @maxLength 5000
+		 * @maxGraphemes 500
 		 */
 		title: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-			/*#__PURE__*/ v.stringLength(0, 1280),
-			/*#__PURE__*/ v.stringGraphemes(0, 128),
+			/*#__PURE__*/ v.stringLength(0, 5000),
+			/*#__PURE__*/ v.stringGraphemes(0, 500),
 		]),
 	}),
 );
