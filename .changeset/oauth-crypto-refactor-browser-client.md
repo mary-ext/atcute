@@ -2,29 +2,26 @@
 '@atcute/oauth-browser-client': major
 ---
 
-clean up exports and internalize implementation details
+internalize implementation details and remove re-exports
 
-**removed exports (never intended as public API):**
+**removed exports:**
 
-- `OAuthServerAgent` class - internal implementation detail
-- `DPoPKey` type - replaced by `DpopPrivateJwk` from `@atcute/oauth-crypto`
+- `OAuthServerAgent` class (internal)
+- `DPoPKey` type → use `DpopPrivateJwk` from `@atcute/oauth-crypto`
 - `IdentityResolver`, `ResolvedIdentity`, `ResolveIdentityOptions`, `DefaultIdentityResolverOptions`
-  type aliases - use `@atcute/identity-resolver` directly
-- `defaultIdentityResolver` function - was deprecated, use `LocalActorResolver` from
-  `@atcute/identity-resolver`
-- re-exported types from `@atcute/oauth-types` (`OAuthTokenResponse`, `AuthorizationServerMetadata`,
-  `ClientMetadata`, `OAuthParResponse`, `ProtectedResourceMetadata`) - import directly from
-  `@atcute/oauth-types`
+  → use `ActorResolver` and related types from `@atcute/identity-resolver`
+- `defaultIdentityResolver` (deprecated) → use `LocalActorResolver` from `@atcute/identity-resolver`
+- re-exported oauth-types (`OAuthTokenResponse`, `AuthorizationServerMetadata`, `ClientMetadata`,
+  `OAuthParResponse`, `ProtectedResourceMetadata`) → import from `@atcute/oauth-types` directly
 
 **changed types:**
 
-- `FetchClientAssertionParams.jkt` removed - the JWK thumbprint is now computed internally when
-  needed
+- `FetchClientAssertionParams.jkt` removed (now computed internally)
 
 **stored session format:**
 
-the internal DPoP key format changed from a custom `DPoPKey` object to the standard `DpopPrivateJwk`
-format. existing sessions are automatically migrated on first access, no action required.
+internal DPoP key format changed from `DPoPKey` to `DpopPrivateJwk`. existing sessions are
+automatically migrated on first access.
 
 **migration:**
 
@@ -41,7 +38,7 @@ import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 import { LocalActorResolver, type ActorResolver } from '@atcute/identity-resolver';
 ```
 
-if you were using the re-exported types from `@atcute/oauth-types`:
+types re-exported from `@atcute/oauth-types` now have an `OAuth` prefix:
 
 ```ts
 // before
@@ -51,7 +48,7 @@ import type { AuthorizationServerMetadata, ClientMetadata } from '@atcute/oauth-
 import type { OAuthAuthorizationServerMetadata, OAuthClientMetadata } from '@atcute/oauth-types';
 ```
 
-if you implemented a custom `ClientAssertionFetcher`, remove the `jkt` parameter:
+custom `ClientAssertionFetcher` implementations should remove `jkt`:
 
 ```ts
 // before
@@ -61,6 +58,6 @@ const fetchAssertion: ClientAssertionFetcher = async ({ jkt, aud, createDpopProo
 
 // after
 const fetchAssertion: ClientAssertionFetcher = async ({ aud, createDpopProof }) => {
-	// jkt is now computed by the backend from the DPoP proof
+	// backend should compute jkt from the DPoP proof instead
 };
 ```
