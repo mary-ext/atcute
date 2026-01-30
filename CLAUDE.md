@@ -77,11 +77,14 @@ the packages are organized into categories under `packages/`:
 
 use `@oomfware/cgr` to ask questions about external repositories:
 
-    npx @oomfware/cgr ask [options] <repo>[#branch] <question>
+```
+npx @oomfware/cgr ask [options] <repo>[#branch] <question>
 
-    options:
-      -m, --model <model>   model to use: opus, sonnet, haiku (default: haiku)
-      -w, --with <repo>     additional repository to include, supports #branch (repeatable)
+options:
+  -m, --model <model>   model to use: opus, sonnet, haiku (default: haiku)
+  -d, --deep            clone full history (enables git log/blame/show)
+  -w, --with <repo>     additional repository to include, supports #branch (repeatable)
+```
 
 useful repositories for development:
 
@@ -98,5 +101,7 @@ useful repositories for development:
 - `github.com/darobin/dasl.ing` for DASL specification
 - `github.com/did-method-plc/did-method-plc` for DID PLC implementation reference
 
-cgr works best with detailed questions. include file/folder paths when you know them, and reference
-details from previous answers in follow-ups.
+broad questions work for getting oriented; detailed questions get precise answers. include
+file/folder paths when you know them, and reference details from previous answers in follow-ups.
+
+run `npx @oomfware/cgr --help` for more options.
