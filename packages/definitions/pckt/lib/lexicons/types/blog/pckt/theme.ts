@@ -22,6 +22,14 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	get light() {
 		return paletteSchema;
 	},
+	/**
+	 * Content background transparency percentage (optional)
+	 * @minimum 0
+	 * @maximum 100
+	 */
+	transparency: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
+	),
 });
 const _paletteSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.theme#palette')),

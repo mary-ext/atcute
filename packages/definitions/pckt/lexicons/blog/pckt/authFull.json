@@ -1,0 +1,19 @@
+{
+	"id": "blog.pckt.authFull",
+	"defs": {
+		"main": {
+			"type": "permission-set",
+			"title": "Full pckt.blog Access",
+			"detail": "Provides full access to all pckt.blog features including publication and document references.",
+			"permissions": [
+				{
+					"type": "permission",
+					"resource": "repo",
+					"collection": ["blog.pckt.publication", "blog.pckt.document"]
+				}
+			]
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}
