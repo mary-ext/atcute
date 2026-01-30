@@ -47,6 +47,7 @@ available packages:
 | [`@atcute/ozone`](../../definitions/ozone)                         | `tools.ozone.*`                         |
 | [`@atcute/bluemoji`](../../definitions/bluemoji)                   | `blue.moji.*`                           |
 | [`@atcute/frontpage`](../../definitions/frontpage)                 | `fyi.unravel.frontpage.*`               |
+| [`@atcute/leaflet`](../../definitions/leaflet)                     | `pub.leaflet.*`                         |
 | [`@atcute/whitewind`](../../definitions/whitewind)                 | `com.whtwnd.*`                          |
 | [`@atcute/tangled`](../../definitions/tangled)                     | `sh.tangled.*`                          |
 | [`@atcute/microcosm`](../../definitions/microcosm)                 | `blue.microcosm.*`, `com.bad-example.*` |
