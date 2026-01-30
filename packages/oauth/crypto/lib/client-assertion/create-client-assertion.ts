@@ -10,8 +10,8 @@ export interface CreateClientAssertionOptions {
 	client_id: string;
 	/** authorization server issuer */
 	aud: string;
-	/** JWK thumbprint of the DPoP key to bind to */
-	jkt: string;
+	/** JWK thumbprint of the DPoP key to bind to (for CAB pattern) */
+	jkt?: string;
 	/** client assertion signing key */
 	key: ClientAssertionPrivateJwk;
 }

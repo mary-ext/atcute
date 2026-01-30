@@ -8,7 +8,9 @@ describe('generateDpopKey', () => {
 
 		expect(key.alg).toBe('ES256');
 		expect(key.kty).toBe('EC');
-		expect(key.crv).toBe('P-256');
+		if (key.kty === 'EC') {
+			expect(key.crv).toBe('P-256');
+		}
 		expect(key.d).toBeDefined();
 	});
 
@@ -31,10 +33,12 @@ describe('generateDpopKey', () => {
 	it('should include all required JWK fields', async () => {
 		const key = await generateDpopKey();
 
-		expect(key.kty).toBeDefined();
+		expect(key.kty).toBe('EC');
 		expect(key.alg).toBeDefined();
-		expect(key.x).toBeDefined();
-		expect(key.y).toBeDefined();
 		expect(key.d).toBeDefined();
+		if (key.kty === 'EC') {
+			expect(key.x).toBeDefined();
+			expect(key.y).toBeDefined();
+		}
 	});
 });

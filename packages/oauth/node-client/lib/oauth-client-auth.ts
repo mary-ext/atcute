@@ -1,13 +1,10 @@
-import { createClientAssertion as createClientAssertionJwt } from '@atcute/oauth-crypto';
-import type { ClientAssertionPrivateJwk } from '@atcute/oauth-crypto';
+import { createClientAssertion, type ClientAssertionPrivateJwk } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import {
 	CLIENT_ASSERTION_TYPE_JWT_BEARER,
 	FALLBACK_ALG,
 	type OAuthAuthorizationServerMetadata,
 } from '@atcute/oauth-types';
-
-export { CLIENT_ASSERTION_TYPE_JWT_BEARER };
 
 /**
  * client authentication method. only `private_key_jwt` is supported.
@@ -115,9 +112,9 @@ const createClientCredentials = async (
 	clientId: string,
 	audience: string,
 ): Promise<ClientCredentials> => {
-	const assertion = await createClientAssertionJwt({
-		clientId,
-		audience,
+	const assertion = await createClientAssertion({
+		client_id: clientId,
+		aud: audience,
 		key,
 	});
 

@@ -9,8 +9,6 @@ export {
 
 export {
 	buildClientMetadata,
-	CLIENT_ASSERTION_TYPE_JWT_BEARER,
-	FALLBACK_ALG,
 	scope,
 	type AtprotoAuthorizationServerMetadata,
 	type AtprotoProtectedResourceMetadata,
