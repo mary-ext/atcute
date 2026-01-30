@@ -1,5 +1,13 @@
 # @atcute/leaflet
 
+## 1.0.17
+
+### Patch Changes
+
+- 40a9d9e: pull latest Leaflet lexicons
+- Updated dependencies [e73fddf]
+  - @atcute/lexicons@1.2.7
+
 ## 1.0.16
 
 ### Patch Changes

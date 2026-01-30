@@ -1,5 +1,16 @@
 # @atcute/lex-cli
 
+## 2.5.3
+
+### Patch Changes
+
+- bfebed5: make use of lexicon-doc's new ref parsing utilities
+- Updated dependencies [e73fddf]
+- Updated dependencies [066bc16]
+- Updated dependencies [2c386c7]
+  - @atcute/lexicons@1.2.7
+  - @atcute/lexicon-doc@2.1.0
+
 ## 2.5.2
 
 ### Patch Changes
@@ -35,7 +46,10 @@
   				properties: {
   					subject: required(string({ format: 'uri' })),
   					createdAt: required(string({ format: 'datetime' })),
-  					tags: array({ items: string(), description: 'tags for organizing bookmarks' }),
+  					tags: array({
+  						items: string(),
+  						description: 'tags for organizing bookmarks',
+  					}),
   				},
   			}),
   		}),
@@ -193,7 +207,10 @@
   		nsid: ['com.atproto.*'],
   		imports: (nsid) => {
   			const specifier = nsid.slice('com.atproto.'.length).replaceAll('.', '/');
-  			return { type: 'namespace', from: `@atcute/atproto/types/${specifier}` };
+  			return {
+  				type: 'namespace',
+  				from: `@atcute/atproto/types/${specifier}`,
+  			};
   		},
   	},
   ];

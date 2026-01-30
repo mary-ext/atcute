@@ -1,5 +1,14 @@
 # @atcute/multibase
 
+## 1.1.7
+
+### Patch Changes
+
+- f859da9: add `workerd` condition for Cloudflare Workers support
+- Updated dependencies [a60d862]
+- Updated dependencies [2772033]
+  - @atcute/uint8array@1.1.0
+
 ## 1.1.6
 
 ### Patch Changes

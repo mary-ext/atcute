@@ -1,5 +1,13 @@
 # @atcute/tangled
 
+## 1.0.15
+
+### Patch Changes
+
+- f913b74: pull latest Tangled lexicons
+- Updated dependencies [e73fddf]
+  - @atcute/lexicons@1.2.7
+
 ## 1.0.14
 
 ### Patch Changes

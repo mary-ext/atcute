@@ -1,5 +1,22 @@
 # @atcute/lexicon-doc
 
+## 2.1.0
+
+### Minor Changes
+
+- 2c386c7: include lexicon ref parsing utilities
+
+### Patch Changes
+
+- 066bc16: faster UTF-8 and grapheme length validation
+- Updated dependencies [e73fddf]
+- Updated dependencies [2aee780]
+- Updated dependencies [a60d862]
+- Updated dependencies [2772033]
+  - @atcute/lexicons@1.2.7
+  - @atcute/util-text@1.1.0
+  - @atcute/uint8array@1.1.0
+
 ## 2.0.6
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @atcute/uint8array
 
+## 1.1.0
+
+### Minor Changes
+
+- a60d862: add isUtf8LengthInRange function
+- 2772033: add randomBytes function
+
 ## 1.0.6
 
 ### Patch Changes

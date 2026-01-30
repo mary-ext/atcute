@@ -1,5 +1,16 @@
 # @atcute/lexicons
 
+## 1.2.7
+
+### Patch Changes
+
+- e73fddf: faster UTF-8 length validation checks
+- Updated dependencies [2aee780]
+- Updated dependencies [a60d862]
+- Updated dependencies [2772033]
+  - @atcute/util-text@1.1.0
+  - @atcute/uint8array@1.1.0
+
 ## 1.2.6
 
 ### Patch Changes

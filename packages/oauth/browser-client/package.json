@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/oauth-browser-client",
-	"version": "2.0.3",
+	"version": "3.0.0",
 	"description": "minimal OAuth browser client implementation for AT Protocol",
 	"license": "0BSD",
 	"repository": {

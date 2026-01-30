@@ -1,5 +1,18 @@
 # @atcute/xrpc-server
 
+## 0.1.9
+
+### Patch Changes
+
+- 853514c: export operation types
+- Updated dependencies [e73fddf]
+- Updated dependencies [a60d862]
+- Updated dependencies [2772033]
+- Updated dependencies [f859da9]
+  - @atcute/lexicons@1.2.7
+  - @atcute/uint8array@1.1.0
+  - @atcute/multibase@1.1.7
+
 ## 0.1.8
 
 ### Patch Changes
