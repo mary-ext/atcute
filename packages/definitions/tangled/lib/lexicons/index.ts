@@ -11,6 +11,7 @@ export * as ShTangledLabelDefinition from './types/sh/tangled/label/definition.j
 export * as ShTangledLabelOp from './types/sh/tangled/label/op.js';
 export * as ShTangledOwner from './types/sh/tangled/owner.js';
 export * as ShTangledPipeline from './types/sh/tangled/pipeline.js';
+export * as ShTangledPipelineCancelPipeline from './types/sh/tangled/pipeline/cancelPipeline.js';
 export * as ShTangledPipelineStatus from './types/sh/tangled/pipeline/status.js';
 export * as ShTangledPublicKey from './types/sh/tangled/publicKey.js';
 export * as ShTangledRepo from './types/sh/tangled/repo.js';

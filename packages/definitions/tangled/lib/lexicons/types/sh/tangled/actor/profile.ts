@@ -7,6 +7,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.actor.profile'),
 		/**
+		 * Small image to be displayed next to posts from account. AKA, 'profile picture'
+		 * @accept image/png, image/jpeg
+		 * @maxSize 1000000
+		 */
+		avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		/**
 		 * Include link to this account on Bluesky.
 		 */
 		bluesky: /*#__PURE__*/ v.boolean(),
