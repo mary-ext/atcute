@@ -51,6 +51,7 @@ for authenticated requests, see the [client docs](./packages/clients/client) or 
 | [`lex-cli`](./packages/lexicons/lex-cli): generate TypeScript from lexicon schemas                          |
 | [`lexicon-doc`](./packages/lexicons/lexicon-doc): parse and author lexicon documents                        |
 | [`lexicon-resolver`](./packages/lexicons/lexicon-resolver): resolve lexicons from the network               |
+| [`lexicon-resolver-node`](./packages/lexicons/lexicon-resolver-node): Node.js lexicon resolvers             |
 | [`lexicons`](./packages/lexicons/lexicons): core types and schema validation                                |
 | **Lexicon definition packages**                                                                             |
 | [`atproto`](./packages/definitions/atproto): `com.atproto.*` definitions                                    |
