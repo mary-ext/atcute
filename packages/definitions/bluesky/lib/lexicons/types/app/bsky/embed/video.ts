@@ -37,6 +37,10 @@ const _mainSchema = /*#__PURE__*/ v.object({
 		);
 	},
 	/**
+	 * A hint to the client about how to present the video.
+	 */
+	presentation: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'default' | 'gif' | (string & {})>()),
+	/**
 	 * The mp4 video file. May be up to 100mb, formerly limited to 50mb.
 	 * @accept video/mp4
 	 * @maxSize 100000000
@@ -60,6 +64,10 @@ const _viewSchema = /*#__PURE__*/ v.object({
 	},
 	cid: /*#__PURE__*/ v.cidString(),
 	playlist: /*#__PURE__*/ v.genericUriString(),
+	/**
+	 * A hint to the client about how to present the video.
+	 */
+	presentation: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'default' | 'gif' | (string & {})>()),
 	thumbnail: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 });
 

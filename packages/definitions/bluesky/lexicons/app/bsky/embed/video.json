@@ -30,6 +30,11 @@
 				"aspectRatio": {
 					"type": "ref",
 					"ref": "app.bsky.embed.defs#aspectRatio"
+				},
+				"presentation": {
+					"type": "string",
+					"description": "A hint to the client about how to present the video.",
+					"knownValues": ["default", "gif"]
 				}
 			}
 		},
@@ -72,6 +77,11 @@
 				"aspectRatio": {
 					"type": "ref",
 					"ref": "app.bsky.embed.defs#aspectRatio"
+				},
+				"presentation": {
+					"type": "string",
+					"description": "A hint to the client about how to present the video.",
+					"knownValues": ["default", "gif"]
 				}
 			}
 		}

@@ -29,7 +29,7 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsersS
 			/**
 			 * Snowflake for this recommendation, use when submitting recommendation events.
 			 */
-			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},
 });

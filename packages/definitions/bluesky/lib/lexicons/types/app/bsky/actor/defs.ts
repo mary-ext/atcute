@@ -300,6 +300,9 @@ const _profileAssociatedSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(profileAssociatedChatSchema);
 	},
 	feedgens: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	get germ() {
+		return /*#__PURE__*/ v.optional(profileAssociatedGermSchema);
+	},
 	labeler: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	lists: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	starterPacks: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
@@ -313,6 +316,11 @@ const _profileAssociatedActivitySubscriptionSchema = /*#__PURE__*/ v.object({
 const _profileAssociatedChatSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileAssociatedChat')),
 	allowIncoming: /*#__PURE__*/ v.string<'all' | 'following' | 'none' | (string & {})>(),
+});
+const _profileAssociatedGermSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileAssociatedGerm')),
+	messageMeUrl: /*#__PURE__*/ v.genericUriString(),
+	showButtonTo: /*#__PURE__*/ v.string<'everyone' | 'usersIFollow' | (string & {})>(),
 });
 const _profileViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileView')),
@@ -607,6 +615,7 @@ type preferences$schematype = typeof _preferencesSchema;
 type profileAssociated$schematype = typeof _profileAssociatedSchema;
 type profileAssociatedActivitySubscription$schematype = typeof _profileAssociatedActivitySubscriptionSchema;
 type profileAssociatedChat$schematype = typeof _profileAssociatedChatSchema;
+type profileAssociatedGerm$schematype = typeof _profileAssociatedGermSchema;
 type profileView$schematype = typeof _profileViewSchema;
 type profileViewBasic$schematype = typeof _profileViewBasicSchema;
 type profileViewDetailed$schematype = typeof _profileViewDetailedSchema;
@@ -642,6 +651,7 @@ export interface preferencesSchema extends preferences$schematype {}
 export interface profileAssociatedSchema extends profileAssociated$schematype {}
 export interface profileAssociatedActivitySubscriptionSchema extends profileAssociatedActivitySubscription$schematype {}
 export interface profileAssociatedChatSchema extends profileAssociatedChat$schematype {}
+export interface profileAssociatedGermSchema extends profileAssociatedGerm$schematype {}
 export interface profileViewSchema extends profileView$schematype {}
 export interface profileViewBasicSchema extends profileViewBasic$schematype {}
 export interface profileViewDetailedSchema extends profileViewDetailed$schematype {}
@@ -679,6 +689,7 @@ export const profileAssociatedSchema = _profileAssociatedSchema as profileAssoci
 export const profileAssociatedActivitySubscriptionSchema =
 	_profileAssociatedActivitySubscriptionSchema as profileAssociatedActivitySubscriptionSchema;
 export const profileAssociatedChatSchema = _profileAssociatedChatSchema as profileAssociatedChatSchema;
+export const profileAssociatedGermSchema = _profileAssociatedGermSchema as profileAssociatedGermSchema;
 export const profileViewSchema = _profileViewSchema as profileViewSchema;
 export const profileViewBasicSchema = _profileViewBasicSchema as profileViewBasicSchema;
 export const profileViewDetailedSchema = _profileViewDetailedSchema as profileViewDetailedSchema;
@@ -716,6 +727,7 @@ export interface ProfileAssociatedActivitySubscription extends v.InferInput<
 	typeof profileAssociatedActivitySubscriptionSchema
 > {}
 export interface ProfileAssociatedChat extends v.InferInput<typeof profileAssociatedChatSchema> {}
+export interface ProfileAssociatedGerm extends v.InferInput<typeof profileAssociatedGermSchema> {}
 export interface ProfileView extends v.InferInput<typeof profileViewSchema> {}
 export interface ProfileViewBasic extends v.InferInput<typeof profileViewBasicSchema> {}
 export interface ProfileViewDetailed extends v.InferInput<typeof profileViewDetailedSchema> {}
