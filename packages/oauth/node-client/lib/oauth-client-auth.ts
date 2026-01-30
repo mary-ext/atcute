@@ -7,13 +7,28 @@ import {
 } from '@atcute/oauth-types';
 
 /**
- * client authentication method. only `private_key_jwt` is supported.
+ * client authentication method for confidential clients using `private_key_jwt`.
  */
-export interface ClientAuthMethod {
+export interface ConfidentialClientAuthMethod {
 	method: 'private_key_jwt';
 	/** key ID used for signing */
 	kid: string;
 }
+
+/**
+ * client authentication method for public clients using `none`.
+ */
+export interface PublicClientAuthMethod {
+	method: 'none';
+}
+
+/**
+ * client authentication method.
+ *
+ * - `private_key_jwt`: confidential clients that authenticate with a JWT assertion
+ * - `none`: public clients that don't authenticate at the token endpoint
+ */
+export type ClientAuthMethod = ConfidentialClientAuthMethod | PublicClientAuthMethod;
 
 /**
  * client credentials for a token endpoint request.
@@ -26,24 +41,37 @@ export interface ClientCredentials {
 
 /**
  * factory function that produces client credentials for each request.
+ *
+ * returns `undefined` for public clients (no authentication).
  */
-export type ClientCredentialsFactory = () => Promise<ClientCredentials>;
+export type ClientCredentialsFactory = () => Promise<ClientCredentials | undefined>;
 
 /**
  * negotiates the client authentication method with the authorization server.
  *
  * @param serverMetadata authorization server metadata
- * @param keyset client's private keyset
- * @returns negotiated auth method with key ID
- * @throws if server doesn't support `private_key_jwt` or no compatible key exists
+ * @param keyset client's private keyset, or undefined for public clients
+ * @returns negotiated auth method
+ * @throws if server doesn't support the required authentication method
  */
 export const negotiateClientAuth = (
 	serverMetadata: OAuthAuthorizationServerMetadata,
-	keyset: Keyset,
+	keyset: Keyset | undefined,
 ): ClientAuthMethod => {
 	const supportedMethods = serverMetadata.token_endpoint_auth_methods_supported;
 
-	// verify server supports private_key_jwt
+	// public client - no keyset
+	if (keyset === undefined) {
+		if (supportedMethods && !supportedMethods.includes('none')) {
+			throw new Error(
+				`server does not support "none" authentication for public clients. ` +
+					`supported methods: ${supportedMethods.join(', ')}`,
+			);
+		}
+		return { method: 'none' };
+	}
+
+	// confidential client - verify server supports private_key_jwt
 	if (supportedMethods && !supportedMethods.includes('private_key_jwt')) {
 		throw new Error(
 			`server does not support "private_key_jwt" authentication. ` +
@@ -64,27 +92,39 @@ export const negotiateClientAuth = (
 };
 
 export interface CreateClientAssertionFactoryOptions {
-	/** negotiated auth method (contains kid) */
+	/** negotiated auth method */
 	authMethod: ClientAuthMethod;
 	/** authorization server metadata */
 	serverMetadata: OAuthAuthorizationServerMetadata;
 	/** client ID */
 	clientId: string;
-	/** client's private keyset */
-	keyset: Keyset;
+	/** client's private keyset, or undefined for public clients */
+	keyset: Keyset | undefined;
 }
 
 /**
  * creates a factory that produces client credentials (JWT assertions) for token requests.
  *
+ * for public clients (authMethod.method === 'none'), returns a factory that produces `undefined`.
+ *
  * @param options factory configuration
- * @returns async function that creates fresh credentials for each request
- * @throws if the key is no longer available in the keyset
+ * @returns async function that creates fresh credentials for each request, or undefined for public clients
+ * @throws if the key is no longer available in the keyset (confidential clients only)
  */
 export const createClientAssertionFactory = (
 	options: CreateClientAssertionFactoryOptions,
 ): ClientCredentialsFactory => {
 	const { authMethod, serverMetadata, clientId, keyset } = options;
+
+	// public client - no credentials
+	if (authMethod.method === 'none') {
+		return async () => undefined;
+	}
+
+	// confidential client - keyset is required
+	if (keyset === undefined) {
+		throw new Error('keyset is required for confidential clients');
+	}
 
 	// get server's supported signing algorithms
 	const supportedAlgs = serverMetadata.token_endpoint_auth_signing_alg_values_supported ?? [FALLBACK_ALG];

@@ -9,14 +9,18 @@ export {
 
 export {
 	buildClientMetadata,
+	buildPublicClientMetadata,
 	scope,
 	type AtprotoAuthorizationServerMetadata,
 	type AtprotoProtectedResourceMetadata,
 	type ConfidentialClientMetadata,
+	type DiscoverablePublicClientMetadata,
+	type LoopbackClientMetadata,
 	type OAuthAuthorizationServerMetadata,
 	type OAuthClientMetadata,
 	type OAuthProtectedResourceMetadata,
 	type OAuthResponseMode,
+	type PublicClientMetadata,
 } from '@atcute/oauth-types';
 
 export {
@@ -26,8 +30,10 @@ export {
 	type AuthorizeTarget,
 	type CallbackOptions,
 	type CallbackResult,
+	type ConfidentialOAuthClientOptions,
 	type OAuthClientOptions,
 	type OAuthClientStores,
+	type PublicOAuthClientOptions,
 	type RestoreOptions,
 } from './oauth-client.js';
 
@@ -50,6 +56,11 @@ export type { Store } from './utils/store.js';
 
 export type { AuthorizationServerMetadataCache } from './resolvers/authorization-server-metadata.js';
 export type { ProtectedResourceMetadataCache } from './resolvers/protected-resource-metadata.js';
+export type {
+	ClientAuthMethod,
+	ConfidentialClientAuthMethod,
+	PublicClientAuthMethod,
+} from './oauth-client-auth.js';
 export type { SessionStore, StoredSession } from './types/sessions.js';
 export type { StateStore, StoredState } from './types/states.js';
 export type { TokenSet } from './types/token-set.js';

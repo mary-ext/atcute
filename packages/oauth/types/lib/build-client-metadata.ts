@@ -5,11 +5,15 @@ import {
 	confidentialClientMetadataSchema,
 	type ConfidentialClientMetadata,
 } from './schemas/atcute-confidential-client-metadata.js';
+import {
+	publicClientMetadataSchema,
+	type PublicClientMetadata,
+} from './schemas/atcute-public-client-metadata.js';
+import { DEFAULT_ATPROTO_OAUTH_SCOPE } from './schemas/atproto-oauth-scope.js';
 import type { OAuthClientMetadata } from './schemas/oauth-client-metadata.js';
 
 /**
- * builds an atproto client metadata
- *
+ * builds an atproto client metadata for a confidential client.
  *
  * @param input client metadata
  * @param keyset available keys
@@ -69,4 +73,84 @@ export const buildClientMetadata = (
 	}
 
 	return metadata;
+};
+
+/**
+ * builds a loopback client_id from redirect_uris and scope.
+ *
+ * @param redirectUris loopback redirect URIs
+ * @param scope OAuth scope string
+ * @returns loopback client_id URL
+ */
+const buildLoopbackClientId = (redirectUris: readonly string[], scope: string): string => {
+	const params = new URLSearchParams();
+
+	// only include scope if not the default
+	if (scope !== DEFAULT_ATPROTO_OAUTH_SCOPE) {
+		params.set('scope', scope);
+	}
+
+	// include redirect URIs
+	for (const uri of redirectUris) {
+		params.append('redirect_uri', uri);
+	}
+
+	if (params.size > 0) {
+		return `http://localhost?${params.toString()}`;
+	}
+
+	return 'http://localhost';
+};
+
+/**
+ * builds an atproto client metadata for a public client.
+ *
+ * public clients use `token_endpoint_auth_method: 'none'` and don't require a keyset.
+ * per AT Protocol spec, they have shorter token lifetimes and cannot use silent sign-in.
+ *
+ * - if `client_id` is omitted: loopback client (client_id built from redirect_uris/scope)
+ * - if `client_id` is provided: discoverable public client
+ *
+ * @param input public client metadata
+ * @returns built client metadata
+ */
+export const buildPublicClientMetadata = (input: PublicClientMetadata): OAuthClientMetadata => {
+	const parsed = publicClientMetadataSchema.parse(input, { mode: 'passthrough' });
+	const scope = Array.isArray(parsed.scope) ? parsed.scope.join(' ') : parsed.scope;
+
+	if (parsed.client_id === undefined) {
+		// loopback client - server generates metadata from client_id URL
+		return {
+			client_id: buildLoopbackClientId(parsed.redirect_uris, scope),
+			redirect_uris: parsed.redirect_uris,
+			scope,
+
+			application_type: 'native',
+			response_types: ['code'],
+			grant_types: ['authorization_code', 'refresh_token'],
+
+			token_endpoint_auth_method: 'none',
+			dpop_bound_access_tokens: true,
+		};
+	}
+
+	// discoverable public client
+	return {
+		client_id: parsed.client_id,
+		client_name: parsed.client_name,
+		client_uri: parsed.client_uri,
+		policy_uri: parsed.policy_uri,
+		tos_uri: parsed.tos_uri,
+		logo_uri: parsed.logo_uri,
+		redirect_uris: parsed.redirect_uris,
+		scope,
+
+		application_type: parsed.application_type ?? 'web',
+		subject_type: 'public',
+		response_types: ['code'],
+		grant_types: ['authorization_code', 'refresh_token'],
+
+		token_endpoint_auth_method: 'none',
+		dpop_bound_access_tokens: true,
+	};
 };

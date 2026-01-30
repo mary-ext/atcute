@@ -1,4 +1,4 @@
-export { buildClientMetadata } from './build-client-metadata.js';
+export { buildClientMetadata, buildPublicClientMetadata } from './build-client-metadata.js';
 export { CLIENT_ASSERTION_TYPE_JWT_BEARER, FALLBACK_ALG } from './constants.js';
 
 export * as scope from './scope.js';
@@ -8,6 +8,14 @@ export {
 	confidentialClientMetadataSchema,
 	type ConfidentialClientMetadata,
 } from './schemas/atcute-confidential-client-metadata.js';
+export {
+	discoverablePublicClientMetadataSchema,
+	loopbackClientMetadataSchema,
+	publicClientMetadataSchema,
+	type DiscoverablePublicClientMetadata,
+	type LoopbackClientMetadata,
+	type PublicClientMetadata,
+} from './schemas/atcute-public-client-metadata.js';
 export {
 	atprotoOAuthScopeSchema,
 	ATPROTO_SCOPE_VALUE,

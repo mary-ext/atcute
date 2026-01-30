@@ -1,21 +1,21 @@
 # @atcute/oauth-node-client
 
-atproto OAuth client for Node.js (plus Deno, Bun, and other server runtimes). this package
-implements a **confidential client** that authenticates using `private_key_jwt`.
+atproto OAuth client for Node.js (plus Deno, Bun, and other server runtimes).
+
+supports both:
+
+- **confidential clients** - authenticate with `private_key_jwt`, longer session lifetimes (up to 180
+  days), requires key management and hosted metadata
+- **public clients** - no authentication (`token_endpoint_auth_method: 'none'`), shorter sessions (2
+  weeks max), simpler setup for CLI tools and local development
 
 ```sh
 npm install @atcute/oauth-node-client
 ```
 
-## usage
+## confidential clients
 
 examples below use Hono, but any web framework works.
-
-```ts
-import { Hono } from 'hono';
-
-const app = new Hono();
-```
 
 ### key management
 
@@ -247,6 +247,91 @@ or, if you already have an `OAuthSession`:
 ```ts
 await session.signOut();
 ```
+
+## public clients
+
+public clients don't require key management or hosted metadata. they're ideal for CLI tools, local
+development, and native apps. the tradeoff is shorter session lifetimes (2 weeks max vs 180 days for
+confidential clients).
+
+### loopback clients
+
+loopback clients use `http://localhost` as their origin, which authorization servers recognize as a
+public client. no client registration or hosted metadata is required - the library builds the
+`client_id` automatically from your redirect URIs and scopes.
+
+```ts
+import { MemoryStore, OAuthClient, scope, type StoredState } from '@atcute/oauth-node-client';
+import {
+	CompositeDidDocumentResolver,
+	CompositeHandleResolver,
+	LocalActorResolver,
+	PlcDidDocumentResolver,
+	WebDidDocumentResolver,
+	WellKnownHandleResolver,
+} from '@atcute/identity-resolver';
+import { NodeDnsHandleResolver } from '@atcute/identity-resolver-node';
+
+// use any available port for the callback server
+const port = 8080;
+const redirectUri = `http://127.0.0.1:${port}/callback`;
+
+const oauth = new OAuthClient({
+	metadata: {
+		// no client_id needed - built automatically as:
+		// http://localhost?redirect_uri=http://127.0.0.1:8080/callback&scope=...
+		redirect_uris: [redirectUri],
+		scope: [scope.rpc({ lxm: ['app.bsky.actor.getProfile'], aud: '*' })],
+	},
+	// no keyset - this makes it a public client
+
+	stores: {
+		sessions: new MemoryStore(),
+		states: new MemoryStore<string, StoredState>({ maxSize: 10, ttl: 10 * 60_000 }),
+	},
+
+	actorResolver: new LocalActorResolver({
+		handleResolver: new CompositeHandleResolver({
+			methods: {
+				dns: new NodeDnsHandleResolver(),
+				http: new WellKnownHandleResolver(),
+			},
+		}),
+		didDocumentResolver: new CompositeDidDocumentResolver({
+			methods: {
+				plc: new PlcDidDocumentResolver(),
+				web: new WebDidDocumentResolver(),
+			},
+		}),
+	}),
+});
+```
+
+loopback redirect URIs must use `127.0.0.1` or `[::1]` (not `localhost`). the port can be any
+available port - authorization servers ignore the port when matching loopback redirect URIs per RFC
+8252.
+
+see the [node-client-public-example](../node-client-public-example) package for a complete CLI
+example.
+
+### discoverable public clients
+
+for public clients that need a discoverable `client_id` (e.g., mobile apps or web apps without a
+backend), provide a `client_id` URL pointing to hosted metadata:
+
+```ts
+const oauth = new OAuthClient({
+	metadata: {
+		client_id: 'https://example.com/oauth-client-metadata.json',
+		redirect_uris: ['https://example.com/callback'],
+		scope: 'atproto',
+	},
+	stores: { /* ... */ },
+	actorResolver: /* ... */,
+});
+```
+
+the hosted metadata should set `token_endpoint_auth_method: 'none'` and omit `jwks`/`jwks_uri`.
 
 ## custom stores
 

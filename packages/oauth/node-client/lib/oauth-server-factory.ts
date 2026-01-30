@@ -11,8 +11,8 @@ export interface OAuthServerFactoryOptions {
 	clientMetadata: OAuthClientMetadata;
 	/** OAuth resolver for metadata discovery */
 	resolver: OAuthResolver;
-	/** client's private keyset */
-	keyset: Keyset;
+	/** client's private keyset, or undefined for public clients */
+	keyset: Keyset | undefined;
 	/** DPoP nonce cache, keyed by origin */
 	dpopNonces: DpopNonceCache;
 	/** custom fetch implementation */
@@ -27,7 +27,7 @@ export interface OAuthServerFactoryOptions {
 export class OAuthServerFactory {
 	readonly clientMetadata: OAuthClientMetadata;
 	readonly resolver: OAuthResolver;
-	readonly keyset: Keyset;
+	readonly keyset: Keyset | undefined;
 	readonly dpopNonces: DpopNonceCache;
 	readonly fetch?: typeof globalThis.fetch;
 

@@ -1,0 +1,19 @@
+{
+	"name": "node-client-public-example",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"start": "bun run src/index.ts"
+	},
+	"dependencies": {
+		"@atcute/bluesky": "workspace:^",
+		"@atcute/client": "workspace:^",
+		"@atcute/identity-resolver": "workspace:^",
+		"@atcute/identity-resolver-node": "workspace:^",
+		"@atcute/lexicons": "workspace:^",
+		"@atcute/oauth-node-client": "workspace:^"
+	},
+	"devDependencies": {
+		"@types/bun": "latest"
+	}
+}

@@ -76,6 +76,33 @@ const createServerAgent = async (
 	});
 };
 
+const createPublicServerAgent = async (
+	options?: Partial<OAuthServerAgentOptions> & { mockFetch?: typeof fetch },
+): Promise<OAuthServerAgent> => {
+	const dpopKey = await generateDpopKey();
+
+	return new OAuthServerAgent({
+		authMethod: { method: 'none' },
+		dpopKey,
+		serverMetadata: options?.serverMetadata ?? createMockMetadata(),
+		clientMetadata: {
+			client_id: 'http://localhost?redirect_uri=http://127.0.0.1/callback&scope=atproto',
+			client_name: 'Test CLI',
+			redirect_uris: ['http://127.0.0.1/callback'],
+			grant_types: ['authorization_code', 'refresh_token'],
+			response_types: ['code'],
+			scope: 'atproto',
+			application_type: 'native',
+			dpop_bound_access_tokens: true,
+			token_endpoint_auth_method: 'none',
+		},
+		dpopNonces: new MemoryStore({}),
+		oauthResolver: options?.oauthResolver ?? createMockOAuthResolver(),
+		keyset: undefined,
+		fetch: options?.mockFetch,
+	});
+};
+
 describe('OAuthServerAgent', () => {
 	// valid DID format for testing (did:plc uses base32 encoding)
 	const TEST_DID = 'did:plc:ewvi7nxzyoun6zhxrhs64oiz';
@@ -301,6 +328,91 @@ describe('OAuthServerAgent', () => {
 			const agent = await createServerAgent({});
 
 			expect(agent.issuer).toBe('https://auth.example.com');
+		});
+	});
+
+	describe('public client support', () => {
+		it('should exchange code without client_assertion for public clients', async () => {
+			const mockFetch = vi.fn().mockImplementation(async (request: Request) => {
+				// dpopFetch passes a Request object - read the body from it
+				const body = await request.clone().text();
+				expect(body).not.toContain('client_assertion');
+				expect(body).toContain('client_id=http');
+
+				return createMockResponse(200, {
+					access_token: 'access-123',
+					refresh_token: 'refresh-123',
+					token_type: 'DPoP',
+					expires_in: 3600,
+					scope: 'atproto',
+					sub: TEST_DID,
+				});
+			});
+
+			const agent = await createPublicServerAgent({ mockFetch });
+
+			const result = await agent.exchangeCode('auth-code', 'verifier', 'http://127.0.0.1/callback');
+
+			expect(result.access_token).toBe('access-123');
+			expect(result.sub).toBe(TEST_DID);
+			expect(mockFetch).toHaveBeenCalledTimes(1);
+		});
+
+		it('should refresh tokens without client_assertion for public clients', async () => {
+			const mockFetch = vi.fn().mockImplementation(async (request: Request) => {
+				const body = await request.clone().text();
+				expect(body).not.toContain('client_assertion');
+				expect(body).toContain('client_id=http');
+
+				return createMockResponse(200, {
+					access_token: 'new-access-123',
+					refresh_token: 'new-refresh-123',
+					token_type: 'DPoP',
+					expires_in: 3600,
+					scope: 'atproto',
+					sub: TEST_DID,
+				});
+			});
+
+			const agent = await createPublicServerAgent({ mockFetch });
+
+			const result = await agent.refresh({
+				iss: 'https://auth.example.com',
+				sub: TEST_DID as Did,
+				aud: 'https://pds.example.com',
+				scope: 'atproto',
+				access_token: 'old-access',
+				refresh_token: 'old-refresh',
+				token_type: 'DPoP',
+			});
+
+			expect(result.access_token).toBe('new-access-123');
+		});
+
+		it('should send PAR without client_assertion for public clients', async () => {
+			const mockFetch = vi.fn().mockImplementation(async (request: Request) => {
+				const body = await request.clone().text();
+				expect(body).not.toContain('client_assertion');
+				expect(body).toContain('client_id=http');
+
+				return createMockResponse(200, {
+					request_uri: 'urn:ietf:params:oauth:request_uri:abc123',
+					expires_in: 60,
+				});
+			});
+
+			const agent = await createPublicServerAgent({ mockFetch });
+
+			const result = await agent.pushAuthorizationRequest({
+				response_type: 'code',
+				redirect_uri: 'http://127.0.0.1/callback',
+				scope: 'atproto',
+				code_challenge: 'challenge',
+				code_challenge_method: 'S256',
+				state: 'state123',
+			});
+
+			expect(result.request_uri).toBe('urn:ietf:params:oauth:request_uri:abc123');
 		});
 	});
 });

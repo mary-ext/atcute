@@ -5,11 +5,13 @@ import { generateDpopKey, generatePkce, type PublicJwk } from '@atcute/oauth-cry
 import { Keyset } from '@atcute/oauth-keyset';
 import {
 	buildClientMetadata,
+	buildPublicClientMetadata,
 	FALLBACK_ALG,
 	type ConfidentialClientMetadata,
 	type OAuthClientMetadata,
 	type OAuthPrompt,
 	type OAuthResponseMode,
+	type PublicClientMetadata,
 } from '@atcute/oauth-types';
 
 import { nanoid } from 'nanoid';
@@ -46,7 +48,8 @@ export interface OAuthClientStores {
 	prMetadata?: ProtectedResourceMetadataCache;
 }
 
-export interface OAuthClientOptions {
+/** options for a confidential OAuth client (with keyset for private_key_jwt) */
+export interface ConfidentialOAuthClientOptions {
 	/** client metadata */
 	metadata: ConfidentialClientMetadata;
 	/** client's signing keys (or an already constructed keyset) */
@@ -64,6 +67,32 @@ export interface OAuthClientOptions {
 	/** custom fetch implementation */
 	fetch?: typeof globalThis.fetch;
 }
+
+/** options for a public OAuth client (no keyset, uses token_endpoint_auth_method: 'none') */
+export interface PublicOAuthClientOptions {
+	/** public client metadata */
+	metadata: PublicClientMetadata;
+	/** identity resolver for DID/handle resolution */
+	actorResolver: ActorResolver;
+	/** storage backends */
+	stores: OAuthClientStores;
+
+	/** OAuth response mode for authorization responses */
+	responseMode?: OAuthResponseMode;
+	/** lock function for coordinating token refresh, defaults to in-memory */
+	requestLock?: LockFunction;
+
+	/** custom fetch implementation */
+	fetch?: typeof globalThis.fetch;
+}
+
+/**
+ * options for creating an OAuth client.
+ *
+ * - confidential clients provide a `keyset` for private_key_jwt authentication
+ * - public clients omit `keyset` and use token_endpoint_auth_method: 'none'
+ */
+export type OAuthClientOptions = ConfidentialOAuthClientOptions | PublicOAuthClientOptions;
 
 export type AuthorizeTarget =
 	| { type: 'account'; identifier: ActorIdentifier }
@@ -115,13 +144,16 @@ export interface RestoreOptions {
 }
 
 /**
- * OAuth client for AT Protocol confidential clients.
+ * OAuth client for AT Protocol.
+ *
+ * supports both confidential clients (with keyset for private_key_jwt) and
+ * public clients (no keyset, uses token_endpoint_auth_method: 'none').
  *
  * handles authorization flow, session management, and token lifecycle.
  */
 export class OAuthClient {
 	readonly metadata: OAuthClientMetadata;
-	readonly keyset: Keyset;
+	readonly keyset: Keyset | undefined;
 
 	private readonly responseMode: OAuthResponseMode;
 	private readonly resolver: OAuthResolver;
@@ -133,9 +165,20 @@ export class OAuthClient {
 	constructor(options: OAuthClientOptions) {
 		const { stores } = options;
 
-		const keyset = Array.isArray(options.keyset) ? new Keyset(options.keyset) : options.keyset;
+		let metadata: OAuthClientMetadata;
+		let keyset: Keyset | undefined;
 
-		this.metadata = buildClientMetadata(options.metadata, keyset);
+		if ('keyset' in options && options.keyset !== undefined) {
+			// confidential client
+			keyset = Array.isArray(options.keyset) ? new Keyset(options.keyset) : options.keyset;
+			metadata = buildClientMetadata(options.metadata as ConfidentialClientMetadata, keyset);
+		} else {
+			// public client
+			keyset = undefined;
+			metadata = buildPublicClientMetadata(options.metadata as PublicClientMetadata);
+		}
+
+		this.metadata = metadata;
 		this.keyset = keyset;
 		this.responseMode = options.responseMode ?? 'query';
 		this.fetch = options.fetch ?? globalThis.fetch;
@@ -195,9 +238,11 @@ export class OAuthClient {
 
 	/**
 	 * public JWKS for serving at jwks_uri.
+	 *
+	 * returns `undefined` for public clients (no keyset).
 	 */
-	get jwks(): { keys: readonly PublicJwk[] } {
-		return this.keyset.publicJwks;
+	get jwks(): { keys: readonly PublicJwk[] } | undefined {
+		return this.keyset?.publicJwks;
 	}
 
 	/**

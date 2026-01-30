@@ -45,8 +45,8 @@ export interface OAuthServerAgentOptions {
 	dpopNonces: DpopNonceCache;
 	/** OAuth resolver for identity verification */
 	oauthResolver: OAuthResolver;
-	/** client's private keyset */
-	keyset: Keyset;
+	/** client's private keyset, or undefined for public clients */
+	keyset: Keyset | undefined;
 	/** custom fetch implementation */
 	fetch?: typeof globalThis.fetch;
 }
@@ -62,7 +62,7 @@ export class OAuthServerAgent {
 	readonly serverMetadata: AtprotoAuthorizationServerMetadata;
 	readonly clientMetadata: OAuthClientMetadata;
 	readonly oauthResolver: OAuthResolver;
-	readonly keyset: Keyset;
+	readonly keyset: Keyset | undefined;
 	readonly dpopNonces: DpopNonceCache;
 
 	private readonly dpopFetch: typeof globalThis.fetch;
@@ -252,10 +252,15 @@ export class OAuthServerAgent {
 				body.set(key, value);
 			}
 		}
-		// add client credentials
-		body.set('client_id', credentials.client_id);
-		body.set('client_assertion_type', credentials.client_assertion_type);
-		body.set('client_assertion', credentials.client_assertion);
+
+		// always add client_id
+		body.set('client_id', this.clientMetadata.client_id!);
+
+		// add client credentials for confidential clients
+		if (credentials) {
+			body.set('client_assertion_type', credentials.client_assertion_type);
+			body.set('client_assertion', credentials.client_assertion);
+		}
 
 		const response = await this.dpopFetch(endpoint, {
 			method: 'POST',
