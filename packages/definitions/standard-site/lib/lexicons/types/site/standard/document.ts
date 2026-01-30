@@ -50,14 +50,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		site: /*#__PURE__*/ v.genericUriString(),
 		/**
 		 * Array of strings used to tag or categorize the document. Avoid prepending tags with hashtags.
+		 * @maxLength 1280
 		 */
 		tags: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.array(
-				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-					/*#__PURE__*/ v.stringLength(0, 1280),
-					/*#__PURE__*/ v.stringGraphemes(0, 128),
-				]),
-			),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
+				/*#__PURE__*/ v.arrayLength(0, 1280),
+			]),
 		),
 		/**
 		 * Plaintext representation of the documents contents. Should not contain markdown or other formatting.

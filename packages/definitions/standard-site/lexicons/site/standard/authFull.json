@@ -1,0 +1,23 @@
+{
+	"id": "site.standard.authFull",
+	"defs": {
+		"main": {
+			"type": "permission-set",
+			"title": "Full Standard.site Access",
+			"detail": "Provides full access to all Standard.site features including publications, documents, and subscriptions.",
+			"permissions": [
+				{
+					"type": "permission",
+					"resource": "repo",
+					"collection": [
+						"site.standard.publication",
+						"site.standard.document",
+						"site.standard.graph.subscription"
+					]
+				}
+			]
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}
