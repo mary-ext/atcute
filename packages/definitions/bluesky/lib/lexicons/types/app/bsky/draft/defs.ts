@@ -9,6 +9,20 @@ import * as AppBskyFeedThreadgate from '../feed/threadgate.js';
 const _draftSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draft')),
 	/**
+	 * UUIDv4 identifier of the device that created this draft.
+	 * @maxLength 100
+	 */
+	deviceId: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+	),
+	/**
+	 * The device and/or platform on which the draft was created.
+	 * @maxLength 100
+	 */
+	deviceName: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+	),
+	/**
 	 * Indicates human language of posts primary text content.
 	 * @maxLength 3
 	 */
