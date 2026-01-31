@@ -78,6 +78,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 						'open-issue-count',
 						'open-pull-request-count',
 						'repository-count',
+						'star-count',
 					]),
 				),
 				[/*#__PURE__*/ v.arrayLength(0, 2)],

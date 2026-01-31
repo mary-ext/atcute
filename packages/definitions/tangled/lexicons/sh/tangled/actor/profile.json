@@ -45,7 +45,8 @@
 								"open-pull-request-count",
 								"open-issue-count",
 								"closed-issue-count",
-								"repository-count"
+								"repository-count",
+								"star-count"
 							]
 						}
 					},
