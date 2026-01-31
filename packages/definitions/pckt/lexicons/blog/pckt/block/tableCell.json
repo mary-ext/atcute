@@ -1,0 +1,33 @@
+{
+	"id": "blog.pckt.block.tableCell",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["content"],
+			"properties": {
+				"colspan": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "Number of columns this cell spans"
+				},
+				"content": {
+					"type": "array",
+					"items": {
+						"refs": ["blog.pckt.block.text"],
+						"type": "union",
+						"closed": false
+					},
+					"description": "Array of block content (typically text)"
+				},
+				"rowspan": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "Number of rows this cell spans"
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Regular table cell containing text and inline content."
+}
