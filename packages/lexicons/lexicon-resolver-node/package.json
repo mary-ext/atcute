@@ -36,7 +36,7 @@
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
 		"@atcute/lexicon-resolver": "workspace:^",
-		"@types/node": "^22.19.3"
+		"@types/node": "^25.1.0"
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^1.0.0",

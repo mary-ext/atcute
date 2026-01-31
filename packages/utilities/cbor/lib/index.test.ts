@@ -10,10 +10,12 @@ const utf8e = new TextEncoder();
 // const utf8d = new TextDecoder();
 
 const referenceKeySorter = (obj: Record<string, unknown>): string[] => {
-	return Object.keys(obj)
-		.filter((key) => obj[key] !== undefined)
-		// oxlint-disable-next-line unicorn/no-array-sort -- filter already clones
-		.sort((a, b) => a.length - b.length || (a < b ? -1 : 1)); 
+	return (
+		Object.keys(obj)
+			.filter((key) => obj[key] !== undefined)
+			// oxlint-disable-next-line unicorn/no-array-sort -- filter already clones
+			.sort((a, b) => a.length - b.length || (a < b ? -1 : 1))
+	);
 };
 
 describe('key sorting', () => {

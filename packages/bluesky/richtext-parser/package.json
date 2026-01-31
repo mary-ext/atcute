@@ -27,7 +27,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@vitest/coverage-v8": "^4.0.16",
-		"vitest": "^4.0.16"
+		"@vitest/coverage-v8": "^4.0.18",
+		"vitest": "^4.0.18"
 	}
 }
