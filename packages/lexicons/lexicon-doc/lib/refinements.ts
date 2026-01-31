@@ -620,7 +620,7 @@ export const refineLexXrpcParameters = (spec: t.LexXrpcParameters, deep: boolean
 	return refineLexObject({ type: 'object', required: spec.required, properties: spec.properties }, deep);
 };
 
-const REPO_ACTIONS: string[] = ['create', 'update', 'delete'];
+const REPO_ACTIONS = new Set(['create', 'update', 'delete']);
 
 /**
  * validates constraints in lexicon permission definitions.
@@ -685,7 +685,7 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 								message: `action entries must be strings`,
 								path: ['action', idx],
 							});
-						} else if (!REPO_ACTIONS.includes(entry)) {
+						} else if (!REPO_ACTIONS.has(entry)) {
 							issues.push({
 								message: `invalid action`,
 								path: ['action', idx],

@@ -101,8 +101,6 @@ describe('PlcClient', () => {
 			const rotationKeyDid = await rotationKey.exportPublicKey('did');
 			const signingKeyDid = await signingKey.exportPublicKey('did');
 
-			// get last op for prev reference
-			const lastOp = await client.getLastOperation(did);
 			const auditLog = await client.getAuditLog(did);
 			const prevCid = auditLog.at(-1)!.cid;
 

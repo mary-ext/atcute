@@ -28,6 +28,7 @@ export const allowsEval = /*#__PURE__*/ lazy((): boolean => {
 
 	try {
 		const F = Function;
+		// oxlint-disable-next-line no-new -- intentional check for Function constructor availability
 		new F('');
 		return true;
 	} catch {

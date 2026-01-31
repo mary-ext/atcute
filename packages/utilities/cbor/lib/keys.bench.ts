@@ -26,7 +26,8 @@ const getObject = () => ({
 function getKeysNaive(obj: Record<string, unknown>): string[] {
 	return Object.keys(obj)
 		.filter((key) => obj[key] !== undefined)
-		.sort((a, b) => a.length - b.length || (a < b ? -1 : 1));
+		// oxlint-disable-next-line unicorn/no-array-sort -- filter already clones
+		.sort((a, b) => a.length - b.length || (a < b ? -1 : 1)); 
 }
 
 summary(() => {

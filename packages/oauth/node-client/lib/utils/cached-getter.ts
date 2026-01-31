@@ -89,6 +89,7 @@ export class CachedGetter<K, V> {
 								await this.deleteStored(key, err);
 							}
 						} catch (error) {
+							// oxlint-disable-next-line preserve-caught-error -- errors preserved in first arg
 							throw new AggregateError([err, error], `error while deleting stored value`);
 						}
 					}

@@ -21,7 +21,7 @@ const PREFERRED_ALGORITHMS: readonly SigningAlgorithm[] = [
 ];
 
 const sortAlgorithms = (algs: readonly SigningAlgorithm[]): SigningAlgorithm[] => {
-	return [...algs].sort((a, b) => {
+	return algs.toSorted((a, b) => {
 		const aIdx = PREFERRED_ALGORITHMS.indexOf(a);
 		const bIdx = PREFERRED_ALGORITHMS.indexOf(b);
 

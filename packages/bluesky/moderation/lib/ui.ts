@@ -171,10 +171,10 @@ export const getDisplayRestrictions = (
 
 	return {
 		noOverride,
-		filters: filters.sort(sortByPriority),
-		blurs: blurs.sort(sortByPriority),
-		alerts: alerts.sort(sortByPriority),
-		informs: informs.sort(sortByPriority),
+		filters: filters.sort(sortByPriority), // oxlint-disable-line unicorn/no-array-sort -- local array
+		blurs: blurs.sort(sortByPriority), // oxlint-disable-line unicorn/no-array-sort -- local array
+		alerts: alerts.sort(sortByPriority), // oxlint-disable-line unicorn/no-array-sort -- local array
+		informs: informs.sort(sortByPriority), // oxlint-disable-line unicorn/no-array-sort -- local array
 	};
 };
 

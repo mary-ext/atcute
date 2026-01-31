@@ -12,7 +12,8 @@ const utf8e = new TextEncoder();
 const referenceKeySorter = (obj: Record<string, unknown>): string[] => {
 	return Object.keys(obj)
 		.filter((key) => obj[key] !== undefined)
-		.sort((a, b) => a.length - b.length || (a < b ? -1 : 1));
+		// oxlint-disable-next-line unicorn/no-array-sort -- filter already clones
+		.sort((a, b) => a.length - b.length || (a < b ? -1 : 1)); 
 };
 
 describe('key sorting', () => {
@@ -90,8 +91,8 @@ it('encodes and decodes into the same value', () => {
 		b32: 65542,
 		minInteger: Number.MIN_SAFE_INTEGER,
 		maxInteger: Number.MAX_SAFE_INTEGER,
-		pi: 3.141592653589793,
-		npi: -3.141592653589793,
+		pi: 3.141592653589793, // oxlint-disable-line approx-constant -- test data
+		npi: -3.141592653589793, // oxlint-disable-line approx-constant -- test data
 		nested: {
 			hello: 'world',
 		},

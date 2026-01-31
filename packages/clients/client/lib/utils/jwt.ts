@@ -23,13 +23,13 @@ export const decodeJwt = (token: string): unknown => {
 	try {
 		decoded = base64UrlDecode(part);
 	} catch (e) {
-		throw new Error('invalid token: invalid b64 for part ' + (pos + 1) + ' (' + (e as Error).message + ')');
+		throw new Error(`invalid token: invalid b64 for part ${pos + 1}`, { cause: e });
 	}
 
 	try {
 		return JSON.parse(decoded);
 	} catch (e) {
-		throw new Error('invalid token: invalid json for part ' + (pos + 1) + ' (' + (e as Error).message + ')');
+		throw new Error(`invalid token: invalid json for part ${pos + 1}`, { cause: e });
 	}
 };
 

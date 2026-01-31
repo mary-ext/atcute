@@ -28,7 +28,9 @@ export const createKeywordPattern = (matchers: KeywordMatch | KeywordMatch[]): R
 			continue;
 		}
 
-		re && (re += '|');
+		if (re) {
+			re += '|';
+		}
 
 		if (whole && WORD_CHAR_RE.test(value.at(0)!)) {
 			re += '\\b';

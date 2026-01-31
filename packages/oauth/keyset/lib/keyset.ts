@@ -102,7 +102,7 @@ export class Keyset {
 		const algSet = alg == null ? null : new Set(Array.isArray(alg) ? alg : [alg]);
 
 		// sort keys by algorithm preference
-		const sorted = [...this.keys].sort((a, b) => {
+		const sorted = this.keys.toSorted((a, b) => {
 			const aIdx = PREFERRED_ALGORITHMS.indexOf(a.alg as (typeof PREFERRED_ALGORITHMS)[number]);
 			const bIdx = PREFERRED_ALGORITHMS.indexOf(b.alg as (typeof PREFERRED_ALGORITHMS)[number]);
 			return aIdx - bIdx;

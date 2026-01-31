@@ -724,11 +724,12 @@ const generateType = (
 			return `${toTitleCase(refPath.nsid)}.${toCamelCase(refPath.defId)}Schema`;
 		}
 		case 'union': {
-			const refs = spec.refs
+				const refs = spec.refs
 				.map((ref) => {
 					const refPath = resolvePath(path, ref);
 					return { path: refPath, uri: formatLexiconRef(refPath) };
 				})
+				// oxlint-disable-next-line unicorn/no-array-sort -- map already clones
 				.sort((a, b) => {
 					if (a.uri < b.uri) {
 						return -1;

@@ -36,7 +36,7 @@ export const mockResolvers = (idResolver: IdResolver, pds: TestPdsServer) => {
 		try {
 			const res = await axios.get(url, { headers: { host: handle } });
 			return res.data;
-		} catch (err) {
+		} catch {
 			return undefined;
 		}
 	};

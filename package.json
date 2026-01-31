@@ -3,7 +3,7 @@
 	"type": "module",
 	"scripts": {
 		"fmt": "oxfmt",
-		"lint": "oxlint --type-aware"
+		"lint": "oxlint"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^2.29.8",

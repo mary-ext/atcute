@@ -135,6 +135,7 @@ expect.extend({
 });
 
 declare module 'vitest' {
+	// oxlint-disable-next-line no-unused-vars -- required for module augmentation
 	interface Assertion<T = any> {
 		toBeModerationResult(
 			expected?: ModerationTestSuiteResultFlag[],

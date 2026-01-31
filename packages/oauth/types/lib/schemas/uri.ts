@@ -85,6 +85,7 @@ export const privateUseUriSchema = urlSchema.chain((input) => {
 
 	const url = new URL(input);
 	const scheme = url.protocol.slice(0, -1);
+	// oxlint-disable-next-line unicorn/no-array-reverse -- split already clones
 	const domain = scheme.split('.').reverse().join('.');
 
 	if (isLocalHostname(domain)) {

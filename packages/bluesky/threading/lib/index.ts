@@ -1,18 +1,18 @@
 import type * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import type * as ComAtprotoRepoApplyWrites from '@atcute/atproto/types/repo/applyWrites';
 import type * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
-import type {} from '@atcute/atproto/types/repo/uploadBlob';
+import type {} from '@atcute/atproto/types/repo/uploadBlob'; // oxlint-disable-line unicorn/require-module-specifiers -- ambient type augmentation
 import type * as AppBskyEmbedExternal from '@atcute/bluesky/types/app/embed/external';
 import type * as AppBskyEmbedImages from '@atcute/bluesky/types/app/embed/images';
 import type * as AppBskyEmbedRecord from '@atcute/bluesky/types/app/embed/record';
 import type * as AppBskyEmbedVideo from '@atcute/bluesky/types/app/embed/video';
 import type * as AppBskyFeedDefs from '@atcute/bluesky/types/app/feed/defs';
-import type {} from '@atcute/bluesky/types/app/feed/getFeedGenerator';
-import type {} from '@atcute/bluesky/types/app/feed/getPosts';
+import type {} from '@atcute/bluesky/types/app/feed/getFeedGenerator'; // oxlint-disable-line unicorn/require-module-specifiers -- ambient type augmentation
+import type {} from '@atcute/bluesky/types/app/feed/getPosts'; // oxlint-disable-line unicorn/require-module-specifiers -- ambient type augmentation
 import type * as AppBskyFeedPost from '@atcute/bluesky/types/app/feed/post';
 import type * as AppBskyFeedThreadgate from '@atcute/bluesky/types/app/feed/threadgate';
-import type {} from '@atcute/bluesky/types/app/graph/getList';
-import type {} from '@atcute/bluesky/types/app/graph/getStarterPack';
+import type {} from '@atcute/bluesky/types/app/graph/getList'; // oxlint-disable-line unicorn/require-module-specifiers -- ambient type augmentation
+import type {} from '@atcute/bluesky/types/app/graph/getStarterPack'; // oxlint-disable-line unicorn/require-module-specifiers -- ambient type augmentation
 import { ClientResponseError, ok, type Client } from '@atcute/client';
 import type { $type, Blob as AtBlob, CanonicalResourceUri, ResourceUri } from '@atcute/lexicons';
 import * as TID from '@atcute/tid';

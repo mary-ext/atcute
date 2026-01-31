@@ -36,11 +36,14 @@ const RE_XRPC_NSID = /^\/xrpc\/([^?]*)/;
 export const cors = (options: CORSOptions = {}): FetchMiddleware => {
 	const exposedHeaders = Array.from(
 		new Set([...DEFAULT_EXPOSED_HEADERS, ...(options.exposedHeaders?.map((h) => h.toLowerCase()) || [])]),
-	).sort();
+	)
+		// oxlint-disable-next-line unicorn/no-array-sort -- Array.from already clones
+		.sort();
 
 	const allowedHeaders = Array.from(
 		new Set([...DEFAULT_ALLOWED_HEADERS, ...(options.allowedHeaders?.map((h) => h.toLowerCase()) || [])]),
 	)
+		// oxlint-disable-next-line unicorn/no-array-sort -- Array.from already clones
 		.sort()
 		.join(',');
 

@@ -82,6 +82,7 @@ it('tokenizes search queries', () => {
 });
 
 it('should match fieldsfunc implementation', () => {
+	// oxlint-disable-next-line unicorn/consistent-function-scoping -- test helper
 	const fieldsfunc = (str: string, fn: (rune: number) => boolean): string[] => {
 		const slices: string[] = [];
 

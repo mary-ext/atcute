@@ -1,0 +1,13 @@
+{
+	"$schema": "https://unpkg.com/oxlint/configuration_schema.json",
+	"ignorePatterns": ["packages/definitions/**/lib/lexicons/**"],
+	"categories": {
+		"correctness": "warn",
+		"suspicious": "warn",
+		"perf": "warn"
+	},
+	"rules": {
+		"no-await-in-loop": "off",
+		"unicorn/prefer-add-event-listener": "off"
+	}
+}
