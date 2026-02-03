@@ -22,7 +22,7 @@ export default document({
 	id: 'blue.microcosm.links.getBacklinks',
 	defs: {
 		main: query({
-			description: 'a list of records linking to any record, identity, or uri',
+			description: 'Constellation: list records linking to any record, identity, or uri',
 			parameters: params({
 				properties: {
 					subject: required(

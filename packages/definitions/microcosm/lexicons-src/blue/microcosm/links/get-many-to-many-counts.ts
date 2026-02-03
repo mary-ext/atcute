@@ -22,7 +22,7 @@ export default document({
 	id: 'blue.microcosm.links.getManyToManyCounts',
 	defs: {
 		main: query({
-			description: 'count many-to-many relationships with secondary link paths',
+			description: 'Constellation: count many-to-many relationships with secondary link paths',
 			parameters: params({
 				properties: {
 					subject: required(

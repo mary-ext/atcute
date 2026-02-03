@@ -1,11 +1,11 @@
 import { document, object, params, query, required, string, unknown } from '@atcute/lexicon-doc/builder';
 
 export default document({
-	id: 'com.bad-example.repo.getUriRecord',
+	id: 'blue.microcosm.repo.getRecordByUri',
 	defs: {
 		main: query({
 			description:
-				'DEPRECATED: use blue.microcosm.repo.getRecordByUri instead. Slingshot: ergonomic complement to com.atproto.repo.getRecord which accepts an at-uri instead of individual repo/collection/rkey params',
+				'Slingshot: ergonomic complement to com.atproto.repo.getRecord which accepts an at-uri instead of individual repo/collection/rkey params',
 			parameters: params({
 				properties: {
 					at_uri: required(

@@ -45,7 +45,7 @@ import type {} from '@atcute/microcosm';
 	});
 
 	const resolved = await ok(
-		slingshot.get('com.bad-example.identity.resolveMiniDoc', {
+		slingshot.get('blue.microcosm.identity.resolveMiniDoc', {
 			params: {
 				identifier: 'microcosm.blue',
 			},

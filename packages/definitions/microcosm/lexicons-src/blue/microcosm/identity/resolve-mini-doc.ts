@@ -1,11 +1,11 @@
 import { document, object, params, query, required, string } from '@atcute/lexicon-doc/builder';
 
 export default document({
-	id: 'com.bad-example.identity.resolveMiniDoc',
+	id: 'blue.microcosm.identity.resolveMiniDoc',
 	defs: {
 		main: query({
 			description:
-				'DEPRECATED: use blue.microcosm.identity.resolveMiniDoc instead. Slingshot: like com.atproto.identity.resolveIdentity but instead of the full didDoc it returns an atproto-relevant subset',
+				'Slingshot: like com.atproto.identity.resolveIdentity but instead of the full didDoc it returns an atproto-relevant subset',
 			parameters: params({
 				properties: {
 					identifier: required(string({ format: 'at-identifier', description: 'handle or DID to resolve' })),
