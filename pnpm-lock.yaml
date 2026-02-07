@@ -35,9 +35,6 @@ importers:
       oxlint-tsgolint:
         specifier: ^0.11.4
         version: 0.11.4
-      pkg-size-report:
-        specifier: workspace:^
-        version: link:packages/internal/pkg-size-report
       prettier:
         specifier: ^3.8.1
         version: 3.8.1
@@ -563,25 +560,6 @@ importers:
       uint8arrays:
         specifier: ^5.1.0
         version: 5.1.0
-
-  packages/internal/pkg-size-report:
-    dependencies:
-      esbuild:
-        specifier: ^0.25.12
-        version: 0.25.12
-      js-yaml:
-        specifier: ^4.1.1
-        version: 4.1.1
-      picocolors:
-        specifier: ^1.1.1
-        version: 1.1.1
-    devDependencies:
-      '@types/js-yaml':
-        specifier: ^4.0.9
-        version: 4.0.9
-      '@types/node':
-        specifier: ^25.2.1
-        version: 25.2.1
 
   packages/lexicons/lex-cli:
     dependencies:
@@ -2763,9 +2741,6 @@ packages:
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
-
-  '@types/js-yaml@4.0.9':
-    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
@@ -6590,8 +6565,6 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
-  '@types/js-yaml@4.0.9': {}
-
   '@types/node@12.20.55': {}
 
   '@types/node@25.2.1':
@@ -7084,6 +7057,7 @@ snapshots:
       '@esbuild/win32-arm64': 0.25.12
       '@esbuild/win32-ia32': 0.25.12
       '@esbuild/win32-x64': 0.25.12
+    optional: true
 
   esbuild@0.27.3:
     optionalDependencies:

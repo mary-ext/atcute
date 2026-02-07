@@ -15,7 +15,6 @@
 		"oxfmt": "^0.28.0",
 		"oxlint": "^1.43.0",
 		"oxlint-tsgolint": "^0.11.4",
-		"pkg-size-report": "workspace:^",
 		"prettier": "^3.8.1",
 		"typescript": "~5.9.3"
 	}
