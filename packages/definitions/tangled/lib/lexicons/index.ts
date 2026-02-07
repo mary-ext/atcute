@@ -49,6 +49,7 @@ export * as ShTangledRepoPullStatusMerged from './types/sh/tangled/repo/pull/sta
 export * as ShTangledRepoPullStatusOpen from './types/sh/tangled/repo/pull/status/open.js';
 export * as ShTangledRepoRemoveSecret from './types/sh/tangled/repo/removeSecret.js';
 export * as ShTangledRepoSetDefaultBranch from './types/sh/tangled/repo/setDefaultBranch.js';
+export * as ShTangledRepoTag from './types/sh/tangled/repo/tag.js';
 export * as ShTangledRepoTags from './types/sh/tangled/repo/tags.js';
 export * as ShTangledRepoTree from './types/sh/tangled/repo/tree.js';
 export * as ShTangledSpindle from './types/sh/tangled/spindle.js';

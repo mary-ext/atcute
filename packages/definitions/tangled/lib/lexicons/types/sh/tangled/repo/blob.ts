@@ -16,10 +16,6 @@ const _lastCommitSchema = /*#__PURE__*/ v.object({
 	 */
 	message: /*#__PURE__*/ v.string(),
 	/**
-	 * Short commit hash
-	 */
-	shortHash: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
 	 * Commit timestamp
 	 */
 	when: /*#__PURE__*/ v.datetimeString(),

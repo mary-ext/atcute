@@ -101,10 +101,6 @@
 					"type": "string",
 					"description": "Commit hash"
 				},
-				"shortHash": {
-					"type": "string",
-					"description": "Short commit hash"
-				},
 				"message": {
 					"type": "string",
 					"description": "Commit message"

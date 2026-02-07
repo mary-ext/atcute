@@ -4,6 +4,9 @@ import * as v from '@atcute/lexicons/validations';
 
 const _lastCommitSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#lastCommit')),
+	get author() {
+		return /*#__PURE__*/ v.optional(signatureSchema);
+	},
 	/**
 	 * Commit hash
 	 */
@@ -43,6 +46,9 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.tree', {
 			get files() {
 				return /*#__PURE__*/ v.array(treeEntrySchema);
 			},
+			get lastCommit() {
+				return /*#__PURE__*/ v.optional(lastCommitSchema);
+			},
 			/**
 			 * The parent path in the tree
 			 */
@@ -71,6 +77,21 @@ const _readmeSchema = /*#__PURE__*/ v.object({
 	 */
 	filename: /*#__PURE__*/ v.string(),
 });
+const _signatureSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#signature')),
+	/**
+	 * Author email
+	 */
+	email: /*#__PURE__*/ v.string(),
+	/**
+	 * Author name
+	 */
+	name: /*#__PURE__*/ v.string(),
+	/**
+	 * Author timestamp
+	 */
+	when: /*#__PURE__*/ v.datetimeString(),
+});
 const _treeEntrySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#treeEntry')),
 	get last_commit() {
@@ -93,20 +114,24 @@ const _treeEntrySchema = /*#__PURE__*/ v.object({
 type lastCommit$schematype = typeof _lastCommitSchema;
 type main$schematype = typeof _mainSchema;
 type readme$schematype = typeof _readmeSchema;
+type signature$schematype = typeof _signatureSchema;
 type treeEntry$schematype = typeof _treeEntrySchema;
 
 export interface lastCommitSchema extends lastCommit$schematype {}
 export interface mainSchema extends main$schematype {}
 export interface readmeSchema extends readme$schematype {}
+export interface signatureSchema extends signature$schematype {}
 export interface treeEntrySchema extends treeEntry$schematype {}
 
 export const lastCommitSchema = _lastCommitSchema as lastCommitSchema;
 export const mainSchema = _mainSchema as mainSchema;
 export const readmeSchema = _readmeSchema as readmeSchema;
+export const signatureSchema = _signatureSchema as signatureSchema;
 export const treeEntrySchema = _treeEntrySchema as treeEntrySchema;
 
 export interface LastCommit extends v.InferInput<typeof lastCommitSchema> {}
 export interface Readme extends v.InferInput<typeof readmeSchema> {}
+export interface Signature extends v.InferInput<typeof signatureSchema> {}
 export interface TreeEntry extends v.InferInput<typeof treeEntrySchema> {}
 
 export interface $params extends v.InferInput<mainSchema['params']> {}

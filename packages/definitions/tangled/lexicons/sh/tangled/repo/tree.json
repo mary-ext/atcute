@@ -46,6 +46,10 @@
 							"ref": "#readme",
 							"description": "Readme for this file tree"
 						},
+						"lastCommit": {
+							"type": "ref",
+							"ref": "#lastCommit"
+						},
 						"files": {
 							"type": "array",
 							"items": {
@@ -123,10 +127,33 @@
 					"type": "string",
 					"description": "Commit message"
 				},
+				"author": {
+					"type": "ref",
+					"ref": "#signature"
+				},
 				"when": {
 					"type": "string",
 					"format": "datetime",
 					"description": "Commit timestamp"
+				}
+			}
+		},
+		"signature": {
+			"type": "object",
+			"required": ["name", "email", "when"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Author name"
+				},
+				"email": {
+					"type": "string",
+					"description": "Author email"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Author timestamp"
 				}
 			}
 		}
