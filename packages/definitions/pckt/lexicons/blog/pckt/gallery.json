@@ -1,0 +1,44 @@
+{
+	"id": "blog.pckt.gallery",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["images"],
+				"properties": {
+					"title": {
+						"type": "string",
+						"maxLength": 200,
+						"description": "Optional title for the gallery"
+					},
+					"images": {
+						"type": "array",
+						"items": {
+							"ref": "blog.pckt.block.image#imageAttrs",
+							"type": "ref"
+						},
+						"maxLength": 50,
+						"minLength": 1,
+						"description": "Array of image blocks in display order"
+					},
+					"layout": {
+						"type": "string",
+						"maxLength": 50,
+						"description": "Layout style for rendering the gallery (e.g. grid, carousel, masonry, list)"
+					},
+					"caption": {
+						"type": "string",
+						"maxLength": 3000,
+						"description": "Optional caption for the entire gallery",
+						"maxGraphemes": 300
+					}
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "A standalone image gallery that can be embedded in posts or other content."
+}

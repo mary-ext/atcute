@@ -9,7 +9,7 @@
 				{
 					"type": "permission",
 					"resource": "repo",
-					"collection": ["blog.pckt.publication", "blog.pckt.document"]
+					"collection": ["blog.pckt.publication", "blog.pckt.document", "blog.pckt.gallery"]
 				}
 			]
 		}

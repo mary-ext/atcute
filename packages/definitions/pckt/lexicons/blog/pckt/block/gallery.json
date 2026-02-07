@@ -1,0 +1,19 @@
+{
+	"id": "blog.pckt.block.gallery",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["ref"],
+			"properties": {
+				"ref": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "Reference to a blog.pckt.gallery record"
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "An embeddable gallery block that references a standalone gallery."
+}

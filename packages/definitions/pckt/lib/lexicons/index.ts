@@ -2,6 +2,7 @@ export * as BlogPcktBlockBlockquote from './types/blog/pckt/block/blockquote.js'
 export * as BlogPcktBlockBlueskyEmbed from './types/blog/pckt/block/blueskyEmbed.js';
 export * as BlogPcktBlockBulletList from './types/blog/pckt/block/bulletList.js';
 export * as BlogPcktBlockCodeBlock from './types/blog/pckt/block/codeBlock.js';
+export * as BlogPcktBlockGallery from './types/blog/pckt/block/gallery.js';
 export * as BlogPcktBlockHardBreak from './types/blog/pckt/block/hardBreak.js';
 export * as BlogPcktBlockHeading from './types/blog/pckt/block/heading.js';
 export * as BlogPcktBlockHorizontalRule from './types/blog/pckt/block/horizontalRule.js';
@@ -20,6 +21,7 @@ export * as BlogPcktBlockText from './types/blog/pckt/block/text.js';
 export * as BlogPcktBlockWebsite from './types/blog/pckt/block/website.js';
 export * as BlogPcktContent from './types/blog/pckt/content.js';
 export * as BlogPcktDocument from './types/blog/pckt/document.js';
+export * as BlogPcktGallery from './types/blog/pckt/gallery.js';
 export * as BlogPcktPublication from './types/blog/pckt/publication.js';
 export * as BlogPcktRichtextFacet from './types/blog/pckt/richtext/facet.js';
 export * as BlogPcktTheme from './types/blog/pckt/theme.js';
