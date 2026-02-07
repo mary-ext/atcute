@@ -20,11 +20,11 @@
 					"tags": {
 						"type": "array",
 						"items": {
-							"type": "string"
+							"type": "string",
+							"maxLength": 1280,
+							"maxGraphemes": 128
 						},
-						"maxLength": 1280,
-						"description": "Array of strings used to tag or categorize the document. Avoid prepending tags with hashtags.",
-						"maxGraphemes": 128
+						"description": "Array of strings used to tag or categorize the document. Avoid prepending tags with hashtags."
 					},
 					"title": {
 						"type": "string",
