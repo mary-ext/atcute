@@ -41,7 +41,7 @@
 		"prettier": "^3.8.1"
 	},
 	"devDependencies": {
-		"@types/node": "^25.1.0",
+		"@types/node": "^25.2.1",
 		"tschema": "^3.2.0"
 	}
 }
