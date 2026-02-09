@@ -290,30 +290,32 @@ const writeValue = (state: State, val: any): void => {
 				return;
 			}
 
-			// case: cid-link
-			if ('$link' in val) {
-				if (val instanceof CidLinkWrapper || typeof val.$link === 'string') {
-					writeCid(state, val);
-					return;
-				}
-
-				throw new TypeError(`unexpected cid-link value`);
-			}
-
-			// case: bytes
-			if ('$bytes' in val) {
-				if (val instanceof BytesWrapper || typeof val.$bytes === 'string') {
-					writeBytes(state, val);
-					return;
-				}
-
-				throw new TypeError(`unexpected bytes value`);
-			}
-
 			// case: POJO
 			if (val.constructor === Object) {
 				const keys = getOrderedObjectKeys(val);
 				const len = keys.length;
+
+				if (len === 1) {
+					const key = keys[0]!;
+
+					if (key === '$link') {
+						if (typeof val.$link === 'string') {
+							writeCid(state, val);
+							return;
+						}
+
+						throw new TypeError(`unexpected cid-link value`);
+					}
+
+					if (key === '$bytes') {
+						if (typeof val.$bytes === 'string') {
+							writeBytes(state, val);
+							return;
+						}
+
+						throw new TypeError(`unexpected bytes value`);
+					}
+				}
 
 				resizeIfNeeded(state, MAX_TYPE_ARG_LEN);
 				writeTypeAndArgument(state, 5, len);
@@ -326,6 +328,26 @@ const writeValue = (state: State, val: any): void => {
 				}
 
 				return;
+			}
+
+			// case: cid-link wrappers / odd objects
+			if ('$link' in val) {
+				if (val instanceof CidLinkWrapper || typeof val.$link === 'string') {
+					writeCid(state, val);
+					return;
+				}
+
+				throw new TypeError(`unexpected cid-link value`);
+			}
+
+			// case: bytes wrappers / odd objects
+			if ('$bytes' in val) {
+				if (val instanceof BytesWrapper || typeof val.$bytes === 'string') {
+					writeBytes(state, val);
+					return;
+				}
+
+				throw new TypeError(`unexpected bytes value`);
 			}
 		}
 	}
@@ -366,13 +388,13 @@ export const getOrderedObjectKeys = (obj: Record<string, unknown>): string[] => 
 			continue;
 		}
 
+		const lenA = valA.length;
 		let j = len - 1;
 		for (; j >= 0; j--) {
 			const valB = keys[j];
 
 			// Note: Don't need to check for equality, keys are always distinct.
-			const cmp = valA.length - valB.length || +(valA > valB);
-			if (cmp > 0) {
+			if (lenA > valB.length || (lenA === valB.length && valA > valB)) {
 				break;
 			}
 
