@@ -21,12 +21,29 @@ export type ParsedResourceUri =
 	| { repo: ActorIdentifier; collection: Nsid; rkey: undefined; fragment: string | undefined }
 	| { repo: ActorIdentifier; collection: Nsid; rkey: RecordKey; fragment: string | undefined };
 
+// minimum valid non-canonical at-uri is `at://a.a` (8 chars)
+const AT_URI_MIN_LENGTH = 8;
+// minimum canonical at-uri is `at://did:m:v/a.b.c/x` (20 chars)
+const CANONICAL_AT_URI_MIN_LENGTH = 5 + 7 + 1 + 5 + 1 + 1;
+// maximum structural length:
+// `at://` + DID (2048) + `/` + NSID (317) + `/` + rkey (512)
+const AT_URI_MAX_LENGTH = 5 + 2048 + 1 + 317 + 1 + 512;
+
+// repo: [a-zA-Z0-9._:%-]
+// collection: [a-zA-Z0-9.-]
+// rkey: [a-zA-Z0-9._~:@!$&%')(*+,;=-]
+// fragment: /[a-zA-Z0-9._~:@!$&%')(*+,;=\-[\]/\\]*
 const ATURI_RE =
 	/^at:\/\/([a-zA-Z0-9._:%-]+)(?:\/([a-zA-Z0-9-.]+)(?:\/([a-zA-Z0-9._~:@!$&%')(*+,;=-]+))?)?(?:#(\/[a-zA-Z0-9._~:@!$&%')(*+,;=\-[\]/\\]*))?$/;
 
 // #__NO_SIDE_EFFECTS__
 export const isResourceUri = (input: unknown): input is ResourceUri => {
 	if (typeof input !== 'string') {
+		return false;
+	}
+
+	const len = input.length;
+	if (len < AT_URI_MIN_LENGTH || len > AT_URI_MAX_LENGTH) {
 		return false;
 	}
 
@@ -42,6 +59,11 @@ export const isResourceUri = (input: unknown): input is ResourceUri => {
 
 // #__NO_SIDE_EFFECTS__
 export const parseResourceUri = (input: string): Result<ParsedResourceUri, string> => {
+	const len = input.length;
+	if (len < AT_URI_MIN_LENGTH || len > AT_URI_MAX_LENGTH) {
+		return { ok: false, error: `invalid at-uri: ${input}` };
+	}
+
 	const match = ATURI_RE.exec(input);
 	if (match === null) {
 		return { ok: false, error: `invalid at-uri: ${input}` };
@@ -86,6 +108,11 @@ export const isCanonicalResourceUri = (input: unknown): input is CanonicalResour
 		return false;
 	}
 
+	const len = input.length;
+	if (len < CANONICAL_AT_URI_MIN_LENGTH || len > AT_URI_MAX_LENGTH) {
+		return false;
+	}
+
 	const match = ATURI_RE.exec(input);
 	if (match === null) {
 		return false;
@@ -98,6 +125,11 @@ export const isCanonicalResourceUri = (input: unknown): input is CanonicalResour
 
 // #__NO_SIDE_EFFECTS__
 export const parseCanonicalResourceUri = (input: string): Result<ParsedCanonicalResourceUri, string> => {
+	const len = input.length;
+	if (len < CANONICAL_AT_URI_MIN_LENGTH || len > AT_URI_MAX_LENGTH) {
+		return { ok: false, error: `invalid canonical-at-uri: ${input}` };
+	}
+
 	const match = ATURI_RE.exec(input);
 	if (match === null) {
 		return { ok: false, error: `invalid canonical-at-uri: ${input}` };
