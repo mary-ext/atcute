@@ -126,7 +126,7 @@ const makeFirehoseFixtures = (count: number): unknown[] => {
 					$type: 'app.bsky.feed.like',
 					subject: {
 						uri: makeAtUri(makeDid(rand(lcg)), 'app.bsky.feed.post', rand(lcg)),
-						cid: { $link: VALID_CID },
+						cid: VALID_CID,
 					},
 					createdAt,
 				});
@@ -137,7 +137,7 @@ const makeFirehoseFixtures = (count: number): unknown[] => {
 					$type: 'app.bsky.feed.repost',
 					subject: {
 						uri: makeAtUri(makeDid(rand(lcg)), 'app.bsky.feed.post', rand(lcg)),
-						cid: { $link: VALID_CID },
+						cid: VALID_CID,
 					},
 					createdAt,
 				});
@@ -172,7 +172,7 @@ const makeFirehoseFixtures = (count: number): unknown[] => {
 							size: 12345,
 						},
 					},
-					swapRecord: randInt(lcg, 2) ? { $link: VALID_CID } : undefined,
+					swapRecord: randInt(lcg, 2) ? VALID_CID : undefined,
 				});
 				break;
 			}
