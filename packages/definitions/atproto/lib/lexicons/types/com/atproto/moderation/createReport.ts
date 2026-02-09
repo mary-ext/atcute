@@ -2,10 +2,10 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ComAtprotoAdminDefs from '../admin/defs.js';
-import * as ComAtprotoRepoStrongRef from '../repo/strongRef.js';
+import * as ComAtprotoAdminDefs from '../admin/defs.ts';
+import * as ComAtprotoRepoStrongRef from '../repo/strongRef.ts';
 
-import * as ComAtprotoModerationDefs from './defs.js';
+import * as ComAtprotoModerationDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.moderation.createReport', {
 	params: null,

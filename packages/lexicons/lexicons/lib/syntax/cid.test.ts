@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isCid } from './cid.js';
+import { isCid } from './cid.ts';
 
 describe('cid validation', () => {
 	it('validates cid', () => {

@@ -1,14 +1,14 @@
-export * from './actor/local.js';
+export * from './actor/local.ts';
 
-export * from './did/composite.js';
-export * from './did/methods/plc.js';
-export * from './did/methods/web.js';
-export * from './did/methods/xrpc.js';
+export * from './did/composite.ts';
+export * from './did/methods/plc.ts';
+export * from './did/methods/web.ts';
+export * from './did/methods/xrpc.ts';
 
-export * from './handle/composite.js';
-export * from './handle/methods/doh-json.js';
-export * from './handle/methods/well-known.js';
-export * from './handle/methods/xrpc.js';
+export * from './handle/composite.ts';
+export * from './handle/methods/doh-json.ts';
+export * from './handle/methods/well-known.ts';
+export * from './handle/methods/xrpc.ts';
 
-export * from './errors.js';
-export * from './types.js';
+export * from './errors.ts';
+export * from './types.ts';

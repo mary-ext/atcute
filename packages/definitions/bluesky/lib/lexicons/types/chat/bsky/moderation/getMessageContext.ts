@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ChatBskyConvoDefs from '../convo/defs.js';
+import * as ChatBskyConvoDefs from '../convo/defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.moderation.getMessageContext', {
 	params: /*#__PURE__*/ v.object({

@@ -1,7 +1,7 @@
-import { MissingBlockError } from './errors.js';
-import { MSTNode } from './node.js';
-import type { BlockStore } from './stores.js';
-import LRUCache from './utils/lru.js';
+import { MissingBlockError } from './errors.ts';
+import { MSTNode } from './node.ts';
+import type { BlockStore } from './stores.ts';
+import LRUCache from './utils/lru.ts';
 
 /**
  * manages caching and storage of MST nodes with LRU eviction

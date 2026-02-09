@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as CommunityLexiconBookmarksBookmark from './bookmark.js';
+import * as CommunityLexiconBookmarksBookmark from './bookmark.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('community.lexicon.bookmarks.getActorBookmarks', {
 	params: /*#__PURE__*/ v.object({

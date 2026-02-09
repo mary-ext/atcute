@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ToolsOzoneVerificationDefs from './defs.js';
+import * as ToolsOzoneVerificationDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.verification.listVerifications', {
 	params: /*#__PURE__*/ v.object({

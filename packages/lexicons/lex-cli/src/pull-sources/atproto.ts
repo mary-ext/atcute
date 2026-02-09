@@ -20,9 +20,9 @@ import {
 
 import pc from 'picocolors';
 
-import type { AtprotoSourceConfig } from '../config.js';
+import type { AtprotoSourceConfig } from '../config.ts';
 
-import type { PullResult, SourceLocation } from './types.js';
+import type { PullResult, SourceLocation } from './types.ts';
 
 /**
  * discovers all published lexicons for an authority by listing records in the

@@ -1,2 +1,2 @@
-export * from './jwt-creator.js';
-export * from './jwt-verifier.js';
+export * from './jwt-creator.ts';
+export * from './jwt-verifier.ts';

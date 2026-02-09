@@ -1,5 +1,5 @@
-import { type BlockMap } from './blockmap.js';
-import { deleteMany, setMany } from './utils/blockmap.js';
+import { type BlockMap } from './blockmap.ts';
+import { deleteMany, setMany } from './utils/blockmap.ts';
 
 /**
  * a read-only interface for retrieving blocks by their CID

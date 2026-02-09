@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ToolsOzoneVerificationDefs from './defs.js';
+import * as ToolsOzoneVerificationDefs from './defs.ts';
 
 const _grantErrorSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(

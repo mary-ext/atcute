@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { didDocument } from './typedefs.js';
+import { didDocument } from './typedefs.ts';
 
 describe('didDocument', () => {
 	it('parses a did:plc document', () => {

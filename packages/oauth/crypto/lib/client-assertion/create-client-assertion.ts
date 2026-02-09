@@ -1,9 +1,9 @@
 import { nanoid } from 'nanoid';
 
-import { getCachedKeyMaterial } from '../internal/key-cache.js';
-import { signJwt } from '../jwt/index.js';
+import { getCachedKeyMaterial } from '../internal/key-cache.ts';
+import { signJwt } from '../jwt/index.ts';
 
-import type { ClientAssertionPrivateJwk } from './types.js';
+import type { ClientAssertionPrivateJwk } from './types.ts';
 
 export interface CreateClientAssertionOptions {
 	/** client id */

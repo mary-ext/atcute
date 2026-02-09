@@ -1,4 +1,4 @@
-import type { Awaitable } from '../types/misc.js';
+import type { Awaitable } from '../types/misc.ts';
 
 /** options for store get operations */
 export interface GetOptions {

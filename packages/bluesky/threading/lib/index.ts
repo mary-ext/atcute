@@ -17,17 +17,17 @@ import { ClientResponseError, ok, type Client } from '@atcute/client';
 import type { $type, Blob as AtBlob, CanonicalResourceUri, ResourceUri } from '@atcute/lexicons';
 import * as TID from '@atcute/tid';
 
-import { serializeRecordCid } from './cbor.js';
-import { getNow } from './time.js';
+import { serializeRecordCid } from './cbor.ts';
+import { getNow } from './time.ts';
 import type {
 	ComposedThread,
 	ComposedThreadgate,
 	PostEmbed,
 	PostMediaEmbed,
 	PostRecordEmbed,
-} from './types.js';
+} from './types.ts';
 
-export type * from './types.js';
+export type * from './types.ts';
 
 /**
  * Create post records and publish them

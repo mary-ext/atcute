@@ -1,7 +1,7 @@
 import { CidLinkWrapper, fromBinary, type CidLink } from '@atcute/cid';
 import { decodeUtf8From } from '@atcute/uint8array';
 
-import { toBytes, type Bytes } from './bytes.js';
+import { toBytes, type Bytes } from './bytes.ts';
 
 interface State {
 	b: Uint8Array;

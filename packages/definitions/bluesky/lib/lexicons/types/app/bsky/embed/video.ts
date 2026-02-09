@@ -1,7 +1,7 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyEmbedDefs from './defs.js';
+import * as AppBskyEmbedDefs from './defs.ts';
 
 const _captionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.video#caption')),

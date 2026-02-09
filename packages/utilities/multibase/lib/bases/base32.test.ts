@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest';
 
-import { fromBase32, toBase32 } from './base32.js';
+import { fromBase32, toBase32 } from './base32.ts';
 
 vi.mock('@atcute/uint8array', () => ({
 	allocUnsafe: (size: number): Uint8Array => {

@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyAgeassuranceDefs from './defs.js';
+import * as AppBskyAgeassuranceDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.ageassurance.getConfig', {
 	params: null,

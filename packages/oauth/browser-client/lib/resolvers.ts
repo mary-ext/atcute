@@ -2,10 +2,10 @@ import type { ResolvedActor } from '@atcute/identity-resolver';
 import type { ActorIdentifier } from '@atcute/lexicons';
 import type { OAuthAuthorizationServerMetadata, OAuthProtectedResourceMetadata } from '@atcute/oauth-types';
 
-import { identityResolver } from './environment.js';
-import { ResolverError } from './errors.js';
-import { extractContentType } from './utils/response.js';
-import { isValidUrl } from './utils/strings.js';
+import { identityResolver } from './environment.ts';
+import { ResolverError } from './errors.ts';
+import { extractContentType } from './utils/response.ts';
+import { isValidUrl } from './utils/strings.ts';
 
 export const resolveFromIdentifier = async (
 	ident: ActorIdentifier,

@@ -4,7 +4,7 @@ import { isKeyDid, isPlcDid } from '@atcute/identity';
 
 import * as v from '@badrap/valita';
 
-import * as t from './types.js';
+import * as t from './types.ts';
 
 // #region Strings
 export const didPlcString = v.string().assert(isPlcDid, `must be a did:plc`);

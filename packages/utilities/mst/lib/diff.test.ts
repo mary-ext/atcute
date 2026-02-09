@@ -3,10 +3,10 @@ import { encodeUtf8 } from '@atcute/uint8array';
 
 import { describe, expect, it } from 'vitest';
 
-import { DeltaType, mstDiff, recordDiff, verySlowMstDiff } from './diff.js';
-import { NodeStore } from './node-store.js';
-import { NodeWrangler } from './node-wrangler.js';
-import { MemoryBlockStore } from './stores.js';
+import { DeltaType, mstDiff, recordDiff, verySlowMstDiff } from './diff.ts';
+import { NodeStore } from './node-store.ts';
+import { NodeWrangler } from './node-wrangler.ts';
+import { MemoryBlockStore } from './stores.ts';
 
 const createCid = async (data: string) => {
 	const bytes = encodeUtf8(data);

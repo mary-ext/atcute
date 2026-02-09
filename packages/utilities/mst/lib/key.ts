@@ -1,4 +1,4 @@
-import { InvalidMstKeyError } from './errors.js';
+import { InvalidMstKeyError } from './errors.ts';
 
 const MST_KEY_RE = /^[a-zA-Z0-9_~.:-]+\/[a-zA-Z0-9_~.:-]+$/;
 

@@ -4,9 +4,9 @@ import { toSha256 } from '@atcute/uint8array';
 import { p256 } from '@noble/curves/p256';
 import { describe, expect, it } from 'vitest';
 
-import { parseDidKey } from '../multibase.js';
+import { parseDidKey } from '../multibase.ts';
 
-import { P256PrivateKey, P256PrivateKeyExportable, P256PublicKey } from './p256.js';
+import { P256PrivateKey, P256PrivateKeyExportable, P256PublicKey } from './p256.ts';
 
 it('creates a valid keypair', async () => {
 	const keypair = await P256PrivateKeyExportable.createKeypair();

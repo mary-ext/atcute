@@ -1,6 +1,6 @@
 import { it, expect, describe } from 'vitest';
 
-import { decode, encode, encodingLength } from './index.js';
+import { decode, encode, encodingLength } from './index.ts';
 
 function randint(range: number): number {
 	return Math.floor(Math.random() * range);

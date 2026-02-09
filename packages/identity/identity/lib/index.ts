@@ -1,9 +1,9 @@
-export * as defs from './typedefs.js';
-export * from './types.js';
+export * as defs from './typedefs.ts';
+export * from './types.ts';
 
-export * from './utils.js';
+export * from './utils.ts';
 
-export * from './did.js';
-export * from './methods/key.js';
-export * from './methods/plc.js';
-export * from './methods/web.js';
+export * from './did.ts';
+export * from './methods/key.ts';
+export * from './methods/plc.ts';
+export * from './methods/web.ts';

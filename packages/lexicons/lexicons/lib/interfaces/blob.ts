@@ -1,6 +1,6 @@
-import type { Cid } from '../syntax/cid.js';
+import type { Cid } from '../syntax/cid.ts';
 
-import { isCidLink, type CidLink } from './cid-link.js';
+import { isCidLink, type CidLink } from './cid-link.ts';
 
 /**
  * represents a reference to a data blob

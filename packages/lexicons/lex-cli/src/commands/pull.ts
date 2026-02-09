@@ -10,11 +10,11 @@ import { command, constant } from '@optique/core/primitives';
 import pc from 'picocolors';
 import prettier from 'prettier';
 
-import { loadConfig, type NormalizedConfig, type PullConfig, type SourceConfig } from '../config.js';
-import { pullAtprotoSource } from '../pull-sources/atproto.js';
-import { pullGitSource } from '../pull-sources/git.js';
-import type { PullResult, PulledLexicon, SourceLocation } from '../pull-sources/types.js';
-import { sharedOptions } from '../shared-options.js';
+import { loadConfig, type NormalizedConfig, type PullConfig, type SourceConfig } from '../config.ts';
+import { pullAtprotoSource } from '../pull-sources/atproto.ts';
+import { pullGitSource } from '../pull-sources/git.ts';
+import type { PullResult, PulledLexicon, SourceLocation } from '../pull-sources/types.ts';
+import { sharedOptions } from '../shared-options.ts';
 
 export const pullCommandSchema = command(
 	'pull',

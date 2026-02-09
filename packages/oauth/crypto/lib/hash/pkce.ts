@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-import { sha256Base64Url } from './sha256.js';
+import { sha256Base64Url } from './sha256.ts';
 
 /**
  * generates pkce verifier and challenge (s256).

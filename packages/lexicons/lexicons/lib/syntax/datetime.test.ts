@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isDatetime } from './datetime.js';
+import { isDatetime } from './datetime.ts';
 
 describe('datetime validation', () => {
 	it('validates datetime', () => {

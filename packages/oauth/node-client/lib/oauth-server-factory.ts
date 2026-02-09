@@ -2,9 +2,9 @@ import type { DpopNonceCache, DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import type { AtprotoAuthorizationServerMetadata, OAuthClientMetadata } from '@atcute/oauth-types';
 
-import { type ClientAuthMethod, negotiateClientAuth } from './oauth-client-auth.js';
-import { OAuthServerAgent } from './oauth-server-agent.js';
-import { OAuthResolver } from './resolvers/index.js';
+import { type ClientAuthMethod, negotiateClientAuth } from './oauth-client-auth.ts';
+import { OAuthServerAgent } from './oauth-server-agent.ts';
+import { OAuthResolver } from './resolvers/index.ts';
 
 export interface OAuthServerFactoryOptions {
 	/** client metadata */

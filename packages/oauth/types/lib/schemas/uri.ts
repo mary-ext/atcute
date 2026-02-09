@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { isHostnameIP, isLocalHostname, isLoopbackHost } from './utils.js';
+import { isHostnameIP, isLocalHostname, isLoopbackHost } from './utils.ts';
 
 /**
  * valid, but potentially dangerous URL (`data:`, `file:`, `javascript:`, etc.).

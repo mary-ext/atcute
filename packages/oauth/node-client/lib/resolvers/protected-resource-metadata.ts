@@ -4,10 +4,10 @@ import {
 } from '@atcute/oauth-types';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
-import { JSON_MIME, PR_METADATA_MAX_SIZE } from '../constants.js';
-import { OAuthResolverError } from '../errors.js';
-import { CachedGetter, type GetCachedOptions } from '../utils/cached-getter.js';
-import type { Store } from '../utils/store.js';
+import { JSON_MIME, PR_METADATA_MAX_SIZE } from '../constants.ts';
+import { OAuthResolverError } from '../errors.ts';
+import { CachedGetter, type GetCachedOptions } from '../utils/cached-getter.ts';
+import type { Store } from '../utils/store.ts';
 
 /** protected resource metadata cache, keyed by resource origin */
 export type ProtectedResourceMetadataCache = Store<string, AtprotoProtectedResourceMetadata>;

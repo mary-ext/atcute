@@ -1,7 +1,7 @@
 import * as v from '@badrap/valita';
 
-import * as err from './errors.js';
-import { SizeLimitStream } from './streams/size-limit.js';
+import * as err from './errors.ts';
+import { SizeLimitStream } from './streams/size-limit.ts';
 
 export type TextResponse = {
 	response: Response;

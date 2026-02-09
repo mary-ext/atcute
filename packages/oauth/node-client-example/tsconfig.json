@@ -10,6 +10,7 @@
 		"moduleDetection": "force",
 		"isolatedModules": true,
 		"verbatimModuleSyntax": true,
+		"allowImportingTsExtensions": true,
 		"strict": true,
 		"noImplicitOverride": true,
 		"noUnusedLocals": true,

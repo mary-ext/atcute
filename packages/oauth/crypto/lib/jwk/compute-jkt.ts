@@ -1,7 +1,7 @@
 import { toBase64Url } from '@atcute/multibase';
 import { encodeUtf8, toSha256 } from '@atcute/uint8array';
 
-import type { PublicJwk } from './types.js';
+import type { PublicJwk } from './types.ts';
 
 /**
  * computes the jwk thumbprint (rfc 7638) for a public key.

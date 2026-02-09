@@ -10,5 +10,5 @@ export {
 	toBase64UrlPad,
 } from '#bases/base64';
 
-export { fromBase32, toBase32 } from './bases/base32.js';
-export { fromBase58Btc, toBase58Btc } from './bases/base58.js';
+export { fromBase32, toBase32 } from './bases/base32.ts';
+export { fromBase58Btc, toBase58Btc } from './bases/base58.ts';

@@ -3,12 +3,12 @@ import { decodeUtf8From } from '@atcute/uint8array';
 
 import * as v from '@badrap/valita';
 
-import { getImportAlgorithm } from '../internal/crypto.js';
-import { computeJktFromJwk } from '../jwk/compute-jkt.js';
-import type { PublicJwk, SigningAlgorithm } from '../jwk/types.js';
-import { verifyJwt } from '../jwt/index.js';
+import { getImportAlgorithm } from '../internal/crypto.ts';
+import { computeJktFromJwk } from '../jwk/compute-jkt.ts';
+import type { PublicJwk, SigningAlgorithm } from '../jwk/types.ts';
+import { verifyJwt } from '../jwt/index.ts';
 
-import type { Awaitable } from './types.js';
+import type { Awaitable } from './types.ts';
 
 const dpopJwkSchema = v.union(
 	v.object({

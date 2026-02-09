@@ -1,6 +1,6 @@
-import type { PrivateJwk, PublicJwk } from '../jwk/types.js';
+import type { PrivateJwk, PublicJwk } from '../jwk/types.ts';
 
-import { derivePublicJwk, importPrivateKeyFromJwk } from './jwk.js';
+import { derivePublicJwk, importPrivateKeyFromJwk } from './jwk.ts';
 
 /**
  * cached key material for a JWK.

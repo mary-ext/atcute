@@ -1,10 +1,10 @@
 import * as v from '@badrap/valita';
 
-import { atprotoOAuthScopeSchema } from './atproto-oauth-scope.js';
-import { oauthClientIdDiscoverableSchema } from './oauth-client-id-discoverable.js';
-import { loopbackRedirectUriSchema, oauthRedirectUriSchema } from './oauth-redirect-uri.js';
-import { nonLocalWebUriSchema, privateUseUriSchema, webUriSchema } from './uri.js';
-import { isLoopbackHost } from './utils.js';
+import { atprotoOAuthScopeSchema } from './atproto-oauth-scope.ts';
+import { oauthClientIdDiscoverableSchema } from './oauth-client-id-discoverable.ts';
+import { loopbackRedirectUriSchema, oauthRedirectUriSchema } from './oauth-redirect-uri.ts';
+import { nonLocalWebUriSchema, privateUseUriSchema, webUriSchema } from './uri.ts';
+import { isLoopbackHost } from './utils.ts';
 
 const SINGLE_SCOPE_RE = /^[\x21\x23-\x5B\x5D-\x7E]+$/;
 

@@ -1,7 +1,7 @@
 import type { Handle } from '@atcute/lexicons';
 import { isHandle } from '@atcute/lexicons/syntax';
 
-import * as t from './types.js';
+import * as t from './types.ts';
 
 export interface VerificationMaterial {
 	type: string;

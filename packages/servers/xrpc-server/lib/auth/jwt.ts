@@ -5,9 +5,9 @@ import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
 
 import * as v from '@badrap/valita';
 
-import type { Result } from '../types/misc.js';
+import type { Result } from '../types/misc.ts';
 
-import type { AuthError } from './types.js';
+import type { AuthError } from './types.ts';
 
 const didString = v.string().assert(isDid, `must be a did`);
 const nsidString = v.string().assert(isNsid, `must be an nsid`);

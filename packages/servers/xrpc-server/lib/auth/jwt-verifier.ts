@@ -4,10 +4,10 @@ import { type DidDocumentResolver } from '@atcute/identity-resolver';
 import type { Did, Nsid } from '@atcute/lexicons';
 import * as uint8arrays from '@atcute/uint8array';
 
-import type { Result } from '../types/misc.js';
+import type { Result } from '../types/misc.ts';
 
-import { parseJwt, type ParsedJwt } from './jwt.js';
-import type { AuthError } from './types.js';
+import { parseJwt, type ParsedJwt } from './jwt.ts';
+import type { AuthError } from './types.ts';
 
 export interface ServiceJwtVerifierOptions {
 	serviceDid: Did | null;

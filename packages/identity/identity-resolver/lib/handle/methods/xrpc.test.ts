@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { XrpcHandleResolver } from './xrpc.js';
+import { XrpcHandleResolver } from './xrpc.ts';
 
 const SERVICE_URL = 'https://pds.example.com';
 

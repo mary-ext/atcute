@@ -1,7 +1,7 @@
 import * as v from '@badrap/valita';
 
-import { oauthIssuerIdentifierSchema } from './oauth-issuer-identifier.js';
-import { webUriSchema } from './uri.js';
+import { oauthIssuerIdentifierSchema } from './oauth-issuer-identifier.ts';
+import { webUriSchema } from './uri.ts';
 
 export const oauthBearerMethodSchema = v.union(v.literal('header'), v.literal('body'), v.literal('query'));
 

@@ -1,7 +1,7 @@
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 
-import type { BlockMap } from '../blockmap.js';
+import type { BlockMap } from '../blockmap.ts';
 
 type BlockEntry = [cid: string, bytes: Uint8Array<ArrayBuffer>];
 

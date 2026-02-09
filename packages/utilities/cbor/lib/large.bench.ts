@@ -2,7 +2,7 @@ import * as ipld from '@ipld/dag-cbor';
 import * as cborx from 'cbor-x';
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
-import * as atcute from './index.js';
+import * as atcute from './index.ts';
 
 const OBJECT = await fetch(
 	'https://tangled.org/@mary.my.id/atcute/raw/trunk/packages/definitions/ozone/lexicons/tools/ozone/moderation/defs.json',

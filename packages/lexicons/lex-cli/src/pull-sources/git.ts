@@ -6,10 +6,10 @@ import type { LexiconDoc } from '@atcute/lexicon-doc';
 
 import pc from 'picocolors';
 
-import type { GitSourceConfig } from '../config.js';
-import { runGit, GitError } from '../git.js';
+import type { GitSourceConfig } from '../config.ts';
+import { runGit, GitError } from '../git.ts';
 
-import type { PullResult, PulledLexicon, SourceLocation } from './types.js';
+import type { PullResult, PulledLexicon, SourceLocation } from './types.ts';
 
 /**
  * pulls lexicon documents from a git repository source

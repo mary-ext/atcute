@@ -1,6 +1,6 @@
 import { decode, decodeFirst } from '@atcute/cbor';
 
-import type { DecodedFrame, ErrorFrameBody, FrameHeader } from './types.js';
+import type { DecodedFrame, ErrorFrameBody, FrameHeader } from './types.ts';
 
 /**
  * decodes a CBOR frame from a buffer

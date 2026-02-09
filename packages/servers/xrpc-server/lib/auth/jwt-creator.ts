@@ -5,7 +5,7 @@ import { encodeUtf8 } from '@atcute/uint8array';
 
 import { nanoid } from 'nanoid';
 
-import type { JwtHeader, JwtPayload } from './jwt.js';
+import type { JwtHeader, JwtPayload } from './jwt.ts';
 
 export interface CreateServiceJwtOptions {
 	keypair: PrivateKey;

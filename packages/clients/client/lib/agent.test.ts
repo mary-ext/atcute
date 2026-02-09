@@ -3,9 +3,9 @@ import type { Handle } from '@atcute/lexicons';
 
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { Client, ok } from './client.js';
-import { CredentialManager, type AtpSessionData } from './credential-manager.js';
-import { simpleFetchHandler } from './fetch-handler.js';
+import { Client, ok } from './client.ts';
+import { CredentialManager, type AtpSessionData } from './credential-manager.ts';
+import { simpleFetchHandler } from './fetch-handler.ts';
 
 let network: TestNetwork;
 

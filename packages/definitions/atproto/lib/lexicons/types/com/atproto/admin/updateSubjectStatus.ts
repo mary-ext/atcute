@@ -2,9 +2,9 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ComAtprotoRepoStrongRef from '../repo/strongRef.js';
+import * as ComAtprotoRepoStrongRef from '../repo/strongRef.ts';
 
-import * as ComAtprotoAdminDefs from './defs.js';
+import * as ComAtprotoAdminDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.updateSubjectStatus', {
 	params: null,

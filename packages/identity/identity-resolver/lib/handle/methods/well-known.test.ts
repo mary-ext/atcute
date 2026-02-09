@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { DidNotFoundError, FailedHandleResolutionError, InvalidResolvedHandleError } from '../../errors.js';
+import { DidNotFoundError, FailedHandleResolutionError, InvalidResolvedHandleError } from '../../errors.ts';
 
-import { WellKnownHandleResolver } from './well-known.js';
+import { WellKnownHandleResolver } from './well-known.ts';
 
 describe('WellKnownHandleResolver', () => {
 	it('resolves handle correctly', async () => {

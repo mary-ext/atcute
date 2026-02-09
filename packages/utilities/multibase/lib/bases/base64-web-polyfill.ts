@@ -1,4 +1,4 @@
-import { createRfc4648Decode, createRfc4648Encode } from '../utils.js';
+import { createRfc4648Decode, createRfc4648Encode } from '../utils.ts';
 
 const BASE64_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 const BASE64URL_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';

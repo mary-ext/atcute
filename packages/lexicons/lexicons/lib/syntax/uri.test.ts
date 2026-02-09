@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isGenericUri } from './uri.js';
+import { isGenericUri } from './uri.ts';
 
 describe('uri validation', () => {
 	it('validates uri', () => {

@@ -1,10 +1,10 @@
 import { nanoid } from 'nanoid';
 
-import type { CachedKeyMaterial } from '../internal/key-cache.js';
-import { getCachedKeyMaterial } from '../internal/key-cache.js';
-import { signJwt } from '../jwt/index.js';
+import type { CachedKeyMaterial } from '../internal/key-cache.ts';
+import { getCachedKeyMaterial } from '../internal/key-cache.ts';
+import { signJwt } from '../jwt/index.ts';
 
-import type { DpopPrivateJwk } from './types.js';
+import type { DpopPrivateJwk } from './types.ts';
 
 /**
  * creates a DPoP proof signer.

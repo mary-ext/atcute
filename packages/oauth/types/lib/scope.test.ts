@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import * as scope from './scope.js';
+import * as scope from './scope.ts';
 
 describe('scope builders', () => {
 	describe('repo', () => {

@@ -2,10 +2,10 @@ import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 import { isKeyDid } from '@atcute/identity';
 
-import { DISPUTE_WINDOW } from './constants.js';
-import * as err from './errors.js';
-import * as t from './types.js';
-import { deriveDidFromGenesisOp, isSignedOperationValid, normalizeOp } from './utils.js';
+import { DISPUTE_WINDOW } from './constants.ts';
+import * as err from './errors.ts';
+import * as t from './types.ts';
+import { deriveDidFromGenesisOp, isSignedOperationValid, normalizeOp } from './utils.ts';
 
 // soft constraint limits for incoming operations
 const MAX_OP_BYTES = 4000;

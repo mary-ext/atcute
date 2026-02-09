@@ -1,8 +1,8 @@
-export * as defs from './typedefs.js';
-export * from './types.js';
+export * as defs from './typedefs.ts';
+export * from './types.ts';
 
-export * from './client.js';
-export * from './constants.js';
-export * from './data.js';
-export * from './errors.js';
-export * from './utils.js';
+export * from './client.ts';
+export * from './constants.ts';
+export * from './data.ts';
+export * from './errors.ts';
+export * from './utils.ts';

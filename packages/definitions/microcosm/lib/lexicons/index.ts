@@ -1,7 +1,7 @@
-export * as BlueMicrocosmIdentityResolveMiniDoc from './types/blue/microcosm/identity/resolveMiniDoc.js';
-export * as BlueMicrocosmLinksGetBacklinks from './types/blue/microcosm/links/getBacklinks.js';
-export * as BlueMicrocosmLinksGetBacklinksCount from './types/blue/microcosm/links/getBacklinksCount.js';
-export * as BlueMicrocosmLinksGetManyToManyCounts from './types/blue/microcosm/links/getManyToManyCounts.js';
-export * as BlueMicrocosmRepoGetRecordByUri from './types/blue/microcosm/repo/getRecordByUri.js';
-export * as ComBadExampleIdentityResolveMiniDoc from './types/com/bad-example/identity/resolveMiniDoc.js';
-export * as ComBadExampleRepoGetUriRecord from './types/com/bad-example/repo/getUriRecord.js';
+export * as BlueMicrocosmIdentityResolveMiniDoc from './types/blue/microcosm/identity/resolveMiniDoc.ts';
+export * as BlueMicrocosmLinksGetBacklinks from './types/blue/microcosm/links/getBacklinks.ts';
+export * as BlueMicrocosmLinksGetBacklinksCount from './types/blue/microcosm/links/getBacklinksCount.ts';
+export * as BlueMicrocosmLinksGetManyToManyCounts from './types/blue/microcosm/links/getManyToManyCounts.ts';
+export * as BlueMicrocosmRepoGetRecordByUri from './types/blue/microcosm/repo/getRecordByUri.ts';
+export * as ComBadExampleIdentityResolveMiniDoc from './types/com/bad-example/identity/resolveMiniDoc.ts';
+export * as ComBadExampleRepoGetUriRecord from './types/com/bad-example/repo/getUriRecord.ts';

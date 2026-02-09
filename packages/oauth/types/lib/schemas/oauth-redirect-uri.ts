@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { httpsUriSchema, loopbackUriSchema, privateUseUriSchema } from './uri.js';
+import { httpsUriSchema, loopbackUriSchema, privateUseUriSchema } from './uri.ts';
 
 /**
  * this is a loopback URI with the additional restriction that the hostname

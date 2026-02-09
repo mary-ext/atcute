@@ -1,7 +1,7 @@
 import { type CidLink, CidLinkWrapper, fromString } from '@atcute/cid';
 import { allocUnsafe, concat, encodeUtf8Into } from '@atcute/uint8array';
 
-import { type Bytes, BytesWrapper, fromBytes } from './bytes.js';
+import { type Bytes, BytesWrapper, fromBytes } from './bytes.ts';
 
 const MAX_TYPE_ARG_LEN = 9;
 const CHUNK_SIZE = 1024;

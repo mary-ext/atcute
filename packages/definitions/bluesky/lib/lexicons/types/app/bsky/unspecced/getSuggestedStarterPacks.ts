@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyGraphDefs from '../graph/defs.js';
+import * as AppBskyGraphDefs from '../graph/defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedStarterPacks', {
 	params: /*#__PURE__*/ v.object({

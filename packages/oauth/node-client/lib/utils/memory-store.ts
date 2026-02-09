@@ -1,5 +1,5 @@
-import { LRUCache } from './lru.js';
-import type { Store } from './store.js';
+import { LRUCache } from './lru.ts';
+import type { Store } from './store.ts';
 
 export interface MemoryStoreOptions {
 	/** maximum number of items the store can hold */

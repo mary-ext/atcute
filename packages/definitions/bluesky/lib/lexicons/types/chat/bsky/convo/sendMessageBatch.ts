@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ChatBskyConvoDefs from './defs.js';
+import * as ChatBskyConvoDefs from './defs.ts';
 
 const _batchItemSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.sendMessageBatch#batchItem')),

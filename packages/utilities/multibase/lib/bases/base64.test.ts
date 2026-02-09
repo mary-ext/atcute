@@ -9,7 +9,7 @@ import {
 	toBase64Pad as toBase64PadNode,
 	toBase64Url as toBase64UrlNode,
 	toBase64UrlPad as toBase64UrlPadNode,
-} from './base64-node.js';
+} from './base64-node.ts';
 import {
 	fromBase64 as fromBase64Native,
 	fromBase64Pad as fromBase64PadNative,
@@ -19,7 +19,7 @@ import {
 	toBase64Pad as toBase64PadNative,
 	toBase64Url as toBase64UrlNative,
 	toBase64UrlPad as toBase64UrlPadNative,
-} from './base64-web-native.js';
+} from './base64-web-native.ts';
 import {
 	fromBase64Pad as fromBase64PadPolyfill,
 	fromBase64 as fromBase64Polyfill,
@@ -29,7 +29,7 @@ import {
 	toBase64 as toBase64Polyfill,
 	toBase64UrlPad as toBase64UrlPadPolyfill,
 	toBase64Url as toBase64UrlPolyfill,
-} from './base64-web-polyfill.js';
+} from './base64-web-polyfill.ts';
 
 vi.mock('@atcute/uint8array', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('@atcute/uint8array')>();

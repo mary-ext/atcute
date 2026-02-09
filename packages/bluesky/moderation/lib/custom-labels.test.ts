@@ -2,8 +2,8 @@ import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 
 import { describe, expect, it } from 'vitest';
 
-import * as mock from './_test-util/mock.js';
-import { type ModerationTestSuiteResultFlag } from './_test-util/moderation-behavior.js';
+import * as mock from './_test-util/mock.ts';
+import { type ModerationTestSuiteResultFlag } from './_test-util/moderation-behavior.ts';
 import {
 	DisplayContext,
 	type InterpretedLabelDefinition,
@@ -13,7 +13,7 @@ import {
 	interpretLabelValueDefinition,
 	moderatePost,
 	moderateProfile,
-} from './index.js';
+} from './index.ts';
 
 interface ScenarioResult {
 	profileList?: ModerationTestSuiteResultFlag[];

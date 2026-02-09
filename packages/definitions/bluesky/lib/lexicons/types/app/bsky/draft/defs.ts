@@ -3,8 +3,8 @@ import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyFeedPostgate from '../feed/postgate.js';
-import * as AppBskyFeedThreadgate from '../feed/threadgate.js';
+import * as AppBskyFeedPostgate from '../feed/postgate.ts';
+import * as AppBskyFeedThreadgate from '../feed/threadgate.ts';
 
 const _draftSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draft')),

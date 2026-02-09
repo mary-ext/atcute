@@ -1,4 +1,4 @@
-import type { PrivateJwk, SigningAlgorithm } from '../jwk/types.js';
+import type { PrivateJwk, SigningAlgorithm } from '../jwk/types.ts';
 
 /**
  * private jwk for client assertion signing.

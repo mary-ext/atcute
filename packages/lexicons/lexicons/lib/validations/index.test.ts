@@ -3,8 +3,8 @@ import { fromBase64 } from '@atcute/multibase';
 
 import { assert, describe, expect, it, vi } from 'vitest';
 
-import * as v from './index.js';
-import { allowsEval } from './utils.js';
+import * as v from './index.ts';
+import { allowsEval } from './utils.ts';
 
 describe(`validation errors`, () => {
 	it(`throws ValidationError`, () => {

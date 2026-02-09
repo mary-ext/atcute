@@ -8,7 +8,7 @@ import { isHandle, isNsid } from '@atcute/lexicons/syntax';
 import * as v from '@badrap/valita';
 import pc from 'picocolors';
 
-import type { ImportMapping } from './codegen.js';
+import type { ImportMapping } from './codegen.ts';
 
 const gitSourceConfigSchema = v.object({
 	type: v.literal('git'),

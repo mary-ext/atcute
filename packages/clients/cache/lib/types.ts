@@ -1,6 +1,6 @@
 import type { BaseSchema, InferOutput, ObjectSchema } from '@atcute/lexicons/validations';
 
-import { isLiteralSchema, isOptionalSchema } from './predicates.js';
+import { isLiteralSchema, isOptionalSchema } from './predicates.ts';
 
 /** entity type identifier, extracted from schema's $type literal */
 export type EntityTypeId = string;

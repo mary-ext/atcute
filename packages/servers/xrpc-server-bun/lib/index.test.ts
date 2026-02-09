@@ -4,7 +4,7 @@ import { ComAtprotoLabelDefs, ComAtprotoLabelSubscribeLabels } from '@atcute/atp
 import { decode, decodeFirst } from '@atcute/cbor';
 import { XRPCRouter } from '@atcute/xrpc-server';
 
-import { createBunWebSocket } from './index.js';
+import { createBunWebSocket } from './index.ts';
 
 const decodeFrame = (buffer: Uint8Array): { header: any; body: any } => {
 	const [header, remainder] = decodeFirst(buffer);

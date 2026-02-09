@@ -2,14 +2,14 @@ import type { Did } from '@atcute/lexicons';
 import { createDpopProofSigner, type DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { AtprotoOAuthTokenResponse, OAuthParResponse } from '@atcute/oauth-types';
 
-import { createDPoPFetch } from '../dpop.js';
-import { CLIENT_ID, fetchClientAssertion, REDIRECT_URI } from '../environment.js';
-import { FetchResponseError, OAuthResponseError, TokenRefreshError } from '../errors.js';
-import { resolveFromIdentifier } from '../resolvers.js';
-import type { PersistedAuthorizationServerMetadata } from '../types/server.js';
-import type { ExchangeInfo, TokenInfo } from '../types/token.js';
-import { pick } from '../utils/misc.js';
-import { extractContentType } from '../utils/response.js';
+import { createDPoPFetch } from '../dpop.ts';
+import { CLIENT_ID, fetchClientAssertion, REDIRECT_URI } from '../environment.ts';
+import { FetchResponseError, OAuthResponseError, TokenRefreshError } from '../errors.ts';
+import { resolveFromIdentifier } from '../resolvers.ts';
+import type { PersistedAuthorizationServerMetadata } from '../types/server.ts';
+import type { ExchangeInfo, TokenInfo } from '../types/token.ts';
+import { pick } from '../utils/misc.ts';
+import { extractContentType } from '../utils/response.ts';
 
 export class OAuthServerAgent {
 	#fetch: typeof fetch;

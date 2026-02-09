@@ -1,5 +1,5 @@
-import { isDid, type Did } from './did.js';
-import { isHandle, type Handle } from './handle.js';
+import { isDid, type Did } from './did.ts';
+import { isHandle, type Handle } from './handle.ts';
 
 /**
  * represents an account's identifier, either a {@link Did} or a

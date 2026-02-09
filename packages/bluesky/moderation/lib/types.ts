@@ -8,8 +8,8 @@ import type {
 } from '@atcute/bluesky';
 import type { CanonicalResourceUri, Did } from '@atcute/lexicons';
 
-import type { KeywordFilter } from './keyword-filter.js';
-import type { InterpretedLabelMapping, LabelPreference } from './label.js';
+import type { KeywordFilter } from './keyword-filter.ts';
+import type { InterpretedLabelMapping, LabelPreference } from './label.ts';
 
 export type Label = ComAtprotoLabelDefs.Label;
 

@@ -1,6 +1,6 @@
 import { fromBase58Btc } from '@atcute/multibase';
 
-import { assertSyntax, assertType } from './utils.js';
+import { assertSyntax, assertType } from './utils.ts';
 
 export type FoundPrivateKey =
 	| { type: 'p256'; privateKeyBytes: Uint8Array<ArrayBuffer> }

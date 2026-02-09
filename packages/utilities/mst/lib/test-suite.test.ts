@@ -7,17 +7,17 @@ import * as CID from '@atcute/cid';
 import * as v from '@badrap/valita';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { DeltaType, mstDiff, recordDiff } from './diff.js';
-import { NodeStore } from './node-store.js';
-import { NodeWrangler } from './node-wrangler.js';
-import { buildExclusionProof, buildInclusionProof } from './proof.js';
+import { DeltaType, mstDiff, recordDiff } from './diff.ts';
+import { NodeStore } from './node-store.ts';
+import { NodeWrangler } from './node-wrangler.ts';
+import { buildExclusionProof, buildInclusionProof } from './proof.ts';
 import {
 	LoggingBlockStore,
 	MemoryBlockStore,
 	OverlayBlockStore,
 	ReadonlyMemoryBlockStore,
-} from './stores.js';
-import { setMany } from './utils/blockmap.js';
+} from './stores.ts';
+import { setMany } from './utils/blockmap.ts';
 
 const mstDiffTestCaseSchema = v.object({
 	$type: v.literal('mst-diff'),

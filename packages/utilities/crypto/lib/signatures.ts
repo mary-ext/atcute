@@ -1,8 +1,8 @@
 import { Secp256k1PublicKey } from '#keypairs/secp256k1';
 
-import { P256PublicKey } from './keypairs/p256.js';
-import { parseDidKey, type FoundPublicKey } from './multibase.js';
-import type { VerifyOptions } from './types.js';
+import { P256PublicKey } from './keypairs/p256.ts';
+import { parseDidKey, type FoundPublicKey } from './multibase.ts';
+import type { VerifyOptions } from './types.ts';
 
 export const verifySig = async (
 	key: FoundPublicKey,

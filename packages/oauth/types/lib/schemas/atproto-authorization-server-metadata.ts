@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { oauthAuthorizationServerMetadataValidator } from './oauth-authorization-server-metadata.js';
+import { oauthAuthorizationServerMetadataValidator } from './oauth-authorization-server-metadata.ts';
 
 /**
  * AT Protocol authorization server metadata with required fields and assertions.

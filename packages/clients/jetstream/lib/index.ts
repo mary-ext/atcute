@@ -1,3 +1,3 @@
-export * from './subscription.js';
-export * from './types.js';
-export * from './typedefs.js';
+export * from './subscription.ts';
+export * from './types.ts';
+export * from './typedefs.ts';

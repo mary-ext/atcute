@@ -1,7 +1,7 @@
 import { toBase58Btc } from '@atcute/multibase';
 import { concat } from '@atcute/uint8array';
 
-import type { PrivateKey } from './types.js';
+import type { PrivateKey } from './types.ts';
 
 // -- Cryptographic commons --
 

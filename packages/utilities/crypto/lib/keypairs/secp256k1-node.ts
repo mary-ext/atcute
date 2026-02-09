@@ -12,7 +12,7 @@ import { promisify } from 'node:util';
 
 import { toBase16 } from '@atcute/multibase';
 
-import type { DidKeyString, PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.js';
+import type { DidKeyString, PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.ts';
 import {
 	assertUnreachable,
 	checkKeypairRelationship,
@@ -20,7 +20,7 @@ import {
 	isSignatureNormalized,
 	normalizeSignature,
 	toMultikey,
-} from '../utils.js';
+} from '../utils.ts';
 
 // Reference: https://atproto.com/specs/cryptography#public-key-encoding
 export const SECP256K1_PUBLIC_PREFIX = Uint8Array.from([0xe7, 0x01]);

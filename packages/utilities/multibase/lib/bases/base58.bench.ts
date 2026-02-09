@@ -1,6 +1,6 @@
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
-import { fromBase58Btc, toBase58Btc } from './base58.js';
+import { fromBase58Btc, toBase58Btc } from './base58.ts';
 
 summary(() => {
 	bench('fromBase58Btc', () => {

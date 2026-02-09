@@ -1,8 +1,8 @@
 import * as v from '@badrap/valita';
 
-import { oauthClientIdSchema } from './oauth-client-id.js';
-import { httpsUriSchema } from './uri.js';
-import { extractUrlPath, isHostnameIP } from './utils.js';
+import { oauthClientIdSchema } from './oauth-client-id.ts';
+import { httpsUriSchema } from './uri.ts';
+import { extractUrlPath, isHostnameIP } from './utils.ts';
 
 /**
  * @see {@link https://www.ietf.org/archive/id/draft-ietf-oauth-client-id-metadata-document-00.html}

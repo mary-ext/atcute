@@ -1,9 +1,9 @@
-import { getGenerateAlgorithm } from '../internal/crypto.js';
-import { exportPrivateJwkFromKey, isSigningAlgorithm } from '../internal/jwk.js';
-import { setCachedKeyMaterial } from '../internal/key-cache.js';
-import type { SigningAlgorithm } from '../jwk/types.js';
+import { getGenerateAlgorithm } from '../internal/crypto.ts';
+import { exportPrivateJwkFromKey, isSigningAlgorithm } from '../internal/jwk.ts';
+import { setCachedKeyMaterial } from '../internal/key-cache.ts';
+import type { SigningAlgorithm } from '../jwk/types.ts';
 
-import type { DpopPrivateJwk } from './types.js';
+import type { DpopPrivateJwk } from './types.ts';
 
 /**
  * preferred algorithm order for DPoP key generation.

@@ -1,7 +1,7 @@
 import type { AtprotoAudience, AtprotoDid, Did } from '@atcute/lexicons/syntax';
 
-import { isPlcDid } from './methods/plc.js';
-import { isAtprotoWebDid } from './methods/web.js';
+import { isPlcDid } from './methods/plc.ts';
+import { isAtprotoWebDid } from './methods/web.ts';
 
 const FRAGMENT_RE = /^(?:[A-Za-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})*$/;
 

@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ChatBskyConvoDefs from './defs.js';
+import * as ChatBskyConvoDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.convo.sendMessage', {
 	params: null,

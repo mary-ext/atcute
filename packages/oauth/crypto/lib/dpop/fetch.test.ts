@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { createDpopFetch } from './fetch.js';
-import { generateDpopKey } from './generate-key.js';
-import type { DpopNonceCache } from './types.js';
+import { createDpopFetch } from './fetch.ts';
+import { generateDpopKey } from './generate-key.ts';
+import type { DpopNonceCache } from './types.ts';
 
 const createMemoryNonceCache = (): DpopNonceCache => {
 	const map = new Map<string, string>();

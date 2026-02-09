@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyEmbedExternal from '../embed/external.js';
+import * as AppBskyEmbedExternal from '../embed/external.ts';
 
 const _liveSchema = /*#__PURE__*/ v.literal('app.bsky.actor.status#live');
 const _mainSchema = /*#__PURE__*/ v.record(

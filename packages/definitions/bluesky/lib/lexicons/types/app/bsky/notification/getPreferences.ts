@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyNotificationDefs from './defs.js';
+import * as AppBskyNotificationDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.getPreferences', {
 	params: /*#__PURE__*/ v.object({}),

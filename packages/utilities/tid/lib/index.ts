@@ -2,7 +2,7 @@ import { now as getNow } from '@atcute/time-ms';
 
 import { random } from '#platform/random';
 
-import { s32decode, s32encode } from './s32.js';
+import { s32decode, s32encode } from './s32.ts';
 
 let lastTimestamp = 0;
 let lastCurrentTime = 0;

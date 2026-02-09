@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { jwkPubSchema, jwkSchema, type Jwk, type JwkPub } from './jwk.js';
+import { jwkPubSchema, jwkSchema, type Jwk, type JwkPub } from './jwk.ts';
 
 /** JWKS (JSON Web Key Set) */
 export const jwksSchema = v.object({

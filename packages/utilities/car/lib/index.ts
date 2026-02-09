@@ -1,8 +1,8 @@
 // implements github:darobin/dasl.ing@cc66c35 (2025-10-20)
 
-export * from './reader.js';
-export * from './streamed-reader.js';
+export * from './reader.ts';
+export * from './streamed-reader.ts';
 
-export * from './writer.js';
+export * from './writer.ts';
 
-export * from './types.js';
+export * from './types.ts';

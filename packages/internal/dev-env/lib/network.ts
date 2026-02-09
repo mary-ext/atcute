@@ -1,6 +1,6 @@
-import { TestPdsServer, type PdsServerOptions } from './pds.js';
-import { TestPlcServer, type PlcServerOptions } from './plc.js';
-import { mockNetworkUtilities } from './utils.js';
+import { TestPdsServer, type PdsServerOptions } from './pds.ts';
+import { TestPlcServer, type PlcServerOptions } from './plc.ts';
+import { mockNetworkUtilities } from './utils.ts';
 
 export type NetworkConfig = {
 	pds: Partial<PdsServerOptions>;

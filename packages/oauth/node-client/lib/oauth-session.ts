@@ -3,10 +3,10 @@ import type { Did } from '@atcute/lexicons';
 import { createDpopFetch } from '@atcute/oauth-crypto';
 import type { AtprotoOAuthScope } from '@atcute/oauth-types';
 
-import { TokenInvalidError, TokenRevokedError } from './errors.js';
-import type { OAuthServerAgent } from './oauth-server-agent.js';
-import type { SessionGetter } from './session-getter.js';
-import type { TokenSet } from './types/token-set.js';
+import { TokenInvalidError, TokenRevokedError } from './errors.ts';
+import type { OAuthServerAgent } from './oauth-server-agent.ts';
+import type { SessionGetter } from './session-getter.ts';
+import type { TokenSet } from './types/token-set.ts';
 
 /**
  * token information for external use.

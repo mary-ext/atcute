@@ -35,10 +35,10 @@ export {
 	type OAuthClientStores,
 	type PublicOAuthClientOptions,
 	type RestoreOptions,
-} from './oauth-client.js';
+} from './oauth-client.ts';
 
-export { OAuthSession } from './oauth-session.js';
-export type { SessionEvent, SessionEventListener } from './session-getter.js';
+export { OAuthSession } from './oauth-session.ts';
+export type { SessionEvent, SessionEventListener } from './session-getter.ts';
 
 export {
 	AuthMethodUnsatisfiableError,
@@ -48,19 +48,19 @@ export {
 	TokenInvalidError,
 	TokenRefreshError,
 	TokenRevokedError,
-} from './errors.js';
+} from './errors.ts';
 
-export type { LockFunction } from './utils/lock.js';
-export { MemoryStore } from './utils/memory-store.js';
-export type { Store } from './utils/store.js';
+export type { LockFunction } from './utils/lock.ts';
+export { MemoryStore } from './utils/memory-store.ts';
+export type { Store } from './utils/store.ts';
 
-export type { AuthorizationServerMetadataCache } from './resolvers/authorization-server-metadata.js';
-export type { ProtectedResourceMetadataCache } from './resolvers/protected-resource-metadata.js';
+export type { AuthorizationServerMetadataCache } from './resolvers/authorization-server-metadata.ts';
+export type { ProtectedResourceMetadataCache } from './resolvers/protected-resource-metadata.ts';
 export type {
 	ClientAuthMethod,
 	ConfidentialClientAuthMethod,
 	PublicClientAuthMethod,
-} from './oauth-client-auth.js';
-export type { SessionStore, StoredSession } from './types/sessions.js';
-export type { StateStore, StoredState } from './types/states.js';
-export type { TokenSet } from './types/token-set.js';
+} from './oauth-client-auth.ts';
+export type { SessionStore, StoredSession } from './types/sessions.ts';
+export type { StateStore, StoredState } from './types/states.ts';
+export type { TokenSet } from './types/token-set.ts';

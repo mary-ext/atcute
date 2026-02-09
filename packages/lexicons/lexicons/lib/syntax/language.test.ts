@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isLanguageCode } from './language.js';
+import { isLanguageCode } from './language.ts';
 
 describe('language code validation', () => {
 	it('validates language code', () => {

@@ -5,13 +5,13 @@ import type { OAuthAuthorizationServerMetadata, OAuthPrompt } from '@atcute/oaut
 
 import { nanoid } from 'nanoid';
 
-import { CLIENT_ID, database, REDIRECT_URI } from '../environment.js';
-import { AuthorizationError, LoginError } from '../errors.js';
-import { resolveFromIdentifier, resolveFromService } from '../resolvers.js';
-import type { Session } from '../types/token.js';
+import { CLIENT_ID, database, REDIRECT_URI } from '../environment.ts';
+import { AuthorizationError, LoginError } from '../errors.ts';
+import { resolveFromIdentifier, resolveFromService } from '../resolvers.ts';
+import type { Session } from '../types/token.ts';
 
-import { OAuthServerAgent } from './server-agent.js';
-import { storeSession } from './sessions.js';
+import { OAuthServerAgent } from './server-agent.ts';
+import { storeSession } from './sessions.ts';
 
 export type AuthorizeTargetOptions =
 	| { type: 'account'; identifier: ActorIdentifier }

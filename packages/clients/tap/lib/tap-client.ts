@@ -1,10 +1,10 @@
 import { defs as identityDefs, type DidDocument } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons';
 
-import { TapSubscription } from './tap-subscription.js';
-import { repoInfoSchema } from './typedefs.js';
-import type { RepoInfo, TapClientOptions, TapSubscribeOptions } from './types.js';
-import { formatAdminAuthHeader } from './utils.js';
+import { TapSubscription } from './tap-subscription.ts';
+import { repoInfoSchema } from './typedefs.ts';
+import type { RepoInfo, TapClientOptions, TapSubscribeOptions } from './types.ts';
+import { formatAdminAuthHeader } from './utils.ts';
 
 export class TapClient {
 	#url: URL;

@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ComWhtwndBlogDefs from './defs.js';
+import * as ComWhtwndBlogDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),

@@ -1,8 +1,8 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as PubLeafletPagesCanvas from './pages/canvas.js';
-import * as PubLeafletPagesLinearDocument from './pages/linearDocument.js';
+import * as PubLeafletPagesCanvas from './pages/canvas.ts';
+import * as PubLeafletPagesLinearDocument from './pages/linearDocument.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.content')),

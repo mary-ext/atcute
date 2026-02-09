@@ -4,12 +4,12 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyEmbedExternal from '../embed/external.js';
-import * as AppBskyEmbedImages from '../embed/images.js';
-import * as AppBskyEmbedRecord from '../embed/record.js';
-import * as AppBskyEmbedRecordWithMedia from '../embed/recordWithMedia.js';
-import * as AppBskyEmbedVideo from '../embed/video.js';
-import * as AppBskyRichtextFacet from '../richtext/facet.js';
+import * as AppBskyEmbedExternal from '../embed/external.ts';
+import * as AppBskyEmbedImages from '../embed/images.ts';
+import * as AppBskyEmbedRecord from '../embed/record.ts';
+import * as AppBskyEmbedRecordWithMedia from '../embed/recordWithMedia.ts';
+import * as AppBskyEmbedVideo from '../embed/video.ts';
+import * as AppBskyRichtextFacet from '../richtext/facet.ts';
 
 const _entitySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.post#entity')),

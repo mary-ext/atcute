@@ -9,8 +9,8 @@ import type {
 	XRPCSubscriptionMetadata,
 } from '@atcute/lexicons/validations';
 
-import type { Literal, Promisable } from '../../types/misc.js';
-import type { JSONResponse } from '../response.js';
+import type { Literal, Promisable } from '../../types/misc.ts';
+import type { JSONResponse } from '../response.ts';
 
 export type UnknownOperationContext = {
 	request: Request;

@@ -2,7 +2,7 @@ import { isNsid, type Nsid } from '@atcute/lexicons/syntax';
 
 import * as v from '@badrap/valita';
 
-import * as t from './types.js';
+import * as t from './types.ts';
 
 const integer = v
 	.number()

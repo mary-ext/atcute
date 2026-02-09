@@ -3,10 +3,10 @@ import { encodeUtf8 } from '@atcute/uint8array';
 
 import { describe, expect, it } from 'vitest';
 
-import { NodeStore } from './node-store.js';
-import { NodeWalker } from './node-walker.js';
-import { MSTNode } from './node.js';
-import { MemoryBlockStore } from './stores.js';
+import { NodeStore } from './node-store.ts';
+import { NodeWalker } from './node-walker.ts';
+import { MSTNode } from './node.ts';
+import { MemoryBlockStore } from './stores.ts';
 
 const createCid = async (data: string) => {
 	const bytes = encodeUtf8(data);

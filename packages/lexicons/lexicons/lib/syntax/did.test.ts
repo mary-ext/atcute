@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isDid } from './did.js';
+import { isDid } from './did.ts';
 
 describe('did validation', () => {
 	it('validates did', () => {

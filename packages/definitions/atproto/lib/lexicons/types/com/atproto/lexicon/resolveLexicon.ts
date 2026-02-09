@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ComAtprotoLexiconSchema from './schema.js';
+import * as ComAtprotoLexiconSchema from './schema.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.lexicon.resolveLexicon', {
 	params: /*#__PURE__*/ v.object({

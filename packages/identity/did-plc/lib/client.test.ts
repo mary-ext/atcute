@@ -3,9 +3,9 @@ import { TestPlcServer } from '@atcute/internal-dev-env';
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-import { PlcClient, PlcClientError } from './client.js';
-import type * as t from './types.js';
-import { deriveDidFromGenesisOp, signOperation } from './utils.js';
+import { PlcClient, PlcClientError } from './client.ts';
+import type * as t from './types.ts';
+import { deriveDidFromGenesisOp, signOperation } from './utils.ts';
 
 describe('PlcClient', () => {
 	let plc: TestPlcServer;

@@ -1,7 +1,7 @@
 import type { ActorResolver } from '@atcute/identity-resolver';
 
-import { createOAuthDatabase, type OAuthDatabase } from './store/db.js';
-import type { ClientAssertionFetcher } from './types/client-assertion.js';
+import { createOAuthDatabase, type OAuthDatabase } from './store/db.ts';
+import type { ClientAssertionFetcher } from './types/client-assertion.ts';
 
 export let CLIENT_ID: string;
 export let REDIRECT_URI: string;

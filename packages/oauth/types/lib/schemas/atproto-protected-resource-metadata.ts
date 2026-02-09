@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { oauthProtectedResourceMetadataValidator } from './oauth-protected-resource-metadata.js';
+import { oauthProtectedResourceMetadataValidator } from './oauth-protected-resource-metadata.ts';
 
 /**
  * AT Protocol protected resource metadata with required fields.

@@ -1,7 +1,7 @@
-import { exportPkcs8PrivateKey as exportPkcs8 } from '../internal/jwk.js';
-import { getCachedKeyMaterial } from '../internal/key-cache.js';
+import { exportPkcs8PrivateKey as exportPkcs8 } from '../internal/jwk.ts';
+import { getCachedKeyMaterial } from '../internal/key-cache.ts';
 
-import type { PrivateJwk } from './types.js';
+import type { PrivateJwk } from './types.ts';
 
 /**
  * exports a private JWK to PKCS8 PEM format.

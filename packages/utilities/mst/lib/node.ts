@@ -3,8 +3,8 @@ import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
 
-import { assertMstKey } from './key.js';
-import { isNodeData, type NodeData, type TreeEntry } from './types.js';
+import { assertMstKey } from './key.ts';
+import { isNodeData, type NodeData, type TreeEntry } from './types.ts';
 
 /**
  * represents a node in a Merkle Search Tree (MST)

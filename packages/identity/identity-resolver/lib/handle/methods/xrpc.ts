@@ -10,8 +10,8 @@ import {
 
 import * as v from '@badrap/valita';
 
-import * as err from '../../errors.js';
-import type { HandleResolver, ResolveHandleOptions } from '../../types.js';
+import * as err from '../../errors.ts';
+import type { HandleResolver, ResolveHandleOptions } from '../../types.ts';
 
 const response = v.object({
 	did: v.string().assert((input) => isAtprotoDid(input)),

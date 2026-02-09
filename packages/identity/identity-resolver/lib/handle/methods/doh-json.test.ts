@@ -5,9 +5,9 @@ import {
 	DidNotFoundError,
 	FailedHandleResolutionError,
 	InvalidResolvedHandleError,
-} from '../../errors.js';
+} from '../../errors.ts';
 
-import { DohJsonHandleResolver } from './doh-json.js';
+import { DohJsonHandleResolver } from './doh-json.ts';
 
 const DOH_URL = 'https://dns.resolver.com/dns-query';
 

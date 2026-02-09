@@ -1,4 +1,4 @@
-import type { SigningAlgorithm } from '../jwk/types.js';
+import type { SigningAlgorithm } from '../jwk/types.ts';
 
 const HASH_BY_ALG: Record<SigningAlgorithm, 'SHA-256' | 'SHA-384' | 'SHA-512'> = {
 	ES256: 'SHA-256',

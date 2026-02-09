@@ -1,7 +1,7 @@
 import * as v from '@badrap/valita';
 
-import { isOAuthScope } from './oauth-scope.js';
-import { isSpaceSeparatedValue } from './utils.js';
+import { isOAuthScope } from './oauth-scope.ts';
+import { isSpaceSeparatedValue } from './utils.ts';
 
 export const ATPROTO_SCOPE_VALUE = 'atproto';
 

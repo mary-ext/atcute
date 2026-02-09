@@ -1,7 +1,7 @@
 import type { CidLink } from '@atcute/cid';
 
-import type { NodeStore } from './node-store.js';
-import { NodeWalker } from './node-walker.js';
+import type { NodeStore } from './node-store.ts';
+import { NodeWalker } from './node-walker.ts';
 
 /**
  * Type of change to a record

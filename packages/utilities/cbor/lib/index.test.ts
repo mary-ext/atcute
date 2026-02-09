@@ -3,8 +3,8 @@ import { fromBase64, toBase16 } from '@atcute/multibase';
 
 import { describe, expect, it } from 'vitest';
 
-import { getOrderedObjectKeys } from './encode.js';
-import { decode, decodeFirst, encode, toBytes, toCidLink } from './index.js';
+import { getOrderedObjectKeys } from './encode.ts';
+import { decode, decodeFirst, encode, toBytes, toCidLink } from './index.ts';
 
 const utf8e = new TextEncoder();
 // const utf8d = new TextDecoder();

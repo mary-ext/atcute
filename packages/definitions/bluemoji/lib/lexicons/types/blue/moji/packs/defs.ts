@@ -4,8 +4,8 @@ import * as AppBskyRichtextFacet from '@atcute/bluesky/types/app/richtext/facet'
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as BlueMojiCollectionItem from '../collection/item.js';
-import * as BlueMojiRichtextFacet from '../richtext/facet.js';
+import * as BlueMojiCollectionItem from '../collection/item.ts';
+import * as BlueMojiRichtextFacet from '../richtext/facet.ts';
 
 const _packItemViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.packs.defs#packItemView')),

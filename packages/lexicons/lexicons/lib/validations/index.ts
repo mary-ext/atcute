@@ -3,13 +3,13 @@ import { isGraphemeLengthInRange } from '@atcute/util-text';
 
 import type { StandardSchemaV1 } from '@standard-schema/spec';
 
-import { _isBytesWrapper } from '../interfaces/bytes.js';
-import * as interfaces from '../interfaces/index.js';
-import * as syntax from '../syntax/index.js';
-import type { $type } from '../types/brand.js';
-import { assert } from '../utils.js';
+import { _isBytesWrapper } from '../interfaces/bytes.ts';
+import * as interfaces from '../interfaces/index.ts';
+import * as syntax from '../syntax/index.ts';
+import type { $type } from '../types/brand.ts';
+import { assert } from '../utils.ts';
 
-import { allowsEval, isArray, isObject, lazy, lazyProperty } from './utils.js';
+import { allowsEval, isArray, isObject, lazy, lazyProperty } from './utils.ts';
 
 /**
  * flag indicating whether xrpc schema generation helpers are used. set to true

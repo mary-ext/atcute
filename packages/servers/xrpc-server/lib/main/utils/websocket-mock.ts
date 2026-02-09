@@ -1,10 +1,10 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 
-import type { Promisable } from '../../types/misc.js';
-import type { XRPCRouter } from '../router.js';
-import type { WebSocketAdapter, WebSocketConnection } from '../types/websocket.js';
+import type { Promisable } from '../../types/misc.ts';
+import type { XRPCRouter } from '../router.ts';
+import type { WebSocketAdapter, WebSocketConnection } from '../types/websocket.ts';
 
-import { EventEmitter } from './event-emitter.js';
+import { EventEmitter } from './event-emitter.ts';
 
 interface WebSocketHandlerContext {
 	handler: ((ws: WebSocketConnection) => Promisable<void>) | null;

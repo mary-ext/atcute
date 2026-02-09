@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { PlcDidDocumentResolver } from './plc.js';
+import { PlcDidDocumentResolver } from './plc.ts';
 
 describe('PlcDidDocumentResolver', () => {
 	const EXAMPLE_DOCUMENT = {

@@ -1,9 +1,9 @@
 import type { Did } from '@atcute/lexicons';
 import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 
-import type { LegacyDpopKey } from '../utils/dpop-key.js';
+import type { LegacyDpopKey } from '../utils/dpop-key.ts';
 
-import type { PersistedAuthorizationServerMetadata } from './server.js';
+import type { PersistedAuthorizationServerMetadata } from './server.ts';
 
 export interface TokenInfo {
 	scope: string;

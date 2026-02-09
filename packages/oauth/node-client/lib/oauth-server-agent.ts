@@ -12,15 +12,15 @@ import {
 } from '@atcute/oauth-types';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
-import { JSON_MIME, PAR_RESPONSE_MAX_SIZE, TOKEN_RESPONSE_MAX_SIZE } from './constants.js';
-import { OAuthResponseError, TokenRefreshError } from './errors.js';
+import { JSON_MIME, PAR_RESPONSE_MAX_SIZE, TOKEN_RESPONSE_MAX_SIZE } from './constants.ts';
+import { OAuthResponseError, TokenRefreshError } from './errors.ts';
 import {
 	createClientAssertionFactory,
 	type ClientAuthMethod,
 	type ClientCredentialsFactory,
-} from './oauth-client-auth.js';
-import { OAuthResolver } from './resolvers/index.js';
-import type { TokenSet } from './types/token-set.js';
+} from './oauth-client-auth.ts';
+import { OAuthResolver } from './resolvers/index.ts';
+import type { TokenSet } from './types/token-set.ts';
 
 const processTokenResponse = pipe(
 	parseResponseAsJson(JSON_MIME, TOKEN_RESPONSE_MAX_SIZE),

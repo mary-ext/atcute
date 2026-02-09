@@ -2,9 +2,9 @@ import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyActorDefs from '../actor/defs.js';
-import * as AppBskyFeedDefs from '../feed/defs.js';
-import * as AppBskyRichtextFacet from '../richtext/facet.js';
+import * as AppBskyActorDefs from '../actor/defs.ts';
+import * as AppBskyFeedDefs from '../feed/defs.ts';
+import * as AppBskyRichtextFacet from '../richtext/facet.ts';
 
 const _curatelistSchema = /*#__PURE__*/ v.literal('app.bsky.graph.defs#curatelist');
 const _listItemViewSchema = /*#__PURE__*/ v.object({

@@ -1,6 +1,6 @@
 export * from '#keypairs/secp256k1';
-export * from './keypairs/p256.js';
+export * from './keypairs/p256.ts';
 
-export * from './multibase.js';
-export * from './signatures.js';
-export * from './types.js';
+export * from './multibase.ts';
+export * from './signatures.ts';
+export * from './types.ts';

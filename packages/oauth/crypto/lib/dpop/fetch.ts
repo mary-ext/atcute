@@ -1,7 +1,7 @@
-import { sha256Base64Url } from '../hash/sha256.js';
+import { sha256Base64Url } from '../hash/sha256.ts';
 
-import { createDpopProofSigner } from './proof.js';
-import type { DpopPrivateJwk, DpopNonceCache } from './types.js';
+import { createDpopProofSigner } from './proof.ts';
+import type { DpopPrivateJwk, DpopNonceCache } from './types.ts';
 
 export interface CreateDpopFetchOptions {
 	/** DPoP private key (JWK with `alg` set) */

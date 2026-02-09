@@ -5,10 +5,10 @@ import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { OAuthResponseError, TokenRefreshError } from './errors.js';
-import { OAuthServerAgent, type OAuthServerAgentOptions } from './oauth-server-agent.js';
-import type { OAuthResolver } from './resolvers/index.js';
-import { MemoryStore } from './utils/memory-store.js';
+import { OAuthResponseError, TokenRefreshError } from './errors.ts';
+import { OAuthServerAgent, type OAuthServerAgentOptions } from './oauth-server-agent.ts';
+import type { OAuthResolver } from './resolvers/index.ts';
+import { MemoryStore } from './utils/memory-store.ts';
 
 const createMockMetadata = (): AtprotoAuthorizationServerMetadata => ({
 	issuer: 'https://auth.example.com',

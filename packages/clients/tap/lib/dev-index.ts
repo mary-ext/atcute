@@ -1,4 +1,4 @@
-import { TapClient } from './tap-client.js';
+import { TapClient } from './tap-client.ts';
 
 const tap = new TapClient({ url: 'http://localhost:2480' });
 

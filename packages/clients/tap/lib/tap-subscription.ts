@@ -5,9 +5,9 @@ import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { ReadonlyDeep } from 'type-fest';
 
-import { flattenTapEvent, tapEventWireSchema } from './typedefs.js';
-import type { TapEvent, TapSubscribeOptions, TapSubscriptionMessage } from './types.js';
-import { formatAdminAuthHeader } from './utils.js';
+import { flattenTapEvent, tapEventWireSchema } from './typedefs.ts';
+import type { TapEvent, TapSubscribeOptions, TapSubscriptionMessage } from './types.ts';
+import { formatAdminAuthHeader } from './utils.ts';
 
 export interface TapSubscriptionOptions extends TapSubscribeOptions {
 	url: string;

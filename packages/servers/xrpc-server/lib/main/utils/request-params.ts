@@ -7,7 +7,7 @@ import {
 	type ValidationResult,
 } from '@atcute/lexicons/validations';
 
-import type { Literal } from '../../types/misc.js';
+import type { Literal } from '../../types/misc.ts';
 
 type MaybeArray<T> = T | T[];
 

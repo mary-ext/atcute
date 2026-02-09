@@ -1,3 +1,3 @@
-export * from './client.js';
-export * from './fetch-handler.js';
-export * from './credential-manager.js';
+export * from './client.ts';
+export * from './fetch-handler.ts';
+export * from './credential-manager.ts';

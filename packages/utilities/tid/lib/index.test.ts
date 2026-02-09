@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
-import * as TID from './index.js';
+import * as TID from './index.ts';
 
 afterEach(() => {
 	vi.useRealTimers();

@@ -6,14 +6,14 @@ import {
 	type SuiteConfigurations,
 	type SuiteScenarios,
 	type SuiteUsers,
-} from './_test-util/moderation-behavior.js';
+} from './_test-util/moderation-behavior.ts';
 import {
 	DisplayContext,
 	getDisplayRestrictions,
 	LabelPreference,
 	moderatePost,
 	moderateProfile,
-} from './index.js';
+} from './index.ts';
 
 const USERS: SuiteUsers = {
 	self: {

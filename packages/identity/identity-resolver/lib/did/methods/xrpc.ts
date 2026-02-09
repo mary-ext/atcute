@@ -10,8 +10,8 @@ import {
 
 import * as v from '@badrap/valita';
 
-import * as err from '../../errors.js';
-import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../../types.js';
+import * as err from '../../errors.ts';
+import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../../types.ts';
 
 const fetchXrpcHandler = pipe(
 	isResponseOk,

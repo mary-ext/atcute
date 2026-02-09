@@ -1,6 +1,6 @@
 import type { XRPCBlobBodyParam, XRPCLexBodyParam } from '@atcute/lexicons/validations';
 
-import type { Result } from '../../types/misc.js';
+import type { Result } from '../../types/misc.ts';
 
 const jsonMimeValidator = (() => {
 	const JSON_RE = /^\s*application\/json\s*(?:$|;)/;

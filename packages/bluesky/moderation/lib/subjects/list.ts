@@ -1,15 +1,15 @@
 import { parseCanonicalResourceUri } from '@atcute/lexicons';
 
-import { LabelTarget } from '../behaviors.js';
+import { LabelTarget } from '../behaviors.ts';
 import {
 	considerLabels,
 	createModerationDecision,
 	mergeModerationDecisions,
 	type ModerationDecision,
-} from '../decision.js';
-import type { ListSubject, ModerationOptions } from '../types.js';
+} from '../decision.ts';
+import type { ListSubject, ModerationOptions } from '../types.ts';
 
-import { moderateProfile } from './profile.js';
+import { moderateProfile } from './profile.ts';
 
 export const moderateList = (subject: ListSubject, opts: ModerationOptions): ModerationDecision => {
 	if ('creator' in subject) {

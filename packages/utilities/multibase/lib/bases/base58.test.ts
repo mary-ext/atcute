@@ -1,6 +1,6 @@
 import { expect, it, vi } from 'vitest';
 
-import { fromBase58Btc, toBase58Btc } from './base58.js';
+import { fromBase58Btc, toBase58Btc } from './base58.ts';
 
 vi.mock('@atcute/uint8array', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('@atcute/uint8array')>();

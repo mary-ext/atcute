@@ -5,7 +5,7 @@ import {
 	parseResourceUri,
 	isCanonicalResourceUri,
 	parseCanonicalResourceUri,
-} from './at-uri.js';
+} from './at-uri.ts';
 
 describe('resourceUri validation', () => {
 	it('validates at-uri', () => {

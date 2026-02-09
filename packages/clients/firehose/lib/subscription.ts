@@ -5,8 +5,8 @@ import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { ReadonlyDeep } from 'type-fest';
 
-import { addTypeToBody, decodeFrame } from './frame-decoder.js';
-import type { FirehoseSubscriptionOptions, MessageOf, ParamsOf } from './types.js';
+import { addTypeToBody, decodeFrame } from './frame-decoder.ts';
+import type { FirehoseSubscriptionOptions, MessageOf, ParamsOf } from './types.ts';
 
 /**
  * generic XRPC subscription client for AT Protocol

@@ -1,10 +1,10 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyEmbedExternal from './external.js';
-import * as AppBskyEmbedImages from './images.js';
-import * as AppBskyEmbedRecord from './record.js';
-import * as AppBskyEmbedVideo from './video.js';
+import * as AppBskyEmbedExternal from './external.ts';
+import * as AppBskyEmbedImages from './images.ts';
+import * as AppBskyEmbedRecord from './record.ts';
+import * as AppBskyEmbedVideo from './video.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.recordWithMedia')),

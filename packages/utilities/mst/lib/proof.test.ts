@@ -3,8 +3,8 @@ import { encodeUtf8 } from '@atcute/uint8array';
 
 import { describe, expect, it } from 'vitest';
 
-import { NodeStore } from './node-store.js';
-import { NodeWrangler } from './node-wrangler.js';
+import { NodeStore } from './node-store.ts';
+import { NodeWrangler } from './node-wrangler.ts';
 import {
 	buildExclusionProof,
 	buildInclusionProof,
@@ -12,8 +12,8 @@ import {
 	ProofError,
 	verifyExclusion,
 	verifyInclusion,
-} from './proof.js';
-import { MemoryBlockStore } from './stores.js';
+} from './proof.ts';
+import { MemoryBlockStore } from './stores.ts';
 
 const createCid = async (data: string) => {
 	const bytes = encodeUtf8(data);

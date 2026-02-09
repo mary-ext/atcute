@@ -1,16 +1,16 @@
 import type { AppBskyGraphDefs } from '@atcute/bluesky';
 import type { Did } from '@atcute/lexicons';
 
-import { DisplayContext, ModerationAction, type BehaviorMapping, type LabelTarget } from './behaviors.js';
-import type { KeywordFilter } from './keyword-filter.js';
+import { DisplayContext, ModerationAction, type BehaviorMapping, type LabelTarget } from './behaviors.ts';
+import type { KeywordFilter } from './keyword-filter.ts';
 import {
 	BUILTIN_LABELS,
 	isCustomLabelValue,
 	LabelFlags,
 	LabelPreference,
 	type InterpretedLabelDefinition,
-} from './label.js';
-import type { Label, LabelerPreference, ModerationOptions } from './types.js';
+} from './label.ts';
+import type { Label, LabelerPreference, ModerationOptions } from './types.ts';
 
 const enum ModerationSeverity {
 	High = 1,

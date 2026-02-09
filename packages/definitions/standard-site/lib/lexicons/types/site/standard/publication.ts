@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as SiteStandardThemeBasic from './theme/basic.js';
+import * as SiteStandardThemeBasic from './theme/basic.ts';
 
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),

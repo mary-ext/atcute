@@ -2,8 +2,8 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as PubLeafletPagesLinearDocument from './pages/linearDocument.js';
-import * as PubLeafletRichtextFacet from './richtext/facet.js';
+import * as PubLeafletPagesLinearDocument from './pages/linearDocument.ts';
+import * as PubLeafletRichtextFacet from './richtext/facet.ts';
 
 const _linearDocumentQuoteSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.comment#linearDocumentQuote')),

@@ -1,4 +1,4 @@
-import type { Promisable } from '../../types/misc.js';
+import type { Promisable } from '../../types/misc.ts';
 
 export interface WebSocketConnection {
 	signal: AbortSignal;

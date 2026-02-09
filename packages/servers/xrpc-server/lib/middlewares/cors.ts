@@ -1,4 +1,4 @@
-import type { FetchMiddleware } from '../main/router.js';
+import type { FetchMiddleware } from '../main/router.ts';
 
 export interface CORSOptions {
 	/** Additional headers to expose to the client */

@@ -21,7 +21,7 @@ import {
 	subscription,
 	token,
 	unknown,
-} from './builder.js';
+} from './builder.ts';
 
 describe('builder', () => {
 	describe('boolean', () => {

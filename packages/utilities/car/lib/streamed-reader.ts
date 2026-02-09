@@ -2,7 +2,7 @@ import * as CBOR from '@atcute/cbor';
 import type { Cid, CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 
-import { isCarV1Header, type CarEntry, type CarHeader } from './types.js';
+import { isCarV1Header, type CarEntry, type CarHeader } from './types.ts';
 
 export interface StreamedCarReader {
 	header(): Promise<CarHeader>;

@@ -3,10 +3,10 @@ import * as v from '@atcute/lexicons/validations';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { json } from './response.js';
-import { defaultNotFoundHandler, XRPCRouter } from './router.js';
-import { MockWebSocketAdapter } from './utils/websocket-mock.js';
-import { InvalidRequestError, XRPCSubscriptionError } from './xrpc-error.js';
+import { json } from './response.ts';
+import { defaultNotFoundHandler, XRPCRouter } from './router.ts';
+import { MockWebSocketAdapter } from './utils/websocket-mock.ts';
+import { InvalidRequestError, XRPCSubscriptionError } from './xrpc-error.ts';
 
 describe('XRPCRouter', () => {
 	describe('routing', () => {

@@ -2,8 +2,8 @@ import type { DidDocument } from '@atcute/identity';
 import { defs as identityDefs } from '@atcute/identity';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
-import * as defs from './typedefs.js';
-import * as t from './types.js';
+import * as defs from './typedefs.ts';
+import * as t from './types.ts';
 
 const MAX_RESPONSE_SIZE = 64 * 1024;
 

@@ -1,7 +1,7 @@
-export * from './response.js';
-export * from './router.js';
-export * from './xrpc-error.js';
-export * from './xrpc-handler.js';
+export * from './response.ts';
+export * from './router.ts';
+export * from './xrpc-error.ts';
+export * from './xrpc-handler.ts';
 
 export type {
 	ProcedureConfig,
@@ -13,5 +13,5 @@ export type {
 	SubscriptionConfig,
 	SubscriptionContext,
 	SubscriptionHandler,
-} from './types/operation.js';
-export * from './types/websocket.js';
+} from './types/operation.ts';
+export * from './types/websocket.ts';

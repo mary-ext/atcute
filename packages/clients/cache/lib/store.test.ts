@@ -3,7 +3,7 @@ import * as v from '@atcute/lexicons/validations';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { NormalizedCache } from './store.js';
+import { NormalizedCache } from './store.ts';
 
 // sample data from https://api.bsky.app/xrpc/app.bsky.feed.getFeed
 const sampleFeedResponse: AppBskyFeedGetFeed.$output = {

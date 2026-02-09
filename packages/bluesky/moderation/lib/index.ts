@@ -4,7 +4,7 @@ export {
 	ModerationAction,
 	type BehaviorMapping,
 	type LabelBehaviorMatrix,
-} from './behaviors.js';
+} from './behaviors.ts';
 export {
 	ModerationCauseType,
 	type BlockedByModerationCause,
@@ -16,7 +16,7 @@ export {
 	type MutedKeywordModerationCause,
 	type MutedPermanentModerationCause,
 	type MutedTemporaryModerationCause,
-} from './decision.js';
+} from './decision.ts';
 
 export {
 	createKeywordPattern,
@@ -25,7 +25,7 @@ export {
 	KeywordFilterFlags,
 	type KeywordFilter,
 	type KeywordMatch,
-} from './keyword-filter.js';
+} from './keyword-filter.ts';
 export {
 	BlurLevel,
 	interpretLabelerDefinition,
@@ -38,7 +38,7 @@ export {
 	type InterpretedLabelDefinition,
 	type InterpretedLabelMapping,
 	type LabelLocale,
-} from './label.js';
+} from './label.ts';
 
 export {
 	type FeedGeneratorSubject,
@@ -50,12 +50,12 @@ export {
 	type NotificationSubject,
 	type PostSubject,
 	type ProfileSubject,
-} from './types.js';
+} from './types.ts';
 
-export { getDisplayRestrictions, type DisplayRestrictions } from './ui.js';
+export { getDisplayRestrictions, type DisplayRestrictions } from './ui.ts';
 
-export { moderateFeedGenerator } from './subjects/feed-generator.js';
-export { moderateList } from './subjects/list.js';
-export { moderateNotification } from './subjects/notification.js';
-export { moderatePost } from './subjects/post.js';
-export { moderateProfile } from './subjects/profile.js';
+export { moderateFeedGenerator } from './subjects/feed-generator.ts';
+export { moderateList } from './subjects/list.ts';
+export { moderateNotification } from './subjects/notification.ts';
+export { moderatePost } from './subjects/post.ts';
+export { moderateProfile } from './subjects/profile.ts';

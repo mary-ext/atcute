@@ -5,9 +5,9 @@ import {
 	AuthorityNotFoundError,
 	FailedAuthorityResolutionError,
 	InvalidResolvedAuthorityError,
-} from '../errors.js';
+} from '../errors.ts';
 
-import { DohJsonLexiconAuthorityResolver } from './doh-json.js';
+import { DohJsonLexiconAuthorityResolver } from './doh-json.ts';
 
 const DOH_URL = 'https://dns.resolver.com/dns-query';
 

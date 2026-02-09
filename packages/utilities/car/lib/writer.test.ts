@@ -3,8 +3,8 @@ import { concat, encodeUtf8 } from '@atcute/uint8array';
 
 import { describe, expect, it } from 'vitest';
 
-import type { CarBlock } from './types.js';
-import { serializeCarEntry, serializeCarHeader, writeCarStream } from './writer.js';
+import type { CarBlock } from './types.ts';
+import { serializeCarEntry, serializeCarHeader, writeCarStream } from './writer.ts';
 
 describe('serializeCarHeader', () => {
 	it('should serialize a header with one root', async () => {

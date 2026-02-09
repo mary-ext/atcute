@@ -1,7 +1,7 @@
 import { createDpopProofSigner, sha256Base64Url, type DpopPrivateJwk } from '@atcute/oauth-crypto';
 
-import { database } from './environment.js';
-import { extractContentType } from './utils/response.js';
+import { database } from './environment.ts';
+import { extractContentType } from './utils/response.ts';
 
 export const createDPoPFetch = (dpopKey: DpopPrivateJwk, isAuthServer?: boolean): typeof fetch => {
 	const nonces = database.dpopNonces;

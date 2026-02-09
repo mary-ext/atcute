@@ -1,4 +1,4 @@
-import { lexiconConfigSchema, type LexiconConfig } from './config.js';
+import { lexiconConfigSchema, type LexiconConfig } from './config.ts';
 
 export type { LexiconConfig };
 

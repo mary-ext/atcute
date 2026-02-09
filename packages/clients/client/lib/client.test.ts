@@ -2,8 +2,8 @@ import * as v from '@atcute/lexicons/validations';
 
 import { assertType, describe, expect, it, vi } from 'vitest';
 
-import { Client, ClientValidationError } from './client.js';
-import type { FetchHandler } from './fetch-handler.js';
+import { Client, ClientValidationError } from './client.ts';
+import type { FetchHandler } from './fetch-handler.ts';
 
 const headersContaining = (expected: Record<string, string>) => ({
 	asymmetricMatch(actual: unknown) {

@@ -1,8 +1,8 @@
 import type { CidLink } from '@atcute/cid';
 
-import { NodeStore } from './node-store.js';
-import { MSTNode, getKeyHeight } from './node.js';
-import Stack from './utils/stack.js';
+import { NodeStore } from './node-store.ts';
+import { MSTNode, getKeyHeight } from './node.ts';
+import Stack from './utils/stack.ts';
 
 /**
  * represents a single frame in the NodeWalker traversal stack

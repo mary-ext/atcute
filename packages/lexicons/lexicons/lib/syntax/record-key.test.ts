@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isRecordKey } from './record-key.js';
+import { isRecordKey } from './record-key.ts';
 
 describe('record key validation', () => {
 	it('validates record key', () => {

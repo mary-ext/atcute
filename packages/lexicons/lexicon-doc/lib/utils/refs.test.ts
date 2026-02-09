@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import type { LexiconDoc } from '../types.js';
+import type { LexiconDoc } from '../types.ts';
 
-import { findExternalReferences, formatLexiconRef, parseLexiconRef } from './refs.js';
+import { findExternalReferences, formatLexiconRef, parseLexiconRef } from './refs.ts';
 
 describe('formatLexiconRef', () => {
 	it('formats nsid with main defId as bare nsid', () => {

@@ -2,9 +2,9 @@ import type { AtprotoProtectedResourceMetadata } from '@atcute/oauth-types';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { MemoryStore } from '../utils/memory-store.js';
+import { MemoryStore } from '../utils/memory-store.ts';
 
-import { ProtectedResourceMetadataResolver } from './protected-resource-metadata.js';
+import { ProtectedResourceMetadataResolver } from './protected-resource-metadata.ts';
 
 const createValidMetadata = (resource: string) =>
 	({

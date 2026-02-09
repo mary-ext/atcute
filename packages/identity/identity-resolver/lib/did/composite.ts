@@ -1,8 +1,8 @@
 import { extractDidMethod, type DidDocument } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons/syntax';
 
-import * as err from '../errors.js';
-import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../types.js';
+import * as err from '../errors.ts';
+import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../types.ts';
 
 export interface CompositeDidDocumentResolverOptions<M extends string> {
 	methods: { [K in M]: DidDocumentResolver<K> };

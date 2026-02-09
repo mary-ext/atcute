@@ -3,7 +3,7 @@ import { fromBase64 } from '@atcute/multibase';
 
 import { describe, expect, it } from 'vitest';
 
-import { fromStream, fromUint8Array, repoEntryTransform } from './index.js';
+import { fromStream, fromUint8Array, repoEntryTransform } from './index.ts';
 
 describe('fromUint8Array', () => {
 	it('decodes atproto car files', () => {

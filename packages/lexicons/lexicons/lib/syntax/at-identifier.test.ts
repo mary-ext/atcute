@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isActorIdentifier } from './at-identifier.js';
+import { isActorIdentifier } from './at-identifier.ts';
 
 describe('at-identifier validation', () => {
 	it('validates at-identifier', () => {

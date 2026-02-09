@@ -12,9 +12,9 @@ import {
 	object,
 	required,
 	string,
-} from './builder.js';
-import type * as t from './types.js';
-import { RecordValidator } from './validations.js';
+} from './builder.ts';
+import type * as t from './types.ts';
+import { RecordValidator } from './validations.ts';
 
 // shared test schemas
 const subjectRef = object({

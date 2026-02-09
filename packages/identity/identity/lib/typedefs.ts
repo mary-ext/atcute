@@ -2,7 +2,7 @@ import { isDid } from '@atcute/lexicons/syntax';
 
 import * as v from '@badrap/valita';
 
-import * as t from './types.js';
+import * as t from './types.ts';
 
 /** @deprecated */
 export const FRAGMENT_RE = /^#[^#]+$/;

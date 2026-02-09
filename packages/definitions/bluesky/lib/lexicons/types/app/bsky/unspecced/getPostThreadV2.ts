@@ -2,9 +2,9 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyFeedDefs from '../feed/defs.js';
+import * as AppBskyFeedDefs from '../feed/defs.ts';
 
-import * as AppBskyUnspeccedDefs from './defs.js';
+import * as AppBskyUnspeccedDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadV2', {
 	params: /*#__PURE__*/ v.object({

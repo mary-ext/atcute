@@ -2,8 +2,8 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as PubLeafletThemeBackgroundImage from './theme/backgroundImage.js';
-import * as PubLeafletThemeColor from './theme/color.js';
+import * as PubLeafletThemeBackgroundImage from './theme/backgroundImage.ts';
+import * as PubLeafletThemeColor from './theme/color.ts';
 
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),

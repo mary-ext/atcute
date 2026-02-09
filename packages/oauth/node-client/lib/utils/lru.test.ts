@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { LRUCache } from './lru.js';
+import { LRUCache } from './lru.ts';
 
 describe('LRUCache', () => {
 	describe('basic operations', () => {

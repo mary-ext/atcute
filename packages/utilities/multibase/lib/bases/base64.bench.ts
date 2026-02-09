@@ -1,8 +1,8 @@
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
-import { fromBase64 as fromBase64Node, toBase64 as toBase64Node } from './base64-node.js';
-import { fromBase64 as fromBase64Native, toBase64 as toBase64Native } from './base64-web-native.js';
-import { fromBase64 as fromBase64Polyfill, toBase64 as toBase64Polyfill } from './base64-web-polyfill.js';
+import { fromBase64 as fromBase64Node, toBase64 as toBase64Node } from './base64-node.ts';
+import { fromBase64 as fromBase64Native, toBase64 as toBase64Native } from './base64-web-native.ts';
+import { fromBase64 as fromBase64Polyfill, toBase64 as toBase64Polyfill } from './base64-web-polyfill.ts';
 
 summary(() => {
 	bench('Uint8Array.fromBase64', () => {

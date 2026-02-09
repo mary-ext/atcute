@@ -7,11 +7,11 @@ import { type InferValue } from '@optique/core/parser';
 import { command, constant } from '@optique/core/primitives';
 import pc from 'picocolors';
 
-import { generateLexiconApi, type ImportMapping } from '../codegen.js';
-import { loadConfig } from '../config.js';
-import { loadLexicons } from '../lexicon-loader.js';
-import { packageJsonSchema } from '../lexicon-metadata.js';
-import { sharedOptions } from '../shared-options.js';
+import { generateLexiconApi, type ImportMapping } from '../codegen.ts';
+import { loadConfig } from '../config.ts';
+import { loadLexicons } from '../lexicon-loader.ts';
+import { packageJsonSchema } from '../lexicon-metadata.ts';
+import { sharedOptions } from '../shared-options.ts';
 
 /**
  * resolves package imports to ImportMapping[]

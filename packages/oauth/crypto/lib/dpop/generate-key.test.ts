@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { generateDpopKey } from './generate-key.js';
+import { generateDpopKey } from './generate-key.ts';
 
 describe('generateDpopKey', () => {
 	it('should generate ES256 key by default', async () => {

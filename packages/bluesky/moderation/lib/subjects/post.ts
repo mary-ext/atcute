@@ -8,7 +8,7 @@ import {
 } from '@atcute/bluesky';
 import type { CanonicalResourceUri } from '@atcute/lexicons';
 
-import { LabelTarget } from '../behaviors.js';
+import { LabelTarget } from '../behaviors.ts';
 import {
 	considerBlockedBy,
 	considerBlocking,
@@ -19,12 +19,12 @@ import {
 	downgradeDecision,
 	mergeModerationDecisions,
 	type ModerationDecision,
-} from '../decision.js';
-import { matchesKeywordFilters } from '../internal/keyword-filter.js';
-import type { KeywordFilter } from '../keyword-filter.js';
-import type { ModerationOptions, PostSubject } from '../types.js';
+} from '../decision.ts';
+import { matchesKeywordFilters } from '../internal/keyword-filter.ts';
+import type { KeywordFilter } from '../keyword-filter.ts';
+import type { ModerationOptions, PostSubject } from '../types.ts';
 
-import { moderateProfile } from './profile.js';
+import { moderateProfile } from './profile.ts';
 
 export const moderatePost = (subject: PostSubject, opts: ModerationOptions) => {
 	return mergeModerationDecisions(

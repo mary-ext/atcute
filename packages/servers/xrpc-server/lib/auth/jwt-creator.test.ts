@@ -5,7 +5,7 @@ import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
 
 import { describe, expect, it } from 'vitest';
 
-import { createServiceJwt } from './jwt-creator.js';
+import { createServiceJwt } from './jwt-creator.ts';
 
 describe('createServiceJwt', () => {
 	const issuerDid: Did = 'did:web:issuer.example.com';

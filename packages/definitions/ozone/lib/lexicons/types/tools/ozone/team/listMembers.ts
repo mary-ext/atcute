@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ToolsOzoneTeamDefs from './defs.js';
+import * as ToolsOzoneTeamDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.team.listMembers', {
 	params: /*#__PURE__*/ v.object({

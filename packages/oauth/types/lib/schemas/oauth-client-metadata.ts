@@ -1,13 +1,13 @@
 import * as v from '@badrap/valita';
 
-import { jwksPubSchema } from './jwks.js';
-import { oauthClientIdSchema } from './oauth-client-id.js';
-import { oauthEndpointAuthMethodSchema } from './oauth-endpoint-auth-method.js';
-import { oauthGrantTypeSchema } from './oauth-grant-type.js';
-import { oauthRedirectUriSchema } from './oauth-redirect-uri.js';
-import { oauthResponseTypeSchema } from './oauth-response-type.js';
-import { oauthScopeSchema } from './oauth-scope.js';
-import { webUriSchema } from './uri.js';
+import { jwksPubSchema } from './jwks.ts';
+import { oauthClientIdSchema } from './oauth-client-id.ts';
+import { oauthEndpointAuthMethodSchema } from './oauth-endpoint-auth-method.ts';
+import { oauthGrantTypeSchema } from './oauth-grant-type.ts';
+import { oauthRedirectUriSchema } from './oauth-redirect-uri.ts';
+import { oauthResponseTypeSchema } from './oauth-response-type.ts';
+import { oauthScopeSchema } from './oauth-scope.ts';
+import { webUriSchema } from './uri.ts';
 
 const oauthApplicationTypeSchema = v.union(v.literal('web'), v.literal('native'));
 

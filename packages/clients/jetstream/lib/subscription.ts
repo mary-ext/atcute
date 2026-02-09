@@ -6,8 +6,8 @@ import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 import type { ReadonlyDeep } from 'type-fest';
 
-import { jetstreamEventSchema } from './typedefs.js';
-import type { JetstreamEvent, JetstreamProcedure } from './types.js';
+import { jetstreamEventSchema } from './typedefs.ts';
+import type { JetstreamEvent, JetstreamProcedure } from './types.ts';
 
 export interface JetstreamSubscriptionOptions {
 	url: string | string[];

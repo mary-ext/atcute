@@ -1,4 +1,4 @@
-import { createBtcBaseDecode, createBtcBaseEncode } from '../utils.js';
+import { createBtcBaseDecode, createBtcBaseEncode } from '../utils.ts';
 
 const BASE58BTC_CHARSET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 

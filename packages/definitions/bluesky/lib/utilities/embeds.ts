@@ -1,9 +1,9 @@
 import type { $type } from '@atcute/lexicons';
 
-import type * as AppBskyEmbedRecord from '../lexicons/types/app/bsky/embed/record.js';
-import type * as AppBskyEmbedRecordWithMedia from '../lexicons/types/app/bsky/embed/recordWithMedia.js';
-import type * as AppBskyFeedDefs from '../lexicons/types/app/bsky/feed/defs.js';
-import type * as AppBskyFeedPost from '../lexicons/types/app/bsky/feed/post.js';
+import type * as AppBskyEmbedRecord from '../lexicons/types/app/bsky/embed/record.ts';
+import type * as AppBskyEmbedRecordWithMedia from '../lexicons/types/app/bsky/embed/recordWithMedia.ts';
+import type * as AppBskyFeedDefs from '../lexicons/types/app/bsky/feed/defs.ts';
+import type * as AppBskyFeedPost from '../lexicons/types/app/bsky/feed/post.ts';
 
 /**
  * a union type of all possible raw embeds.

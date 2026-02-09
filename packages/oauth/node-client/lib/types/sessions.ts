@@ -1,10 +1,10 @@
 import type { Did } from '@atcute/lexicons';
 import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 
-import type { ClientAuthMethod } from '../oauth-client-auth.js';
-import type { Store } from '../utils/store.js';
+import type { ClientAuthMethod } from '../oauth-client-auth.ts';
+import type { Store } from '../utils/store.ts';
 
-import type { TokenSet } from './token-set.js';
+import type { TokenSet } from './token-set.ts';
 
 /**
  * stored session data, keyed by DID.

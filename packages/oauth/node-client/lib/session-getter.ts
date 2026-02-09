@@ -6,11 +6,11 @@ import {
 	TokenInvalidError,
 	TokenRefreshError,
 	TokenRevokedError,
-} from './errors.js';
-import type { OAuthServerFactory } from './oauth-server-factory.js';
-import type { SessionStore, StoredSession } from './types/sessions.js';
-import { CachedGetter, type GetCachedOptions } from './utils/cached-getter.js';
-import type { LockFunction } from './utils/lock.js';
+} from './errors.ts';
+import type { OAuthServerFactory } from './oauth-server-factory.ts';
+import type { SessionStore, StoredSession } from './types/sessions.ts';
+import { CachedGetter, type GetCachedOptions } from './utils/cached-getter.ts';
+import type { LockFunction } from './utils/lock.ts';
 
 export type { SessionStore, StoredSession };
 

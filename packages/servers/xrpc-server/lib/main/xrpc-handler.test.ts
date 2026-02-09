@@ -2,7 +2,7 @@ import * as v from '@atcute/lexicons/validations';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { createXrpcHandler } from './xrpc-handler.js';
+import { createXrpcHandler } from './xrpc-handler.ts';
 
 describe('createXrpcHandler', () => {
 	it('handles query requests', async () => {

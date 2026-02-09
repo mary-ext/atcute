@@ -6,7 +6,7 @@ import type { AtprotoDid } from '@atcute/lexicons/syntax';
 import { isNodeData, type NodeData } from '@atcute/mst';
 import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
 
-import { isCommit, type Commit } from './types.js';
+import { isCommit, type Commit } from './types.ts';
 
 type BlockMap = Map<string, Uint8Array>;
 

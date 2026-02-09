@@ -11,9 +11,9 @@ import type { AtprotoDid, Nsid } from '@atcute/lexicons/syntax';
 import { verifyRecord, type VerifiedRecord } from '@atcute/repo';
 import { FailedResponseError } from '@atcute/util-fetch';
 
-import { LEXICON_SCHEMA_COLLECTION } from '../constants.js';
-import * as err from '../errors.js';
-import type { ResolvedSchema, ResolveLexiconRecordOptions } from '../types.js';
+import { LEXICON_SCHEMA_COLLECTION } from '../constants.ts';
+import * as err from '../errors.ts';
+import type { ResolvedSchema, ResolveLexiconRecordOptions } from '../types.ts';
 
 export interface LexiconSchemaResolverOptions {
 	didDocumentResolver: DidDocumentResolver;

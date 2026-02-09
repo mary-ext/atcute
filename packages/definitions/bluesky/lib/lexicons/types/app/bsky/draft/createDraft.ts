@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyDraftDefs from './defs.js';
+import * as AppBskyDraftDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.draft.createDraft', {
 	params: null,

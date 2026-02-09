@@ -1,9 +1,9 @@
 import * as v from '@badrap/valita';
 
-import { oauthCodeChallengeMethodSchema } from './oauth-code-challenge-method.js';
-import { oauthIssuerIdentifierSchema } from './oauth-issuer-identifier.js';
-import { oauthPromptSchema } from './oauth-prompt.js';
-import { webUriSchema } from './uri.js';
+import { oauthCodeChallengeMethodSchema } from './oauth-code-challenge-method.ts';
+import { oauthIssuerIdentifierSchema } from './oauth-issuer-identifier.ts';
+import { oauthPromptSchema } from './oauth-prompt.ts';
+import { webUriSchema } from './uri.ts';
 
 /**
  * @see {@link https://datatracker.ietf.org/doc/html/rfc8414}

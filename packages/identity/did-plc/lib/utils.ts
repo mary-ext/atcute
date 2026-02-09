@@ -4,7 +4,7 @@ import { verifySigWithDidKey } from '@atcute/crypto';
 import { fromBase64Url, toBase32, toBase64Url } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
-import * as t from './types.js';
+import * as t from './types.ts';
 
 export const wrapHttpPrefix = (str: string): string => {
 	if (str.startsWith('http://') || str.startsWith('https://')) {

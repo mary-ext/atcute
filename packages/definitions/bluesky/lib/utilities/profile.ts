@@ -1,4 +1,4 @@
-import type { AppBskyActorDefs, ChatBskyActorDefs } from '../lexicons/index.js';
+import type { AppBskyActorDefs, ChatBskyActorDefs } from '../lexicons/index.ts';
 
 /**
  * a union type of all possible profile views.

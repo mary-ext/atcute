@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ToolsOzoneSafelinkDefs from './defs.js';
+import * as ToolsOzoneSafelinkDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.safelink.updateRule', {
 	params: null,

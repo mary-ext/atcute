@@ -2,7 +2,7 @@ import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyFeedDefs from '../feed/defs.js';
+import * as AppBskyFeedDefs from '../feed/defs.ts';
 
 const _bookmarkSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.bookmark.defs#bookmark')),

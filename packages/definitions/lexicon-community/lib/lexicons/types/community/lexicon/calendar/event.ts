@@ -2,10 +2,10 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as CommunityLexiconLocationAddress from '../location/address.js';
-import * as CommunityLexiconLocationFsq from '../location/fsq.js';
-import * as CommunityLexiconLocationGeo from '../location/geo.js';
-import * as CommunityLexiconLocationHthree from '../location/hthree.js';
+import * as CommunityLexiconLocationAddress from '../location/address.ts';
+import * as CommunityLexiconLocationFsq from '../location/fsq.ts';
+import * as CommunityLexiconLocationGeo from '../location/geo.ts';
+import * as CommunityLexiconLocationHthree from '../location/hthree.ts';
 
 const _cancelledSchema = /*#__PURE__*/ v.literal('community.lexicon.calendar.event#cancelled');
 const _hybridSchema = /*#__PURE__*/ v.literal('community.lexicon.calendar.event#hybrid');

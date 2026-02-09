@@ -1,7 +1,7 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ComAtprotoServerDefs from '../server/defs.js';
+import * as ComAtprotoServerDefs from '../server/defs.ts';
 
 const _accountViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.admin.defs#accountView')),

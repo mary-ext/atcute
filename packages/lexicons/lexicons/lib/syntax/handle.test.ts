@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isHandle } from './handle.js';
+import { isHandle } from './handle.ts';
 
 describe('handle validation', () => {
 	it('validates handle', () => {

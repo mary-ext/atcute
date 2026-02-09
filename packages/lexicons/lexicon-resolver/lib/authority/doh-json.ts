@@ -2,9 +2,9 @@ import { isAtprotoDid } from '@atcute/identity';
 import type { AtprotoDid, Nsid } from '@atcute/lexicons/syntax';
 import { type DohJsonTxtResult, fetchDohJsonTxt } from '@atcute/util-fetch';
 
-import * as err from '../errors.js';
-import type { LexiconAuthorityResolver, ResolveLexiconAuthorityOptions } from '../types.js';
-import { nsidToLookupDomain } from '../utils.js';
+import * as err from '../errors.ts';
+import type { LexiconAuthorityResolver, ResolveLexiconAuthorityOptions } from '../types.ts';
+import { nsidToLookupDomain } from '../utils.ts';
 
 const SUBDOMAIN = '_lexicon';
 const PREFIX = 'did=';

@@ -4,9 +4,9 @@ import { toSha256 } from '@atcute/uint8array';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import { describe, expect, it } from 'vitest';
 
-import { parseDidKey } from '../multibase.js';
+import { parseDidKey } from '../multibase.ts';
 
-import { Secp256k1PrivateKey, Secp256k1PrivateKeyExportable, Secp256k1PublicKey } from './secp256k1-node.js';
+import { Secp256k1PrivateKey, Secp256k1PrivateKeyExportable, Secp256k1PublicKey } from './secp256k1-node.ts';
 
 it('creates a valid keypair', async () => {
 	const keypair = await Secp256k1PrivateKeyExportable.createKeypair();

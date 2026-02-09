@@ -3,8 +3,8 @@ import { fromBase64 } from '@atcute/multibase';
 
 import { describe, expect, it } from 'vitest';
 
-import { fromUint8Array } from './reader.js';
-import { carEntryTransform, fromStream } from './streamed-reader.js';
+import { fromUint8Array } from './reader.ts';
+import { carEntryTransform, fromStream } from './streamed-reader.ts';
 
 describe('fromUint8Array', () => {
 	it('reads car files', () => {

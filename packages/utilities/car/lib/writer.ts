@@ -3,7 +3,7 @@ import type { CidLink } from '@atcute/cid';
 import { allocUnsafe } from '@atcute/uint8array';
 import * as varint from '@atcute/varint';
 
-import type { CarBlock } from './types.js';
+import type { CarBlock } from './types.ts';
 
 /**
  * encodes a number as an unsigned varint (variable-length integer)

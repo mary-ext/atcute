@@ -2,9 +2,9 @@ import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
 
 import { describe, expect, it, vi } from 'vitest';
 
-import { MemoryStore } from '../utils/memory-store.js';
+import { MemoryStore } from '../utils/memory-store.ts';
 
-import { AuthorizationServerMetadataResolver } from './authorization-server-metadata.js';
+import { AuthorizationServerMetadataResolver } from './authorization-server-metadata.ts';
 
 const createValidMetadata = (issuer: string) =>
 	({

@@ -1,13 +1,13 @@
-import { LabelTarget } from '../behaviors.js';
+import { LabelTarget } from '../behaviors.ts';
 import {
 	considerLabels,
 	createModerationDecision,
 	mergeModerationDecisions,
 	type ModerationDecision,
-} from '../decision.js';
-import type { ModerationOptions, NotificationSubject } from '../types.js';
+} from '../decision.ts';
+import type { ModerationOptions, NotificationSubject } from '../types.ts';
 
-import { moderateProfile } from './profile.js';
+import { moderateProfile } from './profile.ts';
 
 export const moderateNotification = (
 	subject: NotificationSubject,

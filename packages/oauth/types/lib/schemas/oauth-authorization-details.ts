@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { urlSchema } from './uri.js';
+import { urlSchema } from './uri.ts';
 
 /**
  * @see {@link https://datatracker.ietf.org/doc/html/rfc9396#section-2 | RFC 9396, Section 2}

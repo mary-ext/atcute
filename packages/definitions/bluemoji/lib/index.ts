@@ -1,1 +1,1 @@
-export * from './lexicons/index.js';
+export * from './lexicons/index.ts';

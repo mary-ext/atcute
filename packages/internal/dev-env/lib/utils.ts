@@ -1,7 +1,7 @@
 import type { IdResolver } from '@atproto/identity';
 import axios from 'axios';
 
-import type { TestPdsServer } from './pds.js';
+import type { TestPdsServer } from './pds.ts';
 
 export const mockNetworkUtilities = (pds: TestPdsServer) => {
 	mockResolvers(pds.ctx.idResolver, pds);

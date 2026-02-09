@@ -16,24 +16,24 @@ import {
 
 import { nanoid } from 'nanoid';
 
-import { OAuthCallbackError, TokenRevokedError } from './errors.js';
-import { OAuthServerAgent } from './oauth-server-agent.js';
-import { OAuthServerFactory } from './oauth-server-factory.js';
-import { OAuthSession } from './oauth-session.js';
+import { OAuthCallbackError, TokenRevokedError } from './errors.ts';
+import { OAuthServerAgent } from './oauth-server-agent.ts';
+import { OAuthServerFactory } from './oauth-server-factory.ts';
+import { OAuthSession } from './oauth-session.ts';
 import {
 	AuthorizationServerMetadataResolver,
 	type AuthorizationServerMetadataCache,
-} from './resolvers/authorization-server-metadata.js';
-import { OAuthResolver } from './resolvers/index.js';
+} from './resolvers/authorization-server-metadata.ts';
+import { OAuthResolver } from './resolvers/index.ts';
 import {
 	ProtectedResourceMetadataResolver,
 	type ProtectedResourceMetadataCache,
-} from './resolvers/protected-resource-metadata.js';
-import { SessionGetter, type SessionEventListener } from './session-getter.js';
-import type { SessionStore } from './types/sessions.js';
-import type { StateStore, StoredState } from './types/states.js';
-import type { LockFunction } from './utils/lock.js';
-import { MemoryStore } from './utils/memory-store.js';
+} from './resolvers/protected-resource-metadata.ts';
+import { SessionGetter, type SessionEventListener } from './session-getter.ts';
+import type { SessionStore } from './types/sessions.ts';
+import type { StateStore, StoredState } from './types/states.ts';
+import type { LockFunction } from './utils/lock.ts';
+import { MemoryStore } from './utils/memory-store.ts';
 
 export interface OAuthClientStores {
 	/** session store, keyed by DID */

@@ -1,1 +1,1 @@
-export * from './authority/node-dns.js';
+export * from './authority/node-dns.ts';

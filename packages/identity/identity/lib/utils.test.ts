@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { didDocument } from './typedefs.js';
+import { didDocument } from './typedefs.ts';
 import {
 	getAtprotoLabelerVerificationMaterial,
 	getAtprotoVerificationMaterial,
 	getLabelerEndpoint,
 	getPdsEndpoint,
-} from './utils.js';
+} from './utils.ts';
 
 const PRONOUNS_LABELER_DID_DOC = didDocument.parse({
 	'@context': [

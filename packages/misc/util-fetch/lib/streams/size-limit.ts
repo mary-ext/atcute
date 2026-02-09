@@ -1,4 +1,4 @@
-import * as err from '../errors.js';
+import * as err from '../errors.ts';
 
 export class SizeLimitStream extends TransformStream<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>> {
 	constructor(maxSize: number) {

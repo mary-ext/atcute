@@ -7,7 +7,7 @@ import {
 	toBase64Pad as toBase64PadNative,
 	toBase64Url as toBase64UrlNative,
 	toBase64UrlPad as toBase64UrlPadNative,
-} from './base64-web-native.js';
+} from './base64-web-native.ts';
 import {
 	fromBase64Pad as fromBase64PadPolyfill,
 	fromBase64 as fromBase64Polyfill,
@@ -17,7 +17,7 @@ import {
 	toBase64 as toBase64Polyfill,
 	toBase64UrlPad as toBase64UrlPadPolyfill,
 	toBase64Url as toBase64UrlPolyfill,
-} from './base64-web-polyfill.js';
+} from './base64-web-polyfill.ts';
 
 const HAS_NATIVE_SUPPORT = 'fromBase64' in Uint8Array;
 

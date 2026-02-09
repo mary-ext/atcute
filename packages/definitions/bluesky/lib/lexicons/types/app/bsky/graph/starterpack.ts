@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyRichtextFacet from '../richtext/facet.js';
+import * as AppBskyRichtextFacet from '../richtext/facet.ts';
 
 const _feedItemSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.starterpack#feedItem')),

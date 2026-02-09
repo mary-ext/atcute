@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { create, decode, fromString, toString } from './codec.js';
+import { create, decode, fromString, toString } from './codec.ts';
 
 describe('fromString', () => {
 	it('parses a CIDv1 string', () => {

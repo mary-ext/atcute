@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { MemoryStore } from './memory-store.js';
+import { MemoryStore } from './memory-store.ts';
 
 describe('MemoryStore', () => {
 	describe('basic operations', () => {

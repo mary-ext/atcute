@@ -1,16 +1,16 @@
 import type { Keyset } from '@atcute/oauth-keyset';
 
-import { FALLBACK_ALG } from './constants.js';
+import { FALLBACK_ALG } from './constants.ts';
 import {
 	confidentialClientMetadataSchema,
 	type ConfidentialClientMetadata,
-} from './schemas/atcute-confidential-client-metadata.js';
+} from './schemas/atcute-confidential-client-metadata.ts';
 import {
 	publicClientMetadataSchema,
 	type PublicClientMetadata,
-} from './schemas/atcute-public-client-metadata.js';
-import { DEFAULT_ATPROTO_OAUTH_SCOPE } from './schemas/atproto-oauth-scope.js';
-import type { OAuthClientMetadata } from './schemas/oauth-client-metadata.js';
+} from './schemas/atcute-public-client-metadata.ts';
+import { DEFAULT_ATPROTO_OAUTH_SCOPE } from './schemas/atproto-oauth-scope.ts';
+import type { OAuthClientMetadata } from './schemas/oauth-client-metadata.ts';
 
 /**
  * builds an atproto client metadata for a confidential client.

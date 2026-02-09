@@ -1,11 +1,11 @@
-export { createDpopFetch } from './fetch.js';
-export { generateDpopKey } from './generate-key.js';
-export { createDpopProofSigner } from './proof.js';
-export type { DpopNonceCache, DpopPrivateJwk } from './types.js';
+export { createDpopFetch } from './fetch.ts';
+export { generateDpopKey } from './generate-key.ts';
+export { createDpopProofSigner } from './proof.ts';
+export type { DpopNonceCache, DpopPrivateJwk } from './types.ts';
 export {
 	DpopVerifyError,
 	verifyDpopProof,
 	type DpopClaims,
 	type DpopVerifyOptions,
 	type DpopVerifyResult,
-} from './verify.js';
+} from './verify.ts';

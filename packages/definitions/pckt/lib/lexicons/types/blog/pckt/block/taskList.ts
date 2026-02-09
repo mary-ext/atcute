@@ -1,7 +1,7 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as BlogPcktBlockTaskItem from './taskItem.js';
+import * as BlogPcktBlockTaskItem from './taskItem.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.taskList')),

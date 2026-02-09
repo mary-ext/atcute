@@ -9,8 +9,8 @@ import {
 	REF_RE,
 	validateRecordKey,
 	validateStringFormat,
-} from './internal/validation.js';
-import type * as t from './types.js';
+} from './internal/validation.ts';
+import type * as t from './types.ts';
 
 export interface RefineIssue {
 	message: string;

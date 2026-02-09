@@ -2,7 +2,7 @@ import { parse } from '@atcute/lexicons';
 
 import { describe, it } from 'vitest';
 
-import { AppBskyFeedDefs, AppBskyFeedPost } from './lexicons/index.js';
+import { AppBskyFeedDefs, AppBskyFeedPost } from './lexicons/index.ts';
 
 describe('app.bsky.feed.post', () => {
 	it('validates post record', () => {

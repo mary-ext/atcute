@@ -2,7 +2,7 @@ import * as ipld from '@ipld/dag-cbor';
 import * as cborx from 'cbor-x/index-no-eval'; // doesn't do new Function nor native acceleration
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
-import * as atcute from './index.js';
+import * as atcute from './index.ts';
 
 const getBuffer = () =>
 	new Uint8Array([

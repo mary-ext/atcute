@@ -1,1 +1,1 @@
-export * from './did/methods/node.js';
+export * from './did/methods/node.ts';

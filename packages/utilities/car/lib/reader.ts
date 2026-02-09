@@ -3,7 +3,7 @@ import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import * as varint from '@atcute/varint';
 
-import { isCarV1Header, type CarEntry, type CarHeader } from './types.js';
+import { isCarV1Header, type CarEntry, type CarHeader } from './types.ts';
 
 interface SyncByteReader {
 	readonly pos: number;

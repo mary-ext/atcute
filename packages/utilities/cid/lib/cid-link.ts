@@ -1,6 +1,6 @@
 import { toBase32 } from '@atcute/multibase';
 
-import { CID_STRINGIFY_CACHE, decode, fromString, type Cid } from './codec.js';
+import { CID_STRINGIFY_CACHE, decode, fromString, type Cid } from './codec.ts';
 
 const CID_LINK_SYMBOL = Symbol.for('@atcute/cid-link-wrapper');
 

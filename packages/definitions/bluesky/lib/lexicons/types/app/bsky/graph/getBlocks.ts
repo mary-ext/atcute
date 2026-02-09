@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyActorDefs from '../actor/defs.js';
+import * as AppBskyActorDefs from '../actor/defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getBlocks', {
 	params: /*#__PURE__*/ v.object({

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { WebDidDocumentResolver } from './web.js';
+import { WebDidDocumentResolver } from './web.ts';
 
 describe('WebDidDocumentResolver', () => {
 	const EXAMPLE_DOCUMENT = {

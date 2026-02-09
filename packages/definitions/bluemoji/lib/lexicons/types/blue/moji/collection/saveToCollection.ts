@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as BlueMojiCollectionItem from './item.js';
+import * as BlueMojiCollectionItem from './item.ts';
 
 const _mainSchema = /*#__PURE__*/ v.procedure('blue.moji.collection.saveToCollection', {
 	params: null,

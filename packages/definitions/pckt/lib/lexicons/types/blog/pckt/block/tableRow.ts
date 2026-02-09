@@ -1,8 +1,8 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as BlogPcktBlockTableCell from './tableCell.js';
-import * as BlogPcktBlockTableHeader from './tableHeader.js';
+import * as BlogPcktBlockTableCell from './tableCell.ts';
+import * as BlogPcktBlockTableHeader from './tableHeader.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.tableRow')),

@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { isLastOccurrence } from './utils.js';
+import { isLastOccurrence } from './utils.ts';
 
 // key usage constants
 const PUBLIC_KEY_USAGE = ['verify', 'encrypt', 'wrapKey'] as const;

@@ -1,4 +1,4 @@
-import { LabelTarget } from '../behaviors.js';
+import { LabelTarget } from '../behaviors.ts';
 import {
 	considerBlockedBy,
 	considerBlocking,
@@ -6,8 +6,8 @@ import {
 	considerPermanentMute,
 	createModerationDecision,
 	type ModerationDecision,
-} from '../decision.js';
-import type { ModerationOptions, ProfileSubject } from '../types.js';
+} from '../decision.ts';
+import type { ModerationOptions, ProfileSubject } from '../types.ts';
 
 export const moderateProfile = (subject: ProfileSubject, opts: ModerationOptions): ModerationDecision => {
 	const decision = createModerationDecision(subject.did, opts);

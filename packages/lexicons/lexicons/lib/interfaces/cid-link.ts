@@ -1,4 +1,4 @@
-import { isCid, type Cid } from '../syntax/cid.js';
+import { isCid, type Cid } from '../syntax/cid.ts';
 
 /**
  * represents a content identifier (CID) reference

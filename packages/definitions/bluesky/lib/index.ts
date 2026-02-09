@@ -1,6 +1,6 @@
-export * from './lexicons/index.js';
+export * from './lexicons/index.ts';
 
-export * from './utilities/embeds.js';
-export * from './utilities/list.js';
-export * from './utilities/profile.js';
-export * from './utilities/starterpack.js';
+export * from './utilities/embeds.ts';
+export * from './utilities/list.ts';
+export * from './utilities/profile.ts';
+export * from './utilities/starterpack.ts';

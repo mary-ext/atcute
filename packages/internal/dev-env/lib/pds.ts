@@ -7,7 +7,7 @@ import * as pds from '@atproto/pds';
 import getPort from 'get-port';
 import * as ui8 from 'uint8arrays';
 
-import { ADMIN_PASSWORD, JWT_SECRET } from './constants.js';
+import { ADMIN_PASSWORD, JWT_SECRET } from './constants.ts';
 
 export interface PdsServerOptions extends Partial<pds.ServerEnvironment> {
 	didPlcUrl: string;

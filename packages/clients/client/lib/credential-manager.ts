@@ -2,9 +2,9 @@ import type { ComAtprotoServerCreateSession } from '@atcute/atproto';
 import { getPdsEndpoint, type DidDocument } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons';
 
-import { Client, ClientResponseError, isXRPCErrorPayload, ok } from './client.js';
-import { simpleFetchHandler, type FetchHandlerObject } from './fetch-handler.js';
-import { decodeJwt } from './utils/jwt.js';
+import { Client, ClientResponseError, isXRPCErrorPayload, ok } from './client.ts';
+import { simpleFetchHandler, type FetchHandlerObject } from './fetch-handler.ts';
+import { decodeJwt } from './utils/jwt.ts';
 
 /**
  * represents the decoded access token, for convenience

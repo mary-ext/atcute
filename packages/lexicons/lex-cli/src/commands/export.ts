@@ -10,9 +10,9 @@ import { command, constant } from '@optique/core/primitives';
 import pc from 'picocolors';
 import prettier from 'prettier';
 
-import { loadConfig, type ExportConfig, type NormalizedConfig } from '../config.js';
-import { loadLexicons } from '../lexicon-loader.js';
-import { sharedOptions } from '../shared-options.js';
+import { loadConfig, type ExportConfig, type NormalizedConfig } from '../config.ts';
+import { loadLexicons } from '../lexicon-loader.ts';
+import { sharedOptions } from '../shared-options.ts';
 
 export const exportCommandSchema = command(
 	'export',

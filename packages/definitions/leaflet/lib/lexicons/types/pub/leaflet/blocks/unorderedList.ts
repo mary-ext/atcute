@@ -1,9 +1,9 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as PubLeafletBlocksHeader from './header.js';
-import * as PubLeafletBlocksImage from './image.js';
-import * as PubLeafletBlocksText from './text.js';
+import * as PubLeafletBlocksHeader from './header.ts';
+import * as PubLeafletBlocksImage from './image.ts';
+import * as PubLeafletBlocksText from './text.ts';
 
 const _listItemSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.unorderedList#listItem')),

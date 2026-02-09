@@ -5,7 +5,7 @@ import {
 	type XRPCSubscriptionMetadata,
 } from '@atcute/lexicons/validations';
 
-import type { Literal, Promisable } from '../types/misc.js';
+import type { Literal, Promisable } from '../types/misc.ts';
 
 import type {
 	ProcedureConfig,
@@ -13,15 +13,15 @@ import type {
 	SubscriptionConfig,
 	UnknownOperationContext,
 	UnknownSubscriptionContext,
-} from './types/operation.js';
-import type { WebSocketAdapter } from './types/websocket.js';
-import { encodeErrorFrame, encodeMessageFrame, extractMessageType, omitMessageType } from './utils/frames.js';
-import { createAsyncMiddlewareRunner, type Middleware } from './utils/middlewares.js';
-import { unwrapLxm, type Namespaced } from './utils/namespaced.js';
-import { constructMimeValidator } from './utils/request-input.js';
-import { constructParamsHandler } from './utils/request-params.js';
-import { invalidRequest, validationError } from './utils/response.js';
-import { XRPCError, XRPCSubscriptionError } from './xrpc-error.js';
+} from './types/operation.ts';
+import type { WebSocketAdapter } from './types/websocket.ts';
+import { encodeErrorFrame, encodeMessageFrame, extractMessageType, omitMessageType } from './utils/frames.ts';
+import { createAsyncMiddlewareRunner, type Middleware } from './utils/middlewares.ts';
+import { unwrapLxm, type Namespaced } from './utils/namespaced.ts';
+import { constructMimeValidator } from './utils/request-input.ts';
+import { constructParamsHandler } from './utils/request-params.ts';
+import { invalidRequest, validationError } from './utils/response.ts';
+import { XRPCError, XRPCSubscriptionError } from './xrpc-error.ts';
 
 type InternalRequestContext = {
 	url: URL;

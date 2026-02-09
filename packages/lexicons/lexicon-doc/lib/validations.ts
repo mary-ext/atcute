@@ -13,9 +13,9 @@ import {
 	refineLexRefUnion,
 	refineLexString,
 	type RefineIssue,
-} from './refinements.js';
-import type * as t from './types.js';
-import { formatLexiconRef, parseLexiconRef, type ParsedLexiconRef } from './utils/refs.js';
+} from './refinements.ts';
+import type * as t from './types.ts';
+import { formatLexiconRef, parseLexiconRef, type ParsedLexiconRef } from './utils/refs.ts';
 
 export interface RecordValidatorInput {
 	key: string | null;

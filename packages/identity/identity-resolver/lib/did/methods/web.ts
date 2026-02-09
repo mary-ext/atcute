@@ -2,9 +2,9 @@ import { webDidToDocumentUrl, type DidDocument } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons/syntax';
 import { FailedResponseError } from '@atcute/util-fetch';
 
-import * as err from '../../errors.js';
-import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../../types.js';
-import { fetchDocHandler } from '../utils.js';
+import * as err from '../../errors.ts';
+import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../../types.ts';
+import { fetchDocHandler } from '../utils.ts';
 
 export interface WebDidDocumentResolverOptions {
 	fetch?: typeof fetch;

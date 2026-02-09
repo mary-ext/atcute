@@ -2,9 +2,9 @@ import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 
 import { expect } from 'vitest';
 
-import { LabelPreference, type DisplayRestrictions, type ModerationOptions } from '../index.js';
+import { LabelPreference, type DisplayRestrictions, type ModerationOptions } from '../index.ts';
 
-import * as m from './mock.js';
+import * as m from './mock.ts';
 
 export type ModerationTestSuiteResultFlag = 'filter' | 'blur' | 'alert' | 'inform' | 'noOverride';
 

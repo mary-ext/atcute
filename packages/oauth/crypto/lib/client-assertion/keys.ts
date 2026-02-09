@@ -1,8 +1,8 @@
-import { exportPrivateJwkFromKey, importPkcs8PrivateKey } from '../internal/jwk.js';
-import { setCachedKeyMaterial } from '../internal/key-cache.js';
-import type { SigningAlgorithm } from '../jwk/types.js';
+import { exportPrivateJwkFromKey, importPkcs8PrivateKey } from '../internal/jwk.ts';
+import { setCachedKeyMaterial } from '../internal/key-cache.ts';
+import type { SigningAlgorithm } from '../jwk/types.ts';
 
-import type { ClientAssertionPrivateJwk } from './types.js';
+import type { ClientAssertionPrivateJwk } from './types.ts';
 
 /**
  * imports a client assertion private key from a pkcs8 pem string.

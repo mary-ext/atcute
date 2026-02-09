@@ -6,8 +6,8 @@ import * as CID from '@atcute/cid';
 import { isNodeData } from '@atcute/mst';
 import { decodeUtf8From } from '@atcute/uint8array';
 
-import { isCommit, RepoEntry } from './types.js';
-import { assert } from './utils.js';
+import { isCommit, RepoEntry } from './types.ts';
+import { assert } from './utils.ts';
 
 /** @internal */
 type EntryMap = Map<string, CarEntry>;

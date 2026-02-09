@@ -1,6 +1,6 @@
 import { isNsid, type Nsid } from '@atcute/lexicons/syntax';
 
-import type { LexiconDoc, LexRefVariant, LexUserType } from '../types.js';
+import type { LexiconDoc, LexRefVariant, LexUserType } from '../types.ts';
 
 /**
  * represents a lexicon definition reference

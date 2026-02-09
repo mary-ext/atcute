@@ -1,9 +1,9 @@
 import * as v from '@badrap/valita';
 
-import { atprotoOAuthScopeSchema } from './atproto-oauth-scope.js';
-import { oauthClientIdDiscoverableSchema } from './oauth-client-id-discoverable.js';
-import { httpsUriSchema, nonLocalWebUriSchema, webUriSchema } from './uri.js';
-import { isLocalHostname } from './utils.js';
+import { atprotoOAuthScopeSchema } from './atproto-oauth-scope.ts';
+import { oauthClientIdDiscoverableSchema } from './oauth-client-id-discoverable.ts';
+import { httpsUriSchema, nonLocalWebUriSchema, webUriSchema } from './uri.ts';
+import { isLocalHostname } from './utils.ts';
 
 const SINGLE_SCOPE_RE = /^[\x21\x23-\x5B\x5D-\x7E]+$/;
 

@@ -1,20 +1,20 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as PubLeafletBlocksBlockquote from '../blocks/blockquote.js';
-import * as PubLeafletBlocksBskyPost from '../blocks/bskyPost.js';
-import * as PubLeafletBlocksButton from '../blocks/button.js';
-import * as PubLeafletBlocksCode from '../blocks/code.js';
-import * as PubLeafletBlocksHeader from '../blocks/header.js';
-import * as PubLeafletBlocksHorizontalRule from '../blocks/horizontalRule.js';
-import * as PubLeafletBlocksIframe from '../blocks/iframe.js';
-import * as PubLeafletBlocksImage from '../blocks/image.js';
-import * as PubLeafletBlocksMath from '../blocks/math.js';
-import * as PubLeafletBlocksPage from '../blocks/page.js';
-import * as PubLeafletBlocksPoll from '../blocks/poll.js';
-import * as PubLeafletBlocksText from '../blocks/text.js';
-import * as PubLeafletBlocksUnorderedList from '../blocks/unorderedList.js';
-import * as PubLeafletBlocksWebsite from '../blocks/website.js';
+import * as PubLeafletBlocksBlockquote from '../blocks/blockquote.ts';
+import * as PubLeafletBlocksBskyPost from '../blocks/bskyPost.ts';
+import * as PubLeafletBlocksButton from '../blocks/button.ts';
+import * as PubLeafletBlocksCode from '../blocks/code.ts';
+import * as PubLeafletBlocksHeader from '../blocks/header.ts';
+import * as PubLeafletBlocksHorizontalRule from '../blocks/horizontalRule.ts';
+import * as PubLeafletBlocksIframe from '../blocks/iframe.ts';
+import * as PubLeafletBlocksImage from '../blocks/image.ts';
+import * as PubLeafletBlocksMath from '../blocks/math.ts';
+import * as PubLeafletBlocksPage from '../blocks/page.ts';
+import * as PubLeafletBlocksPoll from '../blocks/poll.ts';
+import * as PubLeafletBlocksText from '../blocks/text.ts';
+import * as PubLeafletBlocksUnorderedList from '../blocks/unorderedList.ts';
+import * as PubLeafletBlocksWebsite from '../blocks/website.ts';
 
 const _blockSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.canvas#block')),

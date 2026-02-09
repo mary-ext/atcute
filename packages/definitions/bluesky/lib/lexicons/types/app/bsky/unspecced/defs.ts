@@ -1,8 +1,8 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyActorDefs from '../actor/defs.js';
-import * as AppBskyFeedDefs from '../feed/defs.js';
+import * as AppBskyActorDefs from '../actor/defs.ts';
+import * as AppBskyFeedDefs from '../feed/defs.ts';
 
 const _ageAssuranceEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.unspecced.defs#ageAssuranceEvent')),

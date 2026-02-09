@@ -5,9 +5,9 @@ import * as CID from '@atcute/cid';
 import { isNodeData } from '@atcute/mst';
 import { decodeUtf8From } from '@atcute/uint8array';
 
-import { isCommit, RepoEntry } from './types.js';
-import { assert } from './utils.js';
-import Queue from './utils/queue.js';
+import { isCommit, RepoEntry } from './types.ts';
+import { assert } from './utils.ts';
+import Queue from './utils/queue.ts';
 
 type EntryMeta = { t: 0 } | { t: 1 } | { t: 2; k: string };
 

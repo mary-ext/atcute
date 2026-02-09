@@ -1,7 +1,7 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as SiteStandardThemeColor from './color.js';
+import * as SiteStandardThemeColor from './color.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('site.standard.theme.basic')),

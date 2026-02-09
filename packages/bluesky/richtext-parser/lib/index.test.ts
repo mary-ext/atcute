@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 
-import { tokenize } from './index.js';
+import { tokenize } from './index.ts';
 
 it('plain', () => {
 	expect(tokenize('hello world')).toEqual([

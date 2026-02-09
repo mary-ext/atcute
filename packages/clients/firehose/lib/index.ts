@@ -1,2 +1,2 @@
-export { FirehoseSubscription } from './subscription.js';
-export type { FirehoseSubscriptionOptions, MessageOf, ParamsOf } from './types.js';
+export { FirehoseSubscription } from './subscription.ts';
+export type { FirehoseSubscriptionOptions, MessageOf, ParamsOf } from './types.ts';

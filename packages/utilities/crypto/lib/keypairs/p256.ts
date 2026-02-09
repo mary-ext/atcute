@@ -3,8 +3,8 @@
 import { toBase16 } from '@atcute/multibase';
 import { concat } from '@atcute/uint8array';
 
-import type { DidKeyString, PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.js';
-import { P256_N, uncompressP256Point } from '../utils-p256.js';
+import type { DidKeyString, PrivateKey, PrivateKeyExportable, PublicKey, VerifyOptions } from '../types.ts';
+import { P256_N, uncompressP256Point } from '../utils-p256.ts';
 import {
 	assertType,
 	assertUnreachable,
@@ -14,7 +14,7 @@ import {
 	isSignatureNormalized,
 	normalizeSignature,
 	toMultikey,
-} from '../utils.js';
+} from '../utils.ts';
 
 // Reference: https://atproto.com/specs/cryptography#public-key-encoding
 export const P256_PUBLIC_PREFIX = Uint8Array.from([0x80, 0x24]);

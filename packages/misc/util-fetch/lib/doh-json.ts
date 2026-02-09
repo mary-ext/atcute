@@ -1,7 +1,7 @@
 import * as v from '@badrap/valita';
 
-import { pipe } from './pipeline.js';
-import { isResponseOk, parseResponseAsJson, validateJsonWith } from './transformers.js';
+import { pipe } from './pipeline.ts';
+import { isResponseOk, parseResponseAsJson, validateJsonWith } from './transformers.ts';
 
 const uint32 = v.number().assert((input) => Number.isInteger(input) && input >= 0 && input <= 2 ** 32 - 1);
 

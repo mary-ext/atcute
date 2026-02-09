@@ -1,4 +1,4 @@
-import type { AppBskyGraphDefs } from '../lexicons/index.js';
+import type { AppBskyGraphDefs } from '../lexicons/index.ts';
 
 /**
  * a union type of all possible starterpack views.

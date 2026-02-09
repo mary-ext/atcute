@@ -3,9 +3,9 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as PubLeafletPagesCanvas from './pages/canvas.js';
-import * as PubLeafletPagesLinearDocument from './pages/linearDocument.js';
-import * as PubLeafletPublication from './publication.js';
+import * as PubLeafletPagesCanvas from './pages/canvas.ts';
+import * as PubLeafletPagesLinearDocument from './pages/linearDocument.ts';
+import * as PubLeafletPublication from './publication.ts';
 
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),

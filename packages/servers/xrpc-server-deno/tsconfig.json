@@ -11,6 +11,8 @@
 		"moduleDetection": "force",
 		"isolatedModules": true,
 		"verbatimModuleSyntax": true,
+		"allowImportingTsExtensions": true,
+		"rewriteRelativeImportExtensions": true,
 		"strict": true,
 		"noImplicitOverride": true,
 		"noUnusedLocals": true,

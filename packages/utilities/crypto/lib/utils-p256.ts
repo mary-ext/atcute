@@ -1,4 +1,4 @@
-import { assertType, isCompressedPoint } from './utils.js';
+import { assertType, isCompressedPoint } from './utils.ts';
 
 // NIST SP 800-186, § 3.2.1.3. P-256 -- https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-186.pdf
 export const P256_P = 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffffn;

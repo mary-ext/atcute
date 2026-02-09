@@ -2,8 +2,8 @@ import { isAtprotoDid } from '@atcute/identity';
 import type { AtprotoDid, Handle } from '@atcute/lexicons/syntax';
 import { FailedResponseError, isResponseOk, pipe, readResponseAsText } from '@atcute/util-fetch';
 
-import * as err from '../../errors.js';
-import type { HandleResolver, ResolveHandleOptions } from '../../types.js';
+import * as err from '../../errors.ts';
+import type { HandleResolver, ResolveHandleOptions } from '../../types.ts';
 
 export interface WellKnownHandleResolverOptions {
 	fetch?: typeof fetch;

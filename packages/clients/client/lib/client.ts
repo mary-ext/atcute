@@ -11,7 +11,7 @@ import type {
 	XRPCQueryMetadata,
 } from '@atcute/lexicons/validations';
 
-import { buildFetchHandler, type FetchHandler, type FetchHandlerObject } from './fetch-handler.js';
+import { buildFetchHandler, type FetchHandler, type FetchHandlerObject } from './fetch-handler.ts';
 
 // #region Type utilities
 type RequiredKeysOf<TType extends object> = TType extends any

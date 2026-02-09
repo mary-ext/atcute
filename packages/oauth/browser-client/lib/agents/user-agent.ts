@@ -1,11 +1,11 @@
 import type { FetchHandlerObject } from '@atcute/client';
 import type { Did } from '@atcute/lexicons';
 
-import { createDPoPFetch } from '../dpop.js';
-import type { Session } from '../types/token.js';
+import { createDPoPFetch } from '../dpop.ts';
+import type { Session } from '../types/token.ts';
 
-import { OAuthServerAgent } from './server-agent.js';
-import { type SessionGetOptions, deleteStoredSession, getSession } from './sessions.js';
+import { OAuthServerAgent } from './server-agent.ts';
+import { type SessionGetOptions, deleteStoredSession, getSession } from './sessions.ts';
 
 export class OAuthUserAgent implements FetchHandlerObject {
 	#fetch: typeof fetch;

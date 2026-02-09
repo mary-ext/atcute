@@ -5,7 +5,7 @@ import { XRPCRouter } from '@atcute/xrpc-server';
 import { serve, type ServerType } from '@hono/node-server';
 import { describe, expect, it } from 'vitest';
 
-import { createNodeWebSocket, type NodeWebSocket } from './index.js';
+import { createNodeWebSocket, type NodeWebSocket } from './index.ts';
 
 interface Server extends Disposable {
 	instance: ServerType;

@@ -1,8 +1,8 @@
 import { fromBase64Pad, toBase64Pad } from '@atcute/multibase';
 
-import type { PrivateJwk, PublicJwk, SigningAlgorithm } from '../jwk/types.js';
+import type { PrivateJwk, PublicJwk, SigningAlgorithm } from '../jwk/types.ts';
 
-import { getImportAlgorithm } from './crypto.js';
+import { getImportAlgorithm } from './crypto.ts';
 
 const SIGNING_ALGORITHMS: readonly SigningAlgorithm[] = [
 	'ES256',

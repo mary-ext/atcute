@@ -1,7 +1,7 @@
 import * as fc from 'fast-check';
 import { expect, it } from 'vitest';
 
-import { tokenize, type Token } from './index.js';
+import { tokenize, type Token } from './index.ts';
 
 it('tokenizes search queries', () => {
 	expect(tokenize(`hello world`)).toEqual([

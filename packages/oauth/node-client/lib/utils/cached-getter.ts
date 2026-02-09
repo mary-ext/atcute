@@ -1,6 +1,6 @@
-import type { Awaitable } from '../types/misc.js';
+import type { Awaitable } from '../types/misc.ts';
 
-import type { GetOptions, Store } from './store.js';
+import type { GetOptions, Store } from './store.ts';
 
 export interface GetCachedOptions {
 	signal?: AbortSignal;

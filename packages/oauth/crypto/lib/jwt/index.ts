@@ -1,8 +1,8 @@
 import { fromBase64Url, toBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
 
-import { getSignAlgorithm } from '../internal/crypto.js';
-import type { SigningAlgorithm } from '../jwk/types.js';
+import { getSignAlgorithm } from '../internal/crypto.ts';
+import type { SigningAlgorithm } from '../jwk/types.ts';
 
 /**
  * signs a jwt using webcrypto.

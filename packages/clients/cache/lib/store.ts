@@ -1,8 +1,8 @@
 import type { BaseSchema, InferOutput, ObjectSchema } from '@atcute/lexicons/validations';
 
-import type { EntityDefinition, EntitySubscriber, EntityTypeId, TypeSubscriber } from './types.js';
-import { getTypeIdFromSchema } from './types.js';
-import { WalkerCache } from './walker.js';
+import type { EntityDefinition, EntitySubscriber, EntityTypeId, TypeSubscriber } from './types.ts';
+import { getTypeIdFromSchema } from './types.ts';
+import { WalkerCache } from './walker.ts';
 
 type AnyEntityDefinition = EntityDefinition<ObjectSchema>;
 

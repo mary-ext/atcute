@@ -2,7 +2,7 @@ import { isCid, isDatetime, isDid, isHandle, isNsid, isRecordKey, isTid } from '
 
 import * as v from '@badrap/valita';
 
-import type * as t from './types.js';
+import type * as t from './types.ts';
 
 const cidString = v.string().assert(isCid, `must be a cid`);
 const datetimeString = v.string().assert(isDatetime, `must be a datetime`);

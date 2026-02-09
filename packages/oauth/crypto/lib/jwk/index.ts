@@ -1,6 +1,6 @@
-export { computeJktFromJwk } from './compute-jkt.js';
-export { derivePublicJwk } from '../internal/jwk.js';
-export { exportPkcs8PrivateKey } from './keys.js';
+export { computeJktFromJwk } from './compute-jkt.ts';
+export { derivePublicJwk } from '../internal/jwk.ts';
+export { exportPkcs8PrivateKey } from './keys.ts';
 export type {
 	EcPrivateJwk,
 	EcPublicJwk,
@@ -9,4 +9,4 @@ export type {
 	RsaPrivateJwk,
 	RsaPublicJwk,
 	SigningAlgorithm,
-} from './types.js';
+} from './types.ts';

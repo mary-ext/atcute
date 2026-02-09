@@ -1,12 +1,12 @@
 import type { Did } from '@atcute/lexicons';
 
-import { database } from '../environment.js';
-import { OAuthResponseError, TokenRefreshError } from '../errors.js';
-import type { RawSession, Session } from '../types/token.js';
-import { isLegacyDpopKey, migrateLegacyDpopKey } from '../utils/dpop-key.js';
-import { locks } from '../utils/runtime.js';
+import { database } from '../environment.ts';
+import { OAuthResponseError, TokenRefreshError } from '../errors.ts';
+import type { RawSession, Session } from '../types/token.ts';
+import { isLegacyDpopKey, migrateLegacyDpopKey } from '../utils/dpop-key.ts';
+import { locks } from '../utils/runtime.ts';
 
-import { OAuthServerAgent } from './server-agent.js';
+import { OAuthServerAgent } from './server-agent.ts';
 
 export interface SessionGetOptions {
 	signal?: AbortSignal;

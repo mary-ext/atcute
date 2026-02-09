@@ -2,10 +2,10 @@ import { Secp256k1PrivateKeyExportable } from '@atcute/crypto';
 
 import { describe, expect, it } from 'vitest';
 
-import { processIndexedEntryLog } from './data.js';
-import { indexedEntryLog } from './typedefs.js';
-import type * as t from './types.js';
-import { deriveDidFromGenesisOp, isSignedOperationValid, signOperation } from './utils.js';
+import { processIndexedEntryLog } from './data.ts';
+import { indexedEntryLog } from './typedefs.ts';
+import type * as t from './types.ts';
+import { deriveDidFromGenesisOp, isSignedOperationValid, signOperation } from './utils.ts';
 
 describe('processIndexedEntryLog()', () => {
 	it('validates an operation log', async () => {

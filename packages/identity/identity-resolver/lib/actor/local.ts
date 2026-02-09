@@ -1,14 +1,14 @@
 import { getAtprotoHandle, getPdsEndpoint } from '@atcute/identity';
 import { isDid, type ActorIdentifier, type Did, type Handle } from '@atcute/lexicons/syntax';
 
-import { ActorResolutionError } from '../errors.js';
+import { ActorResolutionError } from '../errors.ts';
 import type {
 	ActorResolver,
 	DidDocumentResolver,
 	HandleResolver,
 	ResolveActorOptions,
 	ResolvedActor,
-} from '../types.js';
+} from '../types.ts';
 
 export interface LocalActorResolverOptions {
 	handleResolver: HandleResolver;

@@ -1,7 +1,7 @@
 import type { ClientAssertionPrivateJwk, PublicJwk } from '@atcute/oauth-crypto';
 import { derivePublicJwk } from '@atcute/oauth-crypto';
 
-import type { KeySearchOptions } from './types.js';
+import type { KeySearchOptions } from './types.ts';
 
 /**
  * preferred algorithm order for signing.

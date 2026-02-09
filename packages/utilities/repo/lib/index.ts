@@ -1,6 +1,6 @@
-export { isCommit } from './types.js';
-export type { Commit, RepoEntry } from './types.js';
+export { isCommit } from './types.ts';
+export type { Commit, RepoEntry } from './types.ts';
 
-export * from './reader.js';
-export * from './streamed-reader.js';
-export * from './verify.js';
+export * from './reader.ts';
+export * from './streamed-reader.ts';
+export * from './verify.ts';

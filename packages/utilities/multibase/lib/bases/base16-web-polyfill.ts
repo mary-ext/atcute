@@ -1,4 +1,4 @@
-import { createRfc4648Decode, createRfc4648Encode } from '../utils.js';
+import { createRfc4648Decode, createRfc4648Encode } from '../utils.ts';
 
 const BASE16_CHARSET = '0123456789abcdef';
 

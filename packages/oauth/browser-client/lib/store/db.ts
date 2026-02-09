@@ -2,9 +2,9 @@ import type { Did } from '@atcute/lexicons';
 import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { OAuthAuthorizationServerMetadata } from '@atcute/oauth-types';
 
-import type { SimpleStore } from '../types/store.js';
-import type { RawSession } from '../types/token.js';
-import { locks } from '../utils/runtime.js';
+import type { SimpleStore } from '../types/store.ts';
+import type { RawSession } from '../types/token.ts';
+import { locks } from '../utils/runtime.ts';
 
 export interface OAuthDatabaseOptions {
 	name: string;

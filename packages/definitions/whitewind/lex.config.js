@@ -3,6 +3,7 @@ import { defineLexiconConfig } from '@atcute/lex-cli';
 export default defineLexiconConfig({
 	files: ['lexicons/com/whtwnd/**/*.json'],
 	outdir: 'lib/lexicons/',
+	modules: { importSuffix: '.ts' },
 
 	pull: {
 		outdir: 'lexicons/',

@@ -1,7 +1,7 @@
 import type { AtprotoDid, Handle } from '@atcute/lexicons/syntax';
 
-import * as err from '../errors.js';
-import type { HandleResolver, ResolveHandleOptions } from '../types.js';
+import * as err from '../errors.ts';
+import type { HandleResolver, ResolveHandleOptions } from '../types.ts';
 
 export type CompositeStrategy = 'http-first' | 'dns-first' | 'race' | 'both';
 

@@ -1,7 +1,7 @@
 import * as v from '@badrap/valita';
 
-import { oauthAuthorizationDetailsSchema } from './oauth-authorization-details.js';
-import { oauthTokenTypeSchema } from './oauth-token-type.js';
+import { oauthAuthorizationDetailsSchema } from './oauth-authorization-details.ts';
+import { oauthTokenTypeSchema } from './oauth-token-type.ts';
 
 /**
  * @see {@link https://www.rfc-editor.org/rfc/rfc6749.html#section-5.1 | RFC 6749 (OAuth2), Section 5.1}

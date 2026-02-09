@@ -1,9 +1,9 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyEmbedRecord from '../../../app/bsky/embed/record.js';
-import * as AppBskyRichtextFacet from '../../../app/bsky/richtext/facet.js';
-import * as ChatBskyActorDefs from '../actor/defs.js';
+import * as AppBskyEmbedRecord from '../../../app/bsky/embed/record.ts';
+import * as AppBskyRichtextFacet from '../../../app/bsky/richtext/facet.ts';
+import * as ChatBskyActorDefs from '../actor/defs.ts';
 
 const _convoViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#convoView')),

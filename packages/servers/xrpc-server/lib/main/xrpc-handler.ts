@@ -1,8 +1,8 @@
 import type { XRPCProcedureMetadata, XRPCQueryMetadata } from '@atcute/lexicons/validations';
 
-import { XRPCRouter, type XRPCRouterOptions } from './router.js';
-import type { ProcedureConfig, QueryConfig } from './types/operation.js';
-import { unwrapLxm, type Namespaced } from './utils/namespaced.js';
+import { XRPCRouter, type XRPCRouterOptions } from './router.ts';
+import type { ProcedureConfig, QueryConfig } from './types/operation.ts';
+import { unwrapLxm, type Namespaced } from './utils/namespaced.ts';
 
 type XrpcHandlerRouterOptions = Pick<XRPCRouterOptions, 'middlewares' | 'handleNotFound' | 'handleException'>;
 

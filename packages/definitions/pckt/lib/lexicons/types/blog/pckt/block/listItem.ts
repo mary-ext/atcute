@@ -1,9 +1,9 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
-import * as BlogPcktBlockBulletList from './bulletList.js';
-import * as BlogPcktBlockOrderedList from './orderedList.js';
-import * as BlogPcktBlockText from './text.js';
+import * as BlogPcktBlockBulletList from './bulletList.ts';
+import * as BlogPcktBlockOrderedList from './orderedList.ts';
+import * as BlogPcktBlockText from './text.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.listItem')),

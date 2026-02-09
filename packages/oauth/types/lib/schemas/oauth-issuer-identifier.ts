@@ -1,6 +1,6 @@
 import * as v from '@badrap/valita';
 
-import { webUriSchema } from './uri.js';
+import { webUriSchema } from './uri.ts';
 
 export const oauthIssuerIdentifierSchema = webUriSchema.chain((input) => {
 	// validate the issuer (MIX-UP attacks)

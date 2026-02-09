@@ -6,9 +6,9 @@ import {
 	LabelTarget,
 	ModerationAction,
 	MUTE_BEHAVIOR,
-} from './behaviors.js';
-import { ModerationCauseType, type ModerationCause, type ModerationDecision } from './decision.js';
-import { LabelPreference } from './label.js';
+} from './behaviors.ts';
+import { ModerationCauseType, type ModerationCause, type ModerationDecision } from './decision.ts';
+import { LabelPreference } from './label.ts';
 
 export interface DisplayRestrictions {
 	noOverride: boolean;

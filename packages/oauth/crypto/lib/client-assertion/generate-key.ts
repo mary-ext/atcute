@@ -1,9 +1,9 @@
-import { getGenerateAlgorithm } from '../internal/crypto.js';
-import { exportPrivateJwkFromKey } from '../internal/jwk.js';
-import { setCachedKeyMaterial } from '../internal/key-cache.js';
-import type { SigningAlgorithm } from '../jwk/types.js';
+import { getGenerateAlgorithm } from '../internal/crypto.ts';
+import { exportPrivateJwkFromKey } from '../internal/jwk.ts';
+import { setCachedKeyMaterial } from '../internal/key-cache.ts';
+import type { SigningAlgorithm } from '../jwk/types.ts';
 
-import type { ClientAssertionPrivateJwk } from './types.js';
+import type { ClientAssertionPrivateJwk } from './types.ts';
 
 /**
  * generates a new client assertion private key.
