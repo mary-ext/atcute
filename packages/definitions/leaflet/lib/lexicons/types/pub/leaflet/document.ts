@@ -35,6 +35,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get postRef() {
 			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
 		},
+		get preferences() {
+			return /*#__PURE__*/ v.optional(PubLeafletPublication.preferencesSchema);
+		},
 		publication: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 		publishedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		tags: /*#__PURE__*/ v.optional(

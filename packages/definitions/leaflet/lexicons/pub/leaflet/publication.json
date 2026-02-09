@@ -55,6 +55,10 @@
 				"showPrevNext": {
 					"type": "boolean",
 					"default": true
+				},
+				"showRecommends": {
+					"type": "boolean",
+					"default": true
 				}
 			}
 		},

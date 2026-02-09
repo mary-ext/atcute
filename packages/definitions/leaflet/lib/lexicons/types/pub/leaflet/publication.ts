@@ -51,6 +51,10 @@ const _preferencesSchema = /*#__PURE__*/ v.object({
 	 * @default true
 	 */
 	showPrevNext: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+	/**
+	 * @default true
+	 */
+	showRecommends: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 });
 const _themeSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.publication#theme')),
