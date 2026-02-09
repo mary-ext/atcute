@@ -1,5 +1,5 @@
 ---
-"@atcute/lexicons": patch
+'@atcute/lexicons': patch
 ---
 
 bound checking on resource URIs

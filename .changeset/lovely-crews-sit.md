@@ -1,5 +1,5 @@
 ---
-"@atcute/lexicons": patch
+'@atcute/lexicons': patch
 ---
 
 faster variant dispatch
