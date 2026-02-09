@@ -113,10 +113,6 @@ const readCid = (state: State, length: number): CidLink => {
 	return new CidLinkWrapper(cid.bytes);
 };
 
-const compareKeys = (a: string, b: string): number => {
-	return a.length - b.length || (a < b ? -1 : a > b ? 1 : 0);
-};
-
 const decodeStringKey = (state: State): string => {
 	const prelude = readUint8(state);
 
@@ -126,7 +122,7 @@ const decodeStringKey = (state: State): string => {
 	}
 
 	const info = prelude & 0x1f;
-	const length = readArgument(state, info);
+	const length = info < 24 ? info : readArgument(state, info);
 	return readString(state, length);
 };
 
@@ -173,7 +169,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 
 		const type = prelude >> 5;
 		const info = prelude & 0x1f;
-		const arg = type === 7 ? 0 : readArgument(state, info);
+		const arg = type === 7 ? 0 : info < 24 ? info : readArgument(state, info);
 
 		switch (type) {
 			case 0: {
@@ -292,9 +288,11 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 				if (!stack.t) {
 					// Read the key of the next map item
 					const prevKey = stack.k;
-					stack.k = decodeStringKey(state);
+					const key = decodeStringKey(state);
+					stack.k = key;
 
-					if (compareKeys(stack.k, prevKey) <= 0) {
+					const cmp = key.length - prevKey.length || (key > prevKey ? 1 : key < prevKey ? -1 : 0);
+					if (cmp <= 0) {
 						throw new TypeError(`map keys are not in canonical order or contain duplicates`);
 					}
 				}

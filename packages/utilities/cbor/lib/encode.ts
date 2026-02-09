@@ -154,6 +154,12 @@ const writeNumber = (state: State, val: number): void => {
 const writeString = (state: State, val: string): void => {
 	const strLength = val.length;
 
+	if (strLength === 0) {
+		resizeIfNeeded(state, 1);
+		writeUint8(state, 0x60);
+		return;
+	}
+
 	// JS strings are UTF-16 (ECMA spec)
 	// Therefore, worst case length of UTF-8 is length * 3. (plus 9 bytes of CBOR header)
 	// Greatly overshoots in practice, but doesn't matter. (alloc is O(1)+ anyway)
@@ -162,9 +168,37 @@ const writeString = (state: State, val: string): void => {
 	// Optimistic fast encode
 	ascii: {
 		const ptr = state.p + getTypeInfoLength(strLength);
-		for (let i = 0; i < strLength; i++) {
-			let code = val.charCodeAt(i);
-			if (code > 0x7f) break ascii;
+		const first = val.charCodeAt(0);
+		if (first > 0x7f) {
+			break ascii;
+		}
+
+		state.b[ptr] = first;
+		let i = 1;
+
+		// batch-process four characters per iteration to lower charCodeAt/branch overhead.
+		for (; i + 3 < strLength; i += 4) {
+			const a = val.charCodeAt(i);
+			const b = val.charCodeAt(i + 1);
+			const c = val.charCodeAt(i + 2);
+			const d = val.charCodeAt(i + 3);
+
+			if ((a | b | c | d) & 0x80) {
+				break ascii;
+			}
+
+			state.b[ptr + i] = a;
+			state.b[ptr + i + 1] = b;
+			state.b[ptr + i + 2] = c;
+			state.b[ptr + i + 3] = d;
+		}
+
+		for (; i < strLength; i++) {
+			const code = val.charCodeAt(i);
+			if (code > 0x7f) {
+				break ascii;
+			}
+
 			state.b[ptr + i] = code;
 		}
 
@@ -324,31 +358,31 @@ export const encode = (value: any): Uint8Array<ArrayBuffer> => {
 /** @internal */
 export const getOrderedObjectKeys = (obj: Record<string, unknown>): string[] => {
 	const keys = Object.keys(obj);
-	for (let i = 1, len = keys.length, j = 0; i < len; j = i++) {
+	let len = 0;
+
+	for (let i = 0; i < keys.length; i++) {
 		const valA = keys[i];
-
-		// Tuck in undefined value filtering here to avoid extra iterations.
 		if (obj[valA] === undefined) {
-			// A lot of things are tucked in here xd
-			// - Pull the currently last item in the keys array at the current place
-			// - Update saved value of array length
-			// - Decrease i by 1
-			keys[i--] = keys[--len];
-			keys.length = len;
-		} else {
-			for (; j >= 0; j--) {
-				const valB = keys[j];
+			continue;
+		}
 
-				// Note: Don't need to check for equality, keys are always distinct.
-				const cmp = valA.length - valB.length || +(valA > valB);
-				if (cmp > 0) break;
+		let j = len - 1;
+		for (; j >= 0; j--) {
+			const valB = keys[j];
 
-				keys[j + 1] = valB;
+			// Note: Don't need to check for equality, keys are always distinct.
+			const cmp = valA.length - valB.length || +(valA > valB);
+			if (cmp > 0) {
+				break;
 			}
 
-			keys[j + 1] = valA;
+			keys[j + 1] = valB;
 		}
+
+		keys[j + 1] = valA;
+		len++;
 	}
 
+	keys.length = len;
 	return keys;
 };
