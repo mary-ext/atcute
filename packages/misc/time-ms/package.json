@@ -33,7 +33,6 @@
 		"install": "node-gyp-build",
 		"build:native": "prebuildify --napi --strip",
 		"build": "tsgo --project tsconfig.build.json",
-		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
 	},
 	"dependencies": {
@@ -41,7 +40,6 @@
 		"node-gyp-build": "^4.8.4"
 	},
 	"devDependencies": {
-		"prebuildify": "^6.0.1",
-		"vitest": "^4.0.18"
+		"prebuildify": "^6.0.1"
 	}
 }

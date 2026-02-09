@@ -1,0 +1,3 @@
+interface DateConstructor {
+	isFake?: boolean;
+}

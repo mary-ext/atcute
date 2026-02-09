@@ -27,6 +27,10 @@ try {
 		const ptr = Deno.UnsafePointer.of(buf);
 
 		now = (): number => {
+			if (Date.isFake) {
+				return Date.now() * 1_000;
+			}
+
 			lib.symbols.GetSystemTimePreciseAsFileTime(ptr);
 			const low = BigInt(buf[0]);
 			const high = BigInt(buf[1]);
@@ -48,6 +52,10 @@ try {
 		const ptr = Deno.UnsafePointer.of(buf);
 
 		now = (): number => {
+			if (Date.isFake) {
+				return Date.now() * 1_000;
+			}
+
 			lib.symbols.clock_gettime(CLOCK_REALTIME, ptr);
 			const sec = buf[0];
 			const nsec = buf[1];
