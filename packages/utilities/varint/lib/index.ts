@@ -27,6 +27,41 @@ export const encode = (num: number, buf: Uint8Array | number[], offset = 0): num
 
 	const start = offset;
 
+	if (num < N1) {
+		buf[offset] = num;
+		return 1;
+	}
+
+	if (num < N2) {
+		buf[offset] = (num & REST) | MSB;
+		buf[offset + 1] = num >>> 7;
+		return 2;
+	}
+
+	if (num < N3) {
+		buf[offset] = (num & REST) | MSB;
+		buf[offset + 1] = ((num >>> 7) & REST) | MSB;
+		buf[offset + 2] = num >>> 14;
+		return 3;
+	}
+
+	if (num < N4) {
+		buf[offset] = (num & REST) | MSB;
+		buf[offset + 1] = ((num >>> 7) & REST) | MSB;
+		buf[offset + 2] = ((num >>> 14) & REST) | MSB;
+		buf[offset + 3] = num >>> 21;
+		return 4;
+	}
+
+	if (num < INT) {
+		buf[offset] = (num & REST) | MSB;
+		buf[offset + 1] = ((num >>> 7) & REST) | MSB;
+		buf[offset + 2] = ((num >>> 14) & REST) | MSB;
+		buf[offset + 3] = ((num >>> 21) & REST) | MSB;
+		buf[offset + 4] = num >>> 28;
+		return 5;
+	}
+
 	while (num >= INT) {
 		buf[offset++] = (num & 0xff) | MSB;
 		num /= 128;
@@ -48,21 +83,67 @@ export const encode = (num: number, buf: Uint8Array | number[], offset = 0): num
  * @returns A tuple containing the resulting number, and the amount of bytes read
  */
 export const decode = (buf: Uint8Array | number[], offset = 0): [num: number, read: number] => {
-	// deno-lint-ignore prefer-const
-	let l = buf.length;
-
-	let res = 0;
-	let shift = 0;
+	const l = buf.length;
 	let counter = offset;
-	let b: number;
 
+	if (counter >= l) {
+		throw new RangeError('could not decode varint');
+	}
+
+	let b = buf[counter++];
+	let res = b & REST;
+	if (b < MSB) {
+		return [res, 1];
+	}
+
+	if (counter >= l) {
+		throw new RangeError('could not decode varint');
+	}
+
+	b = buf[counter++];
+	res |= (b & REST) << 7;
+	if (b < MSB) {
+		return [res, 2];
+	}
+
+	if (counter >= l) {
+		throw new RangeError('could not decode varint');
+	}
+
+	b = buf[counter++];
+	res |= (b & REST) << 14;
+	if (b < MSB) {
+		return [res, 3];
+	}
+
+	if (counter >= l) {
+		throw new RangeError('could not decode varint');
+	}
+
+	b = buf[counter++];
+	res |= (b & REST) << 21;
+	if (b < MSB) {
+		return [res, 4];
+	}
+
+	if (counter >= l) {
+		throw new RangeError('could not decode varint');
+	}
+
+	b = buf[counter++];
+	res += (b & REST) * N4;
+	if (b < MSB) {
+		return [res, 5];
+	}
+
+	let shift = 35;
 	do {
 		if (counter >= l) {
 			throw new RangeError('could not decode varint');
 		}
 
 		b = buf[counter++];
-		res += shift < 28 ? (b & REST) << shift : (b & REST) * Math.pow(2, shift);
+		res += (b & REST) * 2 ** shift;
 		shift += 7;
 	} while (b >= MSB);
 
