@@ -20,14 +20,23 @@
 	"sideEffects": false,
 	"exports": {
 		".": {
-			"deno": "./dist/index.deno.js",
-			"bun": "./dist/index.bun.js",
-			"node": "./dist/index.node.js",
-			"default": "./dist/index.js"
+			"types": "./lib/index.ts",
+			"deno": "./lib/index.deno.ts",
+			"bun": "./lib/index.bun.ts",
+			"node": "./lib/index.node.ts",
+			"default": "./lib/index.ts"
 		}
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": {
+				"deno": "./dist/index.deno.js",
+				"bun": "./dist/index.bun.js",
+				"node": "./dist/index.node.js",
+				"default": "./dist/index.js"
+			}
+		}
 	},
 	"scripts": {
 		"install": "node-gyp-build",

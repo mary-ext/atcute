@@ -21,10 +21,13 @@
 	"type": "module",
 	"sideEffects": false,
 	"exports": {
-		".": "./dist/index.js"
+		".": "./lib/index.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js"
+		}
 	},
 	"scripts": {
 		"generate-tests": "cd mst-test-suite && mise exec -- uv run python scripts/generate_exhaustive_cars.py",

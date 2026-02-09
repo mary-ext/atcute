@@ -63,7 +63,7 @@ export class Secp256k1PublicKey implements PublicKey {
 		}
 
 		const allowMalleable = options?.allowMalleableSig ?? false;
-		const hashed = await toSha256(data);
+		const hashed = await toSha256(data as Uint8Array<ArrayBuffer>);
 
 		return verify(sig, hashed, this._publicKey, { lowS: !allowMalleable, prehash: false });
 	}
@@ -125,7 +125,7 @@ export class Secp256k1PrivateKey extends Secp256k1PublicKey implements PrivateKe
 	}
 
 	async sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
-		const hashed = await toSha256(data);
+		const hashed = await toSha256(data as Uint8Array<ArrayBuffer>);
 		const sig = await signAsync(hashed, this._privateKey, { lowS: true, prehash: false });
 
 		return sig as Uint8Array<ArrayBuffer>;

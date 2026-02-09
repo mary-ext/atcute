@@ -21,11 +21,15 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js",
-		"./types/": "./dist/lexicons/types/tools/ozone/*.js"
+		".": "./lib/index.ts",
+		"./types/": "./lib/lexicons/types/tools/ozone/*.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js",
+			"./types/": "./dist/lexicons/types/tools/ozone/*.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo",

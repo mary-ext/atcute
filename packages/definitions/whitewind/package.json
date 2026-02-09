@@ -20,11 +20,15 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js",
-		"./types/*": "./dist/lexicons/types/com/whtwnd/*.js"
+		".": "./lib/index.ts",
+		"./types/*": "./lib/lexicons/types/com/whtwnd/*.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js",
+			"./types/*": "./dist/lexicons/types/com/whtwnd/*.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo",

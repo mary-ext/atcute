@@ -20,11 +20,15 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js",
-		"./types/*": "./dist/lexicons/types/site/standard/*.js"
+		".": "./lib/index.ts",
+		"./types/*": "./lib/lexicons/types/site/standard/*.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js",
+			"./types/*": "./dist/lexicons/types/site/standard/*.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo",

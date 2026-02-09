@@ -20,11 +20,15 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js",
-		"./types/*": "./dist/lexicons/types/blog/pckt/*.js"
+		".": "./lib/index.ts",
+		"./types/*": "./lib/lexicons/types/blog/pckt/*.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js",
+			"./types/*": "./dist/lexicons/types/blog/pckt/*.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo",

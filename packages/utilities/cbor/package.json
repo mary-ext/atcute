@@ -21,11 +21,15 @@
 	"type": "module",
 	"sideEffects": false,
 	"exports": {
-		".": "./dist/index.js",
-		"./bytes": "./dist/bytes.js"
+		".": "./lib/index.ts",
+		"./bytes": "./lib/bytes.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js",
+			"./bytes": "./dist/bytes.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

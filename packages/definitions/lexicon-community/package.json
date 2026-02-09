@@ -15,11 +15,15 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js",
-		"./types/": "./dist/lexicons/types/community/lexicon/*.js"
+		".": "./lib/index.ts",
+		"./types/": "./lib/lexicons/types/community/lexicon/*.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js",
+			"./types/": "./dist/lexicons/types/community/lexicon/*.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo",

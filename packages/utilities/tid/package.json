@@ -26,10 +26,13 @@
 		}
 	},
 	"exports": {
-		".": "./dist/index.js"
+		".": "./lib/index.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

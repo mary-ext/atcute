@@ -15,12 +15,17 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js",
-		"./types/blue/microcosm/*": "./dist/lexicons/types/blue/microcosm/*.js",
-		"./types/com/bad-example/*": "./dist/lexicons/types/com/bad-example/*.js"
+		".": "./lib/index.ts",
+		"./types/blue/microcosm/*": "./lib/lexicons/types/blue/microcosm/*.ts",
+		"./types/com/bad-example/*": "./lib/lexicons/types/com/bad-example/*.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js",
+			"./types/blue/microcosm/*": "./dist/lexicons/types/blue/microcosm/*.js",
+			"./types/com/bad-example/*": "./dist/lexicons/types/com/bad-example/*.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo -b",

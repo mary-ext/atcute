@@ -15,10 +15,13 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/main/index.js"
+		".": "./lib/main/index.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/main/index.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

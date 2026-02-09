@@ -19,11 +19,15 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js",
-		"./types/*": "./dist/lexicons/types/com/atproto/*.js"
+		".": "./lib/index.ts",
+		"./types/*": "./lib/lexicons/types/com/atproto/*.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js",
+			"./types/*": "./dist/lexicons/types/com/atproto/*.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo",

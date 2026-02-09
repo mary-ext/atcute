@@ -18,10 +18,13 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js"
+		".": "./src/index.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js"
+		}
 	},
 	"scripts": {
 		"build": "pnpm run generate:schema && tsgo",

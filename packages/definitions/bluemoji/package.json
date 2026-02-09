@@ -15,11 +15,15 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js",
-		"./types/": "./dist/lexicons/types/blue/moji/*.js"
+		".": "./lib/index.ts",
+		"./types/": "./lib/lexicons/types/blue/moji/*.ts"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"exports": {
+			".": "./dist/index.js",
+			"./types/": "./dist/lexicons/types/blue/moji/*.js"
+		}
 	},
 	"scripts": {
 		"build": "tsgo",
