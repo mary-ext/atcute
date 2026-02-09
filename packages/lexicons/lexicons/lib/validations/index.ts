@@ -1636,32 +1636,35 @@ export const variant: {
 		members: members,
 		closed: closed,
 		get '~run'() {
-			const map = Object.fromEntries(
-				members.map((member, idx) => {
-					const shape = member.shape;
+			const types: string[] = [];
+			const schemas: ObjectSchema[] = [];
 
-					let t = shape.$type as MaybeOptional<LiteralSchema<syntax.Nsid>> | undefined;
+			for (let idx = 0, len = members.length; idx < len; idx++) {
+				const member = members[idx]!;
+				const shape = member.shape;
 
-					assert(t !== undefined, `expected $type in variant member #${idx} to be defined`);
-					if (t.type === 'optional') {
-						t = t.wrapped;
-					}
+				let t = shape.$type as MaybeOptional<LiteralSchema<syntax.Nsid>> | undefined;
 
-					assert(
-						t.type === 'literal' && typeof t.expected === 'string',
-						`expected $type in variant member #${idx} to be a string literal`,
-					);
+				assert(t !== undefined, `expected $type in variant member #${idx} to be defined`);
+				if (t.type === 'optional') {
+					t = t.wrapped;
+				}
 
-					return [t.expected, member];
-				}),
-			);
+				assert(
+					t.type === 'literal' && typeof t.expected === 'string',
+					`expected $type in variant member #${idx} to be a string literal`,
+				);
+
+				types.push(t.expected);
+				schemas.push(member);
+			}
 
 			const issue: IssueLeaf = {
 				ok: false,
 				code: 'invalid_variant',
-				expected: Object.keys(map),
+				expected: types,
 				msg() {
-					return `expected ${separatedList(Object.keys(map), 'or')}`;
+					return `expected ${separatedList(types, 'or')}`;
 				},
 			};
 
@@ -1680,17 +1683,17 @@ export const variant: {
 					return closed ? issue : ISSUE_VARIANT_TYPE;
 				}
 
-				const schema = map[type];
-
-				if (schema === undefined) {
-					if (closed) {
-						return issue;
+				for (let idx = 0, len = types.length; idx < len; idx++) {
+					if (types[idx] === type) {
+						return schemas[idx]!['~run'](input, flags);
 					}
-
-					return undefined;
 				}
 
-				return schema['~run'](input, flags);
+				if (closed) {
+					return issue;
+				}
+
+				return undefined;
 			};
 
 			return lazyProperty(this, '~run', matcher);
