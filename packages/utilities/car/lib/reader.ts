@@ -7,6 +7,7 @@ import { isCarV1Header, type CarEntry, type CarHeader } from './types.ts';
 
 interface SyncByteReader {
 	readonly pos: number;
+	readonly source: Uint8Array;
 	upto(size: number): Uint8Array;
 	exactly(size: number, seek: boolean): Uint8Array;
 	seek(size: number): void;
@@ -72,6 +73,9 @@ const createUint8Reader = (buf: Uint8Array): SyncByteReader => {
 		get pos() {
 			return pos;
 		},
+		get source() {
+			return buf;
+		},
 
 		seek(size) {
 			if (size > buf.length - pos) {
@@ -99,15 +103,14 @@ const createUint8Reader = (buf: Uint8Array): SyncByteReader => {
 };
 
 const readVarint = (reader: SyncByteReader, size: number): number => {
-	const buf = reader.upto(size);
-	if (buf.length === 0) {
+	if (reader.pos >= reader.source.length) {
 		throw new RangeError(`unexpected end of data`);
 	}
 
-	const [int, read] = varint.decode(buf);
-	reader.seek(read);
+	const { value, nextOffset } = varint.decode(reader.source, reader.pos, size);
+	reader.seek(nextOffset - reader.pos);
 
-	return int;
+	return value;
 };
 
 const readHeader = (reader: SyncByteReader): CarHeader => {

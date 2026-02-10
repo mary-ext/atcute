@@ -13,16 +13,36 @@ it('passes fuzzy test', () => {
 		const encoded: number[] = [];
 		const encodedLength = encode(expected, encoded);
 
-		const [actual, actualLength] = decode(encoded);
+		const { value, nextOffset } = decode(encoded);
 
-		expect(actual).toBe(expected);
-		expect(actualLength).toBe(encodedLength);
+		expect(value).toBe(expected);
+		expect(nextOffset).toBe(encodedLength);
 	}
 });
 
 describe('encode', () => {
 	it('throws on very large numbers', () => {
 		expect(() => encode(2 ** 54 - 1, [])).toThrow();
+	});
+});
+
+describe('decode', () => {
+	it('supports decoding at offset', () => {
+		const encoded: number[] = [255, 255, 255];
+		const written = encode(420, encoded, 1);
+
+		const { value, nextOffset } = decode(encoded, 1);
+
+		expect(value).toBe(420);
+		expect(nextOffset).toBe(1 + written);
+	});
+
+	it('respects length', () => {
+		const encoded: number[] = [];
+		encode(16384, encoded);
+
+		expect(() => decode(encoded, 0, 2)).toThrow();
+		expect(decode(encoded, 0, 3)).toEqual({ value: 16384, nextOffset: 3 });
 	});
 });
 

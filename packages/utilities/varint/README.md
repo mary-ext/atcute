@@ -16,9 +16,9 @@ const bytesWritten = encode(420, encoded);
 // -> bytesWritten: 2
 
 // decoding
-const [num, bytesRead] = decode(encoded);
-// -> num: 420
-// -> bytesRead: 2
+const { value, nextOffset } = decode(encoded);
+// -> value: 420
+// -> nextOffset: 2
 
 // check encoding length beforehand
 encodingLength(420); // -> 2
