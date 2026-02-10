@@ -1,5 +1,11 @@
 # @atcute/cbor
 
+## 2.3.1
+
+### Patch Changes
+
+- 0cfed5a: improve cbor encode/decode
+
 ## 2.3.0
 
 ### Minor Changes

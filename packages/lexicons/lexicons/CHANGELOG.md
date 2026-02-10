@@ -1,5 +1,13 @@
 # @atcute/lexicons
 
+## 1.2.8
+
+### Patch Changes
+
+- 117416e: faster syntax parsers
+- a6d4adc: faster variant dispatch
+- a6d4adc: bound checking on resource URIs
+
 ## 1.2.7
 
 ### Patch Changes
