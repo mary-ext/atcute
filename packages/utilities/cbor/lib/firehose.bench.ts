@@ -189,7 +189,7 @@ const makeFirehoseFixtures = (count: number): unknown[] => {
 
 const stripUndefined = (value: unknown): unknown => {
 	if (Array.isArray(value)) {
-		const out = new Array(value.length);
+		const out = Array.from({ length: value.length });
 		for (let i = 0; i < value.length; i++) {
 			out[i] = stripUndefined(value[i]);
 		}
