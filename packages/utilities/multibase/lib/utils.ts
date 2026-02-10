@@ -107,40 +107,58 @@ export const createBtcBaseEncode = (alphabet: string) => {
 			zeroes++;
 		}
 
-		// Allocate enough space in big-endian base58 representation.
-		const size = ((pend - pbegin) * iFACTOR + 1) >>> 0;
-		const b58 = alloc(size);
+		// Allocate enough space in big-endian base-N representation.
+		const dataLen = pend - pbegin;
+		const size = (dataLen * iFACTOR + 1) >>> 0;
+		const bN = alloc(size);
 
-		// Process the bytes.
+		// Process 3 source bytes at a time where possible.
+		// multiplier: 256^3 = 16777216. max carry: 16777216 * (BASE-1) + (BASE-1).
+		// for BASE=58: 16777216 * 57 = 956301312, well within 2^32 - 1.
+		{
+			const rem = dataLen % 3;
+			const tripleEnd = pend - rem;
+
+			while (pbegin < tripleEnd) {
+				let carry = (source[pbegin] << 16) | (source[pbegin + 1] << 8) | source[pbegin + 2];
+
+				let i = 0;
+				for (let it1 = size - 1; (carry !== 0 || i < length) && it1 !== -1; it1--, i++) {
+					carry = carry + 16777216 * bN[it1];
+					bN[it1] = (carry % BASE) | 0;
+					carry = (carry / BASE) | 0;
+				}
+
+				length = i;
+				pbegin += 3;
+			}
+		}
+
+		// Process remaining 0-2 bytes one at a time.
 		while (pbegin !== pend) {
 			let carry = source[pbegin];
 
-			// Apply "b58 = b58 * 256 + ch".
 			let i = 0;
 			for (let it1 = size - 1; (carry !== 0 || i < length) && it1 !== -1; it1--, i++) {
-				carry += (256 * b58[it1]) >>> 0;
-				b58[it1] = (carry % BASE) >>> 0;
-				carry = (carry / BASE) >>> 0;
-			}
-
-			if (carry !== 0) {
-				throw new Error('non-zero carry');
+				carry = carry + 256 * bN[it1];
+				bN[it1] = (carry % BASE) | 0;
+				carry = (carry / BASE) | 0;
 			}
 
 			length = i;
 			pbegin++;
 		}
 
-		// Skip leading zeroes in base58 result.
+		// Skip leading zeroes in base-N result.
 		let it2 = size - length;
-		while (it2 !== size && b58[it2] === 0) {
+		while (it2 !== size && bN[it2] === 0) {
 			it2++;
 		}
 
 		// Translate the result into a string.
 		let str = LEADER.repeat(zeroes);
 		for (; it2 < size; ++it2) {
-			str += alphabet.charAt(b58[it2]);
+			str += alphabet.charAt(bN[it2]);
 		}
 
 		return str;
@@ -152,10 +170,13 @@ export const createBtcBaseDecode = (alphabet: string) => {
 		throw new RangeError(`alphabet too long`);
 	}
 
-	const BASE_MAP = allocUnsafe(256).fill(255);
+	const BASE_MAP = new Uint8Array(128).fill(255);
 	for (let i = 0; i < alphabet.length; i++) {
 		const xc = alphabet.charCodeAt(i);
 
+		if (xc >= 128) {
+			throw new RangeError(`non-ASCII character in alphabet`);
+		}
 		if (BASE_MAP[xc] !== 255) {
 			throw new RangeError(`${alphabet[i]} is ambiguous`);
 		}
@@ -164,6 +185,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 	}
 
 	const BASE = alphabet.length;
+	const BASE2 = BASE * BASE;
 	const LEADER = alphabet.charAt(0);
 	const FACTOR = Math.log(BASE) / Math.log(256); // log(BASE) / log(256), rounded up
 
@@ -172,7 +194,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 			return allocUnsafe(0);
 		}
 
-		// Skip and count leading '1's.
+		// Skip and count leading leader characters.
 		let psz = 0;
 		let zeroes = 0;
 		let length = 0;
@@ -183,30 +205,60 @@ export const createBtcBaseDecode = (alphabet: string) => {
 		}
 
 		// Allocate enough space in big-endian base256 representation.
-		const size = ((source.length - psz) * FACTOR + 1) >>> 0; // log(58) / log(256), rounded up.
+		const remaining = source.length - psz;
+		const size = (remaining * FACTOR + 1) >>> 0;
 		const b256 = alloc(size);
 
-		// Process the characters.
-		while (psz < source.length) {
-			// Decode character
+		// Process 2 source characters at a time where possible.
+		// combined value: c0 * BASE + c1, multiplier: BASE^2.
+		// max carry: BASE^2 * 255 + (BASE^2 - 1).
+		// for BASE=58: 3364 * 255 + 3363 = 861183, well within safe integer range.
+		{
+			const rem = remaining & 1;
+			const pairEnd = source.length - rem;
+
+			while (psz < pairEnd) {
+				const c0 = BASE_MAP[source.charCodeAt(psz)];
+				const c1 = BASE_MAP[source.charCodeAt(psz + 1)];
+
+				if (c0 === 255 || c1 === 255) {
+					throw new Error(`invalid string`);
+				}
+
+				let carry = c0 * BASE + c1;
+
+				let i = 0;
+				for (let it3 = size - 1; (carry !== 0 || i < length) && it3 !== -1; it3--, i++) {
+					carry += BASE2 * b256[it3];
+					b256[it3] = carry & 0xff;
+					carry = (carry - (carry & 0xff)) / 256;
+				}
+				if (carry !== 0) {
+					throw new Error('non-zero carry');
+				}
+				length = i;
+				psz += 2;
+			}
+		}
+
+		// Process remaining character if odd count.
+		if (psz < source.length) {
 			let carry = BASE_MAP[source.charCodeAt(psz)];
 
-			// Invalid character
 			if (carry === 255) {
 				throw new Error(`invalid string`);
 			}
 
 			let i = 0;
 			for (let it3 = size - 1; (carry !== 0 || i < length) && it3 !== -1; it3--, i++) {
-				carry += (BASE * b256[it3]) >>> 0;
-				b256[it3] = (carry % 256) >>> 0;
-				carry = (carry / 256) >>> 0;
+				carry += BASE * b256[it3];
+				b256[it3] = carry & 0xff;
+				carry = carry >>> 8;
 			}
 			if (carry !== 0) {
 				throw new Error('non-zero carry');
 			}
 			length = i;
-			psz++;
 		}
 
 		// Skip leading zeroes in b256.
