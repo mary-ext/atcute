@@ -113,14 +113,35 @@ export const isCanonicalResourceUri = (input: unknown): input is CanonicalResour
 		return false;
 	}
 
-	const match = ATURI_RE.exec(input);
-	if (match === null) {
+	// must start with "at://"
+	if (
+		input.charCodeAt(0) !== 0x61 ||
+		input.charCodeAt(1) !== 0x74 ||
+		input.charCodeAt(2) !== 0x3a ||
+		input.charCodeAt(3) !== 0x2f ||
+		input.charCodeAt(4) !== 0x2f
+	) {
 		return false;
 	}
 
-	const [, r, c, k] = match;
+	const firstSlash = input.indexOf('/', 5);
+	if (firstSlash === -1) {
+		return false;
+	}
 
-	return isDid(r) && isNsid(c) && isRecordKey(k);
+	const secondSlash = input.indexOf('/', firstSlash + 1);
+	if (secondSlash === -1) {
+		return false;
+	}
+
+	// check for fragment
+	const hashPos = input.indexOf('#', secondSlash + 1);
+
+	const repo = input.substring(5, firstSlash);
+	const collection = input.substring(firstSlash + 1, secondSlash);
+	const rkey = hashPos === -1 ? input.substring(secondSlash + 1) : input.substring(secondSlash + 1, hashPos);
+
+	return isDid(repo) && isNsid(collection) && isRecordKey(rkey);
 };
 
 // #__NO_SIDE_EFFECTS__
