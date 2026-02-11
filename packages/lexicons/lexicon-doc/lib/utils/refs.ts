@@ -71,176 +71,129 @@ type SchemaValue = LexUserType | LexRefVariant;
 export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<string> => {
 	const refs = new Set<string>();
 	const visited = new Set<string>();
+	let stack: { value: SchemaValue; next: typeof stack } | undefined;
 
-	const extract = (def: SchemaValue): void => {
+	if (defId !== undefined) {
+		const def = doc.defs[defId];
+		if (def !== undefined) {
+			stack = { value: def, next: stack };
+		}
+	} else {
+		for (const defId in doc.defs) {
+			stack = { value: doc.defs[defId], next: stack };
+		}
+	}
+
+	while (stack !== undefined) {
+		const def = stack.value;
+		stack = stack.next;
+
 		switch (def.type) {
 			case 'ref': {
-				const ref = def.ref;
-				if (ref.startsWith('#')) {
-					const id = extractDefId(ref)!;
-
-					if (visited.has(id)) {
-						break;
-					}
-
-					visited.add(id);
-
-					const child = doc.defs[id];
-					if (child !== undefined) {
-						extract(child);
-					}
-
+				const id = getInternalDefId(def.ref, doc.id);
+				if (id === undefined) {
+					refs.add(def.ref);
 					break;
 				}
 
-				const nsid = stripHash(ref);
-				if (nsid === doc.id) {
-					const id = extractDefId(ref)!;
-
-					if (visited.has(id)) {
-						break;
-					}
-
-					visited.add(id);
-
-					const child = doc.defs[id];
-					if (child !== undefined) {
-						extract(child);
-					}
-
+				if (visited.has(id)) {
 					break;
 				}
 
-				refs.add(ref);
+				visited.add(id);
+
+				const child = doc.defs[id];
+				if (child !== undefined) {
+					stack = { value: child, next: stack };
+				}
+
 				break;
 			}
 			case 'union': {
-				for (const ref of def.refs) {
-					if (ref.startsWith('#')) {
-						const id = extractDefId(ref)!;
-
-						if (visited.has(id)) {
-							continue;
-						}
-
-						visited.add(id);
-
-						const child = doc.defs[id];
-						if (child !== undefined) {
-							extract(child);
-						}
-
+				for (let idx = 0, len = def.refs.length; idx < len; idx++) {
+					const ref = def.refs[idx];
+					const id = getInternalDefId(ref, doc.id);
+					if (id === undefined) {
+						refs.add(ref);
 						continue;
 					}
 
-					const nsid = stripHash(ref);
-					if (nsid === doc.id) {
-						const id = extractDefId(ref)!;
-
-						if (visited.has(id)) {
-							continue;
-						}
-
-						visited.add(id);
-
-						const child = doc.defs[id];
-						if (child !== undefined) {
-							extract(child);
-						}
-
+					if (visited.has(id)) {
 						continue;
 					}
 
-					refs.add(ref);
+					visited.add(id);
+
+					const child = doc.defs[id];
+					if (child !== undefined) {
+						stack = { value: child, next: stack };
+					}
 				}
 
 				break;
 			}
-
 			case 'record': {
-				extract(def.record);
+				stack = { value: def.record, next: stack };
 				break;
 			}
-
 			case 'array': {
-				extract(def.items);
+				stack = { value: def.items, next: stack };
 				break;
 			}
-
 			case 'object': {
 				const properties = def.properties;
 				if (properties === undefined) {
 					break;
 				}
 
-				for (const item of Object.values(properties)) {
-					extract(item);
+				for (const key in properties) {
+					stack = { value: properties[key], next: stack };
 				}
 
 				break;
 			}
-
 			case 'procedure': {
-				const { input, output } = def;
-
-				if (input?.schema !== undefined) {
-					extract(input.schema);
+				if (def.input?.schema !== undefined) {
+					stack = { value: def.input.schema, next: stack };
 				}
 
-				if (output?.schema !== undefined) {
-					extract(output.schema);
+				if (def.output?.schema !== undefined) {
+					stack = { value: def.output.schema, next: stack };
 				}
 
 				break;
 			}
 			case 'subscription': {
-				const { message } = def;
-
-				if (message?.schema !== undefined) {
-					extract(message.schema);
+				if (def.message?.schema !== undefined) {
+					stack = { value: def.message.schema, next: stack };
 				}
 
 				break;
 			}
 			case 'query': {
-				const { output } = def;
-
-				if (output?.schema !== undefined) {
-					extract(output.schema);
+				if (def.output?.schema !== undefined) {
+					stack = { value: def.output.schema, next: stack };
 				}
 
 				break;
 			}
-		}
-	};
-
-	if (defId !== undefined) {
-		const def = doc.defs[defId];
-		if (def !== undefined) {
-			extract(def);
-		}
-	} else {
-		for (const defId in doc.defs) {
-			const def = doc.defs[defId];
-			extract(def);
 		}
 	}
 
 	return refs;
 };
 
-const stripHash = (defUri: string): string => {
-	const index = defUri.indexOf('#');
-	if (index === -1) {
-		return defUri;
+const getInternalDefId = (ref: string, docId: string): string | undefined => {
+	const hashIndex = ref.indexOf('#');
+	if (hashIndex === 0) {
+		return ref.slice(1);
 	}
 
-	return defUri.slice(0, index);
-};
+	if (hashIndex !== docId.length) {
+		return undefined;
+	}
 
-const extractDefId = (ref: string): string | undefined => {
-	const hashIndex = ref.indexOf('#');
-	if (hashIndex === -1) {
+	if (!ref.startsWith(docId)) {
 		return undefined;
 	}
 
