@@ -66,6 +66,9 @@ importers:
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../../misc/uint8array
 
   packages/bluesky/richtext-parser:
     devDependencies:

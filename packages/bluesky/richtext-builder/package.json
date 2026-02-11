@@ -30,6 +30,7 @@
 	},
 	"dependencies": {
 		"@atcute/bluesky": "workspace:^",
-		"@atcute/lexicons": "workspace:^"
+		"@atcute/lexicons": "workspace:^",
+		"@atcute/uint8array": "workspace:^"
 	}
 }

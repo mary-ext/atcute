@@ -1,5 +1,6 @@
 import type { AppBskyRichtextFacet } from '@atcute/bluesky';
 import type { Did, GenericUri } from '@atcute/lexicons';
+import { getUtf8Length } from '@atcute/uint8array';
 
 type UnwrapArray<T> = T extends (infer V)[] ? V : never;
 
@@ -7,8 +8,6 @@ type UnwrapArray<T> = T extends (infer V)[] ? V : never;
 export type Facet = AppBskyRichtextFacet.Main;
 /** Feature union type from Facet['features'] */
 export type FacetFeature = UnwrapArray<Facet['features']>;
-
-const encoder = new TextEncoder();
 
 /** Resulting rich text */
 export interface BakedRichtext {
@@ -88,15 +87,17 @@ class RichtextBuilder {
 		// Calculate the starting index
 		let start = 0;
 
-		start += encoder.encode(segments[last] as string).byteLength;
+		start += getUtf8Length(segments[last] as string);
 		if (last !== 0) {
 			start += (segments[last - 1] as Facet).index.byteEnd;
 		}
 
+		const byteLength = getUtf8Length(substr);
+
 		const facet: Facet = {
 			index: {
 				byteStart: start,
-				byteEnd: start + encoder.encode(substr).byteLength,
+				byteEnd: start + byteLength,
 			},
 			features: [feature],
 		};
