@@ -2,7 +2,7 @@ import { now as getNow } from '@atcute/time-ms';
 
 import { random } from '#platform/random';
 
-import { S32_2CHAR_TABLE, s32decode, s32encode } from './s32.ts';
+import { S32_2CHAR_TABLE, S32_DECODE_TABLE, s32encode } from './s32.ts';
 
 let lastTimestamp = 0;
 let lastCurrentTime = 0;
@@ -55,12 +55,27 @@ export const now = (): string => {
  * Parses a TID, throws on invalid strings.
  */
 export const parse = (tid: string): { timestamp: number; clockid: number } => {
-	if (!validate(tid)) {
+	if (tid.length !== 13) {
 		throw new Error(`invalid TID`);
 	}
 
-	const timestamp = s32decode(tid, 0, 11);
-	const clockid = s32decode(tid, 11, 2);
+	let timestamp = 0;
+	let clockid = 0;
+
+	for (let idx = 0; idx < 13; idx++) {
+		const code = tid.charCodeAt(idx);
+		const value = code < S32_DECODE_TABLE.length ? S32_DECODE_TABLE[code]! : -1;
+
+		if (value < 0 || (idx === 0 && value > 15)) {
+			throw new Error(`invalid TID`);
+		}
+
+		if (idx < 11) {
+			timestamp = timestamp * 32 + value;
+		} else {
+			clockid = clockid * 32 + value;
+		}
+	}
 
 	return { timestamp, clockid };
 };

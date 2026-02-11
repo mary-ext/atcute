@@ -49,6 +49,10 @@ describe('parse', () => {
 			clockid: 281,
 		});
 	});
+
+	it('throws on invalid code points', () => {
+		expect(() => TID.parse('3kztrqxakokc💩')).toThrow('invalid TID');
+	});
 });
 
 describe('validate', () => {
