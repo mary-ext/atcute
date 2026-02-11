@@ -1,6 +1,6 @@
 const S32_CHAR = '234567abcdefghijklmnopqrstuvwxyz';
 
-const S32_DECODE_TABLE = (() => {
+const S32_DECODE_TABLE = /*#__PURE__*/ (() => {
 	const table = new Int16Array(123);
 	table.fill(-1);
 
@@ -12,7 +12,7 @@ const S32_DECODE_TABLE = (() => {
 	return table;
 })();
 
-export const S32_2CHAR_TABLE = (() => {
+export const S32_2CHAR_TABLE = /*#__PURE__*/ (() => {
 	const table = Array.from<string>({ length: 1024 });
 
 	for (let i = 0; i < 1024; i++) {
