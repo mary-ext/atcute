@@ -222,6 +222,9 @@ export const decodeUtf8From = (
 		const result = _shortString(from, offset, length);
 		if (result !== null) return result;
 	}
+	if (offset === 0 && length === from.length) {
+		return textDecoder.decode(from);
+	}
 	return textDecoder.decode(from.subarray(offset, offset + length));
 };
 
