@@ -2,7 +2,7 @@ import { now as getNow } from '@atcute/time-ms';
 
 import { random } from '#platform/random';
 
-import { s32decode, s32encode } from './s32.ts';
+import { S32_2CHAR_TABLE, s32decode, s32encode } from './s32.ts';
 
 let lastTimestamp = 0;
 let lastCurrentTime = 0;
@@ -13,7 +13,7 @@ const TID_RE = /^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{12}$/;
  * Creates a TID based off provided timestamp and clockid, with no validation.
  */
 export const createRaw = (timestamp: number, clockid: number): string => {
-	return s32encode(timestamp).padStart(11, '2') + s32encode(clockid).padStart(2, '2');
+	return s32encode(timestamp).padStart(11, '2') + S32_2CHAR_TABLE[clockid]!;
 };
 
 /**
@@ -59,10 +59,10 @@ export const parse = (tid: string): { timestamp: number; clockid: number } => {
 		throw new Error(`invalid TID`);
 	}
 
-	const timestamp = s32decode(tid.slice(0, 11));
-	const clockid = s32decode(tid.slice(11, 13));
+	const timestamp = s32decode(tid, 0, 11);
+	const clockid = s32decode(tid, 11, 2);
 
-	return { timestamp: timestamp, clockid: clockid };
+	return { timestamp, clockid };
 };
 
 /**

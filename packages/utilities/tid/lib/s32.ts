@@ -1,5 +1,29 @@
 const S32_CHAR = '234567abcdefghijklmnopqrstuvwxyz';
 
+const S32_DECODE_TABLE = (() => {
+	const table = new Int16Array(123);
+	table.fill(-1);
+
+	for (let i = 0; i < S32_CHAR.length; i++) {
+		const code = S32_CHAR.charCodeAt(i);
+		table[code] = i;
+	}
+
+	return table;
+})();
+
+export const S32_2CHAR_TABLE = (() => {
+	const table = Array.from<string>({ length: 1024 });
+
+	for (let i = 0; i < 1024; i++) {
+		const hi = S32_CHAR.charAt((i >> 5) & 31);
+		const lo = S32_CHAR.charAt(i & 31);
+		table[i] = hi + lo;
+	}
+
+	return table;
+})();
+
 export const s32encode = (i: number): string => {
 	let s = '';
 
@@ -12,11 +36,12 @@ export const s32encode = (i: number): string => {
 	return s;
 };
 
-export const s32decode = (s: string): number => {
+export const s32decode = (s: string, offset: number, length: number): number => {
 	let i = 0;
+	const end = offset + length;
 
-	for (const c of s) {
-		i = i * 32 + S32_CHAR.indexOf(c);
+	for (let idx = offset; idx < end; idx++) {
+		i = i * 32 + S32_DECODE_TABLE[s.charCodeAt(idx)]!;
 	}
 
 	return i;
