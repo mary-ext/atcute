@@ -10,7 +10,26 @@ const CASHTAG_RE = /^[$＄]([A-Za-z][A-Za-z0-9]{0,7})($|\s|\p{P})/u;
 const EMOTE_RE = /^:([\w-]+):/;
 
 const AUTOLINK_RE = /^https?:\/\/[\S]+/;
-const AUTOLINK_BACKPEDAL_RE = /(?:(?<!\(.*)\))?[.,;]*$/;
+
+const trimAutolink = (url: string): string => {
+	let end = url.length;
+
+	while (end > 0) {
+		const code = url.charCodeAt(end - 1);
+		if (code === 46 || code === 44 || code === 59) {
+			end -= 1;
+			continue;
+		}
+
+		break;
+	}
+
+	if (end > 0 && url.charCodeAt(end - 1) === 41 && url.lastIndexOf('(', end - 1) === -1) {
+		end -= 1;
+	}
+
+	return end === url.length ? url : url.slice(0, end);
+};
 
 const LINK_RE =
 	/^\[((?:\[[^\]]*\]|[^[\]]|\](?=[^[]*\]))*)\]\(\s*<?((?:\([^)]*\)|[^\s\\]|\\.)*?)>?(?:\s+['"]([^]*?)['"])?\s*\)/;
@@ -188,7 +207,7 @@ const tokenizeEmote = (src: string): EmoteToken | undefined => {
 const tokenizeAutolink = (src: string): AutolinkToken | undefined => {
 	const match = AUTOLINK_RE.exec(src);
 	if (match) {
-		const url = match[0].replace(AUTOLINK_BACKPEDAL_RE, '');
+		const url = trimAutolink(match[0]);
 
 		return {
 			type: 'autolink',
@@ -311,20 +330,33 @@ export const tokenize = (src: string): Token[] => {
 
 	while (src) {
 		last = token;
+		const first = src.charCodeAt(0);
 
-		if (
-			(token =
-				tokenizeEscape(src) ||
-				tokenizeAutolink(src) ||
-				tokenizeMention(src) ||
-				tokenizeTopic(src) ||
-				tokenizeCashtag(src) ||
-				tokenizeEmote(src) ||
-				tokenizeLink(src) ||
-				tokenizeEmStrongU(src) ||
-				tokenizeDelete(src) ||
-				tokenizeCode(src))
-		) {
+		if (first === 92) {
+			token = tokenizeEscape(src);
+		} else if (first === 104) {
+			token = tokenizeAutolink(src);
+		} else if (first === 64 || first === 65312) {
+			token = tokenizeMention(src);
+		} else if (first === 35 || first === 65283) {
+			token = tokenizeTopic(src);
+		} else if (first === 36 || first === 65284) {
+			token = tokenizeCashtag(src);
+		} else if (first === 58) {
+			token = tokenizeEmote(src);
+		} else if (first === 91) {
+			token = tokenizeLink(src);
+		} else if (first === 42 || first === 95) {
+			token = tokenizeEmStrongU(src);
+		} else if (first === 126) {
+			token = tokenizeDelete(src);
+		} else if (first === 96) {
+			token = tokenizeCode(src);
+		} else {
+			token = undefined;
+		}
+
+		if (token) {
 			src = src.slice(token.raw.length);
 			tokens.push(token);
 			continue;
