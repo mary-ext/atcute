@@ -20,6 +20,13 @@
 	],
 	"type": "module",
 	"sideEffects": false,
+	"imports": {
+		"#runtime": {
+			"workerd": "./lib/runtime.ts",
+			"node": "./lib/runtime.node.ts",
+			"default": "./lib/runtime.ts"
+		}
+	},
 	"exports": {
 		".": "./lib/index.ts",
 		"./bytes": "./lib/bytes.ts"
@@ -29,6 +36,13 @@
 		"exports": {
 			".": "./dist/index.js",
 			"./bytes": "./dist/bytes.js"
+		},
+		"imports": {
+			"#runtime": {
+				"workerd": "./dist/runtime.js",
+				"node": "./dist/runtime.node.js",
+				"default": "./dist/runtime.js"
+			}
 		}
 	},
 	"scripts": {

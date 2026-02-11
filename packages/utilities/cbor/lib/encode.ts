@@ -1,6 +1,8 @@
 import { type CidLink, CidLinkWrapper, fromString } from '@atcute/cid';
 import { allocUnsafe, concat, encodeUtf8Into } from '@atcute/uint8array';
 
+import { IS_NODE_RUNTIME } from '#runtime';
+
 import { type Bytes, BytesWrapper, fromBytes } from './bytes.ts';
 
 const MAX_TYPE_ARG_LEN = 9;
@@ -166,7 +168,7 @@ const writeString = (state: State, val: string): void => {
 	resizeIfNeeded(state, strLength * 3 + MAX_TYPE_ARG_LEN);
 
 	// Optimistic fast encode
-	ascii: {
+	ascii: if (!IS_NODE_RUNTIME || strLength < 24) {
 		const ptr = state.p + getTypeInfoLength(strLength);
 		const first = val.charCodeAt(0);
 		if (first > 0x7f) {
