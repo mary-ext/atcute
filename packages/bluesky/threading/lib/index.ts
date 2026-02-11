@@ -114,7 +114,7 @@ export async function createThread(
 
 	for (let idx = 0, len = posts.length; idx < len; idx++) {
 		// Get the record key for this post
-		rkey = TID.createRaw(now.getTime(), Math.floor(Math.random() * 1023));
+		rkey = TID.createRaw(now.getTime(), Math.floor(Math.random() * 1024));
 
 		const post = posts[idx];
 		const uri: CanonicalResourceUri = `at://${did}/app.bsky.feed.post/${rkey}`;
