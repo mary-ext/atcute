@@ -5,59 +5,74 @@ import * as varint from '@atcute/varint';
 
 import { isCarV1Header, type CarEntry, type CarHeader } from './types.ts';
 
-interface SyncByteReader {
-	readonly pos: number;
-	readonly source: Uint8Array;
-	upto(size: number): Uint8Array;
-	exactly(size: number, seek: boolean): Uint8Array;
-	seek(size: number): void;
-}
-
 export interface SyncCarReader {
 	readonly header: CarHeader;
 	readonly roots: CidLink[];
 
 	/** @deprecated do for..of on the reader directly */
-	iterate(): Generator<CarEntry>;
+	iterate(): IterableIterator<CarEntry>;
 	[Symbol.iterator](): Iterator<CarEntry>;
 }
 
 export const fromUint8Array = (buffer: Uint8Array): SyncCarReader => {
-	const reader = createUint8Reader(buffer);
-	const header = readHeader(reader);
+	const { header, nextOffset: headerOffset } = readHeader(buffer, 0);
+	let pos = headerOffset;
 
 	return {
 		header,
 		roots: header.data.roots,
 
-		*iterate() {
-			while (reader.upto(8 + 36).length > 0) {
-				const entryStart = reader.pos;
-				const entrySize = readVarint(reader, 8);
+		iterate(): IterableIterator<CarEntry> {
+			return {
+				next(): IteratorResult<CarEntry> {
+					if (pos >= buffer.length) {
+						return {
+							done: true,
+							value: undefined,
+						};
+					}
 
-				const cidStart = reader.pos;
-				const cid = readCid(reader);
+					const entryStart = pos;
+					const { value: entryLength, nextOffset: lengthOffset } = varint.decode(buffer, pos, 8);
+					pos = lengthOffset;
 
-				const bytesStart = reader.pos;
-				const bytesSize = entrySize - (bytesStart - cidStart);
-				const bytes = reader.exactly(bytesSize, true);
+					const cidStart = pos;
+					const { cid, nextOffset: cidOffset } = readCid(buffer, pos);
+					pos = cidOffset;
 
-				const cidEnd = bytesStart;
-				const bytesEnd = reader.pos;
-				const entryEnd = bytesEnd;
+					const bytesStart = pos;
+					const bytesSize = entryLength - (bytesStart - cidStart);
+					if (bytesSize < 0 || bytesStart + bytesSize > buffer.length) {
+						throw new RangeError('unexpected end of data');
+					}
 
-				yield {
-					cid,
-					bytes,
+					const bytesEnd = bytesStart + bytesSize;
+					const bytes = buffer.subarray(bytesStart, bytesEnd);
+					pos = bytesEnd;
 
-					entryStart,
-					entryEnd,
-					cidStart,
-					cidEnd,
-					bytesStart,
-					bytesEnd,
-				};
-			}
+					const cidEnd = bytesStart;
+					const entryEnd = bytesEnd;
+
+					return {
+						done: false,
+						value: {
+							cid,
+							bytes,
+
+							entryStart,
+							entryEnd,
+							cidStart,
+							cidEnd,
+							bytesStart,
+							bytesEnd,
+						},
+					};
+				},
+
+				[Symbol.iterator]() {
+					return this;
+				},
+			};
 		},
 
 		[Symbol.iterator](): Iterator<CarEntry> {
@@ -66,76 +81,39 @@ export const fromUint8Array = (buffer: Uint8Array): SyncCarReader => {
 	};
 };
 
-const createUint8Reader = (buf: Uint8Array): SyncByteReader => {
-	let pos = 0;
-
-	return {
-		get pos() {
-			return pos;
-		},
-		get source() {
-			return buf;
-		},
-
-		seek(size) {
-			if (size > buf.length - pos) {
-				throw new RangeError('unexpected end of data');
-			}
-
-			pos += size;
-		},
-		upto(size) {
-			return buf.subarray(pos, pos + size);
-		},
-		exactly(size, seek) {
-			if (size > buf.length - pos) {
-				throw new RangeError('unexpected end of data');
-			}
-
-			const slice = buf.subarray(pos, pos + size);
-			if (seek) {
-				pos += size;
-			}
-
-			return slice;
-		},
-	};
-};
-
-const readVarint = (reader: SyncByteReader, size: number): number => {
-	if (reader.pos >= reader.source.length) {
-		throw new RangeError(`unexpected end of data`);
-	}
-
-	const { value, nextOffset } = varint.decode(reader.source, reader.pos, size);
-	reader.seek(nextOffset - reader.pos);
-
-	return value;
-};
-
-const readHeader = (reader: SyncByteReader): CarHeader => {
-	const headerStart = reader.pos;
-	const length = readVarint(reader, 8);
+const readHeader = (source: Uint8Array, offset: number): { header: CarHeader; nextOffset: number } => {
+	const headerStart = offset;
+	const { value: length, nextOffset: lengthOffset } = varint.decode(source, offset, 8);
 	if (length === 0) {
 		throw new RangeError(`invalid car header; length=0`);
 	}
 
-	const dataStart = reader.pos;
-	const rawHeader = reader.exactly(length, true);
+	const dataStart = lengthOffset;
+	const dataEnd = dataStart + length;
+	if (dataEnd > source.length) {
+		throw new RangeError('unexpected end of data');
+	}
 
-	const data = CBOR.decode(rawHeader);
+	const data = CBOR.decode(source.subarray(dataStart, dataEnd));
 	if (!isCarV1Header(data)) {
 		throw new TypeError(`expected a car v1 archive`);
 	}
 
-	const dataEnd = reader.pos;
 	const headerEnd = dataEnd;
 
-	return { data, headerStart, headerEnd, dataStart, dataEnd };
+	return {
+		header: { data, headerStart, headerEnd, dataStart, dataEnd },
+		nextOffset: dataEnd,
+	};
 };
 
-const readCid = (reader: SyncByteReader): CID.Cid => {
-	const bytes = reader.exactly(36, true);
+const readCid = (source: Uint8Array, offset: number): { cid: CID.Cid; nextOffset: number } => {
+	const cidEnd = offset + 36;
+	if (cidEnd > source.length) {
+		throw new RangeError('unexpected end of data');
+	}
+
+	const bytes = source.subarray(offset, cidEnd);
 
 	const version = bytes[0];
 	const codec = bytes[1];
@@ -159,12 +137,15 @@ const readCid = (reader: SyncByteReader): CID.Cid => {
 	}
 
 	return {
-		version: version,
-		codec: codec,
-		digest: {
-			codec: digestType,
-			contents: bytes.subarray(4, 36),
+		cid: {
+			version: version,
+			codec: codec,
+			digest: {
+				codec: digestType,
+				contents: bytes.subarray(4, 36),
+			},
+			bytes: bytes,
 		},
-		bytes: bytes,
+		nextOffset: cidEnd,
 	};
 };
