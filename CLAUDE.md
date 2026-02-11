@@ -18,7 +18,7 @@ the packages are organized into categories under `packages/`:
 
 ### project management
 
-- tools like Node.js, Bun and pnpm are managed by mise, to run them, use `mise exec -- pnpm ...`
+- tools like Node.js, Bun and pnpm are managed by mise
 - check `pnpm view <package>` before adding a new dependency
 
 #### root-level tasks
@@ -28,7 +28,7 @@ the packages are organized into categories under `packages/`:
 
 #### package-level tasks
 
-run these inside the package directory, e.g. `cd packages/utilities/cbor; mise exec -- pnpm run ...`
+run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm run ...`
 
 - build via `pnpm run build` (tsgo, includes typechecking)
 - test via `pnpm run test` (vitest)
