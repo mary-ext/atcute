@@ -29,8 +29,16 @@ export const toBase32 = (bytes: Uint8Array): string => {
 	// batching into a single String.fromCharCode call for fewer string concats
 	const pairs = (full / 2) | 0;
 	for (let g = 0; g < pairs; g++) {
-		const a0 = bytes[ip], a1 = bytes[ip + 1], a2 = bytes[ip + 2], a3 = bytes[ip + 3], a4 = bytes[ip + 4];
-		const b0 = bytes[ip + 5], b1 = bytes[ip + 6], b2 = bytes[ip + 7], b3 = bytes[ip + 8], b4 = bytes[ip + 9];
+		const a0 = bytes[ip],
+			a1 = bytes[ip + 1],
+			a2 = bytes[ip + 2],
+			a3 = bytes[ip + 3],
+			a4 = bytes[ip + 4];
+		const b0 = bytes[ip + 5],
+			b1 = bytes[ip + 6],
+			b2 = bytes[ip + 7],
+			b3 = bytes[ip + 8],
+			b4 = bytes[ip + 9];
 
 		str += _fromCharCode(
 			cc[a0 >>> 3],
@@ -55,7 +63,11 @@ export const toBase32 = (bytes: Uint8Array): string => {
 
 	// remaining full group if odd count
 	if (full & 1) {
-		const b0 = bytes[ip], b1 = bytes[ip + 1], b2 = bytes[ip + 2], b3 = bytes[ip + 3], b4 = bytes[ip + 4];
+		const b0 = bytes[ip],
+			b1 = bytes[ip + 1],
+			b2 = bytes[ip + 2],
+			b3 = bytes[ip + 3],
+			b4 = bytes[ip + 4];
 
 		str += _fromCharCode(
 			cc[b0 >>> 3],

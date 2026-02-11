@@ -32,7 +32,7 @@ export const wrapAtprotoPrefix = (str: string): string => {
 export const deriveDidFromGenesisOp = async (op: t.CompatibleOperation): Promise<t.DidPlcString> => {
 	const opBytes = CBOR.encode(op);
 	const hash = await toSha256(opBytes);
-	return `did:plc:${toBase32(hash).slice(0, 24)}`;
+	return `did:plc:${toBase32(hash.subarray(0, 15))}`;
 };
 
 export const normalizeOp = (op: t.CompatibleOperation): t.Operation => {
