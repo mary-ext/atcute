@@ -14,7 +14,7 @@ export interface SessionGetOptions {
 	allowStale?: boolean;
 }
 
-type PendingItem<V> = Promise<{ value: V; isFresh: boolean }>;
+type PendingItem<V> = { value: V; isFresh: boolean };
 const pending = new Map<Did, Promise<PendingItem<Session>>>();
 
 export const getSession = async (sub: Did, options?: SessionGetOptions): Promise<Session> => {

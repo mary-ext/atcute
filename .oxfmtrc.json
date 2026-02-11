@@ -14,11 +14,11 @@
 		"customGroups": [
 			{
 				"groupName": "bun",
-				"elementNamePattern": ["bun", "bun:"]
+				"elementNamePattern": ["bun", "bun:*"]
 			},
 			{
 				"groupName": "atcute",
-				"elementNamePattern": ["@atcute/"]
+				"elementNamePattern": ["@atcute/**"]
 			}
 		]
 	},

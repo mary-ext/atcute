@@ -33,7 +33,7 @@
 		"@atcute/uint8array": "workspace:^",
 		"@mary-ext/event-iterator": "^1.0.0",
 		"@mary-ext/simple-event-emitter": "^1.0.0",
-		"partysocket": "^1.1.11",
+		"partysocket": "^1.1.13",
 		"type-fest": "^4.41.0"
 	},
 	"devDependencies": {
