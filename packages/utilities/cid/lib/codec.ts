@@ -11,9 +11,6 @@ export const CODEC_RAW = 0x55;
 /** multicodec for DAG-CBOR encoded data */
 export const CODEC_DCBOR = 0x71;
 
-/** @internal */
-export const CID_STRINGIFY_CACHE = new WeakMap<Cid, string>();
-
 /**
  * represents a Content Identifier (CID), in particular, a limited subset of
  * CIDv1 as described by DASL specifications.
@@ -155,10 +152,7 @@ export const fromString = (input: string): Cid => {
 	}
 
 	const bytes = fromBase32(input.slice(1));
-	const cid = decode(bytes);
-
-	CID_STRINGIFY_CACHE.set(cid, input);
-	return cid;
+	return decode(bytes);
 };
 
 /**
@@ -167,14 +161,7 @@ export const fromString = (input: string): Cid => {
  * @returns base32-encoded string with 'b' prefix
  */
 export const toString = (cid: Cid): string => {
-	let str = CID_STRINGIFY_CACHE.get(cid);
-	if (str === undefined) {
-		str = `b${toBase32(cid.bytes)}`;
-
-		CID_STRINGIFY_CACHE.set(cid, str);
-	}
-
-	return str;
+	return `b${toBase32(cid.bytes)}`;
 };
 
 /**

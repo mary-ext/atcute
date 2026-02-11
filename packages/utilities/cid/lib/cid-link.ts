@@ -1,11 +1,8 @@
 import { toBase32 } from '@atcute/multibase';
 
-import { CID_STRINGIFY_CACHE, decode, fromString, type Cid } from './codec.ts';
+import { decode, fromString, type Cid } from './codec.ts';
 
 const CID_LINK_SYMBOL = Symbol.for('@atcute/cid-link-wrapper');
-
-/** @internal */
-export const CIDLINK_STRINGIFY_CACHE = new WeakMap<CidLinkWrapper, string>();
 
 export interface CidLink {
 	$link: string;
@@ -22,14 +19,13 @@ export class CidLinkWrapper implements CidLink {
 	}
 
 	get $link(): string {
-		let str = CIDLINK_STRINGIFY_CACHE.get(this);
-		if (str === undefined) {
-			str = `b${toBase32(this.bytes)}`;
+		const link = `b${toBase32(this.bytes)}`;
+		Object.defineProperty(this, '$link', {
+			value: link,
+			enumerable: true,
+		});
 
-			CIDLINK_STRINGIFY_CACHE.set(this, str);
-		}
-
-		return str;
+		return link;
 	}
 
 	toJSON(): CidLink {
@@ -47,14 +43,7 @@ export const isCidLink = (value: unknown): value is CidLink => {
 };
 
 export const toCidLink = (cid: Cid): CidLink => {
-	const inst = new CidLinkWrapper(cid.bytes);
-	const str = CID_STRINGIFY_CACHE.get(cid);
-
-	if (str !== undefined) {
-		CIDLINK_STRINGIFY_CACHE.set(inst, str);
-	}
-
-	return inst;
+	return new CidLinkWrapper(cid.bytes);
 };
 
 export const fromCidLink = (link: CidLink): Cid => {
