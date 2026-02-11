@@ -2,11 +2,15 @@ import { expect, it, vi } from 'vitest';
 
 import { fromBase32, toBase32 } from './base32.ts';
 
-vi.mock('@atcute/uint8array', () => ({
-	allocUnsafe: (size: number): Uint8Array => {
-		return crypto.getRandomValues(new Uint8Array(size));
-	},
-}));
+vi.mock('@atcute/uint8array', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('@atcute/uint8array')>();
+	return {
+		...actual,
+		allocUnsafe: (size: number): Uint8Array => {
+			return crypto.getRandomValues(new Uint8Array(size));
+		},
+	};
+});
 
 const inputs = [
 	{

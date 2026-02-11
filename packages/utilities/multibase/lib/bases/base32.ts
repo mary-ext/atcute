@@ -1,20 +1,20 @@
-import { allocUnsafe } from '@atcute/uint8array';
+import { allocUnsafe, decodeUtf8From } from '@atcute/uint8array';
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz234567';
 
 // #region encode
 
-// 2-character lookup table: lut2[(i << 5) | j] = alphabet[i] + alphabet[j]
-// avoids per-character string concatenation in the hot loop
-const _lut2: string[] = /*#__PURE__*/ (() => {
-	const t: string[] = Array.from({ length: 1024 });
+// charCode lookup table: _encLut[i] = ALPHABET.charCodeAt(i) for i in 0..31
+const _encLut: Uint8Array = /*#__PURE__*/ (() => {
+	const t = new Uint8Array(32);
 	for (let i = 0; i < 32; i++) {
-		for (let j = 0; j < 32; j++) {
-			t[(i << 5) | j] = ALPHABET[i] + ALPHABET[j];
-		}
+		t[i] = ALPHABET.charCodeAt(i);
 	}
 	return t;
 })();
+
+// output length for a given remainder (0-4 trailing bytes after full 5-byte groups)
+const _remOutLen = [0, 2, 4, 5, 7];
 
 /**
  * encodes a Uint8Array to an unpadded RFC 4648 base32 (lowercase) string
@@ -23,46 +23,52 @@ const _lut2: string[] = /*#__PURE__*/ (() => {
  */
 export const toBase32 = (bytes: Uint8Array): string => {
 	const len = bytes.length;
-	let str = '';
+	const full = (len / 5) | 0;
+	const rem = len - full * 5;
+	const outLen = full * 8 + _remOutLen[rem];
+	const out = allocUnsafe(outLen);
+	const cc = _encLut;
 
-	// process 5-byte groups (= 40 bits = 8 base32 characters each),
-	// using the 2-char lookup table to emit pairs of characters at a time
-	let i = 0;
-	const fullGroups = len - (len % 5);
-	for (; i < fullGroups; i += 5) {
-		const b0 = bytes[i];
-		const b1 = bytes[i + 1];
-		const b2 = bytes[i + 2];
-		const b3 = bytes[i + 3];
-		const b4 = bytes[i + 4];
+	// process 5-byte groups (= 40 bits = 8 base32 characters each)
+	let ip = 0;
+	let op = 0;
+	for (let g = 0; g < full; g++) {
+		const b0 = bytes[ip++];
+		const b1 = bytes[ip++];
+		const b2 = bytes[ip++];
+		const b3 = bytes[ip++];
+		const b4 = bytes[ip++];
 
-		str +=
-			_lut2[((b0 >>> 3) << 5) | (((b0 << 2) | (b1 >>> 6)) & 0x1f)] +
-			_lut2[(((b1 >>> 1) & 0x1f) << 5) | (((b1 << 4) | (b2 >>> 4)) & 0x1f)] +
-			_lut2[((((b2 << 1) | (b3 >>> 7)) & 0x1f) << 5) | ((b3 >>> 2) & 0x1f)] +
-			_lut2[((((b3 << 3) | (b4 >>> 5)) & 0x1f) << 5) | (b4 & 0x1f)];
+		out[op++] = cc[b0 >>> 3];
+		out[op++] = cc[((b0 << 2) | (b1 >>> 6)) & 0x1f];
+		out[op++] = cc[(b1 >>> 1) & 0x1f];
+		out[op++] = cc[((b1 << 4) | (b2 >>> 4)) & 0x1f];
+		out[op++] = cc[((b2 << 1) | (b3 >>> 7)) & 0x1f];
+		out[op++] = cc[(b3 >>> 2) & 0x1f];
+		out[op++] = cc[((b3 << 3) | (b4 >>> 5)) & 0x1f];
+		out[op++] = cc[b4 & 0x1f];
 	}
 
 	// handle remaining 1-4 bytes
-	if (i < len) {
+	if (rem > 0) {
 		let buffer = 0;
 		let bits = 0;
-		for (; i < len; i++) {
+		for (let i = ip; i < len; i++) {
 			buffer = (buffer << 8) | bytes[i];
 			bits += 8;
 		}
 		while (bits > 0) {
 			if (bits >= 5) {
 				bits -= 5;
-				str += ALPHABET[(buffer >>> bits) & 0x1f];
+				out[op++] = cc[(buffer >>> bits) & 0x1f];
 			} else {
-				str += ALPHABET[(buffer << (5 - bits)) & 0x1f];
+				out[op++] = cc[(buffer << (5 - bits)) & 0x1f];
 				bits = 0;
 			}
 		}
 	}
 
-	return str;
+	return decodeUtf8From(out);
 };
 
 // #endregion
