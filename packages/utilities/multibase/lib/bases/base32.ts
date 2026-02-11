@@ -1,77 +1,8 @@
-import { allocUnsafe, decodeUtf8From } from '@atcute/uint8array';
+import { allocUnsafe } from '@atcute/uint8array';
+
+export { toBase32 } from '#bases/base32-encode';
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyz234567';
-
-// #region encode
-
-// charCode lookup table: _encLut[i] = ALPHABET.charCodeAt(i) for i in 0..31
-const _encLut: Uint8Array = /*#__PURE__*/ (() => {
-	const t = new Uint8Array(32);
-	for (let i = 0; i < 32; i++) {
-		t[i] = ALPHABET.charCodeAt(i);
-	}
-	return t;
-})();
-
-// output length for a given remainder (0-4 trailing bytes after full 5-byte groups)
-const _remOutLen = [0, 2, 4, 5, 7];
-
-/**
- * encodes a Uint8Array to an unpadded RFC 4648 base32 (lowercase) string
- * @param bytes source buffer
- * @returns base32 encoded string
- */
-export const toBase32 = (bytes: Uint8Array): string => {
-	const len = bytes.length;
-	const full = (len / 5) | 0;
-	const rem = len - full * 5;
-	const outLen = full * 8 + _remOutLen[rem];
-	const out = allocUnsafe(outLen);
-	const cc = _encLut;
-
-	// process 5-byte groups (= 40 bits = 8 base32 characters each)
-	let ip = 0;
-	let op = 0;
-	for (let g = 0; g < full; g++) {
-		const b0 = bytes[ip++];
-		const b1 = bytes[ip++];
-		const b2 = bytes[ip++];
-		const b3 = bytes[ip++];
-		const b4 = bytes[ip++];
-
-		out[op++] = cc[b0 >>> 3];
-		out[op++] = cc[((b0 << 2) | (b1 >>> 6)) & 0x1f];
-		out[op++] = cc[(b1 >>> 1) & 0x1f];
-		out[op++] = cc[((b1 << 4) | (b2 >>> 4)) & 0x1f];
-		out[op++] = cc[((b2 << 1) | (b3 >>> 7)) & 0x1f];
-		out[op++] = cc[(b3 >>> 2) & 0x1f];
-		out[op++] = cc[((b3 << 3) | (b4 >>> 5)) & 0x1f];
-		out[op++] = cc[b4 & 0x1f];
-	}
-
-	// handle remaining 1-4 bytes
-	if (rem > 0) {
-		let buffer = 0;
-		let bits = 0;
-		for (let i = ip; i < len; i++) {
-			buffer = (buffer << 8) | bytes[i];
-			bits += 8;
-		}
-		while (bits > 0) {
-			if (bits >= 5) {
-				bits -= 5;
-				out[op++] = cc[(buffer >>> bits) & 0x1f];
-			} else {
-				out[op++] = cc[(buffer << (5 - bits)) & 0x1f];
-				bits = 0;
-			}
-		}
-	}
-
-	return decodeUtf8From(out);
-};
-
-// #endregion
 
 // #region decode
 

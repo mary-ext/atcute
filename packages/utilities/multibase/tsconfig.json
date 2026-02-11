@@ -25,6 +25,7 @@
 		"stripInternal": true,
 		"paths": {
 			"#bases/base16": ["./lib/bases/base16-web.ts"],
+			"#bases/base32-encode": ["./lib/bases/base32-encode.ts"],
 			"#bases/base64": ["./lib/bases/base64-web.ts"]
 		}
 	},

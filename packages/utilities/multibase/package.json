@@ -22,6 +22,10 @@
 			"node": "./dist/bases/base16-node.js",
 			"default": "./dist/bases/base16-web.js"
 		},
+		"#bases/base32-encode": {
+			"bun": "./dist/bases/base32-encode.bun.js",
+			"default": "./dist/bases/base32-encode.js"
+		},
 		"#bases/base64": {
 			"bun": "./dist/bases/base64-web.js",
 			"workerd": "./dist/bases/base64-web.js",
