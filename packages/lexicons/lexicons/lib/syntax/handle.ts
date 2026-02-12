@@ -1,11 +1,10 @@
+import { isAsciiAlpha, isAsciiAlphaNum } from './utils/ascii.ts';
+
 /**
  * represents an account's handle, using domains as a human-friendly
  * identifier.
  */
 export type Handle = `${string}.${string}`;
-
-const isAlpha = (c: number) => (c >= 0x41 && c <= 0x5a) || (c >= 0x61 && c <= 0x7a);
-const isAlphaNum = (c: number) => isAlpha(c) || (c >= 0x30 && c <= 0x39);
 
 // validates a domain label: starts/ends with alphanumeric, middle allows hyphens, max 63 chars
 const isValidLabel = (input: string, start: number, end: number): boolean => {
@@ -15,15 +14,15 @@ const isValidLabel = (input: string, start: number, end: number): boolean => {
 	}
 
 	const first = input.charCodeAt(start);
-	if (!isAlphaNum(first)) {
+	if (!isAsciiAlphaNum(first)) {
 		return false;
 	}
 
 	if (len > 1) {
-		if (!isAlphaNum(input.charCodeAt(end - 1))) return false;
+		if (!isAsciiAlphaNum(input.charCodeAt(end - 1))) return false;
 		for (let j = start + 1; j < end - 1; j++) {
 			const c = input.charCodeAt(j);
-			if (!isAlphaNum(c) && c !== 0x2d) {
+			if (!isAsciiAlphaNum(c) && c !== 0x2d) {
 				return false;
 			}
 		}
@@ -64,5 +63,5 @@ export const isHandle = (input: unknown): input is Handle => {
 	}
 
 	// TLD must start with a letter
-	return isAlpha(input.charCodeAt(lastLabelStart));
+	return isAsciiAlpha(input.charCodeAt(lastLabelStart));
 };

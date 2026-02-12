@@ -4,6 +4,7 @@ import { isActorIdentifier, type ActorIdentifier } from './at-identifier.ts';
 import { isDid, type Did } from './did.ts';
 import { isNsid, type Nsid } from './nsid.ts';
 import { isRecordKey, type RecordKey } from './record-key.ts';
+import { isAsciiAlphaNum } from './utils/ascii.ts';
 
 /**
  * represents a general AT Protocol URI, representing either an entire
@@ -36,6 +37,34 @@ const AT_URI_MAX_LENGTH = 5 + 2048 + 1 + 317 + 1 + 512;
 const ATURI_RE =
 	/^at:\/\/([a-zA-Z0-9._:%-]+)(?:\/([a-zA-Z0-9-.]+)(?:\/([a-zA-Z0-9._~:@!$&%')(*+,;=-]+))?)?(?:#(\/[a-zA-Z0-9._~:@!$&%')(*+,;=\-[\]/\\]*))?$/;
 
+const isFragmentChar = (c: number): boolean => {
+	return (
+		isAsciiAlphaNum(c) ||
+		c === 0x2e || // .
+		c === 0x5f || // _
+		c === 0x7e || // ~
+		c === 0x3a || // :
+		c === 0x40 || // @
+		c === 0x21 || // !
+		c === 0x24 || // $
+		c === 0x26 || // &
+		c === 0x25 || // %
+		c === 0x27 || // '
+		c === 0x29 || // )
+		c === 0x28 || // (
+		c === 0x2a || // *
+		c === 0x2b || // +
+		c === 0x2c || // ,
+		c === 0x3b || // ;
+		c === 0x3d || // =
+		c === 0x2d || // -
+		c === 0x5b || // [
+		c === 0x5d || // ]
+		c === 0x2f || // /
+		c === 0x5c // \
+	);
+};
+
 // #__NO_SIDE_EFFECTS__
 export const isResourceUri = (input: unknown): input is ResourceUri => {
 	if (typeof input !== 'string') {
@@ -47,14 +76,74 @@ export const isResourceUri = (input: unknown): input is ResourceUri => {
 		return false;
 	}
 
-	const match = ATURI_RE.exec(input);
-	if (match === null) {
+	if (
+		input.charCodeAt(0) !== 0x61 ||
+		input.charCodeAt(1) !== 0x74 ||
+		input.charCodeAt(2) !== 0x3a ||
+		input.charCodeAt(3) !== 0x2f ||
+		input.charCodeAt(4) !== 0x2f
+	) {
 		return false;
 	}
 
-	const [, r, c, k] = match;
+	const hash = input.indexOf('#', 5);
+	const stop = hash === -1 ? len : hash;
 
-	return isActorIdentifier(r) && (c === undefined || isNsid(c)) && (k === undefined || isRecordKey(k));
+	if (hash !== -1) {
+		const fragmentStart = hash + 1;
+		if (fragmentStart >= len || input.charCodeAt(fragmentStart) !== 0x2f) {
+			return false;
+		}
+
+		for (let idx = fragmentStart; idx < len; idx++) {
+			if (!isFragmentChar(input.charCodeAt(idx))) {
+				return false;
+			}
+		}
+	}
+
+	const firstSlash = input.indexOf('/', 5);
+	let repoEnd = stop;
+	let collection: string | undefined;
+	let rkey: string | undefined;
+
+	if (firstSlash !== -1 && firstSlash < stop) {
+		repoEnd = firstSlash;
+
+		const collectionStart = firstSlash + 1;
+		if (collectionStart >= stop) {
+			return false;
+		}
+
+		const secondSlash = input.indexOf('/', collectionStart);
+		if (secondSlash !== -1 && secondSlash < stop) {
+			if (secondSlash === collectionStart || secondSlash + 1 >= stop) {
+				return false;
+			}
+
+			const thirdSlash = input.indexOf('/', secondSlash + 1);
+			if (thirdSlash !== -1 && thirdSlash < stop) {
+				return false;
+			}
+
+			collection = input.substring(collectionStart, secondSlash);
+			rkey = input.substring(secondSlash + 1, stop);
+		} else {
+			collection = input.substring(collectionStart, stop);
+		}
+	}
+
+	if (repoEnd <= 5) {
+		return false;
+	}
+
+	const repo = input.substring(5, repoEnd);
+
+	return (
+		isActorIdentifier(repo) &&
+		(collection === undefined || isNsid(collection)) &&
+		(rkey === undefined || isRecordKey(rkey))
+	);
 };
 
 // #__NO_SIDE_EFFECTS__

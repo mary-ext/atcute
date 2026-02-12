@@ -1,10 +1,9 @@
+import { isAsciiAlpha, isAsciiAlphaNum } from './utils/ascii.ts';
+
 /**
  * represents a namespace identifier (NSID)
  */
 export type Nsid = `${string}.${string}.${string}`;
-
-const isAlpha = (c: number) => (c >= 0x41 && c <= 0x5a) || (c >= 0x61 && c <= 0x7a);
-const isAlphaNum = (c: number) => isAlpha(c) || (c >= 0x30 && c <= 0x39);
 
 // #__NO_SIDE_EFFECTS__
 export const isNsid = (input: unknown): input is Nsid => {
@@ -42,23 +41,23 @@ export const isNsid = (input: unknown): input is Nsid => {
 			const first = input.charCodeAt(segStart);
 			if (segIdx === 0) {
 				// first domain label must start with a letter
-				if (!isAlpha(first)) {
+				if (!isAsciiAlpha(first)) {
 					return false;
 				}
 			} else {
 				// subsequent domain labels start with alphanumeric
-				if (!isAlphaNum(first)) {
+				if (!isAsciiAlphaNum(first)) {
 					return false;
 				}
 			}
 
 			if (segLen > 1) {
-				if (!isAlphaNum(input.charCodeAt(i - 1))) {
+				if (!isAsciiAlphaNum(input.charCodeAt(i - 1))) {
 					return false;
 				}
 				for (let j = segStart + 1; j < i - 1; j++) {
 					const c = input.charCodeAt(j);
-					if (!isAlphaNum(c) && c !== 0x2d) {
+					if (!isAsciiAlphaNum(c) && c !== 0x2d) {
 						return false;
 					}
 				}
@@ -81,11 +80,11 @@ export const isNsid = (input: unknown): input is Nsid => {
 		return false;
 	}
 
-	if (!isAlpha(input.charCodeAt(nameStart))) {
+	if (!isAsciiAlpha(input.charCodeAt(nameStart))) {
 		return false;
 	}
 	for (let j = nameStart + 1; j < len; j++) {
-		if (!isAlphaNum(input.charCodeAt(j))) {
+		if (!isAsciiAlphaNum(input.charCodeAt(j))) {
 			return false;
 		}
 	}
