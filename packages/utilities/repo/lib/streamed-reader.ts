@@ -7,6 +7,7 @@ import { decodeUtf8From } from '@atcute/uint8array';
 
 import { isCommit, RepoEntry } from './types.ts';
 import { assert } from './utils.ts';
+import { parseMstKey } from './utils/mst.ts';
 import Queue from './utils/queue.ts';
 
 type EntryMeta = { t: 0 } | { t: 1 } | { t: 2; k: string };
@@ -178,7 +179,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 								break;
 							}
 							case 2: {
-								const [collection, rkey] = meta.k.split('/');
+								const { collection, rkey } = parseMstKey(meta.k);
 
 								yield new RepoEntry(collection, rkey, CID.toCidLink(entry.cid), entry);
 								break;

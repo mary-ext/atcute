@@ -8,6 +8,7 @@ import { decodeUtf8From } from '@atcute/uint8array';
 
 import { isCommit, RepoEntry } from './types.ts';
 import { assert } from './utils.ts';
+import { parseMstKey } from './utils/mst.ts';
 
 /** @internal */
 type EntryMap = Map<string, CarEntry>;
@@ -35,7 +36,7 @@ export function* fromUint8Array(buf: Uint8Array): Generator<RepoEntry> {
 	const commit = readEntry(map, roots[0], isCommit);
 
 	for (const { key, cid } of walkMstEntries(map, commit.data)) {
-		const [collection, rkey] = key.split('/');
+		const { collection, rkey } = parseMstKey(key);
 
 		const carEntry = map.get(cid.$link);
 		assert(carEntry != null, `cid not found in blockmap; cid=${cid}`);
