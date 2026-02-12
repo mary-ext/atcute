@@ -17,47 +17,55 @@ export type Token = WordToken | WhitespaceToken | QuotedToken;
 
 export const tokenize = (query: string): Token[] => {
 	const tokens: Token[] = [];
+	const len = query.length;
 
-	let start = 0;
+	let i = 0;
 	let quoted = false;
-	let code: number;
 
-	for (let i = 0, len = query.length; i <= len; i++) {
-		code = query.charCodeAt(i);
+	while (i < len) {
+		let code = query.charCodeAt(i);
 
-		if (i === len || (code === 32 && !quoted)) {
-			if (start < i) {
-				const substring = query.slice(start, i);
+		if (code === 32 && !quoted) {
+			const start = i;
+			i++;
 
-				if (substring.charCodeAt(0) === 34) {
-					tokens.push({ type: 'quoted', value: substring });
-				} else {
-					tokens.push({ type: 'word', value: substring });
-				}
+			while (i < len && query.charCodeAt(i) === 32) {
+				i++;
 			}
 
-			if (i < len && code === 32 && !quoted) {
-				let j = i;
-
-				for (; j < len; j++) {
-					if (query.charCodeAt(j) !== 32) {
-						break;
-					}
-				}
-
-				tokens.push({ type: 'whitespace', value: query.slice(i, j) });
-
-				start = j;
-				i = j - 1;
-			} else {
-				start = i + 1;
-			}
-
+			tokens.push({ type: 'whitespace', value: query.slice(start, i) });
 			continue;
 		}
 
+		const start = i;
+
 		if (code === 34) {
 			quoted = !quoted;
+		}
+		i++;
+
+		while (i < len) {
+			code = query.charCodeAt(i);
+
+			if (code === 34) {
+				quoted = !quoted;
+				i++;
+				continue;
+			}
+
+			if (code === 32 && !quoted) {
+				break;
+			}
+
+			i++;
+		}
+
+		const substring = query.slice(start, i);
+
+		if (substring.charCodeAt(0) === 34) {
+			tokens.push({ type: 'quoted', value: substring });
+		} else {
+			tokens.push({ type: 'word', value: substring });
 		}
 	}
 
