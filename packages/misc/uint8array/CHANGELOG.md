@@ -1,5 +1,12 @@
 # @atcute/uint8array
 
+## 1.1.1
+
+### Patch Changes
+
+- fe963f8: avoid calling `buf.subarray()` in `decodeUtf8From()` unless necessary on browser runtime
+- 441b28a: missing fast path for isUtf8LengthInRange in Node.js and Bun
+
 ## 1.1.0
 
 ### Minor Changes

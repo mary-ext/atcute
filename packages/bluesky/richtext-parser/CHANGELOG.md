@@ -1,5 +1,11 @@
 # @atcute/bluesky-richtext-parser
 
+## 2.1.1
+
+### Patch Changes
+
+- c4629cd: first-char dispatch, manual autolink backpedal
+
 ## 2.1.0
 
 ### Minor Changes

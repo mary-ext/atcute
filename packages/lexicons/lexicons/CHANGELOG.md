@@ -1,5 +1,17 @@
 # @atcute/lexicons
 
+## 1.2.9
+
+### Patch Changes
+
+- 95dfb99: forbid empty CIDs in lexicons
+- 6e63aab: faster isResourceUri check
+- Updated dependencies [fe963f8]
+- Updated dependencies [441b28a]
+- Updated dependencies [d7a8f60]
+  - @atcute/uint8array@1.1.1
+  - @atcute/util-text@1.1.1
+
 ## 1.2.8
 
 ### Patch Changes

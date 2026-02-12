@@ -1,5 +1,11 @@
 # @atcute/time-ms
 
+## 1.2.2
+
+### Patch Changes
+
+- 4ac8f90: actually make the native module working
+
 ## 1.2.1
 
 ### Patch Changes

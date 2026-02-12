@@ -1,5 +1,16 @@
 # @atcute/multibase
 
+## 1.1.8
+
+### Patch Changes
+
+- b9e9152: alternative base32 encoding implementation
+- b3d0852: faster base32 and base58 encoding/decoding
+- 0c56e4b: faster base64 padding trim
+- Updated dependencies [fe963f8]
+- Updated dependencies [441b28a]
+  - @atcute/uint8array@1.1.1
+
 ## 1.1.7
 
 ### Patch Changes

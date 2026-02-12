@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/cid",
-	"version": "2.4.0",
+	"version": "2.4.1",
 	"description": "lightweight DASL CID codec library for AT Protocol",
 	"keywords": [
 		"atproto",

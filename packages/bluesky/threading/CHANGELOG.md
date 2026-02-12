@@ -1,5 +1,20 @@
 # @atcute/bluesky-threading
 
+## 5.0.6
+
+### Patch Changes
+
+- 6ba553f: fix incorrect clockid randomness
+- Updated dependencies [a891529]
+- Updated dependencies [95dfb99]
+- Updated dependencies [6e63aab]
+- Updated dependencies [a46b7ef]
+- Updated dependencies [ffc3f54]
+  - @atcute/cbor@2.3.2
+  - @atcute/lexicons@1.2.9
+  - @atcute/tid@1.1.2
+  - @atcute/cid@2.4.1
+
 ## 5.0.5
 
 ### Patch Changes

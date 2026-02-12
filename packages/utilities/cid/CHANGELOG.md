@@ -1,5 +1,21 @@
 # @atcute/cid
 
+## 2.4.1
+
+### Patch Changes
+
+- ffc3f54: remove toString caching
+
+  they weren't really useful as `toString()` are one-off calls usually
+
+- Updated dependencies [b9e9152]
+- Updated dependencies [fe963f8]
+- Updated dependencies [441b28a]
+- Updated dependencies [b3d0852]
+- Updated dependencies [0c56e4b]
+  - @atcute/multibase@1.1.8
+  - @atcute/uint8array@1.1.1
+
 ## 2.4.0
 
 ### Minor Changes

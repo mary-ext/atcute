@@ -1,5 +1,26 @@
 # @atcute/car
 
+## 5.1.1
+
+### Patch Changes
+
+- 4bd4ff0: slightly faster varint decoding
+
+  avoid using subarrays here
+
+- ab76dda: remove sync reader indirection
+- Updated dependencies [a891529]
+- Updated dependencies [4bd4ff0]
+- Updated dependencies [4bd4ff0]
+- Updated dependencies [fe963f8]
+- Updated dependencies [441b28a]
+- Updated dependencies [4bd4ff0]
+- Updated dependencies [ffc3f54]
+  - @atcute/cbor@2.3.2
+  - @atcute/varint@2.0.0
+  - @atcute/uint8array@1.1.1
+  - @atcute/cid@2.4.1
+
 ## 5.1.0
 
 ### Minor Changes

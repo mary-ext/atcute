@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/bluesky-search-parser",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "parse Bluesky's search syntax",
 	"license": "0BSD",
 	"repository": {

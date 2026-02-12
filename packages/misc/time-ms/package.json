@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/time-ms",
-	"version": "1.2.1",
+	"version": "1.2.2",
 	"description": "high precision system time helper",
 	"license": "0BSD",
 	"repository": {

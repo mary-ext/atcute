@@ -1,5 +1,25 @@
 # @atcute/did-plc
 
+## 0.3.2
+
+### Patch Changes
+
+- da379ce: optimize did:plc identifier creation
+- Updated dependencies [a891529]
+- Updated dependencies [b9e9152]
+- Updated dependencies [95dfb99]
+- Updated dependencies [6e63aab]
+- Updated dependencies [fe963f8]
+- Updated dependencies [441b28a]
+- Updated dependencies [b3d0852]
+- Updated dependencies [ffc3f54]
+- Updated dependencies [0c56e4b]
+  - @atcute/cbor@2.3.2
+  - @atcute/multibase@1.1.8
+  - @atcute/lexicons@1.2.9
+  - @atcute/uint8array@1.1.1
+  - @atcute/cid@2.4.1
+
 ## 0.3.1
 
 ### Patch Changes

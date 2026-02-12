@@ -1,5 +1,19 @@
 # @atcute/lexicon-doc
 
+## 2.1.1
+
+### Patch Changes
+
+- 33f811a: don't make findExternalReferences recurse
+- Updated dependencies [95dfb99]
+- Updated dependencies [6e63aab]
+- Updated dependencies [fe963f8]
+- Updated dependencies [441b28a]
+- Updated dependencies [d7a8f60]
+  - @atcute/lexicons@1.2.9
+  - @atcute/uint8array@1.1.1
+  - @atcute/util-text@1.1.1
+
 ## 2.1.0
 
 ### Minor Changes

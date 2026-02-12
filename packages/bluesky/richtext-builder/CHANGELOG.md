@@ -1,5 +1,17 @@
 # @atcute/bluesky-richtext-builder
 
+## 2.0.5
+
+### Patch Changes
+
+- 61ed153: faster UTF-8 encoding
+- Updated dependencies [95dfb99]
+- Updated dependencies [6e63aab]
+- Updated dependencies [fe963f8]
+- Updated dependencies [441b28a]
+  - @atcute/lexicons@1.2.9
+  - @atcute/uint8array@1.1.1
+
 ## 2.0.4
 
 ### Patch Changes
