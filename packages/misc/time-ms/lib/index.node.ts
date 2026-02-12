@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module';
 import { join } from 'node:path';
 
 type TimeBinding = {
@@ -18,6 +19,7 @@ export let now = (): number => {
 };
 
 try {
+	const require = createRequire(import.meta.url);
 	const binding: TimeBinding = require('node-gyp-build')(join(import.meta.dirname, '..'));
 
 	now = (): number => {
