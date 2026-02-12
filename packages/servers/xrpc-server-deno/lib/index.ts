@@ -9,7 +9,7 @@ export const createDenoWebSocket = (): WebSocketAdapter => {
 			const connection: WebSocketConnection = {
 				signal: controller.signal,
 				send(data: Uint8Array) {
-					socket.send(data);
+					socket.send(data as Uint8Array<ArrayBuffer>);
 				},
 				close(code?: number, reason?: string) {
 					socket.close(code, reason);
