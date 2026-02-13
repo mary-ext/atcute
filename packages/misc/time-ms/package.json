@@ -39,7 +39,7 @@
 		}
 	},
 	"scripts": {
-		"install": "node-gyp-build",
+		"install": "node-gyp-build || exit 0",
 		"build:native": "prebuildify --napi --strip",
 		"build": "tsgo --project tsconfig.build.json",
 		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
