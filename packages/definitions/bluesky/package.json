@@ -20,17 +20,12 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./lib/index.ts",
-		"./types/app/*": "./lib/lexicons/types/app/bsky/*.ts",
-		"./types/chat/*": "./lib/lexicons/types/chat/bsky/*.ts"
+		".": "./dist/index.js",
+		"./types/app/*": "./dist/lexicons/types/app/bsky/*.js",
+		"./types/chat/*": "./dist/lexicons/types/chat/bsky/*.js"
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": "./dist/index.js",
-			"./types/app/*": "./dist/lexicons/types/app/bsky/*.js",
-			"./types/chat/*": "./dist/lexicons/types/chat/bsky/*.js"
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

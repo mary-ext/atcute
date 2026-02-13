@@ -22,28 +22,17 @@
 	"sideEffects": false,
 	"imports": {
 		"#runtime": {
-			"workerd": "./lib/runtime.ts",
-			"node": "./lib/runtime.node.ts",
-			"default": "./lib/runtime.ts"
+			"workerd": "./dist/runtime.js",
+			"node": "./dist/runtime.node.js",
+			"default": "./dist/runtime.js"
 		}
 	},
 	"exports": {
-		".": "./lib/index.ts",
-		"./bytes": "./lib/bytes.ts"
+		".": "./dist/index.js",
+		"./bytes": "./dist/bytes.js"
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": "./dist/index.js",
-			"./bytes": "./dist/bytes.js"
-		},
-		"imports": {
-			"#runtime": {
-				"workerd": "./dist/runtime.js",
-				"node": "./dist/runtime.node.js",
-				"default": "./dist/runtime.js"
-			}
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

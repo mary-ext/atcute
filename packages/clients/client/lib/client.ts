@@ -357,7 +357,7 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 				'atproto-proxy': _constructProxyHeader(this.proxy),
 			}),
 			duplex: input instanceof ReadableStream ? 'half' : undefined,
-		} as RequestInit);
+		});
 
 		{
 			const status = response.status;

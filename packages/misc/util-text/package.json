@@ -17,18 +17,12 @@
 	"sideEffects": false,
 	"exports": {
 		".": {
-			"react-native": "./lib/index.rn.ts",
-			"default": "./lib/index.ts"
+			"react-native": "./dist/index.rn.js",
+			"default": "./dist/index.js"
 		}
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": {
-				"react-native": "./dist/index.rn.js",
-				"default": "./dist/index.js"
-			}
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

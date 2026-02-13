@@ -20,15 +20,11 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./lib/index.ts",
-		"./types/*": "./lib/lexicons/types/sh/tangled/*.ts"
+		".": "./dist/index.js",
+		"./types/*": "./dist/lexicons/types/sh/tangled/*.js"
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": "./dist/index.js",
-			"./types/*": "./dist/lexicons/types/sh/tangled/*.js"
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo",

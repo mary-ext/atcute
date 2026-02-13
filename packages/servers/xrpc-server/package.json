@@ -15,17 +15,12 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./lib/main/index.ts",
-		"./auth": "./lib/auth/index.ts",
-		"./middlewares/cors": "./lib/middlewares/cors.ts"
+		".": "./dist/main/index.js",
+		"./auth": "./dist/auth/index.js",
+		"./middlewares/cors": "./dist/middlewares/cors.js"
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": "./dist/main/index.js",
-			"./auth": "./dist/auth/index.js",
-			"./middlewares/cors": "./dist/middlewares/cors.js"
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

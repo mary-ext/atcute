@@ -17,21 +17,13 @@
 	"sideEffects": false,
 	"exports": {
 		".": {
-			"types": "./lib/index.ts",
-			"bun": "./lib/index.bun.ts",
-			"node": "./lib/index.node.ts",
-			"default": "./lib/index.ts"
+			"bun": "./dist/index.bun.js",
+			"node": "./dist/index.node.js",
+			"default": "./dist/index.js"
 		}
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": {
-				"bun": "./dist/index.bun.js",
-				"node": "./dist/index.node.js",
-				"default": "./dist/index.js"
-			}
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

@@ -46,9 +46,7 @@ export const verifyRecord = async ({
 			const cidString = CID.toString(entry.cid);
 
 			// Verify that `bytes` matches its associated CID
-			const expectedCid = CID.toString(
-				await CID.create(entry.cid.codec as 85 | 113, entry.bytes as Uint8Array<ArrayBuffer>),
-			);
+			const expectedCid = CID.toString(await CID.create(entry.cid.codec as 85 | 113, entry.bytes));
 			if (cidString !== expectedCid) {
 				throw new Error(`cid does not match bytes`);
 			}

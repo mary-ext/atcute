@@ -21,15 +21,11 @@
 	"type": "module",
 	"sideEffects": false,
 	"exports": {
-		".": "./lib/index.ts",
-		"./cid-link": "./lib/cid-link.ts"
+		".": "./dist/index.js",
+		"./cid-link": "./dist/cid-link.js"
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": "./dist/index.js",
-			"./cid-link": "./dist/cid-link.js"
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

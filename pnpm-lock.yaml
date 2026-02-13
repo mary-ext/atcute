@@ -728,6 +728,9 @@ importers:
       prebuildify:
         specifier: ^6.0.1
         version: 6.0.1
+      vitest:
+        specifier: ^4.0.18
+        version: 4.0.18(@types/node@25.2.1)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
 
   packages/misc/uint8array:
     devDependencies:
@@ -795,6 +798,10 @@ importers:
       '@atcute/oauth-crypto':
         specifier: workspace:^
         version: link:../crypto
+    devDependencies:
+      vitest:
+        specifier: ^4.0.18
+        version: 4.0.18(@types/node@25.2.1)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
 
   packages/oauth/node-client:
     dependencies:

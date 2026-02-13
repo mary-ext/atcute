@@ -20,15 +20,11 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./lib/index.ts",
-		"./types/*": "./lib/lexicons/types/pub/leaflet/*.ts"
+		".": "./dist/index.js",
+		"./types/*": "./dist/lexicons/types/pub/leaflet/*.js"
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": "./dist/index.js",
-			"./types/*": "./dist/lexicons/types/pub/leaflet/*.js"
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo",

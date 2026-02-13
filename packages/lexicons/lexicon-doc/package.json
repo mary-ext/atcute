@@ -17,17 +17,12 @@
 	"type": "module",
 	"sideEffects": false,
 	"exports": {
-		".": "./lib/index.ts",
-		"./builder": "./lib/builder.ts",
-		"./validations": "./lib/validations.ts"
+		".": "./dist/index.js",
+		"./builder": "./dist/builder.js",
+		"./validations": "./dist/validations.js"
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": "./dist/index.js",
-			"./builder": "./dist/builder.js",
-			"./validations": "./dist/validations.js"
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "pnpm run generate:schema && tsgo --project tsconfig.build.json",

@@ -72,7 +72,7 @@ export const fromDigest = (codec: 0x55 | 0x71, digest: Uint8Array): Cid => {
  * @param data raw data to hash
  * @returns CID object
  */
-export const create = async (codec: 0x55 | 0x71, data: Uint8Array<ArrayBuffer>): Promise<Cid> => {
+export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid> => {
 	const digest = await toSha256(data);
 	return fromDigest(codec, digest);
 };

@@ -16,21 +16,14 @@
 	"type": "module",
 	"sideEffects": false,
 	"exports": {
-		".": "./lib/index.ts",
-		"./ambient": "./lib/ambient.ts",
-		"./interfaces": "./lib/interfaces/index.ts",
-		"./syntax": "./lib/syntax/index.ts",
-		"./validations": "./lib/validations/index.ts"
+		".": "./dist/index.js",
+		"./ambient": "./dist/ambient.js",
+		"./interfaces": "./dist/interfaces/index.js",
+		"./syntax": "./dist/syntax/index.js",
+		"./validations": "./dist/validations/index.js"
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": "./dist/index.js",
-			"./ambient": "./dist/ambient.js",
-			"./interfaces": "./dist/interfaces/index.js",
-			"./syntax": "./dist/syntax/index.js",
-			"./validations": "./dist/validations/index.js"
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",

@@ -32,13 +32,10 @@
 		}
 	},
 	"exports": {
-		".": "./lib/index.ts"
+		".": "./dist/index.js"
 	},
 	"publishConfig": {
-		"access": "public",
-		"exports": {
-			".": "./dist/index.js"
-		}
+		"access": "public"
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
