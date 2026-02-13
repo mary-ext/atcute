@@ -183,13 +183,13 @@ const _draftPostSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 	},
 	/**
-	 * The primary post content.
-	 * @maxLength 3000
-	 * @maxGraphemes 300
+	 * The primary post content. It has a higher limit than post contents to allow storing a larger text that can later be refined into smaller posts.
+	 * @maxLength 10000
+	 * @maxGraphemes 1000
 	 */
 	text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-		/*#__PURE__*/ v.stringLength(0, 3000),
-		/*#__PURE__*/ v.stringGraphemes(0, 300),
+		/*#__PURE__*/ v.stringLength(0, 10000),
+		/*#__PURE__*/ v.stringGraphemes(0, 1000),
 	]),
 });
 const _draftViewSchema = /*#__PURE__*/ v.object({

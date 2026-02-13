@@ -118,6 +118,8 @@ export * as AppBskyUnspeccedGetPostThreadOtherV2 from './types/app/bsky/unspecce
 export * as AppBskyUnspeccedGetPostThreadV2 from './types/app/bsky/unspecced/getPostThreadV2.ts';
 export * as AppBskyUnspeccedGetSuggestedFeeds from './types/app/bsky/unspecced/getSuggestedFeeds.ts';
 export * as AppBskyUnspeccedGetSuggestedFeedsSkeleton from './types/app/bsky/unspecced/getSuggestedFeedsSkeleton.ts';
+export * as AppBskyUnspeccedGetSuggestedOnboardingUsers from './types/app/bsky/unspecced/getSuggestedOnboardingUsers.ts';
+export * as AppBskyUnspeccedGetSuggestedOnboardingUsersSkeleton from './types/app/bsky/unspecced/getSuggestedOnboardingUsersSkeleton.ts';
 export * as AppBskyUnspeccedGetSuggestedStarterPacks from './types/app/bsky/unspecced/getSuggestedStarterPacks.ts';
 export * as AppBskyUnspeccedGetSuggestedStarterPacksSkeleton from './types/app/bsky/unspecced/getSuggestedStarterPacksSkeleton.ts';
 export * as AppBskyUnspeccedGetSuggestedUsers from './types/app/bsky/unspecced/getSuggestedUsers.ts';
