@@ -1,5 +1,11 @@
 # @atcute/time-ms
 
+## 1.2.3
+
+### Patch Changes
+
+- b9fe24c: graceful fallback on native build failure
+
 ## 1.2.2
 
 ### Patch Changes
