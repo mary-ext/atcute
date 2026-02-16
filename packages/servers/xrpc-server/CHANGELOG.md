@@ -1,5 +1,11 @@
 # @atcute/xrpc-server
 
+## 0.1.10
+
+### Patch Changes
+
+- b67d7b1: gracefully handle service jwt with extra fields
+
 ## 0.1.9
 
 ### Patch Changes

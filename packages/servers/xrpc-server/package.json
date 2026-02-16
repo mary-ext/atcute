@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/xrpc-server",
-	"version": "0.1.9",
+	"version": "0.1.10",
 	"description": "a small web framework for handling XRPC operations",
 	"license": "0BSD",
 	"repository": {
