@@ -65,7 +65,7 @@ const readJwtPortion = <T>(schema: v.Type<T>, input: string): Result<T, AuthErro
 		const raw = decodeUtf8From(fromBase64Url(input));
 		const json = JSON.parse(raw);
 
-		const result = schema.try(json);
+		const result = schema.try(json, { mode: 'passthrough' });
 		if (result.ok) {
 			return result;
 		}
