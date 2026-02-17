@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedOnboardingUsersSkeleton', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getOnboardingSuggestedUsersSkeleton', {
 	params: /*#__PURE__*/ v.object({
 		/**
 		 * Category of users to get suggestions for.
@@ -45,6 +45,6 @@ export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'app.bsky.unspecced.getSuggestedOnboardingUsersSkeleton': mainSchema;
+		'app.bsky.unspecced.getOnboardingSuggestedUsersSkeleton': mainSchema;
 	}
 }

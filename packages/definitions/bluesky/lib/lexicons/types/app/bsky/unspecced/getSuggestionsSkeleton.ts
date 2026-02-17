@@ -33,9 +33,14 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestionsSkel
 			},
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
-			 * Snowflake for this recommendation, use when submitting recommendation events.
+			 * DEPRECATED: use recIdStr instead.
+			 * @deprecated
 			 */
 			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+			/**
+			 * Snowflake for this recommendation, use when submitting recommendation events.
+			 */
+			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
 			 * DID of the account these suggestions are relative to. If this is returned undefined, suggestions are based on the viewer.
 			 */
