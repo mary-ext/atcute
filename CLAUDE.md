@@ -37,19 +37,27 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
 
 - new files should be in kebab-case
 - use tabs for indentation, spaces allowed for diagrams in comments
-- use single quotes and add trailing commas
+- use single quotes for strings; use template literals for localization strings (user-facing
+  strings, error messages)
+- add trailing commas
 - prefer arrow functions, but use regular methods in classes unless arrow functions are necessary
   (e.g., when passing the method as a callback that needs `this` binding)
 - use braces for control statements, even single-line bodies
 - use bare blocks `{ }` to group related code and limit variable scope
-- use template literals for user-facing strings and error messages
+- avoid barrel exports (index files that re-export from other modules); import directly from source
 - use `// #region <name>` and `// #endregion` to denote regions when a file needs to contain a lot
   of code
+- a parameter should be optional only when callers genuinely split between passing a value and
+  relying on the default; if every caller passes a value, make it required; if no caller would ever
+  change it, it should not be a parameter at all
+- avoid optional parameters that change behavioral modes or make the function do different things
+  based on presence/absence; prefer a separate function with a clearer name instead
 
 ### documentation
 
-- documentations include README, code comments, commit messages, changesets
-- any writing should be in lowercase, except for proper nouns, acronyms and 'I'
+- documentations include README, code comments, commit messages
+- any writing should be in lowercase, except for proper nouns, acronyms and 'I'; this does not apply
+  to public-facing interfaces like web UI
 - only comment non-trivial code, focusing on _why_ rather than _what_
 - write comments and JSDoc in lowercase (except proper nouns, acronyms, and 'I')
 - add JSDoc comments to new publicly exported functions, methods, classes, fields, and enums
@@ -59,12 +67,7 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
   - use `@throws` for exceptions when applicable
   - keep descriptions concise but informative
 
-### testing
-
-- Vitest is the standard test runner, though some packages may still be using bun test
-- run tests via `pnpm run test`
-
-### working style
+### agentic coding
 
 - `.research/` directory in the project root serves as a workspace for temporary experiments,
   analysis, and planning materials. create if not present (it's gitignored). this directory may
@@ -80,8 +83,9 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
 
 ### Claude Code-specific
 
-- Task tool (subagents for exploration, planning, etc.) may not always be accurate; verify subagent
-  findings when needed
+- Explore subagent may not be accurate; verify findings as needed
+- never spawn subagents to read and return file contents; read files directly in the main context.
+  subagents should perform searches or answer specific questions, not act as file I/O proxies
 
 ### external repository research
 
