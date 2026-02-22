@@ -1,7 +1,7 @@
 {
 	"name": "@atcute/labeler",
 	"version": "0.1.0",
-	"description": "sign and emit AT Protocol labels",
+	"description": "a lightweight core for building AT Protocol labelers",
 	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
@@ -22,21 +22,19 @@
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
-		"test": "vitest",
+		"test": "vitest --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
+		"@atcute/atproto": "workspace:^",
 		"@atcute/cbor": "workspace:^",
 		"@atcute/crypto": "workspace:^",
-		"@atcute/lexicons": "workspace:^",
-		"@atcute/xrpc-server": "workspace:^",
-		"@mary-ext/simple-event-emitter": "^1.0.1"
+		"@atcute/lexicons": "^1.2.9",
+		"@mary-ext/simple-event-emitter": "^1.0.0"
 	},
 	"devDependencies": {
-		"@atcute/atproto": "workspace:^",
-		"@atcute/labeler": "file:",
-		"@atcute/ozone": "workspace:^",
 		"@types/node": "^25.2.3",
+		"@vitest/coverage-v8": "^4.0.18",
 		"vitest": "^4.0.18"
 	}
 }

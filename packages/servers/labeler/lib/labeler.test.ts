@@ -1,257 +1,149 @@
-import type { ComAtprotoLabelDefs } from '@atcute/atproto';
-import { Secp256k1PrivateKey } from '@atcute/crypto';
-import type { Did } from '@atcute/lexicons';
-import { XRPCRouter } from '@atcute/xrpc-server';
+import type * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
+import { fromBytes, isBytes } from '@atcute/cbor';
+import type { PrivateKey } from '@atcute/crypto';
 
 import { describe, expect, it } from 'vitest';
 
-import { Labeler, type LabelerOptions } from './labeler.ts';
-import { formatLabel } from './labels.ts';
-import type { LabelStore, SavedLabel } from './store.ts';
+import { FutureCursorError } from './errors.ts';
+import { Labeler } from './labeler.ts';
+import { MemoryLabelStore } from './memory-label-store.ts';
 
-const TEST_DID = 'did:plc:testlabeler' as Did;
-
-const getTestKey = async () => {
-	const keyBytes = new Uint8Array(32);
-	keyBytes[0] = 1;
-	return Secp256k1PrivateKey.importRaw(keyBytes);
-};
-
-const createMockStore = (): LabelStore & { labels: SavedLabel[] } => {
-	const labels: SavedLabel[] = [];
-
+const createTestPrivateKey = (): PrivateKey => {
 	return {
-		labels,
-		async save(label) {
-			const seq = labels.length + 1;
-			const saved = { ...label, seq };
-			labels.push(saved);
-			return saved;
-		},
-		async query({ uriPatterns, sources, cursor, limit }) {
-			let result = [...labels];
-
-			// filter by URI patterns
-			if (uriPatterns.length > 0 && !uriPatterns.includes('*')) {
-				result = result.filter((l) =>
-					uriPatterns.some((pattern) => {
-						if (pattern.endsWith('*')) {
-							return l.uri.startsWith(pattern.slice(0, -1));
-						}
-						return l.uri === pattern;
-					}),
-				);
+		type: 'test',
+		jwtAlg: 'TEST',
+		async sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
+			const out = new Uint8Array(8);
+			for (let idx = 0; idx < data.length; idx++) {
+				out[idx % out.length] = (out[idx % out.length] + data[idx] + idx) & 0xff;
 			}
 
-			// filter by sources
-			if (sources.length > 0) {
-				result = result.filter((l) => sources.includes(l.src));
-			}
-
-			// filter by cursor
-			if (cursor > 0) {
-				result = result.filter((l) => l.seq > cursor);
-			}
-
-			// apply limit
-			result = result.slice(0, limit);
-
-			const formatted: ComAtprotoLabelDefs.Label[] = result.map(formatLabel);
-			const lastSeq = result.at(-1)?.seq ?? 0;
-
-			return { labels: formatted, cursor: String(lastSeq) };
+			return out;
 		},
-		async getLatestSeq() {
-			return labels.at(-1)?.seq ?? 0;
+		async verify() {
+			return true;
 		},
-		async getRange(after, limit) {
-			const result = labels.filter((l) => l.seq > after);
-			return limit !== undefined ? result.slice(0, limit) : result;
+		async exportPublicKey() {
+			return 'did:key:test' as any;
 		},
-	};
+	} as PrivateKey;
 };
 
-const createMockWebSocket = () => ({
-	async upgrade() {
-		return undefined;
-	},
-});
+const collectOne = async <T>(iterable: AsyncIterable<T>): Promise<T> => {
+	const iterator = iterable[Symbol.asyncIterator]();
+	const result = await iterator.next();
+	if (result.done) {
+		throw new Error(`iterator completed`);
+	}
 
-const createTestRouter = async (options?: Partial<LabelerOptions>) => {
-	const key = await getTestKey();
-	const store = createMockStore();
-
-	const labeler = new Labeler({
-		did: TEST_DID,
-		key,
-		store,
-		...options,
-	});
-
-	const router = new XRPCRouter({ websocket: createMockWebSocket() });
-	labeler.register(router);
-
-	return { labeler, store, router };
+	return result.value;
 };
 
 describe('Labeler', () => {
-	describe('createLabel', () => {
-		it('should create and save a label', async () => {
-			const { labeler, store } = await createTestRouter();
-
-			const saved = await labeler.createLabel({
-				uri: 'did:plc:target',
-				val: 'spam',
-			});
-
-			expect(saved.seq).toBe(1);
-			expect(saved.src).toBe(TEST_DID);
-			expect(saved.uri).toBe('did:plc:target');
-			expect(saved.val).toBe('spam');
-			expect(saved.neg).toBe(false);
-			expect(saved.sig.byteLength).toBe(64);
-			expect(store.labels).toHaveLength(1);
+	it('signs and stores labels', async () => {
+		const store = new MemoryLabelStore();
+		const labeler = new Labeler({
+			serviceDid: 'did:plc:labeler',
+			signingKey: createTestPrivateKey(),
+			store: store,
 		});
 
-		it('should create labels with custom src', async () => {
-			const { labeler } = await createTestRouter();
+		const labels = await labeler.applyLabels(
+			[
+				{ uri: 'at://did:plc:alice/app.bsky.feed.post/1', value: 'spam' },
+				{ uri: 'at://did:plc:alice/app.bsky.feed.post/1', value: 'spam', negate: true },
+			],
+			{ issuedAt: '2026-02-22T00:00:00Z' },
+		);
 
-			const saved = await labeler.createLabel({
-				uri: 'did:plc:target',
-				val: 'spam',
-				src: 'did:plc:custom',
-			});
+		expect(labels).toHaveLength(2);
+		expect(labels[0]?.src).toBe('did:plc:labeler');
+		expect(labels[0]?.ver).toBe(1);
+		expect(labels[1]?.neg).toBe(true);
+		expect(labels.every((label) => isBytes(label.sig))).toBe(true);
 
-			expect(saved.src).toBe('did:plc:custom');
-		});
+		const firstSig = fromBytes(labels[0]!.sig as NonNullable<ComAtprotoLabelDefs.Label['sig']>);
+		expect(firstSig.length).toBe(8);
 	});
 
-	describe('createLabels', () => {
-		it('should create and negate labels for a subject', async () => {
-			const { labeler, store } = await createTestRouter();
-
-			const results = await labeler.createLabels(
-				{ uri: 'did:plc:target' },
-				{ create: ['spam', 'nsfw'], negate: ['misleading'] },
-			);
-
-			expect(results).toHaveLength(3);
-			expect(results[0]!.val).toBe('spam');
-			expect(results[0]!.neg).toBe(false);
-			expect(results[1]!.val).toBe('nsfw');
-			expect(results[1]!.neg).toBe(false);
-			expect(results[2]!.val).toBe('misleading');
-			expect(results[2]!.neg).toBe(true);
-			expect(store.labels).toHaveLength(3);
+	it('returns an empty array for an empty batch', async () => {
+		const labeler = new Labeler({
+			serviceDid: 'did:plc:labeler',
+			signingKey: createTestPrivateKey(),
+			store: new MemoryLabelStore(),
 		});
+
+		await expect(labeler.applyLabels([])).resolves.toEqual([]);
 	});
 
-	describe('queryLabels endpoint', () => {
-		it('should return labels matching URI patterns', async () => {
-			const { labeler, router } = await createTestRouter();
-
-			await labeler.createLabel({ uri: 'did:plc:user1', val: 'spam' });
-			await labeler.createLabel({ uri: 'did:plc:user2', val: 'nsfw' });
-
-			const response = await router.fetch(
-				new Request('http://localhost/xrpc/com.atproto.label.queryLabels?uriPatterns=*'),
-			);
-
-			expect(response.status).toBe(200);
-
-			const body = await response.json();
-			expect(body.labels).toHaveLength(2);
-			expect(body.cursor).toBeDefined();
+	it('backfills and streams live events', async () => {
+		const store = new MemoryLabelStore();
+		const labeler = new Labeler({
+			serviceDid: 'did:plc:labeler',
+			signingKey: createTestPrivateKey(),
+			store: store,
 		});
 
-		it('should paginate with cursor', async () => {
-			const { labeler, router } = await createTestRouter();
+		await labeler.applyLabel({ uri: 'at://did:plc:alice/app.bsky.feed.post/1', value: 'spam' });
 
-			await labeler.createLabel({ uri: 'did:plc:user1', val: 'spam' });
-			await labeler.createLabel({ uri: 'did:plc:user2', val: 'nsfw' });
+		const controller = new AbortController();
+		const subscription = labeler.subscribeLabels({ cursor: 0, signal: controller.signal });
+		const iterator = subscription[Symbol.asyncIterator]();
 
-			const response = await router.fetch(
-				new Request('http://localhost/xrpc/com.atproto.label.queryLabels?uriPatterns=*&limit=1'),
-			);
+		const first = await iterator.next();
+		expect(first.done).toBe(false);
+		expect(first.value?.seq).toBe(1);
 
-			const body = await response.json();
-			expect(body.labels).toHaveLength(1);
-			expect(body.labels[0].val).toBe('spam');
+		const nextPromise = iterator.next();
+		await labeler.applyLabel({ uri: 'at://did:plc:alice/app.bsky.feed.post/2', value: 'spam' });
 
-			// fetch next page
-			const response2 = await router.fetch(
-				new Request(
-					`http://localhost/xrpc/com.atproto.label.queryLabels?uriPatterns=*&limit=1&cursor=${body.cursor}`,
-				),
-			);
+		const second = await nextPromise;
+		expect(second.done).toBe(false);
+		expect(second.value?.seq).toBe(2);
 
-			const body2 = await response2.json();
-			expect(body2.labels).toHaveLength(1);
-			expect(body2.labels[0].val).toBe('nsfw');
-		});
+		controller.abort();
 	});
 
-	describe('emitEvent endpoint', () => {
-		it('should not register without auth', async () => {
-			const { router } = await createTestRouter();
+	it('rejects future subscription cursors', async () => {
+		const controller = new AbortController();
 
-			const response = await router.fetch(
-				new Request('http://localhost/xrpc/tools.ozone.moderation.emitEvent', {
-					method: 'POST',
-					headers: { 'content-type': 'application/json' },
-					body: JSON.stringify({
-						event: {
-							$type: 'tools.ozone.moderation.defs#modEventLabel',
-							createLabelVals: ['spam'],
-							negateLabelVals: [],
-						},
-						subject: {
-							$type: 'com.atproto.admin.defs#repoRef',
-							did: 'did:plc:target',
-						},
-						createdBy: TEST_DID,
-					}),
-				}),
-			);
-
-			expect(response.status).toBe(404);
+		const labeler = new Labeler({
+			serviceDid: 'did:plc:labeler',
+			signingKey: createTestPrivateKey(),
+			store: new MemoryLabelStore(),
 		});
 
-		it('should reject when auth returns false', async () => {
-			const { router } = await createTestRouter({
-				auth: () => false,
-			});
+		const error = await collectOne(
+			labeler.subscribeLabels({
+				cursor: 1,
+				signal: controller.signal,
+			}),
+		).catch((err) => err);
 
-			const response = await router.fetch(
-				new Request('http://localhost/xrpc/tools.ozone.moderation.emitEvent', {
-					method: 'POST',
-					headers: { 'content-type': 'application/json' },
-					body: JSON.stringify({
-						event: {
-							$type: 'tools.ozone.moderation.defs#modEventLabel',
-							createLabelVals: ['spam'],
-							negateLabelVals: [],
-						},
-						subject: {
-							$type: 'com.atproto.admin.defs#repoRef',
-							did: 'did:plc:target',
-						},
-						createdBy: TEST_DID,
-					}),
-				}),
-			);
-
-			expect(response.status).toBe(401);
-		});
+		expect(error).toBeInstanceOf(FutureCursorError);
 	});
 
-	describe('register', () => {
-		it('should return 404 for unknown routes', async () => {
-			const { router } = await createTestRouter();
+	it('tolerates sequence gaps in the store', async () => {
+		const controller = new AbortController();
 
-			const response = await router.fetch(new Request('http://localhost/xrpc/com.atproto.nonexistent'));
+		const store = new MemoryLabelStore();
+		store.advanceSeq(3);
 
-			expect(response.status).toBe(404);
+		const labeler = new Labeler({
+			serviceDid: 'did:plc:labeler',
+			signingKey: createTestPrivateKey(),
+			store: store,
 		});
+
+		await labeler.applyLabel({ uri: 'at://did:plc:alice/app.bsky.feed.post/1', value: 'spam' });
+
+		const event = await collectOne(
+			labeler.subscribeLabels({
+				cursor: 0,
+				signal: controller.signal,
+			}),
+		);
+
+		expect(event.seq).toBe(4);
 	});
 });

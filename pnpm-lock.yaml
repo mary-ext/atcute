@@ -913,40 +913,31 @@ importers:
 
   packages/servers/labeler:
     dependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
       '@atcute/cbor':
         specifier: workspace:^
         version: link:../../utilities/cbor
       '@atcute/crypto':
         specifier: workspace:^
         version: link:../../utilities/crypto
-      '@atcute/identity':
-        specifier: workspace:^
-        version: link:../../identity/identity
-      '@atcute/identity-resolver':
-        specifier: workspace:^
-        version: link:../../identity/identity-resolver
       '@atcute/lexicons':
-        specifier: workspace:^
-        version: link:../../lexicons/lexicons
+        specifier: ^1.2.9
+        version: 1.2.9
       '@atcute/xrpc-server':
         specifier: workspace:^
         version: link:../xrpc-server
       '@mary-ext/simple-event-emitter':
-        specifier: ^1.0.1
+        specifier: ^1.0.0
         version: 1.0.1
     devDependencies:
-      '@atcute/atproto':
-        specifier: workspace:^
-        version: link:../../definitions/atproto
-      '@atcute/labeler':
-        specifier: 'file:'
-        version: file:packages/servers/labeler
-      '@atcute/ozone':
-        specifier: workspace:^
-        version: link:../../definitions/ozone
       '@types/node':
         specifier: ^25.2.3
         version: 25.2.3
+      '@vitest/coverage-v8':
+        specifier: ^4.0.18
+        version: 4.0.18(@vitest/browser@4.0.18(vite@7.3.1(@types/node@25.2.3)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0))(vitest@4.0.18))(vitest@4.0.18)
       vitest:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@25.2.3)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
@@ -1278,14 +1269,14 @@ packages:
   '@atcute/frontpage@file:packages/definitions/frontpage':
     resolution: {directory: packages/definitions/frontpage, type: directory}
 
-  '@atcute/labeler@file:packages/servers/labeler':
-    resolution: {directory: packages/servers/labeler, type: directory}
-
   '@atcute/leaflet@file:packages/definitions/leaflet':
     resolution: {directory: packages/definitions/leaflet, type: directory}
 
   '@atcute/lexicon-community@file:packages/definitions/lexicon-community':
     resolution: {directory: packages/definitions/lexicon-community, type: directory}
+
+  '@atcute/lexicons@1.2.9':
+    resolution: {integrity: sha512-/RRHm2Cw9o8Mcsrq0eo8fjS9okKYLGfuFwrQ0YoP/6sdSDsXshaTLJsvLlcUcaDaSJ1YFOuHIo3zr2Om2F/16g==}
 
   '@atcute/microcosm@file:packages/definitions/microcosm':
     resolution: {directory: packages/definitions/microcosm, type: directory}
@@ -1295,6 +1286,12 @@ packages:
 
   '@atcute/tangled@file:packages/definitions/tangled':
     resolution: {directory: packages/definitions/tangled, type: directory}
+
+  '@atcute/uint8array@1.1.1':
+    resolution: {integrity: sha512-3LsC8XB8TKe9q/5hOA5sFuzGaIFdJZJNewC5OKa3o/eU6+K7JR6see9Zy2JbQERNVnRl11EzbNov1efgLMAs4g==}
+
+  '@atcute/util-text@1.1.1':
+    resolution: {integrity: sha512-JH0SxzUQJAmbOBTYyhxQbkkI6M33YpjlVLEcbP5GYt43xgFArzV0FJVmEpvIj0kjsmphHB45b6IitdvxPdec9w==}
 
   '@atcute/whitewind@file:packages/definitions/whitewind':
     resolution: {directory: packages/definitions/whitewind, type: directory}
@@ -4703,16 +4700,6 @@ snapshots:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
-  '@atcute/labeler@file:packages/servers/labeler':
-    dependencies:
-      '@atcute/cbor': link:packages/utilities/cbor
-      '@atcute/crypto': link:packages/utilities/crypto
-      '@atcute/identity': link:packages/identity/identity
-      '@atcute/identity-resolver': link:packages/identity/identity-resolver
-      '@atcute/lexicons': link:packages/lexicons/lexicons
-      '@atcute/xrpc-server': link:packages/servers/xrpc-server
-      '@mary-ext/simple-event-emitter': 1.0.1
-
   '@atcute/leaflet@file:packages/definitions/leaflet':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
@@ -4722,6 +4709,13 @@ snapshots:
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/lexicons': link:packages/lexicons/lexicons
+
+  '@atcute/lexicons@1.2.9':
+    dependencies:
+      '@atcute/uint8array': 1.1.1
+      '@atcute/util-text': 1.1.1
+      '@standard-schema/spec': 1.1.0
+      esm-env: 1.2.2
 
   '@atcute/microcosm@file:packages/definitions/microcosm':
     dependencies:
@@ -4737,6 +4731,12 @@ snapshots:
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/lexicons': link:packages/lexicons/lexicons
+
+  '@atcute/uint8array@1.1.1': {}
+
+  '@atcute/util-text@1.1.1':
+    dependencies:
+      unicode-segmenter: 0.14.5
 
   '@atcute/whitewind@file:packages/definitions/whitewind':
     dependencies:

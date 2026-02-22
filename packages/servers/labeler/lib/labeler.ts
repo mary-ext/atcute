@@ -1,221 +1,108 @@
-import { ComAtprotoLabelQueryLabels, ComAtprotoLabelSubscribeLabels } from '@atcute/atproto';
 import type { PrivateKey } from '@atcute/crypto';
-import type { Did } from '@atcute/lexicons';
-import { ToolsOzoneModerationEmitEvent } from '@atcute/ozone';
-import { AuthRequiredError, InvalidRequestError, type XRPCRouter, json } from '@atcute/xrpc-server';
+import type { Did } from '@atcute/lexicons/syntax';
 
 import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 
-import { formatLabel, signLabel, type CreateLabelData, type LabelSubject } from './labels.ts';
-import { LabelOutbox } from './outbox.ts';
-import type { LabelStore, SavedLabel } from './store.ts';
-
-type Promisable<T> = T | Promise<T>;
+import { FutureCursorError } from './errors.ts';
+import { LabelerOutbox } from './internal/outbox.ts';
+import { buildLabels, signLabel } from './signing.ts';
+import type {
+	ApplyLabelsOptions,
+	LabelerOptions,
+	LabelEvent,
+	LabelOp,
+	LabelSubscriptionOptions,
+	LabelStore,
+	SignedLabel,
+} from './types.ts';
 
 /**
- * auth callback for the `emitEvent` endpoint.
- * receives the request; return `false` to reject.
+ * high-level labeler api with internal sequencing and subscription handling
  */
-export type AuthCheck = (request: Request) => Promisable<boolean>;
-
-export interface LabelerOptions {
-	/** DID of the labeler account */
-	did: Did;
-	/** private signing key */
-	key: PrivateKey;
-	/** label storage backend */
-	store: LabelStore;
-	/** authenticate `emitEvent` requests. if not provided, the endpoint is not registered */
-	auth?: AuthCheck;
-	/** maximum outbox buffer size per subscription */
-	maxBufferSize?: number;
-}
-
-/** labeler server core. */
 export class Labeler {
-	/** labeler DID */
-	readonly did: Did;
+	readonly #serviceDid: Did;
+	readonly #signingKey: PrivateKey;
+	readonly #store: LabelStore;
 
-	#store: LabelStore;
-	#key: PrivateKey;
+	readonly #pageSize: number;
 
-	#auth: AuthCheck | undefined;
+	#events = new SimpleEventEmitter<[event: LabelEvent]>();
 
-	#emitter = new SimpleEventEmitter<[SavedLabel]>();
-	#maxBufferSize: number;
-
+	/**
+	 * creates a new labeler
+	 * @param options labeler options
+	 */
 	constructor(options: LabelerOptions) {
-		this.did = options.did;
-
+		this.#serviceDid = options.serviceDid;
+		this.#signingKey = options.signingKey;
 		this.#store = options.store;
-		this.#key = options.key;
 
-		this.#auth = options.auth;
-
-		this.#maxBufferSize = options.maxBufferSize ?? 500;
+		this.#pageSize = Math.max(1, options.pageSize ?? 500);
 	}
 
 	/**
-	 * register labeler routes on a router.
-	 * registers queryLabels and subscribeLabels always;
-	 * emitEvent is only registered if `auth` was provided.
-	 * @param router the router to register on
+	 * apply a single label operation
+	 * @param op label operation
+	 * @param options batch defaults
+	 * @returns stored label
 	 */
-	register(router: XRPCRouter): void {
-		this.#registerQueryLabels(router);
-		this.#registerSubscribeLabels(router);
-
-		if (this.#auth !== undefined) {
-			this.#registerEmitEvent(router, this.#auth);
+	async applyLabel(op: LabelOp, options?: ApplyLabelsOptions): Promise<SignedLabel> {
+		const labels = await this.applyLabels([op], options);
+		const label = labels[0];
+		if (label === undefined) {
+			throw new Error(`expected one stored label`);
 		}
+
+		return label;
 	}
 
 	/**
-	 * create and save a single label.
-	 * @param data label creation data
-	 * @returns the saved label
+	 * apply label operations
+	 * @param ops label operations
+	 * @param options batch defaults
+	 * @returns stored labels in event order
 	 */
-	async createLabel(data: CreateLabelData): Promise<SavedLabel> {
-		const signed = await signLabel(data, this.did, this.#key);
-		const saved = await this.#store.save(signed);
+	async applyLabels(ops: Iterable<LabelOp>, options?: ApplyLabelsOptions): Promise<SignedLabel[]> {
+		const drafts = buildLabels(this.#serviceDid, ops, options);
+		if (drafts.length === 0) {
+			return [];
+		}
 
-		this.#emitter.emit(saved);
-		return saved;
-	}
+		const signed = await Promise.all(drafts.map((label) => signLabel(this.#signingKey, label)));
+		const events = await this.#store.appendLabels(signed);
 
-	/**
-	 * create and save multiple labels for a subject.
-	 * @param subject the label subject (URI + optional CID)
-	 * @param labels label values to create and/or negate
-	 * @returns all created labels
-	 */
-	async createLabels(
-		subject: LabelSubject,
-		labels: { create?: string[]; negate?: string[]; exp?: string },
-	): Promise<SavedLabel[]> {
-		const result: SavedLabel[] = [];
+		for (const event of events) {
+			this.#events.emit(event);
+		}
 
-		if (labels.create) {
-			for (const val of labels.create) {
-				const saved = await this.createLabel({ ...subject, val, exp: labels.exp });
-				result.push(saved);
+		const labels: SignedLabel[] = [];
+		for (const event of events) {
+			for (const label of event.labels) {
+				labels.push(label);
 			}
 		}
 
-		if (labels.negate) {
-			for (const val of labels.negate) {
-				const saved = await this.createLabel({ ...subject, val, neg: true });
-				result.push(saved);
+		return labels;
+	}
+
+	/**
+	 * subscribe to sequenced label events
+	 * @param options subscription options
+	 * @returns async iterator of label events
+	 * @throws {LabelerFutureCursorError}
+	 */
+	async *subscribeLabels(options: LabelSubscriptionOptions): AsyncIterableIterator<LabelEvent> {
+		const { cursor, signal } = options;
+
+		if (cursor !== undefined) {
+			const latest = (await this.#store.getLatestSeq()) ?? 0;
+			if (cursor > latest) {
+				throw new FutureCursorError(cursor, latest);
 			}
 		}
 
-		return result;
-	}
+		const outbox = new LabelerOutbox(this.#store, this.#events, { pageSize: this.#pageSize });
 
-	#registerQueryLabels(router: XRPCRouter): void {
-		const store = this.#store;
-
-		router.addQuery(ComAtprotoLabelQueryLabels, {
-			handler: async ({ params }) => {
-				const result = await store.query({
-					uriPatterns: params.uriPatterns,
-					sources: params.sources ?? [],
-					cursor: params.cursor !== undefined ? parseInt(params.cursor, 10) || 0 : 0,
-					limit: params.limit,
-				});
-
-				return json(result);
-			},
-		});
-	}
-
-	#registerSubscribeLabels(router: XRPCRouter): void {
-		const store = this.#store;
-		const emitter = this.#emitter;
-		const maxBufferSize = this.#maxBufferSize;
-
-		router.addSubscription(ComAtprotoLabelSubscribeLabels, {
-			async *handler({ params, signal }) {
-				const { cursor } = params;
-
-				if (cursor !== undefined) {
-					const latestSeq = await store.getLatestSeq();
-					if (cursor > latestSeq) {
-						throw new InvalidRequestError({
-							error: 'FutureCursor',
-							description: `cursor is in the future`,
-						});
-					}
-				}
-
-				const outbox = new LabelOutbox(store, emitter, { maxBufferSize });
-
-				for await (const label of outbox.events(cursor, signal)) {
-					yield {
-						$type: 'com.atproto.label.subscribeLabels#labels',
-						seq: label.seq,
-						labels: [formatLabel(label)],
-					};
-				}
-			},
-		});
-	}
-
-	#registerEmitEvent(router: XRPCRouter, auth: AuthCheck): void {
-		router.addProcedure(ToolsOzoneModerationEmitEvent, {
-			handler: async ({ request, input }) => {
-				if (!(await auth(request))) {
-					throw new AuthRequiredError({ description: `unauthorized` });
-				}
-
-				const { event, subject, subjectBlobCids = [], createdBy } = input;
-
-				if (event.$type !== 'tools.ozone.moderation.defs#modEventLabel') {
-					throw new InvalidRequestError({ description: `unsupported event type` });
-				}
-
-				if (!event.createLabelVals?.length && !event.negateLabelVals?.length) {
-					throw new InvalidRequestError({ description: `must provide at least one label value` });
-				}
-
-				const uri =
-					subject.$type === 'com.atproto.admin.defs#repoRef'
-						? subject.did
-						: subject.$type === 'com.atproto.repo.strongRef'
-							? subject.uri
-							: undefined;
-
-				if (uri === undefined) {
-					throw new InvalidRequestError({ description: `invalid subject` });
-				}
-
-				const cid = subject.$type === 'com.atproto.repo.strongRef' ? subject.cid : undefined;
-
-				const labelSubject: LabelSubject = { uri };
-				if (cid !== undefined) {
-					labelSubject.cid = cid;
-				}
-
-				let exp: string | undefined;
-				if (event.durationInHours !== undefined) {
-					exp = new Date(Date.now() + event.durationInHours * 60 * 60 * 1000).toISOString();
-				}
-
-				const labels = await this.createLabels(labelSubject, {
-					create: event.createLabelVals,
-					negate: event.negateLabelVals,
-					exp,
-				});
-
-				return json({
-					id: labels[0]!.seq,
-					event,
-					subject,
-					subjectBlobCids,
-					createdBy,
-					createdAt: new Date().toISOString(),
-				});
-			},
-		});
+		yield* outbox.events(cursor, signal);
 	}
 }

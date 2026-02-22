@@ -1,4 +1,13 @@
-export { formatLabel, signLabel, type CreateLabelData, type LabelSubject } from './labels.ts';
-export { LabelOutbox, type LabelOutboxOptions } from './outbox.ts';
-export { Labeler, type AuthCheck, type LabelerOptions } from './labeler.ts';
-export type { LabelQueryParams, LabelQueryResult, LabelStore, SavedLabel } from './store.ts';
+export { ConsumerTooSlowError, FutureCursorError, LabelerError } from './errors.ts';
+export { Labeler } from './labeler.ts';
+export { MemoryLabelStore } from './memory-label-store.ts';
+
+export type {
+	ApplyLabelsOptions,
+	LabelEvent,
+	LabelOp,
+	LabelStore,
+	LabelSubscriptionOptions,
+	LabelerOptions,
+	SignedLabel,
+} from './types.ts';
