@@ -41,7 +41,7 @@ export class MemoryLabelStore implements LabelStore {
 	 * @param options list options
 	 * @returns events in ascending order
 	 */
-	async listLabelEvents(options: { after?: number; limit: number }): Promise<LabelEvent[]> {
+	async listLabelEvents(options: { after?: number; limit?: number }): Promise<LabelEvent[]> {
 		const { after, limit } = options;
 
 		const events: LabelEvent[] = [];
@@ -51,7 +51,7 @@ export class MemoryLabelStore implements LabelStore {
 			}
 
 			events.push(event);
-			if (events.length >= limit) {
+			if (limit !== undefined && events.length >= limit) {
 				break;
 			}
 		}

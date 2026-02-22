@@ -1,7 +1,7 @@
 {
 	"name": "@atcute/labeler",
 	"version": "0.1.0",
-	"description": "a lightweight core for building AT Protocol labelers",
+	"description": "label signing and subscription engine for AT Protocol",
 	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",

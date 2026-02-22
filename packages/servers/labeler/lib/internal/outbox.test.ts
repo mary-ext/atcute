@@ -29,7 +29,7 @@ const makeEvent = (seq: number): LabelEvent => {
 class TestStore implements LabelStore {
 	#events: LabelEvent[] = [];
 
-	onList?: (options: { after?: number; limit: number }) => void;
+	onList?: (options: { after?: number; limit?: number }) => void;
 
 	insert(event: LabelEvent): void {
 		this.#events.push(event);
@@ -61,7 +61,7 @@ class TestStore implements LabelStore {
 		return this.#events.at(-1)?.seq ?? null;
 	}
 
-	async listLabelEvents(options: { after?: number; limit: number }): Promise<LabelEvent[]> {
+	async listLabelEvents(options: { after?: number; limit?: number }): Promise<LabelEvent[]> {
 		this.onList?.(options);
 
 		const out: LabelEvent[] = [];
@@ -71,7 +71,7 @@ class TestStore implements LabelStore {
 			}
 
 			out.push(event);
-			if (out.length >= options.limit) {
+			if (options.limit !== undefined && out.length >= options.limit) {
 				break;
 			}
 		}
@@ -122,7 +122,7 @@ describe('LabelerOutbox', () => {
 
 		let injectedCutoverEvent = false;
 		store.onList = (options) => {
-			if (injectedCutoverEvent || options.limit !== Number.MAX_SAFE_INTEGER) {
+			if (injectedCutoverEvent || options.limit !== undefined) {
 				return;
 			}
 

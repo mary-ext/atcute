@@ -67,7 +67,7 @@ export interface LabelStore {
 	 * @param options list options
 	 * @returns label events
 	 */
-	listLabelEvents(options: { after?: number; limit: number }): Promise<LabelEvent[]>;
+	listLabelEvents(options: { after?: number; limit?: number }): Promise<LabelEvent[]>;
 }
 
 /**

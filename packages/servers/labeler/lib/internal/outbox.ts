@@ -76,7 +76,6 @@ export class LabelerOutbox {
 		if (!caughtUp) {
 			const events = await this.#store.listLabelEvents({
 				after: lastBackfillSeq > -1 ? lastBackfillSeq : backfillCursor,
-				limit: Number.MAX_SAFE_INTEGER,
 			});
 
 			if (events.length > 0) {
