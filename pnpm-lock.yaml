@@ -728,9 +728,6 @@ importers:
       prebuildify:
         specifier: ^6.0.1
         version: 6.0.1
-      vitest:
-        specifier: ^4.0.18
-        version: 4.0.18(@types/node@25.2.1)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
 
   packages/misc/uint8array:
     devDependencies:
@@ -798,10 +795,6 @@ importers:
       '@atcute/oauth-crypto':
         specifier: workspace:^
         version: link:../crypto
-    devDependencies:
-      vitest:
-        specifier: ^4.0.18
-        version: 4.0.18(@types/node@25.2.1)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
 
   packages/oauth/node-client:
     dependencies:
@@ -914,6 +907,46 @@ importers:
         specifier: ^0.4.6
         version: 0.4.6
     devDependencies:
+      vitest:
+        specifier: ^4.0.18
+        version: 4.0.18(@types/node@25.2.3)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
+
+  packages/servers/labeler:
+    dependencies:
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../../utilities/cbor
+      '@atcute/crypto':
+        specifier: workspace:^
+        version: link:../../utilities/crypto
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../../identity/identity
+      '@atcute/identity-resolver':
+        specifier: workspace:^
+        version: link:../../identity/identity-resolver
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+      '@atcute/xrpc-server':
+        specifier: workspace:^
+        version: link:../xrpc-server
+      '@mary-ext/simple-event-emitter':
+        specifier: ^1.0.1
+        version: 1.0.1
+    devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
+      '@atcute/labeler':
+        specifier: 'file:'
+        version: file:packages/servers/labeler
+      '@atcute/ozone':
+        specifier: workspace:^
+        version: link:../../definitions/ozone
+      '@types/node':
+        specifier: ^25.2.3
+        version: 25.2.3
       vitest:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@25.2.3)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
@@ -1244,6 +1277,9 @@ packages:
 
   '@atcute/frontpage@file:packages/definitions/frontpage':
     resolution: {directory: packages/definitions/frontpage, type: directory}
+
+  '@atcute/labeler@file:packages/servers/labeler':
+    resolution: {directory: packages/servers/labeler, type: directory}
 
   '@atcute/leaflet@file:packages/definitions/leaflet':
     resolution: {directory: packages/definitions/leaflet, type: directory}
@@ -2096,6 +2132,9 @@ packages:
 
   '@mary-ext/simple-event-emitter@1.0.0':
     resolution: {integrity: sha512-meA/zJZKIN1RVBNEYIbjufkUrW7/tRjHH60FjolpG1ixJKo76TB208qefQLNdOVDA7uIG0CGEDuhmMirtHKLAg==}
+
+  '@mary-ext/simple-event-emitter@1.0.1':
+    resolution: {integrity: sha512-9+VvZisxZ/gSg+JJH7hmXaA8Qj42Qjz3O58RSB+INYc8iLA0icATZxHB9vKbj59ojDGZjO3hCKzMXocx3L0H8w==}
 
   '@mitata/counters@0.0.8':
     resolution: {integrity: sha512-f11w0Y1ETFlarDP7CePj8Z+y8Gv5Ax4gMxWsEwrqh0kH/YIY030Ezx5SUJeQg0YPTZ2OHKGcLG1oGJbIqHzaJA==}
@@ -4664,6 +4703,16 @@ snapshots:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
+  '@atcute/labeler@file:packages/servers/labeler':
+    dependencies:
+      '@atcute/cbor': link:packages/utilities/cbor
+      '@atcute/crypto': link:packages/utilities/crypto
+      '@atcute/identity': link:packages/identity/identity
+      '@atcute/identity-resolver': link:packages/identity/identity-resolver
+      '@atcute/lexicons': link:packages/lexicons/lexicons
+      '@atcute/xrpc-server': link:packages/servers/xrpc-server
+      '@mary-ext/simple-event-emitter': 1.0.1
+
   '@atcute/leaflet@file:packages/definitions/leaflet':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
@@ -6120,6 +6169,8 @@ snapshots:
       yocto-queue: 1.2.2
 
   '@mary-ext/simple-event-emitter@1.0.0': {}
+
+  '@mary-ext/simple-event-emitter@1.0.1': {}
 
   '@mitata/counters@0.0.8': {}
 
