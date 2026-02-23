@@ -29,7 +29,7 @@
 		"@atcute/atproto": "workspace:^",
 		"@atcute/cbor": "workspace:^",
 		"@atcute/crypto": "workspace:^",
-		"@atcute/lexicons": "^1.2.9",
+		"@atcute/lexicons": "workspace:^",
 		"@mary-ext/simple-event-emitter": "^1.0.1"
 	},
 	"devDependencies": {
