@@ -17,7 +17,7 @@ import type {
 } from './types.ts';
 
 /**
- * high-level labeler api with internal sequencing and subscription handling
+ * signs, persists, and streams labels for an AT Protocol labeler service
  */
 export class Labeler {
 	readonly #serviceDid: Did;
