@@ -43,11 +43,10 @@ export class Labeler {
 	/**
 	 * apply a single label operation
 	 * @param op label operation
-	 * @param options batch defaults
 	 * @returns stored label
 	 */
-	async applyLabel(op: LabelOp, options?: ApplyLabelsOptions): Promise<SignedLabel> {
-		const labels = await this.applyLabels([op], options);
+	async applyLabel(op: LabelOp): Promise<SignedLabel> {
+		const labels = await this.applyLabels([op]);
 		const label = labels[0];
 		if (label === undefined) {
 			throw new Error(`expected one stored label`);
