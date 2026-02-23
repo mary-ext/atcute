@@ -48,7 +48,7 @@
 		"@atcute/uint8array": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/node": "^25.2.3",
+		"@types/node": "^25.3.0",
 		"@vitest/coverage-v8": "^4.0.18",
 		"vitest": "^4.0.18"
 	}

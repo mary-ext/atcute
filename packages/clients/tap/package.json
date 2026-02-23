@@ -32,8 +32,8 @@
 		"@atcute/uint8array": "workspace:^",
 		"@badrap/valita": "^0.4.6",
 		"@mary-ext/event-iterator": "^1.0.0",
-		"@mary-ext/simple-event-emitter": "^1.0.0",
-		"partysocket": "^1.1.13",
+		"@mary-ext/simple-event-emitter": "^1.0.1",
+		"partysocket": "^1.1.15",
 		"type-fest": "^4.41.0"
 	},
 	"devDependencies": {

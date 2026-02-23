@@ -8,6 +8,7 @@
 	},
 	"rules": {
 		"no-await-in-loop": "off",
+		"no-shadow": "off",
 		"unicorn/prefer-add-event-listener": "off"
 	}
 }

@@ -45,6 +45,7 @@ export const createRfc4648Decode = (alphabet: string, bitsPerChar: number, pad: 
 	return (str: string): Uint8Array<ArrayBuffer> => {
 		// Count the padding bytes:
 		let end = str.length;
+		// oxlint-disable-next-line no-unmodified-loop-condition
 		while (pad && str[end - 1] === '=') {
 			--end;
 		}
