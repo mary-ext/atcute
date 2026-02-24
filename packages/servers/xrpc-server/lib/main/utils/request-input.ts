@@ -2,6 +2,31 @@ import type { XRPCBlobBodyParam, XRPCLexBodyParam } from '@atcute/lexicons/valid
 
 import type { Result } from '../../types/misc.ts';
 
+/**
+ * checks whether a request has a meaningful body.
+ *
+ * Node.js HTTP-to-fetch adapters always provide a `ReadableStream` for
+ * `request.body`, even when no body content was sent. this function
+ * uses `content-length` to handle that case while still respecting the
+ * web `Request` API where `body === null` signals no body.
+ *
+ * @param request incoming request to check
+ * @returns whether the request has body content
+ */
+export const hasRequestBody = (request: Request): boolean => {
+	if (request.body === null) {
+		return false;
+	}
+
+	// Node.js adapters set content-length: 0 for bodiless requests while
+	// still providing a ReadableStream body; treat this as no body.
+	if (request.headers.get('content-length') === '0') {
+		return false;
+	}
+
+	return true;
+};
+
 const jsonMimeValidator = (() => {
 	const JSON_RE = /^\s*application\/json\s*(?:$|;)/;
 

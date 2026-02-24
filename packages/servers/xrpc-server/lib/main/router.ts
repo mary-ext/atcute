@@ -18,7 +18,7 @@ import type { WebSocketAdapter } from './types/websocket.ts';
 import { encodeErrorFrame, encodeMessageFrame, extractMessageType, omitMessageType } from './utils/frames.ts';
 import { createAsyncMiddlewareRunner, type Middleware } from './utils/middlewares.ts';
 import { unwrapLxm, type Namespaced } from './utils/namespaced.ts';
-import { constructMimeValidator } from './utils/request-input.ts';
+import { constructMimeValidator, hasRequestBody } from './utils/request-input.ts';
 import { constructParamsHandler } from './utils/request-params.ts';
 import { invalidRequest, validationError } from './utils/response.ts';
 import { XRPCError, XRPCSubscriptionError } from './xrpc-error.ts';
@@ -236,7 +236,7 @@ export class XRPCRouter {
 				}
 
 				if (requiresInput) {
-					if (request.body === null) {
+					if (!hasRequestBody(request)) {
 						return invalidRequest(`request body is expected but none was provided`);
 					}
 
@@ -263,7 +263,7 @@ export class XRPCRouter {
 						input = result.value;
 					}
 				} else {
-					if (request.body !== null) {
+					if (hasRequestBody(request)) {
 						return invalidRequest(`request body is provided when none was expected`);
 					}
 				}
