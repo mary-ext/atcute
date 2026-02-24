@@ -1,5 +1,5 @@
 ---
-"@atcute/xrpc-server-node": patch
+'@atcute/xrpc-server-node': patch
 ---
 
 incorrect exports
