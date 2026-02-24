@@ -1,7 +1,7 @@
 import { fromBase58Btc, fromBase64 } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
-import { p256 } from '@noble/curves/p256';
+import { p256 } from '@noble/curves/nist.js';
 import { describe, expect, it } from 'vitest';
 
 import { parseDidKey } from '../multibase.ts';
@@ -16,12 +16,12 @@ it('creates a valid keypair', async () => {
 		keypair.exportPublicKey('raw'),
 	]);
 
-	expect(p256.utils.isValidPrivateKey(privateKeyBytes)).toBe(true);
+	expect(p256.utils.isValidSecretKey(privateKeyBytes)).toBe(true);
 	expect(publicKeyBytes).toEqual(p256.getPublicKey(privateKeyBytes));
 });
 
 it('produces valid signatures', async () => {
-	const privateKeyBytes = p256.utils.randomPrivateKey();
+	const privateKeyBytes = p256.utils.randomSecretKey();
 	const publicKeyBytes = p256.getPublicKey(privateKeyBytes);
 
 	const keypair = await P256PrivateKey.importRaw(privateKeyBytes);
@@ -33,12 +33,12 @@ it('produces valid signatures', async () => {
 
 	await expect(keypair.verify(sig, data)).resolves.toBe(true);
 
-	expect(p256.verify(sig, hash, publicKeyBytes, { format: 'compact', lowS: true })).toBe(true);
-	expect(() => p256.verify(sig, hash, publicKeyBytes, { format: 'der' })).toThrow();
+	expect(p256.verify(sig, hash, publicKeyBytes, { prehash: false, format: 'compact', lowS: true })).toBe(true);
+	expect(p256.verify(sig, hash, publicKeyBytes, { prehash: false, format: 'der' })).toBe(false);
 });
 
 it('verifies valid signatures', async () => {
-	const privateKeyBytes = p256.utils.randomPrivateKey();
+	const privateKeyBytes = p256.utils.randomSecretKey();
 	const publicKeyBytes = p256.getPublicKey(privateKeyBytes);
 
 	const keypair = await P256PublicKey.importRaw(publicKeyBytes);
@@ -46,7 +46,7 @@ it('verifies valid signatures', async () => {
 	const data = Uint8Array.from([190, 1, 153, 17, 7, 119, 192, 24, 126, 222, 91, 27, 245, 223, 150, 162]);
 
 	const hash = await toSha256(data);
-	const sig = p256.sign(hash, privateKeyBytes, { lowS: true }).toCompactRawBytes();
+	const sig = p256.sign(hash, privateKeyBytes, { prehash: false, lowS: true });
 
 	await expect(keypair.verify(sig, data)).resolves.toBe(true);
 });
@@ -95,20 +95,20 @@ describe('.importCryptoKey()', () => {
 
 describe('.importRaw()', () => {
 	it('imports public keys', async () => {
-		const privateKeyBytes = p256.utils.randomPrivateKey();
+		const privateKeyBytes = p256.utils.randomSecretKey();
 		const publicKeyBytes = p256.getPublicKey(privateKeyBytes);
 
 		await expect(P256PublicKey.importRaw(publicKeyBytes)).resolves.toBeInstanceOf(P256PublicKey);
 	});
 
 	it('imports private keys without specifying public key', async () => {
-		const privateKeyBytes = p256.utils.randomPrivateKey();
+		const privateKeyBytes = p256.utils.randomSecretKey();
 
 		await expect(P256PrivateKey.importRaw(privateKeyBytes)).resolves.toBeInstanceOf(P256PrivateKey);
 	});
 
 	it('imports keypairs', async () => {
-		const privateKeyBytes = p256.utils.randomPrivateKey();
+		const privateKeyBytes = p256.utils.randomSecretKey();
 		const publicKeyBytes = p256.getPublicKey(privateKeyBytes);
 
 		await expect(P256PrivateKey.importRaw(privateKeyBytes, publicKeyBytes)).resolves.toBeInstanceOf(
@@ -117,8 +117,8 @@ describe('.importRaw()', () => {
 	});
 
 	it('throws on mismatching public/private keys', async () => {
-		const privateKeyBytes = p256.utils.randomPrivateKey();
-		const publicKeyBytes = p256.getPublicKey(p256.utils.randomPrivateKey());
+		const privateKeyBytes = p256.utils.randomSecretKey();
+		const publicKeyBytes = p256.getPublicKey(p256.utils.randomSecretKey());
 
 		await expect(P256PrivateKey.importRaw(privateKeyBytes, publicKeyBytes)).rejects.toThrowError(TypeError);
 	});

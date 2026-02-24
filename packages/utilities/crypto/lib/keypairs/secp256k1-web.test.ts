@@ -1,7 +1,7 @@
 import { fromBase16, fromBase64 } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
-import { secp256k1 } from '@noble/curves/secp256k1';
+import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { describe, expect, it } from 'vitest';
 
 import { parseDidKey } from '../multibase.ts';
@@ -33,8 +33,8 @@ it('produces valid signatures', async () => {
 
 	await expect(keypair.verify(sig, data)).resolves.toBe(true);
 
-	expect(secp256k1.verify(sig, hash, publicKeyBytes, { format: 'compact', lowS: true })).toBe(true);
-	expect(() => secp256k1.verify(sig, hash, publicKeyBytes, { format: 'der' })).toThrow();
+	expect(secp256k1.verify(sig, hash, publicKeyBytes, { prehash: false, format: 'compact', lowS: true })).toBe(true);
+	expect(secp256k1.verify(sig, hash, publicKeyBytes, { prehash: false, format: 'der' })).toBe(false);
 });
 
 it('verifies valid signatures', async () => {
@@ -46,7 +46,7 @@ it('verifies valid signatures', async () => {
 	const data = Uint8Array.from([190, 1, 153, 17, 7, 119, 192, 24, 126, 222, 91, 27, 245, 223, 150, 162]);
 
 	const hash = await toSha256(data);
-	const sig = secp256k1.sign(hash, privateKeyBytes, { lowS: true }).toCompactRawBytes();
+	const sig = secp256k1.sign(hash, privateKeyBytes, { prehash: false, lowS: true });
 
 	await expect(keypair.verify(sig, data)).resolves.toBe(true);
 });
