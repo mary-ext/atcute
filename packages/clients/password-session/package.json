@@ -1,0 +1,39 @@
+{
+	"name": "@atcute/password-session",
+	"version": "0.1.0",
+	"description": "password-based session management for AT Protocol",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/clients/password-session"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts"
+	],
+	"type": "module",
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsgo --project tsconfig.build.json",
+		"test": "vitest run",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/client": "workspace:^",
+		"@atcute/identity": "workspace:^",
+		"@atcute/lexicons": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/atproto": "workspace:^",
+		"@atcute/bluesky": "workspace:^",
+		"@atcute/internal-dev-env": "workspace:^",
+		"vitest": "^4.0.18"
+	}
+}

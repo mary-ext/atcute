@@ -214,6 +214,31 @@ importers:
         specifier: ^4.41.0
         version: 4.41.0
 
+  packages/clients/password-session:
+    dependencies:
+      '@atcute/client':
+        specifier: workspace:^
+        version: link:../client
+      '@atcute/identity':
+        specifier: workspace:^
+        version: link:../../identity/identity
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+    devDependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
+      '@atcute/bluesky':
+        specifier: workspace:^
+        version: link:../../definitions/bluesky
+      '@atcute/internal-dev-env':
+        specifier: workspace:^
+        version: link:../../internal/dev-env
+      vitest:
+        specifier: ^4.0.18
+        version: 4.0.18(@types/node@25.3.0)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.0)
+
   packages/clients/tap:
     dependencies:
       '@atcute/identity':
