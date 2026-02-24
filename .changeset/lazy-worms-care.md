@@ -1,5 +1,5 @@
 ---
-"@atcute/xrpc-server": patch
+'@atcute/xrpc-server': patch
 ---
 
 ignore body if content-length is 0
