@@ -101,11 +101,11 @@ await PasswordSession.delete(savedData);
 
 ## callbacks
 
-| callback          | when                                       | session state     |
-| ----------------- | ------------------------------------------ | ----------------- |
-| `onUpdate`        | login succeeds, tokens refresh successfully | active (updated)  |
-| `onUpdateFailure` | token refresh fails transiently (network)  | active (preserved)|
-| `onDelete`        | logout succeeds, session invalidated       | destroyed         |
-| `onDeleteFailure` | logout fails transiently (network)         | active (preserved)|
+| callback          | when                                        | session state      |
+| ----------------- | ------------------------------------------- | ------------------ |
+| `onUpdate`        | login succeeds, tokens refresh successfully | active (updated)   |
+| `onUpdateFailure` | token refresh fails transiently (network)   | active (preserved) |
+| `onDelete`        | logout succeeds, session invalidated        | destroyed          |
+| `onDeleteFailure` | logout fails transiently (network)          | active (preserved) |
 
 all callbacks receive `this: PasswordSession` context and must not throw.

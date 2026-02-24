@@ -344,8 +344,7 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 		}
 
 		// refresh unless another call already started one
-		const refreshPromise =
-			this.#sessionPromise === sessionPromise ? this.#refresh() : this.#sessionPromise;
+		const refreshPromise = this.#sessionPromise === sessionPromise ? this.#refresh() : this.#sessionPromise;
 
 		const newSessionData = await refreshPromise.catch(() => null);
 
