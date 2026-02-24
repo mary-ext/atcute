@@ -50,16 +50,24 @@ console.log(rt.facets);
 
 use with `@atcute/client` to create a post:
 
+```sh
+npm install @atcute/client @atcute/password-session @atcute/bluesky
+```
+
 ```ts
-import { Client, CredentialManager, ok } from '@atcute/client';
+import { Client, ok } from '@atcute/client';
+import { PasswordSession } from '@atcute/password-session';
 import RichtextBuilder from '@atcute/bluesky-richtext-builder';
 
 import type {} from '@atcute/bluesky';
 
-const manager = new CredentialManager({ service: 'https://bsky.social' });
-const rpc = new Client({ handler: manager });
+const session = await PasswordSession.login({
+	service: 'https://bsky.social',
+	identifier: 'you.bsky.social',
+	password: 'your-app-password',
+});
 
-await manager.login({ identifier: 'you.bsky.social', password: 'your-app-password' });
+const rpc = new Client({ handler: session });
 
 const rt = new RichtextBuilder()
 	.addText('hello ')
@@ -70,7 +78,7 @@ const rt = new RichtextBuilder()
 await ok(
 	rpc.post('com.atproto.repo.createRecord', {
 		input: {
-			repo: manager.session!.did,
+			repo: session.did,
 			collection: 'app.bsky.feed.post',
 			record: {
 				$type: 'app.bsky.feed.post',
@@ -117,7 +125,9 @@ import {
 
 const handleResolver = new CompositeHandleResolver({
 	methods: {
-		dns: new DohJsonHandleResolver({ dohUrl: 'https://mozilla.cloudflare-dns.com/dns-query' }),
+		dns: new DohJsonHandleResolver({
+			dohUrl: 'https://mozilla.cloudflare-dns.com/dns-query',
+		}),
 		http: new WellKnownHandleResolver(),
 	},
 });
