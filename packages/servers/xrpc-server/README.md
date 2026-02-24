@@ -79,21 +79,24 @@ export default router;
 on Deno, Bun or Cloudflare Workers, you can export the router directly and expect it to work out of
 the box.
 
-for Node.js, you'll need the [`@hono/node-server`][hono-node-server] adapter as the router works
-with standard Web Request/Response:
+for Node.js, you'll need a fetch-to-Node adapter like
+[`@remix-run/node-fetch-server`][node-fetch-server] since the router works with standard Web
+Request/Response:
 
-[hono-node-server]: https://github.com/honojs/node-server
+[node-fetch-server]: https://github.com/remix-run/remix/tree/main/packages/node-fetch-server
 
 ```ts
+import * as http from 'node:http';
+import { createRequestListener } from '@remix-run/node-fetch-server';
 import { XRPCRouter } from '@atcute/xrpc-server';
-import { serve } from '@hono/node-server';
 
 const router = new XRPCRouter();
 
 // ... add handlers ...
 
-serve({ fetch: router.fetch, port: 3000 }, (info) => {
-	console.log(`listening on port ${info.port}`);
+const server = http.createServer(createRequestListener(router.fetch));
+server.listen(3000, () => {
+	console.log('listening on port 3000');
 });
 ```
 

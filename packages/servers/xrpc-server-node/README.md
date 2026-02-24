@@ -10,7 +10,8 @@ see the [subscriptions section](../xrpc-server/#subscriptions) in the main packa
 details.
 
 ```ts
-import { serve } from '@hono/node-server';
+import * as http from 'node:http';
+import { createRequestListener } from '@remix-run/node-fetch-server';
 import { XRPCRouter } from '@atcute/xrpc-server';
 import { createNodeWebSocket } from '@atcute/xrpc-server-node';
 
@@ -29,9 +30,10 @@ router.addSubscription(ComExampleSubscribe.mainSchema, {
 	},
 });
 
-const server = serve({ fetch: router.fetch, port: 3000 }, (info) => {
-	console.log(`listening on port ${info.port}`);
-});
-
+const server = http.createServer(createRequestListener(router.fetch));
 ws.injectWebSocket(server, router);
+
+server.listen(3000, () => {
+	console.log('listening on port 3000');
+});
 ```

@@ -1,25 +1,38 @@
+import * as http from 'node:http';
+
 import { ComAtprotoLabelDefs, ComAtprotoLabelSubscribeLabels } from '@atcute/atproto';
 import { decode, decodeFirst } from '@atcute/cbor';
-import { XRPCRouter } from '@atcute/xrpc-server';
+import * as v from '@atcute/lexicons/validations';
+import { InvalidRequestError, json, XRPCRouter } from '@atcute/xrpc-server';
 
-import { serve, type ServerType } from '@hono/node-server';
+import { createRequestListener } from '@remix-run/node-fetch-server';
 import { describe, expect, it } from 'vitest';
 
 import { createNodeWebSocket, type NodeWebSocket } from './index.ts';
 
+// #region test helpers
+
 interface Server extends Disposable {
-	instance: ServerType;
+	instance: http.Server;
 	port: number;
+	url: string;
 }
 
-const createHttpServer = async (router: XRPCRouter, ws: NodeWebSocket): Promise<Server> => {
+const createHttpServer = async (router: XRPCRouter, ws?: NodeWebSocket): Promise<Server> => {
 	return new Promise((resolve) => {
-		const instance = serve({ port: 0, fetch: router.fetch }, (addr) => {
+		const instance = http.createServer(createRequestListener(router.fetch));
+
+		if (ws) {
 			ws.injectWebSocket(instance, router);
+		}
+
+		instance.listen(0, () => {
+			const addr = instance.address() as { port: number };
 
 			resolve({
 				instance: instance,
 				port: addr.port,
+				url: `http://localhost:${addr.port}`,
 				[Symbol.dispose]() {
 					instance.close();
 				},
@@ -35,7 +48,311 @@ const decodeFrame = (buffer: Uint8Array): { header: any; body: any } => {
 	return { header, body };
 };
 
-describe('subscriptions', () => {
+// #endregion
+
+// #region test schemas
+
+const queryNoParams = v.query('com.example.ping', {
+	params: null,
+	output: null,
+});
+
+const queryWithParams = v.query('com.example.greet', {
+	params: v.object({
+		name: v.string(),
+		excited: v.optional(v.boolean()),
+	}),
+	output: {
+		type: 'lex',
+		schema: v.object({
+			greeting: v.string(),
+		}),
+	},
+});
+
+const procedureNoParams = v.procedure('com.example.noop', {
+	params: null,
+	input: null,
+	output: null,
+});
+
+const procedureWithInput = v.procedure('com.example.echo', {
+	params: null,
+	input: {
+		type: 'lex',
+		schema: v.object({
+			message: v.string(),
+		}),
+	},
+	output: {
+		type: 'lex',
+		schema: v.object({
+			echo: v.string(),
+		}),
+	},
+});
+
+const procedureWithParamsAndInput = v.procedure('com.example.create', {
+	params: v.object({
+		collection: v.string(),
+	}),
+	input: {
+		type: 'lex',
+		schema: v.object({
+			text: v.string(),
+		}),
+	},
+	output: {
+		type: 'lex',
+		schema: v.object({
+			uri: v.string(),
+		}),
+	},
+});
+
+// #endregion
+
+describe('query', () => {
+	it('handles query with no params', async () => {
+		const router = new XRPCRouter();
+		router.addQuery(queryNoParams, {
+			async handler() {},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.ping`);
+		expect(response.status).toBe(200);
+	});
+
+	it('handles query returning json', async () => {
+		const router = new XRPCRouter();
+		router.addQuery(queryWithParams, {
+			async handler({ params }) {
+				const greeting = params.excited ? `HELLO ${params.name}!!!` : `hello ${params.name}`;
+				return json({ greeting });
+			},
+		});
+
+		using server = await createHttpServer(router);
+
+		{
+			const response = await fetch(`${server.url}/xrpc/com.example.greet?name=world`);
+			expect(response.status).toBe(200);
+			expect(await response.json()).toEqual({ greeting: 'hello world' });
+		}
+
+		{
+			const response = await fetch(`${server.url}/xrpc/com.example.greet?name=world&excited=true`);
+			expect(response.status).toBe(200);
+			expect(await response.json()).toEqual({ greeting: 'HELLO world!!!' });
+		}
+	});
+
+	it('rejects query with invalid params', async () => {
+		const router = new XRPCRouter();
+		router.addQuery(queryWithParams, {
+			async handler() {
+				return json({ greeting: 'unreachable' });
+			},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.greet`);
+		expect(response.status).toBe(400);
+
+		const body = await response.json();
+		expect(body.error).toBe('InvalidRequest');
+	});
+
+	it('rejects query with wrong HTTP method', async () => {
+		const router = new XRPCRouter();
+		router.addQuery(queryNoParams, {
+			async handler() {},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.ping`, { method: 'POST' });
+		expect(response.status).toBe(405);
+	});
+
+	it('returns 404 for undefined routes', async () => {
+		const router = new XRPCRouter();
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.nonexistent`);
+		expect(response.status).toBe(404);
+	});
+
+	it('handles query throwing XRPCError', async () => {
+		const router = new XRPCRouter();
+		router.addQuery(queryNoParams, {
+			async handler() {
+				throw new InvalidRequestError({ description: 'something went wrong' });
+			},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.ping`);
+		expect(response.status).toBe(400);
+		expect(await response.json()).toEqual({
+			error: 'InvalidRequest',
+			message: 'something went wrong',
+		});
+	});
+
+	it('handles query throwing unexpected error', async () => {
+		const router = new XRPCRouter();
+		router.addQuery(queryNoParams, {
+			async handler() {
+				throw new Error('boom');
+			},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.ping`);
+		expect(response.status).toBe(500);
+
+		const body = await response.json();
+		expect(body.error).toBe('InternalServerError');
+	});
+});
+
+describe('procedure', () => {
+	it('handles procedure with no params or input', async () => {
+		const router = new XRPCRouter();
+		router.addProcedure(procedureNoParams, {
+			async handler() {},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.noop`, { method: 'POST' });
+		expect(response.status).toBe(200);
+	});
+
+	it('handles procedure with json input and output', async () => {
+		const router = new XRPCRouter();
+		router.addProcedure(procedureWithInput, {
+			async handler({ input }) {
+				return json({ echo: input.message });
+			},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.echo`, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ message: 'hello' }),
+		});
+
+		expect(response.status).toBe(200);
+		expect(await response.json()).toEqual({ echo: 'hello' });
+	});
+
+	it('handles procedure with params and input', async () => {
+		const router = new XRPCRouter();
+		router.addProcedure(procedureWithParamsAndInput, {
+			async handler({ params, input }) {
+				return json({ uri: `at://did:plc:test/${params.collection}/abc` });
+			},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.create?collection=app.bsky.feed.post`, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ text: 'hello world' }),
+		});
+
+		expect(response.status).toBe(200);
+		expect(await response.json()).toEqual({
+			uri: 'at://did:plc:test/app.bsky.feed.post/abc',
+		});
+	});
+
+	it('rejects procedure with missing required input', async () => {
+		const router = new XRPCRouter();
+		router.addProcedure(procedureWithInput, {
+			async handler({ input }) {
+				return json({ echo: input.message });
+			},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.echo`, { method: 'POST' });
+		expect(response.status).toBe(400);
+
+		const body = await response.json();
+		expect(body.error).toBe('InvalidRequest');
+	});
+
+	it('rejects procedure with wrong content type', async () => {
+		const router = new XRPCRouter();
+		router.addProcedure(procedureWithInput, {
+			async handler({ input }) {
+				return json({ echo: input.message });
+			},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.echo`, {
+			method: 'POST',
+			headers: { 'content-type': 'text/plain' },
+			body: JSON.stringify({ message: 'hello' }),
+		});
+
+		expect(response.status).toBe(400);
+
+		const body = await response.json();
+		expect(body.error).toBe('InvalidRequest');
+	});
+
+	it('rejects procedure with wrong HTTP method', async () => {
+		const router = new XRPCRouter();
+		router.addProcedure(procedureNoParams, {
+			async handler() {},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.noop`, { method: 'GET' });
+		expect(response.status).toBe(405);
+	});
+
+	it('rejects procedure with invalid input schema', async () => {
+		const router = new XRPCRouter();
+		router.addProcedure(procedureWithInput, {
+			async handler({ input }) {
+				return json({ echo: input.message });
+			},
+		});
+
+		using server = await createHttpServer(router);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.echo`, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ message: 123 }),
+		});
+
+		expect(response.status).toBe(400);
+
+		const body = await response.json();
+		expect(body.error).toBe('InvalidRequest');
+	});
+});
+
+describe('subscription', () => {
 	it('handles subscription', async () => {
 		const ws = createNodeWebSocket();
 		const router = new XRPCRouter({ websocket: ws.adapter });
