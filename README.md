@@ -10,15 +10,15 @@ npm install @atcute/client @atcute/bluesky
 ```
 
 ```ts
-import { Client, simpleFetchHandler } from '@atcute/client';
-import type {} from '@atcute/bluesky';
+import { Client, simpleFetchHandler } from "@atcute/client";
+import type {} from "@atcute/bluesky";
 
 const client = new Client({
-	handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }),
+  handler: simpleFetchHandler({ service: "https://public.api.bsky.app" }),
 });
 
-const { data } = await client.get('app.bsky.actor.getProfile', {
-	params: { actor: 'bsky.app' },
+const { data } = await client.get("app.bsky.actor.getProfile", {
+  params: { actor: "bsky.app" },
 });
 
 console.log(data.displayName);
@@ -33,11 +33,12 @@ for authenticated requests, see the [client docs](./packages/clients/client) or 
 | Packages                                                                                                    |
 | ----------------------------------------------------------------------------------------------------------- |
 | **Client packages**                                                                                         |
+| [`cache`](./packages/clients/cache): normalized cache store                                                 |
 | [`client`](./packages/clients/client): XRPC HTTP client                                                     |
 | [`firehose`](./packages/clients/firehose): XRPC subscription client                                         |
 | [`jetstream`](./packages/clients/jetstream): Jetstream WebSocket client                                     |
+| [`password-session`](./packages/clients/password-session): password-based auth session handler              |
 | [`tap`](./packages/clients/tap): Tap WebSocket client                                                       |
-| [`cache`](./packages/clients/cache): normalized cache store                                                 |
 | **Server packages**                                                                                         |
 | [`xrpc-server`](./packages/servers/xrpc-server): XRPC web framework                                         |
 | [`xrpc-server-bun`](./packages/servers/xrpc-server-bun): Bun WebSocket adapter                              |
