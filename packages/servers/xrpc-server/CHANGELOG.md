@@ -1,5 +1,11 @@
 # @atcute/xrpc-server
 
+## 0.1.11
+
+### Patch Changes
+
+- 4e2306d: ignore body if content-length is 0
+
 ## 0.1.10
 
 ### Patch Changes
