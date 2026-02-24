@@ -33,7 +33,9 @@ it('produces valid signatures', async () => {
 
 	await expect(keypair.verify(sig, data)).resolves.toBe(true);
 
-	expect(secp256k1.verify(sig, hash, publicKeyBytes, { prehash: false, format: 'compact', lowS: true })).toBe(true);
+	expect(secp256k1.verify(sig, hash, publicKeyBytes, { prehash: false, format: 'compact', lowS: true })).toBe(
+		true,
+	);
 	expect(secp256k1.verify(sig, hash, publicKeyBytes, { prehash: false, format: 'der' })).toBe(false);
 });
 

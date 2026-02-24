@@ -259,7 +259,7 @@ describe('procedure', () => {
 	it('handles procedure with params and input', async () => {
 		const router = new XRPCRouter();
 		router.addProcedure(procedureWithParamsAndInput, {
-			async handler({ params, input }) {
+			async handler({ params, input: _input }) {
 				return json({ uri: `at://did:plc:test/${params.collection}/abc` });
 			},
 		});

@@ -9,7 +9,7 @@
 	"singleQuote": true,
 	"bracketSpacing": true,
 
-	"experimentalSortImports": {
+	"sortImports": {
 		"groups": [["builtin", "bun"], ["atcute"], ["external"], ["parent"], ["sibling", "index"]],
 		"customGroups": [
 			{
