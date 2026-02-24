@@ -145,7 +145,9 @@ if you prefer throwing on errors instead of checking `response.ok`, use the `ok(
 ```ts
 import { Client, ok, simpleFetchHandler } from '@atcute/client';
 
-const rpc = new Client({ handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }) });
+const rpc = new Client({
+	handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }),
+});
 
 // throws ClientResponseError if the request fails
 const profile = await ok(rpc.get('app.bsky.actor.getProfile', { params: { actor: 'bsky.app' } }));
@@ -172,17 +174,24 @@ try {
 
 ### authenticated requests
 
-use `CredentialManager` to handle authentication. it manages tokens, automatically refreshes expired
-access tokens, and can persist sessions:
+for password-based authentication, use `PasswordSession` from `@atcute/password-session`. it manages
+tokens, automatically refreshes expired access tokens, and can persist sessions:
+
+```sh
+npm install @atcute/password-session
+```
 
 ```ts
-import { Client, CredentialManager, ok } from '@atcute/client';
+import { Client, ok } from '@atcute/client';
+import { PasswordSession } from '@atcute/password-session';
 
-const manager = new CredentialManager({ service: 'https://bsky.social' });
-const rpc = new Client({ handler: manager });
+const auth = await PasswordSession.login({
+	service: 'https://bsky.social',
+	identifier: 'you.bsky.social',
+	password: 'your-app-password',
+});
 
-// sign in with handle/email and password (or app password)
-await manager.login({ identifier: 'you.bsky.social', password: 'your-app-password' });
+const rpc = new Client({ handler: auth });
 
 // requests are now authenticated
 const session = await ok(rpc.get('com.atproto.server.getSession'));
@@ -190,35 +199,42 @@ console.log(session.did);
 // -> "did:plc:..."
 ```
 
-save `manager.session` to persist login across app restarts:
+save `auth.session` to persist login across app restarts:
 
 ```ts
 // after login, save the session
-localStorage.setItem('session', JSON.stringify(manager.session));
+localStorage.setItem('session', JSON.stringify(auth.session));
 ```
 
 ```ts
 // later, restore the session
 const saved = localStorage.getItem('session');
 if (saved) {
-	await manager.resume(JSON.parse(saved));
+	const auth = await PasswordSession.resume(JSON.parse(saved));
+	const rpc = new Client({ handler: auth });
 }
 ```
 
 use callbacks to keep persisted sessions in sync:
 
 ```ts
-const manager = new CredentialManager({
-	service: 'https://bsky.social',
-	onSessionUpdate(session) {
-		// called on login, resume, and token refresh
-		localStorage.setItem('session', JSON.stringify(session));
+const auth = await PasswordSession.login(
+	{
+		service: 'https://bsky.social',
+		identifier: 'you.bsky.social',
+		password: 'your-app-password',
 	},
-	onExpired(session) {
-		// called when refresh token expires and can't be renewed
-		localStorage.removeItem('session');
+	{
+		onUpdate(session) {
+			// called on login and token refresh
+			localStorage.setItem('session', JSON.stringify(session));
+		},
+		onDelete(session) {
+			// called on logout or session invalidation
+			localStorage.removeItem('session');
+		},
 	},
-});
+);
 ```
 
 ### response formats
@@ -269,7 +285,9 @@ schema from a definition package:
 import { Client, ok, simpleFetchHandler } from '@atcute/client';
 import { AppBskyActorGetProfile } from '@atcute/bluesky';
 
-const rpc = new Client({ handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }) });
+const rpc = new Client({
+	handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }),
+});
 
 // validates params, input, and output against the schema
 const response = await rpc.call(AppBskyActorGetProfile, {
@@ -303,13 +321,19 @@ service proxying lets you make authenticated requests through your PDS to other 
 forwards the request with authorization headers proving it's acting on your behalf.
 
 ```ts
-// must be authenticated via CredentialManager
-const manager = new CredentialManager({ service: 'https://bsky.social' });
-await manager.login({ identifier: 'you.bsky.social', password: 'your-app-password' });
+import { Client, ok } from '@atcute/client';
+import { PasswordSession } from '@atcute/password-session';
+
+// must be authenticated
+const session = await PasswordSession.login({
+	service: 'https://bsky.social',
+	identifier: 'you.bsky.social',
+	password: 'your-app-password',
+});
 
 // create a client that proxies requests through your PDS to the chat service
 const chatClient = new Client({
-	handler: manager,
+	handler: session,
 	proxy: {
 		did: 'did:web:api.bsky.chat',
 		serviceId: '#bsky_chat',
@@ -346,7 +370,7 @@ const customHandler: FetchHandler = async (pathname, init) => {
 const rpc = new Client({ handler: customHandler });
 ```
 
-or implement `FetchHandlerObject` for stateful handlers (like `CredentialManager` does):
+or implement `FetchHandlerObject` for stateful handlers (like `PasswordSession` does):
 
 ```ts
 import type { FetchHandlerObject } from '@atcute/client';
