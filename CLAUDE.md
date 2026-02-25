@@ -52,6 +52,9 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
   change it, it should not be a parameter at all
 - avoid optional parameters that change behavioral modes or make the function do different things
   based on presence/absence; prefer a separate function with a clearer name instead
+- avoid type assertions (`as Type`, `as const`) unless TypeScript actually errors without them; when
+  it does error, prefer finding a solution that satisfies the type system naturally before resorting
+  to an assertion
 
 ### documentation
 
