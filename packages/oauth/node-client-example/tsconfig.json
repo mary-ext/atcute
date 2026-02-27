@@ -19,7 +19,8 @@
 		"module": "NodeNext",
 		"sourceMap": true,
 		"declaration": true,
-		"declarationMap": true
+		"declarationMap": true,
+		"erasableSyntaxOnly": true
 	},
 	"include": ["src", "scripts"]
 }

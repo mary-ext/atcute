@@ -29,11 +29,15 @@ const returnFalse = () => false;
 export class CachedGetter<K, V> {
 	#pending = new Map<K, PendingItem<V>>();
 
-	constructor(
-		readonly getter: Getter<K, V>,
-		readonly store: Store<K, V>,
-		readonly options: CachedGetterOptions<K, V> = {},
-	) {}
+	readonly getter: Getter<K, V>;
+	readonly store: Store<K, V>;
+	readonly options: CachedGetterOptions<K, V>;
+
+	constructor(getter: Getter<K, V>, store: Store<K, V>, options: CachedGetterOptions<K, V> = {}) {
+		this.getter = getter;
+		this.store = store;
+		this.options = options;
+	}
 
 	async get(key: K, options: GetCachedOptions = {}): Promise<V> {
 		const { signal, allowStale = false, noCache = false } = options;

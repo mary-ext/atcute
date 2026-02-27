@@ -4,17 +4,22 @@ import { isBytes, type Bytes } from '@atcute/cbor';
 import { isCidLink, type CidLink } from '@atcute/cid';
 
 export class RepoEntry {
+	/** the collection this record belongs to */
+	readonly collection: string;
+	/** record key */
+	readonly rkey: string;
+	/** CID of this record */
+	readonly cid: CidLink;
+	/** the associated CarEntry for this record */
+	readonly carEntry: CarEntry;
+
 	/** @internal */
-	constructor(
-		/** the collection this record belongs to */
-		public readonly collection: string,
-		/** record key */
-		public readonly rkey: string,
-		/** CID of this record */
-		public readonly cid: CidLink,
-		/** the associated CarEntry for this record */
-		public readonly carEntry: CarEntry,
-	) {}
+	constructor(collection: string, rkey: string, cid: CidLink, carEntry: CarEntry) {
+		this.collection = collection;
+		this.rkey = rkey;
+		this.cid = cid;
+		this.carEntry = carEntry;
+	}
 
 	/**
 	 * raw contents of this record

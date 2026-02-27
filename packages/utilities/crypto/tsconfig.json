@@ -25,7 +25,8 @@
 		"stripInternal": true,
 		"paths": {
 			"#keypairs/secp256k1": ["./lib/keypairs/secp256k1-web.ts"]
-		}
+		},
+		"erasableSyntaxOnly": true
 	},
 	"include": ["lib"]
 }

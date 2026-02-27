@@ -5,8 +5,11 @@ export class FetchResponseError extends Error {
 export class FailedResponseError extends FetchResponseError {
 	override name = 'FailedResponseError';
 
-	constructor(public response: Response) {
+	response: Response;
+
+	constructor(response: Response) {
 		super(`got http ${response.status}`);
+		this.response = response;
 	}
 
 	get status(): number {
@@ -17,23 +20,24 @@ export class FailedResponseError extends FetchResponseError {
 export class ImproperContentTypeError extends FetchResponseError {
 	override name = 'ImproperContentTypeError';
 
-	constructor(
-		public contentType: string | null,
-		reason: string,
-	) {
+	contentType: string | null;
+
+	constructor(contentType: string | null, reason: string) {
 		super(reason);
+		this.contentType = contentType;
 	}
 }
 
 export class ImproperContentLengthError extends FetchResponseError {
 	override name = 'ImproperContentLengthError';
 
-	constructor(
-		public expectedSize: number,
-		public actualSize: number | null,
-		reason: string,
-	) {
+	expectedSize: number;
+	actualSize: number | null;
+
+	constructor(expectedSize: number, actualSize: number | null, reason: string) {
 		super(reason);
+		this.expectedSize = expectedSize;
+		this.actualSize = actualSize;
 	}
 }
 

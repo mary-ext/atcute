@@ -19,12 +19,17 @@ export interface AdditionalPdsContext {
 }
 
 export class TestPdsServer {
-	constructor(
-		public readonly server: pds.PDS,
-		public readonly url: string,
-		public readonly port: number,
-		public readonly additional: AdditionalPdsContext,
-	) {}
+	readonly server: pds.PDS;
+	readonly url: string;
+	readonly port: number;
+	readonly additional: AdditionalPdsContext;
+
+	constructor(server: pds.PDS, url: string, port: number, additional: AdditionalPdsContext) {
+		this.server = server;
+		this.url = url;
+		this.port = port;
+		this.additional = additional;
+	}
 
 	static async create(config: PdsServerOptions): Promise<TestPdsServer> {
 		const plcRotationKey = await Secp256k1Keypair.create({ exportable: true });

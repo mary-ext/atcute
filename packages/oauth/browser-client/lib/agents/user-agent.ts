@@ -11,7 +11,10 @@ export class OAuthUserAgent implements FetchHandlerObject {
 	#fetch: typeof fetch;
 	#getSessionPromise: Promise<Session> | undefined;
 
-	constructor(public session: Session) {
+	session: Session;
+
+	constructor(session: Session) {
+		this.session = session;
 		this.#fetch = createDPoPFetch(session.dpopKey, false);
 	}
 

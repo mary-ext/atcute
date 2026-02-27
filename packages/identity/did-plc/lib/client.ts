@@ -17,12 +17,13 @@ export interface PlcErrorBody {
 export class PlcClientError extends Error {
 	override readonly name = 'PlcClientError';
 
-	constructor(
-		public status: number,
-		public body: PlcErrorBody | null,
-		message: string,
-	) {
+	status: number;
+	body: PlcErrorBody | null;
+
+	constructor(status: number, body: PlcErrorBody | null, message: string) {
 		super(message);
+		this.status = status;
+		this.body = body;
 	}
 
 	/**

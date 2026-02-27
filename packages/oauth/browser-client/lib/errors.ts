@@ -15,25 +15,23 @@ export class ResolverError extends Error {
 export class TokenRefreshError extends Error {
 	override name = 'TokenRefreshError';
 
-	constructor(
-		public readonly sub: Did,
-		message: string,
-		options?: ErrorOptions,
-	) {
+	readonly sub: Did;
+
+	constructor(sub: Did, message: string, options?: ErrorOptions) {
 		super(message, options);
+		this.sub = sub;
 	}
 }
 
 export class OAuthResponseError extends Error {
 	override name = 'OAuthResponseError';
 
+	readonly response: Response;
+	readonly data: any;
 	readonly error: string | undefined;
 	readonly description: string | undefined;
 
-	constructor(
-		public readonly response: Response,
-		public readonly data: any,
-	) {
+	constructor(response: Response, data: any) {
 		const error = ifString(ifObject(data)?.['error']);
 		const errorDescription = ifString(ifObject(data)?.['error_description']);
 
@@ -43,6 +41,8 @@ export class OAuthResponseError extends Error {
 
 		super(message);
 
+		this.response = response;
+		this.data = data;
 		this.error = error;
 		this.description = errorDescription;
 	}
@@ -59,12 +59,13 @@ export class OAuthResponseError extends Error {
 export class FetchResponseError extends Error {
 	override name = 'FetchResponseError';
 
-	constructor(
-		public readonly response: Response,
-		public status: number,
-		message: string,
-	) {
+	readonly response: Response;
+	status: number;
+
+	constructor(response: Response, status: number, message: string) {
 		super(message);
+		this.response = response;
+		this.status = status;
 	}
 }
 

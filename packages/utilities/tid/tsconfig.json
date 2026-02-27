@@ -24,7 +24,8 @@
 		"declarationMap": true,
 		"paths": {
 			"#platform/random": ["./lib/random-web.ts"]
-		}
+		},
+		"erasableSyntaxOnly": true
 	},
 	"include": ["lib"]
 }

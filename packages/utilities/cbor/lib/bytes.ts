@@ -10,7 +10,11 @@ export class BytesWrapper implements Bytes {
 	/** @internal */
 	readonly [BYTES_SYMBOL] = true;
 
-	constructor(public buf: Uint8Array) {}
+	buf: Uint8Array;
+
+	constructor(buf: Uint8Array) {
+		this.buf = buf;
+	}
 
 	get $bytes(): string {
 		return toBase64(this.buf);

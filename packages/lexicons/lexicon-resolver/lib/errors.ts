@@ -8,38 +8,46 @@ export class LexiconAuthorityResolutionError extends Error {
 export class AuthorityNotFoundError extends LexiconAuthorityResolutionError {
 	override name = 'AuthorityNotFoundError';
 
-	constructor(public nsid: Nsid) {
+	nsid: Nsid;
+
+	constructor(nsid: Nsid) {
 		super(`lexicon authority not found; nsid=${nsid}`);
+		this.nsid = nsid;
 	}
 }
 
 export class FailedAuthorityResolutionError extends LexiconAuthorityResolutionError {
 	override name = 'FailedAuthorityResolutionError';
 
-	constructor(
-		public nsid: Nsid,
-		options?: ErrorOptions,
-	) {
+	nsid: Nsid;
+
+	constructor(nsid: Nsid, options?: ErrorOptions) {
 		super(`failed to resolve lexicon authority; nsid=${nsid}`, options);
+		this.nsid = nsid;
 	}
 }
 
 export class InvalidResolvedAuthorityError extends LexiconAuthorityResolutionError {
 	override name = 'InvalidResolvedAuthorityError';
 
-	constructor(
-		public nsid: Nsid,
-		public did: string,
-	) {
+	nsid: Nsid;
+	did: string;
+
+	constructor(nsid: Nsid, did: string) {
 		super(`lexicon authority returned invalid did; nsid=${nsid}; did=${did}`);
+		this.nsid = nsid;
+		this.did = did;
 	}
 }
 
 export class AmbiguousAuthorityError extends LexiconAuthorityResolutionError {
 	override name = 'AmbiguousAuthorityError';
 
-	constructor(public nsid: Nsid) {
+	nsid: Nsid;
+
+	constructor(nsid: Nsid) {
 		super(`lexicon authority returned multiple did values; nsid=${nsid}`);
+		this.nsid = nsid;
 	}
 }
 // #endregion
@@ -52,33 +60,33 @@ export class LexiconResolutionError extends Error {
 export class FailedLexiconResolutionError extends LexiconResolutionError {
 	override name = 'FailedLexiconResolutionError';
 
-	constructor(
-		public nsid: Nsid,
-		options?: ErrorOptions,
-	) {
+	nsid: Nsid;
+
+	constructor(nsid: Nsid, options?: ErrorOptions) {
 		super(`failed to resolve lexicon; nsid=${nsid}`, options);
+		this.nsid = nsid;
 	}
 }
 
 export class InvalidLexiconSchemaError extends LexiconResolutionError {
 	override name = 'InvalidLexiconSchemaError';
 
-	constructor(
-		public nsid: Nsid,
-		options?: ErrorOptions,
-	) {
+	nsid: Nsid;
+
+	constructor(nsid: Nsid, options?: ErrorOptions) {
 		super(`invalid lexicon schema; nsid=${nsid}`, options);
+		this.nsid = nsid;
 	}
 }
 
 export class InvalidLexiconProofError extends LexiconResolutionError {
 	override name = 'InvalidLexiconProofError';
 
-	constructor(
-		public nsid: Nsid,
-		options?: ErrorOptions,
-	) {
+	nsid: Nsid;
+
+	constructor(nsid: Nsid, options?: ErrorOptions) {
 		super(`invalid lexicon record proof; nsid=${nsid}`, options);
+		this.nsid = nsid;
 	}
 }
 // #endregion

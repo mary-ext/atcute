@@ -8,10 +8,13 @@ export type NetworkConfig = {
 };
 
 export class TestNetwork {
-	constructor(
-		public readonly plc: TestPlcServer,
-		public readonly pds: TestPdsServer,
-	) {}
+	readonly plc: TestPlcServer;
+	readonly pds: TestPdsServer;
+
+	constructor(plc: TestPlcServer, pds: TestPdsServer) {
+		this.plc = plc;
+		this.pds = pds;
+	}
 
 	static async create(cfg: Partial<NetworkConfig>): Promise<TestNetwork> {
 		const plc = await TestPlcServer.create(cfg.plc ?? {});

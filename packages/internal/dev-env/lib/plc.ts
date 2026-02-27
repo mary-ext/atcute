@@ -6,11 +6,15 @@ export interface PlcServerOptions {
 }
 
 export class TestPlcServer {
-	constructor(
-		public readonly server: PlcServer,
-		public readonly url: string,
-		public readonly port: number,
-	) {}
+	readonly server: PlcServer;
+	readonly url: string;
+	readonly port: number;
+
+	constructor(server: PlcServer, url: string, port: number) {
+		this.server = server;
+		this.url = url;
+		this.port = port;
+	}
 
 	static async create(cfg: PlcServerOptions = {}): Promise<TestPlcServer> {
 		const port = cfg.port ?? (await getPort());

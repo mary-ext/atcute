@@ -35,15 +35,22 @@ export interface TokenInfo {
 export class OAuthSession implements FetchHandlerObject {
 	private readonly dpopFetch: typeof globalThis.fetch;
 
+	/** server agent for this session's AS */
+	readonly server: OAuthServerAgent;
+	/** user's DID */
+	readonly sub: Did;
+	/** session getter for token management */
+	private readonly sessionGetter: SessionGetter;
+
 	constructor(
-		/** server agent for this session's AS */
-		readonly server: OAuthServerAgent,
-		/** user's DID */
-		readonly sub: Did,
-		/** session getter for token management */
-		private readonly sessionGetter: SessionGetter,
+		server: OAuthServerAgent,
+		sub: Did,
+		sessionGetter: SessionGetter,
 		fetch: typeof globalThis.fetch = globalThis.fetch,
 	) {
+		this.server = server;
+		this.sub = sub;
+		this.sessionGetter = sessionGetter;
 		this.dpopFetch = createDpopFetch({
 			key: server.dpopKey,
 			nonces: server.dpopNonces,

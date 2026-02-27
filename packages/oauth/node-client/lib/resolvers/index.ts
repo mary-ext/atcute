@@ -28,11 +28,19 @@ export interface ResolvedFromService {
  * combines identity resolution with OAuth metadata discovery.
  */
 export class OAuthResolver {
+	readonly actorResolver: ActorResolver;
+	readonly protectedResourceResolver: ProtectedResourceMetadataResolver;
+	readonly authorizationServerResolver: AuthorizationServerMetadataResolver;
+
 	constructor(
-		readonly actorResolver: ActorResolver,
-		readonly protectedResourceResolver: ProtectedResourceMetadataResolver,
-		readonly authorizationServerResolver: AuthorizationServerMetadataResolver,
-	) {}
+		actorResolver: ActorResolver,
+		protectedResourceResolver: ProtectedResourceMetadataResolver,
+		authorizationServerResolver: AuthorizationServerMetadataResolver,
+	) {
+		this.actorResolver = actorResolver;
+		this.protectedResourceResolver = protectedResourceResolver;
+		this.authorizationServerResolver = authorizationServerResolver;
+	}
 
 	/**
 	 * resolves OAuth metadata from a service URL (PDS or entryway).

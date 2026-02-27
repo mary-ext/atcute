@@ -58,12 +58,12 @@ export interface DpopVerifyOptions {
  * error thrown when dpop verification fails.
  */
 export class DpopVerifyError extends Error {
-	constructor(
-		message: string,
-		public code: 'missing' | 'invalid' | 'expired' | 'nonce_required',
-	) {
+	code: 'missing' | 'invalid' | 'expired' | 'nonce_required';
+
+	constructor(message: string, code: 'missing' | 'invalid' | 'expired' | 'nonce_required') {
 		super(message);
 		this.name = 'DpopVerifyError';
+		this.code = code;
 	}
 }
 

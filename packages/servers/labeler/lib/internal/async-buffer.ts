@@ -11,7 +11,11 @@ export class AsyncBuffer<T> {
 	private closed = false;
 	private deferred = Promise.withResolvers<void>();
 
-	constructor(private maxSize: number) {}
+	private maxSize: number;
+
+	constructor(maxSize: number) {
+		this.maxSize = maxSize;
+	}
 
 	push(value: T): void {
 		if (this.closed) {

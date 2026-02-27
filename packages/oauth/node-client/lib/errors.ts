@@ -12,12 +12,11 @@ export class AuthMethodUnsatisfiableError extends Error {
 export class TokenInvalidError extends Error {
 	override name = 'TokenInvalidError';
 
-	constructor(
-		public readonly sub: string,
-		message = `session for "${sub}" is invalid`,
-		options?: ErrorOptions,
-	) {
+	readonly sub: string;
+
+	constructor(sub: string, message = `session for "${sub}" is invalid`, options?: ErrorOptions) {
 		super(message, options);
+		this.sub = sub;
 	}
 }
 
@@ -27,12 +26,11 @@ export class TokenInvalidError extends Error {
 export class TokenRefreshError extends Error {
 	override name = 'TokenRefreshError';
 
-	constructor(
-		public readonly sub: string,
-		message: string,
-		options?: ErrorOptions,
-	) {
+	readonly sub: string;
+
+	constructor(sub: string, message: string, options?: ErrorOptions) {
 		super(message, options);
+		this.sub = sub;
 	}
 }
 
@@ -42,12 +40,11 @@ export class TokenRefreshError extends Error {
 export class TokenRevokedError extends Error {
 	override name = 'TokenRevokedError';
 
-	constructor(
-		public readonly sub: string,
-		message = `session for "${sub}" was revoked`,
-		options?: ErrorOptions,
-	) {
+	readonly sub: string;
+
+	constructor(sub: string, message = `session for "${sub}" was revoked`, options?: ErrorOptions) {
 		super(message, options);
+		this.sub = sub;
 	}
 }
 
@@ -57,12 +54,15 @@ export class TokenRevokedError extends Error {
 export class OAuthResponseError extends Error {
 	override name = 'OAuthResponseError';
 
-	constructor(
-		public readonly response: Response,
-		public readonly error: string,
-		public readonly errorDescription?: string,
-	) {
+	readonly response: Response;
+	readonly error: string;
+	readonly errorDescription?: string;
+
+	constructor(response: Response, error: string, errorDescription?: string) {
 		super(errorDescription ?? error);
+		this.response = response;
+		this.error = error;
+		this.errorDescription = errorDescription;
 	}
 
 	get status(): number {
@@ -76,12 +76,15 @@ export class OAuthResponseError extends Error {
 export class OAuthCallbackError extends Error {
 	override name = 'OAuthCallbackError';
 
-	constructor(
-		public readonly error: string,
-		public readonly errorDescription?: string,
-		public readonly state?: string,
-	) {
+	readonly error: string;
+	readonly errorDescription?: string;
+	readonly state?: string;
+
+	constructor(error: string, errorDescription?: string, state?: string) {
 		super(errorDescription ?? error);
+		this.error = error;
+		this.errorDescription = errorDescription;
+		this.state = state;
 	}
 }
 
