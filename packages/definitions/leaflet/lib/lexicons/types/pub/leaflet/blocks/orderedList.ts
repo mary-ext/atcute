@@ -3,13 +3,13 @@ import * as v from '@atcute/lexicons/validations';
 
 import * as PubLeafletBlocksHeader from './header.ts';
 import * as PubLeafletBlocksImage from './image.ts';
-import * as PubLeafletBlocksOrderedList from './orderedList.ts';
 import * as PubLeafletBlocksText from './text.ts';
+import * as PubLeafletBlocksUnorderedList from './unorderedList.ts';
 
 const _listItemSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.unorderedList#listItem')),
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.orderedList#listItem')),
 	/**
-	 * Nested unordered list items. Mutually exclusive with orderedListChildren; if both are present, children takes precedence.
+	 * Nested ordered list items. Mutually exclusive with unorderedListChildren; if both are present, children takes precedence.
 	 */
 	get children() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(listItemSchema));
@@ -22,17 +22,21 @@ const _listItemSchema = /*#__PURE__*/ v.object({
 		]);
 	},
 	/**
-	 * Nested ordered list items. Mutually exclusive with children; if both are present, children takes precedence.
+	 * A nested unordered list. Mutually exclusive with children; if both are present, children takes precedence.
 	 */
-	get orderedListChildren() {
-		return /*#__PURE__*/ v.optional(PubLeafletBlocksOrderedList.mainSchema);
+	get unorderedListChildren() {
+		return /*#__PURE__*/ v.optional(PubLeafletBlocksUnorderedList.mainSchema);
 	},
 });
 const _mainSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.unorderedList')),
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.orderedList')),
 	get children() {
 		return /*#__PURE__*/ v.array(listItemSchema);
 	},
+	/**
+	 * The starting number for this ordered list. Defaults to 1 if not specified.
+	 */
+	startIndex: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 
 type listItem$schematype = typeof _listItemSchema;
