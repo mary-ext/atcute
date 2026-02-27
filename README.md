@@ -10,15 +10,15 @@ npm install @atcute/client @atcute/bluesky
 ```
 
 ```ts
-import { Client, simpleFetchHandler } from "@atcute/client";
-import type {} from "@atcute/bluesky";
+import { Client, simpleFetchHandler } from '@atcute/client';
+import type {} from '@atcute/bluesky';
 
 const client = new Client({
-  handler: simpleFetchHandler({ service: "https://public.api.bsky.app" }),
+	handler: simpleFetchHandler({ service: 'https://public.api.bsky.app' }),
 });
 
-const { data } = await client.get("app.bsky.actor.getProfile", {
-  params: { actor: "bsky.app" },
+const { data } = await client.get('app.bsky.actor.getProfile', {
+	params: { actor: 'bsky.app' },
 });
 
 console.log(data.displayName);
