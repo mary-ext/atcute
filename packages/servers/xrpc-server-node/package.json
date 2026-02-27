@@ -33,7 +33,7 @@
 		"@atcute/cbor": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@remix-run/node-fetch-server": "^0.13.0",
-		"@types/node": "^25.3.0",
+		"@types/node": "^25.3.2",
 		"@types/ws": "^8.18.1",
 		"vitest": "^4.0.18"
 	},
