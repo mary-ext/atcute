@@ -613,11 +613,11 @@ importers:
         specifier: ^0.4.6
         version: 0.4.6
       '@optique/core':
-        specifier: ^0.6.11
-        version: 0.6.11
+        specifier: ^0.10.6
+        version: 0.10.6
       '@optique/run':
-        specifier: ^0.6.11
-        version: 0.6.11
+        specifier: ^0.10.6
+        version: 0.10.6
       picocolors:
         specifier: ^1.1.1
         version: 1.1.1
@@ -2183,12 +2183,12 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@optique/core@0.6.11':
-    resolution: {integrity: sha512-GVLFihzBA1j78NFlkU5N1Lu0jRqET0k6Z66WK8VQKG/a3cxmCInVGSKMIdQG8i6pgC8wD5OizF6Y3QMztmhAxg==}
+  '@optique/core@0.10.6':
+    resolution: {integrity: sha512-H/E0oqLm1FVFoAp4a4LH1w0P7hG1LSXRC2kpYqxmHy1rv8pypTjs0il8joK+/GFXRIFCyoEw3Cj0YClw7mZ7RQ==}
     engines: {bun: '>=1.2.0', deno: '>=2.3.0', node: '>=20.0.0'}
 
-  '@optique/run@0.6.11':
-    resolution: {integrity: sha512-tsXBEygGSzNpFK2gjsRlXBn7FiScUeLFWIZNpoAZ8iG85Km0/3K9xgqlQAXoQ+uEZBe4XplnzyCDvmEgbyNT8w==}
+  '@optique/run@0.10.6':
+    resolution: {integrity: sha512-MWnB2iOUtahzGXkWZDqvJJR5mt0WtE0ut9A3zUpwB25MjKK2e7MgiLjfTSmCYpWYUxE2Pw2YEvbqUbd64M6Gnw==}
     engines: {bun: '>=1.2.0', deno: '>=2.3.0', node: '>=20.0.0'}
 
   '@oxc-parser/binding-android-arm64@0.99.0':
@@ -6223,11 +6223,11 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
 
-  '@optique/core@0.6.11': {}
+  '@optique/core@0.10.6': {}
 
-  '@optique/run@0.6.11':
+  '@optique/run@0.10.6':
     dependencies:
-      '@optique/core': 0.6.11
+      '@optique/core': 0.10.6
 
   '@oxc-parser/binding-android-arm64@0.99.0':
     optional: true
