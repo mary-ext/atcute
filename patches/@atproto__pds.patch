@@ -1,0 +1,104 @@
+diff --git a/dist/db/db.js b/dist/db/db.js
+index b34a3a195cead4ba7e36e80482873a044906216f..6fa7c83d712a1b4ff1fff170a06eddfa4652ee67 100644
+--- a/dist/db/db.js
++++ b/dist/db/db.js
+@@ -5,13 +5,76 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Database = void 0;
+ const node_assert_1 = __importDefault(require("node:assert"));
+-const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
++const node_sqlite_1 = require("node:sqlite");
+ const kysely_1 = require("kysely");
+ const logger_1 = require("../logger");
+ const util_1 = require("./util");
+ const DEFAULT_PRAGMAS = {
+ // strict: 'ON', // @TODO strictness should live on table defs instead
+ };
++// inlined from @oomfware/kysely-node-sqlite
++class NodeSqliteConnection {
++    #db;
++    constructor(db) { this.#db = db; }
++    executeQuery(compiledQuery) {
++        const { sql, parameters } = compiledQuery;
++        const stmt = this.#db.prepare(sql);
++        if (stmt.columns().length > 0) {
++            return Promise.resolve({ rows: stmt.all(...parameters) });
++        }
++        const { changes, lastInsertRowid } = stmt.run(...parameters);
++        return Promise.resolve({
++            numAffectedRows: BigInt(changes),
++            insertId: BigInt(lastInsertRowid),
++            rows: [],
++        });
++    }
++    async *streamQuery(compiledQuery, _chunkSize) {
++        const { sql, parameters } = compiledQuery;
++        const stmt = this.#db.prepare(sql);
++        for (const row of stmt.iterate(...parameters)) { yield { rows: [row] }; }
++    }
++}
++class ConnectionMutex {
++    #deferred;
++    async lock() {
++        while (this.#deferred) { await this.#deferred.promise; }
++        this.#deferred = Promise.withResolvers();
++    }
++    unlock() {
++        const deferred = this.#deferred;
++        this.#deferred = undefined;
++        deferred?.resolve();
++    }
++}
++class NodeSqliteDriver {
++    #config;
++    #mutex = new ConnectionMutex();
++    #db;
++    #connection;
++    constructor(config) { this.#config = Object.freeze({ ...config }); }
++    async init() {
++        this.#db = typeof this.#config.database === 'function'
++            ? await this.#config.database()
++            : this.#config.database;
++        this.#connection = new NodeSqliteConnection(this.#db);
++        if (this.#config.onCreateConnection) { await this.#config.onCreateConnection(this.#connection); }
++    }
++    async acquireConnection() { await this.#mutex.lock(); return this.#connection; }
++    async releaseConnection() { this.#mutex.unlock(); }
++    async beginTransaction(connection) { await connection.executeQuery(kysely_1.CompiledQuery.raw('begin')); }
++    async commitTransaction(connection) { await connection.executeQuery(kysely_1.CompiledQuery.raw('commit')); }
++    async rollbackTransaction(connection) { await connection.executeQuery(kysely_1.CompiledQuery.raw('rollback')); }
++    async destroy() { this.#db?.close(); }
++}
++class NodeSqliteDialect {
++    #config;
++    constructor(config) { this.#config = config; }
++    createDriver() { return new NodeSqliteDriver(this.#config); }
++    createQueryCompiler() { return new kysely_1.SqliteQueryCompiler(); }
++    createAdapter() { return new kysely_1.SqliteAdapter(); }
++    createIntrospector(db) { return new kysely_1.SqliteIntrospector(db); }
++}
+ class Database {
+     constructor(db) {
+         Object.defineProperty(this, "db", {
+@@ -34,18 +97,16 @@ class Database {
+         });
+     }
+     static sqlite(location, opts) {
+-        const sqliteDb = new better_sqlite3_1.default(location, {
+-            timeout: 0, // handled by application
+-        });
++        const sqliteDb = new node_sqlite_1.DatabaseSync(location);
+         const pragmas = {
+             ...DEFAULT_PRAGMAS,
+             ...(opts?.pragmas ?? {}),
+         };
+         for (const pragma of Object.keys(pragmas)) {
+-            sqliteDb.pragma(`${pragma} = ${pragmas[pragma]}`);
++            sqliteDb.prepare(`PRAGMA ${pragma} = ${pragmas[pragma]}`).run();
+         }
+         const db = new kysely_1.Kysely({
+-            dialect: new kysely_1.SqliteDialect({
++            dialect: new NodeSqliteDialect({
+                 database: sqliteDb,
+             }),
+         });
