@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@atproto/pds>better-sqlite3': ^12.0.0
+
 importers:
 
   .:
@@ -3138,8 +3141,9 @@ packages:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
     engines: {node: '>=4'}
 
-  better-sqlite3@10.1.0:
-    resolution: {integrity: sha512-hqpHJaCfKEZFaAWdMh6crdzRWyzQzfP6Ih8TYI0vFn01a6ZTDSbJIMXN+6AMBaBOh99DzUy8l3PsV9R3qnJDng==}
+  better-sqlite3@12.6.2:
+    resolution: {integrity: sha512-8VYKM3MjCa9WcaSAI3hzwhmyHVlH8tiGFwf0RlTsZPWJ1I5MkzjiudCo4KC4DxOaL/53A5B1sI/IbldNFDbsKA==}
+    engines: {node: 20.x || 22.x || 23.x || 24.x || 25.x}
 
   big-integer@1.6.52:
     resolution: {integrity: sha512-QxD8cf2eVqJOOz63z6JIN9BzvVs/dlySa5HGSBH5xtR8dPteIRQnBxxKqkNTiT6jbDTF6jAfrd4oMcND9RGbQg==}
@@ -5046,7 +5050,7 @@ snapshots:
       '@atproto/xrpc-server': 0.10.14
       '@did-plc/lib': 0.0.4
       '@hapi/address': 5.1.1
-      better-sqlite3: 10.1.0
+      better-sqlite3: 12.6.2
       bytes: 3.1.2
       compression: 1.8.1
       cors: 2.8.6
@@ -7064,7 +7068,7 @@ snapshots:
     dependencies:
       is-windows: 1.0.2
 
-  better-sqlite3@10.1.0:
+  better-sqlite3@12.6.2:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.3
