@@ -12,31 +12,32 @@ import {
 } from './label.ts';
 import type { Label, LabelerPreference, ModerationOptions } from './types.ts';
 
-const enum ModerationSeverity {
-	High = 1,
-	Medium = 2,
-	Low = 3,
-}
+const ModerationSeverity = {
+	High: 1,
+	Medium: 2,
+	Low: 3,
+} as const;
 
-export enum ModerationCauseType {
+export const ModerationCauseType = {
 	/** caused by a label */
-	Label = 1,
+	Label: 1,
 	/** caused by viewer blocking the subject */
-	Blocking = 2,
+	Blocking: 2,
 	/** caused by subject blocking the viewer */
-	BlockedBy = 3,
+	BlockedBy: 3,
 	/** caused by viewer having a (permanent) mute on subject */
-	MutedPermanent = 4,
+	MutedPermanent: 4,
 	/** caused by a temporary mute */
-	MutedTemporary = 5,
+	MutedTemporary: 5,
 	/** caused by a keyword mute */
-	MutedKeyword = 6,
+	MutedKeyword: 6,
 	/** caused by a hidden post */
-	Hidden = 7,
-}
+	Hidden: 7,
+} as const;
+export type ModerationCauseType = (typeof ModerationCauseType)[keyof typeof ModerationCauseType];
 
 export interface BlockingModerationCause {
-	type: ModerationCauseType.Blocking;
+	type: typeof ModerationCauseType.Blocking;
 	priority: 3;
 	source: AppBskyGraphDefs.ListViewBasic | null;
 
@@ -44,21 +45,21 @@ export interface BlockingModerationCause {
 }
 
 export interface BlockedByModerationCause {
-	type: ModerationCauseType.BlockedBy;
+	type: typeof ModerationCauseType.BlockedBy;
 	priority: 4;
 
 	downgraded: boolean;
 }
 
 export interface HiddenModerationCause {
-	type: ModerationCauseType.Hidden;
+	type: typeof ModerationCauseType.Hidden;
 	priority: 6;
 
 	downgraded: boolean;
 }
 
 export interface LabelModerationCause {
-	type: ModerationCauseType.Label;
+	type: typeof ModerationCauseType.Label;
 	priority: 1 | 2 | 5 | 7 | 8;
 	source: Did | null;
 
@@ -74,7 +75,7 @@ export interface LabelModerationCause {
 }
 
 export interface MutedPermanentModerationCause {
-	type: ModerationCauseType.MutedPermanent;
+	type: typeof ModerationCauseType.MutedPermanent;
 	priority: 6;
 	source: AppBskyGraphDefs.ListViewBasic | null;
 
@@ -82,14 +83,14 @@ export interface MutedPermanentModerationCause {
 }
 
 export interface MutedTemporaryModerationCause {
-	type: ModerationCauseType.MutedTemporary;
+	type: typeof ModerationCauseType.MutedTemporary;
 	priority: 6;
 
 	downgraded: boolean;
 }
 
 export interface MutedKeywordModerationCause {
-	type: ModerationCauseType.MutedKeyword;
+	type: typeof ModerationCauseType.MutedKeyword;
 	priority: 6;
 	source: KeywordFilter;
 

@@ -4,51 +4,55 @@ import type { Did } from '@atcute/lexicons';
 
 import { DisplayContext, LabelTarget, ModerationAction, type LabelBehaviorMatrix } from './behaviors.ts';
 
-export enum LabelPreference {
+export const LabelPreference = {
 	/** ignore this label */
-	Ignore = 'ignore',
+	Ignore: 'ignore',
 	/** warn when viewing content or profile with this label */
-	Warn = 'warn',
+	Warn: 'warn',
 	/** hide content or profile containing this label */
-	Hide = 'hide',
-}
+	Hide: 'hide',
+} as const;
+export type LabelPreference = (typeof LabelPreference)[keyof typeof LabelPreference];
 
-export enum LabelFlags {
+export const LabelFlags = {
 	/** no flags */
-	None = 0,
+	None: 0,
 
 	/** unblurring shouldn't be allowed */
-	NoOverride = 1 << 0,
+	NoOverride: 1 << 0,
 	/** label can't be configured */
-	NoConfigurable = 1 << 1,
+	NoConfigurable: 1 << 1,
 	/** label can't be applied as a self-label */
-	NoSelf = 1 << 2,
+	NoSelf: 1 << 2,
 	/** label is adult-only */
-	AdultOnly = 1 << 3,
+	AdultOnly: 1 << 3,
 	/** label can't be applied if authenticated */
-	UnauthenticatedOnly = 1 << 4,
-}
+	UnauthenticatedOnly: 1 << 4,
+} as const;
+export type LabelFlags = (typeof LabelFlags)[keyof typeof LabelFlags];
 
-export enum BlurLevel {
+export const BlurLevel = {
 	/** don't blur any parts of the content */
-	None = 'none',
+	None: 'none',
 	/** only blur the media present in the content */
-	Media = 'media',
+	Media: 'media',
 	/** blur the entire content */
-	Content = 'content',
+	Content: 'content',
 
 	/** special blur value, guaranteed blurring of profile and content */
-	Forced = 'forced',
-}
+	Forced: 'forced',
+} as const;
+export type BlurLevel = (typeof BlurLevel)[keyof typeof BlurLevel];
 
-export enum SeverityLevel {
+export const SeverityLevel = {
 	/** don't inform the user */
-	None = 'none',
+	None: 'none',
 	/** lightly inform the user about this label's presence */
-	Inform = 'inform',
+	Inform: 'inform',
 	/** alert the user about this label's presence */
-	Alert = 'alert',
-}
+	Alert: 'alert',
+} as const;
+export type SeverityLevel = (typeof SeverityLevel)[keyof typeof SeverityLevel];
 
 export interface LabelLocale {
 	/** language code */
@@ -253,9 +257,9 @@ export const isCustomLabelValue = (value: string): boolean => {
 export const interpretLabelValueDefinition = (
 	def: ComAtprotoLabelDefs.LabelValueDefinition,
 ): InterpretedLabelDefinition => {
-	let defaultPref = LabelPreference.Warn;
-	let blur = BlurLevel.None;
-	let severity = SeverityLevel.None;
+	let defaultPref: LabelPreference = LabelPreference.Warn;
+	let blur: BlurLevel = BlurLevel.None;
+	let severity: SeverityLevel = SeverityLevel.None;
 	let flags = LabelFlags.NoSelf;
 
 	switch (def.blurs) {

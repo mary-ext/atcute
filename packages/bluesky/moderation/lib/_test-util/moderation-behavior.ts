@@ -156,11 +156,15 @@ declare module 'vitest' {
 }
 
 export class ModerationBehaviorSuiteRunner {
-	constructor(
-		public users: SuiteUsers,
-		public configurations: SuiteConfigurations,
-		public scenarios: SuiteScenarios,
-	) {}
+	users: SuiteUsers;
+	configurations: SuiteConfigurations;
+	scenarios: SuiteScenarios;
+
+	constructor(users: SuiteUsers, configurations: SuiteConfigurations, scenarios: SuiteScenarios) {
+		this.users = users;
+		this.configurations = configurations;
+		this.scenarios = scenarios;
+	}
 
 	postScenario(scenario: ModerationTestSuiteScenario) {
 		if (scenario.subject !== 'post') {

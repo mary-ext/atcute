@@ -51,14 +51,15 @@ const escape = (str: string) => {
 	return str.replace(ESCAPE_RE, '\\$&');
 };
 
-export enum KeywordFilterFlags {
+export const KeywordFilterFlags = {
 	/** filter applies to content */
-	ApplyContent = 1 << 0,
+	ApplyContent: 1 << 0,
 	/** filter applies to tags */
-	ApplyTopic = 1 << 1,
+	ApplyTopic: 1 << 1,
 	/** filter shouldn't apply to following users */
-	NoFollowing = 1 << 2,
-}
+	NoFollowing: 1 << 2,
+} as const;
+export type KeywordFilterFlags = (typeof KeywordFilterFlags)[keyof typeof KeywordFilterFlags];
 
 export interface KeywordFilter {
 	/** unique identifier for this filter */

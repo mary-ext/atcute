@@ -1,36 +1,39 @@
-export enum LabelTarget {
+export const LabelTarget = {
 	/** label is intended for account's content */
-	Content = 'content',
+	Content: 'content',
 	/** label is intended for account's profile */
-	Profile = 'profile',
+	Profile: 'profile',
 	/** label is intended for account's content and profile */
-	Account = 'account',
-}
+	Account: 'account',
+} as const;
+export type LabelTarget = (typeof LabelTarget)[keyof typeof LabelTarget];
 
-export enum DisplayContext {
+export const DisplayContext = {
 	/** content in expanded view */
-	ContentView = 'contentView',
+	ContentView: 'contentView',
 	/** images or video contained in content */
-	ContentMedia = 'contentMedia',
+	ContentMedia: 'contentMedia',
 	/** content in a list/feed */
-	ContentList = 'contentList',
+	ContentList: 'contentList',
 
 	/** profile in expanded view */
-	ProfileView = 'profileView',
+	ProfileView: 'profileView',
 	/** profile's avatar or banner */
-	ProfileMedia = 'profileMedia',
+	ProfileMedia: 'profileMedia',
 	/** profile in a list */
-	ProfileList = 'profileList',
-}
+	ProfileList: 'profileList',
+} as const;
+export type DisplayContext = (typeof DisplayContext)[keyof typeof DisplayContext];
 
-export enum ModerationAction {
+export const ModerationAction = {
 	/** should cause blurring */
-	Blur = 'blur',
+	Blur: 'blur',
 	/** should cause an alert */
-	Alert = 'alert',
+	Alert: 'alert',
 	/** should cause a notice */
-	Inform = 'inform',
-}
+	Inform: 'inform',
+} as const;
+export type ModerationAction = (typeof ModerationAction)[keyof typeof ModerationAction];
 
 export type BehaviorMapping = { [C in DisplayContext]?: ModerationAction };
 export type LabelBehaviorMatrix = { [T in LabelTarget]: BehaviorMapping };
