@@ -4,13 +4,14 @@ import type { NodeStore } from './node-store.ts';
 import { NodeWalker } from './node-walker.ts';
 
 /**
- * Type of change to a record
+ * type of change to a record
  */
-export enum DeltaType {
-	CREATED = 1,
-	UPDATED = 2,
-	DELETED = 3,
-}
+export const DeltaType = {
+	CREATED: 1,
+	UPDATED: 2,
+	DELETED: 3,
+} as const;
+export type DeltaType = (typeof DeltaType)[keyof typeof DeltaType];
 
 /**
  * Represents a change to a single record

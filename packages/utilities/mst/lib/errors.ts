@@ -2,8 +2,11 @@
  * thrown when an MST key is invalid or malformed
  */
 export class InvalidMstKeyError extends Error {
-	constructor(public key: string) {
+	key: string;
+
+	constructor(key: string) {
 		super(`invalid mst key; key=${key}`);
+		this.key = key;
 	}
 }
 
@@ -11,10 +14,12 @@ export class InvalidMstKeyError extends Error {
  * thrown when a referenced block cannot be found in the store
  */
 export class MissingBlockError extends Error {
-	constructor(
-		public cid: string,
-		public def?: string,
-	) {
+	cid: string;
+	def?: string;
+
+	constructor(cid: string, def?: string) {
 		super(`missing block in store; cid=${cid}` + (def ? `; type=${def}` : ``));
+		this.cid = cid;
+		this.def = def;
 	}
 }

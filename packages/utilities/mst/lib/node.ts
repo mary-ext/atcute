@@ -27,14 +27,22 @@ export class MSTNode {
 	 */
 	_bytes: Uint8Array<ArrayBuffer> | undefined;
 
+	/** sorted array of keys stored in this node */
+	readonly keys: readonly string[];
+	/** array of value CIDs corresponding to each key */
+	readonly values: readonly CidLink[];
+	/** array of subtree CIDs (length is keys.length + 1) */
+	readonly subtrees: readonly (CidLink | null)[];
+
 	protected constructor(
-		/** sorted array of keys stored in this node */
-		readonly keys: readonly string[],
-		/** array of value CIDs corresponding to each key */
-		readonly values: readonly CidLink[],
-		/** array of subtree CIDs (length is keys.length + 1) */
-		readonly subtrees: readonly (CidLink | null)[],
-	) {}
+		keys: readonly string[],
+		values: readonly CidLink[],
+		subtrees: readonly (CidLink | null)[],
+	) {
+		this.keys = keys;
+		this.values = values;
+		this.subtrees = subtrees;
+	}
 
 	/**
 	 * creates a new MST node with validation
