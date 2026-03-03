@@ -1,5 +1,14 @@
 # @atcute/repo
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [812b68e]
+- Updated dependencies [194a382]
+  - @atcute/crypto@2.4.0
+  - @atcute/mst@1.0.0
+
 ## 0.1.2
 
 ### Patch Changes

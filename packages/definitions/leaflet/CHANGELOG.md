@@ -1,5 +1,11 @@
 # @atcute/leaflet
 
+## 1.0.20
+
+### Patch Changes
+
+- dca650b: pull latest Leaflet lexicons
+
 ## 1.0.19
 
 ### Patch Changes

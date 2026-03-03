@@ -1,5 +1,11 @@
 # @atcute/crypto
 
+## 2.4.0
+
+### Minor Changes
+
+- 812b68e: make Deno runtime try node:crypto if available
+
 ## 2.3.0
 
 ### Minor Changes

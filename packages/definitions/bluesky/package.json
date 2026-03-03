@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/bluesky",
-	"version": "3.2.19",
+	"version": "3.2.20",
 	"description": "Bluesky (app.bsky.* and chat.bsky.*) schema definitions",
 	"keywords": [
 		"atcute",

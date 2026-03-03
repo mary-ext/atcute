@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/bluesky-moderation",
-	"version": "2.0.4",
+	"version": "3.0.0",
 	"description": "interprets Bluesky's content moderation labels",
 	"license": "0BSD",
 	"repository": {
