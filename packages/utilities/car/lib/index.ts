@@ -1,4 +1,4 @@
-// implements github:darobin/dasl.ing@cc66c35 (2025-10-20)
+// implements github:darobin/dasl.ing@f96dbb2 (2026-02-11)
 
 export * from './reader.ts';
 export * from './streamed-reader.ts';
