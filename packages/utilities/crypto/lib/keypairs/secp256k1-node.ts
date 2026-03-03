@@ -40,7 +40,8 @@ const ASN1_ALGORITHM_IDENTIFIER = Uint8Array.from([
 ]);
 
 // @see p256.ts
-const PKCS8_PRIVATE_KEY_PREFIX = Uint8Array.from([
+/** @internal */
+export const PKCS8_PRIVATE_KEY_PREFIX = Uint8Array.from([
 	...[/* SEQ */ 0x30, /* len */ 0x3e], // PrivateKeyInfo
 	/**/ ...[/* INT */ 0x02, /* len */ 0x01, /* 0 */ 0x00], // Version
 	/**/ ...ASN1_ALGORITHM_IDENTIFIER, // AlgorithmIdentifier
