@@ -1,6 +1,8 @@
 export * as BlueMicrocosmIdentityResolveMiniDoc from './types/blue/microcosm/identity/resolveMiniDoc.ts';
+export * as BlueMicrocosmLinksGetBacklinkDids from './types/blue/microcosm/links/getBacklinkDids.ts';
 export * as BlueMicrocosmLinksGetBacklinks from './types/blue/microcosm/links/getBacklinks.ts';
 export * as BlueMicrocosmLinksGetBacklinksCount from './types/blue/microcosm/links/getBacklinksCount.ts';
+export * as BlueMicrocosmLinksGetManyToMany from './types/blue/microcosm/links/getManyToMany.ts';
 export * as BlueMicrocosmLinksGetManyToManyCounts from './types/blue/microcosm/links/getManyToManyCounts.ts';
 export * as BlueMicrocosmRepoGetRecordByUri from './types/blue/microcosm/repo/getRecordByUri.ts';
 export * as ComBadExampleIdentityResolveMiniDoc from './types/com/bad-example/identity/resolveMiniDoc.ts';
