@@ -9,6 +9,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.feed.sendInteractions', 
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			feed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 			get interactions() {
 				return /*#__PURE__*/ v.array(AppBskyFeedDefs.interactionSchema);
 			},
