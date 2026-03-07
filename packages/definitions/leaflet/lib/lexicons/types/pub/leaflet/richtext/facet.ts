@@ -26,6 +26,14 @@ const _didMentionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#didMention')),
 	did: /*#__PURE__*/ v.didString(),
 });
+const _footnoteSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#footnote')),
+	get contentFacets() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(mainSchema));
+	},
+	contentPlaintext: /*#__PURE__*/ v.string(),
+	footnoteId: /*#__PURE__*/ v.string(),
+});
 const _highlightSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#highlight')),
 });
@@ -49,6 +57,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 				boldSchema,
 				codeSchema,
 				didMentionSchema,
+				footnoteSchema,
 				highlightSchema,
 				idSchema,
 				italicSchema,
@@ -74,6 +83,7 @@ type bold$schematype = typeof _boldSchema;
 type byteSlice$schematype = typeof _byteSliceSchema;
 type code$schematype = typeof _codeSchema;
 type didMention$schematype = typeof _didMentionSchema;
+type footnote$schematype = typeof _footnoteSchema;
 type highlight$schematype = typeof _highlightSchema;
 type id$schematype = typeof _idSchema;
 type italic$schematype = typeof _italicSchema;
@@ -87,6 +97,7 @@ export interface boldSchema extends bold$schematype {}
 export interface byteSliceSchema extends byteSlice$schematype {}
 export interface codeSchema extends code$schematype {}
 export interface didMentionSchema extends didMention$schematype {}
+export interface footnoteSchema extends footnote$schematype {}
 export interface highlightSchema extends highlight$schematype {}
 export interface idSchema extends id$schematype {}
 export interface italicSchema extends italic$schematype {}
@@ -100,6 +111,7 @@ export const boldSchema = _boldSchema as boldSchema;
 export const byteSliceSchema = _byteSliceSchema as byteSliceSchema;
 export const codeSchema = _codeSchema as codeSchema;
 export const didMentionSchema = _didMentionSchema as didMentionSchema;
+export const footnoteSchema = _footnoteSchema as footnoteSchema;
 export const highlightSchema = _highlightSchema as highlightSchema;
 export const idSchema = _idSchema as idSchema;
 export const italicSchema = _italicSchema as italicSchema;
@@ -113,6 +125,7 @@ export interface Bold extends v.InferInput<typeof boldSchema> {}
 export interface ByteSlice extends v.InferInput<typeof byteSliceSchema> {}
 export interface Code extends v.InferInput<typeof codeSchema> {}
 export interface DidMention extends v.InferInput<typeof didMentionSchema> {}
+export interface Footnote extends v.InferInput<typeof footnoteSchema> {}
 export interface Highlight extends v.InferInput<typeof highlightSchema> {}
 export interface Id extends v.InferInput<typeof idSchema> {}
 export interface Italic extends v.InferInput<typeof italicSchema> {}

@@ -76,6 +76,18 @@ const _themeSchema = /*#__PURE__*/ v.object({
 	get backgroundImage() {
 		return /*#__PURE__*/ v.optional(PubLeafletThemeBackgroundImage.mainSchema);
 	},
+	/**
+	 * @maxLength 100
+	 */
+	bodyFont: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+	),
+	/**
+	 * @maxLength 100
+	 */
+	headingFont: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+	),
 	get pageBackground() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.variant([PubLeafletThemeColor.rgbSchema, PubLeafletThemeColor.rgbaSchema]),
