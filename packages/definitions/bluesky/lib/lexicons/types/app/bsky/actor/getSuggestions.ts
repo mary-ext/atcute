@@ -25,9 +25,14 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.actor.getSuggestions', {
 			},
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
-			 * Snowflake for this recommendation, use when submitting recommendation events.
+			 * DEPRECATED: use recIdStr instead.
+			 * @deprecated
 			 */
 			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+			/**
+			 * Snowflake for this recommendation, use when submitting recommendation events.
+			 */
+			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},
 });
