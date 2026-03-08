@@ -197,6 +197,7 @@ export default defineConfig({
 	server: { host: SERVER_HOST, port: SERVER_PORT },
 	plugins: [
 		{
+			name: 'oauth-envs',
 			config(_conf, { command }) {
 				if (command === 'build') {
 					process.env.VITE_OAUTH_CLIENT_ID = metadata.client_id;
