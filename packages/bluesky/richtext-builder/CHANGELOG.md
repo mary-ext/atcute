@@ -1,5 +1,17 @@
 # @atcute/bluesky-richtext-builder
 
+## 3.0.0
+
+### Major Changes
+
+- 584603a: accept display text in addTag
+
+### Patch Changes
+
+- ef71556: change `substr` param name to `text`
+- Updated dependencies [c7dbefe]
+  - @atcute/bluesky@3.2.21
+
 ## 2.0.5
 
 ### Patch Changes
