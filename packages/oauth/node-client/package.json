@@ -39,7 +39,7 @@
 		"nanoid": "^5.1.6"
 	},
 	"devDependencies": {
-		"@types/node": "^25.3.2",
+		"@types/node": "^25.3.5",
 		"vitest": "^4.0.18"
 	}
 }

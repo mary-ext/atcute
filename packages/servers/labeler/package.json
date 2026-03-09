@@ -33,7 +33,7 @@
 		"@mary-ext/simple-event-emitter": "^1.0.1"
 	},
 	"devDependencies": {
-		"@types/node": "^25.3.2",
+		"@types/node": "^25.3.5",
 		"@vitest/coverage-v8": "^4.0.18",
 		"vitest": "^4.0.18"
 	}

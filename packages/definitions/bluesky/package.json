@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@atcute/bluesky": "file:",
 		"@atcute/lex-cli": "workspace:^",
-		"@atproto/api": "^0.19.0",
+		"@atproto/api": "^0.19.3",
 		"vitest": "^4.0.18"
 	},
 	"atcute:lexicons": {

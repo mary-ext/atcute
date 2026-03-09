@@ -35,7 +35,7 @@
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
-		"@types/node": "^25.3.2"
+		"@types/node": "^25.3.5"
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^1.0.0",
