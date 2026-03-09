@@ -73,7 +73,7 @@ const rt = new RichtextBuilder()
 	.addText('hello ')
 	.addMention('@bsky.app', 'did:plc:z72i7hdynmk6r22z27h6tvur')
 	.addText('! ')
-	.addTag('atproto');
+	.addTag('#atproto', 'atproto');
 
 await ok(
 	rpc.post('com.atproto.repo.createRecord', {
@@ -140,10 +140,11 @@ const rt = new RichtextBuilder().addMention(`@${handle}`, did);
 
 ### adding hashtags
 
-hashtags are added without the `#` prefix - it's added automatically:
-
 ```ts
-const rt = new RichtextBuilder().addText('loving ').addTag('atproto').addText(' development!');
+const rt = new RichtextBuilder()
+	.addText('loving ')
+	.addTag('#atproto', 'atproto')
+	.addText(' development!');
 
 // text: "loving #atproto development!"
 ```
@@ -168,7 +169,7 @@ const rt = new RichtextBuilder().addDecoratedText('custom link', feature);
 there are multiple ways to get the composed rich text:
 
 ```ts
-const rt = new RichtextBuilder().addText('hello ').addTag('world');
+const rt = new RichtextBuilder().addText('hello ').addTag('#world', 'world');
 
 // via getters
 const text = rt.text;
