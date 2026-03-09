@@ -64,23 +64,23 @@ class RichtextBuilder {
 
 	/**
 	 * Add plain text to the rich text
-	 * @param substr The plain text
+	 * @param text The plain text
 	 * @returns The builder instance, for chaining
 	 */
-	addText(substr: string): this {
+	addText(text: string): this {
 		const segments = this.#segments;
-		segments[segments.length - 1] += substr;
+		segments[segments.length - 1] += text;
 
 		return this;
 	}
 
 	/**
 	 * Add decorated text to the rich text
-	 * @param substr The text itself
+	 * @param text The text itself
 	 * @param feature Feature to imbue on the text
 	 * @returns The builder instance, for chaining
 	 */
-	addDecoratedText(substr: string, feature: FacetFeature): this {
+	addDecoratedText(text: string, feature: FacetFeature): this {
 		const segments = this.#segments;
 		const last = segments.length - 1;
 
@@ -92,7 +92,7 @@ class RichtextBuilder {
 			start += (segments[last - 1] as Facet).index.byteEnd;
 		}
 
-		const byteLength = getUtf8Length(substr);
+		const byteLength = getUtf8Length(text);
 
 		const facet: Facet = {
 			index: {
@@ -102,29 +102,29 @@ class RichtextBuilder {
 			features: [feature],
 		};
 
-		segments[last] += substr;
+		segments[last] += text;
 		segments.push(facet, '');
 		return this;
 	}
 
 	/**
 	 * Add link to the rich text
-	 * @param substr Text of the link
+	 * @param text Text of the link
 	 * @param uri Valid URL, for example: https://example.com
 	 * @returns The builder instance, for chaining
 	 */
-	addLink(substr: string, uri: GenericUri): this {
-		return this.addDecoratedText(substr, { $type: 'app.bsky.richtext.facet#link', uri: uri });
+	addLink(text: string, uri: GenericUri): this {
+		return this.addDecoratedText(text, { $type: 'app.bsky.richtext.facet#link', uri: uri });
 	}
 
 	/**
-	 * Mentions a user in rich text
-	 * @param substr Text of the mention, this is usually in the form of `@handle`
+	 * Mention a user in rich text
+	 * @param text Text of the mention, usually in the form of `@handle`
 	 * @param did Valid DID, for example: did:plc:ia76kvnndjutgedggx2ibrem
 	 * @returns The builder instance, for chaining
 	 */
-	addMention(substr: string, did: Did): this {
-		return this.addDecoratedText(substr, { $type: 'app.bsky.richtext.facet#mention', did: did });
+	addMention(text: string, did: Did): this {
+		return this.addDecoratedText(text, { $type: 'app.bsky.richtext.facet#mention', did: did });
 	}
 
 	/**
