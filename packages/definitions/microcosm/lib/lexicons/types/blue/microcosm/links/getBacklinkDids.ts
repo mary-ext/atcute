@@ -29,7 +29,7 @@ const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getBacklinkDids'
 			/**
 			 * pagination cursor
 			 */
-			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nullable(/*#__PURE__*/ v.string())),
 			linking_dids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
 			/**
 			 * total number of matching links

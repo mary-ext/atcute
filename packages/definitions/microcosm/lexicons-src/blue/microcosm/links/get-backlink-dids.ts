@@ -2,6 +2,7 @@ import {
 	array,
 	document,
 	integer,
+	nullable,
 	object,
 	params,
 	query,
@@ -39,7 +40,7 @@ export default document({
 					properties: {
 						total: required(integer({ description: 'total number of matching links' })),
 						linking_dids: required(array({ items: string({ format: 'did' }) })),
-						cursor: string({ description: 'pagination cursor' }),
+						cursor: nullable(string({ description: 'pagination cursor' })),
 					},
 				}),
 			},

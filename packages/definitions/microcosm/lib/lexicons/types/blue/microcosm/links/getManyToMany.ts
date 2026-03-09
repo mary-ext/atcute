@@ -22,6 +22,9 @@ const _linkRecordSchema = /*#__PURE__*/ v.object({
 	 * the DID of the linking record's repository
 	 */
 	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * the record key of the linking record
+	 */
 	rkey: /*#__PURE__*/ v.recordKeyString(),
 });
 const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getManyToMany', {
@@ -60,7 +63,10 @@ const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getManyToMany', 
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			/**
+			 * pagination cursor
+			 */
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nullable(/*#__PURE__*/ v.string())),
 			get items() {
 				return /*#__PURE__*/ v.array(itemSchema);
 			},

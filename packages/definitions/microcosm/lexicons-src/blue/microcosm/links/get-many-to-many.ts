@@ -2,6 +2,7 @@ import {
 	array,
 	document,
 	integer,
+	nullable,
 	object,
 	params,
 	query,
@@ -10,11 +11,11 @@ import {
 } from '@atcute/lexicon-doc/builder';
 
 const linkRecord = object({
-	description: 'a record identifier consisting of a DID, collection, and record key',
+	description: 'a record linking to the subject',
 	properties: {
 		did: required(string({ format: 'did', description: "the DID of the linking record's repository" })),
 		collection: required(string({ format: 'nsid', description: 'the collection of the linking record' })),
-		rkey: required(string({ format: 'record-key' })),
+		rkey: required(string({ format: 'record-key', description: 'the record key of the linking record' })),
 	},
 });
 
@@ -70,7 +71,7 @@ export default document({
 				schema: object({
 					properties: {
 						items: required(array({ items: item })),
-						cursor: string(),
+						cursor: nullable(string({ description: 'pagination cursor' })),
 					},
 				}),
 			},

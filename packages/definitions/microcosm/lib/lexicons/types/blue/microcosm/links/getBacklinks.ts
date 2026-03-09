@@ -48,7 +48,7 @@ const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getBacklinks', {
 			/**
 			 * pagination cursor
 			 */
-			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nullable(/*#__PURE__*/ v.string())),
 			get records() {
 				return /*#__PURE__*/ v.array(linkRecordSchema);
 			},

@@ -8,9 +8,13 @@ export default document({
 			parameters: params({
 				properties: {
 					subject: required(
-						string({ format: 'at-uri', description: 'the target being linked to (at-uri, did, or uri)' }),
+						string({ format: 'uri', description: 'the target being linked to (at-uri, did, or uri)' }),
 					),
-					source: required(string({ description: 'collection and path specification for the primary link' })),
+					source: required(
+						string({
+							description: "collection and path specification (e.g., 'app.bsky.feed.like:subject.uri')",
+						}),
+					),
 				},
 			}),
 			output: {

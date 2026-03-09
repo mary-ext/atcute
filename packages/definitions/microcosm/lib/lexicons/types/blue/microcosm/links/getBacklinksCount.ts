@@ -5,13 +5,13 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getBacklinksCount', {
 	params: /*#__PURE__*/ v.object({
 		/**
-		 * collection and path specification for the primary link
+		 * collection and path specification (e.g., 'app.bsky.feed.like:subject.uri')
 		 */
 		source: /*#__PURE__*/ v.string(),
 		/**
 		 * the target being linked to (at-uri, did, or uri)
 		 */
-		subject: /*#__PURE__*/ v.resourceUriString(),
+		subject: /*#__PURE__*/ v.genericUriString(),
 	}),
 	output: {
 		type: 'lex',

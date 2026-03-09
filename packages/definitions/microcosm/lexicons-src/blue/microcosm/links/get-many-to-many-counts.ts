@@ -2,6 +2,7 @@ import {
 	array,
 	document,
 	integer,
+	nullable,
 	object,
 	params,
 	query,
@@ -31,7 +32,12 @@ export default document({
 							description: 'the primary target being linked to (at-uri, did, or uri)',
 						}),
 					),
-					source: required(string({ description: 'collection and path specification for the primary link' })),
+					source: required(
+						string({
+							description:
+								"collection and path specification for the primary link (e.g., 'app.bsky.feed.like:subject.uri')",
+						}),
+					),
 					pathToOther: required(
 						string({
 							description: "path to the secondary link in the many-to-many record (e.g., 'otherThing.uri')",
@@ -58,7 +64,7 @@ export default document({
 				schema: object({
 					properties: {
 						counts_by_other_subject: required(array({ items: countBySubject })),
-						cursor: string({ description: 'pagination cursor' }),
+						cursor: nullable(string({ description: 'pagination cursor' })),
 					},
 				}),
 			},

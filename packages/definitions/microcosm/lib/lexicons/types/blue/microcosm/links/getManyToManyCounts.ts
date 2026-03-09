@@ -44,7 +44,7 @@ const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getManyToManyCou
 		 */
 		pathToOther: /*#__PURE__*/ v.string(),
 		/**
-		 * collection and path specification for the primary link
+		 * collection and path specification for the primary link (e.g., 'app.bsky.feed.like:subject.uri')
 		 */
 		source: /*#__PURE__*/ v.string(),
 		/**
@@ -61,7 +61,7 @@ const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getManyToManyCou
 			/**
 			 * pagination cursor
 			 */
-			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nullable(/*#__PURE__*/ v.string())),
 		}),
 	},
 });
