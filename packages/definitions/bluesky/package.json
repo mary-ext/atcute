@@ -21,6 +21,7 @@
 	"type": "module",
 	"exports": {
 		".": "./dist/index.js",
+		"./limits": "./dist/limits.js",
 		"./types/app/*": "./dist/lexicons/types/app/bsky/*.js",
 		"./types/chat/*": "./dist/lexicons/types/chat/bsky/*.js"
 	},
@@ -32,6 +33,7 @@
 		"pull": "lex-cli pull",
 		"test": "vitest",
 		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
+		"generate:limits": "node scripts/generate-limits.js",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
