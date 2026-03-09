@@ -30,65 +30,63 @@ for authenticated requests, see the [client docs](./packages/clients/client) or 
 
 ## packages
 
-| Packages                                                                                                    |
-| ----------------------------------------------------------------------------------------------------------- |
-| **Client packages**                                                                                         |
-| [`cache`](./packages/clients/cache): normalized cache store                                                 |
-| [`client`](./packages/clients/client): XRPC HTTP client                                                     |
-| [`firehose`](./packages/clients/firehose): XRPC subscription client                                         |
-| [`jetstream`](./packages/clients/jetstream): Jetstream WebSocket client                                     |
-| [`password-session`](./packages/clients/password-session): password-based auth session handler              |
-| [`tap`](./packages/clients/tap): Tap WebSocket client                                                       |
-| **Server packages**                                                                                         |
-| [`xrpc-server`](./packages/servers/xrpc-server): XRPC web framework                                         |
-| [`xrpc-server-bun`](./packages/servers/xrpc-server-bun): Bun WebSocket adapter                              |
-| [`xrpc-server-cloudflare`](./packages/servers/xrpc-server-cloudflare): Cloudflare Workers WebSocket adapter |
-| [`xrpc-server-deno`](./packages/servers/xrpc-server-deno): Deno WebSocket adapter                           |
-| [`xrpc-server-node`](./packages/servers/xrpc-server-node): Node.js WebSocket adapter                        |
-| **OAuth packages**                                                                                          |
-| [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth client for SPAs                    |
-| [`oauth-node-client`](./packages/oauth/node-client): OAuth client for Node.js                               |
-| **Lexicon packages**                                                                                        |
-| [`lex-cli`](./packages/lexicons/lex-cli): generate TypeScript from lexicon schemas                          |
-| [`lexicon-doc`](./packages/lexicons/lexicon-doc): parse and author lexicon documents                        |
-| [`lexicon-resolver`](./packages/lexicons/lexicon-resolver): resolve lexicons from the network               |
-| [`lexicon-resolver-node`](./packages/lexicons/lexicon-resolver-node): Node.js lexicon resolvers             |
-| [`lexicons`](./packages/lexicons/lexicons): core types and schema validation                                |
-| **Lexicon definition packages**                                                                             |
-| [`atproto`](./packages/definitions/atproto): `com.atproto.*` definitions                                    |
-| [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*` definitions                                    |
-| [`bluesky`](./packages/definitions/bluesky): `app.bsky.*`, `chat.bsky.*` definitions                        |
-| [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*` definitions                      |
-| [`leaflet`](./packages/definitions/leaflet): `pub.leaflet.*` definitions                                    |
-| [`lexicon-community`](./packages/definitions/lexicon-community): `community.lexicon.*` definitions          |
-| [`microcosm`](./packages/definitions/microcosm): `blue.microcosm.*`, `com.bad-example.*` definitions        |
-| [`ozone`](./packages/definitions/ozone): `tools.ozone.*` definitions                                        |
-| [`pckt`](./packages/definitions/pckt): `blog.pckt.*` definitions                                            |
-| [`standard-site`](./packages/definitions/standard-site): `site.standard.*` definitions                      |
-| [`tangled`](./packages/definitions/tangled): `sh.tangled.*` definitions                                     |
-| [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` definitions                                 |
-| **Identity packages**                                                                                       |
-| [`identity`](./packages/identity/identity): handle, DID and DID document types                              |
-| [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution            |
-| [`identity-resolver-node`](./packages/identity/identity-resolver-node): Node.js DNS-based handle resolver   |
-| [`did-plc`](./packages/identity/did-plc): did:plc operation validation                                      |
-| **Utility packages**                                                                                        |
-| [`car`](./packages/utilities/car): CAR archive codec                                                        |
-| [`cbor`](./packages/utilities/cbor): deterministic CBOR codec                                               |
-| [`cid`](./packages/utilities/cid): content identifier codec                                                 |
-| [`crypto`](./packages/utilities/crypto): signing and verification                                           |
-| [`mst`](./packages/utilities/mst): merkle search tree utilities                                             |
-| [`multibase`](./packages/utilities/multibase): base32/base64 encoding                                       |
-| [`repo`](./packages/utilities/repo): repository export reader                                               |
-| [`tid`](./packages/utilities/tid): timestamp identifier codec                                               |
-| [`varint`](./packages/utilities/varint): LEB128 varint codec                                                |
-| **Bluesky-specific packages**                                                                               |
-| [`bluesky-moderation`](./packages/bluesky/moderation): content moderation interpretation                    |
-| [`bluesky-richtext-builder`](./packages/bluesky/richtext-builder): rich text facet builder                  |
-| [`bluesky-richtext-parser`](./packages/bluesky/richtext-parser): parse rich text syntax                     |
-| [`bluesky-richtext-segmenter`](./packages/bluesky/richtext-segmenter): segment text by facets               |
-| [`bluesky-search-parser`](./packages/bluesky/search-parser): search query tokenizer                         |
-| [`bluesky-threading`](./packages/bluesky/threading): atomic thread publishing                               |
+- **Client packages**
+  - [`cache`](./packages/clients/cache): normalized cache store
+  - [`client`](./packages/clients/client): XRPC HTTP client
+  - [`firehose`](./packages/clients/firehose): XRPC subscription client
+  - [`jetstream`](./packages/clients/jetstream): Jetstream WebSocket client
+  - [`password-session`](./packages/clients/password-session): password-based auth session handler
+  - [`tap`](./packages/clients/tap): Tap WebSocket client
+- **Server packages**
+  - [`xrpc-server`](./packages/servers/xrpc-server): XRPC web framework
+  - [`xrpc-server-bun`](./packages/servers/xrpc-server-bun): Bun WebSocket adapter
+  - [`xrpc-server-cloudflare`](./packages/servers/xrpc-server-cloudflare): Cloudflare Workers WebSocket adapter
+  - [`xrpc-server-deno`](./packages/servers/xrpc-server-deno): Deno WebSocket adapter
+  - [`xrpc-server-node`](./packages/servers/xrpc-server-node): Node.js WebSocket adapter
+- **OAuth packages**
+  - [`oauth-browser-client`](./packages/oauth/browser-client): minimal OAuth client for SPAs
+  - [`oauth-node-client`](./packages/oauth/node-client): OAuth client for Node.js
+- **Lexicon packages**
+  - [`lex-cli`](./packages/lexicons/lex-cli): generate TypeScript from lexicon schemas
+  - [`lexicon-doc`](./packages/lexicons/lexicon-doc): parse and author lexicon documents
+  - [`lexicon-resolver`](./packages/lexicons/lexicon-resolver): resolve lexicons from the network
+  - [`lexicon-resolver-node`](./packages/lexicons/lexicon-resolver-node): Node.js lexicon resolvers
+  - [`lexicons`](./packages/lexicons/lexicons): core types and schema validation
+- **Lexicon definition packages**
+  - [`atproto`](./packages/definitions/atproto): `com.atproto.*` definitions
+  - [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*` definitions
+  - [`bluesky`](./packages/definitions/bluesky): `app.bsky.*`, `chat.bsky.*` definitions
+  - [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*` definitions
+  - [`leaflet`](./packages/definitions/leaflet): `pub.leaflet.*` definitions
+  - [`lexicon-community`](./packages/definitions/lexicon-community): `community.lexicon.*` definitions
+  - [`microcosm`](./packages/definitions/microcosm): `blue.microcosm.*`, `com.bad-example.*` definitions
+  - [`ozone`](./packages/definitions/ozone): `tools.ozone.*` definitions
+  - [`pckt`](./packages/definitions/pckt): `blog.pckt.*` definitions
+  - [`standard-site`](./packages/definitions/standard-site): `site.standard.*` definitions
+  - [`tangled`](./packages/definitions/tangled): `sh.tangled.*` definitions
+  - [`whitewind`](./packages/definitions/whitewind): `com.whtwnd.*` definitions
+- **Identity packages**
+  - [`identity`](./packages/identity/identity): handle, DID and DID document types
+  - [`identity-resolver`](./packages/identity/identity-resolver): handle and DID document resolution
+  - [`identity-resolver-node`](./packages/identity/identity-resolver-node): Node.js DNS-based handle resolver
+  - [`did-plc`](./packages/identity/did-plc): did:plc operation validation
+- **Utility packages**
+  - [`car`](./packages/utilities/car): CAR archive codec
+  - [`cbor`](./packages/utilities/cbor): deterministic CBOR codec
+  - [`cid`](./packages/utilities/cid): content identifier codec
+  - [`crypto`](./packages/utilities/crypto): signing and verification
+  - [`mst`](./packages/utilities/mst): merkle search tree utilities
+  - [`multibase`](./packages/utilities/multibase): base32/base64 encoding
+  - [`repo`](./packages/utilities/repo): repository export reader
+  - [`tid`](./packages/utilities/tid): timestamp identifier codec
+  - [`varint`](./packages/utilities/varint): LEB128 varint codec
+- **Bluesky-specific packages**
+  - [`bluesky-moderation`](./packages/bluesky/moderation): content moderation interpretation
+  - [`bluesky-richtext-builder`](./packages/bluesky/richtext-builder): rich text facet builder
+  - [`bluesky-richtext-parser`](./packages/bluesky/richtext-parser): parse rich text syntax
+  - [`bluesky-richtext-segmenter`](./packages/bluesky/richtext-segmenter): segment text by facets
+  - [`bluesky-search-parser`](./packages/bluesky/search-parser): search query tokenizer
+  - [`bluesky-threading`](./packages/bluesky/threading): atomic thread publishing
 
 ## contributing
 
