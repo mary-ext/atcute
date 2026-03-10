@@ -24,7 +24,7 @@
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest",
-		"prepublish": "rm -rf dist; pnpm run build"
+		"prepublish": "rm -rf dist && pnpm run build"
 	},
 	"dependencies": {
 		"@atcute/identity": "workspace:^",

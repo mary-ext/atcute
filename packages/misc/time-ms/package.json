@@ -29,7 +29,7 @@
 	"scripts": {
 		"build:native": "node build.native.js",
 		"build": "tsgo --project tsconfig.build.json",
-		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
+		"prepublish": "rm -rf dist && pnpm run build:native && pnpm run build"
 	},
 	"devDependencies": {
 		"zig-build": "^0.3.0"

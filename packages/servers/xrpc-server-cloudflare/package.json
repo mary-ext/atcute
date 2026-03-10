@@ -22,7 +22,7 @@
 	},
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
-		"prepublish": "rm -rf dist; pnpm run build"
+		"prepublish": "rm -rf dist && pnpm run build"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20260307.1"

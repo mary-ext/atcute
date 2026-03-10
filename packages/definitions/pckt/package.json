@@ -29,8 +29,8 @@
 	"scripts": {
 		"build": "tsgo",
 		"pull": "lex-cli pull",
-		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
-		"prepublish": "rm -rf dist; pnpm run build"
+		"generate": "rm -rf ./lib/lexicons/ && lex-cli generate",
+		"prepublish": "rm -rf dist && pnpm run build"
 	},
 	"dependencies": {
 		"@atcute/atproto": "workspace:^",

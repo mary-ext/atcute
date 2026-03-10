@@ -28,7 +28,7 @@
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest run --coverage",
-		"prepublish": "rm -rf dist; pnpm run build"
+		"prepublish": "rm -rf dist && pnpm run build"
 	},
 	"dependencies": {
 		"@atcute/lexicons": "workspace:^",

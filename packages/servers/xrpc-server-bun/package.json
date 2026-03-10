@@ -23,7 +23,7 @@
 	"scripts": {
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "bun test",
-		"prepublish": "rm -rf dist; pnpm run build"
+		"prepublish": "rm -rf dist && pnpm run build"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",

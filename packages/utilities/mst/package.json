@@ -30,7 +30,7 @@
 		"generate-tests": "cd mst-test-suite && mise exec -- uv run python scripts/generate_exhaustive_cars.py",
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest run",
-		"prepublish": "rm -rf dist; pnpm run build"
+		"prepublish": "rm -rf dist && pnpm run build"
 	},
 	"dependencies": {
 		"@atcute/cbor": "workspace:^",
