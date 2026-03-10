@@ -1,5 +1,11 @@
 # @atcute/time-ms
 
+## 1.3.0
+
+### Minor Changes
+
+- ae335f9: use zig to prebuild for all platforms
+
 ## 1.2.3
 
 ### Patch Changes
