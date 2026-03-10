@@ -8,10 +8,9 @@
 		"directory": "packages/utilities/time-ms"
 	},
 	"files": [
-		"binding.gyp",
 		"dist/",
 		"lib/",
-		"prebuilds/",
+		"prebuilds/**/*.node",
 		"src/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
@@ -20,8 +19,6 @@
 	"sideEffects": false,
 	"exports": {
 		".": {
-			"deno": "./dist/index.deno.js",
-			"bun": "./dist/index.bun.js",
 			"node": "./dist/index.node.js",
 			"default": "./dist/index.js"
 		}
@@ -30,16 +27,11 @@
 		"access": "public"
 	},
 	"scripts": {
-		"install": "node-gyp-build || exit 0",
-		"build:native": "prebuildify --napi --strip",
+		"build:native": "node build.native.js",
 		"build": "tsgo --project tsconfig.build.json",
 		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
 	},
-	"dependencies": {
-		"@types/bun": "^1.3.10",
-		"node-gyp-build": "^4.8.4"
-	},
 	"devDependencies": {
-		"prebuildify": "^6.0.1"
+		"zig-build": "^0.3.0"
 	}
 }

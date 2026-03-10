@@ -1,5 +1,5 @@
 import { createRequire } from 'node:module';
-import { join } from 'node:path';
+import { arch, platform, report } from 'node:process';
 
 type TimeBinding = {
 	now: () => number;
@@ -19,8 +19,17 @@ export let now = (): number => {
 };
 
 try {
+	const getPrebuildDir = (): string => {
+		if (platform === 'linux') {
+			const header = (report.getReport() as Record<string, any>).header;
+			const libc = header.glibcVersionRuntime ? 'glibc' : 'musl';
+			return `${platform}-${arch}-${libc}`;
+		}
+		return `${platform}-${arch}`;
+	};
+
 	const require = createRequire(import.meta.url);
-	const binding: TimeBinding = require('node-gyp-build')(join(import.meta.dirname, '..'));
+	const binding: TimeBinding = require(`../prebuilds/${getPrebuildDir()}/time-ms.node`);
 
 	now = (): number => {
 		if (Date.isFake) {
