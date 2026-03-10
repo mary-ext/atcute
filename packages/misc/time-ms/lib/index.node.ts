@@ -1,5 +1,6 @@
+import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { arch, platform, report } from 'node:process';
+import { arch, platform } from 'node:process';
 
 type TimeBinding = {
 	now: () => number;
@@ -21,8 +22,11 @@ export let now = (): number => {
 try {
 	const getPrebuildDir = (): string => {
 		if (platform === 'linux') {
-			const header = (report.getReport() as Record<string, any>).header;
-			const libc = header.glibcVersionRuntime ? 'glibc' : 'musl';
+			const ldd = readFileSync('/usr/bin/ldd', 'utf-8');
+			const libc = ldd.includes('musl') ? 'musl' : ldd.includes('GNU C Library') ? 'glibc' : null;
+			if (libc === null) {
+				throw new Error(`unable to detect libc`);
+			}
 			return `${platform}-${arch}-${libc}`;
 		}
 		return `${platform}-${arch}`;
