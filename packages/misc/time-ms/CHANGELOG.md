@@ -1,5 +1,11 @@
 # @atcute/time-ms
 
+## 1.3.2
+
+### Patch Changes
+
+- 6a589c0: use `mode: small` for Windows
+
 ## 1.3.1
 
 ### Patch Changes

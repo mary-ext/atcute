@@ -1,5 +1,11 @@
 # @atcute/lexicon-doc
 
+## 2.1.2
+
+### Patch Changes
+
+- 1ed09c9: verify external references have valid NSID
+
 ## 2.1.1
 
 ### Patch Changes
