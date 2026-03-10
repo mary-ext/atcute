@@ -32,7 +32,8 @@
 		"build": "tsgo --project tsconfig.build.json",
 		"pull": "lex-cli pull",
 		"test": "vitest",
-		"generate": "rm -rf ./lib/lexicons/ && lex-cli generate",
+		"generate": "pnpm run generate:lexicons && pnpm run generate:limits",
+		"generate:lexicons": "rm -rf ./lib/lexicons/ && lex-cli generate",
 		"generate:limits": "node scripts/generate-limits.js",
 		"prepublish": "rm -rf dist && pnpm run build"
 	},
