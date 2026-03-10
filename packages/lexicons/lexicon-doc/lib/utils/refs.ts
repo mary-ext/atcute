@@ -92,7 +92,9 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 			case 'ref': {
 				const id = getInternalDefId(def.ref, doc.id);
 				if (id === undefined) {
-					refs.add(def.ref);
+					if (isValidExternalRef(def.ref)) {
+						refs.add(def.ref);
+					}
 					break;
 				}
 
@@ -114,7 +116,9 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 					const ref = def.refs[idx];
 					const id = getInternalDefId(ref, doc.id);
 					if (id === undefined) {
-						refs.add(ref);
+						if (isValidExternalRef(ref)) {
+							refs.add(ref);
+						}
 						continue;
 					}
 
@@ -181,6 +185,11 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 	}
 
 	return refs;
+};
+
+const isValidExternalRef = (ref: string): boolean => {
+	const hashIndex = ref.indexOf('#');
+	return isNsid(hashIndex === -1 ? ref : ref.slice(0, hashIndex));
 };
 
 const getInternalDefId = (ref: string, docId: string): string | undefined => {

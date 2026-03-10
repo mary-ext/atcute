@@ -552,6 +552,51 @@ describe('findExternalReferences', () => {
 		expect(refs.size).toBe(0);
 	});
 
+	it('skips refs with invalid NSIDs', () => {
+		const doc: LexiconDoc = {
+			lexicon: 1,
+			id: 'com.example.test',
+			defs: {
+				main: {
+					type: 'object',
+					properties: {
+						bad1: { type: 'ref', ref: 'not-an-nsid#main' },
+						bad2: { type: 'ref', ref: 'garbage' },
+						bad3: { type: 'ref', ref: 'lex:at.inlay.defs#main' },
+						good: { type: 'ref', ref: 'com.example.valid#main' },
+					},
+				},
+			},
+		};
+
+		const refs = findExternalReferences(doc);
+		expect(refs.size).toBe(1);
+		expect(refs.has('com.example.valid#main')).toBe(true);
+	});
+
+	it('skips union refs with invalid NSIDs', () => {
+		const doc: LexiconDoc = {
+			lexicon: 1,
+			id: 'com.example.test',
+			defs: {
+				main: {
+					type: 'object',
+					properties: {
+						item: {
+							type: 'union',
+							refs: ['invalid', 'also-invalid#foo', 'lex:at.inlay.defs#main', 'com.example.valid#main'],
+							closed: false,
+						},
+					},
+				},
+			},
+		};
+
+		const refs = findExternalReferences(doc);
+		expect(refs.size).toBe(1);
+		expect(refs.has('com.example.valid#main')).toBe(true);
+	});
+
 	it('handles non-existent defId parameter', () => {
 		const doc: LexiconDoc = {
 			lexicon: 1,
