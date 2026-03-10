@@ -71,5 +71,6 @@ await build({
 		output: 'prebuilds/win32-x64/time-ms.node',
 		libraries: ['node'],
 		librariesSearch: [nodeLibDir],
+		mode: 'small',
 	},
 });
