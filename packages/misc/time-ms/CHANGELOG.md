@@ -1,5 +1,11 @@
 # @atcute/time-ms
 
+## 1.3.1
+
+### Patch Changes
+
+- be5cd28: use alternative way to detect libc
+
 ## 1.3.0
 
 ### Minor Changes
