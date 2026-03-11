@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"types": ["bun"],
+		"types": ["node"],
 		"rootDir": "lib/",
 		"outDir": "dist/",
 		"esModuleInterop": true,

@@ -32,6 +32,7 @@
 		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
 	},
 	"devDependencies": {
+		"@types/node": "^25.4.0",
 		"zig-build": "^0.3.0"
 	}
 }

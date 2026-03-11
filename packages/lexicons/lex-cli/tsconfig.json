@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"types": ["node"],
 		"rootDir": "src/",
 		"outDir": "dist/",
 		"esModuleInterop": true,
