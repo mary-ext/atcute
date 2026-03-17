@@ -90,6 +90,8 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
 - Explore subagent may not be accurate; verify findings as needed
 - never spawn subagents to read and return file contents; read files directly in the main context.
   subagents should perform searches or answer specific questions, not act as file I/O proxies
+- don't use WebFetch to retrieve full page contents; it answers a question about a URL, not dumps
+  the raw content. use `curl` if you need the complete unsummarized response
 
 ### external repository research
 
