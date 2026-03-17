@@ -10,6 +10,8 @@
 	"files": [
 		"dist/",
 		"lib/",
+		"prebuilds/**/*.node",
+		"src/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
@@ -18,6 +20,7 @@
 	"exports": {
 		".": {
 			"react-native": "./dist/index.rn.js",
+			"node": "./dist/index.node.js",
 			"default": "./dist/index.js"
 		}
 	},
@@ -25,10 +28,17 @@
 		"access": "public"
 	},
 	"scripts": {
+		"build:native": "node build.native.js",
 		"build": "tsgo --project tsconfig.build.json",
-		"prepublish": "rm -rf dist; pnpm run build"
+		"test": "vitest",
+		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
 	},
 	"dependencies": {
 		"unicode-segmenter": "^0.14.5"
+	},
+	"devDependencies": {
+		"@types/node": "^25.4.0",
+		"vitest": "^4.0.18",
+		"zig-build": "^0.3.0"
 	}
 }

@@ -1,0 +1,452 @@
+/**
+ * self-contained grapheme cluster counter for NAPI.
+ * break tables derived from libgrapheme (ISC license), Unicode 17.0.0.
+ * includes ASCII fast path and inlined UTF-8 decoder.
+ */
+
+#include <node_api.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#define STACK_BUF_MAX 4096
+
+// #region helpers
+
+#ifdef __has_builtin
+#if __has_builtin(__builtin_expect)
+#define likely(expr)   __builtin_expect(!!(expr), 1)
+#define unlikely(expr) __builtin_expect(!!(expr), 0)
+#else
+#define likely(expr)   (expr)
+#define unlikely(expr) (expr)
+#endif
+#else
+#define likely(expr)   (expr)
+#define unlikely(expr) (expr)
+#endif
+
+// #endregion
+
+// #region generated grapheme break property tables (Unicode 17.0.0)
+#include "unicode/grapheme-table.h"
+_Static_assert(NUM_CHAR_BREAK_PROPS <= 32, "bitmask tables require NUM_CHAR_BREAK_PROPS <= 32");
+// #endregion
+
+// #region break rules (UAX #29)
+
+static const uint32_t dont_break_tbl[NUM_CHAR_BREAK_PROPS] = {
+	[CHAR_BREAK_PROP_OTHER] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_ICB_CONSONANT] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_ICB_EXTEND] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_ICB_LINKER] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_CR] = (1u << CHAR_BREAK_PROP_LF),
+	[CHAR_BREAK_PROP_EXTEND] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_EXTENDED_PICTOGRAPHIC] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_HANGUL_L] =
+		(1u << CHAR_BREAK_PROP_HANGUL_L) | (1u << CHAR_BREAK_PROP_HANGUL_V) |
+		(1u << CHAR_BREAK_PROP_HANGUL_LV) | (1u << CHAR_BREAK_PROP_HANGUL_LVT) |
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_HANGUL_V] =
+		(1u << CHAR_BREAK_PROP_HANGUL_V) | (1u << CHAR_BREAK_PROP_HANGUL_T) |
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_HANGUL_T] =
+		(1u << CHAR_BREAK_PROP_HANGUL_T) |
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_HANGUL_LV] =
+		(1u << CHAR_BREAK_PROP_HANGUL_V) | (1u << CHAR_BREAK_PROP_HANGUL_T) |
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_HANGUL_LVT] =
+		(1u << CHAR_BREAK_PROP_HANGUL_T) |
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_PREPEND] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK) |
+		(0xFFFFFFFFu & ~((1u << CHAR_BREAK_PROP_CR) | (1u << CHAR_BREAK_PROP_LF) | (1u << CHAR_BREAK_PROP_CONTROL))),
+	[CHAR_BREAK_PROP_REGIONAL_INDICATOR] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_SPACINGMARK] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_ZWJ] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+	[CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) | (1u << CHAR_BREAK_PROP_SPACINGMARK),
+};
+
+static const uint32_t gb11_update[2 * NUM_CHAR_BREAK_PROPS] = {
+	[CHAR_BREAK_PROP_EXTENDED_PICTOGRAPHIC] =
+		(1u << CHAR_BREAK_PROP_ZWJ) | (1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER),
+	[CHAR_BREAK_PROP_ZWJ + NUM_CHAR_BREAK_PROPS] = (1u << CHAR_BREAK_PROP_EXTENDED_PICTOGRAPHIC),
+	[CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND + NUM_CHAR_BREAK_PROPS] = (1u << CHAR_BREAK_PROP_EXTENDED_PICTOGRAPHIC),
+	[CHAR_BREAK_PROP_EXTEND + NUM_CHAR_BREAK_PROPS] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND),
+	[CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND + NUM_CHAR_BREAK_PROPS] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND),
+	[CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER + NUM_CHAR_BREAK_PROPS] =
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER) | (1u << CHAR_BREAK_PROP_ZWJ) |
+		(1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND),
+	[CHAR_BREAK_PROP_EXTENDED_PICTOGRAPHIC + NUM_CHAR_BREAK_PROPS] =
+		(1u << CHAR_BREAK_PROP_ZWJ) | (1u << CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_EXTEND) | (1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND) |
+		(1u << CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER),
+};
+static const uint32_t gb11_dont_break[2 * NUM_CHAR_BREAK_PROPS] = {
+	[CHAR_BREAK_PROP_ZWJ + NUM_CHAR_BREAK_PROPS] = (1u << CHAR_BREAK_PROP_EXTENDED_PICTOGRAPHIC),
+	[CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND + NUM_CHAR_BREAK_PROPS] = (1u << CHAR_BREAK_PROP_EXTENDED_PICTOGRAPHIC),
+};
+// #endregion
+
+// #region UTF-8 decoder + grapheme counter
+
+static inline size_t decode_utf16_prop_cached(
+	const char16_t *s,
+	size_t len,
+	uint32_t *prop,
+	uint32_t *cached_hi,
+	uint32_t *cached_base
+) {
+	uint32_t first = s[0];
+
+	if (first < 0xD800 || first > 0xDFFF) {
+		*prop = char_break_bmp[first];
+		return 1;
+	}
+
+	if (first <= 0xDBFF && len >= 2) {
+		uint32_t second = s[1];
+		if (second >= 0xDC00 && second <= 0xDFFF) {
+			uint32_t cp = 0x10000 + ((first - 0xD800) << 10) + (second - 0xDC00);
+			if (cp >= 0x1F1E6 && cp <= 0x1F1FF) {
+				*prop = CHAR_BREAK_PROP_REGIONAL_INDICATOR;
+				return 2;
+			}
+
+			uint32_t hi = cp >> 8;
+			if (hi != *cached_hi) {
+				*cached_hi = hi;
+				*cached_base = char_break_major[hi];
+			}
+
+			*prop = char_break_minor[*cached_base + (cp & 0xFF)];
+			return 2;
+		}
+	}
+
+	*prop = char_break_bmp[0xFFFD];
+	return 1;
+}
+
+static inline bool is_gb9c_extend(uint32_t p) {
+	return p == CHAR_BREAK_PROP_ICB_EXTEND ||
+	       p == CHAR_BREAK_PROP_BOTH_ZWJ_ICB_EXTEND ||
+	       p == CHAR_BREAK_PROP_BOTH_EXTEND_ICB_EXTEND;
+}
+
+static inline bool is_gb9c_linker(uint32_t p) {
+	return p == CHAR_BREAK_PROP_ICB_LINKER ||
+	       p == CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER;
+}
+
+static inline int ascii_grapheme_count(const char16_t *str, int len) {
+	int count = len;
+
+	for (int i = 0; i + 1 < len; i++) {
+		if (str[i] == 0x0D && str[i+1] == 0x0A) {
+			count--;
+		}
+	}
+
+	return count;
+}
+
+static inline bool is_all_ascii(const char16_t *str, int len) {
+	int i = 0;
+
+	for (; i + 7 < len; i += 8) {
+		uint16_t m = str[i] | str[i+1] | str[i+2] | str[i+3] |
+		             str[i+4] | str[i+5] | str[i+6] | str[i+7];
+		if (m > 0x7F) {
+			return false;
+		}
+	}
+
+	for (; i < len; i++) {
+		if (str[i] > 0x7F) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+static inline bool is_all_bmp_without_surrogates(const char16_t *str, int len) {
+	for (int i = 0; i < len; i++) {
+		uint16_t unit = str[i];
+		if (unit >= 0xD800 && unit <= 0xDFFF) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+static inline uint8_t advance_gb9c(uint8_t state, uint32_t prop) {
+	if (state == 0) {
+		return prop == CHAR_BREAK_PROP_ICB_CONSONANT ? 1 : 0;
+	}
+
+	if (is_gb9c_extend(prop)) {
+		return state == 3 ? 3 : 2;
+	}
+
+	if (is_gb9c_linker(prop)) {
+		return 3;
+	}
+
+	return prop == CHAR_BREAK_PROP_ICB_CONSONANT ? 1 : 0;
+}
+
+static inline bool advance_gb12_13(bool state, uint32_t p0, uint32_t p1) {
+	return !state &&
+		p0 == CHAR_BREAK_PROP_REGIONAL_INDICATOR &&
+		p1 == CHAR_BREAK_PROP_REGIONAL_INDICATOR;
+}
+
+typedef struct {
+	bool gb11;
+	bool gb12_13;
+	uint8_t gb9c;
+} grapheme_break_state;
+
+/** returns true if there is a grapheme cluster boundary between p0 and p1 */
+static inline bool is_grapheme_break(grapheme_break_state *st, uint32_t p0, uint32_t p1) {
+	uint32_t p1_mask = 1u << p1;
+	const uint32_t *gb11_update_row = gb11_update + (NUM_CHAR_BREAK_PROPS * st->gb11);
+
+	st->gb11 = (gb11_update_row[p0] & p1_mask) != 0;
+	st->gb12_13 = advance_gb12_13(st->gb12_13, p0, p1);
+	st->gb9c = advance_gb9c(st->gb9c, p0);
+	const uint32_t *gb11_dont_break_row = gb11_dont_break + (NUM_CHAR_BREAK_PROPS * st->gb11);
+
+	bool no_break =
+		(dont_break_tbl[p0] & p1_mask) ||
+		(st->gb9c == 3 && p1 == CHAR_BREAK_PROP_ICB_CONSONANT) ||
+		(gb11_dont_break_row[p0] & p1_mask) ||
+		st->gb12_13;
+
+	if (!no_break) {
+		st->gb11 = false;
+		st->gb12_13 = false;
+	}
+
+	return !no_break;
+}
+
+static inline int grapheme_count_bmp(const char16_t *str, int len, int max_len) {
+	int count = 1;
+	grapheme_break_state st = {0};
+	uint32_t p0 = char_break_bmp[str[0]];
+
+	for (int i = 1; i < len; i++) {
+		uint32_t p1 = char_break_bmp[str[i]];
+
+		if (is_grapheme_break(&st, p0, p1)) {
+			count++;
+			if (max_len >= 0 && count > max_len) {
+				return count;
+			}
+		}
+
+		p0 = p1;
+	}
+
+	return count;
+}
+
+static int grapheme_count_impl(const char16_t *str, int len, int max_len) {
+	if (len == 0) return 0;
+
+	if (is_all_ascii(str, len)) {
+		return ascii_grapheme_count(str, len);
+	}
+
+	if (is_all_bmp_without_surrogates(str, len)) {
+		return grapheme_count_bmp(str, len, max_len);
+	}
+
+	int count = 1;
+	grapheme_break_state st = {0};
+	size_t off = 0;
+	uint32_t cached_hi = UINT32_MAX;
+	uint32_t cached_base = 0;
+	uint32_t p0;
+
+	off += decode_utf16_prop_cached(str + off, len - off, &p0, &cached_hi, &cached_base);
+
+	while (off < (size_t)len) {
+		uint32_t p1;
+		size_t adv = decode_utf16_prop_cached(str + off, len - off, &p1, &cached_hi, &cached_base);
+
+		if (is_grapheme_break(&st, p0, p1)) {
+			count++;
+			if (max_len >= 0 && count > max_len) {
+				return count;
+			}
+		}
+
+		p0 = p1;
+		off += adv;
+	}
+
+	return count;
+}
+
+static int grapheme_count(const char16_t *str, int len) {
+	return grapheme_count_impl(str, len, -1);
+}
+
+static bool grapheme_count_in_range(const char16_t *str, int len, int min_len, int max_len) {
+	if (len == 0) return min_len == 0;
+	int count = grapheme_count_impl(str, len, max_len);
+	if (count > max_len) {
+		return false;
+	}
+	return count >= min_len;
+}
+
+// #endregion
+
+// #region NAPI exports
+
+static napi_value napi_get_grapheme_length(napi_env env, napi_callback_info info) {
+	size_t argc = 1;
+	napi_value argv[1];
+	napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
+
+	size_t utf16_len;
+	napi_get_value_string_utf16(env, argv[0], NULL, 0, &utf16_len);
+
+	if (utf16_len == 0) {
+		napi_value result;
+		napi_create_int32(env, 0, &result);
+		return result;
+	}
+
+	char16_t stack_buf[STACK_BUF_MAX];
+	char16_t *buf =
+		(utf16_len < STACK_BUF_MAX) ? stack_buf : (char16_t *)__builtin_malloc((utf16_len + 1) * sizeof(char16_t));
+
+	napi_get_value_string_utf16(env, argv[0], buf, utf16_len + 1, &utf16_len);
+
+	int result_count = grapheme_count(buf, (int)utf16_len);
+
+	if (buf != stack_buf) __builtin_free(buf);
+
+	napi_value result;
+	napi_create_int32(env, result_count, &result);
+	return result;
+}
+
+static napi_value napi_is_grapheme_length_in_range(napi_env env, napi_callback_info info) {
+	size_t argc = 3;
+	napi_value argv[3];
+	napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
+
+	int32_t min_len, max_len;
+	napi_get_value_int32(env, argv[1], &min_len);
+	napi_get_value_int32(env, argv[2], &max_len);
+
+	size_t utf16_len;
+	napi_get_value_string_utf16(env, argv[0], NULL, 0, &utf16_len);
+
+	if ((int32_t)utf16_len < min_len) {
+		napi_value r;
+		napi_get_boolean(env, 0, &r);
+		return r;
+	}
+
+	if (min_len == 0 && (int32_t)utf16_len <= max_len) {
+		napi_value r;
+		napi_get_boolean(env, 1, &r);
+		return r;
+	}
+
+	char16_t stack_buf[STACK_BUF_MAX];
+	char16_t *buf =
+		(utf16_len < STACK_BUF_MAX) ? stack_buf : (char16_t *)__builtin_malloc((utf16_len + 1) * sizeof(char16_t));
+
+	napi_get_value_string_utf16(env, argv[0], buf, utf16_len + 1, &utf16_len);
+
+	bool in_range = grapheme_count_in_range(buf, (int)utf16_len, min_len, max_len);
+
+	if (buf != stack_buf) __builtin_free(buf);
+
+	napi_value r;
+	napi_get_boolean(env, in_range, &r);
+	return r;
+}
+
+static napi_value init(napi_env env, napi_value exports) {
+	napi_property_descriptor descs[] = {
+		{ "getGraphemeLength", NULL, napi_get_grapheme_length, NULL, NULL, NULL, napi_default, NULL },
+		{ "isGraphemeLengthInRange", NULL, napi_is_grapheme_length_in_range, NULL, NULL, NULL, napi_default, NULL },
+	};
+	napi_define_properties(env, exports, 2, descs);
+	return exports;
+}
+
+NAPI_MODULE(NODE_GYP_MODULE_NAME, init)
+
+// #endregion
