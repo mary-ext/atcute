@@ -31,6 +31,7 @@ const isAsciiWithoutCr_loop = (text: string): boolean => {
 };
 
 // regex equivalent
+// oxlint-disable-next-line no-control-regex
 const RE_NON_ASCII_OR_CR = /[^\x00-\x7f]|\r/;
 const isAsciiWithoutCr_regex = (text: string): boolean => {
 	return !RE_NON_ASCII_OR_CR.test(text);
