@@ -1,27 +1,70 @@
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
+import { fromBase58Btc as fromBase58BtcNode, toBase58Btc as toBase58BtcNode } from './base58.node.ts';
 import { fromBase58Btc, toBase58Btc } from './base58.ts';
 
-summary(() => {
-	bench('fromBase58Btc', () => {
-		return do_not_optimize(fromBase58Btc(`UXE7GvtEk8XTXs1GF8HSGbVA9FCX9SEBPe`));
-	});
-});
+const cases = [
+	{
+		label: 'secp256k1 private multikey payload',
+		values: Array.from({ length: 34 }, (_, idx) => (idx * 37 + 11) & 0xff),
+	},
+	{
+		label: 'secp256k1 public multikey payload',
+		values: Array.from({ length: 35 }, (_, idx) => (idx * 53 + 7) & 0xff),
+	},
+];
 
-summary(() => {
-	bench('toBase58Btc', function* () {
-		yield {
-			[0]() {
-				return Uint8Array.from([
-					68, 101, 99, 101, 110, 116, 114, 97, 108, 105, 122, 101, 32, 101, 118, 101, 114, 121, 116, 104, 105,
-					110, 103, 33, 33,
-				]);
-			},
-			bench(bytes: Uint8Array) {
-				return do_not_optimize(toBase58Btc(bytes));
-			},
-		};
+for (const item of cases) {
+	const bytes = Uint8Array.from(item.values);
+	const encoded = toBase58Btc(bytes);
+
+	summary(() => {
+		bench(`fromBase58Btc js ${item.label}`, function* () {
+			yield {
+				[0]() {
+					return encoded;
+				},
+				bench(encoded: string) {
+					return do_not_optimize(fromBase58Btc(encoded));
+				},
+			};
+		});
+
+		bench(`fromBase58Btc node ${item.label}`, function* () {
+			yield {
+				[0]() {
+					return encoded;
+				},
+				bench(encoded: string) {
+					return do_not_optimize(fromBase58BtcNode(encoded));
+				},
+			};
+		});
 	});
-});
+
+	summary(() => {
+		bench(`toBase58Btc js ${item.label}`, function* () {
+			yield {
+				[0]() {
+					return Uint8Array.from(item.values);
+				},
+				bench(bytes: Uint8Array) {
+					return do_not_optimize(toBase58Btc(bytes));
+				},
+			};
+		});
+
+		bench(`toBase58Btc node ${item.label}`, function* () {
+			yield {
+				[0]() {
+					return Uint8Array.from(item.values);
+				},
+				bench(bytes: Uint8Array) {
+					return do_not_optimize(toBase58BtcNode(bytes));
+				},
+			};
+		});
+	});
+}
 
 await run();

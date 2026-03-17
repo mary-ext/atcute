@@ -11,4 +11,4 @@ export {
 } from '#bases/base64';
 
 export { fromBase32, toBase32 } from './bases/base32.ts';
-export { fromBase58Btc, toBase58Btc } from './bases/base58.ts';
+export { fromBase58Btc, toBase58Btc } from '#bases/base58';

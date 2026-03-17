@@ -1,5 +1,10 @@
-import { expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
+import {
+	fromBase58Btc as fromBase58BtcNode,
+	hasNative,
+	toBase58Btc as toBase58BtcNode,
+} from './base58.node.ts';
 import { fromBase58Btc, toBase58Btc } from './base58.ts';
 
 vi.mock('@atcute/uint8array', async (importOriginal) => {
@@ -48,4 +53,18 @@ it('can decode', () => {
 	for (const { buffer, encoded } of inputs) {
 		expect(fromBase58Btc(encoded)).toEqual(buffer);
 	}
+});
+
+describe.skipIf(!hasNative)('native', () => {
+	it('encode matches', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(toBase58BtcNode(buffer)).toEqual(encoded);
+		}
+	});
+
+	it('decode matches', () => {
+		for (const { buffer, encoded } of inputs) {
+			expect(Uint8Array.from(fromBase58BtcNode(encoded))).toEqual(buffer);
+		}
+	});
 });
