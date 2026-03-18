@@ -148,45 +148,7 @@ static const uint32_t gb11_dont_break[2 * NUM_CHAR_BREAK_PROPS] = {
 };
 // #endregion
 
-// #region UTF-8 decoder + grapheme counter
-
-static inline size_t decode_utf16_prop_cached(
-	const char16_t *s,
-	size_t len,
-	uint32_t *prop,
-	uint32_t *cached_hi,
-	uint32_t *cached_base
-) {
-	uint32_t first = s[0];
-
-	if (first < 0xD800 || first > 0xDFFF) {
-		*prop = char_break_bmp[first];
-		return 1;
-	}
-
-	if (first <= 0xDBFF && len >= 2) {
-		uint32_t second = s[1];
-		if (second >= 0xDC00 && second <= 0xDFFF) {
-			uint32_t cp = 0x10000 + ((first - 0xD800) << 10) + (second - 0xDC00);
-			if (cp >= 0x1F1E6 && cp <= 0x1F1FF) {
-				*prop = CHAR_BREAK_PROP_REGIONAL_INDICATOR;
-				return 2;
-			}
-
-			uint32_t hi = cp >> 8;
-			if (hi != *cached_hi) {
-				*cached_hi = hi;
-				*cached_base = char_break_major[hi];
-			}
-
-			*prop = char_break_minor[*cached_base + (cp & 0xFF)];
-			return 2;
-		}
-	}
-
-	*prop = char_break_bmp[0xFFFD];
-	return 1;
-}
+// #region grapheme counter
 
 static inline bool is_gb9c_extend(uint32_t p) {
 	return p == CHAR_BREAK_PROP_ICB_EXTEND ||
@@ -209,37 +171,6 @@ static inline int ascii_grapheme_count(const char16_t *str, int len) {
 	}
 
 	return count;
-}
-
-static inline bool is_all_ascii(const char16_t *str, int len) {
-	int i = 0;
-
-	for (; i + 7 < len; i += 8) {
-		uint16_t m = str[i] | str[i+1] | str[i+2] | str[i+3] |
-		             str[i+4] | str[i+5] | str[i+6] | str[i+7];
-		if (m > 0x7F) {
-			return false;
-		}
-	}
-
-	for (; i < len; i++) {
-		if (str[i] > 0x7F) {
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static inline bool is_all_bmp_without_surrogates(const char16_t *str, int len) {
-	for (int i = 0; i < len; i++) {
-		uint16_t unit = str[i];
-		if (unit >= 0xD800 && unit <= 0xDFFF) {
-			return false;
-		}
-	}
-
-	return true;
 }
 
 static inline uint8_t advance_gb9c(uint8_t state, uint32_t prop) {
@@ -294,60 +225,120 @@ static inline bool is_grapheme_break(grapheme_break_state *st, uint32_t p0, uint
 	return !no_break;
 }
 
-static inline int grapheme_count_bmp(const char16_t *str, int len, int max_len) {
-	int count = 1;
-	grapheme_break_state st = {0};
-	uint32_t p0 = char_break_bmp[str[0]];
-
-	for (int i = 1; i < len; i++) {
-		uint32_t p1 = char_break_bmp[str[i]];
-
-		if (is_grapheme_break(&st, p0, p1)) {
-			count++;
-			if (max_len >= 0 && count > max_len) {
-				return count;
-			}
-		}
-
-		p0 = p1;
-	}
-
-	return count;
-}
-
 static int grapheme_count_impl(const char16_t *str, int len, int max_len) {
 	if (len == 0) return 0;
 
-	if (is_all_ascii(str, len)) {
-		return ascii_grapheme_count(str, len);
+	int i = 0;
+
+	// fast ASCII prefix: skip in chunks of 8
+	{
+		int ascii_end = len - 7;
+		while (i < ascii_end) {
+			uint16_t m = str[i] | str[i+1] | str[i+2] | str[i+3] |
+			             str[i+4] | str[i+5] | str[i+6] | str[i+7];
+			if (m > 0x7F) break;
+			i += 8;
+		}
+		while (i < len && str[i] <= 0x7F) {
+			i++;
+		}
+		if (i == len) {
+			return ascii_grapheme_count(str, len);
+		}
 	}
 
-	if (is_all_bmp_without_surrogates(str, len)) {
-		return grapheme_count_bmp(str, len, max_len);
+	// count graphemes in the ASCII prefix (adjusting for CRLF)
+	int count = i;
+	for (int j = 0; j + 1 < i; j++) {
+		if (str[j] == 0x0D && str[j+1] == 0x0A) {
+			count--;
+		}
 	}
 
-	int count = 1;
+	// set up state machine from the last ASCII character (if any)
 	grapheme_break_state st = {0};
-	size_t off = 0;
-	uint32_t cached_hi = UINT32_MAX;
-	uint32_t cached_base = 0;
 	uint32_t p0;
 
-	off += decode_utf16_prop_cached(str + off, len - off, &p0, &cached_hi, &cached_base);
-
-	while (off < (size_t)len) {
-		uint32_t p1;
-		size_t adv = decode_utf16_prop_cached(str + off, len - off, &p1, &cached_hi, &cached_base);
-
-		if (is_grapheme_break(&st, p0, p1)) {
-			count++;
-			if (max_len >= 0 && count > max_len) {
-				return count;
+	if (i > 0) {
+		p0 = char_break_bmp[str[i - 1]];
+	} else {
+		// string starts with non-ASCII; decode first char properly
+		uint32_t first = str[0];
+		if (first >= 0xD800 && first <= 0xDBFF && len >= 2) {
+			uint32_t second = str[1];
+			if (second >= 0xDC00 && second <= 0xDFFF) {
+				uint32_t cp = 0x10000 + ((first - 0xD800) << 10) + (second - 0xDC00);
+				if (cp >= 0x1F1E6 && cp <= 0x1F1FF) {
+					p0 = CHAR_BREAK_PROP_REGIONAL_INDICATOR;
+				} else {
+					uint32_t hi = cp >> 8;
+					p0 = char_break_minor[char_break_major[hi] + (cp & 0xFF)];
+				}
+				i = 2;
+			} else {
+				p0 = char_break_bmp[0xFFFD];
+				i = 1;
 			}
+		} else if (first >= 0xDC00 && first <= 0xDFFF) {
+			p0 = char_break_bmp[0xFFFD];
+			i = 1;
+		} else {
+			p0 = char_break_bmp[first];
+			i = 1;
 		}
+		count = 1;
+	}
 
-		p0 = p1;
-		off += adv;
+	// single pass: BMP-direct with inline surrogate handling
+	while (i < len) {
+		uint32_t first = str[i];
+
+		if (likely(first < 0xD800 || first > 0xDFFF)) {
+			uint32_t p1 = char_break_bmp[first];
+
+			if (is_grapheme_break(&st, p0, p1)) {
+				count++;
+				if (max_len >= 0 && count > max_len) {
+					return count;
+				}
+			}
+
+			p0 = p1;
+			i++;
+		} else if (first <= 0xDBFF && i + 1 < len) {
+			uint32_t second = str[i + 1];
+			if (second >= 0xDC00 && second <= 0xDFFF) {
+				uint32_t cp = 0x10000 + ((first - 0xD800) << 10) + (second - 0xDC00);
+				uint32_t p1;
+
+				if (cp >= 0x1F1E6 && cp <= 0x1F1FF) {
+					p1 = CHAR_BREAK_PROP_REGIONAL_INDICATOR;
+				} else {
+					uint32_t hi = cp >> 8;
+					p1 = char_break_minor[char_break_major[hi] + (cp & 0xFF)];
+				}
+
+				if (is_grapheme_break(&st, p0, p1)) {
+					count++;
+					if (max_len >= 0 && count > max_len) {
+						return count;
+					}
+				}
+
+				p0 = p1;
+				i += 2;
+			} else {
+				uint32_t p1 = char_break_bmp[0xFFFD];
+				if (is_grapheme_break(&st, p0, p1)) count++;
+				p0 = p1;
+				i++;
+			}
+		} else {
+			uint32_t p1 = char_break_bmp[0xFFFD];
+			if (is_grapheme_break(&st, p0, p1)) count++;
+			p0 = p1;
+			i++;
+		}
 	}
 
 	return count;
