@@ -23,9 +23,12 @@ if (!hasNative) {
 const cases = {
 	displayName: 'maria \u{1F338}',
 	post: 'just mass-migrated to bsky from twitter!! \u{1F389}\u{1F389}\u{1F389}\n\nfollow me for cat pics \u{1F431} and hot takes \u{1F525}\n\n#bsky #newhere #introduction',
-	postJa: 'きょうの天気はとても良かったです\u{2600}\uFE0F 散歩に行ってきました\u{1F6B6}\u200D\u2640\uFE0F\nお花見のシーズンですね\u{1F338}\u{1F338}',
-	postEmoji: '\u{1F468}\u200D\u{1F4BB} shipping code at 2am \u{1F602}\u{1F602}\u{1F602} \u{1F1FA}\u{1F1F8}\u{1F1E7}\u{1F1F7} who needs sleep when you have \u2615\u2615\u2615 #devlife \u{1F525}\u{1F4AF}',
-	altText: 'a photograph of a sunset over the pacific ocean. the sky is painted in gradients of deep orange \u{1F7E0}, pink \u{1F338}, and purple \u{1F49C}. in the foreground, silhouettes of palm trees frame the scene. a small sailboat is visible on the horizon. the water reflects the warm colors of the sky, creating a mirror-like effect on the calm surface.',
+	postJa:
+		'きょうの天気はとても良かったです\u{2600}\uFE0F 散歩に行ってきました\u{1F6B6}\u200D\u2640\uFE0F\nお花見のシーズンですね\u{1F338}\u{1F338}',
+	postEmoji:
+		'\u{1F468}\u200D\u{1F4BB} shipping code at 2am \u{1F602}\u{1F602}\u{1F602} \u{1F1FA}\u{1F1F8}\u{1F1E7}\u{1F1F7} who needs sleep when you have \u2615\u2615\u2615 #devlife \u{1F525}\u{1F4AF}',
+	altText:
+		'a photograph of a sunset over the pacific ocean. the sky is painted in gradients of deep orange \u{1F7E0}, pink \u{1F338}, and purple \u{1F49C}. in the foreground, silhouettes of palm trees frame the scene. a small sailboat is visible on the horizon. the water reflects the warm colors of the sky, creating a mirror-like effect on the calm surface.',
 	skinTone: '\u{1F44B}\u{1F3FB} \u{1F44B}\u{1F3FC} \u{1F44B}\u{1F3FD} \u{1F44B}\u{1F3FE} \u{1F44B}\u{1F3FF}',
 	korean: '안녕하세요! 오늘 블루스카이에 가입했어요 \u{1F60A} 잘 부탁드립니다 \u{1F64F}',
 } as const;

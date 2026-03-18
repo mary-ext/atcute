@@ -15,7 +15,10 @@ const cases = [
 	{
 		// leading zeros map to '1' chars, exercising the prefix-handling path
 		label: 'leading zeros (8 zeros + 27 bytes)',
-		values: [...Array.from({ length: 8 }, () => 0), ...Array.from({ length: 27 }, (_, idx) => (idx * 17 + 5) & 0xff)],
+		values: [
+			...Array.from({ length: 8 }, () => 0),
+			...Array.from({ length: 27 }, (_, idx) => (idx * 17 + 5) & 0xff),
+		],
 	},
 ];
 

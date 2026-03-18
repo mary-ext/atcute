@@ -2,12 +2,11 @@ import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { arch, platform } from 'node:process';
 
-import { isAsciiWithoutCr } from './utils.ts';
-
 import {
 	getGraphemeLength as getGraphemeLengthJs,
 	isGraphemeLengthInRange as isGraphemeLengthInRangeJs,
 } from './index.ts';
+import { isAsciiWithoutCr } from './utils.ts';
 
 type GraphemeBinding = {
 	getGraphemeLength: (str: string) => number;
@@ -34,7 +33,8 @@ export let getGraphemeLength: (text: string) => number = getGraphemeLengthJs;
  * @param max maximum grapheme length (inclusive)
  * @returns true if the grapheme length is within range
  */
-export let isGraphemeLengthInRange: (text: string, min: number, max: number) => boolean = isGraphemeLengthInRangeJs;
+export let isGraphemeLengthInRange: (text: string, min: number, max: number) => boolean =
+	isGraphemeLengthInRangeJs;
 
 try {
 	const getPrebuildDir = (): string => {

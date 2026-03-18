@@ -1,5 +1,5 @@
 ---
-"@atcute/multibase": minor
+'@atcute/multibase': minor
 ---
 
 native base58 encode/decode

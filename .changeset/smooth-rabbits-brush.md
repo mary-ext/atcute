@@ -1,5 +1,5 @@
 ---
-"@atcute/util-text": minor
+'@atcute/util-text': minor
 ---
 
 native grapheme counting
