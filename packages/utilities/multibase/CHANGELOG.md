@@ -1,5 +1,11 @@
 # @atcute/multibase
 
+## 1.2.0
+
+### Minor Changes
+
+- 76aa79d: native base58 encode/decode
+
 ## 1.1.8
 
 ### Patch Changes

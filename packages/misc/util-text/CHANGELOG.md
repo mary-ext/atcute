@@ -1,5 +1,11 @@
 # @atcute/util-text
 
+## 1.2.0
+
+### Minor Changes
+
+- a98ed21: native grapheme counting
+
 ## 1.1.1
 
 ### Patch Changes

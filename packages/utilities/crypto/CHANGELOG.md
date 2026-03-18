@@ -1,5 +1,13 @@
 # @atcute/crypto
 
+## 2.4.1
+
+### Patch Changes
+
+- 72987d7: try compressed point import
+- Updated dependencies [76aa79d]
+  - @atcute/multibase@1.2.0
+
 ## 2.4.0
 
 ### Minor Changes
