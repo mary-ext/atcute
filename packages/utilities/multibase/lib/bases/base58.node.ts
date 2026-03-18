@@ -13,6 +13,7 @@ type Base58Binding = {
 
 /**
  * whether the native base58 module is available for the current runtime.
+ * @internal
  */
 export let hasNative = false;
 
