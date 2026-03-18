@@ -14,56 +14,36 @@ if (!hasNative) {
 	throw new Error(`native binding not available`);
 }
 
-const benchFilter = process.env.BENCH_FILTER?.toLowerCase() ?? '';
-const benchGroup = process.env.BENCH_GROUP?.toLowerCase() ?? 'all';
-const benchCases = new Set(
-	(process.env.BENCH_CASES ?? '')
-		.split(',')
-		.map((value) => value.trim().toLowerCase())
-		.filter(Boolean),
-);
-
-const shouldRun = (group: 'length' | 'range', name: string): boolean => {
-	if (benchGroup !== 'all' && benchGroup !== group) {
-		return false;
-	}
-
-	if (benchCases.size !== 0) {
-		return benchCases.has(name.toLowerCase());
-	}
-
-	if (benchFilter === '') {
-		return true;
-	}
-
-	return `${group}:${name}`.toLowerCase().includes(benchFilter);
-};
-
+// grapheme counting is used for AT Protocol lexicon validation:
+// - display names: max 64 graphemes
+// - posts: max 300 graphemes
+// - descriptions: max 256-300 graphemes
+// - alt text: max 1000 graphemes
+// - emoji reactions: exactly 1 grapheme
 const cases = {
-	ascii: 'The quick brown fox jumps over the lazy dog. '.repeat(16),
-	combining: 'e\u0301'.repeat(256),
-	bmpMixed: ('e\u0301a\r\n' + 'नमस्ते दुनिया ').repeat(160),
-	crlf: 'a\r\nb'.repeat(256),
-	family: '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}\u200D\u{1F466}'.repeat(64),
-	flags: '\u{1F1FA}\u{1F1F8}'.repeat(256),
-	devanagari: 'नमस्ते दुनिया '.repeat(128),
-	mixed: ('hello \u{1F600} e\u0301 🇺🇸\r\n' + 'नमस्ते ').repeat(96),
+	displayName: 'maria \u{1F338}',
+	post: 'just mass-migrated to bsky from twitter!! \u{1F389}\u{1F389}\u{1F389}\n\nfollow me for cat pics \u{1F431} and hot takes \u{1F525}\n\n#bsky #newhere #introduction',
+	postJa: 'きょうの天気はとても良かったです\u{2600}\uFE0F 散歩に行ってきました\u{1F6B6}\u200D\u2640\uFE0F\nお花見のシーズンですね\u{1F338}\u{1F338}',
+	postEmoji: '\u{1F468}\u200D\u{1F4BB} shipping code at 2am \u{1F602}\u{1F602}\u{1F602} \u{1F1FA}\u{1F1F8}\u{1F1E7}\u{1F1F7} who needs sleep when you have \u2615\u2615\u2615 #devlife \u{1F525}\u{1F4AF}',
+	altText: 'a photograph of a sunset over the pacific ocean. the sky is painted in gradients of deep orange \u{1F7E0}, pink \u{1F338}, and purple \u{1F49C}. in the foreground, silhouettes of palm trees frame the scene. a small sailboat is visible on the horizon. the water reflects the warm colors of the sky, creating a mirror-like effect on the calm surface.',
+	skinTone: '\u{1F44B}\u{1F3FB} \u{1F44B}\u{1F3FC} \u{1F44B}\u{1F3FD} \u{1F44B}\u{1F3FE} \u{1F44B}\u{1F3FF}',
+	korean: '안녕하세요! 오늘 블루스카이에 가입했어요 \u{1F60A} 잘 부탁드립니다 \u{1F64F}',
 } as const;
 
-const lengths = Object.fromEntries(
-	Object.entries(cases).map(([name, text]) => [name, getGraphemeLengthJs(text)]),
-) as Record<keyof typeof cases, number>;
-
 const rangeCases = {
-	ascii: { text: cases.ascii, min: 0, max: cases.ascii.length + 1 },
-	bmpMixed: { text: cases.bmpMixed, min: 0, max: lengths.bmpMixed },
-	combining: { text: cases.combining, min: 0, max: lengths.combining },
-	crlf: { text: cases.crlf, min: 0, max: lengths.crlf },
-	family: { text: cases.family, min: 0, max: lengths.family },
-	flags: { text: cases.flags, min: 0, max: lengths.flags },
-	devanagari: { text: cases.devanagari, min: 0, max: lengths.devanagari },
-	mixed: { text: cases.mixed, min: 0, max: lengths.mixed },
-	overflowMixed: { text: cases.mixed, min: 0, max: 100 },
+	// typical validation: min=0, string fits within max — exercises the short-circuit
+	displayName: { text: cases.displayName, min: 0, max: 64 },
+	post: { text: cases.post, min: 0, max: 300 },
+	postJa: { text: cases.postJa, min: 0, max: 300 },
+	postEmoji: { text: cases.postEmoji, min: 0, max: 300 },
+	altText: { text: cases.altText, min: 0, max: 1000 },
+	korean: { text: cases.korean, min: 0, max: 300 },
+
+	// emoji reaction validation: exactly 1 grapheme (min=1 forces counting)
+	emojiReaction: { text: '\u{1F468}\u200D\u{1F469}\u200D\u{1F467}', min: 1, max: 1 },
+
+	// overflow: post exceeds max, needs counting to detect
+	postOverflow: { text: cases.altText, min: 0, max: 50 },
 } as const;
 
 for (const [name, text] of Object.entries(cases)) {
@@ -82,12 +62,8 @@ for (const [name, { text, min, max }] of Object.entries(rangeCases)) {
 	}
 }
 
-summary(() => {
-	for (const [name, text] of Object.entries(cases)) {
-		if (!shouldRun('length', name)) {
-			continue;
-		}
-
+for (const [name, text] of Object.entries(cases)) {
+	summary(() => {
 		bench(`native length: ${name}`, function* () {
 			yield {
 				[0]() {
@@ -109,15 +85,11 @@ summary(() => {
 				},
 			};
 		});
-	}
-});
+	});
+}
 
-summary(() => {
-	for (const [name, { text, min, max }] of Object.entries(rangeCases)) {
-		if (!shouldRun('range', name)) {
-			continue;
-		}
-
+for (const [name, { text, min, max }] of Object.entries(rangeCases)) {
+	summary(() => {
 		bench(`native range: ${name}`, function* () {
 			yield {
 				[0]() {
@@ -139,7 +111,7 @@ summary(() => {
 				},
 			};
 		});
-	}
-});
+	});
+}
 
 await run();
