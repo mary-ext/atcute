@@ -12,6 +12,7 @@ import {
 	compressPoint,
 	deriveEcPublicKeyFromPrivateKey,
 	isSignatureNormalized,
+	isUncompressedPoint,
 	normalizeSignature,
 	toMultikey,
 } from '../utils.ts';
@@ -26,10 +27,55 @@ const ECDSA_ALG: EcdsaParams & EcKeyImportParams = {
 	hash: 'SHA-256',
 } as const;
 
-// TODO(2026-12-09): set this to true, importing compressed EC keys should be widely available by then
-// Firefox added support in 2025-10-29, Firefox 146 scheduled release is 2025-12-09
-// WebKit added support in 2022-09-10 but only in SPKI format (why???)
-const SUPPORTS_COMPRESSED_EC_KEYS = false;
+// importing raw compressed EC points is supported on Node, Bun, Deno, Chrome,
+// and Firefox 132+. WebKit does not support it (as of 2026-03-18).
+// `undefined` means we haven't probed yet — the first import will try compressed
+// and set this based on whether it succeeds.
+let IS_COMPRESSED_POINT_SUPPORTED: boolean | undefined;
+
+const importPublicKey = async (
+	publicKeyBytes: Uint8Array,
+	extractable: boolean,
+	usages: KeyUsage[],
+): Promise<CryptoKey> => {
+	if (IS_COMPRESSED_POINT_SUPPORTED === true || isUncompressedPoint(publicKeyBytes)) {
+		return crypto.subtle.importKey('raw', publicKeyBytes as BufferSource, ECDSA_ALG, extractable, usages);
+	}
+
+	if (IS_COMPRESSED_POINT_SUPPORTED === false) {
+		return crypto.subtle.importKey(
+			'raw',
+			uncompressP256Point(publicKeyBytes),
+			ECDSA_ALG,
+			extractable,
+			usages,
+		);
+	}
+
+	try {
+		const key = await crypto.subtle.importKey(
+			'raw',
+			publicKeyBytes as BufferSource,
+			ECDSA_ALG,
+			extractable,
+			usages,
+		);
+
+		IS_COMPRESSED_POINT_SUPPORTED = true;
+		return key;
+	} catch {
+		const key = await crypto.subtle.importKey(
+			'raw',
+			uncompressP256Point(publicKeyBytes),
+			ECDSA_ALG,
+			extractable,
+			usages,
+		);
+
+		IS_COMPRESSED_POINT_SUPPORTED = false;
+		return key;
+	}
+};
 
 const ASN1_ALGORITHM_IDENTIFIER = Uint8Array.from([
 	...[/* SEQ */ 0x30, /* len */ 0x13], // AlgorithmIdentifier
@@ -57,12 +103,6 @@ const PKCS8_PRIVATE_KEY_PREFIX = Uint8Array.from([
 	/**********/ ...[/* OCT_STR */ 0x04, /* len: 32 */ 0x20 /* ... */],
 ]);
 
-const SPKI_PREFIX = Uint8Array.from([
-	...[/* SEQ */ 0x30, /* len */ 0x39], // SubjectPublicKeyInfo
-	/**/ ...ASN1_ALGORITHM_IDENTIFIER, // AlgorithmIdentifier
-	/**/ ...[/* BIT_STR */ 0x03, /* len: 33 */ 0x22, 0x00 /* ... */], // PublicKey
-]);
-
 export class P256PublicKey implements PublicKey {
 	readonly type = 'p256';
 	readonly jwtAlg = 'ES256';
@@ -76,22 +116,7 @@ export class P256PublicKey implements PublicKey {
 	}
 
 	static async importRaw(publicKeyBytes: Uint8Array): Promise<P256PublicKey> {
-		let imported: CryptoKey;
-
-		if (!SUPPORTS_COMPRESSED_EC_KEYS) {
-			imported = await crypto.subtle.importKey('raw', uncompressP256Point(publicKeyBytes), ECDSA_ALG, true, [
-				'verify',
-			]);
-		} else {
-			imported = await crypto.subtle.importKey(
-				'spki',
-				concat([SPKI_PREFIX, publicKeyBytes]),
-				ECDSA_ALG,
-				true,
-				['verify'],
-			);
-		}
-
+		const imported = await importPublicKey(publicKeyBytes, true, ['verify']);
 		return new P256PublicKey(imported);
 	}
 
@@ -177,23 +202,7 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 		let publicKey: CryptoKey;
 
 		if (publicKeyBytes) {
-			if (!SUPPORTS_COMPRESSED_EC_KEYS) {
-				publicKey = await crypto.subtle.importKey(
-					'raw',
-					uncompressP256Point(publicKeyBytes),
-					ECDSA_ALG,
-					true,
-					['verify'],
-				);
-			} else {
-				publicKey = await crypto.subtle.importKey(
-					'spki',
-					concat([SPKI_PREFIX, publicKeyBytes]),
-					ECDSA_ALG,
-					true,
-					['verify'],
-				);
-			}
+			publicKey = await importPublicKey(publicKeyBytes, true, ['verify']);
 		} else {
 			publicKey = await deriveEcPublicKeyFromPrivateKey(privateKey, ['verify']);
 		}
@@ -264,23 +273,7 @@ export class P256PrivateKeyExportable extends P256PrivateKey implements PrivateK
 		let publicKey: CryptoKey;
 
 		if (publicKeyBytes) {
-			if (!SUPPORTS_COMPRESSED_EC_KEYS) {
-				publicKey = await crypto.subtle.importKey(
-					'raw',
-					uncompressP256Point(publicKeyBytes),
-					ECDSA_ALG,
-					true,
-					['verify'],
-				);
-			} else {
-				publicKey = await crypto.subtle.importKey(
-					'spki',
-					concat([SPKI_PREFIX, publicKeyBytes]),
-					ECDSA_ALG,
-					true,
-					['verify'],
-				);
-			}
+			publicKey = await importPublicKey(publicKeyBytes, true, ['verify']);
 		} else {
 			publicKey = await deriveEcPublicKeyFromPrivateKey(privateKey, ['verify']);
 		}
