@@ -19,7 +19,7 @@ the packages are organized into categories under `packages/`:
 ### project management
 
 - tools like Node.js, Bun and pnpm are managed by mise
-- Node.js can run TypeScript files directly (no tsx or --experimental-strip-types needed)
+- Node.js can run TypeScript files directly (`node index.ts`, strip types is unflagged)
 - check `pnpm view <package>` before adding a new dependency
 
 #### root-level tasks
