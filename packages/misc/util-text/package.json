@@ -37,8 +37,8 @@
 		"unicode-segmenter": "^0.14.5"
 	},
 	"devDependencies": {
-		"@types/node": "^25.4.0",
-		"vitest": "^4.0.18",
+		"@types/node": "^25.5.0",
+		"vitest": "^4.1.0",
 		"zig-build": "^0.3.0"
 	}
 }

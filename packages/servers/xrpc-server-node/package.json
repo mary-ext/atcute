@@ -33,9 +33,9 @@
 		"@atcute/cbor": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@remix-run/node-fetch-server": "^0.13.0",
-		"@types/node": "^25.4.0",
+		"@types/node": "^25.5.0",
 		"@types/ws": "^8.18.1",
-		"vitest": "^4.0.18"
+		"vitest": "^4.1.0"
 	},
 	"peerDependencies": {
 		"@atcute/xrpc-server": "workspace:^"

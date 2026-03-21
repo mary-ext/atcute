@@ -40,8 +40,8 @@
 	"devDependencies": {
 		"@atcute/car": "workspace:^",
 		"@badrap/valita": "^0.4.6",
-		"@types/node": "^25.4.0",
-		"@vitest/coverage-v8": "^4.0.18",
-		"vitest": "^4.0.18"
+		"@types/node": "^25.5.0",
+		"@vitest/coverage-v8": "^4.1.0",
+		"vitest": "^4.1.0"
 	}
 }

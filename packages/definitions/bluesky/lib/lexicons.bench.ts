@@ -288,7 +288,7 @@ pair({
 		$type: 'app.bsky.embed.external',
 		external: {
 			description:
-				"Former reality TV star Jessie Holmes cruised to a repeat victory in the Iditarod, the roughly 1,000-mile sled dog race in Alaska",
+				'Former reality TV star Jessie Holmes cruised to a repeat victory in the Iditarod, the roughly 1,000-mile sled dog race in Alaska',
 			thumb: {
 				$type: 'blob',
 				ref: {
@@ -297,7 +297,8 @@ pair({
 				mimeType: 'image/jpeg',
 				size: 235971,
 			},
-			title: 'Former reality TV star Jessie Holmes repeats as champion of the grueling Iditarod sled dog race',
+			title:
+				'Former reality TV star Jessie Holmes repeats as champion of the grueling Iditarod sled dog race',
 			uri: 'https://www.independent.co.uk/news/alaska-bering-sea-national-geographic-anchorage-willow-b2940836.html',
 		},
 	},
@@ -308,7 +309,7 @@ pair({
 	},
 	langs: [],
 	tags: [],
-	text: "Former reality TV star Jessie Holmes repeats as champion of the grueling Iditarod sled dog race\n\nFormer reality TV star Jessie Holmes cruised to a repeat victory in the Iditarod, the roughly 1,000-mile sled dog race in Alaska\n",
+	text: 'Former reality TV star Jessie Holmes repeats as champion of the grueling Iditarod sled dog race\n\nFormer reality TV star Jessie Holmes cruised to a repeat victory in the Iditarod, the roughly 1,000-mile sled dog race in Alaska\n',
 });
 // #endregion
 

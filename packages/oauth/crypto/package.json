@@ -30,9 +30,9 @@
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
 		"@badrap/valita": "^0.4.6",
-		"nanoid": "^5.1.6"
+		"nanoid": "^5.1.7"
 	},
 	"devDependencies": {
-		"vitest": "^4.0.18"
+		"vitest": "^4.1.0"
 	}
 }
