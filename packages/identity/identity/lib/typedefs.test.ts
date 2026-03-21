@@ -129,6 +129,30 @@ describe('didDocument', () => {
 		});
 	});
 
+	it('parses a did:web document without @context', () => {
+		const doc = didDocument.parse({
+			id: 'did:web:discover.bsky.app',
+			service: [
+				{
+					id: '#bsky_fg',
+					type: 'BskyFeedGenerator',
+					serviceEndpoint: 'https://discover.bsky.app',
+				},
+			],
+		});
+
+		expect(doc).toEqual({
+			id: 'did:web:discover.bsky.app',
+			service: [
+				{
+					id: '#bsky_fg',
+					type: 'BskyFeedGenerator',
+					serviceEndpoint: 'https://discover.bsky.app',
+				},
+			],
+		});
+	});
+
 	it('parses a did:web document', () => {
 		const doc = didDocument.parse({
 			'@context': [

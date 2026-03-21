@@ -28,6 +28,43 @@ describe('WebDidDocumentResolver', () => {
 		],
 	};
 
+	it('resolves DID documents without @context', async () => {
+		const document = {
+			id: 'did:web:discover.bsky.app',
+			service: [
+				{
+					id: '#bsky_fg',
+					type: 'BskyFeedGenerator',
+					serviceEndpoint: 'https://discover.bsky.app',
+				},
+			],
+		};
+
+		const resolver = new WebDidDocumentResolver({
+			async fetch(input, init) {
+				const request = new Request(input, init);
+				const url = new URL(request.url);
+
+				expect(url.href).toBe('https://discover.bsky.app/.well-known/did.json');
+
+				return Response.json(document);
+			},
+		});
+
+		const doc = await resolver.resolve('did:web:discover.bsky.app');
+
+		expect(doc).toEqual({
+			id: 'did:web:discover.bsky.app',
+			service: [
+				{
+					id: '#bsky_fg',
+					type: 'BskyFeedGenerator',
+					serviceEndpoint: 'https://discover.bsky.app',
+				},
+			],
+		});
+	});
+
 	it('resolves DID documents', async () => {
 		const resolver = new WebDidDocumentResolver({
 			async fetch(input, init) {
