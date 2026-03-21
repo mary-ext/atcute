@@ -15,7 +15,7 @@ export interface Service {
 }
 
 export interface DidDocument {
-	'@context': string[];
+	'@context'?: string[];
 	id: Did;
 	controller?: Did | Did[];
 	alsoKnownAs?: string[];

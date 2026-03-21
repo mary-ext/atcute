@@ -66,7 +66,7 @@ export const service: v.Type<t.Service> = v.object({
 
 export const didDocument: v.Type<t.DidDocument> = v
 	.object({
-		'@context': v.array(rfc3968UriSchema),
+		'@context': v.array(rfc3968UriSchema).optional(),
 
 		id: didString,
 
