@@ -1,5 +1,11 @@
 # @atcute/identity
 
+## 1.1.4
+
+### Patch Changes
+
+- dd9b89a: mark `@context` as optional
+
 ## 1.1.3
 
 ### Patch Changes
