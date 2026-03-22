@@ -25,6 +25,13 @@ const custom = TID.create(1724171495793000, 512);
 // -> "3l25zusnsfck2"
 ```
 
+on Node.js, `TID.now()` relies on the system's real-time clock for microsecond precision where
+available, falling back to millisecond precision otherwise.
+
+`TID.now()` is not monotonic — TIDs must track wall clock time, so if the clock is adjusted
+backward, the generated TIDs will follow. within a single process, rapid successive calls that
+observe the same timestamp will increment instead of reusing it to avoid collisions.
+
 ### parsing TIDs
 
 ```ts
