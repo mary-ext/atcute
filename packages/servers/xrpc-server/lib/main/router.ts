@@ -359,7 +359,9 @@ export class XRPCRouter {
 
 							try {
 								await ws.send(frame);
-							} catch {}
+							} catch {
+								// best-effort, socket may already be closed
+							}
 
 							ws.close(err.closeCode, err.error);
 							return;
