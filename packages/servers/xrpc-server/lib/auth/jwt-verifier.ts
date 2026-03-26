@@ -124,7 +124,7 @@ export class ServiceJwtVerifier {
 			};
 		}
 
-		if (this.serviceDid !== undefined && this.serviceDid !== payload.aud) {
+		if (this.serviceDid !== null && this.serviceDid !== payload.aud) {
 			return {
 				ok: false,
 				error: {
