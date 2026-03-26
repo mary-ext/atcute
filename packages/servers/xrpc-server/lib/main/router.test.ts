@@ -956,11 +956,11 @@ describe('XRPCRouter', () => {
 
 			let frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
-				client.events.on('message', (data) => {
+				client.onMessage.subscribe((data) => {
 					frames.push(data);
 				});
 
-				client.events.on('close', () => {
+				client.onClose.subscribe(() => {
 					resolve();
 				});
 			});
@@ -992,11 +992,11 @@ describe('XRPCRouter', () => {
 
 			let frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
-				client.events.on('message', (data) => {
+				client.onMessage.subscribe((data) => {
 					frames.push(data);
 				});
 
-				client.events.on('close', () => {
+				client.onClose.subscribe(() => {
 					resolve();
 				});
 			});
@@ -1029,7 +1029,7 @@ describe('XRPCRouter', () => {
 			using client = await mock.subscribe(`/xrpc/com.example.subscription?cursor=42`);
 
 			await new Promise<void>((resolve) => {
-				client.events.on('close', () => resolve());
+				client.onClose.subscribe(() => resolve());
 			});
 
 			expect(receivedCursor).toBe(42);
@@ -1057,11 +1057,11 @@ describe('XRPCRouter', () => {
 
 			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
-				client.events.on('message', (data) => {
+				client.onMessage.subscribe((data) => {
 					frames.push(data);
 				});
 
-				client.events.on('close', () => {
+				client.onClose.subscribe(() => {
 					resolve();
 				});
 			});
@@ -1100,7 +1100,7 @@ describe('XRPCRouter', () => {
 
 			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
-				client.events.on('message', (data) => {
+				client.onMessage.subscribe((data) => {
 					frames.push(data);
 
 					if (frames.length === 2) {
@@ -1108,7 +1108,7 @@ describe('XRPCRouter', () => {
 					}
 				});
 
-				client.events.on('close', () => {
+				client.onClose.subscribe(() => {
 					resolve();
 				});
 			});
@@ -1146,11 +1146,11 @@ describe('XRPCRouter', () => {
 
 			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
-				client.events.on('message', (data) => {
+				client.onMessage.subscribe((data) => {
 					frames.push(data);
 				});
 
-				client.events.on('close', () => {
+				client.onClose.subscribe(() => {
 					resolve();
 				});
 			});
@@ -1205,7 +1205,7 @@ describe('XRPCRouter', () => {
 			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
 
 			await new Promise<void>((resolve) => {
-				client.events.on('close', (event) => {
+				client.onClose.subscribe((event) => {
 					expect(event).toEqual({ code: 1011, reason: 'internal server error', wasClean: true });
 					resolve();
 				});

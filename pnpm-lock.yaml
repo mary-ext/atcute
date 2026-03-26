@@ -1016,6 +1016,9 @@ importers:
       '@atcute/xrpc-server':
         specifier: 'file:'
         version: file:packages/servers/xrpc-server
+      '@mary-ext/simple-event-emitter':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@types/node':
         specifier: ^25.5.0
         version: 25.5.0

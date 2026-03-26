@@ -1,20 +1,24 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 
+import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
+
 import type { Promisable } from '../../types/misc.ts';
 import type { XRPCRouter } from '../router.ts';
 import type { WebSocketAdapter, WebSocketConnection } from '../types/websocket.ts';
-
-import { EventEmitter } from './event-emitter.ts';
 
 interface WebSocketHandlerContext {
 	handler: ((ws: WebSocketConnection) => Promisable<void>) | null;
 }
 
+export interface CloseEvent {
+	code: number;
+	reason: string;
+	wasClean: boolean;
+}
+
 export interface SubscriptionClient extends Disposable {
-	events: EventEmitter<{
-		message: [data: Uint8Array];
-		close: [event: { code: number; reason: string; wasClean: boolean }];
-	}>;
+	onMessage: SimpleEventEmitter<[data: Uint8Array]>;
+	onClose: SimpleEventEmitter<[event: CloseEvent]>;
 	dispose(): void;
 }
 
@@ -64,10 +68,8 @@ export class MockWebSocketAdapter implements WebSocketAdapter {
 					throw new Error(`WebSocket upgrade succeeded but no handler was set`);
 				}
 
-				const events = new EventEmitter<{
-					message: [data: Uint8Array];
-					close: [event: { code: number; reason: string; wasClean: boolean }];
-				}>();
+				const onMessage = new SimpleEventEmitter<[data: Uint8Array]>();
+				const onClose = new SimpleEventEmitter<[event: CloseEvent]>();
 
 				const controller = new AbortController();
 				const signal = controller.signal;
@@ -75,11 +77,11 @@ export class MockWebSocketAdapter implements WebSocketAdapter {
 				const connection: WebSocketConnection = {
 					signal: signal,
 					send(data) {
-						events.emit('message', data);
+						onMessage.emit(data);
 					},
 					close(code = 1000, reason = '') {
 						if (!signal.aborted) {
-							events.emit('close', { code, reason, wasClean: true });
+							onClose.emit({ code, reason, wasClean: true });
 							controller.abort();
 						}
 					},
@@ -93,10 +95,11 @@ export class MockWebSocketAdapter implements WebSocketAdapter {
 				}
 
 				const client: SubscriptionClient = {
-					events,
+					onMessage,
+					onClose,
 					dispose() {
 						if (!signal.aborted) {
-							events.emit('close', { code: 1000, reason: '', wasClean: true });
+							onClose.emit({ code: 1000, reason: '', wasClean: true });
 							controller.abort();
 						}
 					},
