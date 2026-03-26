@@ -28,7 +28,7 @@
 	},
 	"devDependencies": {
 		"@atcute/bluesky": "workspace:^",
-		"@vitest/coverage-v8": "^4.1.0",
-		"vitest": "^4.1.0"
+		"@vitest/coverage-v8": "^4.1.1",
+		"vitest": "^4.1.1"
 	}
 }

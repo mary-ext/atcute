@@ -27,6 +27,6 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"vitest": "^4.1.0"
+		"vitest": "^4.1.1"
 	}
 }

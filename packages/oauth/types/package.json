@@ -33,6 +33,6 @@
 		"@badrap/valita": "^0.4.6"
 	},
 	"devDependencies": {
-		"vitest": "^4.1.0"
+		"vitest": "^4.1.1"
 	}
 }

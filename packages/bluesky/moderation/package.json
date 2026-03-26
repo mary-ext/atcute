@@ -32,7 +32,7 @@
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
-		"vitest": "^4.1.0"
+		"vitest": "^4.1.1"
 	},
 	"peerDependencies": {
 		"@atcute/atproto": "^3.0.0",

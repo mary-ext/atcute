@@ -26,7 +26,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"ws": "^8.19.0"
+		"ws": "^8.20.0"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
@@ -35,7 +35,7 @@
 		"@remix-run/node-fetch-server": "^0.13.0",
 		"@types/node": "^25.5.0",
 		"@types/ws": "^8.18.1",
-		"vitest": "^4.1.0"
+		"vitest": "^4.1.1"
 	},
 	"peerDependencies": {
 		"@atcute/xrpc-server": "workspace:^"
