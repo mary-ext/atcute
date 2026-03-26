@@ -183,7 +183,7 @@ export class ServiceJwtVerifier {
 
 			// only revalidate if it's a different key
 			if (!uint8arrays.equals(freshKey.value.publicKeyBytes, key.value.publicKeyBytes)) {
-				const result = await this.#verifySignature(key.value, parsed.value);
+				const result = await this.#verifySignature(freshKey.value, parsed.value);
 				if (!result.ok) {
 					return result;
 				}
