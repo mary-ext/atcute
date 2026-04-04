@@ -112,7 +112,7 @@ const returnFalse = () => false;
 
 const refreshToken = async (sub: Did, storedSession: Session | undefined): Promise<Session> => {
 	if (storedSession === undefined) {
-		throw new TokenRefreshError(sub, `session deleted by another tab`);
+		throw new TokenRefreshError(sub, `session deleted`);
 	}
 
 	const { dpopKey, info, token } = storedSession;
