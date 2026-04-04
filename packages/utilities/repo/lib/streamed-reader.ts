@@ -34,10 +34,7 @@ export type MissingBlockEntry =
 	  };
 
 export interface StreamedRepoReader {
-	/**
-	 * list of blocks that were referenced but not found in the repository.
-	 * blocks may be reported as missing if multiple records share the same CID.
-	 */
+	/** list of blocks that were referenced but not found in the repository */
 	readonly missingBlocks: readonly MissingBlockEntry[];
 
 	dispose(): Promise<void>;
@@ -97,7 +94,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 			const car = CAR.fromStream(stream);
 
 			try {
-				const pending = new Map<string, EntryMeta>();
+				const pending = new Map<string, EntryMeta[]>();
 				const strays = new Map<string, CarEntry>();
 
 				const queue = new Queue<Task>();
@@ -109,7 +106,13 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 						strays.delete(cid);
 						queue.enqueue({ c: cid, e: entry, m: meta });
 					} else {
-						pending.set(cid, meta);
+						const metas = pending.get(cid);
+
+						if (metas !== undefined) {
+							metas.push(meta);
+						} else {
+							pending.set(cid, [meta]);
+						}
 					}
 				};
 
@@ -125,11 +128,14 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 					const cid = CID.toString(entry.cid);
 
 					{
-						const meta = pending.get(cid);
+						const metas = pending.get(cid);
 
-						if (meta !== undefined) {
+						if (metas !== undefined) {
 							pending.delete(cid);
-							queue.enqueue({ c: cid, e: entry, m: meta });
+
+							for (let i = 0, il = metas.length; i < il; i++) {
+								queue.enqueue({ c: cid, e: entry, m: metas[i] });
+							}
 						} else {
 							strays.set(cid, entry);
 						}
@@ -188,19 +194,32 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 					}
 				}
 
-				missingBlocks = Array.from(pending, ([cid, meta]): MissingBlockEntry => {
-					switch (meta.t) {
-						case 0: {
-							return { cid, type: 'commit' };
-						}
-						case 1: {
-							return { cid, type: 'mst-node' };
-						}
-						case 2: {
-							return { cid, type: 'record', key: meta.k };
+				{
+					const missing: MissingBlockEntry[] = [];
+
+					for (const [cid, metas] of pending) {
+						for (let i = 0, il = metas.length; i < il; i++) {
+							const meta = metas[i];
+
+							switch (meta.t) {
+								case 0: {
+									missing.push({ cid, type: 'commit' });
+									break;
+								}
+								case 1: {
+									missing.push({ cid, type: 'mst-node' });
+									break;
+								}
+								case 2: {
+									missing.push({ cid, type: 'record', key: meta.k });
+									break;
+								}
+							}
 						}
 					}
-				});
+
+					missingBlocks = missing;
+				}
 			} finally {
 				await car.dispose();
 			}

@@ -1,9 +1,65 @@
-import { fromCidLink, toString } from '@atcute/cid';
+import { serializeCarEntry, serializeCarHeader } from '@atcute/car';
+import * as CBOR from '@atcute/cbor';
+import { toBytes } from '@atcute/cbor';
+import * as CID from '@atcute/cid';
+import { fromCidLink, toCidLink, toString } from '@atcute/cid';
+import { MSTNode } from '@atcute/mst';
 import { fromBase64 } from '@atcute/multibase';
+import { concat } from '@atcute/uint8array';
 
 import { describe, expect, it } from 'vitest';
 
 import { fromStream, fromUint8Array, repoEntryTransform } from './index.ts';
+import type { Commit } from './types.ts';
+
+/**
+ * builds a minimal CAR file containing a commit, single MST node, and one
+ * record block. the MST node has two entries (different keys) pointing to
+ * the same record CID.
+ */
+const buildDuplicateCidCar = async (): Promise<{
+	car: Uint8Array;
+	recordCid: string;
+	record: unknown;
+	keys: [string, string];
+}> => {
+	const record = { $type: 'app.bsky.feed.post', text: 'hello', createdAt: '2025-01-01T00:00:00.000Z' };
+	const recordBytes = CBOR.encode(record);
+	const recordCid = await CID.create(0x71, recordBytes);
+	const recordLink = toCidLink(recordCid);
+
+	// two different keys pointing to the same record CID
+	const keys = ['app.bsky.feed.post/aaaa', 'app.bsky.feed.post/aaab'] as [string, string];
+	const node = await MSTNode.create(keys, [recordLink, recordLink], [null, null, null]);
+	const nodeBytes = await node.serialize();
+	const nodeCid = fromCidLink(await node.cid());
+
+	const commit: Commit = {
+		version: 3,
+		did: 'did:plc:test',
+		data: await node.cid(),
+		rev: '1',
+		prev: null,
+		sig: toBytes(new Uint8Array(64)),
+	};
+	const commitBytes = CBOR.encode(commit);
+	const commitCid = await CID.create(0x71, commitBytes);
+	const commitLink = toCidLink(commitCid);
+
+	const chunks = [
+		serializeCarHeader([commitLink]),
+		serializeCarEntry(commitCid.bytes, commitBytes),
+		serializeCarEntry(nodeCid.bytes, nodeBytes),
+		serializeCarEntry(recordCid.bytes, recordBytes),
+	];
+
+	return {
+		car: concat(chunks),
+		recordCid: toString(recordCid),
+		record,
+		keys,
+	};
+};
 
 describe('fromUint8Array', () => {
 	it('decodes atproto car files', () => {
@@ -230,6 +286,45 @@ describe('repoEntryTransform', () => {
 					],
 				},
 			},
+		]);
+	});
+});
+
+describe('duplicate CID handling', () => {
+	it('fromUint8Array yields both records when two keys share a CID', async () => {
+		const { car, recordCid, record } = await buildDuplicateCidCar();
+
+		const result = Array.from(fromUint8Array(car), (entry) => ({
+			collection: entry.collection,
+			rkey: entry.rkey,
+			cid: toString(fromCidLink(entry.cid)),
+			record: entry.record,
+		}));
+
+		expect(result).toEqual([
+			{ collection: 'app.bsky.feed.post', rkey: 'aaaa', cid: recordCid, record },
+			{ collection: 'app.bsky.feed.post', rkey: 'aaab', cid: recordCid, record },
+		]);
+	});
+
+	it('fromStream yields both records when two keys share a CID', async () => {
+		const { car, recordCid, record } = await buildDuplicateCidCar();
+
+		const blob = new Blob([car]);
+		await using repo = fromStream(blob.stream());
+
+		const result = await Array.fromAsync(repo, (entry) => ({
+			collection: entry.collection,
+			rkey: entry.rkey,
+			cid: toString(fromCidLink(entry.cid)),
+			record: entry.record,
+		}));
+
+		expect(repo.missingBlocks).toEqual([]);
+
+		expect(result).toEqual([
+			{ collection: 'app.bsky.feed.post', rkey: 'aaaa', cid: recordCid, record },
+			{ collection: 'app.bsky.feed.post', rkey: 'aaab', cid: recordCid, record },
 		]);
 	});
 });
