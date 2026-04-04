@@ -96,7 +96,9 @@ const router = new XRPCRouter({ websocket: ws.adapter });
 router.addSubscription(ComAtprotoLabelSubscribeLabels, {
 	async *handler({ params, signal }) {
 		try {
-			yield* labeler.subscribeLabels({ cursor: params.cursor, signal });
+			for await (const event of labeler.subscribeLabels({ cursor: params.cursor, signal })) {
+				yield { $type: 'com.atproto.label.subscribeLabels#labels', ...event };
+			}
 		} catch (err) {
 			if (err instanceof FutureCursorError) {
 				throw new XRPCSubscriptionError({ error: 'FutureCursor' });
