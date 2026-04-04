@@ -1,5 +1,4 @@
 import * as fs from 'node:fs/promises';
-import { availableParallelism } from 'node:os';
 import * as path from 'node:path';
 import * as url from 'node:url';
 
@@ -72,7 +71,7 @@ const formatterConfigSchema = v.union(
 		concurrency: v
 			.number()
 			.assert((value) => Number.isInteger(value) && value > 0, `must be a positive integer`)
-			.optional(() => availableParallelism()),
+			.optional(() => 1),
 	}),
 );
 
