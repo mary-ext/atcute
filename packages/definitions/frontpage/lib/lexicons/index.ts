@@ -1,4 +1,7 @@
 export * as FyiFrontpageFeedComment from './types/fyi/frontpage/feed/comment.ts';
+export * as FyiFrontpageFeedDescribeFeedGenerator from './types/fyi/frontpage/feed/describeFeedGenerator.ts';
+export * as FyiFrontpageFeedGenerator from './types/fyi/frontpage/feed/generator.ts';
+export * as FyiFrontpageFeedGetFeedSkeleton from './types/fyi/frontpage/feed/getFeedSkeleton.ts';
 export * as FyiFrontpageFeedPost from './types/fyi/frontpage/feed/post.ts';
 export * as FyiFrontpageFeedVote from './types/fyi/frontpage/feed/vote.ts';
 export * as FyiFrontpageRichtextBlock from './types/fyi/frontpage/richtext/block.ts';

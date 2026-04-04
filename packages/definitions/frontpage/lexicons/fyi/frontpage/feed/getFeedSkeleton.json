@@ -1,0 +1,67 @@
+{
+	"lexicon": 1,
+	"id": "fyi.frontpage.feed.getFeedSkeleton",
+	"defs": {
+		"main": {
+			"type": "query",
+			"description": "Get a skeleton of a feed provided by a feed generator. Auth is optional, but may be required by the feed generator.",
+			"parameters": {
+				"type": "params",
+				"required": ["feed"],
+				"properties": {
+					"feed": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT URI of the feed generator record."
+					},
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 100,
+						"default": 50,
+						"description": "Maximum number of items to return."
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor."
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["feed"],
+					"properties": {
+						"cursor": {
+							"type": "string"
+						},
+						"feed": {
+							"type": "array",
+							"items": {
+								"type": "ref",
+								"ref": "#skeletonFeedPost"
+							}
+						}
+					}
+				}
+			},
+			"errors": [
+				{
+					"name": "UnknownFeed"
+				}
+			]
+		},
+		"skeletonFeedPost": {
+			"type": "object",
+			"required": ["post"],
+			"properties": {
+				"post": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "AT URI of the post."
+				}
+			}
+		}
+	}
+}

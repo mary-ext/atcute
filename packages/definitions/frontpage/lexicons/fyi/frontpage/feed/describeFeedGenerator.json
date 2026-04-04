@@ -1,0 +1,55 @@
+{
+	"lexicon": 1,
+	"id": "fyi.frontpage.feed.describeFeedGenerator",
+	"defs": {
+		"main": {
+			"type": "query",
+			"description": "Returns information about a feed generator service, including which feeds it provides.",
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["did", "feeds"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did"
+						},
+						"feeds": {
+							"type": "array",
+							"items": {
+								"type": "ref",
+								"ref": "#feed"
+							}
+						},
+						"links": {
+							"type": "ref",
+							"ref": "#links"
+						}
+					}
+				}
+			}
+		},
+		"feed": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				}
+			}
+		},
+		"links": {
+			"type": "object",
+			"properties": {
+				"privacyPolicy": {
+					"type": "string"
+				},
+				"termsOfService": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}
