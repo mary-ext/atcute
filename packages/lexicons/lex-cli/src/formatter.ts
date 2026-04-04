@@ -1,5 +1,4 @@
 import { spawn } from 'node:child_process';
-import { availableParallelism } from 'node:os';
 
 import type { FormatterConfig } from './config.ts';
 
@@ -81,9 +80,8 @@ export const createFormatter = async (config: FormatterConfig, root: string): Pr
 		const prettier = await import('prettier');
 		const prettierConfig = await prettier.resolveConfig(root, { editorconfig: true });
 
-		// prettier is in-process and CPU-bound, so concurrency only helps
-		// avoid buffering all files in memory at once
-		concurrency = availableParallelism();
+		// prettier is in-process and CPU-bound, no benefit from concurrency
+		concurrency = 1;
 		inner = {
 			async format(code, filepath) {
 				return prettier.format(code, { ...prettierConfig, parser: inferPrettierParser(filepath) });
