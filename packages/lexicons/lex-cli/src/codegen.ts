@@ -16,8 +16,6 @@ import type {
 } from '@atcute/lexicon-doc';
 import { formatLexiconRef, parseLexiconRef, type ParsedLexiconRef } from '@atcute/lexicon-doc';
 
-import * as prettier from 'prettier';
-
 export interface SourceFile {
 	filename: string;
 	code: string;
@@ -34,13 +32,6 @@ export interface LexiconApiOptions {
 	modules: {
 		importSuffix: string;
 	};
-	prettier: {
-		cwd: string;
-	};
-}
-
-export interface LexiconApiResult {
-	files: SourceFile[];
 }
 
 type DocumentMap = Map<string, LexiconDoc>;
@@ -68,7 +59,7 @@ const resolveExternalImport = (nsid: string, mappings: ImportMapping[]): ImportM
 
 const PURE = `/*#__PURE__*/`;
 
-export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<LexiconApiResult> => {
+export function* generateLexiconApi(opts: LexiconApiOptions): Generator<SourceFile> {
 	const importExt = opts.modules?.importSuffix;
 
 	const documents = opts.documents.toSorted((a, b) => {
@@ -83,7 +74,6 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 	});
 
 	const map: DocumentMap = new Map(documents.map((doc) => [doc.id, doc]));
-	const files: SourceFile[] = [];
 	const generatedIds = new Set<string>();
 
 	for (const doc of documents) {
@@ -336,7 +326,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 		if (file.exports) {
 			generatedIds.add(doc.id);
 
-			files.push({
+			yield {
 				filename: filename,
 				code:
 					file.imports +
@@ -354,7 +344,7 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 					file.sinterfaces +
 					`\n\n` +
 					file.ambients,
-			});
+			};
 		}
 	}
 
@@ -369,23 +359,12 @@ export const generateLexiconApi = async (opts: LexiconApiOptions): Promise<Lexic
 			code += `export * as ${toTitleCase(doc.id)} from ${lit(`./types/${doc.id.replaceAll('.', '/')}${importExt}`)};\n`;
 		}
 
-		files.push({
+		yield {
 			filename: 'index.ts',
 			code: code,
-		});
+		};
 	}
-
-	if (opts.prettier) {
-		const config = await prettier.resolveConfig(opts.prettier.cwd, { editorconfig: true });
-
-		for (const file of files) {
-			const formatted = await prettier.format(file.code, { ...config, parser: 'typescript' });
-			file.code = formatted;
-		}
-	}
-
-	return { files };
-};
+}
 
 const generateXrpcQuery = (imports: ImportSet, path: ParsedLexiconRef, spec: LexXrpcQuery): string => {
 	const params = generateXrpcParameters(imports, path, spec.parameters);

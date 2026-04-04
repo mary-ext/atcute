@@ -8,9 +8,9 @@ import { message } from '@optique/core/message';
 import { type InferValue } from '@optique/core/parser';
 import { command, constant } from '@optique/core/primitives';
 import pc from 'picocolors';
-import prettier from 'prettier';
 
 import { loadConfig, type ExportConfig, type NormalizedConfig } from '../config.ts';
+import { createFormatter, type Formatter } from '../formatter.ts';
 import { loadLexicons } from '../lexicon-loader.ts';
 import { sharedOptions } from '../shared-options.ts';
 
@@ -44,27 +44,17 @@ const ensureExportConfig = (config: NormalizedConfig): ExportConfig => {
 	return config.export;
 };
 
-/**
- * writes a lexicon document to disk as formatted JSON
- * @param outdir output directory
- * @param nsid the NSID of the lexicon
- * @param doc the lexicon document
- * @param prettierConfig prettier configuration
- */
 const writeLexicon = async (
 	outdir: string,
 	nsid: string,
 	doc: LexiconDoc,
-	prettierConfig: prettier.Options | null,
+	formatter: Formatter,
 ): Promise<void> => {
 	const nsidPath = nsid.replaceAll('.', '/');
 	const target = path.join(outdir, `${nsidPath}.json`);
 	const dirname = path.dirname(target);
 
-	const code = await prettier.format(JSON.stringify(doc, null, 2), {
-		...prettierConfig,
-		parser: 'json',
-	});
+	const code = await formatter.format(JSON.stringify(doc, null, 2), target);
 
 	await fs.mkdir(dirname, { recursive: true });
 	await fs.writeFile(target, code);
@@ -81,7 +71,7 @@ export const runExport = async (args: ExportCommand): Promise<void> => {
 	// use export.files if specified, otherwise fall back to root files config
 	const files = exportConfig.files ?? config.files;
 	const outdir = path.resolve(config.root, exportConfig.outdir);
-	const prettierConfig = await prettier.resolveConfig(config.root, { editorconfig: true });
+	const formatter = await createFormatter(config.formatter, config.root);
 
 	// load lexicons from files
 	const loaded = await loadLexicons(files, config.root);
@@ -99,9 +89,7 @@ export const runExport = async (args: ExportCommand): Promise<void> => {
 	await fs.mkdir(outdir, { recursive: true });
 
 	// write each lexicon as JSON
-	for (const { nsid, doc } of loaded) {
-		await writeLexicon(outdir, nsid, doc, prettierConfig);
-	}
+	await Promise.all(loaded.map(({ nsid, doc }) => writeLexicon(outdir, nsid, doc, formatter)));
 
 	console.log(pc.green(`exported ${loaded.length} lexicon(s) to ${outdir}`));
 };

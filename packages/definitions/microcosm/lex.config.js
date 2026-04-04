@@ -4,6 +4,7 @@ export default defineLexiconConfig({
 	files: ['lexicons-src/**/*.ts'],
 	outdir: 'lib/lexicons/',
 	modules: { importSuffix: '.ts' },
+	formatter: { type: 'command', command: 'oxfmt --stdin-filepath={filepath}' },
 	export: {
 		outdir: 'lexicons/',
 		clean: true,

@@ -8,9 +8,9 @@ import { message } from '@optique/core/message';
 import { type InferValue } from '@optique/core/parser';
 import { command, constant } from '@optique/core/primitives';
 import pc from 'picocolors';
-import prettier from 'prettier';
 
 import { loadConfig, type NormalizedConfig, type PullConfig, type SourceConfig } from '../config.ts';
+import { createFormatter, type Formatter } from '../formatter.ts';
 import { pullAtprotoSource } from '../pull-sources/atproto.ts';
 import { pullGitSource } from '../pull-sources/git.ts';
 import type { PullResult, PulledLexicon, SourceLocation } from '../pull-sources/types.ts';
@@ -110,16 +110,13 @@ const writeLexicon = async (
 	outdir: string,
 	nsid: string,
 	doc: LexiconDoc,
-	prettierConfig: prettier.Options | null,
+	formatter: Formatter,
 ): Promise<void> => {
 	const nsidPath = nsid.replaceAll('.', '/');
 	const target = path.join(outdir, `${nsidPath}.json`);
 	const dirname = path.dirname(target);
 
-	const code = await prettier.format(JSON.stringify(doc, null, 2), {
-		...prettierConfig,
-		parser: 'json',
-	});
+	const code = await formatter.format(JSON.stringify(doc, null, 2), target);
 
 	await fs.mkdir(dirname, { recursive: true });
 	await fs.writeFile(target, code);
@@ -139,7 +136,7 @@ const pullSource = async (source: SourceConfig): Promise<PullResult> => {
 const writeSourceReadme = async (
 	outdir: string,
 	revisions: SourceRevision[],
-	prettierConfig: prettier.Options | null,
+	formatter: Formatter,
 ): Promise<void> => {
 	const lines = [
 		'# lexicon sources',
@@ -173,12 +170,10 @@ const writeSourceReadme = async (
 	lines.push('');
 
 	const content = lines.join('\n');
-	const formatted = await prettier.format(content, {
-		...prettierConfig,
-		parser: 'markdown',
-	});
+	const target = path.join(outdir, 'README.md');
+	const formatted = await formatter.format(content, target);
 
-	await fs.writeFile(path.join(outdir, 'README.md'), formatted);
+	await fs.writeFile(target, formatted);
 };
 
 /**
@@ -190,7 +185,7 @@ export const runPull = async (args: PullCommand): Promise<void> => {
 	const pullConfig = ensurePullConfig(config);
 
 	const outdir = path.resolve(config.root, pullConfig.outdir);
-	const prettierConfig = await prettier.resolveConfig(config.root, { editorconfig: true });
+	const formatter = await createFormatter(config.formatter, config.root);
 
 	const seen = new Map<string, SourceLocation>();
 	const collected: PulledLexicon[] = [];
@@ -224,9 +219,8 @@ export const runPull = async (args: PullCommand): Promise<void> => {
 
 	await fs.mkdir(outdir, { recursive: true });
 
-	for (const entry of collected) {
-		await writeLexicon(outdir, entry.nsid, entry.doc, prettierConfig);
-	}
-
-	await writeSourceReadme(outdir, sourceRevisions, prettierConfig);
+	await Promise.all([
+		...collected.map((entry) => writeLexicon(outdir, entry.nsid, entry.doc, formatter)),
+		writeSourceReadme(outdir, sourceRevisions, formatter),
+	]);
 };

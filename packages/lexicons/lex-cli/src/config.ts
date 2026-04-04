@@ -1,4 +1,5 @@
 import * as fs from 'node:fs/promises';
+import { availableParallelism } from 'node:os';
 import * as path from 'node:path';
 import * as url from 'node:url';
 
@@ -63,6 +64,18 @@ const exportConfigSchema = v.object({
 	clean: v.boolean().optional(),
 });
 
+const formatterConfigSchema = v.union(
+	v.object({ type: v.literal('prettier') }),
+	v.object({
+		type: v.literal('command'),
+		command: v.string().assert((value) => value.length > 0, `must not be empty`),
+		concurrency: v
+			.number()
+			.assert((value) => Number.isInteger(value) && value > 0, `must be a positive integer`)
+			.optional(() => availableParallelism()),
+	}),
+);
+
 export type GitSourceConfig = v.Infer<typeof gitSourceConfigSchema>;
 export type AtprotoNsidsSourceConfig = v.Infer<typeof atprotoNsidsSourceConfigSchema>;
 export type AtprotoAuthoritySourceConfig = v.Infer<typeof atprotoAuthoritySourceConfigSchema>;
@@ -70,6 +83,7 @@ export type AtprotoSourceConfig = v.Infer<typeof atprotoSourceConfigSchema>;
 export type SourceConfig = v.Infer<typeof sourceConfigSchema>;
 export type PullConfig = v.Infer<typeof pullConfigSchema>;
 export type ExportConfig = v.Infer<typeof exportConfigSchema>;
+export type FormatterConfig = v.Infer<typeof formatterConfigSchema>;
 
 const isValidLexiconPattern = (pattern: string): boolean => {
 	if (pattern.endsWith('.*')) {
@@ -126,6 +140,7 @@ export const lexiconConfigSchema = v.object({
 		})
 		.partial()
 		.optional(),
+	formatter: formatterConfigSchema.optional((): FormatterConfig => ({ type: 'prettier' })),
 	pull: pullConfigSchema.optional(),
 	export: exportConfigSchema.optional(),
 });

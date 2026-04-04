@@ -9,6 +9,7 @@ import pc from 'picocolors';
 
 import { generateLexiconApi, type ImportMapping } from '../codegen.ts';
 import { loadConfig } from '../config.ts';
+import { createFormatter } from '../formatter.ts';
 import { loadLexicons } from '../lexicon-loader.ts';
 import { packageJsonSchema } from '../lexicon-metadata.ts';
 import { sharedOptions } from '../shared-options.ts';
@@ -147,24 +148,27 @@ export const runGenerate = async (args: GenerateCommand): Promise<void> => {
 	const loaded = await loadLexicons(config.files, config.root);
 	const documents = loaded.map((l) => l.doc);
 
-	const generationResult = await generateLexiconApi({
+	const outdir = path.join(config.root, config.outdir);
+	const formatter = await createFormatter(config.formatter, config.root);
+	const pending: Promise<void>[] = [];
+
+	for (const file of generateLexiconApi({
 		documents: documents,
 		mappings: allMappings,
 		modules: {
 			importSuffix: config.modules?.importSuffix ?? '.js',
 		},
-		prettier: {
-			cwd: process.cwd(),
-		},
-	});
-
-	const outdir = path.join(config.root, config.outdir);
-
-	for (const file of generationResult.files) {
+	})) {
 		const filename = path.join(outdir, file.filename);
-		const dirname = path.dirname(filename);
 
-		await fs.mkdir(dirname, { recursive: true });
-		await fs.writeFile(filename, file.code);
+		pending.push(
+			(async () => {
+				const formatted = await formatter.format(file.code, filename);
+				await fs.mkdir(path.dirname(filename), { recursive: true });
+				await fs.writeFile(filename, formatted);
+			})(),
+		);
 	}
+
+	await Promise.all(pending);
 };
