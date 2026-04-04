@@ -4,30 +4,32 @@ import * as v from '@atcute/lexicons/validations';
 
 import * as AppBskyActorDefs from '../actor/defs.ts';
 
-const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getSuggestedFollowsByActor', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsersForExplore', {
 	params: /*#__PURE__*/ v.object({
-		actor: /*#__PURE__*/ v.actorIdentifierString(),
+		/**
+		 * Category of users to get suggestions for.
+		 */
+		category: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+		/**
+		 * @minimum 1
+		 * @maximum 50
+		 * @default 25
+		 */
+		limit: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 50)]),
+			25,
+		),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * DEPRECATED, unused. Previously: if true, response has fallen-back to generic results, and is not scoped using relativeToDid
-			 * @default false
-			 */
-			isFallback: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
-			/**
-			 * DEPRECATED: use recIdStr instead.
-			 * @deprecated
-			 */
-			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+			get actors() {
+				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);
+			},
 			/**
 			 * Snowflake for this recommendation, use when submitting recommendation events.
 			 */
 			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			get suggestions() {
-				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);
-			},
 		}),
 	},
 });
@@ -43,6 +45,6 @@ export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'app.bsky.graph.getSuggestedFollowsByActor': mainSchema;
+		'app.bsky.unspecced.getSuggestedUsersForExplore': mainSchema;
 	}
 }

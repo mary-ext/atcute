@@ -123,6 +123,12 @@ export * as AppBskyUnspeccedGetSuggestedOnboardingUsers from './types/app/bsky/u
 export * as AppBskyUnspeccedGetSuggestedStarterPacks from './types/app/bsky/unspecced/getSuggestedStarterPacks.ts';
 export * as AppBskyUnspeccedGetSuggestedStarterPacksSkeleton from './types/app/bsky/unspecced/getSuggestedStarterPacksSkeleton.ts';
 export * as AppBskyUnspeccedGetSuggestedUsers from './types/app/bsky/unspecced/getSuggestedUsers.ts';
+export * as AppBskyUnspeccedGetSuggestedUsersForDiscover from './types/app/bsky/unspecced/getSuggestedUsersForDiscover.ts';
+export * as AppBskyUnspeccedGetSuggestedUsersForDiscoverSkeleton from './types/app/bsky/unspecced/getSuggestedUsersForDiscoverSkeleton.ts';
+export * as AppBskyUnspeccedGetSuggestedUsersForExplore from './types/app/bsky/unspecced/getSuggestedUsersForExplore.ts';
+export * as AppBskyUnspeccedGetSuggestedUsersForExploreSkeleton from './types/app/bsky/unspecced/getSuggestedUsersForExploreSkeleton.ts';
+export * as AppBskyUnspeccedGetSuggestedUsersForSeeMore from './types/app/bsky/unspecced/getSuggestedUsersForSeeMore.ts';
+export * as AppBskyUnspeccedGetSuggestedUsersForSeeMoreSkeleton from './types/app/bsky/unspecced/getSuggestedUsersForSeeMoreSkeleton.ts';
 export * as AppBskyUnspeccedGetSuggestedUsersSkeleton from './types/app/bsky/unspecced/getSuggestedUsersSkeleton.ts';
 export * as AppBskyUnspeccedGetSuggestionsSkeleton from './types/app/bsky/unspecced/getSuggestionsSkeleton.ts';
 export * as AppBskyUnspeccedGetTaggedSuggestions from './types/app/bsky/unspecced/getTaggedSuggestions.ts';
