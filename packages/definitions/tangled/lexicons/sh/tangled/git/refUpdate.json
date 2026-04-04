@@ -8,7 +8,7 @@
 			"key": "tid",
 			"record": {
 				"type": "object",
-				"required": ["ref", "committerDid", "repoDid", "repoName", "oldSha", "newSha", "meta"],
+				"required": ["ref", "committerDid", "repoName", "oldSha", "newSha", "meta"],
 				"properties": {
 					"ref": {
 						"type": "string",
@@ -21,9 +21,14 @@
 						"description": "did of the user that pushed this ref",
 						"format": "did"
 					},
-					"repoDid": {
+					"ownerDid": {
 						"type": "string",
 						"description": "did of the owner of the repo",
+						"format": "did"
+					},
+					"repoDid": {
+						"type": "string",
+						"description": "DID of the repo itself",
 						"format": "did"
 					},
 					"repoName": {

@@ -1,0 +1,162 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.git.temp.getTree",
+	"defs": {
+		"main": {
+			"type": "query",
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "ref"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the repository"
+					},
+					"ref": {
+						"type": "string",
+						"description": "Git reference (branch, tag, or commit SHA)"
+					},
+					"path": {
+						"type": "string",
+						"description": "Path within the repository tree",
+						"default": ""
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "object",
+					"required": ["ref", "files"],
+					"properties": {
+						"ref": {
+							"type": "string",
+							"description": "The git reference used"
+						},
+						"parent": {
+							"type": "string",
+							"description": "The parent path in the tree"
+						},
+						"dotdot": {
+							"type": "string",
+							"description": "Parent directory path"
+						},
+						"readme": {
+							"type": "ref",
+							"ref": "#readme",
+							"description": "Readme for this file tree"
+						},
+						"lastCommit": {
+							"type": "ref",
+							"ref": "#lastCommit"
+						},
+						"files": {
+							"type": "array",
+							"items": {
+								"type": "ref",
+								"ref": "#treeEntry"
+							}
+						}
+					}
+				}
+			},
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "Git reference not found"
+				},
+				{
+					"name": "PathNotFound",
+					"description": "Path not found in repository tree"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			]
+		},
+		"readme": {
+			"type": "object",
+			"required": ["filename", "contents"],
+			"properties": {
+				"filename": {
+					"type": "string",
+					"description": "Name of the readme file"
+				},
+				"contents": {
+					"type": "string",
+					"description": "Contents of the readme file"
+				}
+			}
+		},
+		"treeEntry": {
+			"type": "object",
+			"required": ["name", "mode", "size"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Relative file or directory name"
+				},
+				"mode": {
+					"type": "string",
+					"description": "File mode"
+				},
+				"size": {
+					"type": "integer",
+					"description": "File size in bytes"
+				},
+				"last_commit": {
+					"type": "ref",
+					"ref": "#lastCommit"
+				}
+			}
+		},
+		"lastCommit": {
+			"type": "object",
+			"required": ["hash", "message", "when"],
+			"properties": {
+				"hash": {
+					"type": "string",
+					"description": "Commit hash"
+				},
+				"message": {
+					"type": "string",
+					"description": "Commit message"
+				},
+				"author": {
+					"type": "ref",
+					"ref": "#signature"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Commit timestamp"
+				}
+			}
+		},
+		"signature": {
+			"type": "object",
+			"required": ["name", "email", "when"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Author name"
+				},
+				"email": {
+					"type": "string",
+					"description": "Author email"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Author timestamp"
+				}
+			}
+		}
+	}
+}

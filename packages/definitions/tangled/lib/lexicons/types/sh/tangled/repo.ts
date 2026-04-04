@@ -27,6 +27,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 */
 		name: /*#__PURE__*/ v.string(),
 		/**
+		 * DID of the repo itself, if assigned
+		 */
+		repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+		/**
 		 * source of the repo
 		 */
 		source: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),

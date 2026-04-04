@@ -1,0 +1,37 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.git.temp.getHead",
+	"defs": {
+		"main": {
+			"type": "query",
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the repository"
+					}
+				}
+			},
+			"output": {
+				"encoding": "application/json",
+				"schema": {
+					"type": "ref",
+					"ref": "sh.tangled.git.temp.defs#branch"
+				}
+			},
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			]
+		}
+	}
+}

@@ -53,13 +53,18 @@
 		},
 		"triggerRepo": {
 			"type": "object",
-			"required": ["knot", "did", "repo", "defaultBranch"],
+			"required": ["knot", "did", "defaultBranch"],
 			"properties": {
 				"knot": {
 					"type": "string"
 				},
 				"did": {
 					"type": "string",
+					"format": "did"
+				},
+				"repoDid": {
+					"type": "string",
+					"description": "DID of the repo itself",
 					"format": "did"
 				},
 				"repo": {

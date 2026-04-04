@@ -56,6 +56,11 @@
 							"format": "at-uri"
 						}
 					},
+					"repoDid": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repo itself, if assigned"
+					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime"

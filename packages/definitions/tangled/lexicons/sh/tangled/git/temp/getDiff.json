@@ -1,0 +1,50 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.git.temp.getDiff",
+	"defs": {
+		"main": {
+			"type": "query",
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "rev1", "rev2"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the repository"
+					},
+					"rev1": {
+						"type": "string",
+						"description": "First revision (commit, branch, or tag)"
+					},
+					"rev2": {
+						"type": "string",
+						"description": "Second revision (commit, branch, or tag)"
+					}
+				}
+			},
+			"output": {
+				"encoding": "*/*",
+				"description": "Compare output in application/json"
+			},
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RevisionNotFound",
+					"description": "One or both revisions not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				},
+				{
+					"name": "CompareError",
+					"description": "Failed to compare revisions"
+				}
+			]
+		}
+	}
+}

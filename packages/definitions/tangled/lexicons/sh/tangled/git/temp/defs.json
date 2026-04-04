@@ -1,0 +1,133 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.git.temp.defs",
+	"defs": {
+		"blob": {
+			"type": "object",
+			"description": "blob metadata. This object doesn't include the blob content",
+			"required": ["name", "mode", "size", "lastCommit"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "The file name"
+				},
+				"mode": {
+					"type": "string"
+				},
+				"size": {
+					"type": "integer",
+					"description": "File size in bytes"
+				},
+				"lastCommit": {
+					"type": "ref",
+					"ref": "#commit"
+				},
+				"submodule": {
+					"type": "ref",
+					"ref": "#submodule",
+					"description": "Submodule information if path is a submodule"
+				}
+			}
+		},
+		"branch": {
+			"type": "object",
+			"required": ["name", "commit"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "branch name"
+				},
+				"commit": {
+					"type": "ref",
+					"ref": "#commit",
+					"description": "hydrated commit object"
+				}
+			}
+		},
+		"tag": {
+			"type": "object",
+			"required": ["name", "tagger", "target"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "tag name"
+				},
+				"tagger": {
+					"type": "ref",
+					"ref": "#signature"
+				},
+				"message": {
+					"type": "string"
+				},
+				"target": {
+					"type": "unknown"
+				}
+			}
+		},
+		"commit": {
+			"type": "object",
+			"required": ["hash", "author", "committer", "message", "tree"],
+			"properties": {
+				"hash": {
+					"type": "ref",
+					"ref": "#hash"
+				},
+				"author": {
+					"type": "ref",
+					"ref": "#signature"
+				},
+				"committer": {
+					"type": "ref",
+					"ref": "#signature"
+				},
+				"message": {
+					"type": "string"
+				},
+				"tree": {
+					"type": "ref",
+					"ref": "#hash"
+				}
+			}
+		},
+		"hash": {
+			"type": "string"
+		},
+		"signature": {
+			"type": "object",
+			"required": ["name", "email", "when"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Person name"
+				},
+				"email": {
+					"type": "string",
+					"description": "Person email"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Timestamp of the signature"
+				}
+			}
+		},
+		"submodule": {
+			"type": "object",
+			"required": ["name", "url"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Submodule name"
+				},
+				"url": {
+					"type": "string",
+					"description": "Submodule repository URL"
+				},
+				"branch": {
+					"type": "string",
+					"description": "Branch to track in the submodule"
+				}
+			}
+		}
+	}
+}

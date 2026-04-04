@@ -9,7 +9,7 @@
 			"key": "tid",
 			"record": {
 				"type": "object",
-				"required": ["name", "repo", "tag", "createdAt", "artifact"],
+				"required": ["name", "tag", "createdAt", "artifact"],
 				"properties": {
 					"name": {
 						"type": "string",
@@ -19,6 +19,10 @@
 						"type": "string",
 						"format": "at-uri",
 						"description": "repo that this artifact is being uploaded to"
+					},
+					"repoDid": {
+						"type": "string",
+						"format": "did"
 					},
 					"tag": {
 						"type": "bytes",

@@ -9,7 +9,7 @@
 			"key": "tid",
 			"record": {
 				"type": "object",
-				"required": ["subject", "repo", "createdAt"],
+				"required": ["subject", "createdAt"],
 				"properties": {
 					"subject": {
 						"type": "string",
@@ -19,6 +19,10 @@
 						"type": "string",
 						"description": "repo to add this user to",
 						"format": "at-uri"
+					},
+					"repoDid": {
+						"type": "string",
+						"format": "did"
 					},
 					"createdAt": {
 						"type": "string",

@@ -50,6 +50,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 */
 		oldSha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
 		/**
+		 * did of the owner of the repo
+		 */
+		ownerDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+		/**
 		 * Ref being updated
 		 * @maxLength 2560
 		 * @maxGraphemes 256
@@ -59,9 +63,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			/*#__PURE__*/ v.stringGraphemes(0, 256),
 		]),
 		/**
-		 * did of the owner of the repo
+		 * DID of the repo itself
 		 */
-		repoDid: /*#__PURE__*/ v.didString(),
+		repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		/**
 		 * name of the repo
 		 */

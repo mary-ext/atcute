@@ -33,6 +33,7 @@ const _sourceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.pull#source')),
 	branch: /*#__PURE__*/ v.string(),
 	repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	/**
 	 * @minLength 40
 	 * @maxLength 40
@@ -42,7 +43,8 @@ const _sourceSchema = /*#__PURE__*/ v.object({
 const _targetSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.pull#target')),
 	branch: /*#__PURE__*/ v.string(),
-	repo: /*#__PURE__*/ v.resourceUriString(),
+	repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 });
 
 type main$schematype = typeof _mainSchema;

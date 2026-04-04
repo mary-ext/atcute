@@ -23,7 +23,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		/**
 		 * repo that this artifact is being uploaded to
 		 */
-		repo: /*#__PURE__*/ v.resourceUriString(),
+		repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+		repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		/**
 		 * hash of the tag object that this artifact is attached to (only annotated tags are supported)
 		 * @minLength 20

@@ -10,7 +10,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		/**
 		 * repo to add this user to
 		 */
-		repo: /*#__PURE__*/ v.resourceUriString(),
+		repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+		repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		subject: /*#__PURE__*/ v.didString(),
 	}),
 );

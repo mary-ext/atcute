@@ -1,0 +1,83 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.knot.subscribeRepos",
+	"defs": {
+		"main": {
+			"type": "subscription",
+			"description": "Repository event stream, aka Firehose endpoint. Outputs repo commits with diff data, and identity update events, for all repositories on the current server. See the atproto specifications for details around stream sequencing, repo versioning, CAR diff format, and more. Public and does not require auth; implemented by PDS and Relay.",
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"cursor": {
+						"type": "integer",
+						"description": "The last known event seq number to backfill from."
+					}
+				}
+			},
+			"message": {
+				"schema": {
+					"type": "union",
+					"refs": ["#identity", "sh.tangled.git.refUpdate"]
+				}
+			},
+			"errors": [
+				{
+					"name": "FutureCursor"
+				},
+				{
+					"name": "ConsumerTooSlow",
+					"description": "If the consumer of the stream can not keep up with events, and a backlog gets too large, the server will drop the connection."
+				}
+			]
+		},
+		"identity": {
+			"type": "object",
+			"required": ["seq", "did", "time"],
+			"properties": {
+				"seq": {
+					"type": "integer",
+					"description": "The stream sequence number of this message."
+				},
+				"did": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID identifier"
+				},
+				"time": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		},
+		"gitSync1": {
+			"type": "object",
+			"required": ["seq", "did"],
+			"properties": {
+				"seq": {
+					"type": "integer",
+					"description": "The stream sequence number of this message."
+				},
+				"did": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID identifier"
+				}
+			}
+		},
+		"gitSync2": {
+			"type": "object",
+			"required": ["seq", "repo"],
+			"properties": {
+				"seq": {
+					"type": "integer",
+					"description": "The stream sequence number of this message."
+				},
+				"repo": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "Repository AT-URI identifier"
+				}
+			}
+		}
+	}
+}

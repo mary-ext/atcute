@@ -1,0 +1,41 @@
+{
+	"lexicon": 1,
+	"id": "sh.tangled.git.temp.getTag",
+	"defs": {
+		"main": {
+			"type": "query",
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "tag"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the repository"
+					},
+					"tag": {
+						"type": "string",
+						"description": "Name of tag, such as v1.3.0"
+					}
+				}
+			},
+			"output": {
+				"encoding": "*/*"
+			},
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "TagNotFound",
+					"description": "Tag not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			]
+		}
+	}
+}

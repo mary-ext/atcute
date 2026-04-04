@@ -48,14 +48,21 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			]),
 		),
 		/**
-		 * Any ATURI, it is up to appviews to validate these fields.
+		 * Pinned repositories. Values are repo DIDs for repos that have them, or AT-URIs for legacy repos.
 		 * @minLength 0
 		 * @maxLength 6
 		 */
 		pinnedRepositories: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
 				/*#__PURE__*/ v.arrayLength(0, 6),
 			]),
+		),
+		/**
+		 * A handle the user prefers to be displayed as.
+		 * @maxLength 253
+		 */
+		preferredHandle: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.handleString(), [/*#__PURE__*/ v.stringLength(0, 253)]),
 		),
 		/**
 		 * Preferred gender pronouns.

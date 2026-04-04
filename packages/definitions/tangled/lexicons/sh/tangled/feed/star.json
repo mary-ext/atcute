@@ -9,11 +9,15 @@
 			"key": "tid",
 			"record": {
 				"type": "object",
-				"required": ["subject", "createdAt"],
+				"required": ["createdAt"],
 				"properties": {
 					"subject": {
 						"type": "string",
 						"format": "at-uri"
+					},
+					"subjectDid": {
+						"type": "string",
+						"format": "did"
 					},
 					"createdAt": {
 						"type": "string",

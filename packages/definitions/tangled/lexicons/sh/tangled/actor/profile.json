@@ -62,18 +62,23 @@
 					},
 					"pinnedRepositories": {
 						"type": "array",
-						"description": "Any ATURI, it is up to appviews to validate these fields.",
+						"description": "Pinned repositories. Values are repo DIDs for repos that have them, or AT-URIs for legacy repos.",
 						"minLength": 0,
 						"maxLength": 6,
 						"items": {
-							"type": "string",
-							"format": "at-uri"
+							"type": "string"
 						}
 					},
 					"pronouns": {
 						"type": "string",
 						"description": "Preferred gender pronouns.",
 						"maxLength": 40
+					},
+					"preferredHandle": {
+						"type": "string",
+						"description": "A handle the user prefers to be displayed as.",
+						"format": "handle",
+						"maxLength": 253
 					}
 				}
 			}

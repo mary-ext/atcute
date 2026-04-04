@@ -7,7 +7,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.feed.star'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		subject: /*#__PURE__*/ v.resourceUriString(),
+		subject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+		subjectDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	}),
 );
 
