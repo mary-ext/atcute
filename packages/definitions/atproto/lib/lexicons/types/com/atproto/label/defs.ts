@@ -43,13 +43,10 @@ const _labelSchema = /*#__PURE__*/ v.object({
 });
 const _labelValueSchema = /*#__PURE__*/ v.string<
 	| '!hide'
-	| '!no-promote'
 	| '!no-unauthenticated'
 	| '!warn'
-	| 'dmca-violation'
-	| 'doxxing'
-	| 'gore'
-	| 'nsfl'
+	| 'bot'
+	| 'graphic-media'
 	| 'nudity'
 	| 'porn'
 	| 'sexual'
