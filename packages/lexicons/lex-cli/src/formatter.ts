@@ -73,71 +73,62 @@ class Semaphore {
  * @returns a formatter instance
  */
 export const createFormatter = async (config: FormatterConfig, root: string): Promise<Formatter> => {
-	let inner: Formatter;
-	let concurrency: number;
+	switch (config.type) {
+		case 'prettier': {
+			const prettier = await import('prettier');
+			const prettierConfig = await prettier.resolveConfig(root, { editorconfig: true });
 
-	if (config.type === 'prettier') {
-		const prettier = await import('prettier');
-		const prettierConfig = await prettier.resolveConfig(root, { editorconfig: true });
+			return {
+				async format(code, filepath) {
+					return prettier.format(code, { ...prettierConfig, parser: inferPrettierParser(filepath) });
+				},
+			};
+		}
+		case 'command': {
+			// the template uses {filepath} as a placeholder, which is passed as a
+			// positional argument to sh to avoid shell injection via filenames
+			const shellCmd = config.command.replaceAll('{filepath}', '"$1"');
+			const semaphore = new Semaphore(config.concurrency);
 
-		// prettier is in-process and CPU-bound, no benefit from concurrency
-		concurrency = 1;
-		inner = {
-			async format(code, filepath) {
-				return prettier.format(code, { ...prettierConfig, parser: inferPrettierParser(filepath) });
-			},
-		};
-	} else {
-		// the template uses {filepath} as a placeholder, which is passed as a
-		// positional argument to sh to avoid shell injection via filenames
-		const shellCmd = config.command.replaceAll('{filepath}', '"$1"');
+			return {
+				async format(code, filepath) {
+					const lock = await semaphore.acquire();
 
-		concurrency = config.concurrency;
-		inner = {
-			format(code, filepath) {
-				return new Promise<string>((resolve, reject) => {
-					const child = spawn('sh', ['-c', shellCmd, 'sh', filepath], {
-						stdio: ['pipe', 'pipe', 'pipe'],
-					});
+					try {
+						return await new Promise<string>((resolve, reject) => {
+							const child = spawn('sh', ['-c', shellCmd, 'sh', filepath], {
+								stdio: ['pipe', 'pipe', 'pipe'],
+							});
 
-					const stdoutChunks: Buffer[] = [];
-					const stderrChunks: Buffer[] = [];
+							const stdoutChunks: Buffer[] = [];
+							const stderrChunks: Buffer[] = [];
 
-					child.stdout.on('data', (chunk: Buffer) => {
-						stdoutChunks.push(chunk);
-					});
+							child.stdout.on('data', (chunk: Buffer) => {
+								stdoutChunks.push(chunk);
+							});
 
-					child.stderr.on('data', (chunk: Buffer) => {
-						stderrChunks.push(chunk);
-					});
+							child.stderr.on('data', (chunk: Buffer) => {
+								stderrChunks.push(chunk);
+							});
 
-					child.on('error', reject);
+							child.on('error', reject);
 
-					child.on('close', (exitCode: number | null) => {
-						if (exitCode !== 0) {
-							const stderr = Buffer.concat(stderrChunks).toString();
-							reject(new Error(`formatter exited with code ${exitCode}:\n${stderr}`));
-						} else {
-							resolve(Buffer.concat(stdoutChunks).toString());
-						}
-					});
+							child.on('close', (exitCode: number | null) => {
+								if (exitCode !== 0) {
+									const stderr = Buffer.concat(stderrChunks).toString();
+									reject(new Error(`formatter exited with code ${exitCode}:\n${stderr}`));
+								} else {
+									resolve(Buffer.concat(stdoutChunks).toString());
+								}
+							});
 
-					child.stdin.end(code);
-				});
-			},
-		};
+							child.stdin.end(code);
+						});
+					} finally {
+						lock.release();
+					}
+				},
+			};
+		}
 	}
-
-	const semaphore = new Semaphore(concurrency);
-
-	return {
-		async format(code, filepath) {
-			const lock = await semaphore.acquire();
-			try {
-				return await inner.format(code, filepath);
-			} finally {
-				lock.release();
-			}
-		},
-	};
 };
