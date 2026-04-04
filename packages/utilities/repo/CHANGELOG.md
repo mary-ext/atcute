@@ -1,5 +1,11 @@
 # @atcute/repo
 
+## 0.1.4
+
+### Patch Changes
+
+- 2287359: fix streaming reader losing records when multiple MST entries reference the same CID
+
 ## 0.1.3
 
 ### Patch Changes

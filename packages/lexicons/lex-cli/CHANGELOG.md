@@ -1,5 +1,11 @@
 # @atcute/lex-cli
 
+## 2.6.0
+
+### Minor Changes
+
+- 8d5f575: external formatter support
+
 ## 2.5.3
 
 ### Patch Changes

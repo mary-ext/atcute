@@ -1,5 +1,12 @@
 # @atcute/xrpc-server
 
+## 0.1.12
+
+### Patch Changes
+
+- 6aa8638: incorrect null check on serviceDid
+- b909be5: use the correct key when revalidating
+
 ## 0.1.11
 
 ### Patch Changes
