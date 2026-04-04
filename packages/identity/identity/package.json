@@ -35,7 +35,7 @@
 		"@badrap/valita": "^0.4.6"
 	},
 	"devDependencies": {
-		"@vitest/coverage-v8": "^4.1.1",
-		"vitest": "^4.1.1"
+		"@vitest/coverage-v8": "^4.1.2",
+		"vitest": "^4.1.2"
 	}
 }

@@ -14,7 +14,7 @@
 		"@atproto/identity": "^0.4.12",
 		"@atproto/pds": "^0.4.217",
 		"@did-plc/server": "^0.0.1",
-		"axios": "^1.13.6",
+		"axios": "^1.14.0",
 		"get-port": "^7.2.0",
 		"uint8arrays": "^5.1.0"
 	}
