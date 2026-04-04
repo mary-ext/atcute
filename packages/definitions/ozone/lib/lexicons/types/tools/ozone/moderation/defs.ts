@@ -134,6 +134,16 @@ const _ageAssuranceOverrideEventSchema = /*#__PURE__*/ v.object({
 	 */
 	status: /*#__PURE__*/ v.string<'assured' | 'blocked' | 'reset' | (string & {})>(),
 });
+const _ageAssurancePurgeEventSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#ageAssurancePurgeEvent'),
+	),
+	/**
+	 * Comment describing the reason for the purge.
+	 * @minLength 1
+	 */
+	comment: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1)]),
+});
 const _blobViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#blobView')),
 	cid: /*#__PURE__*/ v.cidString(),
@@ -395,6 +405,7 @@ const _modEventViewSchema = /*#__PURE__*/ v.object({
 			accountEventSchema,
 			ageAssuranceEventSchema,
 			ageAssuranceOverrideEventSchema,
+			ageAssurancePurgeEventSchema,
 			cancelScheduledTakedownEventSchema,
 			identityEventSchema,
 			modEventAcknowledgeSchema,
@@ -441,6 +452,7 @@ const _modEventViewDetailSchema = /*#__PURE__*/ v.object({
 			accountEventSchema,
 			ageAssuranceEventSchema,
 			ageAssuranceOverrideEventSchema,
+			ageAssurancePurgeEventSchema,
 			cancelScheduledTakedownEventSchema,
 			identityEventSchema,
 			modEventAcknowledgeSchema,
@@ -893,6 +905,7 @@ type accountStats$schematype = typeof _accountStatsSchema;
 type accountStrike$schematype = typeof _accountStrikeSchema;
 type ageAssuranceEvent$schematype = typeof _ageAssuranceEventSchema;
 type ageAssuranceOverrideEvent$schematype = typeof _ageAssuranceOverrideEventSchema;
+type ageAssurancePurgeEvent$schematype = typeof _ageAssurancePurgeEventSchema;
 type blobView$schematype = typeof _blobViewSchema;
 type cancelScheduledTakedownEvent$schematype = typeof _cancelScheduledTakedownEventSchema;
 type identityEvent$schematype = typeof _identityEventSchema;
@@ -949,6 +962,7 @@ export interface accountStatsSchema extends accountStats$schematype {}
 export interface accountStrikeSchema extends accountStrike$schematype {}
 export interface ageAssuranceEventSchema extends ageAssuranceEvent$schematype {}
 export interface ageAssuranceOverrideEventSchema extends ageAssuranceOverrideEvent$schematype {}
+export interface ageAssurancePurgeEventSchema extends ageAssurancePurgeEvent$schematype {}
 export interface blobViewSchema extends blobView$schematype {}
 export interface cancelScheduledTakedownEventSchema extends cancelScheduledTakedownEvent$schematype {}
 export interface identityEventSchema extends identityEvent$schematype {}
@@ -1006,6 +1020,7 @@ export const accountStrikeSchema = _accountStrikeSchema as accountStrikeSchema;
 export const ageAssuranceEventSchema = _ageAssuranceEventSchema as ageAssuranceEventSchema;
 export const ageAssuranceOverrideEventSchema =
 	_ageAssuranceOverrideEventSchema as ageAssuranceOverrideEventSchema;
+export const ageAssurancePurgeEventSchema = _ageAssurancePurgeEventSchema as ageAssurancePurgeEventSchema;
 export const blobViewSchema = _blobViewSchema as blobViewSchema;
 export const cancelScheduledTakedownEventSchema =
 	_cancelScheduledTakedownEventSchema as cancelScheduledTakedownEventSchema;
@@ -1066,6 +1081,7 @@ export interface AccountStats extends v.InferInput<typeof accountStatsSchema> {}
 export interface AccountStrike extends v.InferInput<typeof accountStrikeSchema> {}
 export interface AgeAssuranceEvent extends v.InferInput<typeof ageAssuranceEventSchema> {}
 export interface AgeAssuranceOverrideEvent extends v.InferInput<typeof ageAssuranceOverrideEventSchema> {}
+export interface AgeAssurancePurgeEvent extends v.InferInput<typeof ageAssurancePurgeEventSchema> {}
 export interface BlobView extends v.InferInput<typeof blobViewSchema> {}
 export interface CancelScheduledTakedownEvent extends v.InferInput<
 	typeof cancelScheduledTakedownEventSchema

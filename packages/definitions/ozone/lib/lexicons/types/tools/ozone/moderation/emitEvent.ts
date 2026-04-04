@@ -17,6 +17,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 					ToolsOzoneModerationDefs.accountEventSchema,
 					ToolsOzoneModerationDefs.ageAssuranceEventSchema,
 					ToolsOzoneModerationDefs.ageAssuranceOverrideEventSchema,
+					ToolsOzoneModerationDefs.ageAssurancePurgeEventSchema,
 					ToolsOzoneModerationDefs.cancelScheduledTakedownEventSchema,
 					ToolsOzoneModerationDefs.identityEventSchema,
 					ToolsOzoneModerationDefs.modEventAcknowledgeSchema,

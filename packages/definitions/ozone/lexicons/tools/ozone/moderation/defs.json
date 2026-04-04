@@ -33,6 +33,7 @@
 						"#modEventPriorityScore",
 						"#ageAssuranceEvent",
 						"#ageAssuranceOverrideEvent",
+						"#ageAssurancePurgeEvent",
 						"#revokeAccountCredentialsEvent",
 						"#scheduleTakedownEvent",
 						"#cancelScheduledTakedownEvent"
@@ -103,6 +104,7 @@
 						"#modEventPriorityScore",
 						"#ageAssuranceEvent",
 						"#ageAssuranceOverrideEvent",
+						"#ageAssurancePurgeEvent",
 						"#revokeAccountCredentialsEvent",
 						"#scheduleTakedownEvent",
 						"#cancelScheduledTakedownEvent"
@@ -619,6 +621,18 @@
 					"type": "string",
 					"minLength": 1,
 					"description": "Comment describing the reason for the override."
+				}
+			}
+		},
+		"ageAssurancePurgeEvent": {
+			"type": "object",
+			"description": "Purges all age assurance events for the subject. Only works on DID subjects. Moderator-only.",
+			"required": ["comment"],
+			"properties": {
+				"comment": {
+					"type": "string",
+					"minLength": 1,
+					"description": "Comment describing the reason for the purge."
 				}
 			}
 		},
