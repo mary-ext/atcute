@@ -1601,7 +1601,8 @@ export const record = <TKey extends RecordKeySchema, TObject extends ObjectSchem
 
 // #region Variant schema
 
-type VariantTuple = readonly ObjectSchema<any>[];
+type VariantMember = ObjectSchema<any> | RecordSchema<ObjectSchema<any>, RecordKeySchema>;
+type VariantTuple = readonly VariantMember[];
 
 type InferVariantInput<TMembers extends VariantTuple> = $type.enforce<InferInput<TMembers[number]>>;
 
@@ -1629,7 +1630,7 @@ export const variant: {
 		members: TMembers,
 		closed: TClosed,
 	): VariantSchema<TMembers, TClosed>;
-} = (members: ObjectSchema[], closed: boolean = false): VariantSchema<any, any> => {
+} = (members: VariantMember[], closed: boolean = false): VariantSchema<any, any> => {
 	return {
 		kind: 'schema',
 		type: 'variant',
@@ -1640,7 +1641,8 @@ export const variant: {
 			const schemas: ObjectSchema[] = [];
 
 			for (let idx = 0, len = members.length; idx < len; idx++) {
-				const member = members[idx]!;
+				const raw = members[idx]!;
+				const member = raw.type === 'record' ? raw.object : raw;
 				const shape = member.shape;
 
 				let t = shape.$type as MaybeOptional<LiteralSchema<syntax.Nsid>> | undefined;

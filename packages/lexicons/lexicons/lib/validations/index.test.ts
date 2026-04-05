@@ -681,6 +681,75 @@ describe(`complex types`, () => {
 			expect(v.is(schema, { $type: 'adultContent', enabled: 123 })).toBe(false);
 		}
 	});
+
+	it(`validates variant type with record members`, () => {
+		const recordSchema = v.record(
+			v.tidString(),
+			v.object({
+				$type: v.literal('com.example.post'),
+				text: v.string(),
+				createdAt: v.datetimeString(),
+			}),
+		);
+
+		const objectSchema = v.object({
+			$type: v.literal('com.example.like'),
+			subject: v.string(),
+		});
+
+		{
+			const schema = v.variant([recordSchema, objectSchema], false);
+
+			expect(
+				v.is(schema, { $type: 'com.example.post', text: 'hello', createdAt: new Date().toISOString() }),
+			).toBe(true);
+			expect(
+				v.is(schema, { $type: 'com.example.like', subject: 'at://did:plc:1234/com.example.post/1' }),
+			).toBe(true);
+
+			expect(v.is(schema, { $type: 'unknown', hello: 'world' })).toBe(true);
+
+			expect(v.is(schema, 123)).toBe(false);
+			expect(v.is(schema, {})).toBe(false);
+			expect(v.is(schema, { $type: 'com.example.post', text: 123 })).toBe(false);
+		}
+
+		{
+			const schema = v.variant([recordSchema, objectSchema], true);
+
+			expect(
+				v.is(schema, { $type: 'com.example.post', text: 'hello', createdAt: new Date().toISOString() }),
+			).toBe(true);
+			expect(
+				v.is(schema, { $type: 'com.example.like', subject: 'at://did:plc:1234/com.example.post/1' }),
+			).toBe(true);
+
+			expect(v.is(schema, { $type: 'unknown', hello: 'world' })).toBe(false);
+
+			expect(v.is(schema, { $type: 'com.example.post', text: 123 })).toBe(false);
+		}
+	});
+
+	it(`validates record referenced directly in an object`, () => {
+		const recordSchema = v.record(
+			v.tidString(),
+			v.object({
+				$type: v.literal('com.example.post'),
+				text: v.string(),
+			}),
+		);
+
+		const schema = v.object({
+			$type: v.optional(v.literal('com.example.wrapper')),
+			post: recordSchema,
+		});
+
+		expect(v.is(schema, { post: { $type: 'com.example.post', text: 'hello' } })).toBe(true);
+		expect(v.is(schema, { post: { $type: 'com.example.post', text: 123 } })).toBe(false);
+		expect(v.is(schema, { post: { text: 'hello' } })).toBe(false);
+		expect(v.is(schema, { post: 'not an object' })).toBe(false);
+		expect(v.is(schema, {})).toBe(false);
+	});
 });
 
 describe(`constraints`, () => {
