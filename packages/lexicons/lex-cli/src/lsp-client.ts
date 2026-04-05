@@ -148,9 +148,10 @@ export const createLspClient = async (command: string, root: string): Promise<Ls
 	};
 
 	// incremental message parser
-	let buffer = Buffer.alloc(0);
-	let contentLength = -1;
 	const HEADER_SEPARATOR = Buffer.from('\r\n\r\n');
+
+	let buffer: Buffer = Buffer.alloc(0);
+	let contentLength = -1;
 
 	const processBuffer = (): void => {
 		while (true) {
@@ -160,23 +161,23 @@ export const createLspClient = async (command: string, root: string): Promise<Ls
 					break;
 				}
 
-				const header = buffer.subarray(0, separatorIndex).toString();
+				const header = buffer.toString('utf8', 0, separatorIndex);
 				const match = header.match(/Content-Length:\s*(\d+)/i);
 
+				buffer = buffer.subarray(separatorIndex + 4);
+
 				if (!match) {
-					buffer = buffer.subarray(separatorIndex + 4);
 					continue;
 				}
 
 				contentLength = parseInt(match[1], 10);
-				buffer = buffer.subarray(separatorIndex + 4);
 			}
 
 			if (buffer.length < contentLength) {
 				break;
 			}
 
-			const body = buffer.subarray(0, contentLength).toString();
+			const body = buffer.toString('utf8', 0, contentLength);
 			buffer = buffer.subarray(contentLength);
 			contentLength = -1;
 
@@ -204,7 +205,7 @@ export const createLspClient = async (command: string, root: string): Promise<Ls
 	};
 
 	child.stdout.on('data', (chunk: Buffer) => {
-		buffer = Buffer.concat([buffer, chunk]);
+		buffer = buffer.length > 0 ? Buffer.concat([buffer, chunk]) : chunk;
 		processBuffer();
 	});
 
