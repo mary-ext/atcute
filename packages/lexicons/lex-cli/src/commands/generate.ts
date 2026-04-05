@@ -150,25 +150,30 @@ export const runGenerate = async (args: GenerateCommand): Promise<void> => {
 
 	const outdir = path.join(config.root, config.outdir);
 	const formatter = await createFormatter(config.formatter, config.root);
-	const pending: Promise<void>[] = [];
 
-	for (const file of generateLexiconApi({
-		documents: documents,
-		mappings: allMappings,
-		modules: {
-			importSuffix: config.modules?.importSuffix ?? '.js',
-		},
-	})) {
-		const filename = path.join(outdir, file.filename);
+	try {
+		const pending: Promise<void>[] = [];
 
-		pending.push(
-			(async () => {
-				const formatted = await formatter.format(file.code, filename);
-				await fs.mkdir(path.dirname(filename), { recursive: true });
-				await fs.writeFile(filename, formatted);
-			})(),
-		);
+		for (const file of generateLexiconApi({
+			documents: documents,
+			mappings: allMappings,
+			modules: {
+				importSuffix: config.modules?.importSuffix ?? '.js',
+			},
+		})) {
+			const filename = path.join(outdir, file.filename);
+
+			pending.push(
+				(async () => {
+					const formatted = await formatter.format(file.code, filename);
+					await fs.mkdir(path.dirname(filename), { recursive: true });
+					await fs.writeFile(filename, formatted);
+				})(),
+			);
+		}
+
+		await Promise.all(pending);
+	} finally {
+		await formatter.dispose();
 	}
-
-	await Promise.all(pending);
 };

@@ -73,6 +73,10 @@ const formatterConfigSchema = v.union(
 			.assert((value) => Number.isInteger(value) && value > 0, `must be a positive integer`)
 			.optional(() => 1),
 	}),
+	v.object({
+		type: v.literal('lsp'),
+		command: v.string().assert((value) => value.length > 0, `must not be empty`),
+	}),
 );
 
 export type GitSourceConfig = v.Infer<typeof gitSourceConfigSchema>;

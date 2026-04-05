@@ -187,40 +187,44 @@ export const runPull = async (args: PullCommand): Promise<void> => {
 	const outdir = path.resolve(config.root, pullConfig.outdir);
 	const formatter = await createFormatter(config.formatter, config.root);
 
-	const seen = new Map<string, SourceLocation>();
-	const collected: PulledLexicon[] = [];
-	const sourceRevisions: SourceRevision[] = [];
+	try {
+		const seen = new Map<string, SourceLocation>();
+		const collected: PulledLexicon[] = [];
+		const sourceRevisions: SourceRevision[] = [];
 
-	for (const source of pullConfig.sources) {
-		const result = await pullSource(source);
+		for (const source of pullConfig.sources) {
+			const result = await pullSource(source);
 
-		sourceRevisions.push({ source, rev: result.rev });
+			sourceRevisions.push({ source, rev: result.rev });
 
-		for (const [nsid, entry] of result.pulled) {
-			const existing = seen.get(nsid);
+			for (const [nsid, entry] of result.pulled) {
+				const existing = seen.get(nsid);
 
-			if (existing) {
-				console.error(pc.bold(pc.red(`duplicate lexicon "${nsid}"`)));
-				console.error(`- found ${entry.location.relativePath} from ${entry.location.sourceDescription}`);
-				console.error(`  at ${entry.location.absolutePath}`);
-				console.error(`- already found ${existing.relativePath} from ${existing.sourceDescription}`);
-				console.error(`  at ${existing.absolutePath}`);
-				process.exit(1);
+				if (existing) {
+					console.error(pc.bold(pc.red(`duplicate lexicon "${nsid}"`)));
+					console.error(`- found ${entry.location.relativePath} from ${entry.location.sourceDescription}`);
+					console.error(`  at ${entry.location.absolutePath}`);
+					console.error(`- already found ${existing.relativePath} from ${existing.sourceDescription}`);
+					console.error(`  at ${existing.absolutePath}`);
+					process.exit(1);
+				}
+
+				seen.set(nsid, entry.location);
+				collected.push(entry);
 			}
-
-			seen.set(nsid, entry.location);
-			collected.push(entry);
 		}
+
+		if (pullConfig.clean) {
+			await fs.rm(outdir, { recursive: true, force: true });
+		}
+
+		await fs.mkdir(outdir, { recursive: true });
+
+		await Promise.all([
+			...collected.map((entry) => writeLexicon(outdir, entry.nsid, entry.doc, formatter)),
+			writeSourceReadme(outdir, sourceRevisions, formatter),
+		]);
+	} finally {
+		await formatter.dispose();
 	}
-
-	if (pullConfig.clean) {
-		await fs.rm(outdir, { recursive: true, force: true });
-	}
-
-	await fs.mkdir(outdir, { recursive: true });
-
-	await Promise.all([
-		...collected.map((entry) => writeLexicon(outdir, entry.nsid, entry.doc, formatter)),
-		writeSourceReadme(outdir, sourceRevisions, formatter),
-	]);
 };

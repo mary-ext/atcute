@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 
 import type { FormatterConfig } from './config.ts';
+import { createLspClient } from './lsp-client.ts';
 
 /** formats source code */
 export interface Formatter {
@@ -11,6 +12,8 @@ export interface Formatter {
 	 * @returns formatted code
 	 */
 	format(code: string, filepath: string): Promise<string>;
+	/** releases any resources held by the formatter */
+	dispose(): Promise<void>;
 }
 
 const inferPrettierParser = (filepath: string): string => {
@@ -82,6 +85,7 @@ export const createFormatter = async (config: FormatterConfig, root: string): Pr
 				async format(code, filepath) {
 					return prettier.format(code, { ...prettierConfig, parser: inferPrettierParser(filepath) });
 				},
+				async dispose() {},
 			};
 		}
 		case 'command': {
@@ -127,6 +131,25 @@ export const createFormatter = async (config: FormatterConfig, root: string): Pr
 					} finally {
 						lock.release();
 					}
+				},
+				async dispose() {},
+			};
+		}
+		case 'lsp': {
+			const client = await createLspClient(config.command, root);
+			const semaphore = new Semaphore(1);
+
+			return {
+				async format(code, filepath) {
+					const lock = await semaphore.acquire();
+					try {
+						return await client.formatDocument(code, filepath);
+					} finally {
+						lock.release();
+					}
+				},
+				async dispose() {
+					await client.dispose();
 				},
 			};
 		}

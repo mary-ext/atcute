@@ -73,23 +73,27 @@ export const runExport = async (args: ExportCommand): Promise<void> => {
 	const outdir = path.resolve(config.root, exportConfig.outdir);
 	const formatter = await createFormatter(config.formatter, config.root);
 
-	// load lexicons from files
-	const loaded = await loadLexicons(files, config.root);
+	try {
+		// load lexicons from files
+		const loaded = await loadLexicons(files, config.root);
 
-	if (loaded.length === 0) {
-		console.warn(pc.yellow(`warning: no lexicons found to export`));
-		return;
+		if (loaded.length === 0) {
+			console.warn(pc.yellow(`warning: no lexicons found to export`));
+			return;
+		}
+
+		// clean output directory if requested
+		if (exportConfig.clean) {
+			await fs.rm(outdir, { recursive: true, force: true });
+		}
+
+		await fs.mkdir(outdir, { recursive: true });
+
+		// write each lexicon as JSON
+		await Promise.all(loaded.map(({ nsid, doc }) => writeLexicon(outdir, nsid, doc, formatter)));
+
+		console.log(pc.green(`exported ${loaded.length} lexicon(s) to ${outdir}`));
+	} finally {
+		await formatter.dispose();
 	}
-
-	// clean output directory if requested
-	if (exportConfig.clean) {
-		await fs.rm(outdir, { recursive: true, force: true });
-	}
-
-	await fs.mkdir(outdir, { recursive: true });
-
-	// write each lexicon as JSON
-	await Promise.all(loaded.map(({ nsid, doc }) => writeLexicon(outdir, nsid, doc, formatter)));
-
-	console.log(pc.green(`exported ${loaded.length} lexicon(s) to ${outdir}`));
 };

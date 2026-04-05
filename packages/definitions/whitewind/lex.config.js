@@ -4,7 +4,7 @@ export default defineLexiconConfig({
 	files: ['lexicons/com/whtwnd/**/*.json'],
 	outdir: 'lib/lexicons/',
 	modules: { importSuffix: '.ts' },
-	formatter: { type: 'command', command: 'oxfmt --stdin-filepath={filepath}' },
+	formatter: { type: 'lsp', command: 'oxfmt --lsp' },
 
 	pull: {
 		outdir: 'lexicons/',

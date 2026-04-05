@@ -4,7 +4,7 @@ export default defineLexiconConfig({
 	files: ['lexicons/**/*.json'],
 	outdir: 'lib/lexicons/',
 	modules: { importSuffix: '.ts' },
-	formatter: { type: 'command', command: 'oxfmt --stdin-filepath={filepath}' },
+	formatter: { type: 'lsp', command: 'oxfmt --lsp' },
 	imports: ['@atcute/atproto', '@atcute/bluesky'],
 
 	pull: {
