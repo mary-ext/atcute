@@ -1,5 +1,15 @@
 # @atcute/lex-cli
 
+## 2.6.1
+
+### Patch Changes
+
+- 0463405: set default external concurrency to 1
+- 9197920: add lsp formatter support
+- d75f712: do not run prettier concurrently
+- Updated dependencies [2022754]
+  - @atcute/lexicons@1.2.10
+
 ## 2.6.0
 
 ### Minor Changes

@@ -1,5 +1,15 @@
 # @atcute/frontpage
 
+## 2.0.1
+
+### Patch Changes
+
+- 82761df: pull latest Frontpage lexicons
+- Updated dependencies [4b99ff8]
+- Updated dependencies [2022754]
+  - @atcute/atproto@3.1.11
+  - @atcute/lexicons@1.2.10
+
 ## 2.0.0
 
 ### Major Changes

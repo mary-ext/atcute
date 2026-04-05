@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 1.2.10
+
+### Patch Changes
+
+- 2022754: allow referencing records inside objects
+
 ## 1.2.9
 
 ### Patch Changes

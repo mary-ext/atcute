@@ -1,5 +1,13 @@
 # @atcute/atproto
 
+## 3.1.11
+
+### Patch Changes
+
+- 4b99ff8: pull latest atproto lexicons
+- Updated dependencies [2022754]
+  - @atcute/lexicons@1.2.10
+
 ## 3.1.10
 
 ### Patch Changes
