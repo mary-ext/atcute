@@ -1046,6 +1046,9 @@ export const refineLexiconDoc = (spec: t.LexiconDoc, deep: boolean = false): Ref
 	for (const prop in defs) {
 		const def = defs[prop];
 
+		// valid def ID characters are not specified; the reference SDK does not validate them.
+		// see: https://github.com/bluesky-social/atproto/issues/3588
+		// see: https://github.com/bluesky-social/atproto-website/issues/458
 		if (!KEY_RE.test(prop)) {
 			issues.push({
 				message: `invalid definition id`,
