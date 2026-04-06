@@ -112,6 +112,9 @@ export const createLspClient = async (command: string, root: string): Promise<Ls
 	// are handled by the close/error handlers below
 	child.stdin.on('error', () => {});
 
+	// drain stderr so a chatty server doesn't block on a full pipe buffer
+	child.stderr.resume();
+
 	// #region JSON-RPC framing
 
 	const pending = new Map<number, PromiseWithResolvers<unknown>>();
