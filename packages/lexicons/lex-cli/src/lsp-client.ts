@@ -191,7 +191,6 @@ export const createLspClient = async (command: string, root: string): Promise<Ls
 				continue;
 			}
 
-			// dispatch responses to pending requests, ignore everything else
 			if (message.id != null) {
 				const entry = pending.get(message.id);
 				if (entry) {
@@ -202,6 +201,9 @@ export const createLspClient = async (command: string, root: string): Promise<Ls
 					} else {
 						entry.resolve(message.result);
 					}
+				} else if (message.method != null) {
+					// server-initiated request — reply with MethodNotFound so it doesn't hang
+					sendMessage({ jsonrpc: '2.0', id: message.id, error: { code: -32601, message: `method not found` } });
 				}
 			}
 		}
