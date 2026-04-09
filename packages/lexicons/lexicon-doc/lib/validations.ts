@@ -373,6 +373,32 @@ const buildLexCidLink = (ctx: BuildContext, _path: LexPath, spec: t.LexCidLink):
 	return cell;
 };
 
+const simplifyAccept = (accept: string[] | undefined): string[] | undefined => {
+	if (accept === undefined || accept.length === 0 || accept.includes('*/*')) {
+		return undefined;
+	}
+
+	const wildcards = new Set<string>();
+	for (const mime of accept) {
+		if (mime.endsWith('/*')) {
+			wildcards.add(mime.slice(0, mime.indexOf('/')));
+		}
+	}
+
+	if (wildcards.size === 0) {
+		return accept;
+	}
+
+	const simplified = accept.filter((mime) => {
+		if (mime.endsWith('/*')) {
+			return true;
+		}
+		return !wildcards.has(mime.slice(0, mime.indexOf('/')));
+	});
+
+	return simplified.length > 0 ? simplified : undefined;
+};
+
 const buildLexBlob = (ctx: BuildContext, path: LexPath, spec: t.LexBlob): Cell<v.BaseSchema> => {
 	let cell = ctx.cache.get(spec);
 	if (cell != undefined) {
@@ -381,14 +407,15 @@ const buildLexBlob = (ctx: BuildContext, path: LexPath, spec: t.LexBlob): Cell<v
 
 	assertRefine(path, refineLexBlob(spec));
 
-	const { accept, maxSize } = spec;
+	const accept = simplifyAccept(spec.accept);
+	const { maxSize } = spec;
 	const constraints: v.BaseConstraint<any>[] = [];
 
 	if (maxSize !== undefined) {
 		constraints.push(v.blobSize(maxSize));
 	}
 
-	if (accept !== undefined && accept.length > 0 && !accept.includes('*/*')) {
+	if (accept !== undefined) {
 		constraints.push(v.blobAccept(accept));
 	}
 
