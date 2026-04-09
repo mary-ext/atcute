@@ -203,7 +203,11 @@ export const createLspClient = async (command: string, root: string): Promise<Ls
 					}
 				} else if (message.method != null) {
 					// server-initiated request — reply with MethodNotFound so it doesn't hang
-					sendMessage({ jsonrpc: '2.0', id: message.id, error: { code: -32601, message: `method not found` } });
+					sendMessage({
+						jsonrpc: '2.0',
+						id: message.id,
+						error: { code: -32601, message: `method not found` },
+					});
 				}
 			}
 		}
