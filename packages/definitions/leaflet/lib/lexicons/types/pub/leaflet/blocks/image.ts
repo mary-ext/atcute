@@ -16,6 +16,10 @@ const _mainSchema = /*#__PURE__*/ v.object({
 		return aspectRatioSchema;
 	},
 	/**
+	 * Whether the image should extend to the full width of the container, ignoring padding.
+	 */
+	fullBleed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
 	 * @accept image/*
 	 * @maxSize 1000000
 	 */
