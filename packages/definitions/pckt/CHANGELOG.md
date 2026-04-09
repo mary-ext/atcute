@@ -1,5 +1,13 @@
 # @atcute/pckt
 
+## 0.1.8
+
+### Patch Changes
+
+- 43b2d76: regenerate with blob constraints
+- Updated dependencies [94065a1]
+  - @atcute/lexicons@1.3.0
+
 ## 0.1.7
 
 ### Patch Changes

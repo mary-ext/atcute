@@ -1,5 +1,14 @@
 # @atcute/leaflet
 
+## 1.0.23
+
+### Patch Changes
+
+- 202d384: pull latest Leaflet lexicons
+- 43b2d76: regenerate with blob constraints
+- Updated dependencies [94065a1]
+  - @atcute/lexicons@1.3.0
+
 ## 1.0.22
 
 ### Patch Changes

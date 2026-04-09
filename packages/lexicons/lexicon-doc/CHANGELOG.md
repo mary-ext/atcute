@@ -1,5 +1,17 @@
 # @atcute/lexicon-doc
 
+## 2.2.0
+
+### Minor Changes
+
+- b36d1a8: support strict blob validation in RecordValidator
+
+### Patch Changes
+
+- a737a3a: simplify blob accept constraints by removing specific types covered by wildcards
+- Updated dependencies [94065a1]
+  - @atcute/lexicons@1.3.0
+
 ## 2.1.2
 
 ### Patch Changes

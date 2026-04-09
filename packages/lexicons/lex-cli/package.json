@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/lex-cli",
-	"version": "2.6.1",
+	"version": "2.7.0",
 	"description": "cli tool to generate type definitions for atcute",
 	"license": "0BSD",
 	"repository": {

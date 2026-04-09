@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 1.3.0
+
+### Minor Changes
+
+- 94065a1: add strict blob validation (blobSize, blobAccept constraints) and collectBlobs utility
+
 ## 1.2.10
 
 ### Patch Changes

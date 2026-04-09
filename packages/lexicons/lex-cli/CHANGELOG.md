@@ -1,5 +1,20 @@
 # @atcute/lex-cli
 
+## 2.7.0
+
+### Minor Changes
+
+- 22b5181: emit blob size and accept constraints in codegen
+
+### Patch Changes
+
+- f6cf57b: simplify blob accept constraints by removing specific types covered by wildcards
+- Updated dependencies [a737a3a]
+- Updated dependencies [b36d1a8]
+- Updated dependencies [94065a1]
+  - @atcute/lexicon-doc@2.2.0
+  - @atcute/lexicons@1.3.0
+
 ## 2.6.1
 
 ### Patch Changes
