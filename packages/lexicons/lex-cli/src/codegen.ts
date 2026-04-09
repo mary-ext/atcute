@@ -890,7 +890,23 @@ const generateType = (
 
 		// LexBlob
 		case 'blob': {
-			return `${PURE} v.blob()`;
+			let pipe: string[] = [];
+
+			if (spec.maxSize !== undefined) {
+				pipe.push(`${PURE} v.blobSize(${lit(spec.maxSize)})`);
+			}
+
+			if (spec.accept !== undefined && spec.accept.length > 0 && !spec.accept.includes('*/*')) {
+				pipe.push(`${PURE} v.blobAccept(${lit(spec.accept)})`);
+			}
+
+			let call = `${PURE} v.blob()`;
+
+			if (pipe.length !== 0) {
+				call = `${PURE} v.constrain(${call}, [ ${pipe.join(', ')} ])`;
+			}
+
+			return call;
 		}
 
 		// LexIpldType
