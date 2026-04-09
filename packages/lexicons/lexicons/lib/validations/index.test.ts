@@ -270,6 +270,89 @@ it(`validates blob type`, () => {
 	}
 });
 
+describe('strict blob validation', () => {
+	const modernBlob = {
+		$type: 'blob',
+		ref: { $link: 'bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a' },
+		mimeType: 'image/png',
+		size: 1024,
+	};
+
+	const legacyBlob = {
+		cid: 'bafkreidjmlrsggn2shrihfyp4iwlmxdp4dso7iqbkhfrpq6ahm22obop34',
+		mimeType: 'image/jpeg',
+	};
+
+	it('rejects legacy blobs in strict mode', () => {
+		const schema = v.blob();
+
+		expect(v.is(schema, legacyBlob)).toBe(true);
+		expect(v.is(schema, legacyBlob, { strict: true })).toBe(false);
+		expect(v.is(schema, modernBlob, { strict: true })).toBe(true);
+	});
+
+	it('validates blobSize constraint in strict mode', () => {
+		const schema = v.constrain(v.blob(), [v.blobSize(2048)]);
+
+		expect(v.is(schema, modernBlob)).toBe(true);
+		expect(v.is(schema, modernBlob, { strict: true })).toBe(true);
+		expect(v.is(schema, { ...modernBlob, size: 4096 }, { strict: true })).toBe(false);
+
+		// without strict, size constraint is not enforced
+		expect(v.is(schema, { ...modernBlob, size: 4096 })).toBe(true);
+	});
+
+	it('reports blobSize issue with details', () => {
+		const schema = v.constrain(v.blob(), [v.blobSize(512)]);
+
+		const result = v.safeParse(schema, modernBlob, { strict: true });
+		assert(!result.ok, 'expected validation issue');
+		expect(result.issues).toEqual([{ code: 'invalid_blob_size', maxSize: 512, path: [] }]);
+	});
+
+	it('validates blobAccept constraint in strict mode', () => {
+		const schema = v.constrain(v.blob(), [v.blobAccept(['image/png', 'image/jpeg'])]);
+
+		expect(v.is(schema, modernBlob, { strict: true })).toBe(true);
+		expect(v.is(schema, { ...modernBlob, mimeType: 'video/mp4' }, { strict: true })).toBe(false);
+
+		// without strict, accept constraint is not enforced
+		expect(v.is(schema, { ...modernBlob, mimeType: 'video/mp4' })).toBe(true);
+	});
+
+	it('supports wildcard MIME type patterns', () => {
+		const schema = v.constrain(v.blob(), [v.blobAccept(['image/*'])]);
+
+		expect(v.is(schema, { ...modernBlob, mimeType: 'image/png' }, { strict: true })).toBe(true);
+		expect(v.is(schema, { ...modernBlob, mimeType: 'image/jpeg' }, { strict: true })).toBe(true);
+		expect(v.is(schema, { ...modernBlob, mimeType: 'video/mp4' }, { strict: true })).toBe(false);
+	});
+
+	it('handles case-insensitive MIME type matching', () => {
+		const schema = v.constrain(v.blob(), [v.blobAccept(['image/PNG'])]);
+
+		expect(v.is(schema, { ...modernBlob, mimeType: 'image/png' }, { strict: true })).toBe(true);
+		expect(v.is(schema, { ...modernBlob, mimeType: 'image/PNG' }, { strict: true })).toBe(true);
+	});
+
+	it('reports blobAccept issue with details', () => {
+		const accept = ['image/png', 'image/jpeg'];
+		const schema = v.constrain(v.blob(), [v.blobAccept(accept)]);
+
+		const result = v.safeParse(schema, { ...modernBlob, mimeType: 'video/mp4' }, { strict: true });
+		assert(!result.ok, 'expected validation issue');
+		expect(result.issues).toEqual([{ code: 'invalid_blob_mime_type', accept, path: [] }]);
+	});
+
+	it('combines blobSize and blobAccept constraints', () => {
+		const schema = v.constrain(v.blob(), [v.blobSize(2048), v.blobAccept(['image/*'])]);
+
+		expect(v.is(schema, modernBlob, { strict: true })).toBe(true);
+		expect(v.is(schema, { ...modernBlob, size: 4096 }, { strict: true })).toBe(false);
+		expect(v.is(schema, { ...modernBlob, mimeType: 'video/mp4' }, { strict: true })).toBe(false);
+	});
+});
+
 describe(`IPLD types`, () => {
 	it(`validates bytes type`, () => {
 		const schema = v.bytes();

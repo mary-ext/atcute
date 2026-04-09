@@ -68,6 +68,8 @@ export type IssueLeaf = { ok: false; msg: IssueFormatter } & (
 	| { code: 'invalid_string_length'; minLength: number; maxLength: number }
 	| { code: 'invalid_array_length'; minLength: number; maxLength: number }
 	| { code: 'invalid_bytes_size'; minSize: number; maxSize: number }
+	| { code: 'invalid_blob_size'; maxSize: number }
+	| { code: 'invalid_blob_mime_type'; accept: readonly string[] }
 );
 
 export type IssueTree =
@@ -85,7 +87,9 @@ export type Issue =
 	| { code: 'invalid_string_graphemes'; path: Key[]; minGraphemes: number; maxGraphemes: number }
 	| { code: 'invalid_string_length'; path: Key[]; minLength: number; maxLength: number }
 	| { code: 'invalid_array_length'; path: Key[]; minLength: number; maxLength: number }
-	| { code: 'invalid_bytes_size'; path: Key[]; minSize: number; maxSize: number };
+	| { code: 'invalid_bytes_size'; path: Key[]; minSize: number; maxSize: number }
+	| { code: 'invalid_blob_size'; path: Key[]; maxSize: number }
+	| { code: 'invalid_blob_mime_type'; path: Key[]; accept: readonly string[] };
 
 // #__NO_SIDE_EFFECTS__
 const joinIssues = (left: IssueTree | undefined, right: IssueTree): IssueTree => {
@@ -127,6 +131,8 @@ type kType = typeof kType;
 export const FLAG_EMPTY = 0;
 // Don't continue validation if an error is encountered
 export const FLAG_ABORT_EARLY = 1 << 0;
+// Enable strict blob validation (size, MIME type constraints, reject legacy blobs)
+export const FLAG_STRICT = 1 << 1;
 
 type MatcherResult = undefined | Ok<unknown> | IssueTree;
 type Matcher = (input: unknown, flags: number) => MatcherResult;
@@ -313,12 +319,22 @@ class ErrImpl implements Err {
 	}
 }
 
+export interface ValidationOptions {
+	/** enable strict blob validation (size, MIME type constraints, reject legacy blobs) */
+	strict?: boolean;
+}
+
 // #__NO_SIDE_EFFECTS__
 export const is = <const TSchema extends BaseSchema>(
 	schema: TSchema,
 	input: unknown,
+	options?: ValidationOptions,
 ): input is InferInput<TSchema> => {
-	const r = schema['~run'](input, FLAG_ABORT_EARLY);
+	let flags = FLAG_ABORT_EARLY;
+	if (options?.strict) {
+		flags |= FLAG_STRICT;
+	}
+	const r = schema['~run'](input, flags);
 	return r === undefined || r.ok;
 };
 
@@ -326,8 +342,13 @@ export const is = <const TSchema extends BaseSchema>(
 export const safeParse = <const TSchema extends BaseSchema>(
 	schema: TSchema,
 	input: unknown,
+	options?: ValidationOptions,
 ): ValidationResult<InferOutput<TSchema>> => {
-	const r = schema['~run'](input, FLAG_EMPTY);
+	let flags = FLAG_EMPTY;
+	if (options?.strict) {
+		flags |= FLAG_STRICT;
+	}
+	const r = schema['~run'](input, flags);
 
 	if (r === undefined) {
 		return ok(input as InferOutput<TSchema>);
@@ -343,8 +364,13 @@ export const safeParse = <const TSchema extends BaseSchema>(
 export const parse = <const TSchema extends BaseSchema>(
 	schema: TSchema,
 	input: unknown,
+	options?: ValidationOptions,
 ): InferOutput<TSchema> => {
-	const r = schema['~run'](input, FLAG_EMPTY);
+	let flags = FLAG_EMPTY;
+	if (options?.strict) {
+		flags |= FLAG_STRICT;
+	}
+	const r = schema['~run'](input, flags);
 
 	if (r === undefined) {
 		return input as InferOutput<TSchema>;
@@ -886,7 +912,7 @@ const ISSUE_EXPECTED_BLOB: IssueLeaf = {
 const BLOB_SCHEMA: BlobSchema = {
 	kind: 'schema',
 	type: 'blob',
-	'~run'(input, _flags) {
+	'~run'(input, flags) {
 		if (typeof input !== 'object' || input === null) {
 			return ISSUE_EXPECTED_BLOB;
 		}
@@ -895,7 +921,7 @@ const BLOB_SCHEMA: BlobSchema = {
 			return undefined;
 		}
 
-		if (interfaces.isLegacyBlob(input)) {
+		if (!(flags & FLAG_STRICT) && interfaces.isLegacyBlob(input)) {
 			const blob: interfaces.Blob = {
 				$type: 'blob',
 				mimeType: input.mimeType,
@@ -917,6 +943,94 @@ const BLOB_SCHEMA: BlobSchema = {
 export const blob = (): BlobSchema => {
 	return BLOB_SCHEMA;
 };
+
+// #region Blob constraints
+
+export interface BlobSizeConstraint<
+	TMaxSize extends number = number,
+> extends BaseConstraint<interfaces.Blob> {
+	readonly type: 'blob_size';
+	readonly maxSize: TMaxSize;
+}
+
+// #__NO_SIDE_EFFECTS__
+export const blobSize = <const TMaxSize extends number>(maxSize: TMaxSize): BlobSizeConstraint<TMaxSize> => {
+	const issue: IssueLeaf = {
+		ok: false,
+		code: 'invalid_blob_size',
+		maxSize: maxSize,
+		msg() {
+			return `blob size must not exceed ${maxSize} bytes`;
+		},
+	};
+
+	return {
+		kind: 'constraint',
+		type: 'blob_size',
+		maxSize: maxSize,
+		'~run'(input, flags) {
+			if (!(flags & FLAG_STRICT)) {
+				return undefined;
+			}
+			if ((input as interfaces.Blob).size > maxSize) {
+				return issue;
+			}
+			return undefined;
+		},
+	};
+};
+
+export interface BlobAcceptConstraint extends BaseConstraint<interfaces.Blob> {
+	readonly type: 'blob_accept';
+	readonly accept: readonly string[];
+}
+
+// #__NO_SIDE_EFFECTS__
+export const blobAccept = (accept: readonly string[]): BlobAcceptConstraint => {
+	const normalized = accept.map((p) => p.toLowerCase());
+
+	const issue: IssueLeaf = {
+		ok: false,
+		code: 'invalid_blob_mime_type',
+		accept: accept,
+		msg() {
+			return `blob MIME type must match: ${accept.join(', ')}`;
+		},
+	};
+
+	return {
+		kind: 'constraint',
+		type: 'blob_accept',
+		accept: accept,
+		'~run'(input, flags) {
+			if (!(flags & FLAG_STRICT)) {
+				return undefined;
+			}
+			const mimeType = (input as interfaces.Blob).mimeType.toLowerCase();
+
+			for (let idx = 0, len = normalized.length; idx < len; idx++) {
+				const pattern = normalized[idx];
+
+				if (pattern === '*/*') {
+					return undefined;
+				}
+				if (pattern.endsWith('/*')) {
+					if (mimeType.startsWith(pattern.slice(0, -1))) {
+						return undefined;
+					}
+				} else {
+					if (mimeType === pattern) {
+						return undefined;
+					}
+				}
+			}
+
+			return issue;
+		},
+	};
+};
+
+// #endregion
 
 // #region IPLD bytes schema
 

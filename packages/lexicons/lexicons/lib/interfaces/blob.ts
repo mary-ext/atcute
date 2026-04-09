@@ -45,3 +45,81 @@ export const isLegacyBlob = (input: unknown): input is LegacyBlob => {
 		Object.keys(v).length === 2
 	);
 };
+
+/**
+ * extracted blob reference from a record
+ */
+export interface BlobRef {
+	/** CID string */
+	cid: string;
+	mimeType: string;
+	/** self-reported size. -1 for legacy blobs */
+	size: number;
+}
+
+export interface CollectBlobsOptions {
+	/** include legacy blob references in results (default: false) */
+	allowLegacy?: boolean;
+}
+
+/**
+ * extracts all blob references from a record object, including in undeclared
+ * properties. by default only finds modern blobs; set `allowLegacy` to also
+ * include legacy blob formats.
+ * @param record record object to walk
+ * @param options collection options
+ * @returns array of blob references found
+ */
+export const collectBlobs = (record: unknown, options?: CollectBlobsOptions): BlobRef[] => {
+	const allowLegacy = options?.allowLegacy === true;
+	const blobs: BlobRef[] = [];
+	const stack: unknown[] = [record];
+	const visited = new Set<object>();
+
+	while (stack.length > 0) {
+		const value = stack.pop();
+
+		if (typeof value !== 'object' || value === null) {
+			continue;
+		}
+		if (visited.has(value)) {
+			continue;
+		}
+		visited.add(value);
+
+		if (Array.isArray(value)) {
+			for (let i = value.length - 1; i >= 0; i--) {
+				stack.push(value[i]);
+			}
+			continue;
+		}
+
+		if (isBlob(value)) {
+			blobs.push({
+				cid: value.ref.$link,
+				mimeType: value.mimeType,
+				size: value.size,
+			});
+			continue;
+		}
+
+		if (allowLegacy && isLegacyBlob(value)) {
+			blobs.push({
+				cid: value.cid,
+				mimeType: value.mimeType,
+				size: -1,
+			});
+			continue;
+		}
+
+		const keys = Object.keys(value);
+		for (let i = keys.length - 1; i >= 0; i--) {
+			const v = (value as Record<string, unknown>)[keys[i]];
+			if (v != null) {
+				stack.push(v);
+			}
+		}
+	}
+
+	return blobs;
+};
