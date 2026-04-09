@@ -59,6 +59,32 @@ const resolveExternalImport = (nsid: string, mappings: ImportMapping[]): ImportM
 
 const PURE = `/*#__PURE__*/`;
 
+const simplifyAccept = (accept: string[] | undefined): string[] | undefined => {
+	if (accept === undefined || accept.length === 0 || accept.includes('*/*')) {
+		return undefined;
+	}
+
+	const wildcards = new Set<string>();
+	for (const mime of accept) {
+		if (mime.endsWith('/*')) {
+			wildcards.add(mime.slice(0, mime.indexOf('/')));
+		}
+	}
+
+	if (wildcards.size === 0) {
+		return accept;
+	}
+
+	const simplified = accept.filter((mime) => {
+		if (mime.endsWith('/*')) {
+			return true;
+		}
+		return !wildcards.has(mime.slice(0, mime.indexOf('/')));
+	});
+
+	return simplified.length > 0 ? simplified : undefined;
+};
+
 export function* generateLexiconApi(opts: LexiconApiOptions): Generator<SourceFile> {
 	const importExt = opts.modules?.importSuffix;
 
@@ -658,9 +684,10 @@ const generateJsdocField = (spec: LexUserType | LexRefVariant | LexUnknown) => {
 			break;
 		}
 		case 'blob': {
-			if (spec.accept) {
-				const accept = spec.accept.map((mime) => mime.replace(/\*\//g, '*\\/')).join(', ');
-				lines.push(`@accept ${accept}`);
+			const accept = simplifyAccept(spec.accept);
+			if (accept) {
+				const formatted = accept.map((mime) => mime.replace(/\*\//g, '*\\/')).join(', ');
+				lines.push(`@accept ${formatted}`);
 			}
 			if (spec.maxSize !== undefined) {
 				lines.push(`@maxSize ${spec.maxSize}`);
@@ -896,8 +923,9 @@ const generateType = (
 				pipe.push(`${PURE} v.blobSize(${lit(spec.maxSize)})`);
 			}
 
-			if (spec.accept !== undefined && spec.accept.length > 0 && !spec.accept.includes('*/*')) {
-				pipe.push(`${PURE} v.blobAccept(${lit(spec.accept)})`);
+			const accept = simplifyAccept(spec.accept);
+			if (accept !== undefined) {
+				pipe.push(`${PURE} v.blobAccept(${lit(accept)})`);
 			}
 
 			let call = `${PURE} v.blob()`;
