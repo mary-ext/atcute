@@ -8,7 +8,12 @@ const _externalSchema = /*#__PURE__*/ v.object({
 	 * @accept image/*
 	 * @maxSize 1000000
 	 */
-	thumb: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+	thumb: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+			/*#__PURE__*/ v.blobSize(1000000),
+			/*#__PURE__*/ v.blobAccept(['image/*']),
+		]),
+	),
 	title: /*#__PURE__*/ v.string(),
 	uri: /*#__PURE__*/ v.genericUriString(),
 });

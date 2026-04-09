@@ -11,7 +11,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 * @accept *\/*
 		 * @maxSize 52428800
 		 */
-		artifact: /*#__PURE__*/ v.blob(),
+		artifact: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [/*#__PURE__*/ v.blobSize(52428800)]),
 		/**
 		 * time of creation of this artifact
 		 */

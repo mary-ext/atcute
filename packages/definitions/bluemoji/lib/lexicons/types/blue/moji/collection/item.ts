@@ -3,7 +3,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-const _blob_v0Schema = /*#__PURE__*/ v.blob();
+const _blob_v0Schema = /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [/*#__PURE__*/ v.blobSize(262144)]);
 const _bytes_v0Schema = /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.bytes(), [
 	/*#__PURE__*/ v.bytesSize(0, 65536),
 ]);
@@ -22,7 +22,12 @@ const _formats_v0Schema = /*#__PURE__*/ v.object({
 	 * @accept image/*, application/lottie+zip
 	 * @maxSize 1000000
 	 */
-	original: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+	original: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+			/*#__PURE__*/ v.blobSize(1000000),
+			/*#__PURE__*/ v.blobAccept(['image/*', 'application/lottie+zip']),
+		]),
+	),
 	get png_128() {
 		return /*#__PURE__*/ v.optional(blob_v0Schema);
 	},

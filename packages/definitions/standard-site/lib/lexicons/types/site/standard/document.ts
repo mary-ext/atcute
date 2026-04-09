@@ -24,7 +24,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 * @accept image/*
 		 * @maxSize 1000000
 		 */
-		coverImage: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		coverImage: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+				/*#__PURE__*/ v.blobSize(1000000),
+				/*#__PURE__*/ v.blobAccept(['image/*']),
+			]),
+		),
 		/**
 		 * A brief description or excerpt from the document.
 		 * @maxLength 30000

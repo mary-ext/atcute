@@ -18,7 +18,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 * patch content
 		 * @accept text/x-patch
 		 */
-		patchBlob: /*#__PURE__*/ v.blob(),
+		patchBlob: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+			/*#__PURE__*/ v.blobAccept(['text/x-patch']),
+		]),
 		references: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString())),
 		get source() {
 			return /*#__PURE__*/ v.optional(sourceSchema);

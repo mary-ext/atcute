@@ -42,7 +42,12 @@ const _imageAttrsSchema = /*#__PURE__*/ v.object({
 	 * @accept image/*
 	 * @maxSize 10000000
 	 */
-	blob: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+	blob: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+			/*#__PURE__*/ v.blobSize(10000000),
+			/*#__PURE__*/ v.blobAccept(['image/*']),
+		]),
+	),
 	/**
 	 * Image source URL or blob reference (blob:CID format for AT Protocol blobs)
 	 * @maxLength 2000

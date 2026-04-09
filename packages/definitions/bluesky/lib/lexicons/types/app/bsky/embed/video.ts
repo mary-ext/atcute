@@ -9,7 +9,10 @@ const _captionSchema = /*#__PURE__*/ v.object({
 	 * @accept text/vtt
 	 * @maxSize 20000
 	 */
-	file: /*#__PURE__*/ v.blob(),
+	file: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+		/*#__PURE__*/ v.blobSize(20000),
+		/*#__PURE__*/ v.blobAccept(['text/vtt']),
+	]),
 	lang: /*#__PURE__*/ v.languageCodeString(),
 });
 const _mainSchema = /*#__PURE__*/ v.object({
@@ -45,7 +48,10 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	 * @accept video/mp4
 	 * @maxSize 100000000
 	 */
-	video: /*#__PURE__*/ v.blob(),
+	video: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+		/*#__PURE__*/ v.blobSize(100000000),
+		/*#__PURE__*/ v.blobAccept(['video/mp4']),
+	]),
 });
 const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.video#view')),

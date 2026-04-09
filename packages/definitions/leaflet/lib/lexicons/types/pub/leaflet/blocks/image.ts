@@ -23,7 +23,10 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	 * @accept image/*
 	 * @maxSize 1000000
 	 */
-	image: /*#__PURE__*/ v.blob(),
+	image: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+		/*#__PURE__*/ v.blobSize(1000000),
+		/*#__PURE__*/ v.blobAccept(['image/*']),
+	]),
 });
 
 type aspectRatio$schematype = typeof _aspectRatioSchema;

@@ -15,7 +15,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 * @accept image/png, image/jpeg
 		 * @maxSize 1000000
 		 */
-		avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
+		avatar: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+				/*#__PURE__*/ v.blobSize(1000000),
+				/*#__PURE__*/ v.blobAccept(['image/png', 'image/jpeg']),
+			]),
+		),
 		/**
 		 * Client-declared timestamp when this generator was created.
 		 */
