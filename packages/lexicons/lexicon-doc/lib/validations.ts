@@ -50,16 +50,16 @@ export class RecordValidator {
 		this.#validator = validator;
 	}
 
-	is(input: RecordValidatorInput): boolean {
-		return v.is(this.#validator, input);
+	is(input: RecordValidatorInput, options?: v.ValidationOptions): boolean {
+		return v.is(this.#validator, input, options);
 	}
 
-	try(input: RecordValidatorInput): v.ValidationResult<RecordValidatorInput> {
-		return v.safeParse(this.#validator, input);
+	try(input: RecordValidatorInput, options?: v.ValidationOptions): v.ValidationResult<RecordValidatorInput> {
+		return v.safeParse(this.#validator, input, options);
 	}
 
-	parse(input: RecordValidatorInput): RecordValidatorInput {
-		return v.parse(this.#validator, input);
+	parse(input: RecordValidatorInput, options?: v.ValidationOptions): RecordValidatorInput {
+		return v.parse(this.#validator, input, options);
 	}
 }
 
@@ -381,7 +381,22 @@ const buildLexBlob = (ctx: BuildContext, path: LexPath, spec: t.LexBlob): Cell<v
 
 	assertRefine(path, refineLexBlob(spec));
 
+	const { accept, maxSize } = spec;
+	const constraints: v.BaseConstraint<any>[] = [];
+
+	if (maxSize !== undefined) {
+		constraints.push(v.blobSize(maxSize));
+	}
+
+	if (accept !== undefined && accept.length > 0 && !accept.includes('*/*')) {
+		constraints.push(v.blobAccept(accept));
+	}
+
 	let schema: v.BaseSchema = v.blob();
+
+	if (constraints.length > 0) {
+		schema = v.constrain(schema, constraints as any);
+	}
 
 	cell = eager(schema);
 	ctx.cache.set(spec, cell);

@@ -545,4 +545,119 @@ describe('RecordValidator', () => {
 			expect(result).toBe(false);
 		});
 	});
+
+	describe('strict mode', () => {
+		test('validates blob size in strict mode', () => {
+			const validator = new RecordValidator(docs, 'com.example.profile');
+
+			const input = {
+				key: 'self',
+				object: {
+					$type: 'com.example.profile',
+					displayName: 'alice',
+					avatar: {
+						$type: 'blob',
+						ref: { $link: 'bafyreihvzsz6wxhv5idsmsjfbx5jdmfrqx3h4oqw2vvxpwzcdpavqzkp4m' },
+						mimeType: 'image/png',
+						size: 50000,
+					},
+				},
+			};
+
+			// passes without strict (constraints are inert)
+			expect(validator.is(input)).toBe(true);
+
+			// passes with strict (50000 < 1000000 maxSize)
+			expect(validator.is(input, { strict: true })).toBe(true);
+		});
+
+		test('rejects blob exceeding maxSize in strict mode', () => {
+			const validator = new RecordValidator(docs, 'com.example.profile');
+
+			const input = {
+				key: 'self',
+				object: {
+					$type: 'com.example.profile',
+					avatar: {
+						$type: 'blob',
+						ref: { $link: 'bafyreihvzsz6wxhv5idsmsjfbx5jdmfrqx3h4oqw2vvxpwzcdpavqzkp4m' },
+						mimeType: 'image/png',
+						size: 2000000,
+					},
+				},
+			};
+
+			// passes without strict
+			expect(validator.is(input)).toBe(true);
+
+			// fails with strict (2000000 > 1000000 maxSize)
+			expect(validator.is(input, { strict: true })).toBe(false);
+		});
+
+		test('rejects blob with wrong MIME type in strict mode', () => {
+			const validator = new RecordValidator(docs, 'com.example.profile');
+
+			const input = {
+				key: 'self',
+				object: {
+					$type: 'com.example.profile',
+					avatar: {
+						$type: 'blob',
+						ref: { $link: 'bafyreihvzsz6wxhv5idsmsjfbx5jdmfrqx3h4oqw2vvxpwzcdpavqzkp4m' },
+						mimeType: 'video/mp4',
+						size: 50000,
+					},
+				},
+			};
+
+			// passes without strict
+			expect(validator.is(input)).toBe(true);
+
+			// fails with strict (video/mp4 doesn't match image/*)
+			expect(validator.is(input, { strict: true })).toBe(false);
+		});
+
+		test('rejects legacy blobs in strict mode', () => {
+			const validator = new RecordValidator(docs, 'com.example.profile');
+
+			const input = {
+				key: 'self',
+				object: {
+					$type: 'com.example.profile',
+					avatar: {
+						cid: 'bafkreidjmlrsggn2shrihfyp4iwlmxdp4dso7iqbkhfrpq6ahm22obop34',
+						mimeType: 'image/jpeg',
+					},
+				},
+			};
+
+			// passes without strict (legacy blobs are transformed)
+			expect(validator.is(input)).toBe(true);
+
+			// fails with strict (legacy blobs rejected)
+			expect(validator.is(input, { strict: true })).toBe(false);
+		});
+
+		test('try() reports strict validation issues', () => {
+			const validator = new RecordValidator(docs, 'com.example.profile');
+
+			const result = validator.try(
+				{
+					key: 'self',
+					object: {
+						$type: 'com.example.profile',
+						avatar: {
+							$type: 'blob',
+							ref: { $link: 'bafyreihvzsz6wxhv5idsmsjfbx5jdmfrqx3h4oqw2vvxpwzcdpavqzkp4m' },
+							mimeType: 'image/png',
+							size: 2000000,
+						},
+					},
+				},
+				{ strict: true },
+			);
+
+			expect(result.ok).toBe(false);
+		});
+	});
 });
