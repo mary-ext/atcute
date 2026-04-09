@@ -506,6 +506,9 @@ const _statusViewSchema = /*#__PURE__*/ v.object({
 	 * True if the user's go-live access has been disabled by a moderator, false otherwise.
 	 */
 	isDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	get labels() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
+	},
 	record: /*#__PURE__*/ v.unknown(),
 	/**
 	 * The status for the account.

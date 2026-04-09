@@ -13,8 +13,9 @@ const _imageSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
 	/**
+	 * The raw image file. May be up to 2 MB, formerly limited to 1 MB.
 	 * @accept image/*
-	 * @maxSize 1000000
+	 * @maxSize 2000000
 	 */
 	image: /*#__PURE__*/ v.blob(),
 });

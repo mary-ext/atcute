@@ -57,7 +57,7 @@ export const graphStarterpack = {
 export const embedImages = {
 	images: { maxItems: 4 },
 	image: {
-		image: { maxSize: 1_000_000 },
+		image: { maxSize: 2_000_000 },
 	},
 } as const;
 
