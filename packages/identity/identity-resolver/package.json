@@ -37,8 +37,8 @@
 	},
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
-		"@vitest/coverage-v8": "^4.1.2",
-		"vitest": "^4.1.2"
+		"@vitest/coverage-v8": "^4.1.4",
+		"vitest": "^4.1.4"
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^1.0.0"

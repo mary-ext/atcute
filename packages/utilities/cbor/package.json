@@ -46,9 +46,9 @@
 	},
 	"devDependencies": {
 		"@ipld/dag-cbor": "^9.2.6",
-		"@types/node": "^25.5.2",
-		"@vitest/coverage-v8": "^4.1.2",
+		"@types/node": "^25.6.0",
+		"@vitest/coverage-v8": "^4.1.4",
 		"cbor-x": "^1.6.4",
-		"vitest": "^4.1.2"
+		"vitest": "^4.1.4"
 	}
 }

@@ -45,14 +45,14 @@
 	"dependencies": {
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"@noble/secp256k1": "^3.0.0"
+		"@noble/secp256k1": "^3.1.0"
 	},
 	"devDependencies": {
 		"@noble/curves": "^2.0.1",
-		"@types/node": "^25.5.2",
-		"@vitest/browser-playwright": "^4.1.2",
-		"@vitest/coverage-v8": "^4.1.2",
+		"@types/node": "^25.6.0",
+		"@vitest/browser-playwright": "^4.1.4",
+		"@vitest/coverage-v8": "^4.1.4",
 		"playwright": "^1.59.1",
-		"vitest": "^4.1.2"
+		"vitest": "^4.1.4"
 	}
 }

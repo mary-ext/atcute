@@ -34,7 +34,7 @@
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/internal-dev-env": "workspace:^",
-		"@vitest/coverage-v8": "^4.1.2",
-		"vitest": "^4.1.2"
+		"@vitest/coverage-v8": "^4.1.4",
+		"vitest": "^4.1.4"
 	}
 }

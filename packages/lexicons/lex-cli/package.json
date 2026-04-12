@@ -38,11 +38,11 @@
 		"@optique/core": "^0.10.7",
 		"@optique/run": "^0.10.7",
 		"picocolors": "^1.1.1",
-		"prettier": "^3.8.1"
+		"prettier": "^3.8.2"
 	},
 	"devDependencies": {
 		"@atcute/uint8array": "workspace:^",
-		"@types/node": "^25.5.2",
+		"@types/node": "^25.6.0",
 		"tschema": "^3.2.0"
 	}
 }
