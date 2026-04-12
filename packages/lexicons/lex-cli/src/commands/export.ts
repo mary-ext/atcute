@@ -68,8 +68,13 @@ export const runExport = async (args: ExportCommand): Promise<void> => {
 	const config = await loadConfig(args.config);
 	const exportConfig = ensureExportConfig(config);
 
-	// use export.files if specified, otherwise fall back to root files config
-	const files = exportConfig.files ?? config.files;
+	// use export.files if specified, otherwise fall back to generate.files
+	const files = exportConfig.files ?? config.generate?.files;
+	if (!files || files.length === 0) {
+		console.error(pc.bold(pc.red(`export.files or generate.files must be specified`)));
+		process.exit(1);
+	}
+
 	const outdir = path.resolve(config.root, exportConfig.outdir);
 	const formatter = await createFormatter(config.formatter, config.root);
 

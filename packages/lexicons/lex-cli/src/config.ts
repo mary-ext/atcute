@@ -79,20 +79,6 @@ const formatterConfigSchema = v.union(
 	}),
 );
 
-const generateConfigSchema = v.object({
-	clean: v.boolean().optional(),
-});
-
-export type GitSourceConfig = v.Infer<typeof gitSourceConfigSchema>;
-export type AtprotoNsidsSourceConfig = v.Infer<typeof atprotoNsidsSourceConfigSchema>;
-export type AtprotoAuthoritySourceConfig = v.Infer<typeof atprotoAuthoritySourceConfigSchema>;
-export type AtprotoSourceConfig = v.Infer<typeof atprotoSourceConfigSchema>;
-export type SourceConfig = v.Infer<typeof sourceConfigSchema>;
-export type PullConfig = v.Infer<typeof pullConfigSchema>;
-export type ExportConfig = v.Infer<typeof exportConfigSchema>;
-export type FormatterConfig = v.Infer<typeof formatterConfigSchema>;
-export type GenerateConfig = v.Infer<typeof generateConfigSchema>;
-
 const isValidLexiconPattern = (pattern: string): boolean => {
 	if (pattern.endsWith('.*')) {
 		return isNsid(`${pattern.slice(0, -2)}.x`);
@@ -132,22 +118,57 @@ const importMappingSchema: v.Type<ImportMapping> = v.object({
 	imports: mappingImports,
 });
 
-export const lexiconConfigSchema = v.object({
-	outdir: v.string().assert((value) => value.length > 0, `must not be empty`),
+const modulesConfigSchema = v
+	.object({
+		importSuffix: v
+			.string()
+			.assert((value) => value.length > 0, `must not be empty`)
+			.optional(),
+	})
+	.partial();
+
+const generateConfigSchema = v.object({
+	outdir: v
+		.string()
+		.assert((value) => value.length > 0, `must not be empty`)
+		.optional(),
 	files: v
 		.array(v.string().assert((value) => value.length > 0, `must not be empty`))
-		.assert((value) => value.length > 0, `must include at least one glob pattern`),
+		.assert((value) => value.length > 0, `must include at least one glob pattern`)
+		.optional(),
 	imports: v.array(v.string().assert((value) => value.length > 0, `must not be empty`)).optional(),
 	mappings: v.array(importMappingSchema).optional(),
-	modules: v
-		.object({
-			importSuffix: v
-				.string()
-				.assert((value) => value.length > 0, `must not be empty`)
-				.optional(),
-		})
-		.partial()
+	modules: modulesConfigSchema.optional(),
+	clean: v.boolean().optional(),
+});
+
+export type GitSourceConfig = v.Infer<typeof gitSourceConfigSchema>;
+export type AtprotoNsidsSourceConfig = v.Infer<typeof atprotoNsidsSourceConfigSchema>;
+export type AtprotoAuthoritySourceConfig = v.Infer<typeof atprotoAuthoritySourceConfigSchema>;
+export type AtprotoSourceConfig = v.Infer<typeof atprotoSourceConfigSchema>;
+export type SourceConfig = v.Infer<typeof sourceConfigSchema>;
+export type PullConfig = v.Infer<typeof pullConfigSchema>;
+export type ExportConfig = v.Infer<typeof exportConfigSchema>;
+export type FormatterConfig = v.Infer<typeof formatterConfigSchema>;
+export type GenerateConfig = v.Infer<typeof generateConfigSchema>;
+
+export const lexiconConfigSchema = v.object({
+	/** @deprecated moved to `generate.outdir` */
+	outdir: v
+		.string()
+		.assert((value) => value.length > 0, `must not be empty`)
 		.optional(),
+	/** @deprecated moved to `generate.files` */
+	files: v
+		.array(v.string().assert((value) => value.length > 0, `must not be empty`))
+		.assert((value) => value.length > 0, `must include at least one glob pattern`)
+		.optional(),
+	/** @deprecated moved to `generate.imports` */
+	imports: v.array(v.string().assert((value) => value.length > 0, `must not be empty`)).optional(),
+	/** @deprecated moved to `generate.mappings` */
+	mappings: v.array(importMappingSchema).optional(),
+	/** @deprecated moved to `generate.modules` */
+	modules: modulesConfigSchema.optional(),
 	formatter: formatterConfigSchema.optional((): FormatterConfig => ({ type: 'prettier' })),
 	generate: generateConfigSchema.optional(),
 	pull: pullConfigSchema.optional(),
@@ -156,9 +177,12 @@ export const lexiconConfigSchema = v.object({
 
 export type LexiconConfig = v.Infer<typeof lexiconConfigSchema>;
 
-export interface NormalizedConfig extends LexiconConfig {
+export type NormalizedConfig = Omit<
+	LexiconConfig,
+	'outdir' | 'files' | 'imports' | 'mappings' | 'modules'
+> & {
 	root: string;
-}
+};
 
 export const loadConfig = async (configPath?: string): Promise<NormalizedConfig> => {
 	let configFilename: string | undefined;
@@ -213,5 +237,29 @@ export const loadConfig = async (configPath?: string): Promise<NormalizedConfig>
 		process.exit(1);
 	}
 
-	return { ...configResult.value, root: configDirname };
+	const { outdir, files, imports, mappings, modules, generate, ...rest } = configResult.value;
+
+	// back-compat: top-level generate options were moved into `generate.*`. merge the legacy
+	// top-level values into `generate`, with nested `generate.*` winning on conflicts. the result
+	// is only present if at least one generate-related option was provided anywhere.
+	const hasLegacyTopLevel =
+		outdir !== undefined ||
+		files !== undefined ||
+		imports !== undefined ||
+		mappings !== undefined ||
+		modules !== undefined;
+
+	let normalizedGenerate: GenerateConfig | undefined;
+	if (generate || hasLegacyTopLevel) {
+		normalizedGenerate = {
+			outdir: generate?.outdir ?? outdir,
+			files: generate?.files ?? files,
+			imports: generate?.imports ?? imports,
+			mappings: generate?.mappings ?? mappings,
+			modules: generate?.modules ?? modules,
+			clean: generate?.clean,
+		};
+	}
+
+	return { ...rest, generate: normalizedGenerate, root: configDirname };
 };

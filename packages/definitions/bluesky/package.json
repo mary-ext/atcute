@@ -33,7 +33,7 @@
 		"pull": "lex-cli pull",
 		"test": "vitest",
 		"generate": "pnpm run generate:lexicons; pnpm run generate:limits",
-		"generate:lexicons": "rm -r lib/lexicons/; lex-cli generate",
+		"generate:lexicons": "lex-cli generate",
 		"generate:limits": "node scripts/generate-limits.js",
 		"prepublish": "rm -r dist; pnpm run build"
 	},

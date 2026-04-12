@@ -145,8 +145,27 @@ export const generateCommandSchema = command(
 
 export type GenerateCommand = InferValue<typeof generateCommandSchema>;
 
-const ensureGenerateConfig = (config: NormalizedConfig): GenerateConfig => {
-	return config.generate ?? {};
+type ResolvedGenerateConfig = GenerateConfig & { outdir: string; files: string[] };
+
+const ensureGenerateConfig = (config: NormalizedConfig): ResolvedGenerateConfig => {
+	const generate = config.generate;
+	if (!generate) {
+		console.error(pc.bold(pc.red(`generate configuration missing`)));
+		process.exit(1);
+	}
+
+	const { outdir, files } = generate;
+	if (!outdir) {
+		console.error(pc.bold(pc.red(`generate.outdir is required`)));
+		process.exit(1);
+	}
+
+	if (!files || files.length === 0) {
+		console.error(pc.bold(pc.red(`generate.files is required`)));
+		process.exit(1);
+	}
+
+	return { ...generate, outdir, files };
 };
 
 /**
@@ -158,14 +177,16 @@ export const runGenerate = async (args: GenerateCommand): Promise<void> => {
 	const generateConfig = ensureGenerateConfig(config);
 
 	// resolve imports to mappings
-	const importMappings = config.imports ? await resolveImportsToMappings(config.imports, config.root) : [];
-	const allMappings = [...importMappings, ...(config.mappings ?? [])];
+	const importMappings = generateConfig.imports
+		? await resolveImportsToMappings(generateConfig.imports, config.root)
+		: [];
+	const allMappings = [...importMappings, ...(generateConfig.mappings ?? [])];
 
 	// load lexicons from files
-	const loaded = await loadLexicons(config.files, config.root);
+	const loaded = await loadLexicons(generateConfig.files, config.root);
 	const documents = loaded.map((l) => l.doc);
 
-	const outdir = path.join(config.root, config.outdir);
+	const outdir = path.join(config.root, generateConfig.outdir);
 	const formatter = await createFormatter(config.formatter, config.root);
 
 	if (generateConfig.clean) {
@@ -179,7 +200,7 @@ export const runGenerate = async (args: GenerateCommand): Promise<void> => {
 			documents: documents,
 			mappings: allMappings,
 			modules: {
-				importSuffix: config.modules?.importSuffix ?? '.js',
+				importSuffix: generateConfig.modules?.importSuffix ?? '.js',
 			},
 		})) {
 			const filename = path.join(outdir, file.filename);
