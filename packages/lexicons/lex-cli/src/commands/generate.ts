@@ -1,4 +1,5 @@
 import * as fs from 'node:fs/promises';
+import * as module from 'node:module';
 import * as path from 'node:path';
 
 import { merge, object } from '@optique/core/constructs';
@@ -22,40 +23,51 @@ const resolveImportsToMappings = async (
 	configDirname: string,
 ): Promise<ImportMapping[]> => {
 	const mappings: ImportMapping[] = [];
+	const require = module.createRequire(path.join(configDirname, '__lex_cli__.js'));
 
 	for (const packageName of imports) {
-		// walk up from config directory to find package in node_modules
 		let packageJson: unknown;
-		let currentDir = configDirname;
-		let found = false;
 
-		while (currentDir !== path.dirname(currentDir)) {
-			const candidatePath = path.join(currentDir, 'node_modules', packageName, 'package.json');
-			try {
-				const content = await fs.readFile(candidatePath, 'utf8');
-				packageJson = JSON.parse(content);
-				found = true;
-				break;
-			} catch (err: any) {
-				// only continue to parent if file not found
-				if (err.code !== 'ENOENT') {
-					console.error(pc.bold(pc.red(`failed to read package.json for "${packageName}":`)));
-					console.error(err);
-					process.exit(1);
+		try {
+			const entryPath = require.resolve(packageName);
+
+			let currentDir = path.dirname(entryPath);
+			while (true) {
+				const candidatePath = path.join(currentDir, 'package.json');
+				try {
+					const content = await fs.readFile(candidatePath, 'utf8');
+					packageJson = JSON.parse(content);
+					break;
+				} catch (err: any) {
+					if (err.code !== 'ENOENT') {
+						console.error(pc.bold(pc.red(`failed to read package.json for "${packageName}":`)));
+						console.error(err);
+						process.exit(1);
+					}
 				}
 
-				// not found, try parent directory
-				currentDir = path.dirname(currentDir);
-			}
-		}
+				if (currentDir === configDirname) {
+					break;
+				}
 
-		if (!found) {
+				const parentDir = path.dirname(currentDir);
+				if (parentDir === currentDir) {
+					break;
+				}
+
+				currentDir = parentDir;
+			}
+		} catch (err) {
 			console.error(pc.bold(pc.red(`failed to resolve package "${packageName}"`)));
-			console.error(`Could not find package in node_modules starting from ${configDirname}`);
+			console.error(err);
 			process.exit(1);
 		}
 
-		// validate package.json
+		if (!packageJson) {
+			console.error(pc.bold(pc.red(`failed to locate package.json for "${packageName}"`)));
+			process.exit(1);
+		}
+
 		const result = packageJsonSchema.try(packageJson, { mode: 'passthrough' });
 		if (!result.ok) {
 			console.error(pc.bold(pc.red(`invalid atcute:lexicons in "${packageName}":`)));
