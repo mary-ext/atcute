@@ -8,7 +8,6 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.artifact'),
 		/**
 		 * the artifact
-		 * @accept *\/*
 		 * @maxSize 52428800
 		 */
 		artifact: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [/*#__PURE__*/ v.blobSize(52428800)]),
