@@ -4,6 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 const _atMentionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#atMention')),
 	atURI: /*#__PURE__*/ v.genericUriString(),
+	href: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 });
 const _boldSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#bold')),

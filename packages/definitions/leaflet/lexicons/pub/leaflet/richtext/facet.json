@@ -76,6 +76,10 @@
 				"atURI": {
 					"type": "string",
 					"format": "uri"
+				},
+				"href": {
+					"type": "string",
+					"format": "uri"
 				}
 			}
 		},
