@@ -5,6 +5,7 @@ export default defineLexiconConfig({
 	outdir: 'lib/lexicons/',
 	modules: { importSuffix: '.ts' },
 	formatter: { type: 'lsp', command: 'oxfmt --lsp' },
+	generate: { clean: true },
 	export: {
 		outdir: 'lexicons/',
 		clean: true,

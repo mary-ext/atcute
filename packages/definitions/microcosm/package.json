@@ -24,7 +24,7 @@
 	},
 	"scripts": {
 		"build": "tsgo -b",
-		"generate": "rm -r ./lib/lexicons/; lex-cli generate",
+		"generate": "lex-cli generate",
 		"export": "lex-cli export",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

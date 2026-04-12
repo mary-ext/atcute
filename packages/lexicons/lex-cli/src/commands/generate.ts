@@ -9,7 +9,7 @@ import { command, constant } from '@optique/core/primitives';
 import pc from 'picocolors';
 
 import { generateLexiconApi, type ImportMapping } from '../codegen.ts';
-import { loadConfig } from '../config.ts';
+import { loadConfig, type GenerateConfig, type NormalizedConfig } from '../config.ts';
 import { createFormatter } from '../formatter.ts';
 import { loadLexicons } from '../lexicon-loader.ts';
 import { packageJsonSchema } from '../lexicon-metadata.ts';
@@ -145,12 +145,17 @@ export const generateCommandSchema = command(
 
 export type GenerateCommand = InferValue<typeof generateCommandSchema>;
 
+const ensureGenerateConfig = (config: NormalizedConfig): GenerateConfig => {
+	return config.generate ?? {};
+};
+
 /**
  * runs the generate command to create type definitions from lexicon documents
  * @param args parsed command arguments
  */
 export const runGenerate = async (args: GenerateCommand): Promise<void> => {
 	const config = await loadConfig(args.config);
+	const generateConfig = ensureGenerateConfig(config);
 
 	// resolve imports to mappings
 	const importMappings = config.imports ? await resolveImportsToMappings(config.imports, config.root) : [];
@@ -162,6 +167,10 @@ export const runGenerate = async (args: GenerateCommand): Promise<void> => {
 
 	const outdir = path.join(config.root, config.outdir);
 	const formatter = await createFormatter(config.formatter, config.root);
+
+	if (generateConfig.clean) {
+		await fs.rm(outdir, { recursive: true, force: true });
+	}
 
 	try {
 		const pending: Promise<void>[] = [];

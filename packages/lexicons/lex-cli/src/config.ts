@@ -79,6 +79,10 @@ const formatterConfigSchema = v.union(
 	}),
 );
 
+const generateConfigSchema = v.object({
+	clean: v.boolean().optional(),
+});
+
 export type GitSourceConfig = v.Infer<typeof gitSourceConfigSchema>;
 export type AtprotoNsidsSourceConfig = v.Infer<typeof atprotoNsidsSourceConfigSchema>;
 export type AtprotoAuthoritySourceConfig = v.Infer<typeof atprotoAuthoritySourceConfigSchema>;
@@ -87,6 +91,7 @@ export type SourceConfig = v.Infer<typeof sourceConfigSchema>;
 export type PullConfig = v.Infer<typeof pullConfigSchema>;
 export type ExportConfig = v.Infer<typeof exportConfigSchema>;
 export type FormatterConfig = v.Infer<typeof formatterConfigSchema>;
+export type GenerateConfig = v.Infer<typeof generateConfigSchema>;
 
 const isValidLexiconPattern = (pattern: string): boolean => {
 	if (pattern.endsWith('.*')) {
@@ -144,6 +149,7 @@ export const lexiconConfigSchema = v.object({
 		.partial()
 		.optional(),
 	formatter: formatterConfigSchema.optional((): FormatterConfig => ({ type: 'prettier' })),
+	generate: generateConfigSchema.optional(),
 	pull: pullConfigSchema.optional(),
 	export: exportConfigSchema.optional(),
 });
