@@ -3,9 +3,6 @@ import * as v from '@atcute/lexicons/validations';
 
 const _blobMetadataSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.whtwnd.blog.defs#blobMetadata')),
-	/**
-	 * @accept *\/*
-	 */
 	blobref: /*#__PURE__*/ v.blob(),
 	name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
