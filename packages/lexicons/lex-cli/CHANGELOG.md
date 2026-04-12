@@ -1,5 +1,17 @@
 # @atcute/lex-cli
 
+## 2.8.0
+
+### Minor Changes
+
+- f652050: add `clean` option to generate command
+- 4e73cfd: move generate configs over to `generate` field
+
+### Patch Changes
+
+- 3ef08ad: use Node.js module resolution to resolve lexicon imports
+- d01ad16: always clean up temporary Git repository clones
+
 ## 2.7.0
 
 ### Minor Changes
