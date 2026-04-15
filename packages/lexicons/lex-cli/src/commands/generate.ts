@@ -2,18 +2,14 @@ import * as fs from 'node:fs/promises';
 import * as module from 'node:module';
 import * as path from 'node:path';
 
-import { merge, object } from '@optique/core/constructs';
-import { message } from '@optique/core/message';
-import { type InferValue } from '@optique/core/parser';
-import { command, constant } from '@optique/core/primitives';
 import pc from 'picocolors';
 
+import type { GenerateCommand } from '../cli.ts';
 import { generateLexiconApi, type ImportMapping } from '../codegen.ts';
 import { loadConfig, type GenerateConfig, type NormalizedConfig } from '../config.ts';
 import { createFormatter } from '../formatter.ts';
 import { loadLexicons } from '../lexicon-loader.ts';
 import { packageJsonSchema } from '../lexicon-metadata.ts';
-import { sharedOptions } from '../shared-options.ts';
 
 /**
  * resolves package imports to ImportMapping[]
@@ -129,22 +125,6 @@ const resolveImportsToMappings = async (
 	return mappings;
 };
 
-export const generateCommandSchema = command(
-	'generate',
-	merge(
-		object({
-			type: constant('generate'),
-		}),
-		sharedOptions,
-	),
-	{
-		brief: message`generate type definitions from lexicon documents`,
-		description: message`reads lexicon documents from the configured files and generates TypeScript type definitions and runtime validators.`,
-	},
-);
-
-export type GenerateCommand = InferValue<typeof generateCommandSchema>;
-
 type ResolvedGenerateConfig = GenerateConfig & { outdir: string; files: string[] };
 
 const ensureGenerateConfig = (config: NormalizedConfig): ResolvedGenerateConfig => {
@@ -172,7 +152,7 @@ const ensureGenerateConfig = (config: NormalizedConfig): ResolvedGenerateConfig 
  * runs the generate command to create type definitions from lexicon documents
  * @param args parsed command arguments
  */
-export const runGenerate = async (args: GenerateCommand): Promise<void> => {
+export const handler = async (args: GenerateCommand): Promise<void> => {
 	const config = await loadConfig(args.config);
 	const generateConfig = ensureGenerateConfig(config);
 

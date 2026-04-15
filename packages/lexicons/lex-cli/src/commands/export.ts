@@ -3,32 +3,12 @@ import * as path from 'node:path';
 
 import type { LexiconDoc } from '@atcute/lexicon-doc';
 
-import { merge, object } from '@optique/core/constructs';
-import { message } from '@optique/core/message';
-import { type InferValue } from '@optique/core/parser';
-import { command, constant } from '@optique/core/primitives';
 import pc from 'picocolors';
 
+import type { ExportCommand } from '../cli.ts';
 import { loadConfig, type ExportConfig, type NormalizedConfig } from '../config.ts';
 import { createFormatter, type Formatter } from '../formatter.ts';
 import { loadLexicons } from '../lexicon-loader.ts';
-import { sharedOptions } from '../shared-options.ts';
-
-export const exportCommandSchema = command(
-	'export',
-	merge(
-		object({
-			type: constant('export'),
-		}),
-		sharedOptions,
-	),
-	{
-		brief: message`export lexicon documents as JSON files`,
-		description: message`exports lexicon documents (from JSON or builder files) to JSON format for publishing or distribution.`,
-	},
-);
-
-export type ExportCommand = InferValue<typeof exportCommandSchema>;
 
 /**
  * ensures export configuration is present
@@ -64,7 +44,7 @@ const writeLexicon = async (
  * runs the export command to write lexicon documents as JSON files
  * @param args parsed command arguments
  */
-export const runExport = async (args: ExportCommand): Promise<void> => {
+export const handler = async (args: ExportCommand): Promise<void> => {
 	const config = await loadConfig(args.config);
 	const exportConfig = ensureExportConfig(config);
 

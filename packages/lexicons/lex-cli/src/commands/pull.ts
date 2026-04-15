@@ -3,34 +3,14 @@ import * as path from 'node:path';
 
 import { lexiconDoc, refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 
-import { merge, object } from '@optique/core/constructs';
-import { message } from '@optique/core/message';
-import { type InferValue } from '@optique/core/parser';
-import { command, constant } from '@optique/core/primitives';
 import pc from 'picocolors';
 
+import type { PullCommand } from '../cli.ts';
 import { loadConfig, type NormalizedConfig, type PullConfig, type SourceConfig } from '../config.ts';
 import { createFormatter, type Formatter } from '../formatter.ts';
 import { pullAtprotoSource } from '../pull-sources/atproto.ts';
 import { pullGitSource } from '../pull-sources/git.ts';
 import type { PullResult, PulledLexicon, SourceLocation } from '../pull-sources/types.ts';
-import { sharedOptions } from '../shared-options.ts';
-
-export const pullCommandSchema = command(
-	'pull',
-	merge(
-		object({
-			type: constant('pull'),
-		}),
-		sharedOptions,
-	),
-	{
-		brief: message`pull lexicon documents from configured sources`,
-		description: message`fetches lexicon documents from configured git repositories and writes them to the output directory.`,
-	},
-);
-
-export type PullCommand = InferValue<typeof pullCommandSchema>;
 
 interface SourceRevision {
 	source: SourceConfig;
@@ -180,7 +160,7 @@ const writeSourceReadme = async (
  * runs the pull command to fetch lexicon documents from configured sources
  * @param args parsed command arguments
  */
-export const runPull = async (args: PullCommand): Promise<void> => {
+export const handler = async (args: PullCommand): Promise<void> => {
 	const config = await loadConfig(args.config);
 	const pullConfig = ensurePullConfig(config);
 
