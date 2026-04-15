@@ -35,8 +35,8 @@
 		"@atcute/lexicon-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@badrap/valita": "^0.4.6",
-		"@optique/core": "^0.10.7",
-		"@optique/run": "^0.10.7",
+		"@optique/core": "^1.0.0",
+		"@optique/run": "^1.0.0",
 		"picocolors": "^1.1.1",
 		"prettier": "^3.8.3"
 	},
