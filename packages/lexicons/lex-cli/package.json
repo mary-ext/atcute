@@ -38,7 +38,7 @@
 		"@optique/core": "^0.10.7",
 		"@optique/run": "^0.10.7",
 		"picocolors": "^1.1.1",
-		"prettier": "^3.8.2"
+		"prettier": "^3.8.3"
 	},
 	"devDependencies": {
 		"@atcute/uint8array": "workspace:^",
