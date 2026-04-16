@@ -1,5 +1,11 @@
 # @atcute/lex-cli
 
+## 2.8.1
+
+### Patch Changes
+
+- e879572: lazily import comamnds
+
 ## 2.8.0
 
 ### Minor Changes

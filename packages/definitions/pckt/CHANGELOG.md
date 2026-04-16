@@ -1,5 +1,11 @@
 # @atcute/pckt
 
+## 0.1.9
+
+### Patch Changes
+
+- 6ffdbb7: pull latest pckt lexicons
+
 ## 0.1.8
 
 ### Patch Changes
