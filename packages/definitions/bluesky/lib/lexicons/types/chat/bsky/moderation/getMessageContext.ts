@@ -28,6 +28,7 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.moderation.getMessageContex
 					/*#__PURE__*/ v.variant([
 						ChatBskyConvoDefs.deletedMessageViewSchema,
 						ChatBskyConvoDefs.messageViewSchema,
+						ChatBskyConvoDefs.systemMessageViewSchema,
 					]),
 				);
 			},

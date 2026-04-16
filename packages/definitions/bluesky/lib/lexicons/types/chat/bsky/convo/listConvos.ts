@@ -8,6 +8,10 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.listConvos', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * Filter by conversation kind.
+		 */
+		kind: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'direct' | 'group' | (string & {})>()),
+		/**
 		 * @minimum 1
 		 * @maximum 100
 		 * @default 50
@@ -17,6 +21,9 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.listConvos', {
 			50,
 		),
 		readState: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'unread' | (string & {})>()),
+		/**
+		 * Filter convos by their status. It is discouraged to call with "request" and preferred to call chat.bsky.convo.listConvoRequests, which also includes group join requests made by the user.
+		 */
 		status: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'accepted' | 'request' | (string & {})>()),
 	}),
 	output: {

@@ -27,6 +27,7 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getMessages', {
 					/*#__PURE__*/ v.variant([
 						ChatBskyConvoDefs.deletedMessageViewSchema,
 						ChatBskyConvoDefs.messageViewSchema,
+						ChatBskyConvoDefs.systemMessageViewSchema,
 					]),
 				);
 			},

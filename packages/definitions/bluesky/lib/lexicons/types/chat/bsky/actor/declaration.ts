@@ -6,6 +6,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.literal('self'),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('chat.bsky.actor.declaration'),
+		/**
+		 * [NOTE: This is under active development and should be considered unstable while this note is here]. Declaration about group chat invitation preferences for the record owner.
+		 */
+		allowGroupInvites: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.string<'all' | 'following' | 'none' | (string & {})>(),
+		),
 		allowIncoming: /*#__PURE__*/ v.string<'all' | 'following' | 'none' | (string & {})>(),
 	}),
 );
