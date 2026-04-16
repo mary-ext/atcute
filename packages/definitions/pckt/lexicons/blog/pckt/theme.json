@@ -25,6 +25,16 @@
 					"maximum": 100,
 					"minimum": 0,
 					"description": "Content background transparency percentage (optional)"
+				},
+				"tileBackground": {
+					"type": "boolean",
+					"description": "Whether to tile the background image instead of covering (optional)"
+				},
+				"backgroundTileSize": {
+					"type": "integer",
+					"maximum": 100,
+					"minimum": 5,
+					"description": "Background tile size as a percentage when tileBackground is true (optional)"
 				}
 			},
 			"description": "Theme configuration for a blog publication"

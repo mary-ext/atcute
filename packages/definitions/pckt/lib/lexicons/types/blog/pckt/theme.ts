@@ -4,6 +4,14 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.theme')),
 	/**
+	 * Background tile size as a percentage when tileBackground is true (optional)
+	 * @minimum 5
+	 * @maximum 100
+	 */
+	backgroundTileSize: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(5, 100)]),
+	),
+	/**
 	 * Dark mode color palette
 	 */
 	get dark() {
@@ -22,6 +30,10 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	get light() {
 		return paletteSchema;
 	},
+	/**
+	 * Whether to tile the background image instead of covering (optional)
+	 */
+	tileBackground: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/**
 	 * Content background transparency percentage (optional)
 	 * @minimum 0
