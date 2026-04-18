@@ -8,11 +8,7 @@
 		"directory": "packages/misc/util-text"
 	},
 	"files": [
-		"dist/",
-		"lib/",
-		"src/",
-		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts"
+		"dist/"
 	],
 	"type": "module",
 	"sideEffects": false,
