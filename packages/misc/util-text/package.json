@@ -10,7 +10,6 @@
 	"files": [
 		"dist/",
 		"lib/",
-		"prebuilds/**/*.node",
 		"src/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
@@ -20,7 +19,6 @@
 	"exports": {
 		".": {
 			"react-native": "./dist/index.rn.js",
-			"node": "./dist/index.node.js",
 			"default": "./dist/index.js"
 		}
 	},
@@ -31,7 +29,7 @@
 		"build:native": "node build.native.js",
 		"build": "tsgo --project tsconfig.build.json",
 		"test": "vitest",
-		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
+		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
 		"unicode-segmenter": "^0.14.5"
