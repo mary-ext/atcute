@@ -1,5 +1,11 @@
 # @atcute/util-text
 
+## 1.3.0
+
+### Minor Changes
+
+- 1b72c8c: drop native binaries
+
 ## 1.2.0
 
 ### Minor Changes
