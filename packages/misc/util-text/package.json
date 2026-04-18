@@ -8,7 +8,9 @@
 		"directory": "packages/misc/util-text"
 	},
 	"files": [
-		"dist/"
+		"dist/",
+		"!dist/*.bench.*",
+		"!dist/*.node.*"
 	],
 	"type": "module",
 	"sideEffects": false,
