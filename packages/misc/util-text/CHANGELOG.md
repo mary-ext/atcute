@@ -1,5 +1,11 @@
 # @atcute/util-text
 
+## 1.3.1
+
+### Patch Changes
+
+- 8e81a91: drop C source files from published package
+
 ## 1.3.0
 
 ### Minor Changes
