@@ -9,8 +9,9 @@
 	},
 	"files": [
 		"dist/",
+		"!dist/**/*.bench.js",
+		"!dist/**/*.test.js",
 		"lib/",
-		"src/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts"
 	],
