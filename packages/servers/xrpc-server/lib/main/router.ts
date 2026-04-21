@@ -114,7 +114,7 @@ export class XRPCRouter {
 
 		if (request.method !== route.method) {
 			return Response.json(
-				{ error: 'InvalidHttpMethod', message: `invalid http method (expected ${route.method})` },
+				{ error: 'InvalidRequest', message: `invalid http method (expected ${route.method})` },
 				{ status: 405, headers: { allow: `${route.method}` } },
 			);
 		}
@@ -355,7 +355,7 @@ export class XRPCRouter {
 						ws.close(1000);
 					} catch (err) {
 						if (err instanceof XRPCSubscriptionError) {
-							const frame = encodeErrorFrame(err.error, err.description);
+							const frame = encodeErrorFrame(err.error, err.message || undefined);
 
 							try {
 								await ws.send(frame);

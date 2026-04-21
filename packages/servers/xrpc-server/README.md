@@ -135,7 +135,7 @@ router.addQuery(ComExampleGetPost, {
 
 		const post = await db.getPost(params.uri);
 		if (!post) {
-			throw new XRPCError({ status: 400, error: 'InvalidRequest', description: `post not found` });
+			throw new XRPCError({ status: 400, error: 'InvalidRequest', message: `post not found` });
 		}
 
 		return json(post);
@@ -201,7 +201,7 @@ router.addSubscription(ComExampleSubscribe, {
 		if (params.cursor && isCursorTooOld(params.cursor)) {
 			throw new XRPCSubscriptionError({
 				error: 'FutureCursor',
-				description: `cursor is too old`,
+				message: `cursor is too old`,
 			});
 		}
 

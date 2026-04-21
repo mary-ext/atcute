@@ -191,7 +191,7 @@ describe('query', () => {
 		const router = new XRPCRouter();
 		router.addQuery(queryNoParams, {
 			async handler() {
-				throw new InvalidRequestError({ description: 'something went wrong' });
+				throw new InvalidRequestError({ message: 'something went wrong' });
 			},
 		});
 

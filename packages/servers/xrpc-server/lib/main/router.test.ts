@@ -274,7 +274,7 @@ describe('XRPCRouter', () => {
 			{
 				router.addQuery(querySchema, {
 					async handler() {
-						throw new InvalidRequestError({ description: 'invalid user' });
+						throw new InvalidRequestError({ message: 'invalid user' });
 					},
 				});
 
@@ -883,7 +883,7 @@ describe('XRPCRouter', () => {
 			{
 				router.addProcedure(procedureSchema, {
 					async handler() {
-						throw new InvalidRequestError({ description: 'invalid user' });
+						throw new InvalidRequestError({ message: 'invalid user' });
 					},
 				});
 
@@ -1136,7 +1136,7 @@ describe('XRPCRouter', () => {
 
 					throw new XRPCSubscriptionError({
 						error: 'FutureCursor',
-						description: 'Cursor is in the future',
+						message: 'Cursor is in the future',
 					});
 				},
 			});
