@@ -15,11 +15,21 @@ export interface NodeWebSocket {
 	injectWebSocket(server: Server | Http2Server | Http2SecureServer, router: XRPCRouter): void;
 }
 
+export interface CreateNodeWebSocketOptions {
+	/** backpressure high water mark in bytes; defaults to 250 KB. */
+	highWaterMark?: number;
+	/** backpressure low water mark in bytes; defaults to 50 KB. */
+	lowWaterMark?: number;
+}
+
 interface WebSocketHandlerContext {
 	handler: ((ws: WebSocketConnection) => Promisable<void>) | null;
 }
 
-export const createNodeWebSocket = (): NodeWebSocket => {
+export const createNodeWebSocket = ({
+	highWaterMark = 250_000,
+	lowWaterMark = 50_000,
+}: CreateNodeWebSocketOptions = {}): NodeWebSocket => {
 	const context = new AsyncLocalStorage<WebSocketHandlerContext>();
 	const wss = new WebSocketServer({ noServer: true });
 
@@ -71,8 +81,9 @@ export const createNodeWebSocket = (): NodeWebSocket => {
 						wss.emit('connection', ws, request);
 
 						const controller = new AbortController();
+						const signal = controller.signal;
 						const connection: WebSocketConnection = {
-							signal: controller.signal,
+							signal: signal,
 							send(data) {
 								return new Promise((resolve, reject) => {
 									ws.send(data, (err) => {
@@ -83,6 +94,15 @@ export const createNodeWebSocket = (): NodeWebSocket => {
 										}
 									});
 								});
+							},
+							async drain() {
+								if (ws.bufferedAmount <= highWaterMark) {
+									return;
+								}
+
+								while (!signal.aborted && ws.readyState === 1 && ws.bufferedAmount > lowWaterMark) {
+									await sleep(10, signal);
+								}
 							},
 							close(code, reason) {
 								ws.close(code, reason);
@@ -107,4 +127,20 @@ export const createNodeWebSocket = (): NodeWebSocket => {
 			});
 		},
 	};
+};
+
+const sleep = (ms: number, signal: AbortSignal): Promise<void> => {
+	return new Promise((resolve) => {
+		const timer = setTimeout(() => {
+			signal.removeEventListener('abort', onAbort);
+			resolve();
+		}, ms);
+
+		const onAbort = () => {
+			clearTimeout(timer);
+			resolve();
+		};
+
+		signal.addEventListener('abort', onAbort, { once: true });
+	});
 };

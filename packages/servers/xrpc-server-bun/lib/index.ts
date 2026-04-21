@@ -15,7 +15,17 @@ export interface BunWebSocket {
 	};
 }
 
-export const createBunWebSocket = (): BunWebSocket => {
+export interface CreateBunWebSocketOptions {
+	/** backpressure high water mark in bytes; defaults to 250 KB. */
+	highWaterMark?: number;
+	/** backpressure low water mark in bytes; defaults to 50 KB. */
+	lowWaterMark?: number;
+}
+
+export const createBunWebSocket = ({
+	highWaterMark = 250_000,
+	lowWaterMark = 50_000,
+}: CreateBunWebSocketOptions = {}): BunWebSocket => {
 	let server: Bun.Server<WsData> | undefined;
 
 	return {
@@ -48,11 +58,21 @@ export const createBunWebSocket = (): BunWebSocket => {
 				websocket: {
 					async open(ws) {
 						const { controller, handler } = ws.data;
+						const signal = controller.signal;
 
 						const connection: WebSocketConnection = {
-							signal: controller.signal,
+							signal: signal,
 							send(data) {
 								ws.sendBinary(data);
+							},
+							async drain() {
+								if (ws.getBufferedAmount() <= highWaterMark) {
+									return;
+								}
+
+								while (!signal.aborted && ws.readyState === 1 && ws.getBufferedAmount() > lowWaterMark) {
+									await sleep(10, signal);
+								}
 							},
 							close(code, reason) {
 								ws.close(code, reason);
@@ -73,4 +93,20 @@ export const createBunWebSocket = (): BunWebSocket => {
 			};
 		},
 	};
+};
+
+const sleep = (ms: number, signal: AbortSignal): Promise<void> => {
+	return new Promise((resolve) => {
+		const timer = setTimeout(() => {
+			signal.removeEventListener('abort', onAbort);
+			resolve();
+		}, ms);
+
+		const onAbort = () => {
+			clearTimeout(timer);
+			resolve();
+		};
+
+		signal.addEventListener('abort', onAbort, { once: true });
+	});
 };

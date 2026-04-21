@@ -11,6 +11,10 @@ export const createCloudflareWebSocket = (): WebSocketAdapter => {
 				send: (data: Uint8Array) => {
 					server.send(data);
 				},
+				drain: () => {
+					// Cloudflare Workers do not surface the outgoing WebSocket buffer;
+					// there is no way to apply backpressure at this layer.
+				},
 				close: (code?: number, reason?: string) => {
 					server.close(code, reason);
 				},

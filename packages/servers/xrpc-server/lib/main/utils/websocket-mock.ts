@@ -79,6 +79,9 @@ export class MockWebSocketAdapter implements WebSocketAdapter {
 					send(data) {
 						onMessage.emit(data);
 					},
+					drain() {
+						// tests have no outgoing buffer to observe
+					},
 					close(code = 1000, reason = '') {
 						if (!signal.aborted) {
 							onClose.emit({ code, reason, wasClean: true });

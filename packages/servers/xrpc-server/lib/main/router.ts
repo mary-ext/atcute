@@ -417,6 +417,8 @@ export class XRPCRouter {
 
 							const frame = encodeMessageFrame(body, type);
 							await ws.send(frame);
+							const drained = ws.drain();
+							if (drained) await drained;
 						}
 
 						ws.close(1000);

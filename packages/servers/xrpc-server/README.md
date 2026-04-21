@@ -254,6 +254,11 @@ router.addSubscription(ComExampleSubscribe, {
 });
 ```
 
+backpressure is handled per adapter: each adapter's `create*WebSocket()` factory accepts
+`highWaterMark` / `lowWaterMark` options (default 250 KB / 50 KB) that throttle the send loop when
+the outgoing buffer grows. the Cloudflare Workers adapter does not apply backpressure — the runtime
+does not expose the outgoing WebSocket buffer.
+
 ### service authentication
 
 the `@atcute/xrpc-server/auth` subpackage provides utilities for service-to-service authentication
