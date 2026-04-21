@@ -36,6 +36,8 @@ export interface JwtPayload {
 	aud: Did | AtprotoAudience;
 	exp: number;
 	iat?: number;
+	/** not-before time; token is invalid before this unix timestamp */
+	nbf?: number;
 	lxm: Nsid;
 	jti?: string;
 }
@@ -50,6 +52,8 @@ const jwtPayload: v.Type<JwtPayload> = v
 		exp: integer,
 		/** creation time */
 		iat: integer.optional(),
+		/** not-before time */
+		nbf: integer.optional(),
 		/** xrpc operation being invoked; required per atproto service auth spec */
 		lxm: nsidString,
 		/** unique identifier */
@@ -81,7 +85,7 @@ const readJwtPortion = <T>(schema: v.Type<T>, input: string): Result<T, AuthErro
 	return {
 		ok: false,
 		error: {
-			error: `MalformedJwt`,
+			error: `BadJwt`,
 			description: `jwt is malformed`,
 		},
 	};
@@ -95,7 +99,7 @@ const readJwtSignature = (input: string): Result<Uint8Array<ArrayBuffer>, AuthEr
 	return {
 		ok: false,
 		error: {
-			error: `MalformedJwt`,
+			error: `BadJwt`,
 			description: `jwt is malformed`,
 		},
 	};
@@ -107,7 +111,7 @@ export const parseJwt = (jwtString: string): Result<ParsedJwt, AuthError> => {
 		return {
 			ok: false,
 			error: {
-				error: `MalformedJwt`,
+				error: `BadJwt`,
 				description: `jwt is malformed`,
 			},
 		};

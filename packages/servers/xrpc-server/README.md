@@ -267,8 +267,7 @@ using JWTs.
 verifying incoming JWTs:
 
 ```ts
-import { AuthRequiredError } from '@atcute/xrpc-server';
-import { ServiceJwtVerifier, type VerifiedJwt } from '@atcute/xrpc-server/auth';
+import { ServiceJwtVerifier } from '@atcute/xrpc-server/auth';
 import {
 	CompositeDidDocumentResolver,
 	PlcDidDocumentResolver,
@@ -288,24 +287,34 @@ const jwtVerifier = new ServiceJwtVerifier({
 	}),
 });
 
-const verifyServiceAuth = async (request: Request, lxm: string): Promise<VerifiedJwt> => {
-	const authHeader = request.headers.get('authorization');
-	if (!authHeader?.startsWith('Bearer ')) {
-		throw new AuthRequiredError({ description: `missing or invalid authorization header` });
-	}
-
-	const result = await jwtVerifier.verify(authHeader.slice(7), { lxm });
-	if (!result.ok) {
-		throw new AuthRequiredError({ description: result.error.description });
-	}
-
-	return result.value;
-};
-
 router.addQuery(ComExampleProtectedEndpoint, {
 	async handler({ request }) {
-		const auth = await verifyServiceAuth(request, 'com.example.protectedEndpoint');
+		const auth = await jwtVerifier.verifyRequest(request, { lxm: 'com.example.protectedEndpoint' });
 		return json({ caller: auth.issuer });
+	},
+});
+```
+
+`verifyRequest` parses the `Authorization: Bearer` header, verifies the token, and throws an
+`AuthRequiredError` with a populated `WWW-Authenticate: Bearer error="…"` challenge on every failure
+path. it forwards `request.signal` into DID resolution so aborted requests don't keep network calls
+alive.
+
+additional options tune verification:
+
+```ts
+const jwtVerifier = new ServiceJwtVerifier({
+	acceptAudiences: [...],
+	resolver: ...,
+	maxAge: 300,       // max token lifetime window in seconds (default 300)
+	clockLeeway: 5,    // leeway applied to nbf/exp comparisons (default 5)
+	replayStore: {     // optional replay protection; requires jti in tokens
+		async check({ iss, jti }, ttlSeconds) {
+			const key = `${iss}:${jti}`;
+			const isNew = await redis.setnx(key, '1');
+			if (isNew === 1) await redis.expire(key, ttlSeconds);
+			return isNew === 1;
+		},
 	},
 });
 ```
