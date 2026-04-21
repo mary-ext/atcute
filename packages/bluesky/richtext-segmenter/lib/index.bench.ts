@@ -1,4 +1,5 @@
 import type { AppBskyRichtextFacet } from '@atcute/bluesky';
+
 import { bench, run } from 'mitata';
 
 import { segmentize } from './index.ts';

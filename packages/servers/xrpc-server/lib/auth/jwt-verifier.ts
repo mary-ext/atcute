@@ -256,10 +256,7 @@ export class ServiceJwtVerifier {
 		// prevent issuers from minting very long-lived tokens: the configured max-age
 		// window bounds how far `exp` can be in the future and how far `iat` can be in
 		// the past.
-		if (
-			payload.exp - now > this.maxAge ||
-			(payload.iat !== undefined && now - payload.iat > this.maxAge)
-		) {
+		if (payload.exp - now > this.maxAge || (payload.iat !== undefined && now - payload.iat > this.maxAge)) {
 			return {
 				ok: false,
 				error: {
