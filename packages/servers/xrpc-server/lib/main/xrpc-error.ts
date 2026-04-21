@@ -1,3 +1,67 @@
+/**
+ * a single WWW-Authenticate challenge. exactly one of `params` or `token68` may
+ * be provided. a bare scheme (no params, no token) is valid and renders as just
+ * the scheme name.
+ *
+ * @see {@link https://datatracker.ietf.org/doc/html/rfc7235#section-4.1 | RFC 7235 §4.1}
+ */
+export interface WWWAuthenticateChallenge {
+	/** authentication scheme, e.g. `Bearer`, `DPoP`, `Basic`. */
+	scheme: string;
+	/** auth-param pairs. entries whose value is `undefined` are omitted. */
+	params?: Record<string, string | undefined>;
+	/**
+	 * token68 value for schemes that carry one instead of auth-params (e.g.
+	 * `Basic`). mutually exclusive with `params`.
+	 */
+	token68?: string;
+}
+
+/**
+ * formats one or more WWW-Authenticate challenges into a single header value.
+ *
+ * each challenge is emitted as `<scheme>` followed by its params or token68.
+ * multiple challenges are joined with `, `. auth-param values are quoted using
+ * `JSON.stringify` (RFC 7230 quoted-string semantics for ASCII content).
+ *
+ * @param challenges one challenge, or an ordered array of challenges
+ * @returns the formatted header value
+ *
+ * @example
+ * ```ts
+ * formatWWWAuthenticate({ scheme: 'Bearer', params: { error: 'BadJwtSignature' } })
+ * // => `Bearer error="BadJwtSignature"`
+ * ```
+ */
+export const formatWWWAuthenticate = (
+	challenges: WWWAuthenticateChallenge | WWWAuthenticateChallenge[],
+): string => {
+	const list = Array.isArray(challenges) ? challenges : [challenges];
+	return list.map(formatChallenge).join(', ');
+};
+
+const formatChallenge = (challenge: WWWAuthenticateChallenge): string => {
+	if (challenge.token68 !== undefined) {
+		return `${challenge.scheme} ${challenge.token68}`;
+	}
+
+	if (challenge.params !== undefined) {
+		const parts: string[] = [];
+		for (const name in challenge.params) {
+			const value = challenge.params[name];
+			if (value !== undefined) {
+				parts.push(`${name}=${JSON.stringify(value)}`);
+			}
+		}
+
+		if (parts.length > 0) {
+			return `${challenge.scheme} ${parts.join(', ')}`;
+		}
+	}
+
+	return challenge.scheme;
+};
+
 export interface XRPCErrorOptions {
 	status: number;
 	error: string;
@@ -37,14 +101,33 @@ export class InvalidRequestError extends XRPCError {
 	}
 }
 
+export interface AuthRequiredErrorOptions extends Partial<XRPCErrorOptions> {
+	/**
+	 * WWW-Authenticate challenge(s) to attach to the response. the formatted
+	 * header is set on `headers` automatically, and `access-control-expose-headers`
+	 * is appended so browsers can read it from CORS responses.
+	 */
+	wwwAuthenticate?: WWWAuthenticateChallenge | WWWAuthenticateChallenge[];
+}
+
 export class AuthRequiredError extends XRPCError {
 	constructor({
 		status = 401,
 		error = 'AuthenticationRequired',
 		message,
 		headers,
-	}: Partial<XRPCErrorOptions> = {}) {
-		super({ status, error, message, headers });
+		wwwAuthenticate,
+	}: AuthRequiredErrorOptions = {}) {
+		let mergedHeaders = headers;
+
+		if (wwwAuthenticate !== undefined) {
+			const target = new Headers(headers);
+			target.set('www-authenticate', formatWWWAuthenticate(wwwAuthenticate));
+			target.append('access-control-expose-headers', 'www-authenticate');
+			mergedHeaders = target;
+		}
+
+		super({ status, error, message, headers: mergedHeaders });
 	}
 }
 

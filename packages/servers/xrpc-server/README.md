@@ -147,6 +147,19 @@ convenience subclasses are also available: `InvalidRequestError`, `AuthRequiredE
 `ForbiddenError`, `RateLimitExceededError`, `InternalServerError`, `UpstreamFailureError`,
 `NotEnoughResourcesError`, `UpstreamTimeoutError`.
 
+`AuthRequiredError` accepts a `wwwAuthenticate` option that auto-formats an RFC 7235
+`WWW-Authenticate` header on the response (and appends `access-control-expose-headers` so browsers
+can read it from CORS responses):
+
+```ts
+import { AuthRequiredError } from '@atcute/xrpc-server';
+
+throw new AuthRequiredError({
+	message: 'invalid token',
+	wwwAuthenticate: { scheme: 'Bearer', params: { error: 'BadJwtSignature' } },
+});
+```
+
 ### observing errors
 
 for logs or metrics, use the `onError` / `onSocketError` router options. these are fire-and-forget
