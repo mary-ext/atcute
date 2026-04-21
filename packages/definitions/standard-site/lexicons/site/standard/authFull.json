@@ -3,8 +3,8 @@
 	"defs": {
 		"main": {
 			"type": "permission-set",
-			"title": "Full Standard.site Access",
-			"detail": "Provides full access to all Standard.site features including publications, documents, and subscriptions.",
+			"title": "Standard.site",
+			"detail": "Manage your publications, documents, subscriptions, and recommends.",
 			"permissions": [
 				{
 					"type": "permission",
@@ -12,7 +12,8 @@
 					"collection": [
 						"site.standard.publication",
 						"site.standard.document",
-						"site.standard.graph.subscription"
+						"site.standard.graph.subscription",
+						"site.standard.graph.recommend"
 					]
 				}
 			]

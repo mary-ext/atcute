@@ -5,12 +5,12 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
-		$type: /*#__PURE__*/ v.literal('site.standard.graph.subscription'),
-		createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+		$type: /*#__PURE__*/ v.literal('site.standard.graph.recommend'),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
-		 * AT-URI reference to the publication record being subscribed to (ex: at://did:plc:abc123/site.standard.publication/xyz789).
+		 * AT-URI reference to the document record being recommended (ex: at://did:plc:abc123/site.standard.document/xyz789).
 		 */
-		publication: /*#__PURE__*/ v.resourceUriString(),
+		document: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );
 
@@ -24,6 +24,6 @@ export interface Main extends v.InferInput<typeof mainSchema> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface Records {
-		'site.standard.graph.subscription': mainSchema;
+		'site.standard.graph.recommend': mainSchema;
 	}
 }

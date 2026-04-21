@@ -25,6 +25,11 @@
 						"description": "Name of the publication.",
 						"maxGraphemes": 500
 					},
+					"labels": {
+						"refs": ["com.atproto.label.defs#selfLabels"],
+						"type": "union",
+						"description": "Self-label values for this publication. Effectively content warnings."
+					},
 					"basicTheme": {
 						"ref": "site.standard.theme.basic",
 						"type": "ref",
@@ -53,8 +58,7 @@
 					"default": true,
 					"description": "Boolean which decides whether the publication should appear in discovery feeds."
 				}
-			},
-			"description": "Platform-specific preferences for the publication, including discovery and visibility settings."
+			}
 		}
 	},
 	"$type": "com.atproto.lexicon.schema",

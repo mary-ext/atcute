@@ -1,8 +1,33 @@
+import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
+const _contributorSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('site.standard.document#contributor')),
+	did: /*#__PURE__*/ v.didString(),
+	/**
+	 * @maxLength 1000
+	 * @maxGraphemes 100
+	 */
+	displayName: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+			/*#__PURE__*/ v.stringLength(0, 1000),
+			/*#__PURE__*/ v.stringGraphemes(0, 100),
+		]),
+	),
+	/**
+	 * @maxLength 1000
+	 * @maxGraphemes 100
+	 */
+	role: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+			/*#__PURE__*/ v.stringLength(0, 1000),
+			/*#__PURE__*/ v.stringGraphemes(0, 100),
+		]),
+	),
+});
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
@@ -18,6 +43,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 */
 		get content() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([]));
+		},
+		get contributors() {
+			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(contributorSchema));
 		},
 		/**
 		 * Image to used for thumbnail or cover image. Less than 1MB is size.
@@ -41,6 +69,18 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.stringGraphemes(0, 3000),
 			]),
 		),
+		/**
+		 * Self-label values for this post. Effectively content warnings.
+		 */
+		get labels() {
+			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
+		},
+		/**
+		 * Array of values describing relationships between this document and external resources
+		 */
+		get links() {
+			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([]));
+		},
 		/**
 		 * Combine with site or publication url to construct a canonical URL to the document. Prepend with a leading slash.
 		 */
@@ -84,12 +124,16 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	}),
 );
 
+type contributor$schematype = typeof _contributorSchema;
 type main$schematype = typeof _mainSchema;
 
+export interface contributorSchema extends contributor$schematype {}
 export interface mainSchema extends main$schematype {}
 
+export const contributorSchema = _contributorSchema as contributorSchema;
 export const mainSchema = _mainSchema as mainSchema;
 
+export interface Contributor extends v.InferInput<typeof contributorSchema> {}
 export interface Main extends v.InferInput<typeof mainSchema> {}
 
 declare module '@atcute/lexicons/ambient' {

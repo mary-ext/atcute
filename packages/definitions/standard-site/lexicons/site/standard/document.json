@@ -26,11 +26,21 @@
 						},
 						"description": "Array of strings used to tag or categorize the document. Avoid prepending tags with hashtags."
 					},
+					"links": {
+						"refs": [],
+						"type": "union",
+						"description": "Array of values describing relationships between this document and external resources"
+					},
 					"title": {
 						"type": "string",
 						"maxLength": 5000,
 						"description": "Title of the document.",
 						"maxGraphemes": 500
+					},
+					"labels": {
+						"refs": ["com.atproto.label.defs#selfLabels"],
+						"type": "union",
+						"description": "Self-label values for this post. Effectively content warnings."
 					},
 					"content": {
 						"refs": [],
@@ -68,10 +78,37 @@
 					"textContent": {
 						"type": "string",
 						"description": "Plaintext representation of the documents contents. Should not contain markdown or other formatting."
+					},
+					"contributors": {
+						"type": "array",
+						"items": {
+							"ref": "#contributor",
+							"type": "ref"
+						}
 					}
 				}
 			},
 			"description": "A document record representing a published article, blog post, or other content. Documents can belong to a publication or exist independently."
+		},
+		"contributor": {
+			"type": "object",
+			"required": ["did"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				},
+				"role": {
+					"type": "string",
+					"maxLength": 1000,
+					"maxGraphemes": 100
+				},
+				"displayName": {
+					"type": "string",
+					"maxLength": 1000,
+					"maxGraphemes": 100
+				}
+			}
 		}
 	},
 	"$type": "com.atproto.lexicon.schema",

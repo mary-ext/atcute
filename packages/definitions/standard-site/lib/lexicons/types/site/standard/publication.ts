@@ -1,3 +1,4 @@
+import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
@@ -36,6 +37,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.blobAccept(['image/*']),
 			]),
 		),
+		/**
+		 * Self-label values for this publication. Effectively content warnings.
+		 */
+		get labels() {
+			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
+		},
 		/**
 		 * Name of the publication.
 		 * @maxLength 5000
