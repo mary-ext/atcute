@@ -16,7 +16,8 @@
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts"
+		"!lib/**/*.test.ts",
+		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",
 	"exports": {
@@ -29,7 +30,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsgo --project tsconfig.build.json",
+		"build": "tsgo",
 		"pull": "lex-cli pull",
 		"test": "vitest",
 		"generate": "pnpm run generate:lexicons; pnpm run generate:limits",

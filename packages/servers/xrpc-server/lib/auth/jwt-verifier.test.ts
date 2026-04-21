@@ -35,17 +35,27 @@ const bearer = (jwt: string): Request => {
 };
 
 const expectAuthError = async (promise: Promise<unknown>, code: string): Promise<AuthRequiredError> => {
-	await expect(promise).rejects.toBeInstanceOf(AuthRequiredError);
-	const err = await promise.catch((e) => e as AuthRequiredError);
-	expect(err.headers).toBeInstanceOf(Headers);
-	const headerValue = (err.headers as Headers).get('www-authenticate');
-	expect(headerValue).toContain(`error="${code}"`);
-	return err;
+	let caught: unknown;
+	try {
+		await promise;
+	} catch (e) {
+		caught = e;
+	}
+
+	if (!(caught instanceof AuthRequiredError)) {
+		throw new Error(`expected AuthRequiredError, got ${caught}`);
+	}
+	if (!(caught.headers instanceof Headers)) {
+		throw new Error(`expected Headers, got ${caught.headers}`);
+	}
+
+	expect(caught.headers.get('www-authenticate')).toContain(`error="${code}"`);
+	return caught;
 };
 
 describe('ServiceJwtVerifier', () => {
 	const issuerDid: Did = 'did:web:issuer.example.com';
-	const audienceDid: Did = 'did:web:audience.example.com';
+	const audienceDid = 'did:web:audience.example.com' satisfies Did;
 	const audienceRef: AtprotoAudience = `${audienceDid}#svc`;
 	const lxm: Nsid = 'com.example.method';
 

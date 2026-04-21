@@ -16,7 +16,8 @@
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts"
+		"!lib/**/*.test.ts",
+		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",
 	"sideEffects": false,
@@ -27,7 +28,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsgo --project tsconfig.build.json",
+		"build": "tsgo",
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

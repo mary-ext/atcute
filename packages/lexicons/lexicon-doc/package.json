@@ -12,7 +12,8 @@
 		"lib/",
 		"schema/",
 		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts"
+		"!lib/**/*.test.ts",
+		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",
 	"sideEffects": false,
@@ -25,7 +26,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "pnpm run generate:schema && tsgo --project tsconfig.build.json",
+		"build": "pnpm run generate:schema && tsgo",
 		"generate:schema": "node scripts/generate-schema.js",
 		"test": "vitest --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"

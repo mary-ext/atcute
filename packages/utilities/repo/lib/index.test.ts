@@ -1,4 +1,4 @@
-import { serializeCarEntry, serializeCarHeader } from '@atcute/car';
+import { writeCarStream } from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
 import { toBytes } from '@atcute/cbor';
 import * as CID from '@atcute/cid';
@@ -18,7 +18,7 @@ import type { Commit } from './types.ts';
  * the same record CID.
  */
 const buildDuplicateCidCar = async (): Promise<{
-	car: Uint8Array;
+	car: Uint8Array<ArrayBuffer>;
 	recordCid: string;
 	record: unknown;
 	keys: [string, string];
@@ -46,12 +46,16 @@ const buildDuplicateCidCar = async (): Promise<{
 	const commitCid = await CID.create(0x71, commitBytes);
 	const commitLink = toCidLink(commitCid);
 
-	const chunks = [
-		serializeCarHeader([commitLink]),
-		serializeCarEntry(commitCid.bytes, commitBytes),
-		serializeCarEntry(nodeCid.bytes, nodeBytes),
-		serializeCarEntry(recordCid.bytes, recordBytes),
-	];
+	const chunks = await Array.fromAsync(
+		writeCarStream(
+			[commitLink],
+			[
+				{ cid: commitCid.bytes, data: commitBytes },
+				{ cid: nodeCid.bytes, data: nodeBytes },
+				{ cid: recordCid.bytes, data: recordBytes },
+			],
+		),
+	);
 
 	return {
 		car: concat(chunks),

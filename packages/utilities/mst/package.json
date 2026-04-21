@@ -16,7 +16,8 @@
 		"dist/",
 		"lib/",
 		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts"
+		"!lib/**/*.test.ts",
+		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",
 	"sideEffects": false,
@@ -28,7 +29,7 @@
 	},
 	"scripts": {
 		"generate-tests": "cd mst-test-suite && mise exec -- uv run python scripts/generate_exhaustive_cars.py",
-		"build": "tsgo --project tsconfig.build.json",
+		"build": "tsgo",
 		"test": "vitest run",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

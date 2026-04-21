@@ -13,7 +13,8 @@
 		"!dist/**/*.test.js",
 		"lib/",
 		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts"
+		"!lib/**/*.test.ts",
+		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",
 	"sideEffects": false,
@@ -28,7 +29,7 @@
 	},
 	"scripts": {
 		"build:native": "node build.native.js",
-		"build": "tsgo --project tsconfig.build.json",
+		"build": "tsgo",
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

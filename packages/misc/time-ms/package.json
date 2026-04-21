@@ -13,7 +13,8 @@
 		"prebuilds/**/*.node",
 		"src/",
 		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts"
+		"!lib/**/*.test.ts",
+		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",
 	"sideEffects": false,
@@ -28,7 +29,7 @@
 	},
 	"scripts": {
 		"build:native": "node build.native.js",
-		"build": "tsgo --project tsconfig.build.json",
+		"build": "tsgo",
 		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
 	},
 	"devDependencies": {
