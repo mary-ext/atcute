@@ -315,6 +315,9 @@ const _profileAssociatedActivitySubscriptionSchema = /*#__PURE__*/ v.object({
 });
 const _profileAssociatedChatSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileAssociatedChat')),
+	allowGroupInvites: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<'all' | 'following' | 'none' | (string & {})>(),
+	),
 	allowIncoming: /*#__PURE__*/ v.string<'all' | 'following' | 'none' | (string & {})>(),
 });
 const _profileAssociatedGermSchema = /*#__PURE__*/ v.object({
