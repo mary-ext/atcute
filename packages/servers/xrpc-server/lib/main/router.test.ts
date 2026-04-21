@@ -381,6 +381,49 @@ describe('XRPCRouter', () => {
 			}
 		});
 
+		it('invokes onError for unexpected handler errors', async () => {
+			const querySchema = v.query('com.example.query', {
+				params: null,
+				output: null,
+			});
+
+			const onError = vi.fn();
+			const router = new XRPCRouter({ onError });
+
+			router.addQuery(querySchema, {
+				async handler() {
+					throw new Error('boom');
+				},
+			});
+
+			const request = new Request('https://example.com/xrpc/com.example.query', { method: 'GET' });
+			await router.fetch(request);
+
+			expect(onError).toHaveBeenCalledExactlyOnceWith({
+				error: expect.objectContaining({ message: 'boom' }),
+				request: expect.any(Request),
+			});
+		});
+
+		it('does not invoke onError for XRPCError or aborted requests', async () => {
+			const querySchema = v.query('com.example.query', {
+				params: null,
+				output: null,
+			});
+
+			const onError = vi.fn();
+			const router = new XRPCRouter({ onError });
+
+			router.addQuery(querySchema, {
+				async handler() {
+					throw new InvalidRequestError({ message: 'bad input' });
+				},
+			});
+
+			await router.fetch(new Request('https://example.com/xrpc/com.example.query', { method: 'GET' }));
+			expect(onError).not.toHaveBeenCalled();
+		});
+
 		it('does not invoke exception handler on aborted requests', async () => {
 			const querySchema = v.query('com.example.query', {
 				params: null,
@@ -1240,15 +1283,15 @@ describe('XRPCRouter', () => {
 			expect(body).toEqual(expect.objectContaining({ error: 'InvalidRequest' }));
 		});
 
-		it('invokes handleSubscriptionException for unexpected errors', async () => {
+		it('invokes onSocketError for unexpected subscription errors', async () => {
 			const subscriptionSchema = v.subscription('com.example.subscription', {
 				params: null,
 				message: v.object({ seq: v.integer() }),
 			});
 
 			const adapter = new MockWebSocketAdapter();
-			const handleSubscriptionException = vi.fn();
-			const router = new XRPCRouter({ websocket: adapter, handleSubscriptionException });
+			const onSocketError = vi.fn();
+			const router = new XRPCRouter({ websocket: adapter, onSocketError });
 
 			router.addSubscription(subscriptionSchema, {
 				// oxlint-disable-next-line require-yield
@@ -1267,13 +1310,37 @@ describe('XRPCRouter', () => {
 				});
 			});
 
-			expect(handleSubscriptionException).toBeCalledTimes(1);
+			expect(onSocketError).toHaveBeenCalledExactlyOnceWith({
+				error: expect.objectContaining({ message: 'boom' }),
+				request: expect.any(Request),
+			});
+		});
 
-			expect(handleSubscriptionException).toBeCalledWith(expect.any(Error), expect.any(Request));
-			expect(handleSubscriptionException).toBeCalledWith(
-				expect.objectContaining({ message: 'boom' }),
-				expect.anything(),
-			);
+		it('does not invoke onSocketError on XRPCSubscriptionError', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.object({ seq: v.integer() }),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const onSocketError = vi.fn();
+			const router = new XRPCRouter({ websocket: adapter, onSocketError });
+
+			router.addSubscription(subscriptionSchema, {
+				// oxlint-disable-next-line require-yield
+				async *handler() {
+					throw new XRPCSubscriptionError({ error: 'FutureCursor' });
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
+
+			await new Promise<void>((resolve) => {
+				client.onClose.subscribe(() => resolve());
+			});
+
+			expect(onSocketError).not.toHaveBeenCalled();
 		});
 	});
 });

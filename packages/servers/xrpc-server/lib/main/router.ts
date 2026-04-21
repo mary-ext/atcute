@@ -40,7 +40,11 @@ export type FetchMiddleware = Middleware<[request: Request], Promise<Response>>;
 export type NotFoundHandler = (request: Request) => Promisable<Response>;
 export type HealthCheckHandler = (request: Request) => Promisable<Response>;
 export type ExceptionHandler = (error: unknown, request: Request) => Promisable<Response>;
-export type SubscriptionExceptionHandler = (error: unknown, request: Request) => void;
+
+/** telemetry hook invoked for unexpected HTTP handler errors; fire-and-forget. */
+export type ErrorObserver = (ctx: { error: unknown; request: Request }) => void;
+/** telemetry hook invoked for unexpected subscription errors; fire-and-forget. */
+export type SocketErrorObserver = (ctx: { error: unknown; request: Request }) => void;
 
 export const defaultExceptionHandler: ExceptionHandler = (error: unknown) => {
 	if (error instanceof XRPCError) {
@@ -61,10 +65,6 @@ export const defaultNotFoundHandler: NotFoundHandler = () => {
 	return new Response('Not Found', { status: 404 });
 };
 
-export const defaultSubscriptionExceptionHandler: SubscriptionExceptionHandler = (error: unknown) => {
-	throw error;
-};
-
 export interface XRPCRouterOptions {
 	middlewares?: FetchMiddleware[];
 	handleNotFound?: NotFoundHandler;
@@ -75,8 +75,20 @@ export interface XRPCRouterOptions {
 	 * XRPC spec, so callers opt in explicitly.
 	 */
 	handleHealthCheck?: HealthCheckHandler;
+	/** translates a thrown error into an HTTP response. */
 	handleException?: ExceptionHandler;
-	handleSubscriptionException?: SubscriptionExceptionHandler;
+	/**
+	 * fire-and-forget telemetry hook for unexpected HTTP errors. not invoked for
+	 * client-induced errors (aborted requests, `XRPCError` subclasses, thrown
+	 * `Response` objects).
+	 */
+	onError?: ErrorObserver;
+	/**
+	 * fire-and-forget telemetry hook for unexpected subscription errors. not
+	 * invoked for aborted signals or `XRPCSubscriptionError` (which is
+	 * translated to an error frame).
+	 */
+	onSocketError?: SocketErrorObserver;
 	websocket?: WebSocketAdapter;
 }
 
@@ -85,7 +97,8 @@ export class XRPCRouter {
 	#handleNotFound: NotFoundHandler;
 	#handleHealthCheck?: HealthCheckHandler;
 	#handleException: ExceptionHandler;
-	#handleSubscriptionException: SubscriptionExceptionHandler;
+	#onError?: ErrorObserver;
+	#onSocketError?: SocketErrorObserver;
 	#websocket?: WebSocketAdapter;
 
 	fetch: (request: Request) => Promise<Response>;
@@ -95,7 +108,8 @@ export class XRPCRouter {
 		handleException = defaultExceptionHandler,
 		handleNotFound = defaultNotFoundHandler,
 		handleHealthCheck,
-		handleSubscriptionException = defaultSubscriptionExceptionHandler,
+		onError,
+		onSocketError,
 		websocket,
 	}: XRPCRouterOptions = {}) {
 		const runner = createAsyncMiddlewareRunner([...middlewares, (request) => this.#dispatch(request)]);
@@ -104,8 +118,33 @@ export class XRPCRouter {
 		this.#handleException = handleException;
 		this.#handleNotFound = handleNotFound;
 		this.#handleHealthCheck = handleHealthCheck;
-		this.#handleSubscriptionException = handleSubscriptionException;
+		this.#onError = onError;
+		this.#onSocketError = onSocketError;
 		this.#websocket = websocket;
+	}
+
+	#observeError(error: unknown, request: Request): void {
+		// client-induced errors are not bugs; skip telemetry
+		if (request.signal.aborted) return;
+		if (error instanceof XRPCError) return;
+		if (error instanceof Response) return;
+
+		try {
+			this.#onError?.({ error, request });
+		} catch {
+			// observer threw; swallow to keep response path deterministic
+		}
+	}
+
+	#observeSocketError(error: unknown, request: Request): void {
+		if (request.signal.aborted) return;
+		if (error instanceof XRPCSubscriptionError) return;
+
+		try {
+			this.#onSocketError?.({ error, request });
+		} catch {
+			// observer threw; swallow to keep socket close path deterministic
+		}
 	}
 
 	async #dispatch(request: Request): Promise<Response> {
@@ -126,6 +165,7 @@ export class XRPCRouter {
 					return new Response(null, { status: 499 });
 				}
 
+				this.#observeError(err, request);
 				return this.#handleException(err, request);
 			}
 		}
@@ -157,6 +197,7 @@ export class XRPCRouter {
 				return new Response(null, { status: 499 });
 			}
 
+			this.#observeError(err, request);
 			return this.#handleException(err, request);
 		}
 	}
@@ -394,7 +435,7 @@ export class XRPCRouter {
 						}
 
 						ws.close(1011, `internal server error`);
-						this.#handleSubscriptionException(err, request);
+						this.#observeSocketError(err, request);
 					}
 				});
 

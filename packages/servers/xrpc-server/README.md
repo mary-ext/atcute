@@ -147,6 +147,23 @@ convenience subclasses are also available: `InvalidRequestError`, `AuthRequiredE
 `ForbiddenError`, `RateLimitExceededError`, `InternalServerError`, `UpstreamFailureError`,
 `NotEnoughResourcesError`, `UpstreamTimeoutError`.
 
+### observing errors
+
+for logs or metrics, use the `onError` / `onSocketError` router options. these are fire-and-forget
+hooks invoked alongside response generation, and they are NOT called for client-induced errors
+(aborted requests, `XRPCError`, `XRPCSubscriptionError`) — only for bugs worth reporting:
+
+```ts
+const router = new XRPCRouter({
+	onError({ error, request }) {
+		reportToSentry(error, { url: request.url });
+	},
+	onSocketError({ error, request }) {
+		reportToSentry(error, { url: request.url, subscription: true });
+	},
+});
+```
+
 ### health check
 
 the router can optionally answer `/xrpc/_health` if you pass `handleHealthCheck`. this endpoint is
