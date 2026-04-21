@@ -3,8 +3,8 @@
 	"defs": {
 		"main": {
 			"type": "permission-set",
-			"title": "Full pckt.blog Access",
-			"detail": "Provides full access to all pckt.blog features including publication and document references.",
+			"title": "pckt.blog",
+			"detail": "Manage your publication, document, and gallery references.",
 			"permissions": [
 				{
 					"type": "permission",
