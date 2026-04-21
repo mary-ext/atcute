@@ -45,6 +45,7 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
   (e.g., when passing the method as a callback that needs `this` binding)
 - use braces for control statements, even single-line bodies
 - use bare blocks `{ }` to group related code and limit variable scope
+- prefer `switch` over `if`/`else if` chains when branching on a single discriminant value
 - avoid barrel exports (index files that re-export from other modules); import directly from source
 - use `// #region <name>` and `// #endregion` to denote regions when a file needs to contain a lot
   of code
