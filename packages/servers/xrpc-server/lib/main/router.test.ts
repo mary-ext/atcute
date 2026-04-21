@@ -32,6 +32,44 @@ describe('XRPCRouter', () => {
 			expect(response.status).toBe(404);
 		});
 
+		it('falls through to handleNotFound when handleHealthCheck is not set', async () => {
+			const router = new XRPCRouter();
+
+			const request = new Request('http://example.com/xrpc/_health', { method: 'GET' });
+			const response = await router.fetch(request);
+
+			expect(response.status).toBe(404);
+		});
+
+		it('invokes handleHealthCheck on /xrpc/_health', async () => {
+			const mock = vi.fn(() => Response.json({ status: 'ok', version: '1.0' }));
+			const router = new XRPCRouter({ handleHealthCheck: mock });
+
+			const request = new Request('http://example.com/xrpc/_health', { method: 'GET' });
+			const response = await router.fetch(request);
+
+			expect(mock).toHaveBeenCalledExactlyOnceWith(request);
+			expect(response.status).toBe(200);
+			expect(await response.json()).toEqual({ status: 'ok', version: '1.0' });
+		});
+
+		it('runs handleHealthCheck through handleException when it throws', async () => {
+			const router = new XRPCRouter({
+				handleHealthCheck: () => {
+					throw new Error('boom');
+				},
+			});
+
+			const request = new Request('http://example.com/xrpc/_health', { method: 'GET' });
+			const response = await router.fetch(request);
+
+			expect(response.status).toBe(500);
+			expect(await response.json()).toEqual({
+				error: 'InternalServerError',
+				message: 'an exception happened whilst processing this request',
+			});
+		});
+
 		it('accepts HEAD requests on query routes', async () => {
 			const querySchema = v.query('com.example.query', {
 				params: null,

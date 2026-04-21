@@ -147,6 +147,20 @@ convenience subclasses are also available: `InvalidRequestError`, `AuthRequiredE
 `ForbiddenError`, `RateLimitExceededError`, `InternalServerError`, `UpstreamFailureError`,
 `NotEnoughResourcesError`, `UpstreamTimeoutError`.
 
+### health check
+
+the router can optionally answer `/xrpc/_health` if you pass `handleHealthCheck`. this endpoint is
+non-standard — consumers decide the response shape and status.
+
+```ts
+const router = new XRPCRouter({
+	async handleHealthCheck() {
+		const healthy = await pingDatabase();
+		return Response.json({ status: healthy ? 'ok' : 'degraded' }, { status: healthy ? 200 : 503 });
+	},
+});
+```
+
 ### subscriptions
 
 subscriptions provide real-time streaming over WebSocket. they require a runtime-specific adapter:

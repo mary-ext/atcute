@@ -38,6 +38,7 @@ type InternalRouteData = {
 export type FetchMiddleware = Middleware<[request: Request], Promise<Response>>;
 
 export type NotFoundHandler = (request: Request) => Promisable<Response>;
+export type HealthCheckHandler = (request: Request) => Promisable<Response>;
 export type ExceptionHandler = (error: unknown, request: Request) => Promisable<Response>;
 export type SubscriptionExceptionHandler = (error: unknown, request: Request) => void;
 
@@ -67,6 +68,13 @@ export const defaultSubscriptionExceptionHandler: SubscriptionExceptionHandler =
 export interface XRPCRouterOptions {
 	middlewares?: FetchMiddleware[];
 	handleNotFound?: NotFoundHandler;
+	/**
+	 * optional handler for `/xrpc/_health`. when provided, the router answers
+	 * health-check requests by invoking this handler; when absent, the path
+	 * falls through to `handleNotFound`. `_health` is not part of the atproto
+	 * XRPC spec, so callers opt in explicitly.
+	 */
+	handleHealthCheck?: HealthCheckHandler;
 	handleException?: ExceptionHandler;
 	handleSubscriptionException?: SubscriptionExceptionHandler;
 	websocket?: WebSocketAdapter;
@@ -75,6 +83,7 @@ export interface XRPCRouterOptions {
 export class XRPCRouter {
 	#handlers: Record<string, InternalRouteData> = {};
 	#handleNotFound: NotFoundHandler;
+	#handleHealthCheck?: HealthCheckHandler;
 	#handleException: ExceptionHandler;
 	#handleSubscriptionException: SubscriptionExceptionHandler;
 	#websocket?: WebSocketAdapter;
@@ -85,6 +94,7 @@ export class XRPCRouter {
 		middlewares = [],
 		handleException = defaultExceptionHandler,
 		handleNotFound = defaultNotFoundHandler,
+		handleHealthCheck,
 		handleSubscriptionException = defaultSubscriptionExceptionHandler,
 		websocket,
 	}: XRPCRouterOptions = {}) {
@@ -93,6 +103,7 @@ export class XRPCRouter {
 		this.fetch = (request) => runner(request);
 		this.#handleException = handleException;
 		this.#handleNotFound = handleNotFound;
+		this.#handleHealthCheck = handleHealthCheck;
 		this.#handleSubscriptionException = handleSubscriptionException;
 		this.#websocket = websocket;
 	}
@@ -106,6 +117,18 @@ export class XRPCRouter {
 		}
 
 		const nsid = pathname.slice('/xrpc/'.length);
+
+		if (nsid === '_health' && this.#handleHealthCheck !== undefined) {
+			try {
+				return await this.#handleHealthCheck(request);
+			} catch (err) {
+				if (request.signal.aborted) {
+					return new Response(null, { status: 499 });
+				}
+
+				return this.#handleException(err, request);
+			}
+		}
 
 		const route = this.#handlers[nsid];
 		if (route === undefined) {
