@@ -227,7 +227,10 @@ import {
 } from '@atcute/identity-resolver';
 
 const jwtVerifier = new ServiceJwtVerifier({
-	serviceDid: 'did:web:my-service.example.com',
+	// list of audience values this service accepts. during the transition to proposal 0014
+	// (atproto service auth audience), configure both the bare DID and the DID-with-service-ref
+	// form so that tokens from older issuers keep working alongside new ones.
+	acceptAudiences: ['did:web:my-service.example.com', 'did:web:my-service.example.com#atproto_pds'],
 	resolver: new CompositeDidDocumentResolver({
 		methods: {
 			plc: new PlcDidDocumentResolver(),

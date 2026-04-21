@@ -1,5 +1,6 @@
+import { isAtprotoAudience } from '@atcute/identity';
 import type { Did, Nsid } from '@atcute/lexicons';
-import { isDid, isNsid } from '@atcute/lexicons/syntax';
+import { isDid, isNsid, type AtprotoAudience } from '@atcute/lexicons/syntax';
 import { fromBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
 
@@ -10,6 +11,9 @@ import type { Result } from '../types/misc.ts';
 import type { AuthError } from './types.ts';
 
 const didString = v.string().assert(isDid, `must be a did`);
+const audienceString = v
+	.string()
+	.assert((input) => isAtprotoAudience(input) || isDid(input), `must be a did or atproto audience`);
 const nsidString = v.string().assert(isNsid, `must be an nsid`);
 
 const integer = v.number().assert((input) => input >= 0 && Number.isSafeInteger(input), `must be an integer`);
@@ -17,19 +21,22 @@ const integer = v.number().assert((input) => input >= 0 && Number.isSafeInteger(
 export interface JwtHeader {
 	typ?: string;
 	alg: string;
+	/** signing key identifier; a DID fragment, defaults to `#atproto` when absent */
+	kid?: string;
 }
 
 const jwtHeader: v.Type<JwtHeader> = v.object({
 	typ: v.string().optional(),
 	alg: v.string(),
+	kid: v.string().optional(),
 });
 
 export interface JwtPayload {
 	iss: Did;
-	aud: Did;
+	aud: Did | AtprotoAudience;
 	exp: number;
 	iat?: number;
-	lxm?: Nsid;
+	lxm: Nsid;
 	jti?: string;
 }
 
@@ -37,14 +44,14 @@ const jwtPayload: v.Type<JwtPayload> = v
 	.object({
 		/** issuer */
 		iss: didString,
-		/** target audience */
-		aud: didString,
+		/** target audience; a bare DID or a DID with service fragment (e.g. `did:web:x.example#svc`) */
+		aud: audienceString,
 		/** expiration time */
 		exp: integer,
 		/** creation time */
 		iat: integer.optional(),
-		/** xrpc operation being invoked */
-		lxm: nsidString.optional(),
+		/** xrpc operation being invoked; required per atproto service auth spec */
+		lxm: nsidString,
 		/** unique identifier */
 		jti: v.string().optional(),
 	})

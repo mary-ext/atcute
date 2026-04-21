@@ -21,7 +21,7 @@ describe('createServiceJwt', () => {
 			keypair: keypair,
 			issuer: issuerDid,
 			audience: audienceDid,
-			lxm: null,
+			lxm: lxm,
 			issuedAt: now,
 			expiresIn: 60,
 		});
@@ -40,7 +40,7 @@ describe('createServiceJwt', () => {
 			iat: now,
 			iss: issuerDid,
 			jti: expect.stringMatching(/^[A-Za-z0-9_-]+$/),
-			lxm: undefined,
+			lxm: lxm,
 		});
 
 		const signature = fromBase64Url(signatureB64);

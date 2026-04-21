@@ -1,5 +1,6 @@
 import type { PrivateKey } from '@atcute/crypto';
 import type { Did, Nsid } from '@atcute/lexicons';
+import type { AtprotoAudience } from '@atcute/lexicons/syntax';
 import { toBase64Url } from '@atcute/multibase';
 import { encodeUtf8 } from '@atcute/uint8array';
 
@@ -10,8 +11,9 @@ import type { JwtHeader, JwtPayload } from './jwt.ts';
 export interface CreateServiceJwtOptions {
 	keypair: PrivateKey;
 	issuer: Did;
-	audience: Did;
-	lxm: Nsid | null;
+	/** audience is either a bare DID or a DID with service fragment (e.g. `did:web:x.example#svc`) */
+	audience: Did | AtprotoAudience;
+	lxm: Nsid;
 	issuedAt?: number;
 	expiresIn?: number;
 }
@@ -33,7 +35,7 @@ export const createServiceJwt = async (options: CreateServiceJwtOptions): Promis
 		iat: issuedAt,
 		iss: options.issuer,
 		jti: nanoid(24),
-		lxm: options.lxm ?? undefined,
+		lxm: options.lxm,
 	};
 
 	const headerB64 = encodeJwtPortion(header);
