@@ -32,6 +32,24 @@ describe('XRPCRouter', () => {
 			expect(response.status).toBe(404);
 		});
 
+		it('accepts HEAD requests on query routes', async () => {
+			const querySchema = v.query('com.example.query', {
+				params: null,
+				output: null,
+			});
+
+			const mock = vi.fn();
+
+			const router = new XRPCRouter();
+			router.addQuery(querySchema, { handler: mock });
+
+			const request = new Request('https://example.com/xrpc/com.example.query', { method: 'HEAD' });
+			const response = await router.fetch(request);
+
+			expect(response.status).toBe(200);
+			expect(mock).toHaveBeenCalledOnce();
+		});
+
 		it('forbids incorrect HTTP method', async () => {
 			const querySchema = v.query('com.example.query', {
 				params: null,

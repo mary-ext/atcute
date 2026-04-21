@@ -112,10 +112,13 @@ export class XRPCRouter {
 			return this.#handleNotFound(request);
 		}
 
-		if (request.method !== route.method) {
+		// allow HEAD alongside GET; the runtime is responsible for stripping the
+		// response body per the Fetch API.
+		const allowed = request.method === route.method || (route.method === 'GET' && request.method === 'HEAD');
+		if (!allowed) {
 			return Response.json(
 				{ error: 'InvalidRequest', message: `invalid http method (expected ${route.method})` },
-				{ status: 405, headers: { allow: `${route.method}` } },
+				{ status: 405, headers: { allow: route.method === 'GET' ? 'GET, HEAD' : route.method } },
 			);
 		}
 
