@@ -57,6 +57,31 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
   it does error, prefer finding a solution that satisfies the type system naturally before resorting
   to an assertion
 
+### commit workflow
+
+we use conventional commits with these rules:
+
+- accepted types: `feat`, `fix`, `refactor`, `docs`, `chore`
+- optional scope is the package name, e.g. `refactor(package-a):`
+- omit the scope when the change does not involve any specific package, or when it touches most/all
+  packages
+- never list multiple packages in the scope (e.g. `refactor(package-a,package-b)` is forbidden)
+- append `!` after the type/scope to mark breaking changes, e.g. `feat(package-a)!:` or `refactor!:`
+
+scope selection when multiple packages are involved:
+
+- if the change primarily involves `package-a` over `package-b`, pick `package-a`
+- if changes in `package-a` and `package-b` hinge on `package-c` (even if `package-c` itself was not
+  modified), pick `package-c`
+
+granularity — each commit should represent one logical change:
+
+- split distinct changes into separate commits rather than bundling them
+- pair each changeset with the single commit it describes, so the changeset's git hash maps to the
+  right change; do not write one changeset covering multiple commits
+- pair each README update with the commit it documents, rather than batching doc updates across
+  multiple changes
+
 ### documentation
 
 - documentations include README, code comments, commit messages
