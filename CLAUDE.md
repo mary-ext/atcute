@@ -62,6 +62,9 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
 we use conventional commits with these rules:
 
 - accepted types: `feat`, `fix`, `refactor`, `docs`, `chore`
+  - `docs`: only applies to Markdown documents (README and similar)
+  - `chore`: only applies to build/tooling/dependency changes, and mass-autofixes from linters and
+    formatters
 - optional scope is the package name, e.g. `refactor(package-a):`
 - omit the scope when the change does not involve any specific package, or when it touches most/all
   packages
