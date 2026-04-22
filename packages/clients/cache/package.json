@@ -31,6 +31,6 @@
 	},
 	"devDependencies": {
 		"@atcute/bluesky": "workspace:^",
-		"vitest": "^4.1.4"
+		"vitest": "^4.1.5"
 	}
 }

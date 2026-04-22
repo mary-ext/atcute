@@ -36,7 +36,7 @@
 		"@remix-run/node-fetch-server": "^0.13.0",
 		"@types/node": "^25.6.0",
 		"@types/ws": "^8.18.1",
-		"vitest": "^4.1.4"
+		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
 		"@atcute/xrpc-server": "workspace:^"
