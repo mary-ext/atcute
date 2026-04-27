@@ -26,9 +26,12 @@ export class OAuthUserAgent implements FetchHandlerObject {
 		const promise = getSession(this.session.info.sub, options);
 
 		promise
-			.then((session) => {
-				this.session = session;
-			})
+			.then(
+				(session) => {
+					this.session = session;
+				},
+				() => {},
+			)
 			.finally(() => {
 				this.#getSessionPromise = undefined;
 			});
