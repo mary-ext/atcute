@@ -19,7 +19,9 @@ const isValidLabel = (input: string, start: number, end: number): boolean => {
 	}
 
 	if (len > 1) {
-		if (!isAsciiAlphaNum(input.charCodeAt(end - 1))) return false;
+		if (!isAsciiAlphaNum(input.charCodeAt(end - 1))) {
+			return false;
+		}
 		for (let j = start + 1; j < end - 1; j++) {
 			const c = input.charCodeAt(j);
 			if (!isAsciiAlphaNum(c) && c !== 0x2d) {

@@ -125,9 +125,15 @@ export class XRPCRouter {
 
 	#observeError(error: unknown, request: Request): void {
 		// client-induced errors are not bugs; skip telemetry
-		if (request.signal.aborted) return;
-		if (error instanceof XRPCError) return;
-		if (error instanceof Response) return;
+		if (request.signal.aborted) {
+			return;
+		}
+		if (error instanceof XRPCError) {
+			return;
+		}
+		if (error instanceof Response) {
+			return;
+		}
 
 		try {
 			this.#onError?.({ error, request });
@@ -137,8 +143,12 @@ export class XRPCRouter {
 	}
 
 	#observeSocketError(error: unknown, request: Request): void {
-		if (request.signal.aborted) return;
-		if (error instanceof XRPCSubscriptionError) return;
+		if (request.signal.aborted) {
+			return;
+		}
+		if (error instanceof XRPCSubscriptionError) {
+			return;
+		}
 
 		try {
 			this.#onSocketError?.({ error, request });
@@ -418,7 +428,9 @@ export class XRPCRouter {
 							const frame = encodeMessageFrame(body, type);
 							await ws.send(frame);
 							const drained = ws.drain();
-							if (drained) await drained;
+							if (drained) {
+								await drained;
+							}
 						}
 
 						ws.close(1000);

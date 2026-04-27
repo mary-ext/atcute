@@ -297,7 +297,9 @@ describe('ServiceJwtVerifier', () => {
 		const replayStore: ReplayStore = {
 			async check({ iss, jti }) {
 				const key = `${iss}:${jti}`;
-				if (seen.has(key)) return false;
+				if (seen.has(key)) {
+					return false;
+				}
 				seen.add(key);
 				return true;
 			},

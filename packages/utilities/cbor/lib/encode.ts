@@ -373,7 +373,9 @@ export const encode = (value: any): Uint8Array<ArrayBuffer> => {
 	writeValue(state, value);
 
 	const final = state.b.subarray(0, state.p);
-	if (!state.c.length) return final;
+	if (!state.c.length) {
+		return final;
+	}
 
 	state.c.push(final);
 	return concat(state.c, state.l + state.p);
