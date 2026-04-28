@@ -561,12 +561,14 @@ export const literalEnum = <const TEnums extends readonly Literal[]>(
 		},
 	};
 
+	const set = new Set<Literal>(values);
+
 	return {
 		kind: 'schema',
 		type: 'literal_enum',
 		expected: values,
 		'~run'(input, _flags) {
-			if (!values.includes(input as any)) {
+			if (!set.has(input as Literal)) {
 				return issue;
 			}
 
