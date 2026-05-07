@@ -11,10 +11,11 @@ packages:
   - packages/utilities/*
 
 allowBuilds:
-  esbuild: set this to true or false
+  better-sqlite3: true
+  cbor-extract: true
+  core-js: false
+  esbuild: true
+  sharp: true
 
-onlyBuiltDependencies:
-  - better-sqlite3
-  - cbor-extract
-  - esbuild
-  - sharp
+patchedDependencies:
+  '@atproto/pds': patches/@atproto__pds.patch

@@ -16,16 +16,5 @@
 		"oxlint-tsgolint": "^0.22.1",
 		"prettier": "^3.8.3",
 		"typescript": "~6.0.3"
-	},
-	"pnpm": {
-		"patchedDependencies": {
-			"@atproto/pds": "patches/@atproto__pds.patch"
-		},
-		"onlyBuiltDependencies": [
-			"better-sqlite3",
-			"cbor-extract",
-			"esbuild",
-			"sharp"
-		]
 	}
 }
