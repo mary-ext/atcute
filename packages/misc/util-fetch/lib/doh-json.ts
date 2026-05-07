@@ -1,25 +1,29 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import { pipe } from './pipeline.ts';
 import { isResponseOk, parseResponseAsJson, validateJsonWith } from './transformers.ts';
 
-const uint32 = v.number().assert((input) => Number.isInteger(input) && input >= 0 && input <= 2 ** 32 - 1);
+const uint32 = v.pipe(
+	v.number(),
+	v.check((input) => Number.isInteger(input) && input >= 0 && input <= 2 ** 32 - 1),
+);
 
-const question = v.object({
+const question = v.looseObject({
 	name: v.string(),
 	type: v.literal(16), // TXT
 });
 
-const answer = v.object({
+const answer = v.looseObject({
 	name: v.string(),
 	type: v.literal(16), // TXT
 	TTL: uint32,
-	data: v.string().chain((input) => {
-		return v.ok(input.replace(/^"|"$/g, '').replace(/\\"/g, '"'));
-	}),
+	data: v.pipe(
+		v.string(),
+		v.transform((input) => input.replace(/^"|"$/g, '').replace(/\\"/g, '"')),
+	),
 });
 
-const authority = v.object({
+const authority = v.looseObject({
 	name: v.string(),
 	type: uint32,
 	TTL: uint32,
@@ -27,7 +31,7 @@ const authority = v.object({
 });
 
 /** DoH JSON response schema for TXT record queries */
-export const dohJsonTxtResult = v.object({
+export const dohJsonTxtResult = v.looseObject({
 	/** DNS response code */
 	Status: uint32,
 	/** whether response is truncated */
@@ -43,18 +47,18 @@ export const dohJsonTxtResult = v.object({
 	/** requested records */
 	Question: v.tuple([question]),
 	/** answers */
-	Answer: v.array(answer).optional(() => []),
+	Answer: v.optional(v.array(answer), () => []),
 	/** authority */
-	Authority: v.array(authority).optional(),
+	Authority: v.optional(v.array(authority)),
 	/** comment from the DNS server */
-	Comment: v.union(v.string(), v.array(v.string())).optional(),
+	Comment: v.optional(v.union([v.string(), v.array(v.string())])),
 });
 
-export type DohJsonTxtResult = v.Infer<typeof dohJsonTxtResult>;
+export type DohJsonTxtResult = v.InferOutput<typeof dohJsonTxtResult>;
 
 /** fetch handler pipeline for DoH JSON TXT record responses */
 export const fetchDohJsonTxt = pipe(
 	isResponseOk,
 	parseResponseAsJson(/^application\/(dns-)?json$/, 16 * 1024),
-	validateJsonWith(dohJsonTxtResult, { mode: 'passthrough' }),
+	validateJsonWith(dohJsonTxtResult),
 );

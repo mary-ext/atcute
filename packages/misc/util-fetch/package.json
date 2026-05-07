@@ -31,7 +31,6 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"@badrap/valita": "^0.4.6",
 		"valibot": "^1.4.0"
 	}
 }

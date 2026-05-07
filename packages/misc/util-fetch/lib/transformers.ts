@@ -1,4 +1,3 @@
-import * as valita from '@badrap/valita';
 import * as v from 'valibot';
 
 import * as err from './errors.ts';
@@ -44,27 +43,12 @@ export const parseResponseAsJson =
 		}
 	};
 
-type ValitaParseOptions = NonNullable<Parameters<valita.Type['parse']>[1]>;
-
-const isValibotSchema = (schema: unknown): schema is v.GenericSchema =>
-	typeof schema === 'object' && schema !== null && '~standard' in schema;
-
-export function validateJsonWith<T>(
-	schema: valita.Type<T>,
-	options?: ValitaParseOptions,
-): (parsed: ParsedJsonResponse) => Promise<ParsedJsonResponse<T>>;
-export function validateJsonWith<TOutput>(
-	schema: v.GenericSchema<unknown, TOutput>,
-): (parsed: ParsedJsonResponse) => Promise<ParsedJsonResponse<TOutput>>;
-export function validateJsonWith<T>(
-	schema: valita.Type<T> | v.GenericSchema<unknown, T>,
-	options?: ValitaParseOptions,
-) {
-	return async (parsed: ParsedJsonResponse): Promise<ParsedJsonResponse<T>> => {
-		const json = isValibotSchema(schema) ? v.parse(schema, parsed.json) : schema.parse(parsed.json, options);
-		return { response: parsed.response, json: json as T };
+export const validateJsonWith =
+	<TOutput>(schema: v.GenericSchema<unknown, TOutput>) =>
+	async (parsed: ParsedJsonResponse): Promise<ParsedJsonResponse<TOutput>> => {
+		const json = v.parse(schema, parsed.json);
+		return { response: parsed.response, json };
 	};
-}
 
 const assertContentType = async (response: Response, typeRegex: RegExp): Promise<void> => {
 	const type = response.headers.get('content-type')?.split(';', 1)[0].trim();
