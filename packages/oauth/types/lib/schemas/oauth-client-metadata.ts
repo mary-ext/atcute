@@ -66,14 +66,7 @@ export const oauthClientMetadataSchema = v.looseObject({
 	 */
 	default_max_age: v.optional(v.number()),
 	require_auth_time: v.optional(v.boolean()),
-	contacts: v.optional(
-		v.array(
-			v.pipe(
-				v.string(),
-				v.check((s) => EMAIL_RE.test(s), `must be a valid email`),
-			),
-		),
-	),
+	contacts: v.optional(v.array(v.pipe(v.string(), v.regex(EMAIL_RE, `must be a valid email`)))),
 	tls_client_certificate_bound_access_tokens: v.optional(v.boolean()),
 
 	// https://datatracker.ietf.org/doc/html/rfc9449#section-5.2
