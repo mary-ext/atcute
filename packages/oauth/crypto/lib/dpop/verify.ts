@@ -92,29 +92,36 @@ export const verifyDpopProof = async (
 		throw new DpopVerifyError(`invalid dpop proof format`, 'invalid');
 	}
 
-	let header: v.InferOutput<typeof dpopHeaderSchema>;
+	let decoded: unknown;
 	try {
-		header = v.parse(dpopHeaderSchema, decodeSegment(parts[0]));
+		decoded = decodeSegment(parts[0]);
 	} catch {
 		throw new DpopVerifyError(`invalid dpop header`, 'invalid');
 	}
 
-	const { jwk, alg } = header;
+	const headerResult = v.safeParse(dpopHeaderSchema, decoded);
+	if (!headerResult.success) {
+		throw new DpopVerifyError(`invalid dpop header`, 'invalid');
+	}
+
+	const { jwk, alg } = headerResult.output;
 	if (!isSigningAlgorithm(alg)) {
 		throw new DpopVerifyError(`unsupported dpop alg`, 'invalid');
 	}
 
-	let payload: DpopClaims;
+	let raw: unknown;
 	try {
 		const key = await importPublicKey(jwk, alg);
-		const raw = await verifyJwt(dpopHeader, { key, alg, typ: 'dpop+jwt' });
-		payload = v.parse(dpopPayloadSchema, raw);
-	} catch (err) {
-		if (v.isValiError(err)) {
-			throw new DpopVerifyError(`invalid dpop payload`, 'invalid');
-		}
+		raw = await verifyJwt(dpopHeader, { key, alg, typ: 'dpop+jwt' });
+	} catch {
 		throw new DpopVerifyError(`dpop signature verification failed`, 'invalid');
 	}
+
+	const payloadResult = v.safeParse(dpopPayloadSchema, raw);
+	if (!payloadResult.success) {
+		throw new DpopVerifyError(`invalid dpop payload`, 'invalid');
+	}
+	const payload = payloadResult.output;
 
 	if (payload.htm !== method) {
 		throw new DpopVerifyError(`dpop htm mismatch: expected ${method}, got ${payload.htm}`, 'invalid');
