@@ -9,17 +9,23 @@
 		"@changesets/cli": "^2.31.0",
 		"@mary/tar": "jsr:^0.3.2",
 		"@mitata/counters": "^0.0.8",
-		"@typescript/native-preview": "7.0.0-dev.20260422.1",
+		"@typescript/native-preview": "7.0.0-dev.20260507.1",
 		"mitata": "^1.0.34",
-		"oxfmt": "^0.46.0",
-		"oxlint": "^1.61.0",
-		"oxlint-tsgolint": "^0.21.1",
+		"oxfmt": "^0.48.0",
+		"oxlint": "^1.63.0",
+		"oxlint-tsgolint": "^0.22.1",
 		"prettier": "^3.8.3",
 		"typescript": "~6.0.3"
 	},
 	"pnpm": {
 		"patchedDependencies": {
 			"@atproto/pds": "patches/@atproto__pds.patch"
-		}
+		},
+		"onlyBuiltDependencies": [
+			"better-sqlite3",
+			"cbor-extract",
+			"esbuild",
+			"sharp"
+		]
 	}
 }
