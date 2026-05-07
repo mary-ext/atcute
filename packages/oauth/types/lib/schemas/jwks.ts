@@ -2,26 +2,31 @@ import * as v from 'valibot';
 
 import { jwkPubSchema, jwkSchema, type Jwk, type JwkPub } from './jwk.ts';
 
-const filteredKeys = <T>(item: v.GenericSchema<unknown, T>) =>
-	v.pipe(
-		v.array(v.unknown()),
-		v.transform((input): T[] =>
-			input.flatMap((entry) => {
-				const result = v.safeParse(item, entry);
-				return result.success ? [result.output] : [];
-			}),
-		),
-	);
-
 /** JWKS (JSON Web Key Set). implementations SHOULD ignore JWKs within a JWK Set that use unknown
  * `kty` values, are missing required members, or have values out of the supported ranges. */
 export const jwksSchema = v.looseObject({
-	keys: filteredKeys<Jwk>(jwkSchema),
+	keys: v.pipe(
+		v.array(v.unknown()),
+		v.transform((input): Jwk[] =>
+			input.flatMap((entry) => {
+				const result = v.safeParse(jwkSchema, entry);
+				return result.success ? [result.output] : [];
+			}),
+		),
+	),
 });
 
 /** public JWKS (JSON Web Key Set with only public keys) */
 export const jwksPubSchema = v.looseObject({
-	keys: filteredKeys<JwkPub>(jwkPubSchema),
+	keys: v.pipe(
+		v.array(v.unknown()),
+		v.transform((input): JwkPub[] =>
+			input.flatMap((entry) => {
+				const result = v.safeParse(jwkPubSchema, entry);
+				return result.success ? [result.output] : [];
+			}),
+		),
+	),
 });
 
 export type Jwks = v.InferOutput<typeof jwksSchema>;
