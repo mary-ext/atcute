@@ -12,10 +12,18 @@ const _from = /*#__PURE__*/ NodeBuffer.from;
 
 const _byteLength = /*#__PURE__*/ NodeBuffer.byteLength;
 
-const _compare = /*#__PURE__*/ NodeBuffer.prototype.compare;
-const _equals = /*#__PURE__*/ NodeBuffer.prototype.equals;
-const _utf8Slice = /*#__PURE__*/ NodeBuffer.prototype.utf8Slice;
-const _utf8Write = /*#__PURE__*/ NodeBuffer.prototype.utf8Write;
+// utf8Slice / utf8Write are undocumented and missing from @types/node, but exist
+// at runtime and are faster than toString('utf8') / write(str, ..., 'utf8') because
+// they skip the encoding lookup
+const _bufferProto = NodeBuffer.prototype as NodeBuffer & {
+	utf8Slice(start?: number, end?: number): string;
+	utf8Write(string: string, offset?: number, length?: number): number;
+};
+
+const _compare = /*#__PURE__*/ _bufferProto.compare;
+const _equals = /*#__PURE__*/ _bufferProto.equals;
+const _utf8Slice = /*#__PURE__*/ _bufferProto.utf8Slice;
+const _utf8Write = /*#__PURE__*/ _bufferProto.utf8Write;
 
 const toUint8Array = (buffer: NodeBuffer) => {
 	return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
