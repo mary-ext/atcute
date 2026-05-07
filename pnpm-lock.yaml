@@ -1025,10 +1025,6 @@ importers:
         version: 4.1.5(@types/node@25.6.0)(@vitest/browser-playwright@4.1.5)(@vitest/coverage-v8@4.1.5)(vite@8.0.10(@types/node@25.6.0))
 
   packages/servers/xrpc-server-bun:
-    dependencies:
-      '@atcute/xrpc-server':
-        specifier: workspace:^
-        version: link:../xrpc-server
     devDependencies:
       '@atcute/atproto':
         specifier: workspace:^
@@ -1036,35 +1032,33 @@ importers:
       '@atcute/cbor':
         specifier: workspace:^
         version: link:../../utilities/cbor
+      '@atcute/xrpc-server':
+        specifier: workspace:^
+        version: link:../xrpc-server
       '@types/bun':
         specifier: ^1.3.13
         version: 1.3.13
 
   packages/servers/xrpc-server-cloudflare:
-    dependencies:
+    devDependencies:
       '@atcute/xrpc-server':
         specifier: workspace:^
         version: link:../xrpc-server
-    devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20260507.1
         version: 4.20260507.1
 
   packages/servers/xrpc-server-deno:
-    dependencies:
+    devDependencies:
       '@atcute/xrpc-server':
         specifier: workspace:^
         version: link:../xrpc-server
-    devDependencies:
       '@types/deno':
         specifier: ^2.5.0
         version: 2.5.0
 
   packages/servers/xrpc-server-node:
     dependencies:
-      '@atcute/xrpc-server':
-        specifier: workspace:^
-        version: link:../xrpc-server
       ws:
         specifier: ^8.20.0
         version: 8.20.0
@@ -1078,6 +1072,9 @@ importers:
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons
+      '@atcute/xrpc-server':
+        specifier: workspace:^
+        version: link:../xrpc-server
       '@remix-run/node-fetch-server':
         specifier: ^0.13.1
         version: 0.13.1

@@ -26,6 +26,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
+		"@atcute/xrpc-server": "workspace:^",
 		"@types/deno": "^2.5.0"
 	},
 	"peerDependencies": {

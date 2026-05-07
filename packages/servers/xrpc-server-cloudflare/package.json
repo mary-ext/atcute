@@ -26,6 +26,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
+		"@atcute/xrpc-server": "workspace:^",
 		"@cloudflare/workers-types": "^4.20260507.1"
 	},
 	"peerDependencies": {
