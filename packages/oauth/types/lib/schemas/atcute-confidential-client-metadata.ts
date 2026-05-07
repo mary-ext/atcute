@@ -21,15 +21,10 @@ export const confidentialClientMetadataSchema = v.pipe(
 		redirect_uris: v.pipe(
 			v.array(httpsUriSchema),
 			v.minLength(1, `must have at least one redirect URI`),
-			v.check((arr) => {
-				for (const uri of arr) {
-					const url = new URL(uri);
-					if (url.username || url.password) {
-						return false;
-					}
-				}
-				return true;
-			}, `redirect URIs must not contain credentials`),
+			v.checkItems((uri) => {
+				const url = new URL(uri);
+				return !url.username && !url.password;
+			}, `redirect URI must not contain credentials`),
 		),
 
 		scope: scopeSchema,

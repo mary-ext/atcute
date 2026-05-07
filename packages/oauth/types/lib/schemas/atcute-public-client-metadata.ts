@@ -3,25 +3,27 @@ import * as v from 'valibot';
 import { scopeSchema } from './atcute-client-shared.ts';
 import { oauthClientIdDiscoverableSchema } from './oauth-client-id-discoverable.ts';
 import { loopbackRedirectUriSchema, oauthRedirectUriSchema } from './oauth-redirect-uri.ts';
-import { nonLocalWebUriSchema, privateUseUriSchema, webUriSchema } from './uri.ts';
-import { isLoopbackHost } from './utils.ts';
+import { nonLocalWebUriSchema, webUriSchema } from './uri.ts';
 
 const redirectUrisSchema = v.pipe(
 	v.array(oauthRedirectUriSchema),
 	v.minLength(1, `must have at least one redirect URI`),
-	v.check((arr) => {
-		for (const uri of arr) {
-			// private-use URIs don't have URL-style credentials
-			if (!uri.includes('://')) {
-				continue;
-			}
-			const url = new URL(uri);
-			if (url.username || url.password) {
-				return false;
-			}
+	v.checkItems((uri) => {
+		// private-use URIs don't have URL-style credentials
+		if (!uri.includes('://')) {
+			return true;
 		}
-		return true;
-	}, `redirect URIs must not contain credentials`),
+		const url = new URL(uri);
+		return !url.username && !url.password;
+	}, `redirect URI must not contain credentials`),
+);
+
+const loopbackRedirectUrisSchema = v.pipe(
+	redirectUrisSchema,
+	v.checkItems(
+		(uri) => v.is(loopbackRedirectUriSchema, uri),
+		`loopback clients require loopback redirect URIs (127.0.0.1 or [::1])`,
+	),
 );
 
 /**
@@ -31,41 +33,22 @@ const redirectUrisSchema = v.pipe(
  * `http://localhost` as the client_id origin, which is built automatically
  * from the redirect_uris and scope.
  */
-export const loopbackClientMetadataSchema = v.pipe(
-	v.looseObject({
-		/** must not be provided for loopback clients */
-		client_id: v.optional(v.undefined()),
+export const loopbackClientMetadataSchema = v.looseObject({
+	/** must not be provided for loopback clients */
+	client_id: v.optional(v.undefined()),
 
-		/**
-		 * redirect URIs for authorization responses.
-		 *
-		 * must be loopback IP addresses (127.0.0.1 or [::1]).
-		 * per RFC 8252, port numbers are ignored during redirect URI matching,
-		 * allowing ephemeral ports.
-		 */
-		redirect_uris: redirectUrisSchema,
+	/**
+	 * redirect URIs for authorization responses.
+	 *
+	 * must be loopback IP addresses (127.0.0.1 or [::1]).
+	 * per RFC 8252, port numbers are ignored during redirect URI matching,
+	 * allowing ephemeral ports.
+	 */
+	redirect_uris: loopbackRedirectUrisSchema,
 
-		/** OAuth scope (must include "atproto") */
-		scope: scopeSchema,
-	}),
-	v.forward(
-		v.check((input) => {
-			// validate all redirect URIs are loopback
-			for (const uri of input.redirect_uris) {
-				const result = v.safeParse(loopbackRedirectUriSchema, uri);
-				if (!result.success) {
-					return false;
-				}
-				const url = new URL(uri);
-				if (!isLoopbackHost(url.hostname) || url.hostname === 'localhost') {
-					return false;
-				}
-			}
-			return true;
-		}, `loopback clients require loopback redirect URIs (127.0.0.1 or [::1])`),
-		['redirect_uris'],
-	),
-);
+	/** OAuth scope (must include "atproto") */
+	scope: scopeSchema,
+});
 
 export type LoopbackClientMetadata = v.InferOutput<typeof loopbackClientMetadataSchema>;
 
@@ -75,62 +58,32 @@ export type LoopbackClientMetadata = v.InferOutput<typeof loopbackClientMetadata
  * discoverable public clients have an HTTPS client_id URL where metadata is hosted,
  * but don't use a keyset (token_endpoint_auth_method: 'none').
  */
-export const discoverablePublicClientMetadataSchema = v.pipe(
-	v.looseObject({
-		/** discoverable HTTPS client_id URL */
-		client_id: oauthClientIdDiscoverableSchema,
+export const discoverablePublicClientMetadataSchema = v.looseObject({
+	/** discoverable HTTPS client_id URL */
+	client_id: oauthClientIdDiscoverableSchema,
 
-		/** redirect URIs for authorization responses */
-		redirect_uris: redirectUrisSchema,
+	/** redirect URIs for authorization responses */
+	redirect_uris: redirectUrisSchema,
 
-		/** OAuth scope (must include "atproto") */
-		scope: scopeSchema,
+	/** OAuth scope (must include "atproto") */
+	scope: scopeSchema,
 
-		/**
-		 * application type - defaults to 'web'.
-		 */
-		application_type: v.optional(v.union([v.literal('web'), v.literal('native')])),
+	/**
+	 * application type - defaults to 'web'.
+	 */
+	application_type: v.optional(v.union([v.literal('web'), v.literal('native')])),
 
-		/** optional client homepage */
-		client_uri: v.optional(webUriSchema),
-		/** optional display name */
-		client_name: v.optional(v.string()),
-		/** optional policy url */
-		policy_uri: v.optional(nonLocalWebUriSchema),
-		/** optional terms of service url */
-		tos_uri: v.optional(nonLocalWebUriSchema),
-		/** optional logo url */
-		logo_uri: v.optional(nonLocalWebUriSchema),
-	}),
-	v.forward(
-		v.check((input) => {
-			// validate redirect URIs are HTTPS, loopback, or private-use
-			for (const uri of input.redirect_uris) {
-				// private-use URIs are allowed
-				if (!uri.includes('://')) {
-					if (!v.safeParse(privateUseUriSchema, uri).success) {
-						return false;
-					}
-					continue;
-				}
-
-				const url = new URL(uri);
-
-				// loopback http URIs are allowed for native apps
-				if (url.protocol === 'http:' && isLoopbackHost(url.hostname)) {
-					continue;
-				}
-
-				// otherwise must be https
-				if (url.protocol !== 'https:') {
-					return false;
-				}
-			}
-			return true;
-		}, `redirect URI must use https:, http: loopback, or private-use scheme`),
-		['redirect_uris'],
-	),
-);
+	/** optional client homepage */
+	client_uri: v.optional(webUriSchema),
+	/** optional display name */
+	client_name: v.optional(v.string()),
+	/** optional policy url */
+	policy_uri: v.optional(nonLocalWebUriSchema),
+	/** optional terms of service url */
+	tos_uri: v.optional(nonLocalWebUriSchema),
+	/** optional logo url */
+	logo_uri: v.optional(nonLocalWebUriSchema),
+});
 
 export type DiscoverablePublicClientMetadata = v.InferOutput<typeof discoverablePublicClientMetadataSchema>;
 
