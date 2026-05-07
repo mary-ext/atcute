@@ -7,8 +7,7 @@ import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 import type { ReadonlyDeep } from 'type-fest';
 import * as v from 'valibot';
 
-import { jetstreamEventSchema } from './typedefs.ts';
-import type { JetstreamEvent, JetstreamProcedure } from './types.ts';
+import { jetstreamEventSchema, type JetstreamEvent, type JetstreamProcedure } from './typedefs.ts';
 
 export interface JetstreamSubscriptionOptions {
 	url: string | string[];
