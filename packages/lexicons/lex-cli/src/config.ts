@@ -10,6 +10,7 @@ import * as v from 'valibot';
 
 import type { ImportMapping } from './codegen.ts';
 import { printValibotIssues } from './utils/issues.ts';
+import { isValidLexiconPattern } from './utils/nsid-pattern.ts';
 
 // `lexiconConfigSchema` is wide and deep enough that valibot's inferred output bottoms out at
 // `{}` for its nested fields. annotating it against an explicit interface forces tsgo to use the
@@ -97,14 +98,6 @@ export type NormalizedConfig = Omit<
 
 const nonEmptyString = v.pipe(v.string(), v.nonEmpty(`must not be empty`));
 
-const isValidLexiconPattern = (pattern: string): boolean => {
-	if (pattern.endsWith('.*')) {
-		return isNsid(`${pattern.slice(0, -2)}.x`);
-	}
-
-	return isNsid(pattern);
-};
-
 const gitSourceConfigSchema = v.looseObject({
 	type: v.literal('git'),
 	remote: nonEmptyString,
@@ -126,7 +119,7 @@ const atprotoAuthoritySourceConfigSchema = v.looseObject({
 	mode: v.literal('authority'),
 	authority: v.pipe(
 		v.string(),
-		v.check((value) => isHandle(value) || isAtprotoDid(value), `must a valid at-identifier`),
+		v.check((value) => isHandle(value) || isAtprotoDid(value), `must be a valid at-identifier`),
 	),
 	pattern: v.optional(
 		v.array(

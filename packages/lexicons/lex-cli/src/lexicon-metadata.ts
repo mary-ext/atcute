@@ -1,6 +1,6 @@
-import { isNsid } from '@atcute/lexicons/syntax';
-
 import * as v from 'valibot';
+
+import { isValidLexiconPattern } from './utils/nsid-pattern.ts';
 
 export type LexiconMappingEntryType = 'namespace' | 'named';
 export type LexiconMappingPath = '.' | `./${string}`;
@@ -18,21 +18,6 @@ export interface PackageJsonWithLexicons {
 	'atcute:lexicons'?: AtcuteLexiconsField;
 	[key: string]: unknown;
 }
-
-/**
- * Validates if a string is a valid NSID pattern (exact or wildcard)
- * - Exact: "com.atproto.repo.getRecord"
- * - Wildcard: "com.atproto.*"
- */
-const isValidLexiconPattern = (pattern: string): boolean => {
-	if (pattern.endsWith('.*')) {
-		// For wildcards, remove the .* and validate the prefix as an NSID segment
-		const prefix = pattern.slice(0, -2);
-		// Add a dummy segment to make it a valid NSID for validation
-		return isNsid(prefix + '.x');
-	}
-	return isNsid(pattern);
-};
 
 /**
  * Schema for a single lexicon mapping entry
