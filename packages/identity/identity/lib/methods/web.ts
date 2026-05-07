@@ -13,15 +13,15 @@ export const ATPROTO_WEB_DID_RE =
  * `isAtprotoWebDid` for atproto-related cases as atproto only supports a subset
  * of the did:web specification (namely, no custom paths)
  */
-export const isWebDid = (input: string): input is Did<'web'> => {
-	return input.length >= 9 && WEB_DID_RE.test(input);
+export const isWebDid = (input: unknown): input is Did<'web'> => {
+	return typeof input === 'string' && input.length >= 9 && WEB_DID_RE.test(input);
 };
 
 /**
  * checks if input is a did:web identifier that is supported by atproto
  */
-export const isAtprotoWebDid = (input: string): input is Did<'web'> => {
-	return input.length >= 12 && ATPROTO_WEB_DID_RE.test(input);
+export const isAtprotoWebDid = (input: unknown): input is Did<'web'> => {
+	return typeof input === 'string' && input.length >= 12 && ATPROTO_WEB_DID_RE.test(input);
 };
 
 /**

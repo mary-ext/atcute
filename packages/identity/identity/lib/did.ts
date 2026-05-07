@@ -8,13 +8,13 @@ const FRAGMENT_RE = /^(?:[A-Za-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})*$/;
 /**
  * checks if it's a DID identifier that is supported by atproto
  */
-export const isAtprotoDid = (input: string): input is AtprotoDid => {
+export const isAtprotoDid = (input: unknown): input is AtprotoDid => {
 	return isPlcDid(input) || isAtprotoWebDid(input);
 };
 
-export const isAtprotoAudience = (input: string): input is AtprotoAudience => {
+export const isAtprotoAudience = (input: unknown): input is AtprotoAudience => {
 	// 'did:web:a.co#f'
-	if (input.length < 14) {
+	if (typeof input !== 'string' || input.length < 14) {
 		return false;
 	}
 
