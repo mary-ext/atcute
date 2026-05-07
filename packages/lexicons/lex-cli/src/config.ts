@@ -9,6 +9,11 @@ import pc from 'picocolors';
 import * as v from 'valibot';
 
 import type { ImportMapping } from './codegen.ts';
+import { printValibotIssues } from './utils/issues.ts';
+
+// the schema graph here is deep enough that valibot's inferred output types bottom out at `{}`,
+// so each schema is annotated against an explicit interface to keep tsgo happy. the interfaces
+// match the schemas one-to-one — no casts are needed.
 
 export interface GitSourceConfig {
 	type: 'git';
@@ -89,19 +94,21 @@ export type NormalizedConfig = Omit<
 	root: string;
 };
 
-const nonEmptyString = v.pipe(
-	v.string(),
-	v.check((value) => value.length > 0, `must not be empty`),
-);
+const nonEmptyString = v.pipe(v.string(), v.nonEmpty(`must not be empty`));
+
+const isValidLexiconPattern = (pattern: string): boolean => {
+	if (pattern.endsWith('.*')) {
+		return isNsid(`${pattern.slice(0, -2)}.x`);
+	}
+
+	return isNsid(pattern);
+};
 
 const gitSourceConfigSchema: v.GenericSchema<unknown, GitSourceConfig> = v.looseObject({
 	type: v.literal('git'),
 	remote: nonEmptyString,
 	ref: v.optional(nonEmptyString),
-	pattern: v.pipe(
-		v.array(nonEmptyString),
-		v.check((value) => value.length > 0, `must include at least one glob pattern`),
-	),
+	pattern: v.pipe(v.array(nonEmptyString), v.minLength(1, `must include at least one glob pattern`)),
 });
 
 const atprotoNsidsSourceConfigSchema: v.GenericSchema<unknown, AtprotoNsidsSourceConfig> = v.looseObject({
@@ -115,7 +122,7 @@ const atprotoNsidsSourceConfigSchema: v.GenericSchema<unknown, AtprotoNsidsSourc
 				v.transform((value) => value as Nsid),
 			),
 		),
-		v.check((value) => value.length > 0, `must include at least one nsid`),
+		v.minLength(1, `must include at least one nsid`),
 	),
 });
 
@@ -129,10 +136,7 @@ const atprotoAuthoritySourceConfigSchema: v.GenericSchema<unknown, AtprotoAuthor
 		),
 		pattern: v.optional(
 			v.array(
-				v.pipe(
-					v.string(),
-					v.check((value) => isValidLexiconPattern(value), `must be valid nsid or pattern ending with .*`),
-				),
+				v.pipe(v.string(), v.check(isValidLexiconPattern, `must be valid nsid or pattern ending with .*`)),
 			),
 		),
 	});
@@ -150,10 +154,7 @@ const sourceConfigSchema: v.GenericSchema<unknown, SourceConfig> = v.union([
 const pullConfigSchema: v.GenericSchema<unknown, PullConfig> = v.looseObject({
 	outdir: nonEmptyString,
 	clean: v.optional(v.boolean()),
-	sources: v.pipe(
-		v.array(sourceConfigSchema),
-		v.check((value) => value.length > 0, `must include at least one source`),
-	),
+	sources: v.pipe(v.array(sourceConfigSchema), v.minLength(1, `must include at least one source`)),
 });
 
 const exportConfigSchema: v.GenericSchema<unknown, ExportConfig> = v.looseObject({
@@ -181,14 +182,6 @@ const formatterConfigSchema: v.GenericSchema<unknown, FormatterConfig> = v.union
 	}),
 ]);
 
-const isValidLexiconPattern = (pattern: string): boolean => {
-	if (pattern.endsWith('.*')) {
-		return isNsid(`${pattern.slice(0, -2)}.x`);
-	}
-
-	return isNsid(pattern);
-};
-
 const mappingImports: v.GenericSchema<unknown, ImportMapping['imports']> = v.pipe(
 	v.unknown(),
 	v.rawTransform<unknown, ImportMapping['imports']>(({ dataset, addIssue, NEVER }) => {
@@ -200,11 +193,9 @@ const mappingImports: v.GenericSchema<unknown, ImportMapping['imports']> = v.pip
 			}
 			return value;
 		}
-
 		if (typeof value === 'function') {
 			return value as ImportMapping['imports'];
 		}
-
 		addIssue({ message: 'imports must be a string or function' });
 		return NEVER;
 	}),
@@ -215,13 +206,10 @@ const importMappingSchema: v.GenericSchema<unknown, ImportMapping> = v.looseObje
 		v.array(
 			v.pipe(
 				v.string(),
-				v.check(
-					(value) => isValidLexiconPattern(value),
-					`invalid NSID pattern (must be valid NSID or end with .*)`,
-				),
+				v.check(isValidLexiconPattern, `invalid NSID pattern (must be valid NSID or end with .*)`),
 			),
 		),
-		v.check((patterns) => patterns.length > 0, `nsid requires at least one pattern`),
+		v.minLength(1, `nsid requires at least one pattern`),
 	),
 	imports: mappingImports,
 });
@@ -233,10 +221,7 @@ const modulesConfigSchema: v.GenericSchema<unknown, ModulesConfig> = v.looseObje
 const generateConfigSchema: v.GenericSchema<unknown, GenerateConfig> = v.looseObject({
 	outdir: v.optional(nonEmptyString),
 	files: v.optional(
-		v.pipe(
-			v.array(nonEmptyString),
-			v.check((value) => value.length > 0, `must include at least one glob pattern`),
-		),
+		v.pipe(v.array(nonEmptyString), v.minLength(1, `must include at least one glob pattern`)),
 	),
 	imports: v.optional(v.array(nonEmptyString)),
 	mappings: v.optional(v.array(importMappingSchema)),
@@ -252,10 +237,7 @@ export const lexiconConfigSchema: v.GenericSchema<
 	outdir: v.optional(nonEmptyString),
 	/** @deprecated moved to `generate.files` */
 	files: v.optional(
-		v.pipe(
-			v.array(nonEmptyString),
-			v.check((value) => value.length > 0, `must include at least one glob pattern`),
-		),
+		v.pipe(v.array(nonEmptyString), v.minLength(1, `must include at least one glob pattern`)),
 	),
 	/** @deprecated moved to `generate.imports` */
 	imports: v.optional(v.array(nonEmptyString)),
@@ -274,7 +256,6 @@ export const loadConfig = async (configPath?: string): Promise<NormalizedConfig>
 	if (configPath) {
 		configFilename = path.resolve(configPath);
 	} else {
-		// try to find lex.config.js or lex.config.ts in the current directory
 		const candidates = ['lex.config.js', 'lex.config.ts'];
 
 		for (const candidate of candidates) {
@@ -312,12 +293,7 @@ export const loadConfig = async (configPath?: string): Promise<NormalizedConfig>
 	const configResult = v.safeParse(lexiconConfigSchema, rawConfig);
 	if (!configResult.success) {
 		console.error(pc.bold(pc.red(`invalid config:`)));
-
-		for (const issue of configResult.issues) {
-			const dotPath = v.getDotPath(issue) ?? '';
-			console.log(`- ${issue.type} at .${dotPath}: ${issue.message}`);
-		}
-
+		printValibotIssues(configResult.issues);
 		process.exit(1);
 	}
 

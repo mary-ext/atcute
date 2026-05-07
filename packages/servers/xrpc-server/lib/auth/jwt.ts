@@ -26,10 +26,7 @@ const nsidString: v.GenericSchema<unknown, Nsid> = v.pipe(
 	v.transform((value) => value as Nsid),
 );
 
-const integer = v.pipe(
-	v.number(),
-	v.check((input) => input >= 0 && Number.isSafeInteger(input), `must be an integer`),
-);
+const integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 
 export interface JwtHeader {
 	typ?: string;

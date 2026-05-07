@@ -71,15 +71,8 @@ export const oauthProtectedResourceMetadataValidator = v.pipe(
 	v.forward(
 		v.check((data) => {
 			const url = new URL(data.resource);
-			return !url.search;
-		}, `resource URL must not contain query parameters`),
-		['resource'],
-	),
-	v.forward(
-		v.check((data) => {
-			const url = new URL(data.resource);
-			return !url.hash;
-		}, `resource URL must not contain a fragment`),
+			return !url.search && !url.hash;
+		}, `resource URL must not contain query parameters or a fragment`),
 		['resource'],
 	),
 );

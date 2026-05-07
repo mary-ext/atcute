@@ -15,56 +15,57 @@ export const urlSchema = v.pipe(
 /** loopback URL (http://localhost, http://127.0.0.1, http://[::1]) */
 export const loopbackUriSchema = v.pipe(
 	urlSchema,
-	v.check((input) => input.startsWith('http://'), `loopback url must use http: protocol`),
-	v.check(
-		(input) => isLoopbackHost(new URL(input).hostname),
-		`loopback url must use localhost, 127.0.0.1, or [::1] as hostname`,
-	),
+	v.rawCheck(({ dataset, addIssue }) => {
+		if (!dataset.typed) {
+			return;
+		}
+		const input = dataset.value;
+		if (!input.startsWith('http://')) {
+			addIssue({ message: `loopback url must use http: protocol` });
+			return;
+		}
+		if (!isLoopbackHost(new URL(input).hostname)) {
+			addIssue({ message: `loopback url must use localhost, 127.0.0.1, or [::1] as hostname` });
+		}
+	}),
 );
 
 /** HTTPS URL with additional restrictions */
 export const httpsUriSchema = v.pipe(
 	urlSchema,
-	v.check((input) => input.startsWith('https://'), `url must use https: protocol`),
-	v.check((input) => !isLoopbackHost(new URL(input).hostname), `https url must not use a loopback host`),
-	v.check((input) => {
-		const url = new URL(input);
-		if (isHostnameIP(url.hostname)) {
-			return true;
+	v.rawCheck(({ dataset, addIssue }) => {
+		if (!dataset.typed) {
+			return;
 		}
-		return url.hostname.includes('.');
-	}, `domain name must contain at least two segments`),
-	v.check((input) => {
-		const url = new URL(input);
-		if (isHostnameIP(url.hostname)) {
-			return true;
+		const input = dataset.value;
+		if (!input.startsWith('https://')) {
+			addIssue({ message: `url must use https: protocol` });
+			return;
 		}
-		return !url.hostname.endsWith('.local');
-	}, `domain name must not end with .local`),
+
+		const url = new URL(input);
+
+		if (isLoopbackHost(url.hostname)) {
+			addIssue({ message: `https url must not use a loopback host` });
+			return;
+		}
+
+		if (!isHostnameIP(url.hostname)) {
+			if (!url.hostname.includes('.')) {
+				addIssue({ message: `domain name must contain at least two segments` });
+				return;
+			}
+			if (url.hostname.endsWith('.local')) {
+				addIssue({ message: `domain name must not end with .local` });
+			}
+		}
+	}),
 );
 
 /** web URL (either loopback http or https) */
-export const webUriSchema = v.pipe(
-	urlSchema,
-	v.rawTransform<string, string>(({ dataset, addIssue, NEVER }) => {
-		const input = dataset.value;
-		let result;
-		if (input.startsWith('http://')) {
-			result = v.safeParse(loopbackUriSchema, input);
-		} else if (input.startsWith('https://')) {
-			result = v.safeParse(httpsUriSchema, input);
-		} else {
-			addIssue({ message: `url must use http: or https: protocol` });
-			return NEVER;
-		}
-		if (!result.success) {
-			for (const issue of result.issues) {
-				addIssue({ message: issue.message });
-			}
-			return NEVER;
-		}
-		return result.output;
-	}),
+export const webUriSchema = v.union(
+	[loopbackUriSchema, httpsUriSchema],
+	`url must use http: or https: protocol`,
 );
 
 /** web URL with a non-local hostname */
@@ -76,27 +77,37 @@ export const nonLocalWebUriSchema = v.pipe(
 /** private-use URI scheme (e.g., com.example.app:/callback) */
 export const privateUseUriSchema = v.pipe(
 	urlSchema,
-	v.check((input) => {
+	v.rawCheck(({ dataset, addIssue }) => {
+		if (!dataset.typed) {
+			return;
+		}
+		const input = dataset.value;
+
 		const dotIdx = input.indexOf('.');
 		const colonIdx = input.indexOf(':');
-		return dotIdx !== -1 && colonIdx !== -1 && dotIdx <= colonIdx;
-	}, `private-use uri scheme must contain a dot in the protocol`),
-	v.check((input) => {
+		if (dotIdx === -1 || colonIdx === -1 || dotIdx > colonIdx) {
+			addIssue({ message: `private-use uri scheme must contain a dot in the protocol` });
+			return;
+		}
+
 		const url = new URL(input);
 		const scheme = url.protocol.slice(0, -1);
 		// oxlint-disable-next-line unicorn/no-array-reverse -- split already clones
 		const domain = scheme.split('.').reverse().join('.');
-		return !isLocalHostname(domain);
-	}, `private-use uri scheme must not be a local hostname`),
-	v.check((input) => {
-		const url = new URL(input);
+		if (isLocalHostname(domain)) {
+			addIssue({ message: `private-use uri scheme must not be a local hostname` });
+			return;
+		}
+
 		// RFC 8252: private-use URIs must use single slash after scheme
-		return !(
+		if (
 			url.href.startsWith(`${url.protocol}//`) ||
 			url.username ||
 			url.password ||
 			url.hostname ||
 			url.port
-		);
-	}, `private-use uri must be in the form scheme:/<path>`),
+		) {
+			addIssue({ message: `private-use uri must be in the form scheme:/<path>` });
+		}
+	}),
 );

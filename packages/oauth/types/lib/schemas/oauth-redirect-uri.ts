@@ -26,26 +26,9 @@ export const loopbackRedirectUriSchema = v.pipe(
 
 export type LoopbackRedirectUri = v.InferOutput<typeof loopbackRedirectUriSchema>;
 
-export const oauthRedirectUriSchema = v.pipe(
-	v.string(),
-	v.rawTransform<string, string>(({ dataset, addIssue, NEVER }) => {
-		const input = dataset.value;
-		let result;
-		if (input.startsWith('http://')) {
-			result = v.safeParse(loopbackRedirectUriSchema, input);
-		} else if (input.startsWith('https://')) {
-			result = v.safeParse(httpsUriSchema, input);
-		} else {
-			result = v.safeParse(privateUseUriSchema, input);
-		}
-		if (!result.success) {
-			for (const issue of result.issues) {
-				addIssue({ message: issue.message });
-			}
-			return NEVER;
-		}
-		return result.output;
-	}),
+export const oauthRedirectUriSchema = v.union(
+	[loopbackRedirectUriSchema, httpsUriSchema, privateUseUriSchema],
+	`url must use http: loopback, https:, or a private-use scheme`,
 );
 
 export type OAuthRedirectUri = v.InferOutput<typeof oauthRedirectUriSchema>;

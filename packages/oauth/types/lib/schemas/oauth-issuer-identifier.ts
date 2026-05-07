@@ -5,20 +5,34 @@ import { webUriSchema } from './uri.ts';
 export const oauthIssuerIdentifierSchema = v.pipe(
 	webUriSchema,
 	// validate the issuer (MIX-UP attacks)
-	v.check((input) => !input.endsWith('/'), `issuer URL must not end with a slash`),
-	v.check((input) => {
+	v.rawCheck(({ dataset, addIssue }) => {
+		if (!dataset.typed) {
+			return;
+		}
+		const input = dataset.value;
+
+		if (input.endsWith('/')) {
+			addIssue({ message: `issuer URL must not end with a slash` });
+			return;
+		}
+
 		const url = new URL(input);
-		return !(url.username || url.password);
-	}, `issuer URL must not contain a username or password`),
-	v.check((input) => {
-		const url = new URL(input);
-		return !(url.hash || url.search);
-	}, `issuer URL must not contain a query or fragment`),
-	v.check((input) => {
-		const url = new URL(input);
+
+		if (url.username || url.password) {
+			addIssue({ message: `issuer URL must not contain a username or password` });
+			return;
+		}
+
+		if (url.hash || url.search) {
+			addIssue({ message: `issuer URL must not contain a query or fragment` });
+			return;
+		}
+
 		const canonicalValue = url.pathname === '/' ? url.origin : url.href;
-		return input === canonicalValue;
-	}, `issuer URL must be in the canonical form`),
+		if (input !== canonicalValue) {
+			addIssue({ message: `issuer URL must be in the canonical form` });
+		}
+	}),
 );
 
 export type OAuthIssuerIdentifier = v.InferOutput<typeof oauthIssuerIdentifierSchema>;

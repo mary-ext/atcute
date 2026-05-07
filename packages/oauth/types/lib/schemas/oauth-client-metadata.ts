@@ -26,7 +26,7 @@ export const oauthClientMetadataSchema = v.looseObject({
 	// https://www.rfc-editor.org/rfc/rfc7591.html#section-2
 	redirect_uris: v.pipe(
 		v.array(oauthRedirectUriSchema),
-		v.check((arr) => arr.length > 0, `must have at least one redirect URI`),
+		v.minLength(1, `must have at least one redirect URI`),
 	),
 	response_types: v.optional(v.array(oauthResponseTypeSchema)),
 	// > If omitted, the default is that the client will use only the "code"

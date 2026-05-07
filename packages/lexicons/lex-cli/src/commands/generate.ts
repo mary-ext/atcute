@@ -11,6 +11,7 @@ import { loadConfig, type GenerateConfig, type NormalizedConfig } from '../confi
 import { createFormatter } from '../formatter.ts';
 import { loadLexicons } from '../lexicon-loader.ts';
 import { packageJsonSchema } from '../lexicon-metadata.ts';
+import { printValibotIssues } from '../utils/issues.ts';
 
 /**
  * resolves package imports to ImportMapping[]
@@ -68,12 +69,7 @@ const resolveImportsToMappings = async (
 		const result = v.safeParse(packageJsonSchema, packageJson);
 		if (!result.success) {
 			console.error(pc.bold(pc.red(`invalid atcute:lexicons in "${packageName}":`)));
-
-			for (const issue of result.issues) {
-				const dotPath = v.getDotPath(issue) ?? '';
-				console.log(`- ${issue.type} at .${dotPath}: ${issue.message}`);
-			}
-
+			printValibotIssues(result.issues);
 			process.exit(1);
 		}
 

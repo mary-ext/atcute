@@ -8,6 +8,8 @@ import { build, type LexDocumentBuilder } from '@atcute/lexicon-doc/builder';
 import pc from 'picocolors';
 import * as v from 'valibot';
 
+import { printValibotIssues } from './utils/issues.ts';
+
 /** file extensions recognized as module files */
 const MODULE_EXTENSIONS = new Set(['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts']);
 
@@ -74,12 +76,7 @@ const loadJsonFile = async (absolutePath: string, relativePath: string): Promise
 	const result = v.safeParse(lexiconDoc, json);
 	if (!result.success) {
 		console.error(pc.bold(pc.red(`schema validation failed for "${relativePath}"`)));
-
-		for (const issue of result.issues) {
-			const dotPath = v.getDotPath(issue) ?? '';
-			console.log(`- ${issue.type} at .${dotPath}: ${issue.message}`);
-		}
-
+		printValibotIssues(result.issues);
 		process.exit(1);
 	}
 

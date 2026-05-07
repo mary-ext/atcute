@@ -41,40 +41,33 @@ const tidString: v.GenericSchema<unknown, Tid> = v.pipe(
 	v.transform((value) => value as Tid),
 );
 
-const integer = v.pipe(
-	v.number(),
-	v.check((input) => input >= 0 && Number.isSafeInteger(input), `must be a nonnegative integer`),
-);
+const integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 
-const recordEventCreateDataSchema = v.looseObject({
+const baseRecordEventEntries = {
 	did: didString,
 	rev: tidString,
 	collection: nsidString,
 	rkey: rkeyString,
+	live: v.boolean(),
+};
+
+const recordEventCreateDataSchema = v.looseObject({
+	...baseRecordEventEntries,
 	action: v.literal('create'),
 	cid: v.string(),
 	record: v.optional(v.record(v.string(), v.unknown())),
-	live: v.boolean(),
 });
 
 const recordEventUpdateDataSchema = v.looseObject({
-	did: didString,
-	rev: tidString,
-	collection: nsidString,
-	rkey: rkeyString,
+	...baseRecordEventEntries,
 	action: v.literal('update'),
 	cid: v.string(),
 	record: v.optional(v.record(v.string(), v.unknown())),
-	live: v.boolean(),
 });
 
 const recordEventDeleteDataSchema = v.looseObject({
-	did: didString,
-	rev: tidString,
-	collection: nsidString,
-	rkey: rkeyString,
+	...baseRecordEventEntries,
 	action: v.literal('delete'),
-	live: v.boolean(),
 });
 
 const recordEventDataSchema = v.union([

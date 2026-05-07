@@ -1,27 +1,9 @@
 import * as v from 'valibot';
 
-import { atprotoOAuthScopeSchema } from './atproto-oauth-scope.ts';
+import { scopeSchema } from './atcute-client-shared.ts';
 import { oauthClientIdDiscoverableSchema } from './oauth-client-id-discoverable.ts';
 import { httpsUriSchema, nonLocalWebUriSchema, webUriSchema } from './uri.ts';
 import { isLocalHostname } from './utils.ts';
-
-const SINGLE_SCOPE_RE = /^[\x21\x23-\x5B\x5D-\x7E]+$/;
-
-const singleScopeSchema = v.pipe(
-	v.string(),
-	v.check((input) => SINGLE_SCOPE_RE.test(input), `invalid OAuth scope`),
-);
-
-const hasNoDuplicates = <T>(arr: readonly T[]): boolean => {
-	for (let i = 0, len = arr.length; i < len; i++) {
-		for (let j = 0; j < i; j++) {
-			if (arr[i] === arr[j]) {
-				return false;
-			}
-		}
-	}
-	return true;
-};
 
 /**
  * user-facing client metadata for configuring a confidential OAuth client.
@@ -38,7 +20,7 @@ export const confidentialClientMetadataSchema = v.pipe(
 		/** redirect URIs for authorization responses (must be https) */
 		redirect_uris: v.pipe(
 			v.array(httpsUriSchema),
-			v.check((arr) => arr.length > 0, `must have at least one redirect URI`),
+			v.minLength(1, `must have at least one redirect URI`),
 			v.check((arr) => {
 				for (const uri of arr) {
 					const url = new URL(uri);
@@ -50,22 +32,7 @@ export const confidentialClientMetadataSchema = v.pipe(
 			}, `redirect URIs must not contain credentials`),
 		),
 
-		/**
-		 * OAuth scope - either:
-		 * - a space-separated string (must include "atproto")
-		 * - an array of scope strings ('atproto' is added automatically)
-		 */
-		scope: v.union([
-			v.pipe(
-				atprotoOAuthScopeSchema,
-				v.check((input) => hasNoDuplicates(input.split(/\s+/)), `duplicate scope`),
-			),
-			v.pipe(
-				v.array(singleScopeSchema),
-				v.transform((input) => (input.includes('atproto') ? input : ['atproto', ...input])),
-				v.check(hasNoDuplicates, `duplicate scope`),
-			),
-		]),
+		scope: scopeSchema,
 
 		/** optional client homepage */
 		client_uri: v.optional(webUriSchema),

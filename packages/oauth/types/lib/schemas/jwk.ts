@@ -20,22 +20,9 @@ const isPrivateKeyUsage = (usage: unknown): usage is (typeof PRIVATE_KEY_USAGE)[
 const isSigKeyUsage = (v: InternalKeyUsage): boolean => v === 'verify';
 const isEncKeyUsage = (v: InternalKeyUsage): boolean => v === 'encrypt' || v === 'wrapKey';
 
-export const keyUsageSchema = v.union([
-	v.literal('verify'),
-	v.literal('encrypt'),
-	v.literal('wrapKey'),
-	v.literal('sign'),
-	v.literal('decrypt'),
-	v.literal('unwrapKey'),
-	v.literal('deriveKey'),
-	v.literal('deriveBits'),
-]);
+export const keyUsageSchema = v.picklist(KEY_USAGE);
 
-export const publicKeyUsageSchema = v.union([
-	v.literal('verify'),
-	v.literal('encrypt'),
-	v.literal('wrapKey'),
-]);
+export const publicKeyUsageSchema = v.picklist(PUBLIC_KEY_USAGE);
 
 const jwkBaseEntries = {
 	kty: v.string(),

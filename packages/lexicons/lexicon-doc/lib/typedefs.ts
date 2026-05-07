@@ -4,10 +4,7 @@ import * as v from 'valibot';
 
 import * as t from './types.ts';
 
-const integer = v.pipe(
-	v.number(),
-	v.check((input) => input >= 0 && Number.isSafeInteger(input), `expected non-negative integer`),
-);
+const integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 
 const nsid: v.GenericSchema<unknown, Nsid> = v.pipe(
 	v.string(),

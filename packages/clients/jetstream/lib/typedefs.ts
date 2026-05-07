@@ -55,10 +55,7 @@ const tidString: v.GenericSchema<unknown, Tid> = v.pipe(
 	v.transform((value) => value as Tid),
 );
 
-const integer = v.pipe(
-	v.number(),
-	v.check((input) => input >= 0 && Number.isSafeInteger(input), `must be a nonnegative integer`),
-);
+const integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 
 const baseCommitEntries = {
 	rev: tidString,

@@ -12,6 +12,7 @@ import { createFormatter, type Formatter } from '../formatter.ts';
 import { pullAtprotoSource } from '../pull-sources/atproto.ts';
 import { pullGitSource } from '../pull-sources/git.ts';
 import type { PullResult, PulledLexicon, SourceLocation } from '../pull-sources/types.ts';
+import { printValibotIssues } from '../utils/issues.ts';
 
 interface SourceRevision {
 	source: SourceConfig;
@@ -61,12 +62,7 @@ const parseLexiconFile = async (loc: SourceLocation): Promise<LexiconDoc> => {
 			),
 		);
 		console.error(`found in ${loc.absolutePath}`);
-
-		for (const issue of result.issues) {
-			const dotPath = v.getDotPath(issue) ?? '';
-			console.log(`- ${issue.type} at .${dotPath}: ${issue.message}`);
-		}
-
+		printValibotIssues(result.issues);
 		process.exit(1);
 	}
 
