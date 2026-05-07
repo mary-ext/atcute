@@ -1,23 +1,13 @@
 import * as v from 'valibot';
 
-import {
-	oauthProtectedResourceMetadataValidator,
-	type OAuthProtectedResourceMetadata,
-} from './oauth-protected-resource-metadata.ts';
-
-export type AtprotoProtectedResourceMetadata = OAuthProtectedResourceMetadata & {
-	authorization_servers: [string];
-};
+import { oauthProtectedResourceMetadataValidator } from './oauth-protected-resource-metadata.ts';
 
 /**
  * AT Protocol protected resource metadata with required fields.
  *
  * @see {@link https://atproto.com/specs/oauth}
  */
-export const atprotoProtectedResourceMetadataValidator: v.GenericSchema<
-	unknown,
-	AtprotoProtectedResourceMetadata
-> = v.pipe(
+export const atprotoProtectedResourceMetadataValidator = v.pipe(
 	oauthProtectedResourceMetadataValidator,
 	v.forward(
 		v.check(
@@ -26,4 +16,9 @@ export const atprotoProtectedResourceMetadataValidator: v.GenericSchema<
 		),
 		['authorization_servers'],
 	),
-) as unknown as v.GenericSchema<unknown, AtprotoProtectedResourceMetadata>;
+	v.transform((data) => data as typeof data & { authorization_servers: [string] }),
+);
+
+export type AtprotoProtectedResourceMetadata = v.InferOutput<
+	typeof atprotoProtectedResourceMetadataValidator
+>;

@@ -1,23 +1,13 @@
 import * as v from 'valibot';
 
-import {
-	oauthAuthorizationServerMetadataValidator,
-	type OAuthAuthorizationServerMetadata,
-} from './oauth-authorization-server-metadata.ts';
-
-export type AtprotoAuthorizationServerMetadata = OAuthAuthorizationServerMetadata & {
-	pushed_authorization_request_endpoint: string;
-};
+import { oauthAuthorizationServerMetadataValidator } from './oauth-authorization-server-metadata.ts';
 
 /**
  * AT Protocol authorization server metadata with required fields and assertions.
  *
  * @see {@link https://atproto.com/specs/oauth}
  */
-export const atprotoAuthorizationServerMetadataValidator: v.GenericSchema<
-	unknown,
-	AtprotoAuthorizationServerMetadata
-> = v.pipe(
+export const atprotoAuthorizationServerMetadataValidator = v.pipe(
 	oauthAuthorizationServerMetadataValidator,
 	v.forward(
 		v.check(
@@ -33,4 +23,9 @@ export const atprotoAuthorizationServerMetadataValidator: v.GenericSchema<
 		),
 		['pushed_authorization_request_endpoint'],
 	),
-) as unknown as v.GenericSchema<unknown, AtprotoAuthorizationServerMetadata>;
+	v.transform((data) => data as typeof data & { pushed_authorization_request_endpoint: string }),
+);
+
+export type AtprotoAuthorizationServerMetadata = v.InferOutput<
+	typeof atprotoAuthorizationServerMetadataValidator
+>;

@@ -44,7 +44,7 @@ export const httpsUriSchema = v.pipe(
 );
 
 /** web URL (either loopback http or https) */
-export const webUriSchema: v.GenericSchema<unknown, string> = v.pipe(
+export const webUriSchema = v.pipe(
 	urlSchema,
 	v.rawTransform<string, string>(({ dataset, addIssue, NEVER }) => {
 		const input = dataset.value;
