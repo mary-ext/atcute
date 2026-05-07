@@ -36,13 +36,12 @@
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
 		"@atcute/util-text": "workspace:^",
-		"@badrap/valita": "^0.4.6"
+		"valibot": "^1.4.0"
 	},
 	"devDependencies": {
 		"@valibot/to-json-schema": "^1.7.0",
 		"@vitest/coverage-v8": "^4.1.5",
 		"tschema": "^3.2.0",
-		"valibot": "^1.4.0",
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {

@@ -4,6 +4,7 @@ import * as path from 'node:path';
 import { lexiconDoc, refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
 
 import pc from 'picocolors';
+import * as v from 'valibot';
 
 import type { PullCommand } from '../cli.ts';
 import { loadConfig, type NormalizedConfig, type PullConfig, type SourceConfig } from '../config.ts';
@@ -52,24 +53,24 @@ const parseLexiconFile = async (loc: SourceLocation): Promise<LexiconDoc> => {
 		process.exit(1);
 	}
 
-	const result = lexiconDoc.try(json, { mode: 'passthrough' });
-	if (!result.ok) {
+	const result = v.safeParse(lexiconDoc, json);
+	if (!result.success) {
 		console.error(
 			pc.bold(
 				pc.red(`schema validation failed for ${loc.relativePath} when pulling ${loc.sourceDescription}`),
 			),
 		);
 		console.error(`found in ${loc.absolutePath}`);
-		console.error(result.message);
 
 		for (const issue of result.issues) {
-			console.log(`- ${issue.code} at .${issue.path.join('.')}`);
+			const dotPath = v.getDotPath(issue) ?? '';
+			console.log(`- ${issue.type} at .${dotPath}: ${issue.message}`);
 		}
 
 		process.exit(1);
 	}
 
-	const issues = refineLexiconDoc(result.value, true);
+	const issues = refineLexiconDoc(result.output, true);
 	if (issues.length > 0) {
 		console.error(
 			pc.bold(pc.red(`lint validation failed for ${loc.relativePath} when pulling ${loc.sourceDescription}`)),
@@ -83,7 +84,7 @@ const parseLexiconFile = async (loc: SourceLocation): Promise<LexiconDoc> => {
 		process.exit(1);
 	}
 
-	return result.value;
+	return result.output;
 };
 
 const writeLexicon = async (

@@ -6,6 +6,7 @@ import { lexiconDoc, refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-d
 import { build, type LexDocumentBuilder } from '@atcute/lexicon-doc/builder';
 
 import pc from 'picocolors';
+import * as v from 'valibot';
 
 /** file extensions recognized as module files */
 const MODULE_EXTENSIONS = new Set(['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts']);
@@ -70,19 +71,19 @@ const loadJsonFile = async (absolutePath: string, relativePath: string): Promise
 		process.exit(1);
 	}
 
-	const result = lexiconDoc.try(json, { mode: 'strip' });
-	if (!result.ok) {
+	const result = v.safeParse(lexiconDoc, json);
+	if (!result.success) {
 		console.error(pc.bold(pc.red(`schema validation failed for "${relativePath}"`)));
-		console.error(result.message);
 
 		for (const issue of result.issues) {
-			console.log(`- ${issue.code} at .${issue.path.join('.')}`);
+			const dotPath = v.getDotPath(issue) ?? '';
+			console.log(`- ${issue.type} at .${dotPath}: ${issue.message}`);
 		}
 
 		process.exit(1);
 	}
 
-	const issues = refineLexiconDoc(result.value, true);
+	const issues = refineLexiconDoc(result.output, true);
 	if (issues.length > 0) {
 		console.error(pc.bold(pc.red(`lint validation failed for "${relativePath}"`)));
 
@@ -93,7 +94,7 @@ const loadJsonFile = async (absolutePath: string, relativePath: string): Promise
 		process.exit(1);
 	}
 
-	return result.value;
+	return result.output;
 };
 
 /**

@@ -11,6 +11,8 @@ import type { AtprotoDid, Nsid } from '@atcute/lexicons/syntax';
 import { verifyRecord, type VerifiedRecord } from '@atcute/repo';
 import { FailedResponseError } from '@atcute/util-fetch';
 
+import * as v from 'valibot';
+
 import { LEXICON_SCHEMA_COLLECTION } from '../constants.ts';
 import * as err from '../errors.ts';
 import type { ResolvedSchema, ResolveLexiconRecordOptions } from '../types.ts';
@@ -118,7 +120,7 @@ export class LexiconSchemaResolver {
 
 		let schema: LexiconDoc;
 		try {
-			schema = lexiconDoc.parse(rawSchema, { mode: 'passthrough' });
+			schema = v.parse(lexiconDoc, rawSchema);
 		} catch (cause) {
 			throw new err.InvalidLexiconSchemaError(nsid, { cause });
 		}
