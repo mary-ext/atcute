@@ -9,11 +9,7 @@ import { oauthAuthorizationDetailsSchema } from './oauth-authorization-details.t
 export const atprotoOAuthTokenResponseSchema = v.looseObject({
 	access_token: v.string(),
 	token_type: v.literal('DPoP'),
-	sub: v.pipe(
-		v.string(),
-		v.check((input) => isAtprotoDid(input), `must be a did:plc or did:web`),
-		v.transform((value) => value as Did),
-	),
+	sub: v.custom<Did>(isAtprotoDid, `must be a did:plc or did:web`),
 	scope: atprotoOAuthScopeSchema,
 	refresh_token: v.optional(v.string()),
 	expires_in: v.optional(v.number()),

@@ -24,11 +24,7 @@ export const multibaseString = v.pipe(
 	v.check((input) => MULTIBASE_RE.test(input), `must be a base58 multibase`),
 );
 
-export const didString: v.GenericSchema<unknown, Did> = v.pipe(
-	v.string(),
-	v.check((input) => isDid(input), `must be a did`),
-	v.transform((value) => value as Did),
-);
+export const didString = v.custom<Did>(isDid, `must be a did`);
 
 export const verificationMethod: v.GenericSchema<unknown, t.VerificationMethod> = v.pipe(
 	v.looseObject({

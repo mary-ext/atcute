@@ -19,41 +19,13 @@ import * as v from 'valibot';
 
 import type * as t from './types.ts';
 
-const cidString: v.GenericSchema<unknown, Cid> = v.pipe(
-	v.string(),
-	v.check((input) => isCid(input), `must be a cid`),
-	v.transform((value) => value as Cid),
-);
-const datetimeString: v.GenericSchema<unknown, Datetime> = v.pipe(
-	v.string(),
-	v.check((input) => isDatetime(input), `must be a datetime`),
-	v.transform((value) => value as Datetime),
-);
-const didString: v.GenericSchema<unknown, Did> = v.pipe(
-	v.string(),
-	v.check((input) => isDid(input), `must be a did`),
-	v.transform((value) => value as Did),
-);
-const handleString: v.GenericSchema<unknown, Handle> = v.pipe(
-	v.string(),
-	v.check((input) => isHandle(input), `must be a handle`),
-	v.transform((value) => value as Handle),
-);
-const nsidString: v.GenericSchema<unknown, Nsid> = v.pipe(
-	v.string(),
-	v.check((input) => isNsid(input), `must be an nsid`),
-	v.transform((value) => value as Nsid),
-);
-const rkeyString: v.GenericSchema<unknown, RecordKey> = v.pipe(
-	v.string(),
-	v.check((input) => isRecordKey(input), `must be a rkey`),
-	v.transform((value) => value as RecordKey),
-);
-const tidString: v.GenericSchema<unknown, Tid> = v.pipe(
-	v.string(),
-	v.check((input) => isTid(input), `must be a tid`),
-	v.transform((value) => value as Tid),
-);
+const cidString = v.custom<Cid>(isCid, `must be a cid`);
+const datetimeString = v.custom<Datetime>(isDatetime, `must be a datetime`);
+const didString = v.custom<Did>(isDid, `must be a did`);
+const handleString = v.custom<Handle>(isHandle, `must be a handle`);
+const nsidString = v.custom<Nsid>(isNsid, `must be an nsid`);
+const rkeyString = v.custom<RecordKey>(isRecordKey, `must be a rkey`);
+const tidString = v.custom<Tid>(isTid, `must be a tid`);
 
 const integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 

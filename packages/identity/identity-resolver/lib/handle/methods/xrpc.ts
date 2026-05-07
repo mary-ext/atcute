@@ -14,11 +14,7 @@ import * as err from '../../errors.ts';
 import type { HandleResolver, ResolveHandleOptions } from '../../types.ts';
 
 const response = v.looseObject({
-	did: v.pipe(
-		v.string(),
-		v.check((input) => isAtprotoDid(input)),
-		v.transform((value) => value as AtprotoDid),
-	),
+	did: v.custom<AtprotoDid>(isAtprotoDid),
 });
 
 const fetchXrpcHandler = pipe(

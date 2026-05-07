@@ -6,11 +6,7 @@ import * as t from './types.ts';
 
 const integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 
-const nsid: v.GenericSchema<unknown, Nsid> = v.pipe(
-	v.string(),
-	v.check((input) => isNsid(input), `expected valid nsid`),
-	v.transform((value) => value as Nsid),
-);
+const nsid = v.custom<Nsid>(isNsid, `expected valid nsid`);
 
 // #region Concrete types
 export const lexBoolean: v.GenericSchema<unknown, t.LexBoolean> = v.looseObject({
@@ -219,10 +215,9 @@ export const lexRecord: v.GenericSchema<unknown, t.LexRecord> = v.looseObject({
 			v.literal('tid'),
 			v.literal('nsid'),
 			v.literal('any'),
-			v.pipe(
-				v.string(),
-				v.check((input) => input.startsWith('literal:'), `invalid literal key`),
-				v.transform((value) => value as `literal:${string}`),
+			v.custom<`literal:${string}`>(
+				(input) => typeof input === 'string' && input.startsWith('literal:'),
+				`invalid literal key`,
 			),
 		]),
 	),

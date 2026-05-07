@@ -10,21 +10,12 @@ import type { Result } from '../types/misc.ts';
 
 import type { AuthError } from './types.ts';
 
-const didString: v.GenericSchema<unknown, Did> = v.pipe(
-	v.string(),
-	v.check((input) => isDid(input), `must be a did`),
-	v.transform((value) => value as Did),
+const didString = v.custom<Did>(isDid, `must be a did`);
+const audienceString = v.custom<Did | AtprotoAudience>(
+	(input) => isAtprotoAudience(input) || isDid(input),
+	`must be a did or atproto audience`,
 );
-const audienceString: v.GenericSchema<unknown, Did | AtprotoAudience> = v.pipe(
-	v.string(),
-	v.check((input) => isAtprotoAudience(input) || isDid(input), `must be a did or atproto audience`),
-	v.transform((value) => value as Did | AtprotoAudience),
-);
-const nsidString: v.GenericSchema<unknown, Nsid> = v.pipe(
-	v.string(),
-	v.check((input) => isNsid(input), `must be an nsid`),
-	v.transform((value) => value as Nsid),
-);
+const nsidString = v.custom<Nsid>(isNsid, `must be an nsid`);
 
 const integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 

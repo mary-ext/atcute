@@ -7,30 +7,21 @@ import * as v from 'valibot';
 import * as t from './types.ts';
 
 // #region Strings
-export const didPlcString: v.GenericSchema<unknown, t.DidPlcString> = v.pipe(
-	v.string(),
-	v.check((input) => isPlcDid(input), `must be a did:plc`),
-	v.transform((value) => value as t.DidPlcString),
-);
+export const didPlcString = v.custom<t.DidPlcString>(isPlcDid, `must be a did:plc`);
 
-export const permissiveDidKeyString: v.GenericSchema<unknown, t.DidKeyString> = v.pipe(
-	v.string(),
-	v.check((input) => isKeyDid(input), `must be a did:key`),
-	v.transform((value) => value as t.DidKeyString),
-);
+export const permissiveDidKeyString = v.custom<t.DidKeyString>(isKeyDid, `must be a did:key`);
 
-export const didKeyString: v.GenericSchema<unknown, t.DidKeyString> = v.pipe(
-	v.string(),
-	v.check((input) => {
-		try {
-			parseDidKey(input);
-			return true;
-		} catch {
-			return false;
-		}
-	}, `invalid did:key`),
-	v.transform((value) => value as t.DidKeyString),
-);
+export const didKeyString = v.custom<t.DidKeyString>((input) => {
+	if (!isKeyDid(input)) {
+		return false;
+	}
+	try {
+		parseDidKey(input);
+		return true;
+	} catch {
+		return false;
+	}
+}, `invalid did:key`);
 
 const cidString = v.pipe(
 	v.string(),

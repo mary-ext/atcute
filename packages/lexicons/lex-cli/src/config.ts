@@ -116,13 +116,7 @@ const atprotoNsidsSourceConfigSchema = v.looseObject({
 	type: v.literal('atproto'),
 	mode: v.literal('nsids'),
 	nsids: v.pipe(
-		v.array(
-			v.pipe(
-				v.string(),
-				v.check((value) => isNsid(value), `must be valid nsid`),
-				v.transform((value) => value as Nsid),
-			),
-		),
+		v.array(v.custom<Nsid>(isNsid, `must be valid nsid`)),
 		v.minLength(1, `must include at least one nsid`),
 	),
 });
