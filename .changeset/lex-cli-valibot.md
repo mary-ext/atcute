@@ -1,5 +1,5 @@
 ---
-'@atcute/lex-cli': major
+'@atcute/lex-cli': patch
 ---
 
 migrate the internal config and metadata schemas from `@badrap/valita` to `valibot`. the
