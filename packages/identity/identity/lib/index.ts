@@ -1,5 +1,5 @@
 export * as defs from './typedefs.ts';
-export * from './types.ts';
+export type { DidDocument, Service, VerificationMethod } from './typedefs.ts';
 
 export * from './utils.ts';
 

@@ -2,8 +2,6 @@ import { isDid, type Did } from '@atcute/lexicons/syntax';
 
 import * as v from 'valibot';
 
-import * as t from './types.ts';
-
 /** @deprecated */
 export const FRAGMENT_RE = /^#[^#]+$/;
 /** @deprecated */
@@ -19,14 +17,11 @@ export const didRelativeUri = v.pipe(
 	v.check((input) => FRAGMENT_RE.test(input) || URL.canParse(input), `must be a did relative uri`),
 );
 
-export const multibaseString = v.pipe(
-	v.string(),
-	v.check((input) => MULTIBASE_RE.test(input), `must be a base58 multibase`),
-);
+export const multibaseString = v.pipe(v.string(), v.regex(MULTIBASE_RE, `must be a base58 multibase`));
 
 export const didString = v.custom<Did>(isDid, `must be a did`);
 
-export const verificationMethod: v.GenericSchema<unknown, t.VerificationMethod> = v.pipe(
+export const verificationMethod = v.pipe(
 	v.looseObject({
 		id: didRelativeUri,
 		type: v.string(),
@@ -48,7 +43,7 @@ export const verificationMethod: v.GenericSchema<unknown, t.VerificationMethod> 
 	),
 );
 
-export const service: v.GenericSchema<unknown, t.Service> = v.looseObject({
+export const service = v.looseObject({
 	// should've only been RFC3968, but did:plc uses relative URIs.
 	id: didRelativeUri,
 	type: v.union([v.string(), v.array(v.string())]),
@@ -71,7 +66,7 @@ const hasDuplicates = <T>(arr: readonly T[], key: (item: T) => unknown = (x) => 
 	return false;
 };
 
-export const didDocument: v.GenericSchema<unknown, t.DidDocument> = v.pipe(
+export const didDocument = v.pipe(
 	v.looseObject({
 		'@context': v.optional(v.array(rfc3968UriSchema)),
 
@@ -104,3 +99,7 @@ export const didDocument: v.GenericSchema<unknown, t.DidDocument> = v.pipe(
 		return !hasDuplicates(identifiers);
 	}, `duplicate service ids`),
 );
+
+export type VerificationMethod = v.InferOutput<typeof verificationMethod>;
+export type Service = v.InferOutput<typeof service>;
+export type DidDocument = v.InferOutput<typeof didDocument>;
