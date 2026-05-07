@@ -1,13 +1,13 @@
 import { decodeUtf8From } from '@atcute/uint8array';
 
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
 import { WebSocketServer, type RawData, type WebSocket } from 'ws';
 
 import { TapSubscription } from './tap-subscription.ts';
 import { flattenTapEvent, tapEventWireSchema, tapRecordEventWireSchema } from './typedefs.ts';
 
-type RecordEventWire = v.Infer<typeof tapRecordEventWireSchema>;
+type RecordEventWire = v.InferOutput<typeof tapRecordEventWireSchema>;
 
 const createRecordEvent = (id: number): RecordEventWire => ({
 	id,
@@ -122,16 +122,14 @@ describe('tap subscription', () => {
 });
 
 describe('tap event schemas', () => {
-	const PARSE_OPTIONS = { mode: 'passthrough' } as const;
-
 	it('accepts create events without record', () => {
-		const result = tapEventWireSchema.try(createRecordEventWithoutRecord(1), PARSE_OPTIONS);
-		expect(result.ok).toBe(true);
-		if (!result.ok) {
+		const result = v.safeParse(tapEventWireSchema, createRecordEventWithoutRecord(1));
+		expect(result.success).toBe(true);
+		if (!result.success) {
 			return;
 		}
 
-		const evt = flattenTapEvent(result.value);
+		const evt = flattenTapEvent(result.output);
 		expect(evt.type).toBe('record');
 		if (evt.type !== 'record' || evt.action !== 'create') {
 			throw new Error(`unexpected event`);
@@ -142,13 +140,13 @@ describe('tap event schemas', () => {
 	});
 
 	it('accepts delete events without cid or record', () => {
-		const result = tapEventWireSchema.try(deleteRecordEvent(2), PARSE_OPTIONS);
-		expect(result.ok).toBe(true);
-		if (!result.ok) {
+		const result = v.safeParse(tapEventWireSchema, deleteRecordEvent(2));
+		expect(result.success).toBe(true);
+		if (!result.success) {
 			return;
 		}
 
-		const evt = flattenTapEvent(result.value);
+		const evt = flattenTapEvent(result.output);
 		expect(evt.type).toBe('record');
 		if (evt.type !== 'record' || evt.action !== 'delete') {
 			throw new Error(`unexpected event`);
@@ -159,22 +157,19 @@ describe('tap event schemas', () => {
 	});
 
 	it('rejects update events missing cid', () => {
-		const result = tapEventWireSchema.try(
-			{
-				id: 3,
-				type: 'record',
-				record: {
-					did: 'did:plc:ewvi7nxzyoun6zhxrhs64oiz',
-					rev: '3k3m5z2zq2f2x',
-					collection: 'app.bsky.feed.post',
-					rkey: '3k3m5z2zq2f2x',
-					action: 'update',
-					live: true,
-				},
+		const result = v.safeParse(tapEventWireSchema, {
+			id: 3,
+			type: 'record',
+			record: {
+				did: 'did:plc:ewvi7nxzyoun6zhxrhs64oiz',
+				rev: '3k3m5z2zq2f2x',
+				collection: 'app.bsky.feed.post',
+				rkey: '3k3m5z2zq2f2x',
+				action: 'update',
+				live: true,
 			},
-			PARSE_OPTIONS,
-		);
+		});
 
-		expect(result.ok).toBe(false);
+		expect(result.success).toBe(false);
 	});
 });

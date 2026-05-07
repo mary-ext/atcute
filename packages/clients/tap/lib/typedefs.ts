@@ -1,42 +1,74 @@
-import { isDid, isHandle, isNsid, isRecordKey, isTid } from '@atcute/lexicons/syntax';
+import {
+	isDid,
+	isHandle,
+	isNsid,
+	isRecordKey,
+	isTid,
+	type Did,
+	type Handle,
+	type Nsid,
+	type RecordKey,
+	type Tid,
+} from '@atcute/lexicons/syntax';
 
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import type * as t from './types.ts';
 
-const didString = v.string().assert(isDid, `must be a did`);
-const handleString = v.string().assert(isHandle, `must be a handle`);
-const nsidString = v.string().assert(isNsid, `must be an nsid`);
-const rkeyString = v.string().assert(isRecordKey, `must be a record key`);
-const tidString = v.string().assert(isTid, `must be a tid`);
+const didString: v.GenericSchema<unknown, Did> = v.pipe(
+	v.string(),
+	v.check((input) => isDid(input), `must be a did`),
+	v.transform((value) => value as Did),
+);
+const handleString: v.GenericSchema<unknown, Handle> = v.pipe(
+	v.string(),
+	v.check((input) => isHandle(input), `must be a handle`),
+	v.transform((value) => value as Handle),
+);
+const nsidString: v.GenericSchema<unknown, Nsid> = v.pipe(
+	v.string(),
+	v.check((input) => isNsid(input), `must be an nsid`),
+	v.transform((value) => value as Nsid),
+);
+const rkeyString: v.GenericSchema<unknown, RecordKey> = v.pipe(
+	v.string(),
+	v.check((input) => isRecordKey(input), `must be a record key`),
+	v.transform((value) => value as RecordKey),
+);
+const tidString: v.GenericSchema<unknown, Tid> = v.pipe(
+	v.string(),
+	v.check((input) => isTid(input), `must be a tid`),
+	v.transform((value) => value as Tid),
+);
 
-const integer = v
-	.number()
-	.assert((input) => input >= 0 && Number.isSafeInteger(input), `must be a nonnegative integer`);
+const integer = v.pipe(
+	v.number(),
+	v.check((input) => input >= 0 && Number.isSafeInteger(input), `must be a nonnegative integer`),
+);
 
-const recordEventCreateDataSchema = v.object({
+const recordEventCreateDataSchema = v.looseObject({
 	did: didString,
 	rev: tidString,
 	collection: nsidString,
 	rkey: rkeyString,
 	action: v.literal('create'),
 	cid: v.string(),
-	record: v.record(v.unknown()).optional(),
+	record: v.optional(v.record(v.string(), v.unknown())),
 	live: v.boolean(),
 });
 
-const recordEventUpdateDataSchema = v.object({
+const recordEventUpdateDataSchema = v.looseObject({
 	did: didString,
 	rev: tidString,
 	collection: nsidString,
 	rkey: rkeyString,
 	action: v.literal('update'),
 	cid: v.string(),
-	record: v.record(v.unknown()).optional(),
+	record: v.optional(v.record(v.string(), v.unknown())),
 	live: v.boolean(),
 });
 
-const recordEventDeleteDataSchema = v.object({
+const recordEventDeleteDataSchema = v.looseObject({
 	did: didString,
 	rev: tidString,
 	collection: nsidString,
@@ -45,50 +77,50 @@ const recordEventDeleteDataSchema = v.object({
 	live: v.boolean(),
 });
 
-const recordEventDataSchema = v.union(
+const recordEventDataSchema = v.union([
 	recordEventCreateDataSchema,
 	recordEventUpdateDataSchema,
 	recordEventDeleteDataSchema,
-);
+]);
 
-const identityEventDataSchema = v.object({
+const identityEventDataSchema = v.looseObject({
 	did: didString,
 	handle: handleString,
 	is_active: v.boolean(),
-	status: v.union(
+	status: v.union([
 		v.literal('active'),
 		v.literal('takendown'),
 		v.literal('suspended'),
 		v.literal('deactivated'),
 		v.literal('deleted'),
-	),
+	]),
 });
 
-export const tapRecordEventWireSchema = v.object({
+export const tapRecordEventWireSchema = v.looseObject({
 	id: integer,
 	type: v.literal('record'),
 	record: recordEventDataSchema,
 });
 
-export const tapIdentityEventWireSchema = v.object({
+export const tapIdentityEventWireSchema = v.looseObject({
 	id: integer,
 	type: v.literal('identity'),
 	identity: identityEventDataSchema,
 });
 
-export const tapEventWireSchema = v.union(tapRecordEventWireSchema, tapIdentityEventWireSchema);
+export const tapEventWireSchema = v.union([tapRecordEventWireSchema, tapIdentityEventWireSchema]);
 
-export const repoInfoSchema: v.Type<t.RepoInfo> = v.object({
+export const repoInfoSchema: v.GenericSchema<unknown, t.RepoInfo> = v.looseObject({
 	did: didString,
 	handle: handleString,
 	state: v.string(),
 	rev: tidString,
 	records: integer,
-	error: v.string().optional(),
-	retries: integer.optional(),
+	error: v.optional(v.string()),
+	retries: v.optional(integer),
 });
 
-export const flattenTapEvent = (wire: v.Infer<typeof tapEventWireSchema>): t.TapEvent => {
+export const flattenTapEvent = (wire: v.InferOutput<typeof tapEventWireSchema>): t.TapEvent => {
 	switch (wire.type) {
 		case 'identity': {
 			return {

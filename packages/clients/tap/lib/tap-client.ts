@@ -98,7 +98,7 @@ export class TapClient {
 			throw new Error(`failed to get repo info: ${response.status} ${response.statusText}`);
 		}
 
-		return repoInfoSchema.parse(await response.json());
+		return v.parse(repoInfoSchema, await response.json());
 	}
 
 	#getHeaders(): Record<string, string> {

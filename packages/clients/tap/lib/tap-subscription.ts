@@ -4,6 +4,7 @@ import { EventIterator } from '@mary-ext/event-iterator';
 import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { ReadonlyDeep } from 'type-fest';
+import * as v from 'valibot';
 
 import { flattenTapEvent, tapEventWireSchema } from './typedefs.ts';
 import type { TapEvent, TapSubscribeOptions, TapSubscriptionMessage } from './types.ts';
@@ -20,8 +21,6 @@ type BufferedAck = {
 	resolve: (value: void) => void;
 	reject: (reason?: unknown) => void;
 };
-
-const PARSE_OPTIONS = { mode: 'passthrough' } as const;
 
 export class TapSubscription {
 	#listening = 0;
@@ -143,13 +142,13 @@ export class TapSubscription {
 
 			let evt: TapEvent;
 			if (validateEvents) {
-				const result = tapEventWireSchema.try(raw, PARSE_OPTIONS);
-				if (!result.ok) {
-					onError?.(result);
+				const result = v.safeParse(tapEventWireSchema, raw);
+				if (!result.success) {
+					onError?.(new v.ValiError(result.issues));
 					return;
 				}
 
-				evt = flattenTapEvent(result.value);
+				evt = flattenTapEvent(result.output);
 			} else {
 				try {
 					evt = flattenTapEvent(raw as any);

@@ -255,9 +255,6 @@ importers:
       '@atcute/uint8array':
         specifier: workspace:^
         version: link:../../misc/uint8array
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
       '@mary-ext/event-iterator':
         specifier: ^1.0.0
         version: 1.0.0
