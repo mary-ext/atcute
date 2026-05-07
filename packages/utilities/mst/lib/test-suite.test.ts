@@ -4,7 +4,7 @@ import * as path from 'node:path';
 import * as CAR from '@atcute/car';
 import * as CID from '@atcute/cid';
 
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 import { beforeAll, describe, expect, it } from 'vitest';
 
 import { DeltaType, mstDiff, recordDiff } from './diff.ts';
@@ -19,21 +19,21 @@ import {
 } from './stores.ts';
 import { setMany } from './utils/blockmap.ts';
 
-const mstDiffTestCaseSchema = v.object({
+const mstDiffTestCaseSchema = v.looseObject({
 	$type: v.literal('mst-diff'),
 	description: v.string(),
-	inputs: v.object({
+	inputs: v.looseObject({
 		mst_a: v.string(),
 		mst_b: v.string(),
 	}),
-	results: v.object({
+	results: v.looseObject({
 		created_nodes: v.array(v.string()),
 		deleted_nodes: v.array(v.string()),
 		record_ops: v.array(
-			v.object({
+			v.looseObject({
 				rpath: v.string(),
-				old_value: v.string().nullable(),
-				new_value: v.string().nullable(),
+				old_value: v.nullable(v.string()),
+				new_value: v.nullable(v.string()),
 			}),
 		),
 		proof_nodes: v.array(v.string()),
@@ -41,7 +41,7 @@ const mstDiffTestCaseSchema = v.object({
 	}),
 });
 
-type MstDiffTestCase = v.Infer<typeof mstDiffTestCaseSchema>;
+type MstDiffTestCase = v.InferOutput<typeof mstDiffTestCaseSchema>;
 
 const testSuiteRoot = path.join(__dirname, '../mst-test-suite');
 
@@ -79,7 +79,7 @@ const testCases = await (async () => {
 		const raw = await fs.readFile(filename, 'utf-8');
 		const json = JSON.parse(raw);
 
-		const testCase = mstDiffTestCaseSchema.parse(json, { mode: 'passthrough' });
+		const testCase = v.parse(mstDiffTestCaseSchema, json);
 
 		testCases.push({
 			path: filename,
