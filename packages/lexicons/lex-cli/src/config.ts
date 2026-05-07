@@ -11,9 +11,10 @@ import * as v from 'valibot';
 import type { ImportMapping } from './codegen.ts';
 import { printValibotIssues } from './utils/issues.ts';
 
-// the schema graph here is deep enough that valibot's inferred output types bottom out at `{}`,
-// so each schema is annotated against an explicit interface to keep tsgo happy. the interfaces
-// match the schemas one-to-one — no casts are needed.
+// `lexiconConfigSchema` is wide and deep enough that valibot's inferred output bottoms out at
+// `{}` for its nested fields. annotating it against an explicit interface forces tsgo to use the
+// declared shape; inner schemas infer cleanly without help. the interfaces also strip the
+// `{ [key: string]: unknown }` index signature that `looseObject` would otherwise expose.
 
 export interface GitSourceConfig {
 	type: 'git';
@@ -104,14 +105,14 @@ const isValidLexiconPattern = (pattern: string): boolean => {
 	return isNsid(pattern);
 };
 
-const gitSourceConfigSchema: v.GenericSchema<unknown, GitSourceConfig> = v.looseObject({
+const gitSourceConfigSchema = v.looseObject({
 	type: v.literal('git'),
 	remote: nonEmptyString,
 	ref: v.optional(nonEmptyString),
 	pattern: v.pipe(v.array(nonEmptyString), v.minLength(1, `must include at least one glob pattern`)),
 });
 
-const atprotoNsidsSourceConfigSchema: v.GenericSchema<unknown, AtprotoNsidsSourceConfig> = v.looseObject({
+const atprotoNsidsSourceConfigSchema = v.looseObject({
 	type: v.literal('atproto'),
 	mode: v.literal('nsids'),
 	nsids: v.pipe(
@@ -126,44 +127,40 @@ const atprotoNsidsSourceConfigSchema: v.GenericSchema<unknown, AtprotoNsidsSourc
 	),
 });
 
-const atprotoAuthoritySourceConfigSchema: v.GenericSchema<unknown, AtprotoAuthoritySourceConfig> =
-	v.looseObject({
-		type: v.literal('atproto'),
-		mode: v.literal('authority'),
-		authority: v.pipe(
-			v.string(),
-			v.check((value) => isHandle(value) || isAtprotoDid(value), `must a valid at-identifier`),
+const atprotoAuthoritySourceConfigSchema = v.looseObject({
+	type: v.literal('atproto'),
+	mode: v.literal('authority'),
+	authority: v.pipe(
+		v.string(),
+		v.check((value) => isHandle(value) || isAtprotoDid(value), `must a valid at-identifier`),
+	),
+	pattern: v.optional(
+		v.array(
+			v.pipe(v.string(), v.check(isValidLexiconPattern, `must be valid nsid or pattern ending with .*`)),
 		),
-		pattern: v.optional(
-			v.array(
-				v.pipe(v.string(), v.check(isValidLexiconPattern, `must be valid nsid or pattern ending with .*`)),
-			),
-		),
-	});
+	),
+});
 
-const atprotoSourceConfigSchema: v.GenericSchema<unknown, AtprotoSourceConfig> = v.union([
+const atprotoSourceConfigSchema = v.union([
 	atprotoNsidsSourceConfigSchema,
 	atprotoAuthoritySourceConfigSchema,
 ]);
 
-const sourceConfigSchema: v.GenericSchema<unknown, SourceConfig> = v.union([
-	gitSourceConfigSchema,
-	atprotoSourceConfigSchema,
-]);
+const sourceConfigSchema = v.union([gitSourceConfigSchema, atprotoSourceConfigSchema]);
 
-const pullConfigSchema: v.GenericSchema<unknown, PullConfig> = v.looseObject({
+const pullConfigSchema = v.looseObject({
 	outdir: nonEmptyString,
 	clean: v.optional(v.boolean()),
 	sources: v.pipe(v.array(sourceConfigSchema), v.minLength(1, `must include at least one source`)),
 });
 
-const exportConfigSchema: v.GenericSchema<unknown, ExportConfig> = v.looseObject({
+const exportConfigSchema = v.looseObject({
 	outdir: nonEmptyString,
 	files: v.optional(v.array(nonEmptyString)),
 	clean: v.optional(v.boolean()),
 });
 
-const formatterConfigSchema: v.GenericSchema<unknown, FormatterConfig> = v.union([
+const formatterConfigSchema = v.union([
 	v.looseObject({ type: v.literal('prettier') }),
 	v.looseObject({
 		type: v.literal('command'),
@@ -182,7 +179,7 @@ const formatterConfigSchema: v.GenericSchema<unknown, FormatterConfig> = v.union
 	}),
 ]);
 
-const mappingImports: v.GenericSchema<unknown, ImportMapping['imports']> = v.pipe(
+const mappingImports = v.pipe(
 	v.unknown(),
 	v.rawTransform<unknown, ImportMapping['imports']>(({ dataset, addIssue, NEVER }) => {
 		const value = dataset.value;
@@ -201,7 +198,7 @@ const mappingImports: v.GenericSchema<unknown, ImportMapping['imports']> = v.pip
 	}),
 );
 
-const importMappingSchema: v.GenericSchema<unknown, ImportMapping> = v.looseObject({
+const importMappingSchema = v.looseObject({
 	nsid: v.pipe(
 		v.array(
 			v.pipe(
@@ -214,11 +211,11 @@ const importMappingSchema: v.GenericSchema<unknown, ImportMapping> = v.looseObje
 	imports: mappingImports,
 });
 
-const modulesConfigSchema: v.GenericSchema<unknown, ModulesConfig> = v.looseObject({
+const modulesConfigSchema = v.looseObject({
 	importSuffix: v.optional(nonEmptyString),
 });
 
-const generateConfigSchema: v.GenericSchema<unknown, GenerateConfig> = v.looseObject({
+const generateConfigSchema = v.looseObject({
 	outdir: v.optional(nonEmptyString),
 	files: v.optional(
 		v.pipe(v.array(nonEmptyString), v.minLength(1, `must include at least one glob pattern`)),
