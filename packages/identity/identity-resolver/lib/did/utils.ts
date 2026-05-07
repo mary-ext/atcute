@@ -4,5 +4,5 @@ import { isResponseOk, parseResponseAsJson, pipe, validateJsonWith } from '@atcu
 export const fetchDocHandler = pipe(
 	isResponseOk,
 	parseResponseAsJson(/^application\/(did\+ld\+)?json$/, 20 * 1024),
-	validateJsonWith(defs.didDocument, { mode: 'passthrough' }),
+	validateJsonWith(defs.didDocument),
 );

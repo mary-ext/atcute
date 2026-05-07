@@ -1,3 +1,4 @@
+import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
 
 import { didDocument } from './typedefs.ts';
@@ -8,7 +9,7 @@ import {
 	getPdsEndpoint,
 } from './utils.ts';
 
-const PRONOUNS_LABELER_DID_DOC = didDocument.parse({
+const PRONOUNS_LABELER_DID_DOC = v.parse(didDocument, {
 	'@context': [
 		'https://www.w3.org/ns/did/v1',
 		'https://w3id.org/security/multikey/v1',

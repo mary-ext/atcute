@@ -1,10 +1,11 @@
+import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
 
 import { didDocument } from './typedefs.ts';
 
 describe('didDocument', () => {
 	it('parses a did:plc document', () => {
-		const doc = didDocument.parse({
+		const doc = v.parse(didDocument, {
 			'@context': [
 				'https://www.w3.org/ns/did/v1',
 				'https://w3id.org/security/multikey/v1',
@@ -56,7 +57,7 @@ describe('didDocument', () => {
 	});
 
 	it('parses a did:plc document containing a labeler', () => {
-		const doc = didDocument.parse({
+		const doc = v.parse(didDocument, {
 			'@context': [
 				'https://www.w3.org/ns/did/v1',
 				'https://w3id.org/security/multikey/v1',
@@ -130,7 +131,7 @@ describe('didDocument', () => {
 	});
 
 	it('parses a did:web document without @context', () => {
-		const doc = didDocument.parse({
+		const doc = v.parse(didDocument, {
 			id: 'did:web:discover.bsky.app',
 			service: [
 				{
@@ -154,7 +155,7 @@ describe('didDocument', () => {
 	});
 
 	it('parses a did:web document', () => {
-		const doc = didDocument.parse({
+		const doc = v.parse(didDocument, {
 			'@context': [
 				'https://www.w3.org/ns/did/v1',
 				'https://w3id.org/security/multikey/v1',

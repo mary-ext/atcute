@@ -8,7 +8,7 @@ import {
 	validateJsonWith,
 } from '@atcute/util-fetch';
 
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import * as err from '../../errors.ts';
 import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../../types.ts';
@@ -16,7 +16,7 @@ import type { DidDocumentResolver, ResolveDidDocumentOptions } from '../../types
 const fetchXrpcHandler = pipe(
 	isResponseOk,
 	parseResponseAsJson(/^application\/json$/, 20 * 1024 + 16),
-	validateJsonWith(v.object({ didDoc: defs.didDocument }), { mode: 'passthrough' }),
+	validateJsonWith(v.looseObject({ didDoc: defs.didDocument })),
 );
 
 export interface XrpcDidDocumentResolverOptions {

@@ -62,7 +62,7 @@ const assertResponseOk = async (response: Response): Promise<Response> => {
 const handleDocument = pipe(
 	assertResponseOk,
 	parseResponseAsJson(/^application\/(did\+ld\+)?json$/, MAX_RESPONSE_SIZE),
-	validateJsonWith(identityDefs.didDocument, { mode: 'passthrough' }),
+	validateJsonWith(identityDefs.didDocument),
 );
 
 const handlePlcState = pipe(

@@ -1,6 +1,8 @@
 import { defs as identityDefs, type DidDocument } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons';
 
+import * as v from 'valibot';
+
 import { TapSubscription } from './tap-subscription.ts';
 import { repoInfoSchema } from './typedefs.ts';
 import type { RepoInfo, TapClientOptions, TapSubscribeOptions } from './types.ts';
@@ -82,7 +84,7 @@ export class TapClient {
 			throw new Error(`failed to resolve did: ${response.status} ${response.statusText}`);
 		}
 
-		return identityDefs.didDocument.parse(await response.json());
+		return v.parse(identityDefs.didDocument, await response.json());
 	}
 
 	async getRepoInfo(did: Did): Promise<RepoInfo> {

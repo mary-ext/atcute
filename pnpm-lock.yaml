@@ -270,6 +270,9 @@ importers:
       type-fest:
         specifier: ^4.41.0
         version: 4.41.0
+      valibot:
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@6.0.3)
     devDependencies:
       '@types/ws':
         specifier: ^8.18.1
@@ -518,9 +521,9 @@ importers:
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
+      valibot:
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@6.0.3)
     devDependencies:
       '@vitest/coverage-v8':
         specifier: ^4.1.5
@@ -537,9 +540,9 @@ importers:
       '@atcute/util-fetch':
         specifier: workspace:^
         version: link:../../misc/util-fetch
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
+      valibot:
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@6.0.3)
     devDependencies:
       '@atcute/identity':
         specifier: workspace:^

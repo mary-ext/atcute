@@ -34,7 +34,7 @@
 	"dependencies": {
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
-		"@badrap/valita": "^0.4.6"
+		"valibot": "^1.4.0"
 	},
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",

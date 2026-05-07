@@ -8,19 +8,23 @@ import {
 	validateJsonWith,
 } from '@atcute/util-fetch';
 
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import * as err from '../../errors.ts';
 import type { HandleResolver, ResolveHandleOptions } from '../../types.ts';
 
-const response = v.object({
-	did: v.string().assert((input) => isAtprotoDid(input)),
+const response = v.looseObject({
+	did: v.pipe(
+		v.string(),
+		v.check((input) => isAtprotoDid(input)),
+		v.transform((value) => value as AtprotoDid),
+	),
 });
 
 const fetchXrpcHandler = pipe(
 	isResponseOk,
 	parseResponseAsJson(/^application\/json$/, 4 * 1024),
-	validateJsonWith(response, { mode: 'passthrough' }),
+	validateJsonWith(response),
 );
 
 export interface XrpcHandleResolverOptions {
@@ -38,7 +42,7 @@ export class XrpcHandleResolver implements HandleResolver {
 	}
 
 	async resolve(handle: Handle, options?: ResolveHandleOptions): Promise<AtprotoDid> {
-		let json: v.Infer<typeof response>;
+		let json: v.InferOutput<typeof response>;
 
 		try {
 			const url = new URL(`/xrpc/com.atproto.identity.resolveHandle`, this.serviceUrl);
