@@ -502,9 +502,9 @@ importers:
       '@atcute/util-fetch':
         specifier: workspace:^
         version: link:../../misc/util-fetch
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
+      valibot:
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@6.0.3)
     devDependencies:
       '@atcute/internal-dev-env':
         specifier: workspace:^

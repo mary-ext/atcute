@@ -68,25 +68,25 @@ const handleDocument = pipe(
 const handlePlcState = pipe(
 	assertResponseOk,
 	parseResponseAsJson(/^application\/json$/, MAX_RESPONSE_SIZE),
-	validateJsonWith(defs.plcState, { mode: 'passthrough' }),
+	validateJsonWith(defs.plcState),
 );
 
 const handleOperationLog = pipe(
 	assertResponseOk,
 	parseResponseAsJson(/^application\/json$/, MAX_RESPONSE_SIZE),
-	validateJsonWith(defs.operationLog, { mode: 'passthrough' }),
+	validateJsonWith(defs.operationLog),
 );
 
 const handleIndexedEntryLog = pipe(
 	assertResponseOk,
 	parseResponseAsJson(/^application\/json$/, MAX_RESPONSE_SIZE),
-	validateJsonWith(defs.indexedEntryLog, { mode: 'passthrough' }),
+	validateJsonWith(defs.indexedEntryLog),
 );
 
 const handleLastOperation = pipe(
 	assertResponseOk,
 	parseResponseAsJson(/^application\/json$/, MAX_RESPONSE_SIZE),
-	validateJsonWith(defs.compatibleOperationOrTombstone, { mode: 'passthrough' }),
+	validateJsonWith(defs.compatibleOperationOrTombstone),
 );
 
 export interface PlcClientOptions {

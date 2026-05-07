@@ -2,135 +2,158 @@ import * as CID from '@atcute/cid';
 import { parseDidKey } from '@atcute/crypto';
 import { isKeyDid, isPlcDid } from '@atcute/identity';
 
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import * as t from './types.ts';
 
 // #region Strings
-export const didPlcString = v.string().assert(isPlcDid, `must be a did:plc`);
+export const didPlcString: v.GenericSchema<unknown, t.DidPlcString> = v.pipe(
+	v.string(),
+	v.check((input) => isPlcDid(input), `must be a did:plc`),
+	v.transform((value) => value as t.DidPlcString),
+);
 
-export const permissiveDidKeyString = v.string().assert(isKeyDid, `must be a did:key`);
+export const permissiveDidKeyString: v.GenericSchema<unknown, t.DidKeyString> = v.pipe(
+	v.string(),
+	v.check((input) => isKeyDid(input), `must be a did:key`),
+	v.transform((value) => value as t.DidKeyString),
+);
 
-export const didKeyString = v.string().chain((input) => {
-	try {
-		parseDidKey(input);
-	} catch (err) {
-		if (err instanceof SyntaxError) {
-			return v.err(`did:key can't be parsed`);
+export const didKeyString: v.GenericSchema<unknown, t.DidKeyString> = v.pipe(
+	v.string(),
+	v.check((input) => {
+		try {
+			parseDidKey(input);
+			return true;
+		} catch {
+			return false;
 		}
+	}, `invalid did:key`),
+	v.transform((value) => value as t.DidKeyString),
+);
 
-		return v.err(`invalid did:key`);
-	}
-
-	return v.ok(input as t.DidKeyString);
-});
-
-const cidString = v.string().chain((input) => {
-	try {
-		CID.fromString(input);
-	} catch {
-		return v.err(`invalid cid`);
-	}
-
-	return v.ok(input);
-});
+const cidString = v.pipe(
+	v.string(),
+	v.check((input) => {
+		try {
+			CID.fromString(input);
+			return true;
+		} catch {
+			return false;
+		}
+	}, `invalid cid`),
+);
 // #endregion
 
 // #region create
-const _unsignedLegacyCreateOperation = v.object({
+const unsignedLegacyCreateOperationEntries = {
 	type: v.literal('create'),
 	prev: v.null(),
 	signingKey: didKeyString,
 	recoveryKey: didKeyString,
 	handle: v.string(),
 	service: v.string(),
-}) satisfies v.Type<t.UnsignedLegacyCreateOperation>;
+};
 
-export const unsignedLegacyCreateOperation: v.Type<t.UnsignedLegacyCreateOperation> =
-	_unsignedLegacyCreateOperation;
+export const unsignedLegacyCreateOperation: v.GenericSchema<unknown, t.UnsignedLegacyCreateOperation> =
+	v.looseObject(unsignedLegacyCreateOperationEntries);
 
-export const legacyCreateOperation: v.Type<t.LegacyCreateOperation> = _unsignedLegacyCreateOperation.extend({
+export const legacyCreateOperation: v.GenericSchema<unknown, t.LegacyCreateOperation> = v.looseObject({
+	...unsignedLegacyCreateOperationEntries,
 	sig: v.string(),
 });
 // #endregion
 
 // #region plc_operation
-export const service: v.Type<t.Service> = v.object({
+export const service: v.GenericSchema<unknown, t.Service> = v.looseObject({
 	type: v.string(),
 	endpoint: v.string(),
 });
 
-const _unsignedOperation = v.object({
+const unsignedOperationEntries = {
 	type: v.literal('plc_operation'),
-	prev: v.string().nullable(),
+	prev: v.nullable(v.string()),
 	rotationKeys: v.array(didKeyString),
-	verificationMethods: v.record(permissiveDidKeyString),
+	verificationMethods: v.record(v.string(), permissiveDidKeyString),
 	alsoKnownAs: v.array(v.string()),
-	services: v.record(service),
-}) satisfies v.Type<t.UnsignedOperation>;
+	services: v.record(v.string(), service),
+};
 
-export const unsignedOperation: v.Type<t.UnsignedOperation> = _unsignedOperation;
+export const unsignedOperation: v.GenericSchema<unknown, t.UnsignedOperation> =
+	v.looseObject(unsignedOperationEntries);
 
-export const operation: v.Type<t.Operation> = _unsignedOperation.extend({
+export const operation: v.GenericSchema<unknown, t.Operation> = v.looseObject({
+	...unsignedOperationEntries,
 	sig: v.string(),
 });
 // #endregion
 
 // #region plc_tombstone
-const _unsignedTombstone = v.object({
+const unsignedTombstoneEntries = {
 	type: v.literal('plc_tombstone'),
 	prev: v.string(),
-}) satisfies v.Type<t.UnsignedTombstone>;
+};
 
-export const unsignedTombstone: v.Type<t.UnsignedTombstone> = _unsignedTombstone;
+export const unsignedTombstone: v.GenericSchema<unknown, t.UnsignedTombstone> =
+	v.looseObject(unsignedTombstoneEntries);
 
-export const tombstone: v.Type<t.Tombstone> = _unsignedTombstone.extend({
+export const tombstone: v.GenericSchema<unknown, t.Tombstone> = v.looseObject({
+	...unsignedTombstoneEntries,
 	sig: v.string(),
 });
 // #endregion
 
 // #region Entry
-export const compatibleOperation: v.Type<t.CompatibleOperation> = v.union(operation, legacyCreateOperation);
-
-export const compatibleOperationOrTombstone: v.Type<t.CompatibleOperationOrTombstone> = v.union(
+export const compatibleOperation: v.GenericSchema<unknown, t.CompatibleOperation> = v.union([
 	operation,
 	legacyCreateOperation,
+]);
+
+export const compatibleOperationOrTombstone: v.GenericSchema<unknown, t.CompatibleOperationOrTombstone> =
+	v.union([operation, legacyCreateOperation, tombstone]);
+
+export const operationOrTombstone: v.GenericSchema<unknown, t.OperationOrTombstone> = v.union([
+	operation,
 	tombstone,
+]);
+
+export const operationLog: v.GenericSchema<unknown, t.OperationLog> = v.tupleWithRest(
+	[compatibleOperation],
+	operationOrTombstone,
 );
-
-export const operationOrTombstone: v.Type<t.OperationOrTombstone> = v.union(operation, tombstone);
-
-export const operationLog: v.Type<t.OperationLog> = v
-	.tuple([compatibleOperation])
-	.concat(v.array(operationOrTombstone));
 // #endregion
 
 // #region Indexed entry
-const _indexedEntry = v.object({
+const indexedEntryEntries = {
 	did: didPlcString,
 	operation: compatibleOperationOrTombstone,
 	cid: cidString,
 	nullified: v.boolean(),
-	createdAt: v.string().assert((input) => !Number.isNaN(new Date(input).getTime()), `invalid timestamp`),
-}) satisfies v.Type<t.IndexedEntry>;
+	createdAt: v.pipe(
+		v.string(),
+		v.check((input) => !Number.isNaN(new Date(input).getTime()), `invalid timestamp`),
+	),
+};
 
-export const indexedEntry: v.Type<t.IndexedEntry> = _indexedEntry;
+export const indexedEntry: v.GenericSchema<unknown, t.IndexedEntry> = v.looseObject(indexedEntryEntries);
 
-export const indexedEntryLog: v.Type<t.IndexedEntryLog> = v
-	.tuple([_indexedEntry.extend({ operation: compatibleOperation })])
-	.concat(v.array(_indexedEntry.extend({ operation: operationOrTombstone })));
+export const indexedEntryLog: v.GenericSchema<unknown, t.IndexedEntryLog> = v.tupleWithRest(
+	[v.looseObject({ ...indexedEntryEntries, operation: compatibleOperation })],
+	v.looseObject({ ...indexedEntryEntries, operation: operationOrTombstone }),
+);
 // #endregion
 
 // #region Client response schemas
-export const plcState: v.Type<t.PlcState> = v.object({
+export const plcState: v.GenericSchema<unknown, t.PlcState> = v.looseObject({
 	did: didPlcString,
 	rotationKeys: v.array(didKeyString),
-	verificationMethods: v.record(permissiveDidKeyString),
+	verificationMethods: v.record(v.string(), permissiveDidKeyString),
 	alsoKnownAs: v.array(v.string()),
-	services: v.record(service),
+	services: v.record(v.string(), service),
 });
 
-export const sequencedEntry: v.Type<t.SequencedEntry> = _indexedEntry.extend({
+export const sequencedEntry: v.GenericSchema<unknown, t.SequencedEntry> = v.looseObject({
+	...indexedEntryEntries,
 	type: v.literal('sequenced_op'),
 	seq: v.number(),
 });

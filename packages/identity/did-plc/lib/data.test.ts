@@ -1,5 +1,6 @@
 import { Secp256k1PrivateKeyExportable } from '@atcute/crypto';
 
+import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
 
 import { processIndexedEntryLog } from './data.ts';
@@ -9,7 +10,7 @@ import { deriveDidFromGenesisOp, isSignedOperationValid, signOperation } from '.
 
 describe('processIndexedEntryLog()', () => {
 	it('validates an operation log', async () => {
-		const log = indexedEntryLog.parse([
+		const log = v.parse(indexedEntryLog, [
 			{
 				did: 'did:plc:oky5czdrnfjpqslsw2a5iclo',
 				operation: {
@@ -91,7 +92,7 @@ describe('processIndexedEntryLog()', () => {
 	});
 
 	it('validates an operation log containing a nullified op', async () => {
-		const log = indexedEntryLog.parse([
+		const log = v.parse(indexedEntryLog, [
 			{
 				did: 'did:plc:pkmfz5soq2swsvbhvjekb36g',
 				operation: {
