@@ -6,8 +6,13 @@ import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { ReadonlyDeep } from 'type-fest';
 import * as v from 'valibot';
 
-import { flattenTapEvent, tapEventWireSchema } from './typedefs.ts';
-import type { TapEvent, TapSubscribeOptions, TapSubscriptionMessage } from './types.ts';
+import {
+	flattenTapEvent,
+	tapEventWireSchema,
+	type TapEvent,
+	type TapSubscribeOptions,
+	type TapSubscriptionMessage,
+} from './typedefs.ts';
 import { formatAdminAuthHeader } from './utils.ts';
 
 export interface TapSubscriptionOptions extends TapSubscribeOptions {

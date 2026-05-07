@@ -11,9 +11,8 @@ import {
 	type Tid,
 } from '@atcute/lexicons/syntax';
 
+import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 import * as v from 'valibot';
-
-import type * as t from './types.ts';
 
 const didString = v.custom<Did>(isDid, `must be a did`);
 const handleString = v.custom<Handle>(isHandle, `must be a handle`);
@@ -50,7 +49,7 @@ const recordEventDeleteDataSchema = v.looseObject({
 	action: v.literal('delete'),
 });
 
-const recordEventDataSchema = v.union([
+const recordEventDataSchema = v.variant('action', [
 	recordEventCreateDataSchema,
 	recordEventUpdateDataSchema,
 	recordEventDeleteDataSchema,
@@ -75,9 +74,9 @@ export const tapIdentityEventWireSchema = v.looseObject({
 	identity: identityEventDataSchema,
 });
 
-export const tapEventWireSchema = v.union([tapRecordEventWireSchema, tapIdentityEventWireSchema]);
+export const tapEventWireSchema = v.variant('type', [tapRecordEventWireSchema, tapIdentityEventWireSchema]);
 
-export const repoInfoSchema: v.GenericSchema<unknown, t.RepoInfo> = v.looseObject({
+export const repoInfoSchema = v.looseObject({
 	did: didString,
 	handle: handleString,
 	state: v.string(),
@@ -87,7 +86,88 @@ export const repoInfoSchema: v.GenericSchema<unknown, t.RepoInfo> = v.looseObjec
 	retries: v.optional(integer),
 });
 
-export const flattenTapEvent = (wire: v.InferOutput<typeof tapEventWireSchema>): t.TapEvent => {
+export type RepoInfo = v.InferOutput<typeof repoInfoSchema>;
+
+export type TapRecordAction = 'create' | 'update' | 'delete';
+
+export type TapRepoStatus = 'active' | 'takendown' | 'suspended' | 'deactivated' | 'deleted';
+
+export interface TapRecordBaseEvent {
+	id: number;
+	type: 'record';
+
+	live: boolean;
+	did: Did;
+	rev: Tid;
+	collection: Nsid;
+	rkey: RecordKey;
+}
+
+export interface TapRecordCreateEvent extends TapRecordBaseEvent {
+	action: 'create';
+	cid: string;
+
+	/**
+	 * record may be omitted if tap fails to decode the record body but still has a cid.
+	 */
+	record?: Record<string, unknown>;
+}
+
+export interface TapRecordUpdateEvent extends TapRecordBaseEvent {
+	action: 'update';
+	cid: string;
+
+	/**
+	 * record may be omitted if tap fails to decode the record body but still has a cid.
+	 */
+	record?: Record<string, unknown>;
+}
+
+export interface TapRecordDeleteEvent extends TapRecordBaseEvent {
+	action: 'delete';
+}
+
+export type TapRecordEvent = TapRecordCreateEvent | TapRecordUpdateEvent | TapRecordDeleteEvent;
+
+export interface TapIdentityEvent {
+	id: number;
+	type: 'identity';
+
+	did: Did;
+	handle: Handle;
+	isActive: boolean;
+	status: TapRepoStatus;
+}
+
+export type TapEvent = TapRecordEvent | TapIdentityEvent;
+
+export interface TapClientOptions {
+	url: string | URL;
+	adminPassword?: string;
+	fetch?: typeof globalThis.fetch;
+}
+
+export interface TapSubscribeOptions {
+	/**
+	 * whether to validate incoming events.
+	 * @default true
+	 */
+	validateEvents?: boolean;
+
+	onConnectionOpen?: (event: Event) => void;
+	onConnectionClose?: (event: CloseEvent) => void;
+	onConnectionError?: (event: ErrorEvent) => void;
+	onError?: (error: unknown) => void;
+
+	ws?: Options;
+}
+
+export interface TapSubscriptionMessage {
+	event: TapEvent;
+	ack: () => Promise<void>;
+}
+
+export const flattenTapEvent = (wire: v.InferOutput<typeof tapEventWireSchema>): TapEvent => {
 	switch (wire.type) {
 		case 'identity': {
 			return {
