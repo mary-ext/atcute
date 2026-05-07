@@ -200,9 +200,6 @@ importers:
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
       '@mary-ext/event-iterator':
         specifier: ^1.0.0
         version: 1.0.0
@@ -215,6 +212,9 @@ importers:
       type-fest:
         specifier: ^4.41.0
         version: 4.41.0
+      valibot:
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@6.0.3)
 
   packages/clients/password-session:
     dependencies:
@@ -7899,54 +7899,3 @@ snapshots:
       chalk: 4.1.2
 
   zod@3.25.76: {}
-
-time:
-  '@atproto/api@0.19.14': 2026-05-06T19:09:21.667Z
-  '@atproto/crypto@0.4.5': 2025-12-02T17:12:36.396Z
-  '@atproto/identity@0.4.12': 2026-02-20T09:53:28.911Z
-  '@atproto/pds@0.4.221': 2026-04-29T14:27:21.398Z
-  '@badrap/valita@0.4.6': 2025-08-01T14:38:30.802Z
-  '@changesets/cli@2.31.0': 2026-04-17T21:20:58.915Z
-  '@cloudflare/workers-types@4.20260507.1': 2026-05-07T01:25:05.710Z
-  '@did-plc/server@0.0.1': 2023-02-28T20:54:17.740Z
-  '@ipld/dag-cbor@9.2.6': 2026-04-02T11:51:57.016Z
-  '@mary-ext/event-iterator@1.0.0': 2025-05-11T13:42:15.460Z
-  '@mary-ext/simple-event-emitter@1.0.1': 2026-02-21T09:26:06.205Z
-  '@mitata/counters@0.0.8': 2025-01-09T11:02:22.407Z
-  '@noble/curves@2.2.0': 2026-04-12T20:23:10.847Z
-  '@noble/secp256k1@3.1.0': 2026-04-11T22:19:22.821Z
-  '@optique/core@1.0.2': 2026-04-24T08:39:10.551Z
-  '@optique/run@1.0.2': 2026-04-24T08:39:32.543Z
-  '@remix-run/node-fetch-server@0.13.1': 2026-04-30T19:10:33.226Z
-  '@standard-schema/spec@1.1.0': 2025-12-15T20:49:46.431Z
-  '@types/bun@1.3.13': 2026-04-22T15:55:43.685Z
-  '@types/deno@2.5.0': 2025-10-01T19:32:19.552Z
-  '@types/node@25.6.0': 2026-04-10T03:39:59.421Z
-  '@types/ws@8.18.1': 2025-04-01T02:59:54.693Z
-  '@valibot/to-json-schema@1.7.0': 2026-05-05T23:01:25.494Z
-  '@vitest/browser-playwright@4.1.5': 2026-04-21T11:04:06.900Z
-  '@vitest/coverage-v8@4.1.5': 2026-04-21T11:04:22.099Z
-  axios@1.16.0: 2026-05-02T15:04:00.274Z
-  cbor-x@1.6.4: 2026-03-10T23:06:41.834Z
-  esm-env@1.2.2: 2025-01-08T20:32:34.154Z
-  fast-check@4.7.0: 2026-04-17T10:06:20.089Z
-  get-port@7.2.0: 2026-03-22T05:52:49.076Z
-  hono@4.12.18: 2026-05-06T11:32:30.638Z
-  mitata@1.0.34: 2025-02-04T01:36:33.564Z
-  nanoid@5.1.11: 2026-04-30T22:06:42.984Z
-  oxfmt@0.48.0: 2026-05-05T13:15:17.501Z
-  oxlint-tsgolint@0.22.1: 2026-04-27T14:59:54.947Z
-  oxlint@1.63.0: 2026-05-05T13:15:22.344Z
-  partysocket@1.1.18: 2026-04-20T20:34:34.895Z
-  picocolors@1.1.1: 2024-10-16T18:20:03.921Z
-  playwright@1.59.1: 2026-04-01T17:58:48.894Z
-  prettier@3.8.3: 2026-04-15T00:55:25.573Z
-  tschema@3.2.0: 2024-10-12T11:12:53.204Z
-  type-fest@4.41.0: 2025-05-06T07:20:19.356Z
-  typescript@6.0.3: 2026-04-16T23:38:27.905Z
-  uint8arrays@5.1.1: 2026-04-13T11:07:27.950Z
-  unicode-segmenter@0.14.5: 2025-12-29T00:02:28.636Z
-  valibot@1.4.0: 2026-05-05T22:44:23.192Z
-  vitest@4.1.5: 2026-04-21T11:04:03.117Z
-  ws@8.20.0: 2026-03-21T17:31:08.578Z
-  zig-build@0.3.0: 2023-09-27T23:59:54.310Z

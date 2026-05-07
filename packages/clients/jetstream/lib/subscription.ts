@@ -5,6 +5,7 @@ import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 import type { ReadonlyDeep } from 'type-fest';
+import * as v from 'valibot';
 
 import { jetstreamEventSchema } from './typedefs.ts';
 import type { JetstreamEvent, JetstreamProcedure } from './types.ts';
@@ -40,8 +41,6 @@ export interface JetstreamSubscriptionOptions {
 	 */
 	ws?: Options;
 }
-
-const PARSE_OPTIONS = { mode: 'passthrough' } as const;
 
 export class JetstreamSubscription {
 	#listening = 0;
@@ -136,12 +135,12 @@ export class JetstreamSubscription {
 
 			let event: JetstreamEvent;
 			if (validateEvents) {
-				const result = jetstreamEventSchema.try(raw, PARSE_OPTIONS);
-				if (!result.ok) {
+				const result = v.safeParse(jetstreamEventSchema, raw);
+				if (!result.success) {
 					return;
 				}
 
-				event = result.value;
+				event = result.output;
 			} else {
 				event = raw;
 			}
