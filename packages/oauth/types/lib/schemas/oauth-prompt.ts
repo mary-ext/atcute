@@ -1,4 +1,4 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 /**
  * OAuth prompt mode values.
@@ -9,12 +9,12 @@ import * as v from '@badrap/valita';
  * - `select_account`: force account selection
  * - `create`: force user registration screen
  */
-export const oauthPromptSchema = v.union(
+export const oauthPromptSchema = v.union([
 	v.literal('none'),
 	v.literal('login'),
 	v.literal('consent'),
 	v.literal('select_account'),
 	v.literal('create'),
-);
+]);
 
-export type OAuthPrompt = v.Infer<typeof oauthPromptSchema>;
+export type OAuthPrompt = v.InferOutput<typeof oauthPromptSchema>;

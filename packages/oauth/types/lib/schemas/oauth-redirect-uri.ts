@@ -1,4 +1,4 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import { httpsUriSchema, loopbackUriSchema, privateUseUriSchema } from './uri.ts';
 
@@ -16,27 +16,36 @@ import { httpsUriSchema, loopbackUriSchema, privateUseUriSchema } from './uri.ts
  * > than the loopback interface. It is also less susceptible to client-side
  * > firewalls and misconfigured host name resolution on the user's device.
  */
-export const loopbackRedirectUriSchema = loopbackUriSchema.chain((input) => {
-	if (input.startsWith('http://localhost')) {
-		return v.err(
-			`use of "localhost" hostname is not allowed (RFC 8252), use a loopback IP such as "127.0.0.1" instead`,
-		);
-	}
-	return v.ok(input);
-});
+export const loopbackRedirectUriSchema = v.pipe(
+	loopbackUriSchema,
+	v.check(
+		(input) => !input.startsWith('http://localhost'),
+		`use of "localhost" hostname is not allowed (RFC 8252), use a loopback IP such as "127.0.0.1" instead`,
+	),
+);
 
-export type LoopbackRedirectUri = v.Infer<typeof loopbackRedirectUriSchema>;
+export type LoopbackRedirectUri = v.InferOutput<typeof loopbackRedirectUriSchema>;
 
-export const oauthRedirectUriSchema = v.string().chain((input, options) => {
-	if (input.startsWith('http://')) {
-		return loopbackRedirectUriSchema.try(input, options);
-	}
+export const oauthRedirectUriSchema = v.pipe(
+	v.string(),
+	v.rawTransform<string, string>(({ dataset, addIssue, NEVER }) => {
+		const input = dataset.value;
+		let result;
+		if (input.startsWith('http://')) {
+			result = v.safeParse(loopbackRedirectUriSchema, input);
+		} else if (input.startsWith('https://')) {
+			result = v.safeParse(httpsUriSchema, input);
+		} else {
+			result = v.safeParse(privateUseUriSchema, input);
+		}
+		if (!result.success) {
+			for (const issue of result.issues) {
+				addIssue({ message: issue.message });
+			}
+			return NEVER;
+		}
+		return result.output;
+	}),
+);
 
-	if (input.startsWith('https://')) {
-		return httpsUriSchema.try(input, options);
-	}
-
-	return privateUseUriSchema.try(input, options);
-});
-
-export type OAuthRedirectUri = v.Infer<typeof oauthRedirectUriSchema>;
+export type OAuthRedirectUri = v.InferOutput<typeof oauthRedirectUriSchema>;

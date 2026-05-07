@@ -1,4 +1,4 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import { atprotoOAuthScopeSchema } from './atproto-oauth-scope.ts';
 import { oauthClientIdDiscoverableSchema } from './oauth-client-id-discoverable.ts';
@@ -8,47 +8,38 @@ import { isLoopbackHost } from './utils.ts';
 
 const SINGLE_SCOPE_RE = /^[\x21\x23-\x5B\x5D-\x7E]+$/;
 
-const singleScopeSchema = v.string().assert((input) => SINGLE_SCOPE_RE.test(input), `invalid OAuth scope`);
-
-const scopeSchema = v.union(
-	atprotoOAuthScopeSchema.chain((input) => {
-		const scopes = input.split(/\s+/);
-
-		for (let i = 0, len = scopes.length; i < len; i++) {
-			const aka = scopes[i];
-
-			for (let j = 0; j < i; j++) {
-				if (aka === scopes[j]) {
-					return v.err(`duplicate "${aka}" scope`);
-				}
-			}
-		}
-
-		return v.ok(input);
-	}),
-	v.array(singleScopeSchema).chain((input) => {
-		if (!input.includes('atproto')) {
-			input = ['atproto', ...input];
-		}
-
-		for (let i = 0, len = input.length; i < len; i++) {
-			const aka = input[i];
-
-			for (let j = 0; j < i; j++) {
-				if (aka === input[j]) {
-					return v.err(`duplicate "${aka}" scope`);
-				}
-			}
-		}
-
-		return v.ok(input);
-	}),
+const singleScopeSchema = v.pipe(
+	v.string(),
+	v.check((input) => SINGLE_SCOPE_RE.test(input), `invalid OAuth scope`),
 );
 
-const redirectUrisSchema = v
-	.array(oauthRedirectUriSchema)
-	.assert((arr) => arr.length > 0, `must have at least one redirect URI`)
-	.assert((arr) => {
+const hasNoDuplicates = <T>(arr: readonly T[]): boolean => {
+	for (let i = 0, len = arr.length; i < len; i++) {
+		for (let j = 0; j < i; j++) {
+			if (arr[i] === arr[j]) {
+				return false;
+			}
+		}
+	}
+	return true;
+};
+
+const scopeSchema = v.union([
+	v.pipe(
+		atprotoOAuthScopeSchema,
+		v.check((input) => hasNoDuplicates(input.split(/\s+/)), `duplicate scope`),
+	),
+	v.pipe(
+		v.array(singleScopeSchema),
+		v.transform((input) => (input.includes('atproto') ? input : ['atproto', ...input])),
+		v.check(hasNoDuplicates, `duplicate scope`),
+	),
+]);
+
+const redirectUrisSchema = v.pipe(
+	v.array(oauthRedirectUriSchema),
+	v.check((arr) => arr.length > 0, `must have at least one redirect URI`),
+	v.check((arr) => {
 		for (const uri of arr) {
 			// private-use URIs don't have URL-style credentials
 			if (!uri.includes('://')) {
@@ -60,7 +51,8 @@ const redirectUrisSchema = v
 			}
 		}
 		return true;
-	}, `redirect URIs must not contain credentials`);
+	}, `redirect URIs must not contain credentials`),
+);
 
 /**
  * user-facing client metadata for configuring a loopback public OAuth client.
@@ -69,10 +61,10 @@ const redirectUrisSchema = v
  * `http://localhost` as the client_id origin, which is built automatically
  * from the redirect_uris and scope.
  */
-export const loopbackClientMetadataSchema = v
-	.object({
+export const loopbackClientMetadataSchema = v.pipe(
+	v.looseObject({
 		/** must not be provided for loopback clients */
-		client_id: v.undefined().optional(),
+		client_id: v.optional(v.undefined()),
 
 		/**
 		 * redirect URIs for authorization responses.
@@ -85,32 +77,27 @@ export const loopbackClientMetadataSchema = v
 
 		/** OAuth scope (must include "atproto") */
 		scope: scopeSchema,
-	})
-	.chain((input) => {
-		// validate all redirect URIs are loopback
-		for (let i = 0; i < input.redirect_uris.length; i++) {
-			const uri = input.redirect_uris[i];
-			const result = loopbackRedirectUriSchema.try(uri, { mode: 'strict' });
-			if (!result.ok) {
-				return v.err({
-					message: `loopback clients require loopback redirect URIs (127.0.0.1 or [::1]): ${result.message}`,
-					path: ['redirect_uris', i],
-				});
+	}),
+	v.forward(
+		v.check((input) => {
+			// validate all redirect URIs are loopback
+			for (const uri of input.redirect_uris) {
+				const result = v.safeParse(loopbackRedirectUriSchema, uri);
+				if (!result.success) {
+					return false;
+				}
+				const url = new URL(uri);
+				if (!isLoopbackHost(url.hostname) || url.hostname === 'localhost') {
+					return false;
+				}
 			}
+			return true;
+		}, `loopback clients require loopback redirect URIs (127.0.0.1 or [::1])`),
+		['redirect_uris'],
+	),
+);
 
-			const url = new URL(uri);
-			if (!isLoopbackHost(url.hostname) || url.hostname === 'localhost') {
-				return v.err({
-					message: `loopback redirect URIs must use 127.0.0.1 or [::1], not ${url.hostname}`,
-					path: ['redirect_uris', i],
-				});
-			}
-		}
-
-		return v.ok(input);
-	});
-
-export type LoopbackClientMetadata = v.Infer<typeof loopbackClientMetadataSchema>;
+export type LoopbackClientMetadata = v.InferOutput<typeof loopbackClientMetadataSchema>;
 
 /**
  * user-facing client metadata for configuring a discoverable public OAuth client.
@@ -118,8 +105,8 @@ export type LoopbackClientMetadata = v.Infer<typeof loopbackClientMetadataSchema
  * discoverable public clients have an HTTPS client_id URL where metadata is hosted,
  * but don't use a keyset (token_endpoint_auth_method: 'none').
  */
-export const discoverablePublicClientMetadataSchema = v
-	.object({
+export const discoverablePublicClientMetadataSchema = v.pipe(
+	v.looseObject({
 		/** discoverable HTTPS client_id URL */
 		client_id: oauthClientIdDiscoverableSchema,
 
@@ -132,56 +119,50 @@ export const discoverablePublicClientMetadataSchema = v
 		/**
 		 * application type - defaults to 'web'.
 		 */
-		application_type: v.union(v.literal('web'), v.literal('native')).optional(),
+		application_type: v.optional(v.union([v.literal('web'), v.literal('native')])),
 
 		/** optional client homepage */
-		client_uri: webUriSchema.optional(),
+		client_uri: v.optional(webUriSchema),
 		/** optional display name */
-		client_name: v.string().optional(),
+		client_name: v.optional(v.string()),
 		/** optional policy url */
-		policy_uri: nonLocalWebUriSchema.optional(),
+		policy_uri: v.optional(nonLocalWebUriSchema),
 		/** optional terms of service url */
-		tos_uri: nonLocalWebUriSchema.optional(),
+		tos_uri: v.optional(nonLocalWebUriSchema),
 		/** optional logo url */
-		logo_uri: nonLocalWebUriSchema.optional(),
-	})
-	.chain((input) => {
-		// validate redirect URIs are HTTPS, loopback, or private-use
-		for (let i = 0; i < input.redirect_uris.length; i++) {
-			const uri = input.redirect_uris[i];
-
-			// private-use URIs are allowed
-			if (!uri.includes('://')) {
-				const result = privateUseUriSchema.try(uri, { mode: 'strict' });
-				if (!result.ok) {
-					return v.err({
-						message: `invalid redirect URI: ${result.message}`,
-						path: ['redirect_uris', i],
-					});
+		logo_uri: v.optional(nonLocalWebUriSchema),
+	}),
+	v.forward(
+		v.check((input) => {
+			// validate redirect URIs are HTTPS, loopback, or private-use
+			for (const uri of input.redirect_uris) {
+				// private-use URIs are allowed
+				if (!uri.includes('://')) {
+					if (!v.safeParse(privateUseUriSchema, uri).success) {
+						return false;
+					}
+					continue;
 				}
-				continue;
+
+				const url = new URL(uri);
+
+				// loopback http URIs are allowed for native apps
+				if (url.protocol === 'http:' && isLoopbackHost(url.hostname)) {
+					continue;
+				}
+
+				// otherwise must be https
+				if (url.protocol !== 'https:') {
+					return false;
+				}
 			}
+			return true;
+		}, `redirect URI must use https:, http: loopback, or private-use scheme`),
+		['redirect_uris'],
+	),
+);
 
-			const url = new URL(uri);
-
-			// loopback http URIs are allowed for native apps
-			if (url.protocol === 'http:' && isLoopbackHost(url.hostname)) {
-				continue;
-			}
-
-			// otherwise must be https
-			if (url.protocol !== 'https:') {
-				return v.err({
-					message: `redirect URI must use https:, http: loopback, or private-use scheme`,
-					path: ['redirect_uris', i],
-				});
-			}
-		}
-
-		return v.ok(input);
-	});
-
-export type DiscoverablePublicClientMetadata = v.Infer<typeof discoverablePublicClientMetadataSchema>;
+export type DiscoverablePublicClientMetadata = v.InferOutput<typeof discoverablePublicClientMetadataSchema>;
 
 /**
  * user-facing client metadata for configuring a public OAuth client.
@@ -189,9 +170,9 @@ export type DiscoverablePublicClientMetadata = v.Infer<typeof discoverablePublic
  * - if `client_id` is omitted: loopback client (for localhost dev / CLI tools)
  * - if `client_id` is provided: discoverable public client (HTTPS URL)
  */
-export const publicClientMetadataSchema = v.union(
+export const publicClientMetadataSchema = v.union([
 	loopbackClientMetadataSchema,
 	discoverablePublicClientMetadataSchema,
-);
+]);
 
-export type PublicClientMetadata = v.Infer<typeof publicClientMetadataSchema>;
+export type PublicClientMetadata = v.InferOutput<typeof publicClientMetadataSchema>;

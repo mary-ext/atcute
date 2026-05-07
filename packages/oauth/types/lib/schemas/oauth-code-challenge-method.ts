@@ -1,5 +1,5 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
-export const oauthCodeChallengeMethodSchema = v.union(v.literal('S256'), v.literal('plain'));
+export const oauthCodeChallengeMethodSchema = v.union([v.literal('S256'), v.literal('plain')]);
 
-export type OAuthCodeChallengeMethod = v.Infer<typeof oauthCodeChallengeMethodSchema>;
+export type OAuthCodeChallengeMethod = v.InferOutput<typeof oauthCodeChallengeMethodSchema>;

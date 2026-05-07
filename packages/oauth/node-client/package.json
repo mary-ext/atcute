@@ -36,8 +36,8 @@
 		"@atcute/oauth-keyset": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
-		"@badrap/valita": "^0.4.6",
-		"nanoid": "^5.1.11"
+		"nanoid": "^5.1.11",
+		"valibot": "^1.4.0"
 	},
 	"devDependencies": {
 		"@types/node": "^25.6.0",

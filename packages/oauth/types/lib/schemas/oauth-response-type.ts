@@ -1,6 +1,6 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
-export const oauthResponseTypeSchema = v.union(
+export const oauthResponseTypeSchema = v.union([
 	// OAuth2 (https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-10#section-4.1.1)
 	v.literal('code'), // Authorization Code Grant
 	v.literal('token'), // Implicit Grant
@@ -12,6 +12,6 @@ export const oauthResponseTypeSchema = v.union(
 	v.literal('code token'),
 	v.literal('id_token token'),
 	v.literal('id_token'),
-);
+]);
 
-export type OAuthResponseType = v.Infer<typeof oauthResponseTypeSchema>;
+export type OAuthResponseType = v.InferOutput<typeof oauthResponseTypeSchema>;

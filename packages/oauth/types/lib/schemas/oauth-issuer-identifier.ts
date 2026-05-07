@@ -1,30 +1,24 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import { webUriSchema } from './uri.ts';
 
-export const oauthIssuerIdentifierSchema = webUriSchema.chain((input) => {
+export const oauthIssuerIdentifierSchema = v.pipe(
+	webUriSchema,
 	// validate the issuer (MIX-UP attacks)
+	v.check((input) => !input.endsWith('/'), `issuer URL must not end with a slash`),
+	v.check((input) => {
+		const url = new URL(input);
+		return !(url.username || url.password);
+	}, `issuer URL must not contain a username or password`),
+	v.check((input) => {
+		const url = new URL(input);
+		return !(url.hash || url.search);
+	}, `issuer URL must not contain a query or fragment`),
+	v.check((input) => {
+		const url = new URL(input);
+		const canonicalValue = url.pathname === '/' ? url.origin : url.href;
+		return input === canonicalValue;
+	}, `issuer URL must be in the canonical form`),
+);
 
-	if (input.endsWith('/')) {
-		return v.err(`issuer URL must not end with a slash`);
-	}
-
-	const url = new URL(input);
-
-	if (url.username || url.password) {
-		return v.err(`issuer URL must not contain a username or password`);
-	}
-
-	if (url.hash || url.search) {
-		return v.err(`issuer URL must not contain a query or fragment`);
-	}
-
-	const canonicalValue = url.pathname === '/' ? url.origin : url.href;
-	if (input !== canonicalValue) {
-		return v.err(`issuer URL must be in the canonical form`);
-	}
-
-	return v.ok(input);
-});
-
-export type OAuthIssuerIdentifier = v.Infer<typeof oauthIssuerIdentifierSchema>;
+export type OAuthIssuerIdentifier = v.InferOutput<typeof oauthIssuerIdentifierSchema>;

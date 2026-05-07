@@ -5,6 +5,8 @@ import {
 } from '@atcute/oauth-types';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
+import * as v from 'valibot';
+
 import { AS_METADATA_MAX_SIZE, JSON_MIME } from '../constants.ts';
 import { OAuthResolverError } from '../errors.ts';
 import { CachedGetter, type GetCachedOptions } from '../utils/cached-getter.ts';
@@ -16,9 +18,7 @@ export type AuthorizationServerMetadataCache = Store<string, AtprotoAuthorizatio
 /** hoisted pipeline for parsing and validating AS metadata */
 const processResponse = pipe(
 	parseResponseAsJson(JSON_MIME, AS_METADATA_MAX_SIZE),
-	validateJsonWith(atprotoAuthorizationServerMetadataValidator, {
-		mode: 'passthrough',
-	}),
+	validateJsonWith(atprotoAuthorizationServerMetadataValidator),
 );
 
 export interface AuthorizationServerMetadataResolverOptions {
@@ -57,7 +57,7 @@ export class AuthorizationServerMetadataResolver extends CachedGetter<
 	 */
 	async resolve(input: string, options?: GetCachedOptions): Promise<AtprotoAuthorizationServerMetadata> {
 		// validate issuer format (allows https or loopback http only)
-		const issuer = oauthIssuerIdentifierSchema.parse(input);
+		const issuer = v.parse(oauthIssuerIdentifierSchema, input);
 
 		// loopback http only allowed in development
 		if (issuer.startsWith('http:') && !this.allowHttp) {

@@ -818,12 +818,12 @@ importers:
       '@atcute/uint8array':
         specifier: workspace:^
         version: link:../../misc/uint8array
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
       nanoid:
         specifier: ^5.1.11
         version: 5.1.11
+      valibot:
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@6.0.3)
     devDependencies:
       vitest:
         specifier: ^4.1.5
@@ -861,12 +861,12 @@ importers:
       '@atcute/util-fetch':
         specifier: workspace:^
         version: link:../../misc/util-fetch
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
       nanoid:
         specifier: ^5.1.11
         version: 5.1.11
+      valibot:
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@6.0.3)
     devDependencies:
       '@types/node':
         specifier: ^25.6.0
@@ -942,9 +942,9 @@ importers:
       '@atcute/oauth-keyset':
         specifier: workspace:^
         version: link:../keyset
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
+      valibot:
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@6.0.3)
     devDependencies:
       vitest:
         specifier: ^4.1.5

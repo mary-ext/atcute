@@ -1,5 +1,7 @@
 import type { Keyset } from '@atcute/oauth-keyset';
 
+import * as v from 'valibot';
+
 import { FALLBACK_ALG } from './constants.ts';
 import {
 	confidentialClientMetadataSchema,
@@ -24,7 +26,7 @@ export const buildClientMetadata = (
 	keyset: Keyset,
 ): OAuthClientMetadata => {
 	// validate user-facing schema is correct
-	const conf = confidentialClientMetadataSchema.parse(input, { mode: 'passthrough' });
+	const conf = v.parse(confidentialClientMetadataSchema, input);
 
 	// build full OAuth client metadata (atproto defaults and requirements)
 	const metadata: OAuthClientMetadata = {
@@ -115,7 +117,7 @@ const buildLoopbackClientId = (redirectUris: readonly string[], scope: string): 
  * @returns built client metadata
  */
 export const buildPublicClientMetadata = (input: PublicClientMetadata): OAuthClientMetadata => {
-	const parsed = publicClientMetadataSchema.parse(input, { mode: 'passthrough' });
+	const parsed = v.parse(publicClientMetadataSchema, input);
 	const scope = Array.isArray(parsed.scope) ? parsed.scope.join(' ') : parsed.scope;
 
 	if (parsed.client_id === undefined) {

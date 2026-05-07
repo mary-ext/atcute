@@ -1,7 +1,7 @@
 import { fromBase64Url } from '@atcute/multibase';
 import { decodeUtf8From } from '@atcute/uint8array';
 
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import { getImportAlgorithm } from '../internal/crypto.ts';
 import { computeJktFromJwk } from '../jwk/compute-jkt.ts';
@@ -10,36 +10,39 @@ import { verifyJwt } from '../jwt/index.ts';
 
 import type { Awaitable } from './types.ts';
 
-const dpopJwkSchema = v.union(
-	v.object({
+const dpopJwkSchema = v.union([
+	v.looseObject({
 		kty: v.literal('EC'),
-		crv: v.union(v.literal('P-256'), v.literal('P-384'), v.literal('P-521')),
+		crv: v.union([v.literal('P-256'), v.literal('P-384'), v.literal('P-521')]),
 		x: v.string(),
 		y: v.string(),
 	}),
-	v.object({
+	v.looseObject({
 		kty: v.literal('RSA'),
 		e: v.string(),
 		n: v.string(),
 	}),
-);
+]);
 
-const dpopHeaderSchema = v.object({
+const dpopHeaderSchema = v.looseObject({
 	typ: v.literal('dpop+jwt'),
-	alg: v.string().assert((alg) => alg !== 'none', 'alg must not be "none"'),
+	alg: v.pipe(
+		v.string(),
+		v.check((alg) => alg !== 'none', 'alg must not be "none"'),
+	),
 	jwk: dpopJwkSchema,
 });
 
-const dpopPayloadSchema = v.object({
+const dpopPayloadSchema = v.looseObject({
 	htm: v.string(),
 	htu: v.string(),
 	iat: v.number(),
 	jti: v.string(),
-	nonce: v.string().optional(),
+	nonce: v.optional(v.string()),
 });
 
-export type DpopClaims = v.Infer<typeof dpopPayloadSchema>;
-type DpopJwk = v.Infer<typeof dpopJwkSchema>;
+export type DpopClaims = v.InferOutput<typeof dpopPayloadSchema>;
+type DpopJwk = v.InferOutput<typeof dpopJwkSchema>;
 
 export interface DpopVerifyResult {
 	claims: DpopClaims;
@@ -89,9 +92,9 @@ export const verifyDpopProof = async (
 		throw new DpopVerifyError(`invalid dpop proof format`, 'invalid');
 	}
 
-	let header: v.Infer<typeof dpopHeaderSchema>;
+	let header: v.InferOutput<typeof dpopHeaderSchema>;
 	try {
-		header = dpopHeaderSchema.parse(decodeSegment(parts[0]), { mode: 'passthrough' });
+		header = v.parse(dpopHeaderSchema, decodeSegment(parts[0]));
 	} catch {
 		throw new DpopVerifyError(`invalid dpop header`, 'invalid');
 	}
@@ -105,9 +108,9 @@ export const verifyDpopProof = async (
 	try {
 		const key = await importPublicKey(jwk, alg);
 		const raw = await verifyJwt(dpopHeader, { key, alg, typ: 'dpop+jwt' });
-		payload = dpopPayloadSchema.parse(raw, { mode: 'passthrough' });
+		payload = v.parse(dpopPayloadSchema, raw);
 	} catch (err) {
-		if (err instanceof v.ValitaError) {
+		if (v.isValiError(err)) {
 			throw new DpopVerifyError(`invalid dpop payload`, 'invalid');
 		}
 		throw new DpopVerifyError(`dpop signature verification failed`, 'invalid');

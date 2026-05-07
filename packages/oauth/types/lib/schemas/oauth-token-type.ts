@@ -1,15 +1,19 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 /** token type (case-insensitive input, normalized output) */
-export const oauthTokenTypeSchema = v.string().chain((input) => {
-	const lower = input.toLowerCase();
-	if (lower === 'dpop') {
-		return v.ok('DPoP');
-	}
-	if (lower === 'bearer') {
-		return v.ok('Bearer');
-	}
-	return v.err(`must be "DPoP" or "Bearer"`);
-});
+export const oauthTokenTypeSchema = v.pipe(
+	v.string(),
+	v.rawTransform<string, 'DPoP' | 'Bearer'>(({ dataset, addIssue, NEVER }) => {
+		const lower = dataset.value.toLowerCase();
+		if (lower === 'dpop') {
+			return 'DPoP';
+		}
+		if (lower === 'bearer') {
+			return 'Bearer';
+		}
+		addIssue({ message: `must be "DPoP" or "Bearer"` });
+		return NEVER;
+	}),
+);
 
-export type OAuthTokenType = v.Infer<typeof oauthTokenTypeSchema>;
+export type OAuthTokenType = v.InferOutput<typeof oauthTokenTypeSchema>;

@@ -24,12 +24,12 @@ import type { TokenSet } from './types/token-set.ts';
 
 const processTokenResponse = pipe(
 	parseResponseAsJson(JSON_MIME, TOKEN_RESPONSE_MAX_SIZE),
-	validateJsonWith(atprotoOAuthTokenResponseSchema, { mode: 'passthrough' }),
+	validateJsonWith(atprotoOAuthTokenResponseSchema),
 );
 
 const processParResponse = pipe(
 	parseResponseAsJson(JSON_MIME, PAR_RESPONSE_MAX_SIZE),
-	validateJsonWith(oauthParResponseSchema, { mode: 'passthrough' }),
+	validateJsonWith(oauthParResponseSchema),
 );
 
 export interface OAuthServerAgentOptions {

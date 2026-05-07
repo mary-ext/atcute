@@ -1,4 +1,4 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import { isOAuthScope } from './oauth-scope.ts';
 import { isSpaceSeparatedValue } from './utils.ts';
@@ -10,9 +10,12 @@ const isAtprotoOAuthScope = (input: string): boolean => {
 };
 
 /** atproto OAuth scope (must include "atproto") */
-export const atprotoOAuthScopeSchema = v.string().assert(isAtprotoOAuthScope, `invalid atproto OAuth scope`);
+export const atprotoOAuthScopeSchema = v.pipe(
+	v.string(),
+	v.check(isAtprotoOAuthScope, `invalid atproto OAuth scope`),
+);
 
-export type AtprotoOAuthScope = v.Infer<typeof atprotoOAuthScopeSchema>;
+export type AtprotoOAuthScope = v.InferOutput<typeof atprotoOAuthScopeSchema>;
 
 /** default scope is for reading identity (did) only */
 export const DEFAULT_ATPROTO_OAUTH_SCOPE: AtprotoOAuthScope = ATPROTO_SCOPE_VALUE;

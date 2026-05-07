@@ -1,16 +1,16 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import { oauthIssuerIdentifierSchema } from './oauth-issuer-identifier.ts';
 import { webUriSchema } from './uri.ts';
 
-export const oauthBearerMethodSchema = v.union(v.literal('header'), v.literal('body'), v.literal('query'));
+export const oauthBearerMethodSchema = v.union([v.literal('header'), v.literal('body'), v.literal('query')]);
 
-export type OAuthBearerMethod = v.Infer<typeof oauthBearerMethodSchema>;
+export type OAuthBearerMethod = v.InferOutput<typeof oauthBearerMethodSchema>;
 
 /**
  * @see {@link https://www.rfc-editor.org/rfc/rfc9728.html#section-3.2}
  */
-export const oauthProtectedResourceMetadataSchema = v.object({
+export const oauthProtectedResourceMetadataSchema = v.looseObject({
 	/**
 	 * REQUIRED. the protected resource's resource identifier, which is a URL that
 	 * uses the https scheme and has no query or fragment components.
@@ -22,68 +22,66 @@ export const oauthProtectedResourceMetadataSchema = v.object({
 	 * identifiers, as defined in RFC8414, for authorization servers that can be
 	 * used with this protected resource.
 	 */
-	authorization_servers: v.array(oauthIssuerIdentifierSchema).optional(),
+	authorization_servers: v.optional(v.array(oauthIssuerIdentifierSchema)),
 
 	/**
 	 * OPTIONAL. URL of the protected resource's JWK Set document.
 	 */
-	jwks_uri: webUriSchema.optional(),
+	jwks_uri: v.optional(webUriSchema),
 
 	/**
 	 * RECOMMENDED. JSON array containing a list of the OAuth 2.0 scope values that
 	 * are used in authorization requests to request access to this protected resource.
 	 */
-	scopes_supported: v.array(v.string()).optional(),
+	scopes_supported: v.optional(v.array(v.string())),
 
 	/**
 	 * OPTIONAL. JSON array containing a list of the supported methods of sending
 	 * an OAuth 2.0 Bearer Token to the protected resource.
 	 */
-	bearer_methods_supported: v.array(oauthBearerMethodSchema).optional(),
+	bearer_methods_supported: v.optional(v.array(oauthBearerMethodSchema)),
 
 	/**
 	 * OPTIONAL. JSON array containing a list of the JWS signing algorithms
 	 * supported by the protected resource for signing resource responses.
 	 */
-	resource_signing_alg_values_supported: v.array(v.string()).optional(),
+	resource_signing_alg_values_supported: v.optional(v.array(v.string())),
 
 	/**
 	 * OPTIONAL. URL of a page containing human-readable information that
 	 * developers might want or need to know when using the protected resource.
 	 */
-	resource_documentation: webUriSchema.optional(),
+	resource_documentation: v.optional(webUriSchema),
 
 	/**
 	 * OPTIONAL. URL that the protected resource provides to read about the
 	 * protected resource's requirements on how the client can use the data.
 	 */
-	resource_policy_uri: webUriSchema.optional(),
+	resource_policy_uri: v.optional(webUriSchema),
 
 	/**
 	 * OPTIONAL. URL that the protected resource provides to read about the
 	 * protected resource's terms of service.
 	 */
-	resource_tos_uri: webUriSchema.optional(),
+	resource_tos_uri: v.optional(webUriSchema),
 });
 
-export const oauthProtectedResourceMetadataValidator = oauthProtectedResourceMetadataSchema.chain((data) => {
-	const url = new URL(data.resource);
+export const oauthProtectedResourceMetadataValidator = v.pipe(
+	oauthProtectedResourceMetadataSchema,
+	v.forward(
+		v.check((data) => {
+			const url = new URL(data.resource);
+			return !url.search;
+		}, `resource URL must not contain query parameters`),
+		['resource'],
+	),
+	v.forward(
+		v.check((data) => {
+			const url = new URL(data.resource);
+			return !url.hash;
+		}, `resource URL must not contain a fragment`),
+		['resource'],
+	),
+);
 
-	if (url.search) {
-		return v.err({
-			message: `resource URL must not contain query parameters`,
-			path: ['resource'],
-		});
-	}
-
-	if (url.hash) {
-		return v.err({
-			message: `resource URL must not contain a fragment`,
-			path: ['resource'],
-		});
-	}
-
-	return v.ok(data);
-});
-
-export type OAuthProtectedResourceMetadata = v.Infer<typeof oauthProtectedResourceMetadataSchema>;
+export type OAuthProtectedResourceMetadata = v.InferOutput<typeof oauthProtectedResourceMetadataSchema>;

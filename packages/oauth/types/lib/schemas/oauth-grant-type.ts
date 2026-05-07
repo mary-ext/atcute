@@ -1,6 +1,6 @@
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
-export const oauthGrantTypeSchema = v.union(
+export const oauthGrantTypeSchema = v.union([
 	v.literal('authorization_code'),
 	v.literal('implicit'),
 	v.literal('refresh_token'),
@@ -8,6 +8,6 @@ export const oauthGrantTypeSchema = v.union(
 	v.literal('client_credentials'),
 	v.literal('urn:ietf:params:oauth:grant-type:jwt-bearer'),
 	v.literal('urn:ietf:params:oauth:grant-type:saml2-bearer'),
-);
+]);
 
-export type OAuthGrantType = v.Infer<typeof oauthGrantTypeSchema>;
+export type OAuthGrantType = v.InferOutput<typeof oauthGrantTypeSchema>;
