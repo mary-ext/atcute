@@ -4,19 +4,32 @@ import { isDid, isNsid, type AtprotoAudience } from '@atcute/lexicons/syntax';
 import { fromBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
 
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 import type { Result } from '../types/misc.ts';
 
 import type { AuthError } from './types.ts';
 
-const didString = v.string().assert(isDid, `must be a did`);
-const audienceString = v
-	.string()
-	.assert((input) => isAtprotoAudience(input) || isDid(input), `must be a did or atproto audience`);
-const nsidString = v.string().assert(isNsid, `must be an nsid`);
+const didString: v.GenericSchema<unknown, Did> = v.pipe(
+	v.string(),
+	v.check((input) => isDid(input), `must be a did`),
+	v.transform((value) => value as Did),
+);
+const audienceString: v.GenericSchema<unknown, Did | AtprotoAudience> = v.pipe(
+	v.string(),
+	v.check((input) => isAtprotoAudience(input) || isDid(input), `must be a did or atproto audience`),
+	v.transform((value) => value as Did | AtprotoAudience),
+);
+const nsidString: v.GenericSchema<unknown, Nsid> = v.pipe(
+	v.string(),
+	v.check((input) => isNsid(input), `must be an nsid`),
+	v.transform((value) => value as Nsid),
+);
 
-const integer = v.number().assert((input) => input >= 0 && Number.isSafeInteger(input), `must be an integer`);
+const integer = v.pipe(
+	v.number(),
+	v.check((input) => input >= 0 && Number.isSafeInteger(input), `must be an integer`),
+);
 
 export interface JwtHeader {
 	typ?: string;
@@ -25,10 +38,10 @@ export interface JwtHeader {
 	kid?: string;
 }
 
-const jwtHeader: v.Type<JwtHeader> = v.object({
-	typ: v.string().optional(),
+const jwtHeader: v.GenericSchema<unknown, JwtHeader> = v.looseObject({
+	typ: v.optional(v.string()),
 	alg: v.string(),
-	kid: v.string().optional(),
+	kid: v.optional(v.string()),
 });
 
 export interface JwtPayload {
@@ -42,8 +55,8 @@ export interface JwtPayload {
 	jti?: string;
 }
 
-const jwtPayload: v.Type<JwtPayload> = v
-	.object({
+const jwtPayload: v.GenericSchema<unknown, JwtPayload> = v.pipe(
+	v.looseObject({
 		/** issuer */
 		iss: didString,
 		/** target audience; a bare DID or a DID with service fragment (e.g. `did:web:x.example#svc`) */
@@ -51,18 +64,19 @@ const jwtPayload: v.Type<JwtPayload> = v
 		/** expiration time */
 		exp: integer,
 		/** creation time */
-		iat: integer.optional(),
+		iat: v.optional(integer),
 		/** not-before time */
-		nbf: integer.optional(),
+		nbf: v.optional(integer),
 		/** xrpc operation being invoked; required per atproto service auth spec */
 		lxm: nsidString,
 		/** unique identifier */
-		jti: v.string().optional(),
-	})
-	.assert(({ iat, exp }) => iat === undefined || exp > iat, {
-		message: `expiry time must be greater than issued time`,
-		path: ['exp'],
-	});
+		jti: v.optional(v.string()),
+	}),
+	v.forward(
+		v.check(({ iat, exp }) => iat === undefined || exp > iat, `expiry time must be greater than issued time`),
+		['exp'],
+	),
+);
 
 export interface ParsedJwt {
 	header: JwtHeader;
@@ -71,14 +85,14 @@ export interface ParsedJwt {
 	signature: Uint8Array<ArrayBuffer>;
 }
 
-const readJwtPortion = <T>(schema: v.Type<T>, input: string): Result<T, AuthError> => {
+const readJwtPortion = <T>(schema: v.GenericSchema<unknown, T>, input: string): Result<T, AuthError> => {
 	try {
 		const raw = decodeUtf8From(fromBase64Url(input));
 		const json = JSON.parse(raw);
 
-		const result = schema.try(json, { mode: 'passthrough' });
-		if (result.ok) {
-			return result;
+		const result = v.safeParse(schema, json);
+		if (result.success) {
+			return { ok: true, value: result.output };
 		}
 	} catch {}
 

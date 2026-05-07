@@ -1001,12 +1001,12 @@ importers:
       '@atcute/uint8array':
         specifier: workspace:^
         version: link:../../misc/uint8array
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
       nanoid:
         specifier: ^5.1.11
         version: 5.1.11
+      valibot:
+        specifier: ^1.4.0
+        version: 1.4.0(typescript@6.0.3)
     devDependencies:
       '@atcute/atproto':
         specifier: workspace:^
@@ -1016,7 +1016,7 @@ importers:
         version: link:../../definitions/bluesky
       '@atcute/xrpc-server':
         specifier: 'file:'
-        version: file:packages/servers/xrpc-server(@atcute/lexicons@packages+lexicons+lexicons)
+        version: file:packages/servers/xrpc-server(@atcute/lexicons@packages+lexicons+lexicons)(typescript@6.0.3)
       '@mary-ext/simple-event-emitter':
         specifier: ^1.0.1
         version: 1.0.1
@@ -4366,7 +4366,7 @@ snapshots:
     dependencies:
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
-  '@atcute/xrpc-server@file:packages/servers/xrpc-server(@atcute/lexicons@packages+lexicons+lexicons)':
+  '@atcute/xrpc-server@file:packages/servers/xrpc-server(@atcute/lexicons@packages+lexicons+lexicons)(typescript@6.0.3)':
     dependencies:
       '@atcute/cbor': link:packages/utilities/cbor
       '@atcute/crypto': link:packages/utilities/crypto
@@ -4375,8 +4375,10 @@ snapshots:
       '@atcute/lexicons': link:packages/lexicons/lexicons
       '@atcute/multibase': link:packages/utilities/multibase
       '@atcute/uint8array': link:packages/misc/uint8array
-      '@badrap/valita': 0.4.6
       nanoid: 5.1.11
+      valibot: 1.4.0(typescript@6.0.3)
+    transitivePeerDependencies:
+      - typescript
 
   '@atproto-labs/did-resolver@0.2.6':
     dependencies:
