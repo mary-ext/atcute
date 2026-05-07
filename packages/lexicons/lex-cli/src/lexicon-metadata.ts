@@ -1,6 +1,6 @@
 import { isNsid } from '@atcute/lexicons/syntax';
 
-import * as v from '@badrap/valita';
+import * as v from 'valibot';
 
 export type LexiconMappingEntryType = 'namespace' | 'named';
 export type LexiconMappingPath = '.' | `./${string}`;
@@ -37,38 +37,37 @@ const isValidLexiconPattern = (pattern: string): boolean => {
 /**
  * Schema for a single lexicon mapping entry
  */
-const lexiconMappingEntry: v.Type<LexiconMappingEntry> = v.object({
-	type: v.union(v.literal('namespace'), v.literal('named')),
-	path: v.string().assert((input): input is LexiconMappingPath => input === '.' || input.startsWith('./'), {
-		message: `path must be "." or start with "./"`,
-	}),
+const lexiconMappingEntry: v.GenericSchema<unknown, LexiconMappingEntry> = v.looseObject({
+	type: v.union([v.literal('namespace'), v.literal('named')]),
+	path: v.pipe(
+		v.string(),
+		v.check((input) => input === '.' || input.startsWith('./'), `path must be "." or start with "./"`),
+		v.transform((value) => value as LexiconMappingPath),
+	),
 });
 
 /**
  * Schema for the atcute:lexicons field in package.json
  */
-const mappingsSchema: v.Type<Record<string, LexiconMappingEntry>> = v
-	.record(lexiconMappingEntry)
-	.chain((input) => {
+const mappingsSchema: v.GenericSchema<unknown, Record<string, LexiconMappingEntry>> = v.pipe(
+	v.record(v.string(), lexiconMappingEntry),
+	v.check((input) => {
 		for (const key in input) {
 			if (!isValidLexiconPattern(key)) {
-				return v.err({
-					message: `invalid NSID pattern (must be valid NSID or end with .*)`,
-					path: [key],
-				});
+				return false;
 			}
 		}
+		return true;
+	}, `invalid NSID pattern (must be valid NSID or end with .*)`),
+);
 
-		return v.ok(input);
-	});
-
-const atcuteLexiconsField: v.Type<AtcuteLexiconsField> = v.object({
-	mappings: mappingsSchema.optional(),
+const atcuteLexiconsField: v.GenericSchema<unknown, AtcuteLexiconsField> = v.looseObject({
+	mappings: v.optional(mappingsSchema),
 });
 
 /**
  * Schema for package.json with atcute:lexicons field
  */
-export const packageJsonSchema: v.Type<PackageJsonWithLexicons> = v.object({
-	'atcute:lexicons': atcuteLexiconsField.optional(),
+export const packageJsonSchema: v.GenericSchema<unknown, PackageJsonWithLexicons> = v.looseObject({
+	'atcute:lexicons': v.optional(atcuteLexiconsField),
 });

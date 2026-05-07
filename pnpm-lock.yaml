@@ -608,9 +608,6 @@ importers:
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../lexicons
-      '@badrap/valita':
-        specifier: ^0.4.6
-        version: 0.4.6
       '@optique/core':
         specifier: ^1.0.2
         version: 1.0.2

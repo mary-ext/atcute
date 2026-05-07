@@ -3,6 +3,7 @@ import * as module from 'node:module';
 import * as path from 'node:path';
 
 import pc from 'picocolors';
+import * as v from 'valibot';
 
 import type { GenerateCommand } from '../cli.ts';
 import { generateLexiconApi, type ImportMapping } from '../codegen.ts';
@@ -64,19 +65,19 @@ const resolveImportsToMappings = async (
 			process.exit(1);
 		}
 
-		const result = packageJsonSchema.try(packageJson, { mode: 'passthrough' });
-		if (!result.ok) {
+		const result = v.safeParse(packageJsonSchema, packageJson);
+		if (!result.success) {
 			console.error(pc.bold(pc.red(`invalid atcute:lexicons in "${packageName}":`)));
-			console.error(result.message);
 
 			for (const issue of result.issues) {
-				console.log(`- ${issue.code} at .${issue.path.join('.')}`);
+				const dotPath = v.getDotPath(issue) ?? '';
+				console.log(`- ${issue.type} at .${dotPath}: ${issue.message}`);
 			}
 
 			process.exit(1);
 		}
 
-		const lexicons = result.value['atcute:lexicons'];
+		const lexicons = result.output['atcute:lexicons'];
 		if (!lexicons?.mappings) {
 			continue;
 		}
