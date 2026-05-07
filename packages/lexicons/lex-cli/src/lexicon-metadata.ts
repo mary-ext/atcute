@@ -38,7 +38,7 @@ const isValidLexiconPattern = (pattern: string): boolean => {
  * Schema for a single lexicon mapping entry
  */
 const lexiconMappingEntry: v.GenericSchema<unknown, LexiconMappingEntry> = v.looseObject({
-	type: v.union([v.literal('namespace'), v.literal('named')]),
+	type: v.picklist(['namespace', 'named']),
 	path: v.custom<LexiconMappingPath>(
 		(input) => typeof input === 'string' && (input === '.' || input.startsWith('./')),
 		`path must be "." or start with "./"`,

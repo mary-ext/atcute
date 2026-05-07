@@ -13,7 +13,7 @@ import type { Awaitable } from './types.ts';
 const dpopJwkSchema = v.union([
 	v.looseObject({
 		kty: v.literal('EC'),
-		crv: v.union([v.literal('P-256'), v.literal('P-384'), v.literal('P-521')]),
+		crv: v.picklist(['P-256', 'P-384', 'P-521']),
 		x: v.string(),
 		y: v.string(),
 	}),

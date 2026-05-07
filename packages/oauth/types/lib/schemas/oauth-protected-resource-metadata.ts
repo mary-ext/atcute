@@ -3,7 +3,7 @@ import * as v from 'valibot';
 import { oauthIssuerIdentifierSchema } from './oauth-issuer-identifier.ts';
 import { webUriSchema } from './uri.ts';
 
-export const oauthBearerMethodSchema = v.union([v.literal('header'), v.literal('body'), v.literal('query')]);
+export const oauthBearerMethodSchema = v.picklist(['header', 'body', 'query']);
 
 export type OAuthBearerMethod = v.InferOutput<typeof oauthBearerMethodSchema>;
 

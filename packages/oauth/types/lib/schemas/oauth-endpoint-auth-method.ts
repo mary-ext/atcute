@@ -1,13 +1,13 @@
 import * as v from 'valibot';
 
-export const oauthEndpointAuthMethodSchema = v.union([
-	v.literal('client_secret_basic'),
-	v.literal('client_secret_jwt'),
-	v.literal('client_secret_post'),
-	v.literal('none'),
-	v.literal('private_key_jwt'),
-	v.literal('self_signed_tls_client_auth'),
-	v.literal('tls_client_auth'),
+export const oauthEndpointAuthMethodSchema = v.picklist([
+	'client_secret_basic',
+	'client_secret_jwt',
+	'client_secret_post',
+	'none',
+	'private_key_jwt',
+	'self_signed_tls_client_auth',
+	'tls_client_auth',
 ]);
 
 export type OAuthEndpointAuthMethod = v.InferOutput<typeof oauthEndpointAuthMethodSchema>;

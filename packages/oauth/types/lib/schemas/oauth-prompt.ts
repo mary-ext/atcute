@@ -9,12 +9,6 @@ import * as v from 'valibot';
  * - `select_account`: force account selection
  * - `create`: force user registration screen
  */
-export const oauthPromptSchema = v.union([
-	v.literal('none'),
-	v.literal('login'),
-	v.literal('consent'),
-	v.literal('select_account'),
-	v.literal('create'),
-]);
+export const oauthPromptSchema = v.picklist(['none', 'login', 'consent', 'select_account', 'create']);
 
 export type OAuthPrompt = v.InferOutput<typeof oauthPromptSchema>;

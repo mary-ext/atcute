@@ -9,9 +9,9 @@ import { oauthResponseTypeSchema } from './oauth-response-type.ts';
 import { oauthScopeSchema } from './oauth-scope.ts';
 import { webUriSchema } from './uri.ts';
 
-const oauthApplicationTypeSchema = v.union([v.literal('web'), v.literal('native')]);
+const oauthApplicationTypeSchema = v.picklist(['web', 'native']);
 
-const oauthSubjectTypeSchema = v.union([v.literal('public'), v.literal('pairwise')]);
+const oauthSubjectTypeSchema = v.picklist(['public', 'pairwise']);
 
 // simple email validation
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -71,7 +71,7 @@ export const discoverablePublicClientMetadataSchema = v.looseObject({
 	/**
 	 * application type - defaults to 'web'.
 	 */
-	application_type: v.optional(v.union([v.literal('web'), v.literal('native')])),
+	application_type: v.optional(v.picklist(['web', 'native'])),
 
 	/** optional client homepage */
 	client_uri: v.optional(webUriSchema),

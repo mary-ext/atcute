@@ -26,18 +26,18 @@ export const lexInteger: v.GenericSchema<unknown, t.LexInteger> = v.looseObject(
 	const: v.optional(integer),
 });
 
-export const lexStringFormat: v.GenericSchema<unknown, t.LexStringFormat> = v.union([
-	v.literal('datetime'),
-	v.literal('uri'),
-	v.literal('at-uri'),
-	v.literal('did'),
-	v.literal('handle'),
-	v.literal('at-identifier'),
-	v.literal('nsid'),
-	v.literal('cid'),
-	v.literal('language'),
-	v.literal('tid'),
-	v.literal('record-key'),
+export const lexStringFormat: v.GenericSchema<unknown, t.LexStringFormat> = v.picklist([
+	'datetime',
+	'uri',
+	'at-uri',
+	'did',
+	'handle',
+	'at-identifier',
+	'nsid',
+	'cid',
+	'language',
+	'tid',
+	'record-key',
 ]);
 
 export const lexString: v.GenericSchema<unknown, t.LexString> = v.looseObject({

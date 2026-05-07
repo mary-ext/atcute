@@ -28,7 +28,7 @@ const jwkBaseEntries = {
 	kty: v.string(),
 	alg: v.optional(v.string()),
 	kid: v.optional(v.string()),
-	use: v.optional(v.union([v.literal('sig'), v.literal('enc')])),
+	use: v.optional(v.picklist(['sig', 'enc'])),
 	key_ops: v.optional(v.array(keyUsageSchema)),
 
 	// X.509
@@ -55,16 +55,7 @@ const jwkBaseEntries = {
 const jwkRsaKeySchema = v.looseObject({
 	...jwkBaseEntries,
 	kty: v.literal('RSA'),
-	alg: v.optional(
-		v.union([
-			v.literal('RS256'),
-			v.literal('RS384'),
-			v.literal('RS512'),
-			v.literal('PS256'),
-			v.literal('PS384'),
-			v.literal('PS512'),
-		]),
-	),
+	alg: v.optional(v.picklist(['RS256', 'RS384', 'RS512', 'PS256', 'PS384', 'PS512'])),
 	n: v.string(),
 	e: v.string(),
 	d: v.optional(v.string()),
@@ -87,8 +78,8 @@ const jwkRsaKeySchema = v.looseObject({
 const jwkEcKeySchema = v.looseObject({
 	...jwkBaseEntries,
 	kty: v.literal('EC'),
-	alg: v.optional(v.union([v.literal('ES256'), v.literal('ES384'), v.literal('ES512')])),
-	crv: v.union([v.literal('P-256'), v.literal('P-384'), v.literal('P-521')]),
+	alg: v.optional(v.picklist(['ES256', 'ES384', 'ES512'])),
+	crv: v.picklist(['P-256', 'P-384', 'P-521']),
 	x: v.string(),
 	y: v.string(),
 	d: v.optional(v.string()),
@@ -108,7 +99,7 @@ const jwkOkpKeySchema = v.looseObject({
 	...jwkBaseEntries,
 	kty: v.literal('OKP'),
 	alg: v.optional(v.literal('EdDSA')),
-	crv: v.union([v.literal('Ed25519'), v.literal('Ed448')]),
+	crv: v.picklist(['Ed25519', 'Ed448']),
 	x: v.string(),
 	d: v.optional(v.string()),
 });
@@ -116,7 +107,7 @@ const jwkOkpKeySchema = v.looseObject({
 const jwkSymKeySchema = v.looseObject({
 	...jwkBaseEntries,
 	kty: v.literal('oct'),
-	alg: v.optional(v.union([v.literal('HS256'), v.literal('HS384'), v.literal('HS512')])),
+	alg: v.optional(v.picklist(['HS256', 'HS384', 'HS512'])),
 	k: v.string(),
 });
 

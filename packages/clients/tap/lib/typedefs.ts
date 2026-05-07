@@ -60,13 +60,7 @@ const identityEventDataSchema = v.looseObject({
 	did: didString,
 	handle: handleString,
 	is_active: v.boolean(),
-	status: v.union([
-		v.literal('active'),
-		v.literal('takendown'),
-		v.literal('suspended'),
-		v.literal('deactivated'),
-		v.literal('deleted'),
-	]),
+	status: v.picklist(['active', 'takendown', 'suspended', 'deactivated', 'deleted']),
 });
 
 export const tapRecordEventWireSchema = v.looseObject({
