@@ -29,7 +29,7 @@ const _convoViewSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([messageAndReactionViewSchema]));
 	},
 	/**
-	 * Members of this conversation. For direct convos, it will be an immutable list of the 2 members. For group convos, it will a list of important members (the first few members, the viewer, the member who invited the viewer, the member who sent the last message, the member who sent the last reaction), but will not contain the full list of members. NOTE: TBD an endpoint to list all members.
+	 * Members of this conversation. For direct convos, it will be an immutable list of the 2 members. For group convos, it will a list of important members (the first few members, the viewer, the member who invited the viewer, the member who sent the last message, the member who sent the last reaction), but will not contain the full list of members. Use chat.bsky.convo.getConvoMembers to list all members.
 	 */
 	get members() {
 		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
@@ -58,6 +58,7 @@ const _directConvoSchema = /*#__PURE__*/ v.object({
 });
 const _groupConvoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#groupConvo')),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
 	get joinLink() {
 		return /*#__PURE__*/ v.optional(ChatBskyGroupDefs.joinLinkViewSchema);
 	},
@@ -67,6 +68,10 @@ const _groupConvoSchema = /*#__PURE__*/ v.object({
 	get lockStatus() {
 		return convoLockStatusSchema;
 	},
+	/**
+	 * The total number of members in the group conversation.
+	 */
+	memberCount: /*#__PURE__*/ v.integer(),
 	/**
 	 * The display name of the group conversation.
 	 * @maxLength 1280
@@ -85,8 +90,17 @@ const _logAcceptConvoSchema = /*#__PURE__*/ v.object({
 const _logAddMemberSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logAddMember')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataAddMember
+	 */
 	get message() {
-		return systemMessageDataAddMemberSchema;
+		return systemMessageViewSchema;
+	},
+	/**
+	 * Profiles referred in the system message.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
@@ -98,6 +112,12 @@ const _logAddReactionSchema = /*#__PURE__*/ v.object({
 	},
 	get reaction() {
 		return reactionViewSchema;
+	},
+	/**
+	 * Profiles referred in the message and reaction views. This isn't required for compatibility, because it was added later, but should generally be present.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema));
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
@@ -120,8 +140,11 @@ const _logBeginConvoSchema = /*#__PURE__*/ v.object({
 const _logCreateJoinLinkSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logCreateJoinLink')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataCreateJoinLink
+	 */
 	get message() {
-		return systemMessageDataCreateJoinLinkSchema;
+		return systemMessageViewSchema;
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
@@ -130,6 +153,12 @@ const _logCreateMessageSchema = /*#__PURE__*/ v.object({
 	convoId: /*#__PURE__*/ v.string(),
 	get message() {
 		return /*#__PURE__*/ v.variant([deletedMessageViewSchema, messageViewSchema]);
+	},
+	/**
+	 * Profiles referred to in the message view. This isn't required for compatibility, because it was added later, but should generally be present.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema));
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
@@ -144,32 +173,44 @@ const _logDeleteMessageSchema = /*#__PURE__*/ v.object({
 const _logDisableJoinLinkSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logDisableJoinLink')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataDisableJoinLink
+	 */
 	get message() {
-		return systemMessageDataDisableJoinLinkSchema;
+		return systemMessageViewSchema;
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
 const _logEditGroupSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logEditGroup')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataEditGroup
+	 */
 	get message() {
-		return systemMessageDataEditGroupSchema;
+		return systemMessageViewSchema;
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
 const _logEditJoinLinkSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logEditJoinLink')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataEditJoinLink
+	 */
 	get message() {
-		return systemMessageDataEditJoinLinkSchema;
+		return systemMessageViewSchema;
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
 const _logEnableJoinLinkSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logEnableJoinLink')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataEnableJoinLink
+	 */
 	get message() {
-		return systemMessageDataEnableJoinLinkSchema;
+		return systemMessageViewSchema;
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
@@ -192,32 +233,68 @@ const _logLeaveConvoSchema = /*#__PURE__*/ v.object({
 const _logLockConvoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logLockConvo')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataLockConvo
+	 */
 	get message() {
-		return systemMessageDataLockConvoSchema;
+		return systemMessageViewSchema;
+	},
+	/**
+	 * Profiles referred in the system message.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
 const _logLockConvoPermanentlySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logLockConvoPermanently')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataLockConvoPermanently
+	 */
 	get message() {
-		return systemMessageDataLockConvoPermanentlySchema;
+		return systemMessageViewSchema;
+	},
+	/**
+	 * Profiles referred in the system message.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
 const _logMemberJoinSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logMemberJoin')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataMemberJoin
+	 */
 	get message() {
-		return systemMessageDataMemberJoinSchema;
+		return systemMessageViewSchema;
+	},
+	/**
+	 * Profiles referred in the system message.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
 const _logMemberLeaveSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logMemberLeave')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataMemberLeave
+	 */
 	get message() {
-		return systemMessageDataMemberLeaveSchema;
+		return systemMessageViewSchema;
+	},
+	/**
+	 * Profiles referred in the system message.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
@@ -261,8 +338,17 @@ const _logRejectJoinRequestSchema = /*#__PURE__*/ v.object({
 const _logRemoveMemberSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logRemoveMember')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataRemoveMember
+	 */
 	get message() {
-		return systemMessageDataRemoveMemberSchema;
+		return systemMessageViewSchema;
+	},
+	/**
+	 * Profiles referred in the system message.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
@@ -275,13 +361,28 @@ const _logRemoveReactionSchema = /*#__PURE__*/ v.object({
 	get reaction() {
 		return reactionViewSchema;
 	},
+	/**
+	 * Profiles referred in the message and reaction views. This isn't required for compatibility, because it was added later, but should generally be present.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema));
+	},
 	rev: /*#__PURE__*/ v.string(),
 });
 const _logUnlockConvoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logUnlockConvo')),
 	convoId: /*#__PURE__*/ v.string(),
+	/**
+	 * A system message with data of type #systemMessageDataUnlockConvo
+	 */
 	get message() {
-		return systemMessageDataUnlockConvoSchema;
+		return systemMessageViewSchema;
+	},
+	/**
+	 * Profiles referred in the system message.
+	 */
+	get relatedProfiles() {
+		return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
@@ -376,13 +477,13 @@ const _reactionViewSenderSchema = /*#__PURE__*/ v.object({
 const _systemMessageDataAddMemberSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#systemMessageDataAddMember')),
 	get addedBy() {
-		return ChatBskyActorDefs.profileViewBasicSchema;
+		return systemMessageReferredUserSchema;
 	},
 	/**
 	 * Current view of the member who was added.
 	 */
 	get member() {
-		return ChatBskyActorDefs.profileViewBasicSchema;
+		return systemMessageReferredUserSchema;
 	},
 	/**
 	 * Role the user was added to the group with. The role from 'member' will reflect the current data, not historical.
@@ -428,7 +529,7 @@ const _systemMessageDataLockConvoSchema = /*#__PURE__*/ v.object({
 	 * Current view of the member who locked the group.
 	 */
 	get lockedBy() {
-		return ChatBskyActorDefs.profileViewBasicSchema;
+		return systemMessageReferredUserSchema;
 	},
 });
 const _systemMessageDataLockConvoPermanentlySchema = /*#__PURE__*/ v.object({
@@ -439,7 +540,7 @@ const _systemMessageDataLockConvoPermanentlySchema = /*#__PURE__*/ v.object({
 	 * Current view of the member who locked the group.
 	 */
 	get lockedBy() {
-		return ChatBskyActorDefs.profileViewBasicSchema;
+		return systemMessageReferredUserSchema;
 	},
 });
 const _systemMessageDataMemberJoinSchema = /*#__PURE__*/ v.object({
@@ -450,13 +551,13 @@ const _systemMessageDataMemberJoinSchema = /*#__PURE__*/ v.object({
 	 * If join link was configured to require approval, this will be set to who approved the request. Undefined if approval was not required.
 	 */
 	get approvedBy() {
-		return /*#__PURE__*/ v.optional(ChatBskyActorDefs.profileViewBasicSchema);
+		return /*#__PURE__*/ v.optional(systemMessageReferredUserSchema);
 	},
 	/**
 	 * Current view of the member who joined.
 	 */
 	get member() {
-		return ChatBskyActorDefs.profileViewBasicSchema;
+		return systemMessageReferredUserSchema;
 	},
 	/**
 	 * Role the user was added to the group with. The role from 'member' will reflect the current data, not historical.
@@ -473,7 +574,7 @@ const _systemMessageDataMemberLeaveSchema = /*#__PURE__*/ v.object({
 	 * Current view of the member who left the group.
 	 */
 	get member() {
-		return ChatBskyActorDefs.profileViewBasicSchema;
+		return systemMessageReferredUserSchema;
 	},
 });
 const _systemMessageDataRemoveMemberSchema = /*#__PURE__*/ v.object({
@@ -484,10 +585,10 @@ const _systemMessageDataRemoveMemberSchema = /*#__PURE__*/ v.object({
 	 * Current view of the member who was removed.
 	 */
 	get member() {
-		return ChatBskyActorDefs.profileViewBasicSchema;
+		return systemMessageReferredUserSchema;
 	},
 	get removedBy() {
-		return ChatBskyActorDefs.profileViewBasicSchema;
+		return systemMessageReferredUserSchema;
 	},
 });
 const _systemMessageDataUnlockConvoSchema = /*#__PURE__*/ v.object({
@@ -498,8 +599,12 @@ const _systemMessageDataUnlockConvoSchema = /*#__PURE__*/ v.object({
 	 * Current view of the member who unlocked the group.
 	 */
 	get unlockedBy() {
-		return ChatBskyActorDefs.profileViewBasicSchema;
+		return systemMessageReferredUserSchema;
 	},
+});
+const _systemMessageReferredUserSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#systemMessageReferredUser')),
+	did: /*#__PURE__*/ v.didString(),
 });
 const _systemMessageViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#systemMessageView')),
@@ -577,6 +682,7 @@ type systemMessageDataMemberJoin$schematype = typeof _systemMessageDataMemberJoi
 type systemMessageDataMemberLeave$schematype = typeof _systemMessageDataMemberLeaveSchema;
 type systemMessageDataRemoveMember$schematype = typeof _systemMessageDataRemoveMemberSchema;
 type systemMessageDataUnlockConvo$schematype = typeof _systemMessageDataUnlockConvoSchema;
+type systemMessageReferredUser$schematype = typeof _systemMessageReferredUserSchema;
 type systemMessageView$schematype = typeof _systemMessageViewSchema;
 
 export interface convoKindSchema extends convoKind$schematype {}
@@ -632,6 +738,7 @@ export interface systemMessageDataMemberJoinSchema extends systemMessageDataMemb
 export interface systemMessageDataMemberLeaveSchema extends systemMessageDataMemberLeave$schematype {}
 export interface systemMessageDataRemoveMemberSchema extends systemMessageDataRemoveMember$schematype {}
 export interface systemMessageDataUnlockConvoSchema extends systemMessageDataUnlockConvo$schematype {}
+export interface systemMessageReferredUserSchema extends systemMessageReferredUser$schematype {}
 export interface systemMessageViewSchema extends systemMessageView$schematype {}
 
 export const convoKindSchema = _convoKindSchema as convoKindSchema;
@@ -699,6 +806,8 @@ export const systemMessageDataRemoveMemberSchema =
 	_systemMessageDataRemoveMemberSchema as systemMessageDataRemoveMemberSchema;
 export const systemMessageDataUnlockConvoSchema =
 	_systemMessageDataUnlockConvoSchema as systemMessageDataUnlockConvoSchema;
+export const systemMessageReferredUserSchema =
+	_systemMessageReferredUserSchema as systemMessageReferredUserSchema;
 export const systemMessageViewSchema = _systemMessageViewSchema as systemMessageViewSchema;
 
 export type ConvoKind = v.InferInput<typeof convoKindSchema>;
@@ -770,4 +879,5 @@ export interface SystemMessageDataRemoveMember extends v.InferInput<
 export interface SystemMessageDataUnlockConvo extends v.InferInput<
 	typeof systemMessageDataUnlockConvoSchema
 > {}
+export interface SystemMessageReferredUser extends v.InferInput<typeof systemMessageReferredUserSchema> {}
 export interface SystemMessageView extends v.InferInput<typeof systemMessageViewSchema> {}

@@ -154,6 +154,7 @@ export * as ChatBskyConvoDeleteMessageForSelf from './types/chat/bsky/convo/dele
 export * as ChatBskyConvoGetConvo from './types/chat/bsky/convo/getConvo.ts';
 export * as ChatBskyConvoGetConvoAvailability from './types/chat/bsky/convo/getConvoAvailability.ts';
 export * as ChatBskyConvoGetConvoForMembers from './types/chat/bsky/convo/getConvoForMembers.ts';
+export * as ChatBskyConvoGetConvoMembers from './types/chat/bsky/convo/getConvoMembers.ts';
 export * as ChatBskyConvoGetLog from './types/chat/bsky/convo/getLog.ts';
 export * as ChatBskyConvoGetMessages from './types/chat/bsky/convo/getMessages.ts';
 export * as ChatBskyConvoLeaveConvo from './types/chat/bsky/convo/leaveConvo.ts';

@@ -23,6 +23,9 @@ const _groupConvoMemberSchema = /*#__PURE__*/ v.object({
 	},
 });
 const _memberRoleSchema = /*#__PURE__*/ v.string<'owner' | 'standard' | (string & {})>();
+const _pastGroupConvoMemberSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.actor.defs#pastGroupConvoMember')),
+});
 const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.actor.defs#profileViewBasic')),
 	get associated() {
@@ -51,7 +54,7 @@ const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 	 */
 	get kind() {
 		return /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.variant([directConvoMemberSchema, groupConvoMemberSchema]),
+			/*#__PURE__*/ v.variant([directConvoMemberSchema, groupConvoMemberSchema, pastGroupConvoMemberSchema]),
 		);
 	},
 	get labels() {
@@ -68,19 +71,23 @@ const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 type directConvoMember$schematype = typeof _directConvoMemberSchema;
 type groupConvoMember$schematype = typeof _groupConvoMemberSchema;
 type memberRole$schematype = typeof _memberRoleSchema;
+type pastGroupConvoMember$schematype = typeof _pastGroupConvoMemberSchema;
 type profileViewBasic$schematype = typeof _profileViewBasicSchema;
 
 export interface directConvoMemberSchema extends directConvoMember$schematype {}
 export interface groupConvoMemberSchema extends groupConvoMember$schematype {}
 export interface memberRoleSchema extends memberRole$schematype {}
+export interface pastGroupConvoMemberSchema extends pastGroupConvoMember$schematype {}
 export interface profileViewBasicSchema extends profileViewBasic$schematype {}
 
 export const directConvoMemberSchema = _directConvoMemberSchema as directConvoMemberSchema;
 export const groupConvoMemberSchema = _groupConvoMemberSchema as groupConvoMemberSchema;
 export const memberRoleSchema = _memberRoleSchema as memberRoleSchema;
+export const pastGroupConvoMemberSchema = _pastGroupConvoMemberSchema as pastGroupConvoMemberSchema;
 export const profileViewBasicSchema = _profileViewBasicSchema as profileViewBasicSchema;
 
 export interface DirectConvoMember extends v.InferInput<typeof directConvoMemberSchema> {}
 export interface GroupConvoMember extends v.InferInput<typeof groupConvoMemberSchema> {}
 export type MemberRole = v.InferInput<typeof memberRoleSchema>;
+export interface PastGroupConvoMember extends v.InferInput<typeof pastGroupConvoMemberSchema> {}
 export interface ProfileViewBasic extends v.InferInput<typeof profileViewBasicSchema> {}

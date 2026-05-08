@@ -4,9 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 
 import * as ChatBskyActorDefs from '../actor/defs.ts';
 
-import * as ChatBskyConvoDefs from './defs.ts';
-
-const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getMessages', {
+const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getConvoMembers', {
 	params: /*#__PURE__*/ v.object({
 		convoId: /*#__PURE__*/ v.string(),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
@@ -24,20 +22,8 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getMessages', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			get messages() {
-				return /*#__PURE__*/ v.array(
-					/*#__PURE__*/ v.variant([
-						ChatBskyConvoDefs.deletedMessageViewSchema,
-						ChatBskyConvoDefs.messageViewSchema,
-						ChatBskyConvoDefs.systemMessageViewSchema,
-					]),
-				);
-			},
-			/**
-			 * Set of all members who authored or reacted to the returned messages. Members referred to by system messages are also included.
-			 */
-			get relatedProfiles() {
-				return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema));
+			get members() {
+				return /*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema);
 			},
 		}),
 	},
@@ -54,6 +40,6 @@ export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'chat.bsky.convo.getMessages': mainSchema;
+		'chat.bsky.convo.getConvoMembers': mainSchema;
 	}
 }

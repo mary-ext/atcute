@@ -2,6 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
+import * as ChatBskyActorDefs from '../actor/defs.ts';
 import * as ChatBskyConvoDefs from '../convo/defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.group.addMembers', {
@@ -21,6 +22,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.group.addMembers', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			get addedMembers() {
+				return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ChatBskyActorDefs.profileViewBasicSchema));
+			},
 			get convo() {
 				return ChatBskyConvoDefs.convoViewSchema;
 			},

@@ -98,6 +98,16 @@
 				}
 			}
 		},
+		"systemMessageReferredUser": {
+			"type": "object",
+			"required": ["did"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		},
 		"systemMessageView": {
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here].",
 			"type": "object",
@@ -140,7 +150,7 @@
 				"member": {
 					"description": "Current view of the member who was added.",
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				},
 				"role": {
 					"description": "Role the user was added to the group with. The role from 'member' will reflect the current data, not historical.",
@@ -149,7 +159,7 @@
 				},
 				"addedBy": {
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				}
 			}
 		},
@@ -161,11 +171,11 @@
 				"member": {
 					"description": "Current view of the member who was removed.",
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				},
 				"removedBy": {
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				}
 			}
 		},
@@ -177,7 +187,7 @@
 				"member": {
 					"description": "Current view of the member who joined.",
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				},
 				"role": {
 					"description": "Role the user was added to the group with. The role from 'member' will reflect the current data, not historical.",
@@ -187,7 +197,7 @@
 				"approvedBy": {
 					"description": "If join link was configured to require approval, this will be set to who approved the request. Undefined if approval was not required.",
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				}
 			}
 		},
@@ -199,7 +209,7 @@
 				"member": {
 					"description": "Current view of the member who left the group.",
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				}
 			}
 		},
@@ -211,7 +221,7 @@
 				"lockedBy": {
 					"description": "Current view of the member who locked the group.",
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				}
 			}
 		},
@@ -223,7 +233,7 @@
 				"unlockedBy": {
 					"description": "Current view of the member who unlocked the group.",
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				}
 			}
 		},
@@ -235,7 +245,7 @@
 				"lockedBy": {
 					"description": "Current view of the member who locked the group.",
 					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "#systemMessageReferredUser"
 				}
 			}
 		},
@@ -355,7 +365,7 @@
 					"type": "string"
 				},
 				"members": {
-					"description": "Members of this conversation. For direct convos, it will be an immutable list of the 2 members. For group convos, it will a list of important members (the first few members, the viewer, the member who invited the viewer, the member who sent the last message, the member who sent the last reaction), but will not contain the full list of members. NOTE: TBD an endpoint to list all members.",
+					"description": "Members of this conversation. For direct convos, it will be an immutable list of the 2 members. For group convos, it will a list of important members (the first few members, the viewer, the member who invited the viewer, the member who sent the last message, the member who sent the last reaction), but will not contain the full list of members. Use chat.bsky.convo.getConvoMembers to list all members.",
 					"type": "array",
 					"items": {
 						"type": "ref",
@@ -396,13 +406,21 @@
 		"groupConvo": {
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here].",
 			"type": "object",
-			"required": ["name", "lockStatus"],
+			"required": ["name", "lockStatus", "memberCount", "createdAt"],
 			"properties": {
 				"name": {
 					"type": "string",
 					"description": "The display name of the group conversation.",
 					"maxGraphemes": 128,
 					"maxLength": 1280
+				},
+				"memberCount": {
+					"type": "integer",
+					"description": "The total number of members in the group conversation."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
 				},
 				"joinLink": {
 					"type": "ref",
@@ -494,6 +512,14 @@
 				"message": {
 					"type": "union",
 					"refs": ["#messageView", "#deletedMessageView"]
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred to in the message view. This isn't required for compatibility, because it was added later, but should generally be present.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
@@ -549,6 +575,14 @@
 				"reaction": {
 					"type": "ref",
 					"ref": "#reactionView"
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred in the message and reaction views. This isn't required for compatibility, because it was added later, but should generally be present.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
@@ -570,6 +604,14 @@
 				"reaction": {
 					"type": "ref",
 					"ref": "#reactionView"
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred in the message and reaction views. This isn't required for compatibility, because it was added later, but should generally be present.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
@@ -593,7 +635,7 @@
 		"logAddMember": {
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member was added to a group convo. The member who was added gets a logBeginConvo (to create the convo) but also a logAddMember (to show the system message as the first message the user sees).",
 			"type": "object",
-			"required": ["rev", "convoId", "message"],
+			"required": ["rev", "convoId", "message", "relatedProfiles"],
 			"properties": {
 				"rev": {
 					"type": "string"
@@ -602,15 +644,24 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataAddMember",
 					"type": "ref",
-					"ref": "#systemMessageDataAddMember"
+					"ref": "#systemMessageView"
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred in the system message.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
 		"logRemoveMember": {
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member was removed from a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logRemoveMember (because they already left, so can't see the system message).",
 			"type": "object",
-			"required": ["rev", "convoId", "message"],
+			"required": ["rev", "convoId", "message", "relatedProfiles"],
 			"properties": {
 				"rev": {
 					"type": "string"
@@ -619,15 +670,24 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataRemoveMember",
 					"type": "ref",
-					"ref": "#systemMessageDataRemoveMember"
+					"ref": "#systemMessageView"
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred in the system message.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
 		"logMemberJoin": {
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member joined a group convo via join link. The member who was added gets a logBeginConvo (to create the convo) but also a logMemberJoin (to show the system message as the first message the user sees).",
 			"type": "object",
-			"required": ["rev", "convoId", "message"],
+			"required": ["rev", "convoId", "message", "relatedProfiles"],
 			"properties": {
 				"rev": {
 					"type": "string"
@@ -636,15 +696,24 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataMemberJoin",
 					"type": "ref",
-					"ref": "#systemMessageDataMemberJoin"
+					"ref": "#systemMessageView"
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred in the system message.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
 		"logMemberLeave": {
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member voluntarily left a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logMemberLeave (because they already left, so can't see the system message).",
 			"type": "object",
-			"required": ["rev", "convoId", "message"],
+			"required": ["rev", "convoId", "message", "relatedProfiles"],
 			"properties": {
 				"rev": {
 					"type": "string"
@@ -653,15 +722,24 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataMemberLeave",
 					"type": "ref",
-					"ref": "#systemMessageDataMemberLeave"
+					"ref": "#systemMessageView"
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred in the system message.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
 		"logLockConvo": {
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a group convo was locked.",
 			"type": "object",
-			"required": ["rev", "convoId", "message"],
+			"required": ["rev", "convoId", "message", "relatedProfiles"],
 			"properties": {
 				"rev": {
 					"type": "string"
@@ -670,15 +748,24 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataLockConvo",
 					"type": "ref",
-					"ref": "#systemMessageDataLockConvo"
+					"ref": "#systemMessageView"
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred in the system message.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
 		"logUnlockConvo": {
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a group convo was unlocked.",
 			"type": "object",
-			"required": ["rev", "convoId", "message"],
+			"required": ["rev", "convoId", "message", "relatedProfiles"],
 			"properties": {
 				"rev": {
 					"type": "string"
@@ -687,15 +774,24 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataUnlockConvo",
 					"type": "ref",
-					"ref": "#systemMessageDataUnlockConvo"
+					"ref": "#systemMessageView"
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred in the system message.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
 		"logLockConvoPermanently": {
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a group convo was locked permanently.",
 			"type": "object",
-			"required": ["rev", "convoId", "message"],
+			"required": ["rev", "convoId", "message", "relatedProfiles"],
 			"properties": {
 				"rev": {
 					"type": "string"
@@ -704,8 +800,17 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataLockConvoPermanently",
 					"type": "ref",
-					"ref": "#systemMessageDataLockConvoPermanently"
+					"ref": "#systemMessageView"
+				},
+				"relatedProfiles": {
+					"description": "Profiles referred in the system message.",
+					"type": "array",
+					"items": {
+						"type": "ref",
+						"ref": "chat.bsky.actor.defs#profileViewBasic"
+					}
 				}
 			}
 		},
@@ -721,8 +826,9 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataEditGroup",
 					"type": "ref",
-					"ref": "#systemMessageDataEditGroup"
+					"ref": "#systemMessageView"
 				}
 			}
 		},
@@ -738,8 +844,9 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataCreateJoinLink",
 					"type": "ref",
-					"ref": "#systemMessageDataCreateJoinLink"
+					"ref": "#systemMessageView"
 				}
 			}
 		},
@@ -755,8 +862,9 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataEditJoinLink",
 					"type": "ref",
-					"ref": "#systemMessageDataEditJoinLink"
+					"ref": "#systemMessageView"
 				}
 			}
 		},
@@ -772,8 +880,9 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataEnableJoinLink",
 					"type": "ref",
-					"ref": "#systemMessageDataEnableJoinLink"
+					"ref": "#systemMessageView"
 				}
 			}
 		},
@@ -789,8 +898,9 @@
 					"type": "string"
 				},
 				"message": {
+					"description": "A system message with data of type #systemMessageDataDisableJoinLink",
 					"type": "ref",
-					"ref": "#systemMessageDataDisableJoinLink"
+					"ref": "#systemMessageView"
 				}
 			}
 		},
