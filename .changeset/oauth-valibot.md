@@ -3,11 +3,6 @@
 '@atcute/oauth-crypto': major
 ---
 
-migrate the OAuth packages from `@badrap/valita` to `valibot`. every exported schema (the entire
-`schemas/` directory in `@atcute/oauth-types`, plus `dpop`'s internal validators) is now a valibot
-schema — instance methods `.parse(...)` and `.try(...)` no longer exist; use
-`v.parse(schema, input)` / `v.safeParse(schema, input)` from valibot.
-
-every object in the schema graph is `looseObject`, matching the `mode: 'passthrough'` already in use
-at every call site. duplicate-detection error messages on the OAuth scope schemas no longer include
-the duplicate value (the validation logic is unchanged).
+migrate from `@badrap/valita` to `valibot`. every exported schema (the `schemas/` directory in
+`@atcute/oauth-types`, plus `dpop`'s validators) is now a valibot schema — use
+`v.parse(schema, input)` / `v.safeParse(schema, input)` instead of `.parse(...)` / `.try(...)`.
