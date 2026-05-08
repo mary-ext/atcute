@@ -30,5 +30,8 @@
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/uint8array": "workspace:^"
+	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

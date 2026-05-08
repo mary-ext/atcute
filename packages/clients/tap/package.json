@@ -41,5 +41,9 @@
 		"@types/ws": "^8.18.1",
 		"vitest": "^4.1.5",
 		"ws": "^8.20.0"
+	},
+	"peerDependencies": {
+		"@atcute/identity": "^1.0.0",
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

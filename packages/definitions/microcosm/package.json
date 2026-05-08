@@ -37,6 +37,9 @@
 		"@atcute/lexicon-doc": "workspace:^",
 		"@atcute/microcosm": "file:"
 	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
+	},
 	"atcute:lexicons": {
 		"mappings": {
 			"blue.microcosm.*": {

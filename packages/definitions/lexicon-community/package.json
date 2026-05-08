@@ -36,6 +36,9 @@
 		"@atcute/lex-cli": "workspace:^",
 		"@atcute/lexicon-community": "file:"
 	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
+	},
 	"atcute:lexicons": {
 		"mappings": {
 			"community.lexicon.*": {

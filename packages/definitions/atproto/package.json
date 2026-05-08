@@ -39,6 +39,9 @@
 		"@atcute/atproto": "file:",
 		"@atcute/lex-cli": "workspace:^"
 	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
+	},
 	"atcute:lexicons": {
 		"mappings": {
 			"com.atproto.*": {

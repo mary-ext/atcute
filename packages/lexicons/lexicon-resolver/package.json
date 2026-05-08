@@ -48,6 +48,8 @@
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^1.1.0",
-		"@atcute/identity-resolver": "^1.1.3"
+		"@atcute/identity-resolver": "^1.1.3",
+		"@atcute/lexicon-doc": "^2.0.0",
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

@@ -41,6 +41,9 @@
 		"@atcute/lex-cli": "workspace:^",
 		"@atcute/tangled": "file:"
 	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
+	},
 	"atcute:lexicons": {
 		"mappings": {
 			"sh.tangled.*": {

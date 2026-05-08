@@ -32,5 +32,8 @@
 	"devDependencies": {
 		"@atcute/bluesky": "workspace:^",
 		"vitest": "^4.1.5"
+	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

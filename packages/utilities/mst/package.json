@@ -44,5 +44,9 @@
 		"@types/node": "^25.6.0",
 		"@vitest/coverage-v8": "^4.1.5",
 		"vitest": "^4.1.5"
+	},
+	"peerDependencies": {
+		"@atcute/cbor": "^2.0.0",
+		"@atcute/cid": "^2.0.0"
 	}
 }

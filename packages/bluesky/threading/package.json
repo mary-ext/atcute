@@ -34,5 +34,8 @@
 		"@atcute/client": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/tid": "workspace:^"
+	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

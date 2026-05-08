@@ -36,5 +36,9 @@
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/internal-dev-env": "workspace:^",
 		"vitest": "^4.1.5"
+	},
+	"peerDependencies": {
+		"@atcute/identity": "^1.0.0",
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

@@ -44,5 +44,8 @@
 		"tschema": "^3.2.0",
 		"valibot": "^1.4.0",
 		"vitest": "^4.1.5"
+	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

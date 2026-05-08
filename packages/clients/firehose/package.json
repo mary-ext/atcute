@@ -36,5 +36,8 @@
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^"
+	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

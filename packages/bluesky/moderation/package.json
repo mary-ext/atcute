@@ -37,6 +37,7 @@
 	},
 	"peerDependencies": {
 		"@atcute/atproto": "^3.0.0",
-		"@atcute/bluesky": "^3.0.0"
+		"@atcute/bluesky": "^3.0.0",
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

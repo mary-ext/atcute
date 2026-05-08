@@ -40,6 +40,9 @@
 		"@atcute/lex-cli": "workspace:^",
 		"@atcute/whitewind": "file:"
 	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
+	},
 	"atcute:lexicons": {
 		"mappings": {
 			"com.whtwnd.*": {

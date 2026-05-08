@@ -48,6 +48,9 @@
 		"@atproto/api": "^0.19.14",
 		"vitest": "^4.1.5"
 	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
+	},
 	"atcute:lexicons": {
 		"mappings": {
 			"app.bsky.*": {

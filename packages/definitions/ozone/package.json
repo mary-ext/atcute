@@ -43,6 +43,9 @@
 		"@atcute/lex-cli": "workspace:^",
 		"@atcute/ozone": "file:"
 	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
+	},
 	"atcute:lexicons": {
 		"mappings": {
 			"tools.ozone.*": {

@@ -41,6 +41,7 @@
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^1.0.0",
-		"@atcute/lexicon-resolver": "^0.1.0"
+		"@atcute/lexicon-resolver": "^0.1.0",
+		"@atcute/lexicons": "^1.0.0"
 	}
 }

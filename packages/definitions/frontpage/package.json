@@ -41,6 +41,9 @@
 		"@atcute/frontpage": "file:",
 		"@atcute/lex-cli": "workspace:^"
 	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^1.0.0"
+	},
 	"atcute:lexicons": {
 		"mappings": {
 			"fyi.unravel.frontpage.*": {

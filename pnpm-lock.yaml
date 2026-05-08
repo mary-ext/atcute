@@ -7,9 +7,7 @@ settings:
 pnpmfileChecksum: sha256-3aR7HO1D+O+ZJWGd95yDWJmz1hUofpOWygFPqDymYEg=
 
 patchedDependencies:
-  '@atproto/pds':
-    hash: acd46ed089de2d59171762efa35a9814e458fd8703bfcee1c856392f7e13c850
-    path: patches/@atproto__pds.patch
+  '@atproto/pds': acd46ed089de2d59171762efa35a9814e458fd8703bfcee1c856392f7e13c850
 
 importers:
 
@@ -291,7 +289,7 @@ importers:
     devDependencies:
       '@atcute/atproto':
         specifier: 'file:'
-        version: file:packages/definitions/atproto
+        version: file:packages/definitions/atproto(@atcute/lexicons@packages+lexicons+lexicons)
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../lexicons/lex-cli
@@ -310,7 +308,7 @@ importers:
     devDependencies:
       '@atcute/bluemoji':
         specifier: 'file:'
-        version: file:packages/definitions/bluemoji
+        version: file:packages/definitions/bluemoji(@atcute/lexicons@packages+lexicons+lexicons)
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../lexicons/lex-cli
@@ -326,7 +324,7 @@ importers:
     devDependencies:
       '@atcute/bluesky':
         specifier: 'file:'
-        version: file:packages/definitions/bluesky
+        version: file:packages/definitions/bluesky(@atcute/lexicons@packages+lexicons+lexicons)
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../lexicons/lex-cli
@@ -348,7 +346,7 @@ importers:
     devDependencies:
       '@atcute/frontpage':
         specifier: 'file:'
-        version: file:packages/definitions/frontpage
+        version: file:packages/definitions/frontpage(@atcute/lexicons@packages+lexicons+lexicons)
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../lexicons/lex-cli
@@ -364,7 +362,7 @@ importers:
     devDependencies:
       '@atcute/leaflet':
         specifier: 'file:'
-        version: file:packages/definitions/leaflet
+        version: file:packages/definitions/leaflet(@atcute/lexicons@packages+lexicons+lexicons)
       '@atcute/lex-cli':
         specifier: workspace:^
         version: link:../../lexicons/lex-cli
@@ -383,7 +381,7 @@ importers:
         version: link:../../lexicons/lex-cli
       '@atcute/lexicon-community':
         specifier: 'file:'
-        version: file:packages/definitions/lexicon-community
+        version: file:packages/definitions/lexicon-community(@atcute/lexicons@packages+lexicons+lexicons)
 
   packages/definitions/microcosm:
     dependencies:
@@ -399,7 +397,7 @@ importers:
         version: link:../../lexicons/lexicon-doc
       '@atcute/microcosm':
         specifier: 'file:'
-        version: file:packages/definitions/microcosm
+        version: file:packages/definitions/microcosm(@atcute/lexicons@packages+lexicons+lexicons)
 
   packages/definitions/ozone:
     dependencies:
@@ -418,7 +416,7 @@ importers:
         version: link:../../lexicons/lex-cli
       '@atcute/ozone':
         specifier: 'file:'
-        version: file:packages/definitions/ozone
+        version: file:packages/definitions/ozone(@atcute/lexicons@packages+lexicons+lexicons)
 
   packages/definitions/pckt:
     dependencies:
@@ -460,7 +458,7 @@ importers:
         version: link:../../lexicons/lex-cli
       '@atcute/tangled':
         specifier: 'file:'
-        version: file:packages/definitions/tangled
+        version: file:packages/definitions/tangled(@atcute/lexicons@packages+lexicons+lexicons)
 
   packages/definitions/whitewind:
     dependencies:
@@ -473,7 +471,7 @@ importers:
         version: link:../../lexicons/lex-cli
       '@atcute/whitewind':
         specifier: 'file:'
-        version: file:packages/definitions/whitewind
+        version: file:packages/definitions/whitewind(@atcute/lexicons@packages+lexicons+lexicons)
 
   packages/identity/did-plc:
     dependencies:
@@ -1015,7 +1013,7 @@ importers:
         version: link:../../definitions/bluesky
       '@atcute/xrpc-server':
         specifier: 'file:'
-        version: file:packages/servers/xrpc-server
+        version: file:packages/servers/xrpc-server(@atcute/lexicons@packages+lexicons+lexicons)
       '@mary-ext/simple-event-emitter':
         specifier: ^1.0.1
         version: 1.0.1
@@ -1303,36 +1301,58 @@ packages:
 
   '@atcute/atproto@file:packages/definitions/atproto':
     resolution: {directory: packages/definitions/atproto, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/bluemoji@file:packages/definitions/bluemoji':
     resolution: {directory: packages/definitions/bluemoji, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/bluesky@file:packages/definitions/bluesky':
     resolution: {directory: packages/definitions/bluesky, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/frontpage@file:packages/definitions/frontpage':
     resolution: {directory: packages/definitions/frontpage, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/leaflet@file:packages/definitions/leaflet':
     resolution: {directory: packages/definitions/leaflet, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/lexicon-community@file:packages/definitions/lexicon-community':
     resolution: {directory: packages/definitions/lexicon-community, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/microcosm@file:packages/definitions/microcosm':
     resolution: {directory: packages/definitions/microcosm, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/ozone@file:packages/definitions/ozone':
     resolution: {directory: packages/definitions/ozone, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/tangled@file:packages/definitions/tangled':
     resolution: {directory: packages/definitions/tangled, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/whitewind@file:packages/definitions/whitewind':
     resolution: {directory: packages/definitions/whitewind, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atcute/xrpc-server@file:packages/servers/xrpc-server':
     resolution: {directory: packages/servers/xrpc-server, type: directory}
+    peerDependencies:
+      '@atcute/lexicons': ^1.0.0
 
   '@atproto-labs/did-resolver@0.2.6':
     resolution: {integrity: sha512-2K1bC04nI2fmgNcvof+yA28IhGlpWn2JKYlPa7To9JTKI45FINCGkQSGiL2nyXlyzDJJ34fZ1aq6/IRFIOIiqg==}
@@ -4402,56 +4422,56 @@ packages:
 
 snapshots:
 
-  '@atcute/atproto@file:packages/definitions/atproto':
+  '@atcute/atproto@file:packages/definitions/atproto(@atcute/lexicons@packages+lexicons+lexicons)':
     dependencies:
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
-  '@atcute/bluemoji@file:packages/definitions/bluemoji':
-    dependencies:
-      '@atcute/atproto': link:packages/definitions/atproto
-      '@atcute/bluesky': link:packages/definitions/bluesky
-      '@atcute/lexicons': link:packages/lexicons/lexicons
-
-  '@atcute/bluesky@file:packages/definitions/bluesky':
-    dependencies:
-      '@atcute/atproto': link:packages/definitions/atproto
-      '@atcute/lexicons': link:packages/lexicons/lexicons
-
-  '@atcute/frontpage@file:packages/definitions/frontpage':
-    dependencies:
-      '@atcute/atproto': link:packages/definitions/atproto
-      '@atcute/lexicons': link:packages/lexicons/lexicons
-
-  '@atcute/leaflet@file:packages/definitions/leaflet':
-    dependencies:
-      '@atcute/atproto': link:packages/definitions/atproto
-      '@atcute/lexicons': link:packages/lexicons/lexicons
-
-  '@atcute/lexicon-community@file:packages/definitions/lexicon-community':
-    dependencies:
-      '@atcute/atproto': link:packages/definitions/atproto
-      '@atcute/lexicons': link:packages/lexicons/lexicons
-
-  '@atcute/microcosm@file:packages/definitions/microcosm':
-    dependencies:
-      '@atcute/lexicons': link:packages/lexicons/lexicons
-
-  '@atcute/ozone@file:packages/definitions/ozone':
+  '@atcute/bluemoji@file:packages/definitions/bluemoji(@atcute/lexicons@packages+lexicons+lexicons)':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/bluesky': link:packages/definitions/bluesky
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
-  '@atcute/tangled@file:packages/definitions/tangled':
+  '@atcute/bluesky@file:packages/definitions/bluesky(@atcute/lexicons@packages+lexicons+lexicons)':
     dependencies:
       '@atcute/atproto': link:packages/definitions/atproto
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
-  '@atcute/whitewind@file:packages/definitions/whitewind':
+  '@atcute/frontpage@file:packages/definitions/frontpage(@atcute/lexicons@packages+lexicons+lexicons)':
+    dependencies:
+      '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/lexicons': link:packages/lexicons/lexicons
+
+  '@atcute/leaflet@file:packages/definitions/leaflet(@atcute/lexicons@packages+lexicons+lexicons)':
+    dependencies:
+      '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/lexicons': link:packages/lexicons/lexicons
+
+  '@atcute/lexicon-community@file:packages/definitions/lexicon-community(@atcute/lexicons@packages+lexicons+lexicons)':
+    dependencies:
+      '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/lexicons': link:packages/lexicons/lexicons
+
+  '@atcute/microcosm@file:packages/definitions/microcosm(@atcute/lexicons@packages+lexicons+lexicons)':
     dependencies:
       '@atcute/lexicons': link:packages/lexicons/lexicons
 
-  '@atcute/xrpc-server@file:packages/servers/xrpc-server':
+  '@atcute/ozone@file:packages/definitions/ozone(@atcute/lexicons@packages+lexicons+lexicons)':
+    dependencies:
+      '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/bluesky': link:packages/definitions/bluesky
+      '@atcute/lexicons': link:packages/lexicons/lexicons
+
+  '@atcute/tangled@file:packages/definitions/tangled(@atcute/lexicons@packages+lexicons+lexicons)':
+    dependencies:
+      '@atcute/atproto': link:packages/definitions/atproto
+      '@atcute/lexicons': link:packages/lexicons/lexicons
+
+  '@atcute/whitewind@file:packages/definitions/whitewind(@atcute/lexicons@packages+lexicons+lexicons)':
+    dependencies:
+      '@atcute/lexicons': link:packages/lexicons/lexicons
+
+  '@atcute/xrpc-server@file:packages/servers/xrpc-server(@atcute/lexicons@packages+lexicons+lexicons)':
     dependencies:
       '@atcute/cbor': link:packages/utilities/cbor
       '@atcute/crypto': link:packages/utilities/crypto
