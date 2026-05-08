@@ -1,5 +1,13 @@
 # @atcute/ozone
 
+## 3.1.16
+
+### Patch Changes
+
+- ee3d473: pull latest Bluesky lexicons
+- Updated dependencies [0db4e5a]
+  - @atcute/bluesky@3.3.5
+
 ## 3.1.15
 
 ### Patch Changes

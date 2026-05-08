@@ -1,5 +1,11 @@
 # @atcute/lexicon-community
 
+## 1.1.6
+
+### Patch Changes
+
+- 08f7140: pull latest Lexicon Community lexicons
+
 ## 1.1.5
 
 ### Patch Changes
