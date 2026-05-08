@@ -336,6 +336,10 @@ const _modEventTagSchema = /*#__PURE__*/ v.object({
 	 */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**
+	 * Indicates how long the tags being added should remain before automatically being removed. Only applies to tags being added.
+	 */
+	durationInHours: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
 	 * Tags to be removed to the subject. Ignores a tag If it doesn't exist, won't be duplicated.
 	 */
 	remove: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
