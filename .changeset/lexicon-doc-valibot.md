@@ -1,7 +1,5 @@
 ---
 '@atcute/lexicon-doc': major
-'@atcute/lexicon-resolver': patch
-'@atcute/lex-cli': patch
 ---
 
 migrate from `@badrap/valita` to `valibot`. the exported schemas (`lexiconDoc`, `lexBoolean`,
