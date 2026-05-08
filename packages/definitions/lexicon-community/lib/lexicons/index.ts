@@ -8,3 +8,4 @@ export * as CommunityLexiconLocationFsq from './types/community/lexicon/location
 export * as CommunityLexiconLocationGeo from './types/community/lexicon/location/geo.ts';
 export * as CommunityLexiconLocationHthree from './types/community/lexicon/location/hthree.ts';
 export * as CommunityLexiconPaymentsWebMonetization from './types/community/lexicon/payments/webMonetization.ts';
+export * as CommunityLexiconPreferenceAi from './types/community/lexicon/preference/ai.ts';
