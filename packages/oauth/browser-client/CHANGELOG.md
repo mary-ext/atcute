@@ -1,5 +1,18 @@
 # @atcute/oauth-browser-client
 
+## 3.0.1
+
+### Patch Changes
+
+- d174298: mark some dependencies as peer dependencies to avoid breakages in the future.
+- 157172a: avoid unhandled rejections when session refresh fails
+- Updated dependencies [d174298]
+- Updated dependencies [87c00bb]
+- Updated dependencies [8b6c404]
+  - @atcute/client@4.2.2
+  - @atcute/identity-resolver@1.2.3
+  - @atcute/lexicons@1.3.1
+
 ## 3.0.0
 
 ### Major Changes

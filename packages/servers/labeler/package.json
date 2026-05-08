@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/labeler",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "label signing and subscription engine for AT Protocol",
 	"license": "0BSD",
 	"repository": {

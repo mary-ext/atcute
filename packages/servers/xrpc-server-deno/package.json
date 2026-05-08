@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/xrpc-server-deno",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "Deno WebSocket adapter for @atcute/xrpc-server",
 	"license": "0BSD",
 	"repository": {

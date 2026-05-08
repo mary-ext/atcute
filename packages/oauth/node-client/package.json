@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/oauth-node-client",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "atproto OAuth client for Node.js and other server runtimes",
 	"license": "0BSD",
 	"repository": {

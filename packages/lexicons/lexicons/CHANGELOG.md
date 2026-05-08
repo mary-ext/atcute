@@ -1,5 +1,12 @@
 # @atcute/lexicons
 
+## 1.3.1
+
+### Patch Changes
+
+- 87c00bb: improve literal enum validation lookup performance
+- 8b6c404: avoid extra issue joining when array validation aborts early
+
 ## 1.3.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
-# @atcute/tap
+# @atcute/password-session
 
-## 0.1.2
+## 0.1.1
 
 ### Patch Changes
 
@@ -8,11 +8,6 @@
 - Updated dependencies [d174298]
 - Updated dependencies [87c00bb]
 - Updated dependencies [8b6c404]
+  - @atcute/client@4.2.2
   - @atcute/identity@1.1.5
   - @atcute/lexicons@1.3.1
-
-## 0.1.1
-
-### Patch Changes
-
-- fbbe907: properly differentiate record event actions

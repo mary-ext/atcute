@@ -1,5 +1,18 @@
 # @atcute/oauth-node-client
 
+## 1.1.1
+
+### Patch Changes
+
+- d174298: mark some dependencies as peer dependencies to avoid breakages in the future.
+- Updated dependencies [d174298]
+- Updated dependencies [87c00bb]
+- Updated dependencies [8b6c404]
+  - @atcute/client@4.2.2
+  - @atcute/identity@1.1.5
+  - @atcute/identity-resolver@1.2.3
+  - @atcute/lexicons@1.3.1
+
 ## 1.1.0
 
 ### Minor Changes

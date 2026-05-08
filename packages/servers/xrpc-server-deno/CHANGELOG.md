@@ -1,4 +1,4 @@
-# @atcute/xrpc-server-bun
+# @atcute/xrpc-server-deno
 
 ## 1.0.0
 
@@ -25,9 +25,3 @@
 - Updated dependencies [bdd2ed1]
 - Updated dependencies [94d5ce8]
   - @atcute/xrpc-server@1.0.0
-
-## 0.1.1
-
-### Patch Changes
-
-- d4a5df4: fix Bun.Server typing

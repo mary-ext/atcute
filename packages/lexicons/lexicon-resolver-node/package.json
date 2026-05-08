@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/lexicon-resolver-node",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "additional atproto lexicon resolvers for Node.js",
 	"keywords": [
 		"atproto",

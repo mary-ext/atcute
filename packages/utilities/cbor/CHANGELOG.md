@@ -1,5 +1,11 @@
 # @atcute/cbor
 
+## 2.3.3
+
+### Patch Changes
+
+- d174298: mark some dependencies as peer dependencies to avoid breakages in the future.
+
 ## 2.3.2
 
 ### Patch Changes

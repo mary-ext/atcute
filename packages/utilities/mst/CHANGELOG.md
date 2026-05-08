@@ -1,5 +1,13 @@
 # @atcute/mst
 
+## 1.0.1
+
+### Patch Changes
+
+- d174298: mark some dependencies as peer dependencies to avoid breakages in the future.
+- Updated dependencies [d174298]
+  - @atcute/cbor@2.3.3
+
 ## 1.0.0
 
 ### Major Changes

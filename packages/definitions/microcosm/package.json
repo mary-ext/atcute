@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/microcosm",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Microcosm (blue.microcosm.*, com.bad-example.*) schema definitions",
 	"license": "0BSD",
 	"repository": {

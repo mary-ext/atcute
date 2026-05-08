@@ -1,5 +1,14 @@
 # @atcute/bluesky-moderation
 
+## 3.0.1
+
+### Patch Changes
+
+- d174298: mark some dependencies as peer dependencies to avoid breakages in the future.
+- Updated dependencies [87c00bb]
+- Updated dependencies [8b6c404]
+  - @atcute/lexicons@1.3.1
+
 ## 3.0.0
 
 ### Major Changes
