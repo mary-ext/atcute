@@ -1,10 +1,32 @@
 {
-	"lexicon": 1,
 	"id": "fyi.frontpage.feed.getFeedSkeleton",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get a skeleton of a feed provided by a feed generator. Auth is optional, but may be required by the feed generator.",
+			"errors": [
+				{
+					"name": "UnknownFeed"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["feed"],
+					"properties": {
+						"feed": {
+							"type": "array",
+							"items": {
+								"ref": "#skeletonFeedPost",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["feed"],
@@ -16,9 +38,9 @@
 					},
 					"limit": {
 						"type": "integer",
-						"minimum": 1,
-						"maximum": 100,
 						"default": 50,
+						"maximum": 100,
+						"minimum": 1,
 						"description": "Maximum number of items to return."
 					},
 					"cursor": {
@@ -27,30 +49,7 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["feed"],
-					"properties": {
-						"cursor": {
-							"type": "string"
-						},
-						"feed": {
-							"type": "array",
-							"items": {
-								"type": "ref",
-								"ref": "#skeletonFeedPost"
-							}
-						}
-					}
-				}
-			},
-			"errors": [
-				{
-					"name": "UnknownFeed"
-				}
-			]
+			"description": "Get a skeleton of a feed provided by a feed generator. Auth is optional, but may be required by the feed generator."
 		},
 		"skeletonFeedPost": {
 			"type": "object",
@@ -63,5 +62,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

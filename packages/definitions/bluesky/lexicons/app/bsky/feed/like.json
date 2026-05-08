@@ -1,29 +1,29 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.feed.like",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "Record declaring a 'like' of a piece of subject content.",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["subject", "createdAt"],
 				"properties": {
+					"via": {
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
+					},
 					"subject": {
-						"type": "ref",
-						"ref": "com.atproto.repo.strongRef"
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
 					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime"
-					},
-					"via": {
-						"type": "ref",
-						"ref": "com.atproto.repo.strongRef"
 					}
 				}
-			}
+			},
+			"description": "Record declaring a 'like' of a piece of subject content."
 		}
-	}
+	},
+	"lexicon": 1
 }

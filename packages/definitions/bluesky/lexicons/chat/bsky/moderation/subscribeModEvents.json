@@ -1,10 +1,23 @@
 {
-	"lexicon": 1,
 	"id": "chat.bsky.moderation.subscribeModEvents",
 	"defs": {
 		"main": {
 			"type": "subscription",
-			"description": "Subscribe to stream of chat events targeted to moderation. Private endpoint.",
+			"errors": [
+				{
+					"name": "FutureCursor"
+				},
+				{
+					"name": "ConsumerTooSlow",
+					"description": "If the consumer of the stream can not keep up with events, and a backlog gets too large, the server will drop the connection."
+				}
+			],
+			"message": {
+				"schema": {
+					"refs": ["#eventConvoFirstMessage"],
+					"type": "union"
+				}
+			},
 			"parameters": {
 				"type": "params",
 				"properties": {
@@ -14,26 +27,20 @@
 					}
 				}
 			},
-			"message": {
-				"schema": {
-					"type": "union",
-					"refs": ["#eventConvoFirstMessage"]
-				}
-			},
-			"errors": [
-				{
-					"name": "FutureCursor"
-				},
-				{
-					"name": "ConsumerTooSlow",
-					"description": "If the consumer of the stream can not keep up with events, and a backlog gets too large, the server will drop the connection."
-				}
-			]
+			"description": "Subscribe to stream of chat events targeted to moderation. Private endpoint."
 		},
 		"eventConvoFirstMessage": {
 			"type": "object",
 			"required": ["createdAt", "rev", "convoId", "user", "recipients"],
 			"properties": {
+				"rev": {
+					"type": "string"
+				},
+				"user": {
+					"type": "string",
+					"format": "did",
+					"description": "The DID of the message author."
+				},
 				"convoId": {
 					"type": "string"
 				},
@@ -45,22 +52,15 @@
 					"type": "string"
 				},
 				"recipients": {
-					"description": "The list of DIDs message recipients. Does not include the sender, which is in the `user` field",
 					"type": "array",
 					"items": {
 						"type": "string",
 						"format": "did"
-					}
-				},
-				"rev": {
-					"type": "string"
-				},
-				"user": {
-					"description": "The DID of the message author.",
-					"type": "string",
-					"format": "did"
+					},
+					"description": "The list of DIDs message recipients. Does not include the sender, which is in the `user` field"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,23 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.unspecced.getTrends",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get the current trends on the network",
-			"parameters": {
-				"type": "params",
-				"properties": {
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 25,
-						"default": 10
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["trends"],
@@ -25,13 +11,27 @@
 						"trends": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "app.bsky.unspecced.defs#trendView"
+								"ref": "app.bsky.unspecced.defs#trendView",
+								"type": "ref"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 10,
+						"maximum": 25,
+						"minimum": 1
+					}
 				}
-			}
+			},
+			"description": "Get the current trends on the network"
 		}
-	}
+	},
+	"lexicon": 1
 }

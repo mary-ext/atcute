@@ -1,44 +1,26 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.actor.profile",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "A declaration of a Tangled account profile.",
 			"key": "literal:self",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["bluesky"],
 				"properties": {
-					"avatar": {
-						"type": "blob",
-						"description": "Small image to be displayed next to posts from account. AKA, 'profile picture'",
-						"accept": ["image/png", "image/jpeg"],
-						"maxSize": 1000000
-					},
-					"description": {
-						"type": "string",
-						"description": "Free-form profile description text.",
-						"maxGraphemes": 256,
-						"maxLength": 2560
-					},
 					"links": {
 						"type": "array",
-						"minLength": 0,
-						"maxLength": 5,
 						"items": {
 							"type": "string",
-							"description": "Any URI, intended for social profiles or websites, can be used to link DIDs/AT-URIs too.",
-							"format": "uri"
-						}
+							"format": "uri",
+							"description": "Any URI, intended for social profiles or websites, can be used to link DIDs/AT-URIs too."
+						},
+						"maxLength": 5,
+						"minLength": 0
 					},
 					"stats": {
 						"type": "array",
-						"minLength": 0,
-						"maxLength": 2,
 						"items": {
-							"type": "string",
-							"description": "Vanity stats.",
 							"enum": [
 								"merged-pull-request-count",
 								"closed-pull-request-count",
@@ -47,8 +29,18 @@
 								"closed-issue-count",
 								"repository-count",
 								"star-count"
-							]
-						}
+							],
+							"type": "string",
+							"description": "Vanity stats."
+						},
+						"maxLength": 2,
+						"minLength": 0
+					},
+					"avatar": {
+						"type": "blob",
+						"accept": ["image/png", "image/jpeg"],
+						"maxSize": 1000000,
+						"description": "Small image to be displayed next to posts from account. AKA, 'profile picture'"
 					},
 					"bluesky": {
 						"type": "boolean",
@@ -56,32 +48,40 @@
 					},
 					"location": {
 						"type": "string",
+						"maxLength": 400,
 						"description": "Free-form location text.",
-						"maxGraphemes": 40,
-						"maxLength": 400
-					},
-					"pinnedRepositories": {
-						"type": "array",
-						"description": "Pinned repositories. Values are repo DIDs for repos that have them, or AT-URIs for legacy repos.",
-						"minLength": 0,
-						"maxLength": 6,
-						"items": {
-							"type": "string"
-						}
+						"maxGraphemes": 40
 					},
 					"pronouns": {
 						"type": "string",
-						"description": "Preferred gender pronouns.",
-						"maxLength": 40
+						"maxLength": 40,
+						"description": "Preferred gender pronouns."
+					},
+					"description": {
+						"type": "string",
+						"maxLength": 2560,
+						"description": "Free-form profile description text.",
+						"maxGraphemes": 256
 					},
 					"preferredHandle": {
 						"type": "string",
-						"description": "A handle the user prefers to be displayed as.",
 						"format": "handle",
-						"maxLength": 253
+						"maxLength": 253,
+						"description": "A handle the user prefers to be displayed as."
+					},
+					"pinnedRepositories": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"maxLength": 6,
+						"minLength": 0,
+						"description": "Pinned repositories. Values are repo DIDs for repos that have them, or AT-URIs for legacy repos."
 					}
 				}
-			}
+			},
+			"description": "A declaration of a Tangled account profile."
 		}
-	}
+	},
+	"lexicon": 1
 }

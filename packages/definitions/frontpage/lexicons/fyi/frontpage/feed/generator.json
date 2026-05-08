@@ -1,11 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "fyi.frontpage.feed.generator",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "Record declaring a feed generator. The did field points to the service that runs the feed algorithm.",
 			"key": "any",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["did", "displayName", "createdAt"],
@@ -15,35 +13,37 @@
 						"format": "did",
 						"description": "DID of the feed generator service."
 					},
-					"displayName": {
-						"type": "string",
-						"maxLength": 320,
-						"maxGraphemes": 32,
-						"description": "Display name for the feed."
-					},
-					"description": {
-						"type": "string",
-						"maxLength": 3000,
-						"maxGraphemes": 300,
-						"description": "Description of the feed."
-					},
 					"avatar": {
 						"type": "blob",
 						"accept": ["image/png", "image/jpeg"],
 						"maxSize": 1000000,
 						"description": "Avatar image for the feed."
 					},
-					"acceptsInteractions": {
-						"type": "boolean",
-						"description": "Whether the feed generator accepts interaction feedback."
-					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime",
 						"description": "Client-declared timestamp when this generator was created."
+					},
+					"description": {
+						"type": "string",
+						"maxLength": 3000,
+						"description": "Description of the feed.",
+						"maxGraphemes": 300
+					},
+					"displayName": {
+						"type": "string",
+						"maxLength": 320,
+						"description": "Display name for the feed.",
+						"maxGraphemes": 32
+					},
+					"acceptsInteractions": {
+						"type": "boolean",
+						"description": "Whether the feed generator accepts interaction feedback."
 					}
 				}
-			}
+			},
+			"description": "Record declaring a feed generator. The did field points to the service that runs the feed algorithm."
 		}
-	}
+	},
+	"lexicon": 1
 }

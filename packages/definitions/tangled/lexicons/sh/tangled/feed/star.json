@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.feed.star",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["createdAt"],
@@ -15,16 +12,19 @@
 						"type": "string",
 						"format": "at-uri"
 					},
-					"subjectDid": {
-						"type": "string",
-						"format": "did"
-					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime"
+					},
+					"subjectDid": {
+						"type": "string",
+						"format": "did"
 					}
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

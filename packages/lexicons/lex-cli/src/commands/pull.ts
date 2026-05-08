@@ -83,6 +83,26 @@ const parseLexiconFile = async (loc: SourceLocation): Promise<LexiconDoc> => {
 	return result.output;
 };
 
+// valibot rebuilds objects in schema key order; reorder back into dag-cbor
+// canonical order (shorter keys first, then lexicographic) so writes are
+// deterministic regardless of schema field declaration order
+const canonicalize = (value: unknown): unknown => {
+	if (Array.isArray(value)) {
+		return value.map(canonicalize);
+	}
+	if (value !== null && typeof value === 'object') {
+		const obj = value as Record<string, unknown>;
+		const keys = Object.keys(obj).toSorted((a, b) => a.length - b.length || (a < b ? -1 : 1));
+		const result: Record<string, unknown> = {};
+		for (const key of keys) {
+			result[key] = canonicalize(obj[key]);
+		}
+
+		return result;
+	}
+	return value;
+};
+
 const writeLexicon = async (
 	outdir: string,
 	nsid: string,
@@ -93,7 +113,7 @@ const writeLexicon = async (
 	const target = path.join(outdir, `${nsidPath}.json`);
 	const dirname = path.dirname(target);
 
-	const code = await formatter.format(JSON.stringify(doc, null, 2), target);
+	const code = await formatter.format(JSON.stringify(canonicalize(doc), null, 2), target);
 
 	await fs.mkdir(dirname, { recursive: true });
 	await fs.writeFile(target, code);

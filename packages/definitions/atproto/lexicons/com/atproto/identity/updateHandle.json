@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.identity.updateHandle",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Updates the current account's handle. Verifies handle validity, and updates did:plc document if necessary. Implemented by PDS, and requires auth.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["handle"],
@@ -17,8 +14,11 @@
 							"description": "The new handle."
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Updates the current account's handle. Verifies handle validity, and updates did:plc document if necessary. Implemented by PDS, and requires auth."
 		}
-	}
+	},
+	"lexicon": 1
 }

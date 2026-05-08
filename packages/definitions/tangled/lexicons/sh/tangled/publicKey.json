@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.publicKey",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["key", "name", "createdAt"],
@@ -28,5 +25,8 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

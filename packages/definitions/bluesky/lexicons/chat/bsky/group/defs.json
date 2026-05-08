@@ -1,12 +1,6 @@
 {
-	"lexicon": 1,
 	"id": "chat.bsky.group.defs",
-	"description": "[NOTE: This is under active development and should be considered unstable while this note is here].",
 	"defs": {
-		"linkEnabledStatus": {
-			"type": "string",
-			"knownValues": ["enabled", "disabled"]
-		},
 		"joinRule": {
 			"type": "string",
 			"knownValues": ["anyone", "followedByOwner"]
@@ -18,20 +12,20 @@
 				"code": {
 					"type": "string"
 				},
-				"enabledStatus": {
-					"type": "ref",
-					"ref": "#linkEnabledStatus"
-				},
-				"requireApproval": {
-					"type": "boolean"
-				},
 				"joinRule": {
-					"type": "ref",
-					"ref": "#joinRule"
+					"ref": "#joinRule",
+					"type": "ref"
 				},
 				"createdAt": {
 					"type": "string",
 					"format": "datetime"
+				},
+				"enabledStatus": {
+					"ref": "#linkEnabledStatus",
+					"type": "ref"
+				},
+				"requireApproval": {
+					"type": "boolean"
 				}
 			}
 		},
@@ -43,8 +37,8 @@
 					"type": "string"
 				},
 				"owner": {
-					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
+					"ref": "chat.bsky.actor.defs#profileViewBasic",
+					"type": "ref"
 				},
 				"memberCount": {
 					"type": "integer"
@@ -61,15 +55,21 @@
 				"convoId": {
 					"type": "string"
 				},
-				"requestedBy": {
-					"type": "ref",
-					"ref": "chat.bsky.actor.defs#profileViewBasic"
-				},
 				"requestedAt": {
 					"type": "string",
 					"format": "datetime"
+				},
+				"requestedBy": {
+					"ref": "chat.bsky.actor.defs#profileViewBasic",
+					"type": "ref"
 				}
 			}
+		},
+		"linkEnabledStatus": {
+			"type": "string",
+			"knownValues": ["enabled", "disabled"]
 		}
-	}
+	},
+	"lexicon": 1,
+	"description": "[NOTE: This is under active development and should be considered unstable while this note is here]."
 }

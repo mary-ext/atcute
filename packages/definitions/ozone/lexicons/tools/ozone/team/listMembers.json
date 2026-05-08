@@ -1,38 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.team.listMembers",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "List all members with access to the ozone service.",
-			"parameters": {
-				"type": "params",
-				"properties": {
-					"q": {
-						"type": "string"
-					},
-					"disabled": {
-						"type": "boolean"
-					},
-					"roles": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 100,
-						"default": 50
-					},
-					"cursor": {
-						"type": "string"
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["members"],
@@ -43,13 +14,42 @@
 						"members": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "tools.ozone.team.defs#member"
+								"ref": "tools.ozone.team.defs#member",
+								"type": "ref"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"q": {
+						"type": "string"
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"roles": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"disabled": {
+						"type": "boolean"
+					}
 				}
-			}
+			},
+			"description": "List all members with access to the ozone service."
 		}
-	}
+	},
+	"lexicon": 1
 }

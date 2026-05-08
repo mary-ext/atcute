@@ -1,28 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.unspecced.getTrendingTopics",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get a list of trending topics",
-			"parameters": {
-				"type": "params",
-				"properties": {
-					"viewer": {
-						"type": "string",
-						"format": "did",
-						"description": "DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking."
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 25,
-						"default": 10
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["topics", "suggested"],
@@ -30,20 +11,39 @@
 						"topics": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "app.bsky.unspecced.defs#trendingTopic"
+								"ref": "app.bsky.unspecced.defs#trendingTopic",
+								"type": "ref"
 							}
 						},
 						"suggested": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "app.bsky.unspecced.defs#trendingTopic"
+								"ref": "app.bsky.unspecced.defs#trendingTopic",
+								"type": "ref"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 10,
+						"maximum": 25,
+						"minimum": 1
+					},
+					"viewer": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking."
+					}
 				}
-			}
+			},
+			"description": "Get a list of trending topics"
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.pipeline.cancelPipeline",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Cancel a running pipeline",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["repo", "pipeline", "workflow"],
@@ -26,8 +23,11 @@
 							"description": "workflow name"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Cancel a running pipeline"
 		}
-	}
+	},
+	"lexicon": 1
 }

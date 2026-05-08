@@ -1,40 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.set.querySets",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Query available sets",
-			"parameters": {
-				"type": "params",
-				"properties": {
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 100,
-						"default": 50
-					},
-					"cursor": {
-						"type": "string"
-					},
-					"namePrefix": {
-						"type": "string"
-					},
-					"sortBy": {
-						"type": "string",
-						"enum": ["name", "createdAt", "updatedAt"],
-						"default": "name"
-					},
-					"sortDirection": {
-						"type": "string",
-						"default": "asc",
-						"enum": ["asc", "desc"],
-						"description": "Defaults to ascending order of name field."
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["sets"],
@@ -42,16 +11,47 @@
 						"sets": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "tools.ozone.set.defs#setView"
+								"ref": "tools.ozone.set.defs#setView",
+								"type": "ref"
 							}
 						},
 						"cursor": {
 							"type": "string"
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"sortBy": {
+						"enum": ["name", "createdAt", "updatedAt"],
+						"type": "string",
+						"default": "name"
+					},
+					"namePrefix": {
+						"type": "string"
+					},
+					"sortDirection": {
+						"enum": ["asc", "desc"],
+						"type": "string",
+						"default": "asc",
+						"description": "Defaults to ascending order of name field."
+					}
 				}
-			}
+			},
+			"description": "Query available sets"
 		}
-	}
+	},
+	"lexicon": 1
 }

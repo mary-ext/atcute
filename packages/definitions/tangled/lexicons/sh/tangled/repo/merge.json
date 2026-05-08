@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.merge",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Merge a patch into a repository branch",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["did", "name", "patch", "branch"],
@@ -32,21 +29,24 @@
 							"type": "string",
 							"description": "Author name for the merge commit"
 						},
-						"authorEmail": {
-							"type": "string",
-							"description": "Author email for the merge commit"
-						},
 						"commitBody": {
 							"type": "string",
 							"description": "Additional commit message body"
+						},
+						"authorEmail": {
+							"type": "string",
+							"description": "Author email for the merge commit"
 						},
 						"commitMessage": {
 							"type": "string",
 							"description": "Merge commit message"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Merge a patch into a repository branch"
 		}
-	}
+	},
+	"lexicon": 1
 }

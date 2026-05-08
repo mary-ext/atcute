@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.draft.deleteDraft",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Deletes a draft by ID. Requires authentication.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["id"],
@@ -16,8 +13,11 @@
 							"format": "tid"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Deletes a draft by ID. Requires authentication."
 		}
-	}
+	},
+	"lexicon": 1
 }

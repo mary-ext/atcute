@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.report.defs",
 	"defs": {
 		"reasonType": {
@@ -47,165 +46,166 @@
 				"tools.ozone.report.defs#reasonSelfHarmOther"
 			]
 		},
-		"reasonAppeal": {
-			"type": "token",
-			"description": "Appeal a previously taken moderation action"
-		},
 		"reasonOther": {
 			"type": "token",
 			"description": "An issue not included in these options"
 		},
-		"reasonViolenceAnimal": {
+		"reasonAppeal": {
 			"type": "token",
-			"description": "Animal welfare violations"
-		},
-		"reasonViolenceThreats": {
-			"type": "token",
-			"description": "Threats or incitement"
-		},
-		"reasonViolenceGraphicContent": {
-			"type": "token",
-			"description": "Graphic violent content"
-		},
-		"reasonViolenceGlorification": {
-			"type": "token",
-			"description": "Glorification of violence"
-		},
-		"reasonViolenceExtremistContent": {
-			"type": "token",
-			"description": "Extremist content. These reports will be sent only be sent to the application's Moderation Authority."
-		},
-		"reasonViolenceTrafficking": {
-			"type": "token",
-			"description": "Human trafficking"
-		},
-		"reasonViolenceOther": {
-			"type": "token",
-			"description": "Other violent content"
-		},
-		"reasonSexualAbuseContent": {
-			"type": "token",
-			"description": "Adult sexual abuse content"
-		},
-		"reasonSexualNCII": {
-			"type": "token",
-			"description": "Non-consensual intimate imagery"
-		},
-		"reasonSexualDeepfake": {
-			"type": "token",
-			"description": "Deepfake adult content"
-		},
-		"reasonSexualAnimal": {
-			"type": "token",
-			"description": "Animal sexual abuse"
-		},
-		"reasonSexualUnlabeled": {
-			"type": "token",
-			"description": "Unlabelled adult content"
-		},
-		"reasonSexualOther": {
-			"type": "token",
-			"description": "Other sexual violence content"
-		},
-		"reasonChildSafetyCSAM": {
-			"type": "token",
-			"description": "Child sexual abuse material (CSAM). These reports will be sent only be sent to the application's Moderation Authority."
-		},
-		"reasonChildSafetyGroom": {
-			"type": "token",
-			"description": "Grooming or predatory behavior. These reports will be sent only be sent to the application's Moderation Authority."
-		},
-		"reasonChildSafetyPrivacy": {
-			"type": "token",
-			"description": "Privacy violation involving a minor"
-		},
-		"reasonChildSafetyHarassment": {
-			"type": "token",
-			"description": "Harassment or bullying of minors"
-		},
-		"reasonChildSafetyOther": {
-			"type": "token",
-			"description": "Other child safety. These reports will be sent only be sent to the application's Moderation Authority."
-		},
-		"reasonHarassmentTroll": {
-			"type": "token",
-			"description": "Trolling"
-		},
-		"reasonHarassmentTargeted": {
-			"type": "token",
-			"description": "Targeted harassment"
-		},
-		"reasonHarassmentHateSpeech": {
-			"type": "token",
-			"description": "Hate speech"
-		},
-		"reasonHarassmentDoxxing": {
-			"type": "token",
-			"description": "Doxxing"
-		},
-		"reasonHarassmentOther": {
-			"type": "token",
-			"description": "Other harassing or hateful content"
-		},
-		"reasonMisleadingBot": {
-			"type": "token",
-			"description": "Fake account or bot"
-		},
-		"reasonMisleadingImpersonation": {
-			"type": "token",
-			"description": "Impersonation"
-		},
-		"reasonMisleadingSpam": {
-			"type": "token",
-			"description": "Spam"
-		},
-		"reasonMisleadingScam": {
-			"type": "token",
-			"description": "Scam"
-		},
-		"reasonMisleadingElections": {
-			"type": "token",
-			"description": "False information about elections"
-		},
-		"reasonMisleadingOther": {
-			"type": "token",
-			"description": "Other misleading content"
-		},
-		"reasonRuleSiteSecurity": {
-			"type": "token",
-			"description": "Hacking or system attacks"
-		},
-		"reasonRuleProhibitedSales": {
-			"type": "token",
-			"description": "Promoting or selling prohibited items or services"
-		},
-		"reasonRuleBanEvasion": {
-			"type": "token",
-			"description": "Banned user returning"
+			"description": "Appeal a previously taken moderation action"
 		},
 		"reasonRuleOther": {
 			"type": "token",
 			"description": "Other"
 		},
-		"reasonSelfHarmContent": {
-			"type": "token",
-			"description": "Content promoting or depicting self-harm"
-		},
 		"reasonSelfHarmED": {
 			"type": "token",
 			"description": "Eating disorders"
+		},
+		"reasonSexualNCII": {
+			"type": "token",
+			"description": "Non-consensual intimate imagery"
+		},
+		"reasonSexualOther": {
+			"type": "token",
+			"description": "Other sexual violence content"
+		},
+		"reasonSexualAnimal": {
+			"type": "token",
+			"description": "Animal sexual abuse"
+		},
+		"reasonMisleadingBot": {
+			"type": "token",
+			"description": "Fake account or bot"
+		},
+		"reasonSelfHarmOther": {
+			"type": "token",
+			"description": "Other dangerous content"
+		},
+		"reasonViolenceOther": {
+			"type": "token",
+			"description": "Other violent content"
+		},
+		"reasonMisleadingScam": {
+			"type": "token",
+			"description": "Scam"
+		},
+		"reasonMisleadingSpam": {
+			"type": "token",
+			"description": "Spam"
+		},
+		"reasonRuleBanEvasion": {
+			"type": "token",
+			"description": "Banned user returning"
 		},
 		"reasonSelfHarmStunts": {
 			"type": "token",
 			"description": "Dangerous challenges or activities"
 		},
+		"reasonSexualDeepfake": {
+			"type": "token",
+			"description": "Deepfake adult content"
+		},
+		"reasonViolenceAnimal": {
+			"type": "token",
+			"description": "Animal welfare violations"
+		},
+		"reasonChildSafetyCSAM": {
+			"type": "token",
+			"description": "Child sexual abuse material (CSAM). These reports will be sent only be sent to the application's Moderation Authority."
+		},
+		"reasonHarassmentOther": {
+			"type": "token",
+			"description": "Other harassing or hateful content"
+		},
+		"reasonHarassmentTroll": {
+			"type": "token",
+			"description": "Trolling"
+		},
+		"reasonMisleadingOther": {
+			"type": "token",
+			"description": "Other misleading content"
+		},
+		"reasonSelfHarmContent": {
+			"type": "token",
+			"description": "Content promoting or depicting self-harm"
+		},
+		"reasonSexualUnlabeled": {
+			"type": "token",
+			"description": "Unlabelled adult content"
+		},
+		"reasonViolenceThreats": {
+			"type": "token",
+			"description": "Threats or incitement"
+		},
+		"reasonChildSafetyGroom": {
+			"type": "token",
+			"description": "Grooming or predatory behavior. These reports will be sent only be sent to the application's Moderation Authority."
+		},
+		"reasonChildSafetyOther": {
+			"type": "token",
+			"description": "Other child safety. These reports will be sent only be sent to the application's Moderation Authority."
+		},
+		"reasonRuleSiteSecurity": {
+			"type": "token",
+			"description": "Hacking or system attacks"
+		},
+		"reasonHarassmentDoxxing": {
+			"type": "token",
+			"description": "Doxxing"
+		},
+		"reasonChildSafetyPrivacy": {
+			"type": "token",
+			"description": "Privacy violation involving a minor"
+		},
+		"reasonHarassmentTargeted": {
+			"type": "token",
+			"description": "Targeted harassment"
+		},
 		"reasonSelfHarmSubstances": {
 			"type": "token",
 			"description": "Dangerous substances or drug abuse"
 		},
-		"reasonSelfHarmOther": {
+		"reasonSexualAbuseContent": {
 			"type": "token",
-			"description": "Other dangerous content"
+			"description": "Adult sexual abuse content"
+		},
+		"reasonMisleadingElections": {
+			"type": "token",
+			"description": "False information about elections"
+		},
+		"reasonRuleProhibitedSales": {
+			"type": "token",
+			"description": "Promoting or selling prohibited items or services"
+		},
+		"reasonViolenceTrafficking": {
+			"type": "token",
+			"description": "Human trafficking"
+		},
+		"reasonHarassmentHateSpeech": {
+			"type": "token",
+			"description": "Hate speech"
+		},
+		"reasonChildSafetyHarassment": {
+			"type": "token",
+			"description": "Harassment or bullying of minors"
+		},
+		"reasonViolenceGlorification": {
+			"type": "token",
+			"description": "Glorification of violence"
+		},
+		"reasonViolenceGraphicContent": {
+			"type": "token",
+			"description": "Graphic violent content"
+		},
+		"reasonMisleadingImpersonation": {
+			"type": "token",
+			"description": "Impersonation"
+		},
+		"reasonViolenceExtremistContent": {
+			"type": "token",
+			"description": "Extremist content. These reports will be sent only be sent to the application's Moderation Authority."
 		}
-	}
+	},
+	"lexicon": 1
 }

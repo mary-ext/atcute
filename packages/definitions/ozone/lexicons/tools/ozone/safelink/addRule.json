@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.safelink.addRule",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Add a new URL safety rule",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["url", "pattern", "action", "reason"],
@@ -15,21 +12,21 @@
 							"type": "string",
 							"description": "The URL or domain to apply the rule to"
 						},
-						"pattern": {
-							"type": "ref",
-							"ref": "tools.ozone.safelink.defs#patternType"
-						},
 						"action": {
-							"type": "ref",
-							"ref": "tools.ozone.safelink.defs#actionType"
+							"ref": "tools.ozone.safelink.defs#actionType",
+							"type": "ref"
 						},
 						"reason": {
-							"type": "ref",
-							"ref": "tools.ozone.safelink.defs#reasonType"
+							"ref": "tools.ozone.safelink.defs#reasonType",
+							"type": "ref"
 						},
 						"comment": {
 							"type": "string",
 							"description": "Optional comment about the decision"
+						},
+						"pattern": {
+							"ref": "tools.ozone.safelink.defs#patternType",
+							"type": "ref"
 						},
 						"createdBy": {
 							"type": "string",
@@ -37,14 +34,8 @@
 							"description": "Author DID. Only respected when using admin auth"
 						}
 					}
-				}
-			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "ref",
-					"ref": "tools.ozone.safelink.defs#event"
-				}
+				},
+				"encoding": "application/json"
 			},
 			"errors": [
 				{
@@ -55,7 +46,16 @@
 					"name": "RuleAlreadyExists",
 					"description": "A rule for this URL/domain already exists"
 				}
-			]
+			],
+			"output": {
+				"schema": {
+					"ref": "tools.ozone.safelink.defs#event",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"description": "Add a new URL safety rule"
 		}
-	}
+	},
+	"lexicon": 1
 }

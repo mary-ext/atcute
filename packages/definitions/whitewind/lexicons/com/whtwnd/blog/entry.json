@@ -1,58 +1,58 @@
 {
-	"lexicon": 1,
 	"id": "com.whtwnd.blog.entry",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "A declaration of a post.",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["content"],
 				"properties": {
-					"content": {
-						"type": "string",
-						"maxLength": 100000
+					"ogp": {
+						"ref": "com.whtwnd.blog.defs#ogp",
+						"type": "ref"
 					},
-					"createdAt": {
-						"type": "string",
-						"format": "datetime"
+					"blobs": {
+						"type": "array",
+						"items": {
+							"ref": "com.whtwnd.blog.defs#blobMetadata",
+							"type": "ref"
+						}
+					},
+					"theme": {
+						"enum": ["github-light"],
+						"type": "string"
 					},
 					"title": {
 						"type": "string",
 						"maxLength": 1000
 					},
-					"subtitle": {
+					"content": {
 						"type": "string",
-						"maxLength": 1000
-					},
-					"ogp": {
-						"type": "ref",
-						"ref": "com.whtwnd.blog.defs#ogp"
-					},
-					"theme": {
-						"type": "string",
-						"enum": ["github-light"]
-					},
-					"blobs": {
-						"type": "array",
-						"items": {
-							"type": "ref",
-							"ref": "com.whtwnd.blog.defs#blobMetadata"
-						}
+						"maxLength": 100000
 					},
 					"isDraft": {
 						"type": "boolean",
 						"description": "(DEPRECATED) Marks this entry as draft to tell AppViews not to show it to anyone except for the author"
 					},
-					"visibility": {
+					"subtitle": {
 						"type": "string",
+						"maxLength": 1000
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"visibility": {
 						"enum": ["public", "url", "author"],
+						"type": "string",
 						"default": "public",
 						"description": "Tells the visibility of the article to AppView."
 					}
 				}
-			}
+			},
+			"description": "A declaration of a post."
 		}
-	}
+	},
+	"lexicon": 1
 }

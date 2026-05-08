@@ -1,27 +1,20 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.create",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Create a new repository",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["rkey", "name"],
 					"properties": {
-						"rkey": {
-							"type": "string",
-							"description": "Rkey of the repository record"
-						},
 						"name": {
 							"type": "string",
 							"description": "Name of the repository"
 						},
-						"defaultBranch": {
+						"rkey": {
 							"type": "string",
-							"description": "Default branch to push to"
+							"description": "Rkey of the repository record"
 						},
 						"source": {
 							"type": "string",
@@ -31,12 +24,16 @@
 							"type": "string",
 							"format": "did",
 							"description": "Optional user-provided did:web to use as the repo identity instead of minting a did:plc."
+						},
+						"defaultBranch": {
+							"type": "string",
+							"description": "Default branch to push to"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"properties": {
@@ -45,8 +42,11 @@
 							"format": "did"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Create a new repository"
 		}
-	}
+	},
+	"lexicon": 1
 }

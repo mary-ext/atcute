@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.safelink.updateRule",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Update an existing URL safety rule",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["url", "pattern", "action", "reason"],
@@ -15,21 +12,21 @@
 							"type": "string",
 							"description": "The URL or domain to update the rule for"
 						},
-						"pattern": {
-							"type": "ref",
-							"ref": "tools.ozone.safelink.defs#patternType"
-						},
 						"action": {
-							"type": "ref",
-							"ref": "tools.ozone.safelink.defs#actionType"
+							"ref": "tools.ozone.safelink.defs#actionType",
+							"type": "ref"
 						},
 						"reason": {
-							"type": "ref",
-							"ref": "tools.ozone.safelink.defs#reasonType"
+							"ref": "tools.ozone.safelink.defs#reasonType",
+							"type": "ref"
 						},
 						"comment": {
 							"type": "string",
 							"description": "Optional comment about the update"
+						},
+						"pattern": {
+							"ref": "tools.ozone.safelink.defs#patternType",
+							"type": "ref"
 						},
 						"createdBy": {
 							"type": "string",
@@ -37,21 +34,24 @@
 							"description": "Optional DID to credit as the creator. Only respected for admin_token authentication."
 						}
 					}
-				}
-			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "ref",
-					"ref": "tools.ozone.safelink.defs#event"
-				}
+				},
+				"encoding": "application/json"
 			},
 			"errors": [
 				{
 					"name": "RuleNotFound",
 					"description": "No active rule found for this URL/domain"
 				}
-			]
+			],
+			"output": {
+				"schema": {
+					"ref": "tools.ozone.safelink.defs#event",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"description": "Update an existing URL safety rule"
 		}
-	}
+	},
+	"lexicon": 1
 }

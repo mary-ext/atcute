@@ -1,10 +1,28 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.sync.getBlocks",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get data blocks from a given repo, by CID. For example, intermediate MST nodes, or records. Does not require auth; implemented by PDS.",
+			"errors": [
+				{
+					"name": "BlockNotFound"
+				},
+				{
+					"name": "RepoNotFound"
+				},
+				{
+					"name": "RepoTakendown"
+				},
+				{
+					"name": "RepoSuspended"
+				},
+				{
+					"name": "RepoDeactivated"
+				}
+			],
+			"output": {
+				"encoding": "application/vnd.ipld.car"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["did", "cids"],
@@ -23,26 +41,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/vnd.ipld.car"
-			},
-			"errors": [
-				{
-					"name": "BlockNotFound"
-				},
-				{
-					"name": "RepoNotFound"
-				},
-				{
-					"name": "RepoTakendown"
-				},
-				{
-					"name": "RepoSuspended"
-				},
-				{
-					"name": "RepoDeactivated"
-				}
-			]
+			"description": "Get data blocks from a given repo, by CID. For example, intermediate MST nodes, or records. Does not require auth; implemented by PDS."
 		}
-	}
+	},
+	"lexicon": 1
 }

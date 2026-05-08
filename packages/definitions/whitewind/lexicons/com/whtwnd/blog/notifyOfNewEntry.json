@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.whtwnd.blog.notifyOfNewEntry",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Notify AppView of existence of new entry and request indexing",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["entryUri"],
@@ -16,17 +13,20 @@
 							"format": "at-uri"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
+			"errors": [],
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": [],
 					"properties": {}
-				}
+				},
+				"encoding": "application/json"
 			},
-			"errors": []
+			"description": "Notify AppView of existence of new entry and request indexing"
 		}
-	}
+	},
+	"lexicon": 1
 }

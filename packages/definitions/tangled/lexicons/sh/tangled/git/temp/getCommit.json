@@ -1,32 +1,8 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.git.temp.getCommit",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "resolve commit from given ref",
-			"parameters": {
-				"type": "params",
-				"required": ["repo", "ref"],
-				"properties": {
-					"repo": {
-						"type": "string",
-						"format": "at-uri",
-						"description": "AT-URI of the repository"
-					},
-					"ref": {
-						"type": "string",
-						"description": "reference name to resolve"
-					}
-				}
-			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "ref",
-					"ref": "sh.tangled.git.temp.defs#commit"
-				}
-			},
 			"errors": [
 				{
 					"name": "RepoNotFound",
@@ -40,7 +16,31 @@
 					"name": "InvalidRequest",
 					"description": "Invalid request parameters"
 				}
-			]
+			],
+			"output": {
+				"schema": {
+					"ref": "sh.tangled.git.temp.defs#commit",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "ref"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"description": "reference name to resolve"
+					},
+					"repo": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the repository"
+					}
+				}
+			},
+			"description": "resolve commit from given ref"
 		}
-	}
+	},
+	"lexicon": 1
 }

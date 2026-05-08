@@ -1,35 +1,35 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.string",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["filename", "description", "createdAt", "contents"],
 				"properties": {
+					"contents": {
+						"type": "string",
+						"minGraphemes": 1
+					},
 					"filename": {
 						"type": "string",
 						"maxGraphemes": 140,
 						"minGraphemes": 1
 					},
-					"description": {
-						"type": "string",
-						"maxGraphemes": 280
-					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime"
 					},
-					"contents": {
+					"description": {
 						"type": "string",
-						"minGraphemes": 1
+						"maxGraphemes": 280
 					}
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

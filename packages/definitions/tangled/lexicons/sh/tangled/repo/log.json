@@ -1,42 +1,8 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.log",
 	"defs": {
 		"main": {
 			"type": "query",
-			"parameters": {
-				"type": "params",
-				"required": ["repo", "ref"],
-				"properties": {
-					"repo": {
-						"type": "string",
-						"description": "Repository identifier in format 'did:plc:.../repoName'"
-					},
-					"ref": {
-						"type": "string",
-						"description": "Git reference (branch, tag, or commit SHA)"
-					},
-					"path": {
-						"type": "string",
-						"description": "Path to filter commits by",
-						"default": ""
-					},
-					"limit": {
-						"type": "integer",
-						"description": "Maximum number of commits to return",
-						"minimum": 1,
-						"maximum": 100,
-						"default": 50
-					},
-					"cursor": {
-						"type": "string",
-						"description": "Pagination cursor (commit SHA)"
-					}
-				}
-			},
-			"output": {
-				"encoding": "*/*"
-			},
 			"errors": [
 				{
 					"name": "RepoNotFound",
@@ -54,7 +20,41 @@
 					"name": "InvalidRequest",
 					"description": "Invalid request parameters"
 				}
-			]
+			],
+			"output": {
+				"encoding": "*/*"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "ref"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"description": "Git reference (branch, tag, or commit SHA)"
+					},
+					"path": {
+						"type": "string",
+						"default": "",
+						"description": "Path to filter commits by"
+					},
+					"repo": {
+						"type": "string",
+						"description": "Repository identifier in format 'did:plc:.../repoName'"
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1,
+						"description": "Maximum number of commits to return"
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor (commit SHA)"
+					}
+				}
+			}
 		}
-	}
+	},
+	"lexicon": 1
 }

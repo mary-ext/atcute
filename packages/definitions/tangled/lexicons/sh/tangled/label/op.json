@@ -1,16 +1,27 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.label.op",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["subject", "add", "delete", "performedAt"],
 				"properties": {
+					"add": {
+						"type": "array",
+						"items": {
+							"ref": "#operand",
+							"type": "ref"
+						}
+					},
+					"delete": {
+						"type": "array",
+						"items": {
+							"ref": "#operand",
+							"type": "ref"
+						}
+					},
 					"subject": {
 						"type": "string",
 						"format": "at-uri",
@@ -19,20 +30,6 @@
 					"performedAt": {
 						"type": "string",
 						"format": "datetime"
-					},
-					"add": {
-						"type": "array",
-						"items": {
-							"type": "ref",
-							"ref": "#operand"
-						}
-					},
-					"delete": {
-						"type": "array",
-						"items": {
-							"type": "ref",
-							"ref": "#operand"
-						}
 					}
 				}
 			}
@@ -52,5 +49,8 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

@@ -1,15 +1,26 @@
 {
-	"lexicon": 1,
 	"id": "chat.bsky.group.getGroupPublicInfo",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about a group from an join link.",
 			"errors": [
 				{
 					"name": "InvalidCode"
 				}
 			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["group"],
+					"properties": {
+						"group": {
+							"ref": "chat.bsky.group.defs#groupPublicView",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["code"],
@@ -19,19 +30,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["group"],
-					"properties": {
-						"group": {
-							"type": "ref",
-							"ref": "chat.bsky.group.defs#groupPublicView"
-						}
-					}
-				}
-			}
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about a group from an join link."
 		}
-	}
+	},
+	"lexicon": 1
 }

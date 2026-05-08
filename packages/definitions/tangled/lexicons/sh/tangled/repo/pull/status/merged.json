@@ -1,12 +1,12 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.pull.status.merged",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
 			"type": "token",
 			"description": "merged pull request"
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

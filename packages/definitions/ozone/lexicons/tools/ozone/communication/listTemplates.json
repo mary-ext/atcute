@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.communication.listTemplates",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get list of all communication templates.",
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["communicationTemplates"],
@@ -14,13 +11,16 @@
 						"communicationTemplates": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "tools.ozone.communication.defs#templateView"
+								"ref": "tools.ozone.communication.defs#templateView",
+								"type": "ref"
 							}
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Get list of all communication templates."
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,33 +1,26 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.issue",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["title", "createdAt"],
 				"properties": {
+					"body": {
+						"type": "string"
+					},
 					"repo": {
 						"type": "string",
 						"format": "at-uri"
 					},
-					"repoDid": {
-						"type": "string",
-						"format": "did"
-					},
 					"title": {
 						"type": "string"
 					},
-					"body": {
-						"type": "string"
-					},
-					"createdAt": {
+					"repoDid": {
 						"type": "string",
-						"format": "datetime"
+						"format": "did"
 					},
 					"mentions": {
 						"type": "array",
@@ -35,6 +28,10 @@
 							"type": "string",
 							"format": "did"
 						}
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
 					},
 					"references": {
 						"type": "array",
@@ -46,5 +43,8 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

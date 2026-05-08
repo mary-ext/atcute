@@ -1,10 +1,20 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.moderation.getRepo",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get details about a repository.",
+			"errors": [
+				{
+					"name": "RepoNotFound"
+				}
+			],
+			"output": {
+				"schema": {
+					"ref": "tools.ozone.moderation.defs#repoViewDetail",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["did"],
@@ -15,18 +25,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "ref",
-					"ref": "tools.ozone.moderation.defs#repoViewDetail"
-				}
-			},
-			"errors": [
-				{
-					"name": "RepoNotFound"
-				}
-			]
+			"description": "Get details about a repository."
 		}
-	}
+	},
+	"lexicon": 1
 }

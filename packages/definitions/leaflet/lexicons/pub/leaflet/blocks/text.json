@@ -1,26 +1,26 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.blocks.text",
 	"defs": {
 		"main": {
 			"type": "object",
 			"required": ["plaintext"],
 			"properties": {
-				"plaintext": {
-					"type": "string"
-				},
-				"textSize": {
-					"type": "string",
-					"enum": ["default", "small", "large"]
-				},
 				"facets": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "pub.leaflet.richtext.facet"
+						"ref": "pub.leaflet.richtext.facet",
+						"type": "ref"
 					}
+				},
+				"textSize": {
+					"enum": ["default", "small", "large"],
+					"type": "string"
+				},
+				"plaintext": {
+					"type": "string"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,28 +1,15 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.knot.listKeys",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "List all public keys stored in the knot server",
-			"parameters": {
-				"type": "params",
-				"properties": {
-					"limit": {
-						"type": "integer",
-						"description": "Maximum number of keys to return",
-						"minimum": 1,
-						"maximum": 1000,
-						"default": 100
-					},
-					"cursor": {
-						"type": "string",
-						"description": "Pagination cursor"
-					}
+			"errors": [
+				{
+					"name": "InternalServerError",
+					"description": "Failed to retrieve public keys"
 				}
-			},
+			],
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["keys"],
@@ -30,8 +17,8 @@
 						"keys": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "#publicKey"
+								"ref": "#publicKey",
+								"type": "ref"
 							}
 						},
 						"cursor": {
@@ -39,14 +26,26 @@
 							"description": "Pagination cursor for next page"
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 100,
+						"maximum": 1000,
+						"minimum": 1,
+						"description": "Maximum number of keys to return"
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					}
 				}
 			},
-			"errors": [
-				{
-					"name": "InternalServerError",
-					"description": "Failed to retrieve public keys"
-				}
-			]
+			"description": "List all public keys stored in the knot server"
 		},
 		"publicKey": {
 			"type": "object",
@@ -69,5 +68,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,10 +1,24 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.labeler.getServices",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get information about a list of labeler services.",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["views"],
+					"properties": {
+						"views": {
+							"type": "array",
+							"items": {
+								"refs": ["app.bsky.labeler.defs#labelerView", "app.bsky.labeler.defs#labelerViewDetailed"],
+								"type": "union"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["dids"],
@@ -22,22 +36,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["views"],
-					"properties": {
-						"views": {
-							"type": "array",
-							"items": {
-								"type": "union",
-								"refs": ["app.bsky.labeler.defs#labelerView", "app.bsky.labeler.defs#labelerViewDetailed"]
-							}
-						}
-					}
-				}
-			}
+			"description": "Get information about a list of labeler services."
 		}
-	}
+	},
+	"lexicon": 1
 }

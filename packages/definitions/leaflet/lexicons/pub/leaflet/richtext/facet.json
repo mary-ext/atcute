@@ -1,20 +1,49 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.richtext.facet",
 	"defs": {
+		"id": {
+			"type": "object",
+			"required": [],
+			"properties": {
+				"id": {
+					"type": "string"
+				}
+			},
+			"description": "Facet feature for an identifier. Used for linking to a segment"
+		},
+		"bold": {
+			"type": "object",
+			"required": [],
+			"properties": {},
+			"description": "Facet feature for bold text"
+		},
+		"code": {
+			"type": "object",
+			"required": [],
+			"properties": {},
+			"description": "Facet feature for inline code."
+		},
+		"link": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"uri": {
+					"type": "string"
+				}
+			},
+			"description": "Facet feature for a URL. The text URL may have been simplified or truncated, but the facet reference should be a complete URL."
+		},
 		"main": {
 			"type": "object",
-			"description": "Annotation of a sub-string within rich text.",
 			"required": ["index", "features"],
 			"properties": {
 				"index": {
-					"type": "ref",
-					"ref": "#byteSlice"
+					"ref": "#byteSlice",
+					"type": "ref"
 				},
 				"features": {
 					"type": "array",
 					"items": {
-						"type": "union",
 						"refs": [
 							"#link",
 							"#didMention",
@@ -27,127 +56,98 @@
 							"#bold",
 							"#italic",
 							"#footnote"
-						]
+						],
+						"type": "union"
 					}
 				}
-			}
+			},
+			"description": "Annotation of a sub-string within rich text."
+		},
+		"italic": {
+			"type": "object",
+			"required": [],
+			"properties": {},
+			"description": "Facet feature for italic text"
+		},
+		"footnote": {
+			"type": "object",
+			"required": ["footnoteId", "contentPlaintext"],
+			"properties": {
+				"footnoteId": {
+					"type": "string"
+				},
+				"contentFacets": {
+					"type": "array",
+					"items": {
+						"ref": "#main",
+						"type": "ref"
+					}
+				},
+				"contentPlaintext": {
+					"type": "string"
+				}
+			},
+			"description": "Facet feature for a footnote reference"
+		},
+		"atMention": {
+			"type": "object",
+			"required": ["atURI"],
+			"properties": {
+				"href": {
+					"type": "string",
+					"format": "uri"
+				},
+				"atURI": {
+					"type": "string",
+					"format": "uri"
+				}
+			},
+			"description": "Facet feature for mentioning an AT URI."
 		},
 		"byteSlice": {
 			"type": "object",
-			"description": "Specifies the sub-string range a facet feature applies to. Start index is inclusive, end index is exclusive. Indices are zero-indexed, counting bytes of the UTF-8 encoded text. NOTE: some languages, like Javascript, use UTF-16 or Unicode codepoints for string slice indexing; in these languages, convert to byte arrays before working with facets.",
 			"required": ["byteStart", "byteEnd"],
 			"properties": {
-				"byteStart": {
-					"type": "integer",
-					"minimum": 0
-				},
 				"byteEnd": {
 					"type": "integer",
 					"minimum": 0
+				},
+				"byteStart": {
+					"type": "integer",
+					"minimum": 0
 				}
-			}
+			},
+			"description": "Specifies the sub-string range a facet feature applies to. Start index is inclusive, end index is exclusive. Indices are zero-indexed, counting bytes of the UTF-8 encoded text. NOTE: some languages, like Javascript, use UTF-16 or Unicode codepoints for string slice indexing; in these languages, convert to byte arrays before working with facets."
 		},
-		"link": {
+		"highlight": {
 			"type": "object",
-			"description": "Facet feature for a URL. The text URL may have been simplified or truncated, but the facet reference should be a complete URL.",
-			"required": ["uri"],
-			"properties": {
-				"uri": {
-					"type": "string"
-				}
-			}
+			"required": [],
+			"properties": {},
+			"description": "Facet feature for highlighted text."
+		},
+		"underline": {
+			"type": "object",
+			"required": [],
+			"properties": {},
+			"description": "Facet feature for underline markup"
 		},
 		"didMention": {
 			"type": "object",
-			"description": "Facet feature for mentioning a did.",
 			"required": ["did"],
 			"properties": {
 				"did": {
 					"type": "string",
 					"format": "did"
 				}
-			}
-		},
-		"atMention": {
-			"type": "object",
-			"description": "Facet feature for mentioning an AT URI.",
-			"required": ["atURI"],
-			"properties": {
-				"atURI": {
-					"type": "string",
-					"format": "uri"
-				},
-				"href": {
-					"type": "string",
-					"format": "uri"
-				}
-			}
-		},
-		"code": {
-			"type": "object",
-			"description": "Facet feature for inline code.",
-			"required": [],
-			"properties": {}
-		},
-		"highlight": {
-			"type": "object",
-			"description": "Facet feature for highlighted text.",
-			"required": [],
-			"properties": {}
-		},
-		"underline": {
-			"type": "object",
-			"description": "Facet feature for underline markup",
-			"required": [],
-			"properties": {}
+			},
+			"description": "Facet feature for mentioning a did."
 		},
 		"strikethrough": {
 			"type": "object",
-			"description": "Facet feature for strikethrough markup",
 			"required": [],
-			"properties": {}
-		},
-		"id": {
-			"type": "object",
-			"description": "Facet feature for an identifier. Used for linking to a segment",
-			"required": [],
-			"properties": {
-				"id": {
-					"type": "string"
-				}
-			}
-		},
-		"bold": {
-			"type": "object",
-			"description": "Facet feature for bold text",
-			"required": [],
-			"properties": {}
-		},
-		"italic": {
-			"type": "object",
-			"description": "Facet feature for italic text",
-			"required": [],
-			"properties": {}
-		},
-		"footnote": {
-			"type": "object",
-			"description": "Facet feature for a footnote reference",
-			"required": ["footnoteId", "contentPlaintext"],
-			"properties": {
-				"footnoteId": {
-					"type": "string"
-				},
-				"contentPlaintext": {
-					"type": "string"
-				},
-				"contentFacets": {
-					"type": "array",
-					"items": {
-						"type": "ref",
-						"ref": "#main"
-					}
-				}
-			}
+			"properties": {},
+			"description": "Facet feature for strikethrough markup"
 		}
-	}
+	},
+	"lexicon": 1
 }

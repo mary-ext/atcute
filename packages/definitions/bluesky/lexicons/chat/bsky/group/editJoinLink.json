@@ -1,10 +1,27 @@
 {
-	"lexicon": 1,
 	"id": "chat.bsky.group.editJoinLink",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Edits the existing join link settings for the group convo.",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["convoId"],
+					"properties": {
+						"convoId": {
+							"type": "string"
+						},
+						"joinRule": {
+							"ref": "chat.bsky.group.defs#joinRule",
+							"type": "ref"
+						},
+						"requireApproval": {
+							"type": "boolean"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"errors": [
 				{
 					"name": "InvalidConvo"
@@ -16,38 +33,21 @@
 					"name": "NoJoinLink"
 				}
 			],
-			"input": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["convoId"],
-					"properties": {
-						"convoId": {
-							"type": "string"
-						},
-						"requireApproval": {
-							"type": "boolean"
-						},
-						"joinRule": {
-							"type": "ref",
-							"ref": "chat.bsky.group.defs#joinRule"
-						}
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["joinLink"],
 					"properties": {
 						"joinLink": {
-							"type": "ref",
-							"ref": "chat.bsky.group.defs#joinLinkView"
+							"ref": "chat.bsky.group.defs#joinLinkView",
+							"type": "ref"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Edits the existing join link settings for the group convo."
 		}
-	}
+	},
+	"lexicon": 1
 }

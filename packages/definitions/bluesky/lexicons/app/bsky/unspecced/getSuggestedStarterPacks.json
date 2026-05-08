@@ -1,23 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.unspecced.getSuggestedStarterPacks",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get a list of suggested starterpacks",
-			"parameters": {
-				"type": "params",
-				"properties": {
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 25,
-						"default": 10
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["starterPacks"],
@@ -25,13 +11,27 @@
 						"starterPacks": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "app.bsky.graph.defs#starterPackView"
+								"ref": "app.bsky.graph.defs#starterPackView",
+								"type": "ref"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 10,
+						"maximum": 25,
+						"minimum": 1
+					}
 				}
-			}
+			},
+			"description": "Get a list of suggested starterpacks"
 		}
-	}
+	},
+	"lexicon": 1
 }

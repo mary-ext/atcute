@@ -1,74 +1,73 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.git.refUpdate",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "An update to a git repository, emitted by knots.",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["ref", "committerDid", "repoName", "oldSha", "newSha", "meta"],
 				"properties": {
 					"ref": {
 						"type": "string",
+						"maxLength": 2560,
 						"description": "Ref being updated",
-						"maxGraphemes": 256,
-						"maxLength": 2560
+						"maxGraphemes": 256
 					},
-					"committerDid": {
-						"type": "string",
-						"description": "did of the user that pushed this ref",
-						"format": "did"
+					"meta": {
+						"ref": "#meta",
+						"type": "ref"
 					},
-					"ownerDid": {
+					"newSha": {
 						"type": "string",
-						"description": "did of the owner of the repo",
-						"format": "did"
+						"maxLength": 40,
+						"minLength": 40,
+						"description": "new SHA of this ref"
+					},
+					"oldSha": {
+						"type": "string",
+						"maxLength": 40,
+						"minLength": 40,
+						"description": "old SHA of this ref"
 					},
 					"repoDid": {
 						"type": "string",
-						"description": "DID of the repo itself",
-						"format": "did"
+						"format": "did",
+						"description": "DID of the repo itself"
+					},
+					"ownerDid": {
+						"type": "string",
+						"format": "did",
+						"description": "did of the owner of the repo"
 					},
 					"repoName": {
 						"type": "string",
 						"description": "name of the repo"
 					},
-					"oldSha": {
+					"committerDid": {
 						"type": "string",
-						"description": "old SHA of this ref",
-						"minLength": 40,
-						"maxLength": 40
-					},
-					"newSha": {
-						"type": "string",
-						"description": "new SHA of this ref",
-						"minLength": 40,
-						"maxLength": 40
-					},
-					"meta": {
-						"type": "ref",
-						"ref": "#meta"
+						"format": "did",
+						"description": "did of the user that pushed this ref"
 					}
 				}
-			}
+			},
+			"description": "An update to a git repository, emitted by knots."
 		},
 		"meta": {
 			"type": "object",
 			"required": ["isDefaultRef", "commitCount"],
 			"properties": {
+				"commitCount": {
+					"ref": "#commitCountBreakdown",
+					"type": "ref"
+				},
 				"isDefaultRef": {
 					"type": "boolean",
 					"default": false
 				},
 				"langBreakdown": {
-					"type": "ref",
-					"ref": "#langBreakdown"
-				},
-				"commitCount": {
-					"type": "ref",
-					"ref": "#commitCountBreakdown"
+					"ref": "#langBreakdown",
+					"type": "ref"
 				}
 			}
 		},
@@ -78,8 +77,21 @@
 				"inputs": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "#individualLanguageSize"
+						"ref": "#individualLanguageSize",
+						"type": "ref"
+					}
+				}
+			}
+		},
+		"commitCountBreakdown": {
+			"type": "object",
+			"required": [],
+			"properties": {
+				"byEmail": {
+					"type": "array",
+					"items": {
+						"ref": "#individualEmailCommitCount",
+						"type": "ref"
 					}
 				}
 			}
@@ -96,30 +108,18 @@
 				}
 			}
 		},
-		"commitCountBreakdown": {
-			"type": "object",
-			"required": [],
-			"properties": {
-				"byEmail": {
-					"type": "array",
-					"items": {
-						"type": "ref",
-						"ref": "#individualEmailCommitCount"
-					}
-				}
-			}
-		},
 		"individualEmailCommitCount": {
 			"type": "object",
 			"required": ["email", "count"],
 			"properties": {
-				"email": {
-					"type": "string"
-				},
 				"count": {
 					"type": "integer"
+				},
+				"email": {
+					"type": "string"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

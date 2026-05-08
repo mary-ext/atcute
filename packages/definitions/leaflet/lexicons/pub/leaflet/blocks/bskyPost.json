@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.blocks.bskyPost",
 	"defs": {
 		"main": {
@@ -7,13 +6,14 @@
 			"required": ["postRef"],
 			"properties": {
 				"postRef": {
-					"type": "ref",
-					"ref": "com.atproto.repo.strongRef"
+					"ref": "com.atproto.repo.strongRef",
+					"type": "ref"
 				},
 				"clientHost": {
 					"type": "string"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

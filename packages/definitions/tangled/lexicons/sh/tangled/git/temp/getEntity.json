@@ -1,37 +1,8 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.git.temp.getEntity",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "get metadata of blob by ref and path",
-			"parameters": {
-				"type": "params",
-				"required": ["repo", "path"],
-				"properties": {
-					"repo": {
-						"type": "string",
-						"format": "at-uri",
-						"description": "AT-URI of the repository"
-					},
-					"ref": {
-						"type": "string",
-						"description": "Git reference (branch, tag, or commit SHA)",
-						"default": "HEAD"
-					},
-					"path": {
-						"type": "string",
-						"description": "path of the entity"
-					}
-				}
-			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "ref",
-					"ref": "sh.tangled.git.temp.defs#blob"
-				}
-			},
 			"errors": [
 				{
 					"name": "RepoNotFound",
@@ -45,7 +16,36 @@
 					"name": "InvalidRequest",
 					"description": "Invalid request parameters"
 				}
-			]
+			],
+			"output": {
+				"schema": {
+					"ref": "sh.tangled.git.temp.defs#blob",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "path"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"default": "HEAD",
+						"description": "Git reference (branch, tag, or commit SHA)"
+					},
+					"path": {
+						"type": "string",
+						"description": "path of the entity"
+					},
+					"repo": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the repository"
+					}
+				}
+			},
+			"description": "get metadata of blob by ref and path"
 		}
-	}
+	},
+	"lexicon": 1
 }

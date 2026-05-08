@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.repo.defs",
 	"defs": {
 		"commitMeta": {
@@ -16,5 +15,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

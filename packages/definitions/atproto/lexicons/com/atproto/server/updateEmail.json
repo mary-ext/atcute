@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.server.updateEmail",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Update an account's email.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["email"],
@@ -14,15 +11,16 @@
 						"email": {
 							"type": "string"
 						},
-						"emailAuthFactor": {
-							"type": "boolean"
-						},
 						"token": {
 							"type": "string",
 							"description": "Requires a token from com.atproto.sever.requestEmailUpdate if the account's email has been confirmed."
+						},
+						"emailAuthFactor": {
+							"type": "boolean"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"errors": [
 				{
@@ -34,7 +32,9 @@
 				{
 					"name": "TokenRequired"
 				}
-			]
+			],
+			"description": "Update an account's email."
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "fyi.frontpage.richtext.block",
 	"defs": {
 		"main": {
@@ -7,8 +6,8 @@
 			"required": ["content"],
 			"properties": {
 				"content": {
-					"type": "union",
-					"refs": ["#plaintextParagraph"]
+					"refs": ["#plaintextParagraph"],
+					"type": "union"
 				}
 			}
 		},
@@ -23,5 +22,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

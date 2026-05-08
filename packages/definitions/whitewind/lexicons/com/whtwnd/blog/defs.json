@@ -1,18 +1,19 @@
 {
-	"lexicon": 1,
 	"id": "com.whtwnd.blog.defs",
 	"defs": {
-		"blogEntry": {
+		"ogp": {
 			"type": "object",
-			"required": ["content"],
+			"required": ["url"],
 			"properties": {
-				"content": {
+				"url": {
 					"type": "string",
-					"maxLength": 100000
+					"format": "uri"
 				},
-				"createdAt": {
-					"type": "string",
-					"format": "datetime"
+				"width": {
+					"type": "integer"
+				},
+				"height": {
+					"type": "integer"
 				}
 			}
 		},
@@ -30,19 +31,17 @@
 				}
 			}
 		},
-		"ogp": {
+		"blogEntry": {
 			"type": "object",
-			"required": ["url"],
+			"required": ["content"],
 			"properties": {
-				"url": {
+				"content": {
 					"type": "string",
-					"format": "uri"
+					"maxLength": 100000
 				},
-				"width": {
-					"type": "integer"
-				},
-				"height": {
-					"type": "integer"
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
 				}
 			}
 		},
@@ -50,14 +49,15 @@
 			"type": "object",
 			"required": ["blobref"],
 			"properties": {
+				"name": {
+					"type": "string"
+				},
 				"blobref": {
 					"type": "blob",
 					"accept": ["*/*"]
-				},
-				"name": {
-					"type": "string"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

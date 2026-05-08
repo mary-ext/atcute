@@ -1,16 +1,25 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.admin.defs",
 	"defs": {
+		"repoRef": {
+			"type": "object",
+			"required": ["did"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		},
 		"statusAttr": {
 			"type": "object",
 			"required": ["applied"],
 			"properties": {
-				"applied": {
-					"type": "boolean"
-				},
 				"ref": {
 					"type": "string"
+				},
+				"applied": {
+					"type": "boolean"
 				}
 			}
 		},
@@ -22,17 +31,18 @@
 					"type": "string",
 					"format": "did"
 				},
+				"email": {
+					"type": "string"
+				},
 				"handle": {
 					"type": "string",
 					"format": "handle"
 				},
-				"email": {
-					"type": "string"
-				},
-				"relatedRecords": {
+				"invites": {
 					"type": "array",
 					"items": {
-						"type": "unknown"
+						"ref": "com.atproto.server.defs#inviteCode",
+						"type": "ref"
 					}
 				},
 				"indexedAt": {
@@ -40,14 +50,20 @@
 					"format": "datetime"
 				},
 				"invitedBy": {
-					"type": "ref",
-					"ref": "com.atproto.server.defs#inviteCode"
+					"ref": "com.atproto.server.defs#inviteCode",
+					"type": "ref"
 				},
-				"invites": {
+				"inviteNote": {
+					"type": "string"
+				},
+				"deactivatedAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"relatedRecords": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "com.atproto.server.defs#inviteCode"
+						"type": "unknown"
 					}
 				},
 				"invitesDisabled": {
@@ -57,29 +73,12 @@
 					"type": "string",
 					"format": "datetime"
 				},
-				"inviteNote": {
-					"type": "string"
-				},
-				"deactivatedAt": {
-					"type": "string",
-					"format": "datetime"
-				},
 				"threatSignatures": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "#threatSignature"
+						"ref": "#threatSignature",
+						"type": "ref"
 					}
-				}
-			}
-		},
-		"repoRef": {
-			"type": "object",
-			"required": ["did"],
-			"properties": {
-				"did": {
-					"type": "string",
-					"format": "did"
 				}
 			}
 		},
@@ -87,13 +86,13 @@
 			"type": "object",
 			"required": ["did", "cid"],
 			"properties": {
-				"did": {
-					"type": "string",
-					"format": "did"
-				},
 				"cid": {
 					"type": "string",
 					"format": "cid"
+				},
+				"did": {
+					"type": "string",
+					"format": "did"
 				},
 				"recordUri": {
 					"type": "string",
@@ -105,13 +104,14 @@
 			"type": "object",
 			"required": ["property", "value"],
 			"properties": {
-				"property": {
+				"value": {
 					"type": "string"
 				},
-				"value": {
+				"property": {
 					"type": "string"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

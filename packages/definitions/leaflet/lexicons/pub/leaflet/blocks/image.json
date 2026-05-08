@@ -1,27 +1,26 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.blocks.image",
 	"defs": {
 		"main": {
 			"type": "object",
 			"required": ["image", "aspectRatio"],
 			"properties": {
+				"alt": {
+					"type": "string",
+					"description": "Alt text description of the image, for accessibility."
+				},
 				"image": {
 					"type": "blob",
 					"accept": ["image/*"],
 					"maxSize": 1000000
 				},
-				"alt": {
-					"type": "string",
-					"description": "Alt text description of the image, for accessibility."
-				},
-				"aspectRatio": {
-					"type": "ref",
-					"ref": "#aspectRatio"
-				},
 				"fullBleed": {
 					"type": "boolean",
 					"description": "Whether the image should extend to the full width of the container, ignoring padding."
+				},
+				"aspectRatio": {
+					"ref": "#aspectRatio",
+					"type": "ref"
 				}
 			}
 		},
@@ -37,5 +36,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

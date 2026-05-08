@@ -1,40 +1,6 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.notification.defs",
 	"defs": {
-		"recordDeleted": {
-			"type": "object",
-			"properties": {}
-		},
-		"chatPreference": {
-			"type": "object",
-			"required": ["include", "push"],
-			"properties": {
-				"include": {
-					"type": "string",
-					"knownValues": ["all", "accepted"]
-				},
-				"push": {
-					"type": "boolean"
-				}
-			}
-		},
-		"filterablePreference": {
-			"type": "object",
-			"required": ["include", "list", "push"],
-			"properties": {
-				"include": {
-					"type": "string",
-					"knownValues": ["all", "follows"]
-				},
-				"list": {
-					"type": "boolean"
-				},
-				"push": {
-					"type": "boolean"
-				}
-			}
-		},
 		"preference": {
 			"type": "object",
 			"required": ["list", "push"],
@@ -66,56 +32,73 @@
 			],
 			"properties": {
 				"chat": {
-					"type": "ref",
-					"ref": "#chatPreference"
-				},
-				"follow": {
-					"type": "ref",
-					"ref": "#filterablePreference"
+					"ref": "#chatPreference",
+					"type": "ref"
 				},
 				"like": {
-					"type": "ref",
-					"ref": "#filterablePreference"
-				},
-				"likeViaRepost": {
-					"type": "ref",
-					"ref": "#filterablePreference"
-				},
-				"mention": {
-					"type": "ref",
-					"ref": "#filterablePreference"
+					"ref": "#filterablePreference",
+					"type": "ref"
 				},
 				"quote": {
-					"type": "ref",
-					"ref": "#filterablePreference"
+					"ref": "#filterablePreference",
+					"type": "ref"
 				},
 				"reply": {
-					"type": "ref",
-					"ref": "#filterablePreference"
+					"ref": "#filterablePreference",
+					"type": "ref"
+				},
+				"follow": {
+					"ref": "#filterablePreference",
+					"type": "ref"
 				},
 				"repost": {
-					"type": "ref",
-					"ref": "#filterablePreference"
+					"ref": "#filterablePreference",
+					"type": "ref"
 				},
-				"repostViaRepost": {
-					"type": "ref",
-					"ref": "#filterablePreference"
-				},
-				"starterpackJoined": {
-					"type": "ref",
-					"ref": "#preference"
-				},
-				"subscribedPost": {
-					"type": "ref",
-					"ref": "#preference"
-				},
-				"unverified": {
-					"type": "ref",
-					"ref": "#preference"
+				"mention": {
+					"ref": "#filterablePreference",
+					"type": "ref"
 				},
 				"verified": {
-					"type": "ref",
-					"ref": "#preference"
+					"ref": "#preference",
+					"type": "ref"
+				},
+				"unverified": {
+					"ref": "#preference",
+					"type": "ref"
+				},
+				"likeViaRepost": {
+					"ref": "#filterablePreference",
+					"type": "ref"
+				},
+				"subscribedPost": {
+					"ref": "#preference",
+					"type": "ref"
+				},
+				"repostViaRepost": {
+					"ref": "#filterablePreference",
+					"type": "ref"
+				},
+				"starterpackJoined": {
+					"ref": "#preference",
+					"type": "ref"
+				}
+			}
+		},
+		"recordDeleted": {
+			"type": "object",
+			"properties": {}
+		},
+		"chatPreference": {
+			"type": "object",
+			"required": ["include", "push"],
+			"properties": {
+				"push": {
+					"type": "boolean"
+				},
+				"include": {
+					"type": "string",
+					"knownValues": ["all", "accepted"]
 				}
 			}
 		},
@@ -131,8 +114,23 @@
 				}
 			}
 		},
+		"filterablePreference": {
+			"type": "object",
+			"required": ["include", "list", "push"],
+			"properties": {
+				"list": {
+					"type": "boolean"
+				},
+				"push": {
+					"type": "boolean"
+				},
+				"include": {
+					"type": "string",
+					"knownValues": ["all", "follows"]
+				}
+			}
+		},
 		"subjectActivitySubscription": {
-			"description": "Object used to store activity subscription data in stash.",
 			"type": "object",
 			"required": ["subject", "activitySubscription"],
 			"properties": {
@@ -141,10 +139,12 @@
 					"format": "did"
 				},
 				"activitySubscription": {
-					"type": "ref",
-					"ref": "#activitySubscription"
+					"ref": "#activitySubscription",
+					"type": "ref"
 				}
-			}
+			},
+			"description": "Object used to store activity subscription data in stash."
 		}
-	}
+	},
+	"lexicon": 1
 }

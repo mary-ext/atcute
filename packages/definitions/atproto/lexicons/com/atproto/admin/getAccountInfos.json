@@ -1,10 +1,24 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.admin.getAccountInfos",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get details about some accounts.",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["infos"],
+					"properties": {
+						"infos": {
+							"type": "array",
+							"items": {
+								"ref": "com.atproto.admin.defs#accountView",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["dids"],
@@ -18,22 +32,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["infos"],
-					"properties": {
-						"infos": {
-							"type": "array",
-							"items": {
-								"type": "ref",
-								"ref": "com.atproto.admin.defs#accountView"
-							}
-						}
-					}
-				}
-			}
+			"description": "Get details about some accounts."
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,34 +1,31 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.server.getConfig",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get details about ozone's server configuration.",
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"properties": {
-						"appview": {
-							"type": "ref",
-							"ref": "#serviceConfig"
-						},
 						"pds": {
-							"type": "ref",
-							"ref": "#serviceConfig"
-						},
-						"blobDivert": {
-							"type": "ref",
-							"ref": "#serviceConfig"
+							"ref": "#serviceConfig",
+							"type": "ref"
 						},
 						"chat": {
-							"type": "ref",
-							"ref": "#serviceConfig"
+							"ref": "#serviceConfig",
+							"type": "ref"
 						},
 						"viewer": {
-							"type": "ref",
-							"ref": "#viewerConfig"
+							"ref": "#viewerConfig",
+							"type": "ref"
+						},
+						"appview": {
+							"ref": "#serviceConfig",
+							"type": "ref"
+						},
+						"blobDivert": {
+							"ref": "#serviceConfig",
+							"type": "ref"
 						},
 						"verifierDid": {
 							"type": "string",
@@ -36,17 +33,10 @@
 							"description": "The did of the verifier used for verification."
 						}
 					}
-				}
-			}
-		},
-		"serviceConfig": {
-			"type": "object",
-			"properties": {
-				"url": {
-					"type": "string",
-					"format": "uri"
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Get details about ozone's server configuration."
 		},
 		"viewerConfig": {
 			"type": "object",
@@ -61,6 +51,16 @@
 					]
 				}
 			}
+		},
+		"serviceConfig": {
+			"type": "object",
+			"properties": {
+				"url": {
+					"type": "string",
+					"format": "uri"
+				}
+			}
 		}
-	}
+	},
+	"lexicon": 1
 }

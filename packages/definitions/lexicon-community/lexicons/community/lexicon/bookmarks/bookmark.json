@@ -1,15 +1,20 @@
 {
-	"lexicon": 1,
 	"id": "community.lexicon.bookmarks.bookmark",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "Record bookmarking a link to come back to later.",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["subject", "createdAt"],
 				"properties": {
+					"tags": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "Tags for content the bookmark may be related to, for example 'news' or 'funny videos'"
+					},
 					"subject": {
 						"type": "string",
 						"format": "uri"
@@ -17,16 +22,11 @@
 					"createdAt": {
 						"type": "string",
 						"format": "datetime"
-					},
-					"tags": {
-						"type": "array",
-						"description": "Tags for content the bookmark may be related to, for example 'news' or 'funny videos'",
-						"items": {
-							"type": "string"
-						}
 					}
 				}
-			}
+			},
+			"description": "Record bookmarking a link to come back to later."
 		}
-	}
+	},
+	"lexicon": 1
 }

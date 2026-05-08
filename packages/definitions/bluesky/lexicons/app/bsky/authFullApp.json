@@ -1,18 +1,14 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.authFullApp",
 	"defs": {
 		"main": {
 			"type": "permission-set",
 			"title": "Full Bluesky Social App Permissions",
-			"title:lang": {},
 			"detail": "Manage all public content and interactions, private preferences and subscriptions, and other Bluesky-specific app features and data.",
+			"title:lang": {},
 			"detail:lang": {},
 			"permissions": [
 				{
-					"type": "permission",
-					"resource": "rpc",
-					"inheritAud": true,
 					"lxm": [
 						"app.bsky.actor.getPreferences",
 						"app.bsky.actor.getProfile",
@@ -107,12 +103,15 @@
 						"app.bsky.video.getJobStatus",
 						"app.bsky.video.getUploadLimits",
 						"app.bsky.video.uploadVideo"
-					]
+					],
+					"type": "permission",
+					"resource": "rpc",
+					"inheritAud": true
 				},
 				{
 					"type": "permission",
-					"resource": "repo",
 					"action": ["create", "update", "delete"],
+					"resource": "repo",
 					"collection": [
 						"app.bsky.actor.profile",
 						"app.bsky.actor.status",
@@ -132,5 +131,6 @@
 				}
 			]
 		}
-	}
+	},
+	"lexicon": 1
 }

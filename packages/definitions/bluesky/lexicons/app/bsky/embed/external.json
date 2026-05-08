@@ -1,15 +1,24 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.embed.external",
 	"defs": {
 		"main": {
 			"type": "object",
-			"description": "A representation of some externally linked content (eg, a URL and 'card'), embedded in a Bluesky record (eg, a post).",
 			"required": ["external"],
 			"properties": {
 				"external": {
-					"type": "ref",
-					"ref": "#external"
+					"ref": "#external",
+					"type": "ref"
+				}
+			},
+			"description": "A representation of some externally linked content (eg, a URL and 'card'), embedded in a Bluesky record (eg, a post)."
+		},
+		"view": {
+			"type": "object",
+			"required": ["external"],
+			"properties": {
+				"external": {
+					"ref": "#viewExternal",
+					"type": "ref"
 				}
 			}
 		},
@@ -21,31 +30,21 @@
 					"type": "string",
 					"format": "uri"
 				},
+				"thumb": {
+					"type": "blob",
+					"accept": ["image/*"],
+					"maxSize": 1000000
+				},
 				"title": {
 					"type": "string"
 				},
 				"description": {
 					"type": "string"
 				},
-				"thumb": {
-					"type": "blob",
-					"accept": ["image/*"],
-					"maxSize": 1000000
-				},
 				"associatedRecord": {
 					"type": "string",
 					"format": "at-uri",
 					"description": "The URI of the Atmosphere record representing this external content, if it exists. Example: a site.standard.document record."
-				}
-			}
-		},
-		"view": {
-			"type": "object",
-			"required": ["external"],
-			"properties": {
-				"external": {
-					"type": "ref",
-					"ref": "#viewExternal"
 				}
 			}
 		},
@@ -57,17 +56,18 @@
 					"type": "string",
 					"format": "uri"
 				},
+				"thumb": {
+					"type": "string",
+					"format": "uri"
+				},
 				"title": {
 					"type": "string"
 				},
 				"description": {
 					"type": "string"
-				},
-				"thumb": {
-					"type": "string",
-					"format": "uri"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

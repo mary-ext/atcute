@@ -1,26 +1,56 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.unspecced.getSuggestionsSkeleton",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get a skeleton of suggested actors. Intended to be called and then hydrated through app.bsky.actor.getSuggestions",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["actors"],
+					"properties": {
+						"recId": {
+							"type": "integer",
+							"description": "DEPRECATED: use recIdStr instead."
+						},
+						"actors": {
+							"type": "array",
+							"items": {
+								"ref": "app.bsky.unspecced.defs#skeletonSearchActor",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						},
+						"recIdStr": {
+							"type": "string",
+							"description": "Snowflake for this recommendation, use when submitting recommendation events."
+						},
+						"relativeToDid": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the account these suggestions are relative to. If this is returned undefined, suggestions are based on the viewer."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					},
 					"viewer": {
 						"type": "string",
 						"format": "did",
 						"description": "DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking."
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 100,
-						"default": 50
-					},
-					"cursor": {
-						"type": "string"
 					},
 					"relativeToDid": {
 						"type": "string",
@@ -29,38 +59,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["actors"],
-					"properties": {
-						"cursor": {
-							"type": "string"
-						},
-						"actors": {
-							"type": "array",
-							"items": {
-								"type": "ref",
-								"ref": "app.bsky.unspecced.defs#skeletonSearchActor"
-							}
-						},
-						"relativeToDid": {
-							"type": "string",
-							"format": "did",
-							"description": "DID of the account these suggestions are relative to. If this is returned undefined, suggestions are based on the viewer."
-						},
-						"recId": {
-							"type": "integer",
-							"description": "DEPRECATED: use recIdStr instead."
-						},
-						"recIdStr": {
-							"type": "string",
-							"description": "Snowflake for this recommendation, use when submitting recommendation events."
-						}
-					}
-				}
-			}
+			"description": "Get a skeleton of suggested actors. Intended to be called and then hydrated through app.bsky.actor.getSuggestions"
 		}
-	}
+	},
+	"lexicon": 1
 }

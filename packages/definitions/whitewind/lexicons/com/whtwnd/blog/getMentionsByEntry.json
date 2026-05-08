@@ -1,22 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.whtwnd.blog.getMentionsByEntry",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get comments associated to designated post.",
-			"parameters": {
-				"type": "params",
-				"required": ["postUri"],
-				"properties": {
-					"postUri": {
-						"type": "string",
-						"format": "at-uri"
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["mentions"],
@@ -29,8 +16,21 @@
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["postUri"],
+				"properties": {
+					"postUri": {
+						"type": "string",
+						"format": "at-uri"
+					}
 				}
-			}
+			},
+			"description": "Get comments associated to designated post."
 		}
-	}
+	},
+	"lexicon": 1
 }

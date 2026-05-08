@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.label.definition",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "any",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["name", "valueType", "scope", "createdAt"],
@@ -14,33 +11,33 @@
 					"name": {
 						"type": "string",
 						"description": "The display name of this label.",
-						"minGraphemes": 1,
-						"maxGraphemes": 40
-					},
-					"valueType": {
-						"type": "ref",
-						"ref": "#valueType",
-						"description": "The type definition of this label. Appviews may allow sorting for certain types."
-					},
-					"scope": {
-						"type": "array",
-						"description": "The areas of the repo this label may apply to, eg.: sh.tangled.repo.issue. Appviews may choose to respect this.",
-						"items": {
-							"type": "string",
-							"format": "nsid"
-						}
+						"maxGraphemes": 40,
+						"minGraphemes": 1
 					},
 					"color": {
 						"type": "string",
 						"description": "The hex value for the background color for the label. Appviews may choose to respect this."
 					},
-					"createdAt": {
-						"type": "string",
-						"format": "datetime"
+					"scope": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "nsid"
+						},
+						"description": "The areas of the repo this label may apply to, eg.: sh.tangled.repo.issue. Appviews may choose to respect this."
 					},
 					"multiple": {
 						"type": "boolean",
 						"description": "Whether this label can be repeated for a given entity, eg.: [reviewer:foo, reviewer:bar]"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"valueType": {
+						"ref": "#valueType",
+						"type": "ref",
+						"description": "The type definition of this label. Appviews may allow sorting for certain types."
 					}
 				}
 			}
@@ -49,24 +46,27 @@
 			"type": "object",
 			"required": ["type", "format"],
 			"properties": {
+				"enum": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Closed set of values that this label can take."
+				},
 				"type": {
-					"type": "string",
 					"enum": ["null", "boolean", "integer", "string"],
+					"type": "string",
 					"description": "The concrete type of this label's value."
 				},
 				"format": {
-					"type": "string",
 					"enum": ["any", "did", "nsid"],
+					"type": "string",
 					"description": "An optional constraint that can be applied on string concrete types."
-				},
-				"enum": {
-					"type": "array",
-					"description": "Closed set of values that this label can take.",
-					"items": {
-						"type": "string"
-					}
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

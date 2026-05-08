@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.set.deleteValues",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Delete values from a specific set. Attempting to delete values that are not in the set will not result in an error",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["name", "values"],
@@ -17,21 +14,24 @@
 						},
 						"values": {
 							"type": "array",
-							"minLength": 1,
 							"items": {
 								"type": "string"
 							},
+							"minLength": 1,
 							"description": "Array of string values to delete from the set"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"errors": [
 				{
 					"name": "SetNotFound",
 					"description": "set with the given name does not exist"
 				}
-			]
+			],
+			"description": "Delete values from a specific set. Attempting to delete values that are not in the set will not result in an error"
 		}
-	}
+	},
+	"lexicon": 1
 }

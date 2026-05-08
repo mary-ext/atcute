@@ -1,25 +1,28 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.draft.createDraft",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Inserts a draft using private storage (stash). An upper limit of drafts might be enforced. Requires authentication.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["draft"],
 					"properties": {
 						"draft": {
-							"type": "ref",
-							"ref": "app.bsky.draft.defs#draft"
+							"ref": "app.bsky.draft.defs#draft",
+							"type": "ref"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
+			"errors": [
+				{
+					"name": "DraftLimitReached",
+					"description": "Trying to insert a new draft when the limit was already reached."
+				}
+			],
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["id"],
@@ -29,14 +32,11 @@
 							"description": "The ID of the created draft."
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
-			"errors": [
-				{
-					"name": "DraftLimitReached",
-					"description": "Trying to insert a new draft when the limit was already reached."
-				}
-			]
+			"description": "Inserts a draft using private storage (stash). An upper limit of drafts might be enforced. Requires authentication."
 		}
-	}
+	},
+	"lexicon": 1
 }

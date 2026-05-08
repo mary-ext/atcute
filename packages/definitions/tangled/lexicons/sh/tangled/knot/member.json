@@ -1,23 +1,20 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.knot.member",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["subject", "domain", "createdAt"],
 				"properties": {
-					"subject": {
-						"type": "string",
-						"format": "did"
-					},
 					"domain": {
 						"type": "string",
 						"description": "domain that this member now belongs to"
+					},
+					"subject": {
+						"type": "string",
+						"format": "did"
 					},
 					"createdAt": {
 						"type": "string",
@@ -26,5 +23,8 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

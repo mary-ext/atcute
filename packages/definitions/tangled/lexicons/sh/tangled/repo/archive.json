@@ -1,37 +1,8 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.archive",
 	"defs": {
 		"main": {
 			"type": "query",
-			"parameters": {
-				"type": "params",
-				"required": ["repo", "ref"],
-				"properties": {
-					"repo": {
-						"type": "string",
-						"description": "Repository identifier in format 'did:plc:.../repoName'"
-					},
-					"ref": {
-						"type": "string",
-						"description": "Git reference (branch, tag, or commit SHA)"
-					},
-					"format": {
-						"type": "string",
-						"description": "Archive format",
-						"enum": ["tar", "zip", "tar.gz", "tar.bz2", "tar.xz"],
-						"default": "tar.gz"
-					},
-					"prefix": {
-						"type": "string",
-						"description": "Prefix for files in the archive"
-					}
-				}
-			},
-			"output": {
-				"encoding": "*/*",
-				"description": "Binary archive data"
-			},
 			"errors": [
 				{
 					"name": "RepoNotFound",
@@ -49,7 +20,36 @@
 					"name": "ArchiveError",
 					"description": "Failed to create archive"
 				}
-			]
+			],
+			"output": {
+				"encoding": "*/*",
+				"description": "Binary archive data"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "ref"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"description": "Git reference (branch, tag, or commit SHA)"
+					},
+					"repo": {
+						"type": "string",
+						"description": "Repository identifier in format 'did:plc:.../repoName'"
+					},
+					"format": {
+						"enum": ["tar", "zip", "tar.gz", "tar.bz2", "tar.xz"],
+						"type": "string",
+						"default": "tar.gz",
+						"description": "Archive format"
+					},
+					"prefix": {
+						"type": "string",
+						"description": "Prefix for files in the archive"
+					}
+				}
+			}
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.blocks.math",
 	"defs": {
 		"main": {
@@ -11,5 +10,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

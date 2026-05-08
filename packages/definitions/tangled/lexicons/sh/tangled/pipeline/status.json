@@ -1,16 +1,26 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.pipeline.status",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["pipeline", "workflow", "status", "createdAt"],
 				"properties": {
+					"error": {
+						"type": "string",
+						"description": "error message if failed"
+					},
+					"status": {
+						"enum": ["pending", "running", "failed", "timeout", "cancelled", "success"],
+						"type": "string",
+						"description": "status of the workflow"
+					},
+					"exitCode": {
+						"type": "integer",
+						"description": "exit code if failed"
+					},
 					"pipeline": {
 						"type": "string",
 						"format": "at-uri",
@@ -21,26 +31,16 @@
 						"format": "at-uri",
 						"description": "name of the workflow within this pipeline"
 					},
-					"status": {
-						"type": "string",
-						"description": "status of the workflow",
-						"enum": ["pending", "running", "failed", "timeout", "cancelled", "success"]
-					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime",
 						"description": "time of creation of this status update"
-					},
-					"error": {
-						"type": "string",
-						"description": "error message if failed"
-					},
-					"exitCode": {
-						"type": "integer",
-						"description": "exit code if failed"
 					}
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

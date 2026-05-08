@@ -1,72 +1,72 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["name", "knot", "createdAt"],
 				"properties": {
-					"name": {
-						"type": "string",
-						"description": "name of the repo"
-					},
 					"knot": {
 						"type": "string",
 						"description": "knot where the repo was created"
 					},
-					"spindle": {
+					"name": {
 						"type": "string",
-						"description": "CI runner to send jobs to and receive results from"
+						"description": "name of the repo"
 					},
-					"description": {
-						"type": "string",
-						"minGraphemes": 1,
-						"maxGraphemes": 140
-					},
-					"website": {
-						"type": "string",
-						"format": "uri",
-						"description": "Any URI related to the repo"
-					},
-					"topics": {
+					"labels": {
 						"type": "array",
-						"description": "Topics related to the repo",
 						"items": {
 							"type": "string",
-							"minLength": 1,
-							"maxLength": 50
+							"format": "at-uri"
 						},
-						"maxLength": 50
+						"description": "List of labels that this repo subscribes to"
 					},
 					"source": {
 						"type": "string",
 						"format": "uri",
 						"description": "source of the repo"
 					},
-					"labels": {
+					"topics": {
 						"type": "array",
-						"description": "List of labels that this repo subscribes to",
 						"items": {
 							"type": "string",
-							"format": "at-uri"
-						}
+							"maxLength": 50,
+							"minLength": 1
+						},
+						"maxLength": 50,
+						"description": "Topics related to the repo"
 					},
 					"repoDid": {
 						"type": "string",
 						"format": "did",
 						"description": "DID of the repo itself, if assigned"
 					},
+					"spindle": {
+						"type": "string",
+						"description": "CI runner to send jobs to and receive results from"
+					},
+					"website": {
+						"type": "string",
+						"format": "uri",
+						"description": "Any URI related to the repo"
+					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime"
+					},
+					"description": {
+						"type": "string",
+						"maxGraphemes": 140,
+						"minGraphemes": 1
 					}
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

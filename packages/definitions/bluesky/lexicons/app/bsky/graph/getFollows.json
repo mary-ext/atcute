@@ -1,10 +1,31 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.graph.getFollows",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Enumerates accounts which a specified account (actor) follows.",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["subject", "follows"],
+					"properties": {
+						"cursor": {
+							"type": "string"
+						},
+						"follows": {
+							"type": "array",
+							"items": {
+								"ref": "app.bsky.actor.defs#profileView",
+								"type": "ref"
+							}
+						},
+						"subject": {
+							"ref": "app.bsky.actor.defs#profileView",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["actor"],
@@ -15,38 +36,17 @@
 					},
 					"limit": {
 						"type": "integer",
-						"minimum": 1,
+						"default": 50,
 						"maximum": 100,
-						"default": 50
+						"minimum": 1
 					},
 					"cursor": {
 						"type": "string"
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["subject", "follows"],
-					"properties": {
-						"subject": {
-							"type": "ref",
-							"ref": "app.bsky.actor.defs#profileView"
-						},
-						"cursor": {
-							"type": "string"
-						},
-						"follows": {
-							"type": "array",
-							"items": {
-								"type": "ref",
-								"ref": "app.bsky.actor.defs#profileView"
-							}
-						}
-					}
-				}
-			}
+			"description": "Enumerates accounts which a specified account (actor) follows."
 		}
-	}
+	},
+	"lexicon": 1
 }

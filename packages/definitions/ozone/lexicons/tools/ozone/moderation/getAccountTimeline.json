@@ -1,10 +1,29 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.moderation.getAccountTimeline",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get timeline of all available events of an account. This includes moderation events, account history and did history.",
+			"errors": [
+				{
+					"name": "RepoNotFound"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["timeline"],
+					"properties": {
+						"timeline": {
+							"type": "array",
+							"items": {
+								"ref": "#timelineItem",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["did"],
@@ -15,27 +34,7 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["timeline"],
-					"properties": {
-						"timeline": {
-							"type": "array",
-							"items": {
-								"type": "ref",
-								"ref": "#timelineItem"
-							}
-						}
-					}
-				}
-			},
-			"errors": [
-				{
-					"name": "RepoNotFound"
-				}
-			]
+			"description": "Get timeline of all available events of an account. This includes moderation events, account history and did history."
 		},
 		"timelineItem": {
 			"type": "object",
@@ -47,8 +46,8 @@
 				"summary": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "#timelineItemSummary"
+						"ref": "#timelineItemSummary",
+						"type": "ref"
 					}
 				}
 			}
@@ -57,9 +56,8 @@
 			"type": "object",
 			"required": ["eventSubjectType", "eventType", "count"],
 			"properties": {
-				"eventSubjectType": {
-					"type": "string",
-					"knownValues": ["account", "record", "chat"]
+				"count": {
+					"type": "integer"
 				},
 				"eventType": {
 					"type": "string",
@@ -97,10 +95,12 @@
 						"tools.ozone.moderation.defs#cancelScheduledTakedownEvent"
 					]
 				},
-				"count": {
-					"type": "integer"
+				"eventSubjectType": {
+					"type": "string",
+					"knownValues": ["account", "record", "chat"]
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

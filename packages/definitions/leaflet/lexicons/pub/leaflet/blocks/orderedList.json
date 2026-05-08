@@ -1,21 +1,20 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.blocks.orderedList",
 	"defs": {
 		"main": {
 			"type": "object",
 			"required": ["children"],
 			"properties": {
-				"startIndex": {
-					"type": "integer",
-					"description": "The starting number for this ordered list. Defaults to 1 if not specified."
-				},
 				"children": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "#listItem"
+						"ref": "#listItem",
+						"type": "ref"
 					}
+				},
+				"startIndex": {
+					"type": "integer",
+					"description": "The starting number for this ordered list. Defaults to 1 if not specified."
 				}
 			}
 		},
@@ -28,23 +27,24 @@
 					"description": "If present, this item is a checklist item. true = checked, false = unchecked. If absent, this is a normal list item."
 				},
 				"content": {
-					"type": "union",
-					"refs": ["pub.leaflet.blocks.text", "pub.leaflet.blocks.header", "pub.leaflet.blocks.image"]
+					"refs": ["pub.leaflet.blocks.text", "pub.leaflet.blocks.header", "pub.leaflet.blocks.image"],
+					"type": "union"
 				},
 				"children": {
 					"type": "array",
-					"description": "Nested ordered list items. Mutually exclusive with unorderedListChildren; if both are present, children takes precedence.",
 					"items": {
-						"type": "ref",
-						"ref": "#listItem"
-					}
+						"ref": "#listItem",
+						"type": "ref"
+					},
+					"description": "Nested ordered list items. Mutually exclusive with unorderedListChildren; if both are present, children takes precedence."
 				},
 				"unorderedListChildren": {
+					"ref": "pub.leaflet.blocks.unorderedList",
 					"type": "ref",
-					"description": "A nested unordered list. Mutually exclusive with children; if both are present, children takes precedence.",
-					"ref": "pub.leaflet.blocks.unorderedList"
+					"description": "A nested unordered list. Mutually exclusive with children; if both are present, children takes precedence."
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

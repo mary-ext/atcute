@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.blocks.unorderedList",
 	"defs": {
 		"main": {
@@ -9,8 +8,8 @@
 				"children": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "#listItem"
+						"ref": "#listItem",
+						"type": "ref"
 					}
 				}
 			}
@@ -24,23 +23,24 @@
 					"description": "If present, this item is a checklist item. true = checked, false = unchecked. If absent, this is a normal list item."
 				},
 				"content": {
-					"type": "union",
-					"refs": ["pub.leaflet.blocks.text", "pub.leaflet.blocks.header", "pub.leaflet.blocks.image"]
+					"refs": ["pub.leaflet.blocks.text", "pub.leaflet.blocks.header", "pub.leaflet.blocks.image"],
+					"type": "union"
 				},
 				"children": {
 					"type": "array",
-					"description": "Nested unordered list items. Mutually exclusive with orderedListChildren; if both are present, children takes precedence.",
 					"items": {
-						"type": "ref",
-						"ref": "#listItem"
-					}
+						"ref": "#listItem",
+						"type": "ref"
+					},
+					"description": "Nested unordered list items. Mutually exclusive with orderedListChildren; if both are present, children takes precedence."
 				},
 				"orderedListChildren": {
+					"ref": "pub.leaflet.blocks.orderedList",
 					"type": "ref",
-					"description": "Nested ordered list items. Mutually exclusive with children; if both are present, children takes precedence.",
-					"ref": "pub.leaflet.blocks.orderedList"
+					"description": "Nested ordered list items. Mutually exclusive with children; if both are present, children takes precedence."
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

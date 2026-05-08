@@ -1,11 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.interactions.recommend",
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
-			"description": "Record representing a recommend on a document",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["subject", "createdAt"],
@@ -19,7 +17,9 @@
 						"format": "datetime"
 					}
 				}
-			}
+			},
+			"description": "Record representing a recommend on a document"
 		}
-	}
+	},
+	"lexicon": 1
 }

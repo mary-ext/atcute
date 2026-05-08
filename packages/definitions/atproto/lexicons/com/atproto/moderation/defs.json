@@ -1,7 +1,14 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.moderation.defs",
 	"defs": {
+		"reasonRude": {
+			"type": "token",
+			"description": "Rude, harassing, explicit, or otherwise unwelcoming behavior. Prefer new lexicon definition `tools.ozone.report.defs#reasonHarassmentOther`."
+		},
+		"reasonSpam": {
+			"type": "token",
+			"description": "Spam: frequent unwanted promotion, replies, mentions. Prefer new lexicon definition `tools.ozone.report.defs#reasonMisleadingSpam`."
+		},
 		"reasonType": {
 			"type": "string",
 			"knownValues": [
@@ -54,9 +61,22 @@
 				"tools.ozone.report.defs#reasonSelfHarmOther"
 			]
 		},
-		"reasonSpam": {
+		"reasonOther": {
 			"type": "token",
-			"description": "Spam: frequent unwanted promotion, replies, mentions. Prefer new lexicon definition `tools.ozone.report.defs#reasonMisleadingSpam`."
+			"description": "Reports not falling under another report category. Prefer new lexicon definition `tools.ozone.report.defs#reasonOther`."
+		},
+		"subjectType": {
+			"type": "string",
+			"description": "Tag describing a type of subject that might be reported.",
+			"knownValues": ["account", "record", "chat"]
+		},
+		"reasonAppeal": {
+			"type": "token",
+			"description": "Appeal a previously taken moderation action"
+		},
+		"reasonSexual": {
+			"type": "token",
+			"description": "Unwanted or mislabeled sexual content. Prefer new lexicon definition `tools.ozone.report.defs#reasonSexualUnlabeled`."
 		},
 		"reasonViolation": {
 			"type": "token",
@@ -65,27 +85,7 @@
 		"reasonMisleading": {
 			"type": "token",
 			"description": "Misleading identity, affiliation, or content. Prefer new lexicon definition `tools.ozone.report.defs#reasonMisleadingOther`."
-		},
-		"reasonSexual": {
-			"type": "token",
-			"description": "Unwanted or mislabeled sexual content. Prefer new lexicon definition `tools.ozone.report.defs#reasonSexualUnlabeled`."
-		},
-		"reasonRude": {
-			"type": "token",
-			"description": "Rude, harassing, explicit, or otherwise unwelcoming behavior. Prefer new lexicon definition `tools.ozone.report.defs#reasonHarassmentOther`."
-		},
-		"reasonOther": {
-			"type": "token",
-			"description": "Reports not falling under another report category. Prefer new lexicon definition `tools.ozone.report.defs#reasonOther`."
-		},
-		"reasonAppeal": {
-			"type": "token",
-			"description": "Appeal a previously taken moderation action"
-		},
-		"subjectType": {
-			"type": "string",
-			"description": "Tag describing a type of subject that might be reported.",
-			"knownValues": ["account", "record", "chat"]
 		}
-	}
+	},
+	"lexicon": 1
 }

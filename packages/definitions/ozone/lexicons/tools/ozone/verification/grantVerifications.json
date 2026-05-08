@@ -1,30 +1,27 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.verification.grantVerifications",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Grant verifications to multiple subjects. Allows batch processing of up to 100 verifications at once.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["verifications"],
 					"properties": {
 						"verifications": {
 							"type": "array",
-							"description": "Array of verification requests to process",
-							"maxLength": 100,
 							"items": {
-								"type": "ref",
-								"ref": "#verificationInput"
-							}
+								"ref": "#verificationInput",
+								"type": "ref"
+							},
+							"maxLength": 100,
+							"description": "Array of verification requests to process"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["verifications", "failedVerifications"],
@@ -32,49 +29,25 @@
 						"verifications": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "tools.ozone.verification.defs#verificationView"
+								"ref": "tools.ozone.verification.defs#verificationView",
+								"type": "ref"
 							}
 						},
 						"failedVerifications": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "#grantError"
+								"ref": "#grantError",
+								"type": "ref"
 							}
 						}
 					}
-				}
-			}
-		},
-		"verificationInput": {
-			"type": "object",
-			"required": ["subject", "handle", "displayName"],
-			"properties": {
-				"subject": {
-					"type": "string",
-					"description": "The did of the subject being verified",
-					"format": "did"
 				},
-				"handle": {
-					"type": "string",
-					"description": "Handle of the subject the verification applies to at the moment of verifying.",
-					"format": "handle"
-				},
-				"displayName": {
-					"type": "string",
-					"description": "Display name of the subject the verification applies to at the moment of verifying."
-				},
-				"createdAt": {
-					"type": "string",
-					"format": "datetime",
-					"description": "Timestamp for verification record. Defaults to current time when not specified."
-				}
-			}
+				"encoding": "application/json"
+			},
+			"description": "Grant verifications to multiple subjects. Allows batch processing of up to 100 verifications at once."
 		},
 		"grantError": {
 			"type": "object",
-			"description": "Error object for failed verifications.",
 			"required": ["error", "subject"],
 			"properties": {
 				"error": {
@@ -83,10 +56,37 @@
 				},
 				"subject": {
 					"type": "string",
-					"description": "The did of the subject being verified",
-					"format": "did"
+					"format": "did",
+					"description": "The did of the subject being verified"
+				}
+			},
+			"description": "Error object for failed verifications."
+		},
+		"verificationInput": {
+			"type": "object",
+			"required": ["subject", "handle", "displayName"],
+			"properties": {
+				"handle": {
+					"type": "string",
+					"format": "handle",
+					"description": "Handle of the subject the verification applies to at the moment of verifying."
+				},
+				"subject": {
+					"type": "string",
+					"format": "did",
+					"description": "The did of the subject being verified"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Timestamp for verification record. Defaults to current time when not specified."
+				},
+				"displayName": {
+					"type": "string",
+					"description": "Display name of the subject the verification applies to at the moment of verifying."
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

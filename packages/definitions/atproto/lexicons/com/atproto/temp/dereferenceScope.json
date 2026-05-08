@@ -1,10 +1,27 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.temp.dereferenceScope",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Allows finding the oauth permission scope from a reference",
+			"errors": [
+				{
+					"name": "InvalidScopeReference",
+					"description": "An invalid scope reference was provided."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["scope"],
+					"properties": {
+						"scope": {
+							"type": "string",
+							"description": "The full oauth permission scope"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["scope"],
@@ -15,25 +32,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["scope"],
-					"properties": {
-						"scope": {
-							"type": "string",
-							"description": "The full oauth permission scope"
-						}
-					}
-				}
-			},
-			"errors": [
-				{
-					"name": "InvalidScopeReference",
-					"description": "An invalid scope reference was provided."
-				}
-			]
+			"description": "Allows finding the oauth permission scope from a reference"
 		}
-	}
+	},
+	"lexicon": 1
 }

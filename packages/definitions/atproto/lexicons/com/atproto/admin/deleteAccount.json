@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.admin.deleteAccount",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Delete a user account as an administrator.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["did"],
@@ -16,8 +13,11 @@
 							"format": "did"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Delete a user account as an administrator."
 		}
-	}
+	},
+	"lexicon": 1
 }

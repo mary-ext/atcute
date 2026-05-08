@@ -1,10 +1,36 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.set.getValues",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get a specific set and its values",
+			"errors": [
+				{
+					"name": "SetNotFound",
+					"description": "set with the given name does not exist"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["set", "values"],
+					"properties": {
+						"set": {
+							"ref": "tools.ozone.set.defs#setView",
+							"type": "ref"
+						},
+						"cursor": {
+							"type": "string"
+						},
+						"values": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["name"],
@@ -14,43 +40,17 @@
 					},
 					"limit": {
 						"type": "integer",
-						"minimum": 1,
+						"default": 100,
 						"maximum": 1000,
-						"default": 100
+						"minimum": 1
 					},
 					"cursor": {
 						"type": "string"
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["set", "values"],
-					"properties": {
-						"set": {
-							"type": "ref",
-							"ref": "tools.ozone.set.defs#setView"
-						},
-						"values": {
-							"type": "array",
-							"items": {
-								"type": "string"
-							}
-						},
-						"cursor": {
-							"type": "string"
-						}
-					}
-				}
-			},
-			"errors": [
-				{
-					"name": "SetNotFound",
-					"description": "set with the given name does not exist"
-				}
-			]
+			"description": "Get a specific set and its values"
 		}
-	}
+	},
+	"lexicon": 1
 }

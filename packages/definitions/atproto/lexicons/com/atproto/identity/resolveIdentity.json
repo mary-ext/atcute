@@ -1,28 +1,8 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.identity.resolveIdentity",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Resolves an identity (DID or Handle) to a full identity (DID document and verified handle).",
-			"parameters": {
-				"type": "params",
-				"required": ["identifier"],
-				"properties": {
-					"identifier": {
-						"type": "string",
-						"format": "at-identifier",
-						"description": "Handle or DID to resolve."
-					}
-				}
-			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "ref",
-					"ref": "com.atproto.identity.defs#identityInfo"
-				}
-			},
 			"errors": [
 				{
 					"name": "HandleNotFound",
@@ -36,7 +16,27 @@
 					"name": "DidDeactivated",
 					"description": "The DID previously existed, but has been deactivated."
 				}
-			]
+			],
+			"output": {
+				"schema": {
+					"ref": "com.atproto.identity.defs#identityInfo",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["identifier"],
+				"properties": {
+					"identifier": {
+						"type": "string",
+						"format": "at-identifier",
+						"description": "Handle or DID to resolve."
+					}
+				}
+			},
+			"description": "Resolves an identity (DID or Handle) to a full identity (DID document and verified handle)."
 		}
-	}
+	},
+	"lexicon": 1
 }

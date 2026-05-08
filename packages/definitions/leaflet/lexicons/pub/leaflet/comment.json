@@ -1,17 +1,27 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.comment",
-	"revision": 1,
-	"description": "A lexicon for comments on documents",
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
-			"description": "Record containing a comment",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["subject", "plaintext", "createdAt"],
 				"properties": {
+					"reply": {
+						"ref": "#replyRef",
+						"type": "ref"
+					},
+					"facets": {
+						"type": "array",
+						"items": {
+							"ref": "pub.leaflet.richtext.facet",
+							"type": "ref"
+						}
+					},
+					"onPage": {
+						"type": "string"
+					},
 					"subject": {
 						"type": "string",
 						"format": "at-uri"
@@ -20,43 +30,16 @@
 						"type": "string",
 						"format": "datetime"
 					},
-					"reply": {
-						"type": "ref",
-						"ref": "#replyRef"
-					},
 					"plaintext": {
 						"type": "string"
 					},
-					"facets": {
-						"type": "array",
-						"items": {
-							"type": "ref",
-							"ref": "pub.leaflet.richtext.facet"
-						}
-					},
-					"onPage": {
-						"type": "string"
-					},
 					"attachment": {
-						"type": "union",
-						"refs": ["#linearDocumentQuote"]
+						"refs": ["#linearDocumentQuote"],
+						"type": "union"
 					}
 				}
-			}
-		},
-		"linearDocumentQuote": {
-			"type": "object",
-			"required": ["document", "quote"],
-			"properties": {
-				"document": {
-					"type": "string",
-					"format": "at-uri"
-				},
-				"quote": {
-					"type": "ref",
-					"ref": "pub.leaflet.pages.linearDocument#quote"
-				}
-			}
+			},
+			"description": "Record containing a comment"
 		},
 		"replyRef": {
 			"type": "object",
@@ -67,6 +50,23 @@
 					"format": "at-uri"
 				}
 			}
+		},
+		"linearDocumentQuote": {
+			"type": "object",
+			"required": ["document", "quote"],
+			"properties": {
+				"quote": {
+					"ref": "pub.leaflet.pages.linearDocument#quote",
+					"type": "ref"
+				},
+				"document": {
+					"type": "string",
+					"format": "at-uri"
+				}
+			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"revision": 1,
+	"description": "A lexicon for comments on documents"
 }

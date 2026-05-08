@@ -1,31 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.signature.findRelatedAccounts",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get accounts that share some matching threat signatures with the root account.",
-			"parameters": {
-				"type": "params",
-				"required": ["did"],
-				"properties": {
-					"did": {
-						"type": "string",
-						"format": "did"
-					},
-					"cursor": {
-						"type": "string"
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 100,
-						"default": 50
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["accounts"],
@@ -36,30 +14,52 @@
 						"accounts": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "#relatedAccount"
+								"ref": "#relatedAccount",
+								"type": "ref"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["did"],
+				"properties": {
+					"did": {
+						"type": "string",
+						"format": "did"
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					}
 				}
-			}
+			},
+			"description": "Get accounts that share some matching threat signatures with the root account."
 		},
 		"relatedAccount": {
 			"type": "object",
 			"required": ["account"],
 			"properties": {
 				"account": {
-					"type": "ref",
-					"ref": "com.atproto.admin.defs#accountView"
+					"ref": "com.atproto.admin.defs#accountView",
+					"type": "ref"
 				},
 				"similarities": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "tools.ozone.signature.defs#sigDetail"
+						"ref": "tools.ozone.signature.defs#sigDetail",
+						"type": "ref"
 					}
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

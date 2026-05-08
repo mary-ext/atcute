@@ -1,10 +1,25 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.sync.getRepo",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Download a repository export as CAR file. Optionally only a 'diff' since a previous revision. Does not require auth; implemented by PDS.",
+			"errors": [
+				{
+					"name": "RepoNotFound"
+				},
+				{
+					"name": "RepoTakendown"
+				},
+				{
+					"name": "RepoSuspended"
+				},
+				{
+					"name": "RepoDeactivated"
+				}
+			],
+			"output": {
+				"encoding": "application/vnd.ipld.car"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["did"],
@@ -21,23 +36,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/vnd.ipld.car"
-			},
-			"errors": [
-				{
-					"name": "RepoNotFound"
-				},
-				{
-					"name": "RepoTakendown"
-				},
-				{
-					"name": "RepoSuspended"
-				},
-				{
-					"name": "RepoDeactivated"
-				}
-			]
+			"description": "Download a repository export as CAR file. Optionally only a 'diff' since a previous revision. Does not require auth; implemented by PDS."
 		}
-	}
+	},
+	"lexicon": 1
 }

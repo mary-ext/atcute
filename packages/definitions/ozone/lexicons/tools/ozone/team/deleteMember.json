@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.team.deleteMember",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Delete a member from ozone team. Requires admin role.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["did"],
@@ -16,7 +13,8 @@
 							"format": "did"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"errors": [
 				{
@@ -27,7 +25,9 @@
 					"name": "CannotDeleteSelf",
 					"description": "You can not delete yourself from the team"
 				}
-			]
+			],
+			"description": "Delete a member from ozone team. Requires admin role."
 		}
-	}
+	},
+	"lexicon": 1
 }

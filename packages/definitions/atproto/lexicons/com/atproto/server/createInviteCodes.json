@@ -1,22 +1,19 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.server.createInviteCodes",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Create invite codes.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["codeCount", "useCount"],
 					"properties": {
+						"useCount": {
+							"type": "integer"
+						},
 						"codeCount": {
 							"type": "integer",
 							"default": 1
-						},
-						"useCount": {
-							"type": "integer"
 						},
 						"forAccounts": {
 							"type": "array",
@@ -26,10 +23,10 @@
 							}
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["codes"],
@@ -37,28 +34,31 @@
 						"codes": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "#accountCodes"
+								"ref": "#accountCodes",
+								"type": "ref"
 							}
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Create invite codes."
 		},
 		"accountCodes": {
 			"type": "object",
 			"required": ["account", "codes"],
 			"properties": {
-				"account": {
-					"type": "string"
-				},
 				"codes": {
 					"type": "array",
 					"items": {
 						"type": "string"
 					}
+				},
+				"account": {
+					"type": "string"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

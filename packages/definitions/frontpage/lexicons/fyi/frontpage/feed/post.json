@@ -1,11 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "fyi.frontpage.feed.post",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "Record containing a Frontpage post.",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["title", "createdAt", "subject"],
@@ -13,13 +11,13 @@
 					"title": {
 						"type": "string",
 						"maxLength": 3000,
-						"maxGraphemes": 300,
-						"description": "The title of the post."
+						"description": "The title of the post.",
+						"maxGraphemes": 300
 					},
 					"subject": {
+						"refs": ["#urlSubject"],
 						"type": "union",
-						"description": "The piece of content that this Frontpage post is about.",
-						"refs": ["#urlSubject"]
+						"description": "The piece of content that this Frontpage post is about."
 					},
 					"createdAt": {
 						"type": "string",
@@ -27,7 +25,8 @@
 						"description": "Client-declared timestamp when this post was originally created."
 					}
 				}
-			}
+			},
+			"description": "Record containing a Frontpage post."
 		},
 		"urlSubject": {
 			"type": "object",
@@ -39,5 +38,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

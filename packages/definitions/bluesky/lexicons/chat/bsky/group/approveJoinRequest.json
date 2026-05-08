@@ -1,10 +1,24 @@
 {
-	"lexicon": 1,
 	"id": "chat.bsky.group.approveJoinRequest",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Approves a request to join a group (via join link) the user owns. Action taken by the group owner.",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["convoId", "member"],
+					"properties": {
+						"member": {
+							"type": "string",
+							"format": "did"
+						},
+						"convoId": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"errors": [
 				{
 					"name": "InvalidConvo"
@@ -16,35 +30,21 @@
 					"name": "MemberLimitReached"
 				}
 			],
-			"input": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["convoId", "member"],
-					"properties": {
-						"convoId": {
-							"type": "string"
-						},
-						"member": {
-							"type": "string",
-							"format": "did"
-						}
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["convo"],
 					"properties": {
 						"convo": {
-							"type": "ref",
-							"ref": "chat.bsky.convo.defs#convoView"
+							"ref": "chat.bsky.convo.defs#convoView",
+							"type": "ref"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Approves a request to join a group (via join link) the user owns. Action taken by the group owner."
 		}
-	}
+	},
+	"lexicon": 1
 }

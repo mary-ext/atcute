@@ -1,26 +1,8 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.diff",
 	"defs": {
 		"main": {
 			"type": "query",
-			"parameters": {
-				"type": "params",
-				"required": ["repo", "ref"],
-				"properties": {
-					"repo": {
-						"type": "string",
-						"description": "Repository identifier in format 'did:plc:.../repoName'"
-					},
-					"ref": {
-						"type": "string",
-						"description": "Git reference (branch, tag, or commit SHA)"
-					}
-				}
-			},
-			"output": {
-				"encoding": "*/*"
-			},
 			"errors": [
 				{
 					"name": "RepoNotFound",
@@ -34,7 +16,25 @@
 					"name": "InvalidRequest",
 					"description": "Invalid request parameters"
 				}
-			]
+			],
+			"output": {
+				"encoding": "*/*"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "ref"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"description": "Git reference (branch, tag, or commit SHA)"
+					},
+					"repo": {
+						"type": "string",
+						"description": "Repository identifier in format 'did:plc:.../repoName'"
+					}
+				}
+			}
 		}
-	}
+	},
+	"lexicon": 1
 }

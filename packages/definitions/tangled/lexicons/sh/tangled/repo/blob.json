@@ -1,82 +1,8 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.blob",
 	"defs": {
 		"main": {
 			"type": "query",
-			"parameters": {
-				"type": "params",
-				"required": ["repo", "ref", "path"],
-				"properties": {
-					"repo": {
-						"type": "string",
-						"description": "Repository identifier in format 'did:plc:.../repoName'"
-					},
-					"ref": {
-						"type": "string",
-						"description": "Git reference (branch, tag, or commit SHA)"
-					},
-					"path": {
-						"type": "string",
-						"description": "Path to the file within the repository"
-					},
-					"raw": {
-						"type": "boolean",
-						"description": "Return raw file content instead of JSON response",
-						"default": false
-					}
-				}
-			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["ref", "path"],
-					"properties": {
-						"ref": {
-							"type": "string",
-							"description": "The git reference used"
-						},
-						"path": {
-							"type": "string",
-							"description": "The file path"
-						},
-						"content": {
-							"type": "string",
-							"description": "File content (base64 encoded for binary files)"
-						},
-						"encoding": {
-							"type": "string",
-							"description": "Content encoding",
-							"enum": ["utf-8", "base64"]
-						},
-						"size": {
-							"type": "integer",
-							"description": "File size in bytes"
-						},
-						"isBinary": {
-							"type": "boolean",
-							"description": "Whether the file is binary"
-						},
-						"mimeType": {
-							"type": "string",
-							"description": "MIME type of the file"
-						},
-						"submodule": {
-							"type": "ref",
-							"ref": "#submodule",
-							"description": "Submodule information if path is a submodule"
-						},
-						"lastCommit": {
-							"type": "ref",
-							"ref": "#lastCommit"
-						},
-						"fileTooLarge": {
-							"type": "boolean"
-						}
-					}
-				}
-			},
 			"errors": [
 				{
 					"name": "RepoNotFound",
@@ -94,28 +20,78 @@
 					"name": "InvalidRequest",
 					"description": "Invalid request parameters"
 				}
-			]
-		},
-		"lastCommit": {
-			"type": "object",
-			"required": ["hash", "message", "when"],
-			"properties": {
-				"hash": {
-					"type": "string",
-					"description": "Commit hash"
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["ref", "path"],
+					"properties": {
+						"ref": {
+							"type": "string",
+							"description": "The git reference used"
+						},
+						"path": {
+							"type": "string",
+							"description": "The file path"
+						},
+						"size": {
+							"type": "integer",
+							"description": "File size in bytes"
+						},
+						"content": {
+							"type": "string",
+							"description": "File content (base64 encoded for binary files)"
+						},
+						"encoding": {
+							"enum": ["utf-8", "base64"],
+							"type": "string",
+							"description": "Content encoding"
+						},
+						"isBinary": {
+							"type": "boolean",
+							"description": "Whether the file is binary"
+						},
+						"mimeType": {
+							"type": "string",
+							"description": "MIME type of the file"
+						},
+						"submodule": {
+							"ref": "#submodule",
+							"type": "ref",
+							"description": "Submodule information if path is a submodule"
+						},
+						"lastCommit": {
+							"ref": "#lastCommit",
+							"type": "ref"
+						},
+						"fileTooLarge": {
+							"type": "boolean"
+						}
+					}
 				},
-				"message": {
-					"type": "string",
-					"description": "Commit message"
-				},
-				"author": {
-					"type": "ref",
-					"ref": "#signature"
-				},
-				"when": {
-					"type": "string",
-					"format": "datetime",
-					"description": "Commit timestamp"
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "ref", "path"],
+				"properties": {
+					"raw": {
+						"type": "boolean",
+						"default": false,
+						"description": "Return raw file content instead of JSON response"
+					},
+					"ref": {
+						"type": "string",
+						"description": "Git reference (branch, tag, or commit SHA)"
+					},
+					"path": {
+						"type": "string",
+						"description": "Path to the file within the repository"
+					},
+					"repo": {
+						"type": "string",
+						"description": "Repository identifier in format 'did:plc:.../repoName'"
+					}
 				}
 			}
 		},
@@ -127,14 +103,14 @@
 					"type": "string",
 					"description": "Author name"
 				},
-				"email": {
-					"type": "string",
-					"description": "Author email"
-				},
 				"when": {
 					"type": "string",
 					"format": "datetime",
 					"description": "Author timestamp"
+				},
+				"email": {
+					"type": "string",
+					"description": "Author email"
 				}
 			}
 		},
@@ -142,19 +118,43 @@
 			"type": "object",
 			"required": ["name", "url"],
 			"properties": {
-				"name": {
-					"type": "string",
-					"description": "Submodule name"
-				},
 				"url": {
 					"type": "string",
 					"description": "Submodule repository URL"
+				},
+				"name": {
+					"type": "string",
+					"description": "Submodule name"
 				},
 				"branch": {
 					"type": "string",
 					"description": "Branch to track in the submodule"
 				}
 			}
+		},
+		"lastCommit": {
+			"type": "object",
+			"required": ["hash", "message", "when"],
+			"properties": {
+				"hash": {
+					"type": "string",
+					"description": "Commit hash"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Commit timestamp"
+				},
+				"author": {
+					"ref": "#signature",
+					"type": "ref"
+				},
+				"message": {
+					"type": "string",
+					"description": "Commit message"
+				}
+			}
 		}
-	}
+	},
+	"lexicon": 1
 }

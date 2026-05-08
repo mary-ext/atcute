@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.deleteBranch",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Delete a branch on this repository",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["repo", "branch"],
@@ -19,8 +16,11 @@
 							"type": "string"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Delete a branch on this repository"
 		}
-	}
+	},
+	"lexicon": 1
 }

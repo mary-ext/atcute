@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.temp.addReservedHandle",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Add a handle to the set of reserved handles.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["handle"],
@@ -15,15 +12,18 @@
 							"type": "string"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"properties": {}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Add a handle to the set of reserved handles."
 		}
-	}
+	},
+	"lexicon": 1
 }

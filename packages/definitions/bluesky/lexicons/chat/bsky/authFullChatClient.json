@@ -1,20 +1,16 @@
 {
-	"lexicon": 1,
 	"id": "chat.bsky.authFullChatClient",
 	"defs": {
 		"main": {
 			"type": "permission-set",
 			"title": "Full Chat Client (All Conversations)",
-			"title:lang": {},
 			"detail": "Control of all chat conversations and configuration management.",
+			"title:lang": {},
 			"detail:lang": {
 				"en": "All Chat Conversations"
 			},
 			"permissions": [
 				{
-					"type": "permission",
-					"resource": "rpc",
-					"inheritAud": true,
 					"lxm": [
 						"chat.bsky.actor.deleteAccount",
 						"chat.bsky.convo.acceptConvo",
@@ -52,15 +48,19 @@
 						"chat.bsky.group.rejectJoinRequest",
 						"chat.bsky.group.removeMembers",
 						"chat.bsky.group.requestJoin"
-					]
+					],
+					"type": "permission",
+					"resource": "rpc",
+					"inheritAud": true
 				},
 				{
 					"type": "permission",
-					"resource": "repo",
 					"action": ["create", "update", "delete"],
+					"resource": "repo",
 					"collection": ["chat.bsky.actor.declaration"]
 				}
 			]
 		}
-	}
+	},
+	"lexicon": 1
 }

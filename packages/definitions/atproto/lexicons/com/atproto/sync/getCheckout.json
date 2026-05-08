@@ -1,10 +1,11 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.sync.getCheckout",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "DEPRECATED - please use com.atproto.sync.getRepo instead",
+			"output": {
+				"encoding": "application/vnd.ipld.car"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["did"],
@@ -16,9 +17,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/vnd.ipld.car"
-			}
+			"description": "DEPRECATED - please use com.atproto.sync.getRepo instead"
 		}
-	}
+	},
+	"lexicon": 1
 }

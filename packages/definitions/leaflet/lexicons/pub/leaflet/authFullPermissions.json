@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.authFullPermissions",
 	"defs": {
 		"main": {
@@ -9,8 +8,8 @@
 			"permissions": [
 				{
 					"type": "permission",
-					"resource": "repo",
 					"action": ["create", "update", "delete"],
+					"resource": "repo",
 					"collection": [
 						"pub.leaflet.document",
 						"pub.leaflet.publication",
@@ -23,5 +22,6 @@
 				}
 			]
 		}
-	}
+	},
+	"lexicon": 1
 }

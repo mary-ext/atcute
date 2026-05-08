@@ -1,10 +1,36 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.unspecced.searchActorsSkeleton",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Backend Actors (profile) search, returns only skeleton.",
+			"errors": [
+				{
+					"name": "BadQueryString"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["actors"],
+					"properties": {
+						"actors": {
+							"type": "array",
+							"items": {
+								"ref": "app.bsky.unspecced.defs#skeletonSearchActor",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						},
+						"hitsTotal": {
+							"type": "integer",
+							"description": "Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["q"],
@@ -12,6 +38,16 @@
 					"q": {
 						"type": "string",
 						"description": "Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended. For typeahead search, only simple term match is supported, not full syntax."
+					},
+					"limit": {
+						"type": "integer",
+						"default": 25,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Optional pagination mechanism; may not necessarily allow scrolling through entire result set."
 					},
 					"viewer": {
 						"type": "string",
@@ -21,47 +57,11 @@
 					"typeahead": {
 						"type": "boolean",
 						"description": "If true, acts as fast/simple 'typeahead' query."
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 100,
-						"default": 25
-					},
-					"cursor": {
-						"type": "string",
-						"description": "Optional pagination mechanism; may not necessarily allow scrolling through entire result set."
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["actors"],
-					"properties": {
-						"cursor": {
-							"type": "string"
-						},
-						"hitsTotal": {
-							"type": "integer",
-							"description": "Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits."
-						},
-						"actors": {
-							"type": "array",
-							"items": {
-								"type": "ref",
-								"ref": "app.bsky.unspecced.defs#skeletonSearchActor"
-							}
-						}
-					}
-				}
-			},
-			"errors": [
-				{
-					"name": "BadQueryString"
-				}
-			]
+			"description": "Backend Actors (profile) search, returns only skeleton."
 		}
-	}
+	},
+	"lexicon": 1
 }

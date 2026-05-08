@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.sync.requestCrawl",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Request a service to persistently crawl hosted repos. Does not require auth.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["hostname"],
@@ -21,13 +18,16 @@
 							"description": "specific repository to ensure crawling"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"errors": [
 				{
 					"name": "HostBanned"
 				}
-			]
+			],
+			"description": "Request a service to persistently crawl hosted repos. Does not require auth."
 		}
-	}
+	},
+	"lexicon": 1
 }

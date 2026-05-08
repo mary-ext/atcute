@@ -1,10 +1,15 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.moderation.getEvent",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get details about a moderation event.",
+			"output": {
+				"schema": {
+					"ref": "tools.ozone.moderation.defs#modEventViewDetail",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["id"],
@@ -14,13 +19,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "ref",
-					"ref": "tools.ozone.moderation.defs#modEventViewDetail"
-				}
-			}
+			"description": "Get details about a moderation event."
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,41 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.notification.listNotifications",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Enumerate notifications for the requesting account. Requires auth.",
-			"parameters": {
-				"type": "params",
-				"properties": {
-					"reasons": {
-						"description": "Notification reasons to include in response.",
-						"type": "array",
-						"items": {
-							"type": "string",
-							"description": "A reason that matches the reason property of #notification."
-						}
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 100,
-						"default": 50
-					},
-					"priority": {
-						"type": "boolean"
-					},
-					"cursor": {
-						"type": "string"
-					},
-					"seenAt": {
-						"type": "string",
-						"format": "datetime"
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["notifications"],
@@ -43,39 +11,80 @@
 						"cursor": {
 							"type": "string"
 						},
-						"notifications": {
-							"type": "array",
-							"items": {
-								"type": "ref",
-								"ref": "#notification"
-							}
+						"seenAt": {
+							"type": "string",
+							"format": "datetime"
 						},
 						"priority": {
 							"type": "boolean"
 						},
-						"seenAt": {
-							"type": "string",
-							"format": "datetime"
+						"notifications": {
+							"type": "array",
+							"items": {
+								"ref": "#notification",
+								"type": "ref"
+							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"seenAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"reasons": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"description": "A reason that matches the reason property of #notification."
+						},
+						"description": "Notification reasons to include in response."
+					},
+					"priority": {
+						"type": "boolean"
+					}
 				}
-			}
+			},
+			"description": "Enumerate notifications for the requesting account. Requires auth."
 		},
 		"notification": {
 			"type": "object",
 			"required": ["uri", "cid", "author", "reason", "record", "isRead", "indexedAt"],
 			"properties": {
-				"uri": {
-					"type": "string",
-					"format": "at-uri"
-				},
 				"cid": {
 					"type": "string",
 					"format": "cid"
 				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
 				"author": {
-					"type": "ref",
-					"ref": "app.bsky.actor.defs#profileView"
+					"ref": "app.bsky.actor.defs#profileView",
+					"type": "ref"
+				},
+				"isRead": {
+					"type": "boolean"
+				},
+				"labels": {
+					"type": "array",
+					"items": {
+						"ref": "com.atproto.label.defs#label",
+						"type": "ref"
+					}
 				},
 				"reason": {
 					"type": "string",
@@ -96,28 +105,19 @@
 						"contact-match"
 					]
 				},
-				"reasonSubject": {
-					"type": "string",
-					"format": "at-uri"
-				},
 				"record": {
 					"type": "unknown"
-				},
-				"isRead": {
-					"type": "boolean"
 				},
 				"indexedAt": {
 					"type": "string",
 					"format": "datetime"
 				},
-				"labels": {
-					"type": "array",
-					"items": {
-						"type": "ref",
-						"ref": "com.atproto.label.defs#label"
-					}
+				"reasonSubject": {
+					"type": "string",
+					"format": "at-uri"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

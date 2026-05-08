@@ -1,27 +1,27 @@
 {
-	"lexicon": 1,
 	"id": "community.lexicon.payments.webMonetization",
-	"description": "Web Monetization integration: https://webmonetization.org/",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "Web Monetization wallet.",
 			"key": "any",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["address"],
 				"properties": {
+					"note": {
+						"type": "string",
+						"description": "Short, human-readable description of how this wallet is related to this account."
+					},
 					"address": {
 						"type": "string",
 						"format": "uri",
 						"description": "Wallet address."
-					},
-					"note": {
-						"type": "string",
-						"description": "Short, human-readable description of how this wallet is related to this account."
 					}
 				}
-			}
+			},
+			"description": "Web Monetization wallet."
 		}
-	}
+	},
+	"lexicon": 1,
+	"description": "Web Monetization integration: https://webmonetization.org/"
 }

@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.blocks.iframe",
 	"defs": {
 		"main": {
@@ -12,12 +11,12 @@
 				},
 				"height": {
 					"type": "integer",
-					"minimum": 16,
-					"maximum": 1600
+					"maximum": 1600,
+					"minimum": 16
 				},
 				"aspectRatio": {
-					"type": "ref",
-					"ref": "#aspectRatio"
+					"ref": "#aspectRatio",
+					"type": "ref"
 				}
 			}
 		},
@@ -33,5 +32,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

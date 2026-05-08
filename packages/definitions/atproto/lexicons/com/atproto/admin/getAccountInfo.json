@@ -1,10 +1,15 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.admin.getAccountInfo",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get details about an account.",
+			"output": {
+				"schema": {
+					"ref": "com.atproto.admin.defs#accountView",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["did"],
@@ -15,13 +20,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "ref",
-					"ref": "com.atproto.admin.defs#accountView"
-				}
-			}
+			"description": "Get details about an account."
 		}
-	}
+	},
+	"lexicon": 1
 }

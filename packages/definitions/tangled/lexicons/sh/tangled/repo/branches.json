@@ -1,9 +1,21 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.branches",
 	"defs": {
 		"main": {
 			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"encoding": "*/*"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["repo"],
@@ -14,30 +26,18 @@
 					},
 					"limit": {
 						"type": "integer",
-						"description": "Maximum number of branches to return",
-						"minimum": 1,
+						"default": 50,
 						"maximum": 100,
-						"default": 50
+						"minimum": 1,
+						"description": "Maximum number of branches to return"
 					},
 					"cursor": {
 						"type": "string",
 						"description": "Pagination cursor"
 					}
 				}
-			},
-			"output": {
-				"encoding": "*/*"
-			},
-			"errors": [
-				{
-					"name": "RepoNotFound",
-					"description": "Repository not found or access denied"
-				},
-				{
-					"name": "InvalidRequest",
-					"description": "Invalid request parameters"
-				}
-			]
+			}
 		}
-	}
+	},
+	"lexicon": 1
 }

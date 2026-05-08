@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.server.checkAccountStatus",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Returns the status of an account, especially as pertaining to import or recovery. Can be called many times over the course of an account migration. Requires auth and can only be called pertaining to oneself.",
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": [
@@ -21,20 +18,26 @@
 						"importedBlobs"
 					],
 					"properties": {
-						"activated": {
-							"type": "boolean"
+						"repoRev": {
+							"type": "string"
 						},
 						"validDid": {
 							"type": "boolean"
+						},
+						"activated": {
+							"type": "boolean"
+						},
+						"repoBlocks": {
+							"type": "integer"
 						},
 						"repoCommit": {
 							"type": "string",
 							"format": "cid"
 						},
-						"repoRev": {
-							"type": "string"
+						"expectedBlobs": {
+							"type": "integer"
 						},
-						"repoBlocks": {
+						"importedBlobs": {
 							"type": "integer"
 						},
 						"indexedRecords": {
@@ -42,16 +45,13 @@
 						},
 						"privateStateValues": {
 							"type": "integer"
-						},
-						"expectedBlobs": {
-							"type": "integer"
-						},
-						"importedBlobs": {
-							"type": "integer"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Returns the status of an account, especially as pertaining to import or recovery. Can be called many times over the course of an account migration. Requires auth and can only be called pertaining to oneself."
 		}
-	}
+	},
+	"lexicon": 1
 }

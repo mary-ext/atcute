@@ -1,27 +1,24 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.graph.vouch",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "any",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["kind", "createdAt"],
 				"properties": {
 					"kind": {
-						"type": "string",
-						"description": "Whether this user is being vouched for or denounced",
 						"enum": ["vouch", "denounce"],
-						"default": "vouch"
+						"type": "string",
+						"default": "vouch",
+						"description": "Whether this user is being vouched for or denounced"
 					},
 					"reason": {
 						"type": "string",
+						"maxLength": 2560,
 						"description": "The reason for this vouch/denouncement",
-						"maxGraphemes": 256,
-						"maxLength": 2560
+						"maxGraphemes": 256
 					},
 					"createdAt": {
 						"type": "string",
@@ -30,5 +27,8 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

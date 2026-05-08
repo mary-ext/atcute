@@ -1,53 +1,8 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.getDefaultBranch",
 	"defs": {
 		"main": {
 			"type": "query",
-			"parameters": {
-				"type": "params",
-				"required": ["repo"],
-				"properties": {
-					"repo": {
-						"type": "string",
-						"description": "Repository identifier in format 'did:plc:.../repoName'"
-					}
-				}
-			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["name", "hash", "when"],
-					"properties": {
-						"name": {
-							"type": "string",
-							"description": "Default branch name"
-						},
-						"hash": {
-							"type": "string",
-							"description": "Latest commit hash on default branch"
-						},
-						"shortHash": {
-							"type": "string",
-							"description": "Short commit hash"
-						},
-						"when": {
-							"type": "string",
-							"format": "datetime",
-							"description": "Timestamp of latest commit"
-						},
-						"message": {
-							"type": "string",
-							"description": "Latest commit message"
-						},
-						"author": {
-							"type": "ref",
-							"ref": "#signature"
-						}
-					}
-				}
-			},
 			"errors": [
 				{
 					"name": "RepoNotFound",
@@ -57,7 +12,51 @@
 					"name": "InvalidRequest",
 					"description": "Invalid request parameters"
 				}
-			]
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["name", "hash", "when"],
+					"properties": {
+						"hash": {
+							"type": "string",
+							"description": "Latest commit hash on default branch"
+						},
+						"name": {
+							"type": "string",
+							"description": "Default branch name"
+						},
+						"when": {
+							"type": "string",
+							"format": "datetime",
+							"description": "Timestamp of latest commit"
+						},
+						"author": {
+							"ref": "#signature",
+							"type": "ref"
+						},
+						"message": {
+							"type": "string",
+							"description": "Latest commit message"
+						},
+						"shortHash": {
+							"type": "string",
+							"description": "Short commit hash"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"description": "Repository identifier in format 'did:plc:.../repoName'"
+					}
+				}
+			}
 		},
 		"signature": {
 			"type": "object",
@@ -67,16 +66,17 @@
 					"type": "string",
 					"description": "Author name"
 				},
-				"email": {
-					"type": "string",
-					"description": "Author email"
-				},
 				"when": {
 					"type": "string",
 					"format": "datetime",
 					"description": "Author timestamp"
+				},
+				"email": {
+					"type": "string",
+					"description": "Author email"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

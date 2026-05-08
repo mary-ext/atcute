@@ -1,28 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.unspecced.getOnboardingSuggestedStarterPacksSkeleton",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get a skeleton of suggested starterpacks for onboarding. Intended to be called and hydrated by app.bsky.unspecced.getOnboardingSuggestedStarterPacks",
-			"parameters": {
-				"type": "params",
-				"properties": {
-					"viewer": {
-						"type": "string",
-						"format": "did",
-						"description": "DID of the account making the request (not included for public/unauthenticated queries)."
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 25,
-						"default": 10
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["starterPacks"],
@@ -35,8 +16,27 @@
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 10,
+						"maximum": 25,
+						"minimum": 1
+					},
+					"viewer": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the account making the request (not included for public/unauthenticated queries)."
+					}
 				}
-			}
+			},
+			"description": "Get a skeleton of suggested starterpacks for onboarding. Intended to be called and hydrated by app.bsky.unspecced.getOnboardingSuggestedStarterPacks"
 		}
-	}
+	},
+	"lexicon": 1
 }

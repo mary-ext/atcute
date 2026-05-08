@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.identity.refreshIdentity",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Request that the server re-resolve an identity (DID and handle). The server may ignore this request, or require authentication, depending on the role, implementation, and policy of the server.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["identifier"],
@@ -16,14 +13,8 @@
 							"format": "at-identifier"
 						}
 					}
-				}
-			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "ref",
-					"ref": "com.atproto.identity.defs#identityInfo"
-				}
+				},
+				"encoding": "application/json"
 			},
 			"errors": [
 				{
@@ -38,7 +29,16 @@
 					"name": "DidDeactivated",
 					"description": "The DID previously existed, but has been deactivated."
 				}
-			]
+			],
+			"output": {
+				"schema": {
+					"ref": "com.atproto.identity.defs#identityInfo",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"description": "Request that the server re-resolve an identity (DID and handle). The server may ignore this request, or require authentication, depending on the role, implementation, and policy of the server."
 		}
-	}
+	},
+	"lexicon": 1
 }

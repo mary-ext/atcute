@@ -1,33 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.signature.searchAccounts",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Search for accounts that match one or more threat signature values.",
-			"parameters": {
-				"type": "params",
-				"required": ["values"],
-				"properties": {
-					"values": {
-						"type": "array",
-						"items": {
-							"type": "string"
-						}
-					},
-					"cursor": {
-						"type": "string"
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 100,
-						"default": 50
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["accounts"],
@@ -38,13 +14,37 @@
 						"accounts": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "com.atproto.admin.defs#accountView"
+								"ref": "com.atproto.admin.defs#accountView",
+								"type": "ref"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["values"],
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"values": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
 				}
-			}
+			},
+			"description": "Search for accounts that match one or more threat signature values."
 		}
-	}
+	},
+	"lexicon": 1
 }

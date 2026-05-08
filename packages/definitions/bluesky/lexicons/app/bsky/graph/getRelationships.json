@@ -1,32 +1,15 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.graph.getRelationships",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Enumerates public relationships between one account, and a list of other accounts. Does not require auth.",
-			"parameters": {
-				"type": "params",
-				"required": ["actor"],
-				"properties": {
-					"actor": {
-						"type": "string",
-						"format": "at-identifier",
-						"description": "Primary account requesting relationships for."
-					},
-					"others": {
-						"type": "array",
-						"description": "List of 'other' accounts to be related back to the primary.",
-						"maxLength": 30,
-						"items": {
-							"type": "string",
-							"format": "at-identifier"
-						}
-					}
+			"errors": [
+				{
+					"name": "ActorNotFound",
+					"description": "the primary actor at-identifier could not be resolved"
 				}
-			},
+			],
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["relationships"],
@@ -38,19 +21,36 @@
 						"relationships": {
 							"type": "array",
 							"items": {
-								"type": "union",
-								"refs": ["app.bsky.graph.defs#relationship", "app.bsky.graph.defs#notFoundActor"]
+								"refs": ["app.bsky.graph.defs#relationship", "app.bsky.graph.defs#notFoundActor"],
+								"type": "union"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["actor"],
+				"properties": {
+					"actor": {
+						"type": "string",
+						"format": "at-identifier",
+						"description": "Primary account requesting relationships for."
+					},
+					"others": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "at-identifier"
+						},
+						"maxLength": 30,
+						"description": "List of 'other' accounts to be related back to the primary."
+					}
 				}
 			},
-			"errors": [
-				{
-					"name": "ActorNotFound",
-					"description": "the primary actor at-identifier could not be resolved"
-				}
-			]
+			"description": "Enumerates public relationships between one account, and a list of other accounts. Does not require auth."
 		}
-	}
+	},
+	"lexicon": 1
 }

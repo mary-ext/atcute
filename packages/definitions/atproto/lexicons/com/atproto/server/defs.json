@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.server.defs",
 	"defs": {
 		"inviteCode": {
@@ -9,28 +8,28 @@
 				"code": {
 					"type": "string"
 				},
-				"available": {
-					"type": "integer"
+				"uses": {
+					"type": "array",
+					"items": {
+						"ref": "#inviteCodeUse",
+						"type": "ref"
+					}
 				},
 				"disabled": {
 					"type": "boolean"
 				},
-				"forAccount": {
-					"type": "string"
-				},
-				"createdBy": {
-					"type": "string"
+				"available": {
+					"type": "integer"
 				},
 				"createdAt": {
 					"type": "string",
 					"format": "datetime"
 				},
-				"uses": {
-					"type": "array",
-					"items": {
-						"type": "ref",
-						"ref": "#inviteCodeUse"
-					}
+				"createdBy": {
+					"type": "string"
+				},
+				"forAccount": {
+					"type": "string"
 				}
 			}
 		},
@@ -38,15 +37,16 @@
 			"type": "object",
 			"required": ["usedBy", "usedAt"],
 			"properties": {
-				"usedBy": {
-					"type": "string",
-					"format": "did"
-				},
 				"usedAt": {
 					"type": "string",
 					"format": "datetime"
+				},
+				"usedBy": {
+					"type": "string",
+					"format": "did"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

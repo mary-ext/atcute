@@ -1,106 +1,62 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.labeler.defs",
 	"defs": {
 		"labelerView": {
 			"type": "object",
 			"required": ["uri", "cid", "creator", "indexedAt"],
 			"properties": {
-				"uri": {
-					"type": "string",
-					"format": "at-uri"
-				},
 				"cid": {
 					"type": "string",
 					"format": "cid"
 				},
-				"creator": {
-					"type": "ref",
-					"ref": "app.bsky.actor.defs#profileView"
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
 				},
-				"likeCount": {
-					"type": "integer",
-					"minimum": 0
+				"labels": {
+					"type": "array",
+					"items": {
+						"ref": "com.atproto.label.defs#label",
+						"type": "ref"
+					}
 				},
 				"viewer": {
-					"type": "ref",
-					"ref": "#labelerViewerState"
+					"ref": "#labelerViewerState",
+					"type": "ref"
+				},
+				"creator": {
+					"ref": "app.bsky.actor.defs#profileView",
+					"type": "ref"
 				},
 				"indexedAt": {
 					"type": "string",
 					"format": "datetime"
 				},
-				"labels": {
-					"type": "array",
-					"items": {
-						"type": "ref",
-						"ref": "com.atproto.label.defs#label"
-					}
+				"likeCount": {
+					"type": "integer",
+					"minimum": 0
 				}
 			}
 		},
-		"labelerViewDetailed": {
+		"labelerPolicies": {
 			"type": "object",
-			"required": ["uri", "cid", "creator", "policies", "indexedAt"],
+			"required": ["labelValues"],
 			"properties": {
-				"uri": {
-					"type": "string",
-					"format": "at-uri"
-				},
-				"cid": {
-					"type": "string",
-					"format": "cid"
-				},
-				"creator": {
-					"type": "ref",
-					"ref": "app.bsky.actor.defs#profileView"
-				},
-				"policies": {
-					"type": "ref",
-					"ref": "app.bsky.labeler.defs#labelerPolicies"
-				},
-				"likeCount": {
-					"type": "integer",
-					"minimum": 0
-				},
-				"viewer": {
-					"type": "ref",
-					"ref": "#labelerViewerState"
-				},
-				"indexedAt": {
-					"type": "string",
-					"format": "datetime"
-				},
-				"labels": {
+				"labelValues": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "com.atproto.label.defs#label"
-					}
+						"ref": "com.atproto.label.defs#labelValue",
+						"type": "ref"
+					},
+					"description": "The label values which this labeler publishes. May include global or custom labels."
 				},
-				"reasonTypes": {
-					"description": "The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed.",
+				"labelValueDefinitions": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "com.atproto.moderation.defs#reasonType"
-					}
-				},
-				"subjectTypes": {
-					"description": "The set of subject types (account, record, etc) this service accepts reports on.",
-					"type": "array",
-					"items": {
-						"type": "ref",
-						"ref": "com.atproto.moderation.defs#subjectType"
-					}
-				},
-				"subjectCollections": {
-					"type": "array",
-					"description": "Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type.",
-					"items": {
-						"type": "string",
-						"format": "nsid"
-					}
+						"ref": "com.atproto.label.defs#labelValueDefinition",
+						"type": "ref"
+					},
+					"description": "Label values created by this labeler and scoped exclusively to it. Labels defined here will override global label definitions for this labeler."
 				}
 			}
 		},
@@ -113,27 +69,71 @@
 				}
 			}
 		},
-		"labelerPolicies": {
+		"labelerViewDetailed": {
 			"type": "object",
-			"required": ["labelValues"],
+			"required": ["uri", "cid", "creator", "policies", "indexedAt"],
 			"properties": {
-				"labelValues": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"labels": {
 					"type": "array",
-					"description": "The label values which this labeler publishes. May include global or custom labels.",
 					"items": {
-						"type": "ref",
-						"ref": "com.atproto.label.defs#labelValue"
+						"ref": "com.atproto.label.defs#label",
+						"type": "ref"
 					}
 				},
-				"labelValueDefinitions": {
+				"viewer": {
+					"ref": "#labelerViewerState",
+					"type": "ref"
+				},
+				"creator": {
+					"ref": "app.bsky.actor.defs#profileView",
+					"type": "ref"
+				},
+				"policies": {
+					"ref": "app.bsky.labeler.defs#labelerPolicies",
+					"type": "ref"
+				},
+				"indexedAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"likeCount": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"reasonTypes": {
 					"type": "array",
-					"description": "Label values created by this labeler and scoped exclusively to it. Labels defined here will override global label definitions for this labeler.",
 					"items": {
-						"type": "ref",
-						"ref": "com.atproto.label.defs#labelValueDefinition"
-					}
+						"ref": "com.atproto.moderation.defs#reasonType",
+						"type": "ref"
+					},
+					"description": "The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed."
+				},
+				"subjectTypes": {
+					"type": "array",
+					"items": {
+						"ref": "com.atproto.moderation.defs#subjectType",
+						"type": "ref"
+					},
+					"description": "The set of subject types (account, record, etc) this service accepts reports on."
+				},
+				"subjectCollections": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"format": "nsid"
+					},
+					"description": "Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type."
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

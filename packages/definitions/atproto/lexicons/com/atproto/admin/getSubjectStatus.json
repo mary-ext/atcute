@@ -1,10 +1,33 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.admin.getSubjectStatus",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get the service-specific admin status of a subject (account, record, or blob).",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["subject"],
+					"properties": {
+						"subject": {
+							"refs": [
+								"com.atproto.admin.defs#repoRef",
+								"com.atproto.repo.strongRef",
+								"com.atproto.admin.defs#repoBlobRef"
+							],
+							"type": "union"
+						},
+						"takedown": {
+							"ref": "com.atproto.admin.defs#statusAttr",
+							"type": "ref"
+						},
+						"deactivated": {
+							"ref": "com.atproto.admin.defs#statusAttr",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"properties": {
@@ -22,31 +45,8 @@
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["subject"],
-					"properties": {
-						"subject": {
-							"type": "union",
-							"refs": [
-								"com.atproto.admin.defs#repoRef",
-								"com.atproto.repo.strongRef",
-								"com.atproto.admin.defs#repoBlobRef"
-							]
-						},
-						"takedown": {
-							"type": "ref",
-							"ref": "com.atproto.admin.defs#statusAttr"
-						},
-						"deactivated": {
-							"type": "ref",
-							"ref": "com.atproto.admin.defs#statusAttr"
-						}
-					}
-				}
-			}
+			"description": "Get the service-specific admin status of a subject (account, record, or blob)."
 		}
-	}
+	},
+	"lexicon": 1
 }

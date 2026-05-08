@@ -1,39 +1,39 @@
 {
-	"lexicon": 1,
 	"id": "fyi.frontpage.feed.comment",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "Record containing a Frontpage comment.",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["createdAt", "post", "blocks"],
 				"properties": {
+					"post": {
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
+					},
 					"blocks": {
 						"type": "array",
-						"maxLength": 200,
-						"description": "The content of the comment. Note, there are additional constraints placed on the total size of the content within the Frontpage AppView that are not possible to express in lexicon. Generally a comment can have a maximum length of 10,000 graphemes, the Frontpage AppView will enforce this limit.",
 						"items": {
-							"type": "ref",
-							"ref": "fyi.frontpage.richtext.block"
-						}
+							"ref": "fyi.frontpage.richtext.block",
+							"type": "ref"
+						},
+						"maxLength": 200,
+						"description": "The content of the comment. Note, there are additional constraints placed on the total size of the content within the Frontpage AppView that are not possible to express in lexicon. Generally a comment can have a maximum length of 10,000 graphemes, the Frontpage AppView will enforce this limit."
+					},
+					"parent": {
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
 					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime",
 						"description": "Client-declared timestamp when this comment was originally created."
-					},
-					"parent": {
-						"type": "ref",
-						"ref": "com.atproto.repo.strongRef"
-					},
-					"post": {
-						"type": "ref",
-						"ref": "com.atproto.repo.strongRef"
 					}
 				}
-			}
+			},
+			"description": "Record containing a Frontpage comment."
 		}
-	}
+	},
+	"lexicon": 1
 }

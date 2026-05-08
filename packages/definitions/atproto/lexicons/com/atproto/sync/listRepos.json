@@ -1,43 +1,42 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.sync.listRepos",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Enumerates all the DID, rev, and commit CID for all repos hosted by this service. Does not require auth; implemented by PDS and Relay.",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["repos"],
+					"properties": {
+						"repos": {
+							"type": "array",
+							"items": {
+								"ref": "#repo",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"properties": {
 					"limit": {
 						"type": "integer",
-						"minimum": 1,
+						"default": 500,
 						"maximum": 1000,
-						"default": 500
+						"minimum": 1
 					},
 					"cursor": {
 						"type": "string"
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["repos"],
-					"properties": {
-						"cursor": {
-							"type": "string"
-						},
-						"repos": {
-							"type": "array",
-							"items": {
-								"type": "ref",
-								"ref": "#repo"
-							}
-						}
-					}
-				}
-			}
+			"description": "Enumerates all the DID, rev, and commit CID for all repos hosted by this service. Does not require auth; implemented by PDS and Relay."
 		},
 		"repo": {
 			"type": "object",
@@ -47,14 +46,14 @@
 					"type": "string",
 					"format": "did"
 				},
+				"rev": {
+					"type": "string",
+					"format": "tid"
+				},
 				"head": {
 					"type": "string",
 					"format": "cid",
 					"description": "Current repo commit CID"
-				},
-				"rev": {
-					"type": "string",
-					"format": "tid"
 				},
 				"active": {
 					"type": "boolean"
@@ -66,5 +65,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

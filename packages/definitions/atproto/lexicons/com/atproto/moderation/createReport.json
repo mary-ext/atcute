@@ -1,40 +1,37 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.moderation.createReport",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Submit a moderation report regarding an atproto account or record. Implemented by moderation services (with PDS proxying), and requires auth.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["reasonType", "subject"],
 					"properties": {
-						"reasonType": {
-							"type": "ref",
-							"description": "Indicates the broad category of violation the report is for.",
-							"ref": "com.atproto.moderation.defs#reasonType"
-						},
 						"reason": {
 							"type": "string",
-							"maxGraphemes": 2000,
 							"maxLength": 20000,
-							"description": "Additional context about the content and violation."
-						},
-						"subject": {
-							"type": "union",
-							"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"]
+							"description": "Additional context about the content and violation.",
+							"maxGraphemes": 2000
 						},
 						"modTool": {
+							"ref": "#modTool",
+							"type": "ref"
+						},
+						"subject": {
+							"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"],
+							"type": "union"
+						},
+						"reasonType": {
+							"ref": "com.atproto.moderation.defs#reasonType",
 							"type": "ref",
-							"ref": "#modTool"
+							"description": "Indicates the broad category of violation the report is for."
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["id", "reasonType", "subject", "reportedBy", "createdAt"],
@@ -42,45 +39,48 @@
 						"id": {
 							"type": "integer"
 						},
-						"reasonType": {
-							"type": "ref",
-							"ref": "com.atproto.moderation.defs#reasonType"
-						},
 						"reason": {
 							"type": "string",
-							"maxGraphemes": 2000,
-							"maxLength": 20000
+							"maxLength": 20000,
+							"maxGraphemes": 2000
 						},
 						"subject": {
-							"type": "union",
-							"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"]
-						},
-						"reportedBy": {
-							"type": "string",
-							"format": "did"
+							"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"],
+							"type": "union"
 						},
 						"createdAt": {
 							"type": "string",
 							"format": "datetime"
+						},
+						"reasonType": {
+							"ref": "com.atproto.moderation.defs#reasonType",
+							"type": "ref"
+						},
+						"reportedBy": {
+							"type": "string",
+							"format": "did"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Submit a moderation report regarding an atproto account or record. Implemented by moderation services (with PDS proxying), and requires auth."
 		},
 		"modTool": {
 			"type": "object",
-			"description": "Moderation tool information for tracing the source of the action",
 			"required": ["name"],
 			"properties": {
-				"name": {
-					"type": "string",
-					"description": "Name/identifier of the source (e.g., 'bsky-app/android', 'bsky-web/chrome')"
-				},
 				"meta": {
 					"type": "unknown",
 					"description": "Additional arbitrary metadata about the source"
+				},
+				"name": {
+					"type": "string",
+					"description": "Name/identifier of the source (e.g., 'bsky-app/android', 'bsky-web/chrome')"
 				}
-			}
+			},
+			"description": "Moderation tool information for tracing the source of the action"
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,26 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.moderation.getSubjects",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get details about subjects.",
-			"parameters": {
-				"type": "params",
-				"required": ["subjects"],
-				"properties": {
-					"subjects": {
-						"type": "array",
-						"maxLength": 100,
-						"minLength": 1,
-						"items": {
-							"type": "string"
-						}
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["subjects"],
@@ -28,13 +11,30 @@
 						"subjects": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "tools.ozone.moderation.defs#subjectView"
+								"ref": "tools.ozone.moderation.defs#subjectView",
+								"type": "ref"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subjects"],
+				"properties": {
+					"subjects": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"maxLength": 100,
+						"minLength": 1
+					}
 				}
-			}
+			},
+			"description": "Get details about subjects."
 		}
-	}
+	},
+	"lexicon": 1
 }

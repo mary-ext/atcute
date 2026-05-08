@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.theme.backgroundImage",
 	"defs": {
 		"main": {
@@ -19,5 +18,6 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

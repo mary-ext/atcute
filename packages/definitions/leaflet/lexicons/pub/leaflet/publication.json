@@ -1,18 +1,25 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.publication",
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
-			"description": "Record declaring a publication",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["name"],
 				"properties": {
+					"icon": {
+						"type": "blob",
+						"accept": ["image/*"],
+						"maxSize": 1000000
+					},
 					"name": {
 						"type": "string",
 						"maxLength": 2000
+					},
+					"theme": {
+						"ref": "#theme",
+						"type": "ref"
 					},
 					"base_path": {
 						"type": "string"
@@ -21,29 +28,63 @@
 						"type": "string",
 						"maxLength": 2000
 					},
-					"icon": {
-						"type": "blob",
-						"accept": ["image/*"],
-						"maxSize": 1000000
-					},
-					"theme": {
-						"type": "ref",
-						"ref": "#theme"
-					},
 					"preferences": {
-						"type": "ref",
-						"ref": "#preferences"
+						"ref": "#preferences",
+						"type": "ref"
 					}
+				}
+			},
+			"description": "Record declaring a publication"
+		},
+		"theme": {
+			"type": "object",
+			"properties": {
+				"primary": {
+					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"type": "union"
+				},
+				"bodyFont": {
+					"type": "string",
+					"maxLength": 100
+				},
+				"pageWidth": {
+					"type": "integer",
+					"maximum": 1600,
+					"minimum": 0
+				},
+				"accentText": {
+					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"type": "union"
+				},
+				"headingFont": {
+					"type": "string",
+					"maxLength": 100
+				},
+				"pageBackground": {
+					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"type": "union"
+				},
+				"backgroundColor": {
+					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"type": "union"
+				},
+				"backgroundImage": {
+					"ref": "pub.leaflet.theme.backgroundImage",
+					"type": "ref"
+				},
+				"accentBackground": {
+					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"type": "union"
+				},
+				"showPageBackground": {
+					"type": "boolean",
+					"default": false
 				}
 			}
 		},
 		"preferences": {
 			"type": "object",
 			"properties": {
-				"showInDiscover": {
-					"type": "boolean",
-					"default": true
-				},
 				"showComments": {
 					"type": "boolean",
 					"default": true
@@ -56,57 +97,16 @@
 					"type": "boolean",
 					"default": true
 				},
+				"showInDiscover": {
+					"type": "boolean",
+					"default": true
+				},
 				"showRecommends": {
 					"type": "boolean",
 					"default": true
 				}
 			}
-		},
-		"theme": {
-			"type": "object",
-			"properties": {
-				"backgroundColor": {
-					"type": "union",
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"]
-				},
-				"backgroundImage": {
-					"type": "ref",
-					"ref": "pub.leaflet.theme.backgroundImage"
-				},
-				"pageWidth": {
-					"type": "integer",
-					"minimum": 0,
-					"maximum": 1600
-				},
-				"primary": {
-					"type": "union",
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"]
-				},
-				"pageBackground": {
-					"type": "union",
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"]
-				},
-				"showPageBackground": {
-					"type": "boolean",
-					"default": false
-				},
-				"accentBackground": {
-					"type": "union",
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"]
-				},
-				"accentText": {
-					"type": "union",
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"]
-				},
-				"headingFont": {
-					"type": "string",
-					"maxLength": 100
-				},
-				"bodyFont": {
-					"type": "string",
-					"maxLength": 100
-				}
-			}
 		}
-	}
+	},
+	"lexicon": 1
 }

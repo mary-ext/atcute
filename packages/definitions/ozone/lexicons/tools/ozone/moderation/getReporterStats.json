@@ -1,26 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.moderation.getReporterStats",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get reporter stats for a list of users.",
-			"parameters": {
-				"type": "params",
-				"required": ["dids"],
-				"properties": {
-					"dids": {
-						"type": "array",
-						"maxLength": 100,
-						"items": {
-							"type": "string",
-							"format": "did"
-						}
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["stats"],
@@ -28,13 +11,30 @@
 						"stats": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "tools.ozone.moderation.defs#reporterStats"
+								"ref": "tools.ozone.moderation.defs#reporterStats",
+								"type": "ref"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["dids"],
+				"properties": {
+					"dids": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "did"
+						},
+						"maxLength": 100
+					}
 				}
-			}
+			},
+			"description": "Get reporter stats for a list of users."
 		}
-	}
+	},
+	"lexicon": 1
 }

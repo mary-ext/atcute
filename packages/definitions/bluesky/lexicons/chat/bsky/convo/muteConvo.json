@@ -1,17 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "chat.bsky.convo.muteConvo",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Mutes a conversation, preventing notifications related to it.",
-			"errors": [
-				{
-					"name": "InvalidConvo"
-				}
-			],
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["convoId"],
@@ -20,21 +12,29 @@
 							"type": "string"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
+			"errors": [
+				{
+					"name": "InvalidConvo"
+				}
+			],
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["convo"],
 					"properties": {
 						"convo": {
-							"type": "ref",
-							"ref": "chat.bsky.convo.defs#convoView"
+							"ref": "chat.bsky.convo.defs#convoView",
+							"type": "ref"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Mutes a conversation, preventing notifications related to it."
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,27 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.unspecced.getSuggestedUsersForSeeMore",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get a list of suggested users for the See More page",
-			"parameters": {
-				"type": "params",
-				"properties": {
-					"category": {
-						"type": "string",
-						"description": "Category of users to get suggestions for."
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 50,
-						"default": 25
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["actors"],
@@ -29,8 +11,8 @@
 						"actors": {
 							"type": "array",
 							"items": {
-								"type": "ref",
-								"ref": "app.bsky.actor.defs#profileView"
+								"ref": "app.bsky.actor.defs#profileView",
+								"type": "ref"
 							}
 						},
 						"recIdStr": {
@@ -38,8 +20,26 @@
 							"description": "Snowflake for this recommendation, use when submitting recommendation events."
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 25,
+						"maximum": 50,
+						"minimum": 1
+					},
+					"category": {
+						"type": "string",
+						"description": "Category of users to get suggestions for."
+					}
 				}
-			}
+			},
+			"description": "Get a list of suggested users for the See More page"
 		}
-	}
+	},
+	"lexicon": 1
 }

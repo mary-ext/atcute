@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.pages.linearDocument",
 	"defs": {
 		"main": {
@@ -12,8 +11,8 @@
 				"blocks": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "#block"
+						"ref": "#block",
+						"type": "ref"
 					}
 				}
 			}
@@ -23,7 +22,6 @@
 			"required": ["block"],
 			"properties": {
 				"block": {
-					"type": "union",
 					"refs": [
 						"pub.leaflet.blocks.iframe",
 						"pub.leaflet.blocks.text",
@@ -40,7 +38,8 @@
 						"pub.leaflet.blocks.page",
 						"pub.leaflet.blocks.poll",
 						"pub.leaflet.blocks.button"
-					]
+					],
+					"type": "union"
 				},
 				"alignment": {
 					"type": "string",
@@ -48,29 +47,17 @@
 				}
 			}
 		},
-		"textAlignLeft": {
-			"type": "token"
-		},
-		"textAlignCenter": {
-			"type": "token"
-		},
-		"textAlignRight": {
-			"type": "token"
-		},
-		"textAlignJustify": {
-			"type": "token"
-		},
 		"quote": {
 			"type": "object",
 			"required": ["start", "end"],
 			"properties": {
-				"start": {
-					"type": "ref",
-					"ref": "#position"
-				},
 				"end": {
-					"type": "ref",
-					"ref": "#position"
+					"ref": "#position",
+					"type": "ref"
+				},
+				"start": {
+					"ref": "#position",
+					"type": "ref"
 				}
 			}
 		},
@@ -88,6 +75,19 @@
 					"type": "integer"
 				}
 			}
+		},
+		"textAlignLeft": {
+			"type": "token"
+		},
+		"textAlignRight": {
+			"type": "token"
+		},
+		"textAlignCenter": {
+			"type": "token"
+		},
+		"textAlignJustify": {
+			"type": "token"
 		}
-	}
+	},
+	"lexicon": 1
 }

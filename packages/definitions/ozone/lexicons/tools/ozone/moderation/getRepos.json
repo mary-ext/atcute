@@ -1,26 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.moderation.getRepos",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get details about some repositories.",
-			"parameters": {
-				"type": "params",
-				"required": ["dids"],
-				"properties": {
-					"dids": {
-						"type": "array",
-						"maxLength": 100,
-						"items": {
-							"type": "string",
-							"format": "did"
-						}
-					}
-				}
-			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["repos"],
@@ -28,16 +11,33 @@
 						"repos": {
 							"type": "array",
 							"items": {
-								"type": "union",
 								"refs": [
 									"tools.ozone.moderation.defs#repoViewDetail",
 									"tools.ozone.moderation.defs#repoViewNotFound"
-								]
+								],
+								"type": "union"
 							}
 						}
 					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["dids"],
+				"properties": {
+					"dids": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "did"
+						},
+						"maxLength": 100
+					}
 				}
-			}
+			},
+			"description": "Get details about some repositories."
 		}
-	}
+	},
+	"lexicon": 1
 }

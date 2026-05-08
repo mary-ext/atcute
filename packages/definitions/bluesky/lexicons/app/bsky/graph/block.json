@@ -1,11 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "app.bsky.graph.block",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "Record declaring a 'block' relationship against another account. NOTE: blocks are public in Bluesky; see blog posts for details.",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["subject", "createdAt"],
@@ -20,7 +18,9 @@
 						"format": "datetime"
 					}
 				}
-			}
+			},
+			"description": "Record declaring a 'block' relationship against another account. NOTE: blocks are public in Bluesky; see blog posts for details."
 		}
-	}
+	},
+	"lexicon": 1
 }

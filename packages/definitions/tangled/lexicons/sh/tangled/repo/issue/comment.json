@@ -1,26 +1,19 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.issue.comment",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["issue", "body", "createdAt"],
 				"properties": {
-					"issue": {
-						"type": "string",
-						"format": "at-uri"
-					},
 					"body": {
 						"type": "string"
 					},
-					"createdAt": {
+					"issue": {
 						"type": "string",
-						"format": "datetime"
+						"format": "at-uri"
 					},
 					"replyTo": {
 						"type": "string",
@@ -33,6 +26,10 @@
 							"format": "did"
 						}
 					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					},
 					"references": {
 						"type": "array",
 						"items": {
@@ -43,5 +40,8 @@
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

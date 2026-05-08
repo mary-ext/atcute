@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.team.defs",
 	"defs": {
 		"member": {
@@ -10,12 +9,21 @@
 					"type": "string",
 					"format": "did"
 				},
-				"disabled": {
-					"type": "boolean"
+				"role": {
+					"type": "string",
+					"knownValues": [
+						"tools.ozone.team.defs#roleAdmin",
+						"tools.ozone.team.defs#roleModerator",
+						"tools.ozone.team.defs#roleTriage",
+						"tools.ozone.team.defs#roleVerifier"
+					]
 				},
 				"profile": {
-					"type": "ref",
-					"ref": "app.bsky.actor.defs#profileViewDetailed"
+					"ref": "app.bsky.actor.defs#profileViewDetailed",
+					"type": "ref"
+				},
+				"disabled": {
+					"type": "boolean"
 				},
 				"createdAt": {
 					"type": "string",
@@ -27,25 +35,12 @@
 				},
 				"lastUpdatedBy": {
 					"type": "string"
-				},
-				"role": {
-					"type": "string",
-					"knownValues": [
-						"tools.ozone.team.defs#roleAdmin",
-						"tools.ozone.team.defs#roleModerator",
-						"tools.ozone.team.defs#roleTriage",
-						"tools.ozone.team.defs#roleVerifier"
-					]
 				}
 			}
 		},
 		"roleAdmin": {
 			"type": "token",
 			"description": "Admin role. Highest level of access, can perform all actions."
-		},
-		"roleModerator": {
-			"type": "token",
-			"description": "Moderator role. Can perform most actions."
 		},
 		"roleTriage": {
 			"type": "token",
@@ -54,6 +49,11 @@
 		"roleVerifier": {
 			"type": "token",
 			"description": "Verifier role. Only allowed to issue verifications."
+		},
+		"roleModerator": {
+			"type": "token",
+			"description": "Moderator role. Can perform most actions."
 		}
-	}
+	},
+	"lexicon": 1
 }

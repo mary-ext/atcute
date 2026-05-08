@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.mergeCheck",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Check if a merge is possible between two branches",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["did", "name", "patch", "branch"],
@@ -29,51 +26,54 @@
 							"description": "Target branch to merge into"
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["is_conflicted"],
 					"properties": {
-						"is_conflicted": {
-							"type": "boolean",
-							"description": "Whether the merge has conflicts"
-						},
-						"conflicts": {
-							"type": "array",
-							"description": "List of files with merge conflicts",
-							"items": {
-								"type": "ref",
-								"ref": "#conflictInfo"
-							}
+						"error": {
+							"type": "string",
+							"description": "Error message if check failed"
 						},
 						"message": {
 							"type": "string",
 							"description": "Additional message about the merge check"
 						},
-						"error": {
-							"type": "string",
-							"description": "Error message if check failed"
+						"conflicts": {
+							"type": "array",
+							"items": {
+								"ref": "#conflictInfo",
+								"type": "ref"
+							},
+							"description": "List of files with merge conflicts"
+						},
+						"is_conflicted": {
+							"type": "boolean",
+							"description": "Whether the merge has conflicts"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Check if a merge is possible between two branches"
 		},
 		"conflictInfo": {
 			"type": "object",
 			"required": ["filename", "reason"],
 			"properties": {
-				"filename": {
-					"type": "string",
-					"description": "Name of the conflicted file"
-				},
 				"reason": {
 					"type": "string",
 					"description": "Reason for the conflict"
+				},
+				"filename": {
+					"type": "string",
+					"description": "Name of the conflicted file"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,9 +1,29 @@
 {
-	"lexicon": 1,
 	"id": "chat.bsky.moderation.getActorMetadata",
 	"defs": {
 		"main": {
 			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["day", "month", "all"],
+					"properties": {
+						"all": {
+							"ref": "#metadata",
+							"type": "ref"
+						},
+						"day": {
+							"ref": "#metadata",
+							"type": "ref"
+						},
+						"month": {
+							"ref": "#metadata",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["actor"],
@@ -13,46 +33,26 @@
 						"format": "did"
 					}
 				}
-			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["day", "month", "all"],
-					"properties": {
-						"day": {
-							"type": "ref",
-							"ref": "#metadata"
-						},
-						"month": {
-							"type": "ref",
-							"ref": "#metadata"
-						},
-						"all": {
-							"type": "ref",
-							"ref": "#metadata"
-						}
-					}
-				}
 			}
 		},
 		"metadata": {
 			"type": "object",
 			"required": ["messagesSent", "messagesReceived", "convos", "convosStarted"],
 			"properties": {
-				"messagesSent": {
-					"type": "integer"
-				},
-				"messagesReceived": {
-					"type": "integer"
-				},
 				"convos": {
+					"type": "integer"
+				},
+				"messagesSent": {
 					"type": "integer"
 				},
 				"convosStarted": {
 					"type": "integer"
+				},
+				"messagesReceived": {
+					"type": "integer"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

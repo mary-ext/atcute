@@ -1,58 +1,95 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.safelink.defs",
 	"defs": {
 		"event": {
 			"type": "object",
-			"description": "An event for URL safety decisions",
 			"required": ["id", "eventType", "url", "pattern", "action", "reason", "createdBy", "createdAt"],
 			"properties": {
 				"id": {
 					"type": "integer",
 					"description": "Auto-incrementing row ID"
 				},
-				"eventType": {
-					"type": "ref",
-					"ref": "#eventType"
-				},
 				"url": {
 					"type": "string",
 					"description": "The URL that this rule applies to"
 				},
-				"pattern": {
-					"type": "ref",
-					"ref": "#patternType"
-				},
 				"action": {
-					"type": "ref",
-					"ref": "#actionType"
+					"ref": "#actionType",
+					"type": "ref"
 				},
 				"reason": {
-					"type": "ref",
-					"ref": "#reasonType"
+					"ref": "#reasonType",
+					"type": "ref"
+				},
+				"comment": {
+					"type": "string",
+					"description": "Optional comment about the decision"
+				},
+				"pattern": {
+					"ref": "#patternType",
+					"type": "ref"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
 				},
 				"createdBy": {
 					"type": "string",
 					"format": "did",
 					"description": "DID of the user who created this rule"
 				},
-				"createdAt": {
+				"eventType": {
+					"ref": "#eventType",
+					"type": "ref"
+				}
+			},
+			"description": "An event for URL safety decisions"
+		},
+		"urlRule": {
+			"type": "object",
+			"required": ["url", "pattern", "action", "reason", "createdBy", "createdAt", "updatedAt"],
+			"properties": {
+				"url": {
 					"type": "string",
-					"format": "datetime"
+					"description": "The URL or domain to apply the rule to"
+				},
+				"action": {
+					"ref": "#actionType",
+					"type": "ref"
+				},
+				"reason": {
+					"ref": "#reasonType",
+					"type": "ref"
 				},
 				"comment": {
 					"type": "string",
 					"description": "Optional comment about the decision"
+				},
+				"pattern": {
+					"ref": "#patternType",
+					"type": "ref"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Timestamp when the rule was created"
+				},
+				"createdBy": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the user added the rule."
+				},
+				"updatedAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Timestamp when the rule was last updated"
 				}
-			}
+			},
+			"description": "Input for creating a URL safety rule"
 		},
 		"eventType": {
 			"type": "string",
 			"knownValues": ["addRule", "updateRule", "removeRule"]
-		},
-		"patternType": {
-			"type": "string",
-			"knownValues": ["domain", "url"]
 		},
 		"actionType": {
 			"type": "string",
@@ -62,47 +99,10 @@
 			"type": "string",
 			"knownValues": ["csam", "spam", "phishing", "none"]
 		},
-		"urlRule": {
-			"type": "object",
-			"description": "Input for creating a URL safety rule",
-			"required": ["url", "pattern", "action", "reason", "createdBy", "createdAt", "updatedAt"],
-			"properties": {
-				"url": {
-					"type": "string",
-					"description": "The URL or domain to apply the rule to"
-				},
-				"pattern": {
-					"type": "ref",
-					"ref": "#patternType"
-				},
-				"action": {
-					"type": "ref",
-					"ref": "#actionType"
-				},
-				"reason": {
-					"type": "ref",
-					"ref": "#reasonType"
-				},
-				"comment": {
-					"type": "string",
-					"description": "Optional comment about the decision"
-				},
-				"createdBy": {
-					"type": "string",
-					"format": "did",
-					"description": "DID of the user added the rule."
-				},
-				"createdAt": {
-					"type": "string",
-					"format": "datetime",
-					"description": "Timestamp when the rule was created"
-				},
-				"updatedAt": {
-					"type": "string",
-					"format": "datetime",
-					"description": "Timestamp when the rule was last updated"
-				}
-			}
+		"patternType": {
+			"type": "string",
+			"knownValues": ["domain", "url"]
 		}
-	}
+	},
+	"lexicon": 1
 }

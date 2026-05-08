@@ -1,55 +1,27 @@
 {
-	"lexicon": 1,
 	"id": "community.lexicon.preference.ai",
-	"description": "Declares a user's preferences regarding AI usage of their public data. A record at key 'self' with globalScope establishes default preferences. Additional records keyed by TID establish scoped overrides for specific entities or content collections.",
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "any",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["updatedAt", "scope", "preferences"],
 				"properties": {
+					"scope": {
+						"refs": ["#globalScope", "#entityScope", "#collectionScope"],
+						"type": "union",
+						"description": "What this record's preferences apply to."
+					},
 					"updatedAt": {
 						"type": "string",
 						"format": "datetime",
 						"description": "Timestamp of the most recent change to this record."
 					},
-					"scope": {
-						"type": "union",
-						"description": "What this record's preferences apply to.",
-						"refs": ["#globalScope", "#entityScope", "#collectionScope"]
-					},
 					"preferences": {
-						"type": "ref",
-						"ref": "#preferenceSet"
+						"ref": "#preferenceSet",
+						"type": "ref"
 					}
-				}
-			}
-		},
-		"preferenceSet": {
-			"type": "object",
-			"description": "A set of AI usage preferences. Omitted fields mean undefined (no declared preference).",
-			"properties": {
-				"training": {
-					"type": "ref",
-					"ref": "#preference",
-					"description": "Use as input for training, fine-tuning, distillation, or RLHF of ML models."
-				},
-				"inference": {
-					"type": "ref",
-					"ref": "#preference",
-					"description": "Use at inference time for retrieval, RAG, or context injection."
-				},
-				"syntheticContent": {
-					"type": "ref",
-					"ref": "#preference",
-					"description": "Use to generate synthetic content or interactions derived from user data."
-				},
-				"embedding": {
-					"type": "ref",
-					"ref": "#preference",
-					"description": "Use for vector embeddings or semantic indexing."
 				}
 			}
 		},
@@ -68,24 +40,49 @@
 				}
 			}
 		},
-		"globalScope": {
-			"type": "object",
-			"description": "Account-wide default. The record at key 'self' should carry this scope."
-		},
 		"entityScope": {
 			"type": "object",
-			"description": "Scopes preferences to a specific AI consumer.",
 			"required": ["entity"],
 			"properties": {
 				"entity": {
 					"type": "string",
 					"description": "DID or domain of the entity this override applies to."
 				}
-			}
+			},
+			"description": "Scopes preferences to a specific AI consumer."
+		},
+		"globalScope": {
+			"type": "object",
+			"description": "Account-wide default. The record at key 'self' should carry this scope."
+		},
+		"preferenceSet": {
+			"type": "object",
+			"properties": {
+				"training": {
+					"ref": "#preference",
+					"type": "ref",
+					"description": "Use as input for training, fine-tuning, distillation, or RLHF of ML models."
+				},
+				"embedding": {
+					"ref": "#preference",
+					"type": "ref",
+					"description": "Use for vector embeddings or semantic indexing."
+				},
+				"inference": {
+					"ref": "#preference",
+					"type": "ref",
+					"description": "Use at inference time for retrieval, RAG, or context injection."
+				},
+				"syntheticContent": {
+					"ref": "#preference",
+					"type": "ref",
+					"description": "Use to generate synthetic content or interactions derived from user data."
+				}
+			},
+			"description": "A set of AI usage preferences. Omitted fields mean undefined (no declared preference)."
 		},
 		"collectionScope": {
 			"type": "object",
-			"description": "Scopes preferences to a specific record collection in the user's repository.",
 			"required": ["collection"],
 			"properties": {
 				"collection": {
@@ -93,7 +90,10 @@
 					"format": "nsid",
 					"description": "NSID of the collection this override applies to."
 				}
-			}
+			},
+			"description": "Scopes preferences to a specific record collection in the user's repository."
 		}
-	}
+	},
+	"lexicon": 1,
+	"description": "Declares a user's preferences regarding AI usage of their public data. A record at key 'self' with globalScope establishes default preferences. Additional records keyed by TID establish scoped overrides for specific entities or content collections."
 }

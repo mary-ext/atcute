@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.setting.upsertOption",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Create or update setting option",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["key", "scope", "value"],
@@ -36,21 +33,24 @@
 							]
 						}
 					}
-				}
+				},
+				"encoding": "application/json"
 			},
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["option"],
 					"properties": {
 						"option": {
-							"type": "ref",
-							"ref": "tools.ozone.setting.defs#option"
+							"ref": "tools.ozone.setting.defs#option",
+							"type": "ref"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Create or update setting option"
 		}
-	}
+	},
+	"lexicon": 1
 }

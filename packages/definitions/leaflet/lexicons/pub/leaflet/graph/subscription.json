@@ -1,11 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.graph.subscription",
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
-			"description": "Record declaring a subscription to a publication",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["publication"],
@@ -15,7 +13,9 @@
 						"format": "at-uri"
 					}
 				}
-			}
+			},
+			"description": "Record declaring a subscription to a publication"
 		}
-	}
+	},
+	"lexicon": 1
 }

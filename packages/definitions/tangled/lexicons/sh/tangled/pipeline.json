@@ -1,128 +1,36 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.pipeline",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["triggerMetadata", "workflows"],
 				"properties": {
-					"triggerMetadata": {
-						"type": "ref",
-						"ref": "#triggerMetadata"
-					},
 					"workflows": {
 						"type": "array",
 						"items": {
-							"type": "ref",
-							"ref": "#workflow"
+							"ref": "#workflow",
+							"type": "ref"
 						}
+					},
+					"triggerMetadata": {
+						"ref": "#triggerMetadata",
+						"type": "ref"
 					}
 				}
 			}
 		},
-		"triggerMetadata": {
+		"pair": {
 			"type": "object",
-			"required": ["kind", "repo"],
+			"required": ["key", "value"],
 			"properties": {
-				"kind": {
-					"type": "string",
-					"enum": ["push", "pull_request", "manual"]
-				},
-				"repo": {
-					"type": "ref",
-					"ref": "#triggerRepo"
-				},
-				"push": {
-					"type": "ref",
-					"ref": "#pushTriggerData"
-				},
-				"pullRequest": {
-					"type": "ref",
-					"ref": "#pullRequestTriggerData"
-				},
-				"manual": {
-					"type": "ref",
-					"ref": "#manualTriggerData"
-				}
-			}
-		},
-		"triggerRepo": {
-			"type": "object",
-			"required": ["knot", "did", "defaultBranch"],
-			"properties": {
-				"knot": {
+				"key": {
 					"type": "string"
 				},
-				"did": {
-					"type": "string",
-					"format": "did"
-				},
-				"repoDid": {
-					"type": "string",
-					"description": "DID of the repo itself",
-					"format": "did"
-				},
-				"repo": {
+				"value": {
 					"type": "string"
-				},
-				"defaultBranch": {
-					"type": "string"
-				}
-			}
-		},
-		"pushTriggerData": {
-			"type": "object",
-			"required": ["ref", "newSha", "oldSha"],
-			"properties": {
-				"ref": {
-					"type": "string"
-				},
-				"newSha": {
-					"type": "string",
-					"minLength": 40,
-					"maxLength": 40
-				},
-				"oldSha": {
-					"type": "string",
-					"minLength": 40,
-					"maxLength": 40
-				}
-			}
-		},
-		"pullRequestTriggerData": {
-			"type": "object",
-			"required": ["sourceBranch", "targetBranch", "sourceSha", "action"],
-			"properties": {
-				"sourceBranch": {
-					"type": "string"
-				},
-				"targetBranch": {
-					"type": "string"
-				},
-				"sourceSha": {
-					"type": "string",
-					"minLength": 40,
-					"maxLength": 40
-				},
-				"action": {
-					"type": "string"
-				}
-			}
-		},
-		"manualTriggerData": {
-			"type": "object",
-			"properties": {
-				"inputs": {
-					"type": "array",
-					"items": {
-						"type": "ref",
-						"ref": "#pair"
-					}
 				}
 			}
 		},
@@ -130,17 +38,17 @@
 			"type": "object",
 			"required": ["name", "engine", "clone", "raw"],
 			"properties": {
+				"raw": {
+					"type": "string"
+				},
 				"name": {
 					"type": "string"
 				},
-				"engine": {
-					"type": "string"
-				},
 				"clone": {
-					"type": "ref",
-					"ref": "#cloneOpts"
+					"ref": "#cloneOpts",
+					"type": "ref"
 				},
-				"raw": {
+				"engine": {
 					"type": "string"
 				}
 			}
@@ -160,17 +68,109 @@
 				}
 			}
 		},
-		"pair": {
+		"triggerRepo": {
 			"type": "object",
-			"required": ["key", "value"],
+			"required": ["knot", "did", "defaultBranch"],
 			"properties": {
-				"key": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				},
+				"knot": {
 					"type": "string"
 				},
-				"value": {
+				"repo": {
+					"type": "string"
+				},
+				"repoDid": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the repo itself"
+				},
+				"defaultBranch": {
+					"type": "string"
+				}
+			}
+		},
+		"pushTriggerData": {
+			"type": "object",
+			"required": ["ref", "newSha", "oldSha"],
+			"properties": {
+				"ref": {
+					"type": "string"
+				},
+				"newSha": {
+					"type": "string",
+					"maxLength": 40,
+					"minLength": 40
+				},
+				"oldSha": {
+					"type": "string",
+					"maxLength": 40,
+					"minLength": 40
+				}
+			}
+		},
+		"triggerMetadata": {
+			"type": "object",
+			"required": ["kind", "repo"],
+			"properties": {
+				"kind": {
+					"enum": ["push", "pull_request", "manual"],
+					"type": "string"
+				},
+				"push": {
+					"ref": "#pushTriggerData",
+					"type": "ref"
+				},
+				"repo": {
+					"ref": "#triggerRepo",
+					"type": "ref"
+				},
+				"manual": {
+					"ref": "#manualTriggerData",
+					"type": "ref"
+				},
+				"pullRequest": {
+					"ref": "#pullRequestTriggerData",
+					"type": "ref"
+				}
+			}
+		},
+		"manualTriggerData": {
+			"type": "object",
+			"properties": {
+				"inputs": {
+					"type": "array",
+					"items": {
+						"ref": "#pair",
+						"type": "ref"
+					}
+				}
+			}
+		},
+		"pullRequestTriggerData": {
+			"type": "object",
+			"required": ["sourceBranch", "targetBranch", "sourceSha", "action"],
+			"properties": {
+				"action": {
+					"type": "string"
+				},
+				"sourceSha": {
+					"type": "string",
+					"maxLength": 40,
+					"minLength": 40
+				},
+				"sourceBranch": {
+					"type": "string"
+				},
+				"targetBranch": {
 					"type": "string"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

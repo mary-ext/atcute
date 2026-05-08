@@ -1,40 +1,33 @@
 {
-	"lexicon": 1,
 	"id": "sh.tangled.repo.pull",
-	"needsCbor": true,
-	"needsType": true,
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["target", "title", "createdAt", "rounds"],
 				"properties": {
-					"title": {
+					"body": {
 						"type": "string"
 					},
-					"body": {
+					"title": {
 						"type": "string"
 					},
 					"rounds": {
 						"type": "array",
 						"items": {
-							"type": "ref",
-							"ref": "#round"
+							"ref": "#round",
+							"type": "ref"
 						}
 					},
 					"source": {
-						"type": "ref",
-						"ref": "#source"
+						"ref": "#source",
+						"type": "ref"
 					},
 					"target": {
-						"type": "ref",
-						"ref": "#target"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "datetime"
+						"ref": "#target",
+						"type": "ref"
 					},
 					"mentions": {
 						"type": "array",
@@ -42,6 +35,10 @@
 							"type": "string",
 							"format": "did"
 						}
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
 					},
 					"references": {
 						"type": "array",
@@ -57,44 +54,9 @@
 				}
 			}
 		},
-		"target": {
-			"type": "object",
-			"required": ["branch"],
-			"properties": {
-				"repo": {
-					"type": "string",
-					"format": "at-uri"
-				},
-				"repoDid": {
-					"type": "string",
-					"format": "did"
-				},
-				"branch": {
-					"type": "string"
-				}
-			}
-		},
-		"source": {
-			"type": "object",
-			"required": ["branch"],
-			"properties": {
-				"branch": {
-					"type": "string"
-				},
-				"repo": {
-					"type": "string",
-					"format": "at-uri"
-				},
-				"repoDid": {
-					"type": "string",
-					"format": "did"
-				}
-			}
-		},
 		"round": {
 			"type": "object",
 			"required": ["patchBlob", "createdAt"],
-			"description": "revisions of this pull request, newer rounds are appended to this array. appviews may reject records do not treat this field as append-only. the blob format is gzipped text-based git-format-patches.",
 			"properties": {
 				"createdAt": {
 					"type": "string",
@@ -104,7 +66,45 @@
 					"type": "blob",
 					"accept": ["application/gzip"]
 				}
+			},
+			"description": "revisions of this pull request, newer rounds are appended to this array. appviews may reject records do not treat this field as append-only. the blob format is gzipped text-based git-format-patches."
+		},
+		"source": {
+			"type": "object",
+			"required": ["branch"],
+			"properties": {
+				"repo": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"branch": {
+					"type": "string"
+				},
+				"repoDid": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		},
+		"target": {
+			"type": "object",
+			"required": ["branch"],
+			"properties": {
+				"repo": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"branch": {
+					"type": "string"
+				},
+				"repoDid": {
+					"type": "string",
+					"format": "did"
+				}
 			}
 		}
-	}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
 }

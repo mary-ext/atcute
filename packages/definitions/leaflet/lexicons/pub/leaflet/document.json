@@ -1,51 +1,13 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.document",
-	"revision": 1,
-	"description": "A lexicon for long form rich media documents",
 	"defs": {
 		"main": {
-			"type": "record",
 			"key": "tid",
-			"description": "Record containing a document",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["pages", "author", "title"],
 				"properties": {
-					"title": {
-						"type": "string",
-						"maxLength": 5000,
-						"maxGraphemes": 500
-					},
-					"postRef": {
-						"type": "ref",
-						"ref": "com.atproto.repo.strongRef"
-					},
-					"description": {
-						"type": "string",
-						"maxLength": 30000,
-						"maxGraphemes": 3000
-					},
-					"publishedAt": {
-						"type": "string",
-						"format": "datetime"
-					},
-					"publication": {
-						"type": "string",
-						"format": "at-uri"
-					},
-					"author": {
-						"type": "string",
-						"format": "at-identifier"
-					},
-					"theme": {
-						"type": "ref",
-						"ref": "pub.leaflet.publication#theme"
-					},
-					"preferences": {
-						"type": "ref",
-						"ref": "pub.leaflet.publication#preferences"
-					},
 					"tags": {
 						"type": "array",
 						"items": {
@@ -53,20 +15,58 @@
 							"maxLength": 50
 						}
 					},
+					"pages": {
+						"type": "array",
+						"items": {
+							"refs": ["pub.leaflet.pages.linearDocument", "pub.leaflet.pages.canvas"],
+							"type": "union"
+						}
+					},
+					"theme": {
+						"ref": "pub.leaflet.publication#theme",
+						"type": "ref"
+					},
+					"title": {
+						"type": "string",
+						"maxLength": 5000,
+						"maxGraphemes": 500
+					},
+					"author": {
+						"type": "string",
+						"format": "at-identifier"
+					},
+					"postRef": {
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
+					},
 					"coverImage": {
 						"type": "blob",
 						"accept": ["image/png", "image/jpeg", "image/webp"],
 						"maxSize": 1000000
 					},
-					"pages": {
-						"type": "array",
-						"items": {
-							"type": "union",
-							"refs": ["pub.leaflet.pages.linearDocument", "pub.leaflet.pages.canvas"]
-						}
+					"description": {
+						"type": "string",
+						"maxLength": 30000,
+						"maxGraphemes": 3000
+					},
+					"preferences": {
+						"ref": "pub.leaflet.publication#preferences",
+						"type": "ref"
+					},
+					"publication": {
+						"type": "string",
+						"format": "at-uri"
+					},
+					"publishedAt": {
+						"type": "string",
+						"format": "datetime"
 					}
 				}
-			}
+			},
+			"description": "Record containing a document"
 		}
-	}
+	},
+	"lexicon": 1,
+	"revision": 1,
+	"description": "A lexicon for long form rich media documents"
 }

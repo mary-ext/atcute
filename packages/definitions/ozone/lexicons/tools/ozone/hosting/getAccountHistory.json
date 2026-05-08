@@ -1,10 +1,27 @@
 {
-	"lexicon": 1,
 	"id": "tools.ozone.hosting.getAccountHistory",
 	"defs": {
 		"main": {
 			"type": "query",
-			"description": "Get account history, e.g. log of updated email addresses or other identity information.",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["events"],
+					"properties": {
+						"cursor": {
+							"type": "string"
+						},
+						"events": {
+							"type": "array",
+							"items": {
+								"ref": "#event",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
 			"parameters": {
 				"type": "params",
 				"required": ["did"],
@@ -12,6 +29,15 @@
 					"did": {
 						"type": "string",
 						"format": "did"
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
 					},
 					"events": {
 						"type": "array",
@@ -25,58 +51,50 @@
 								"handleUpdated"
 							]
 						}
-					},
-					"cursor": {
-						"type": "string"
-					},
-					"limit": {
-						"type": "integer",
-						"minimum": 1,
-						"maximum": 100,
-						"default": 50
 					}
 				}
 			},
-			"output": {
-				"encoding": "application/json",
-				"schema": {
-					"type": "object",
-					"required": ["events"],
-					"properties": {
-						"cursor": {
-							"type": "string"
-						},
-						"events": {
-							"type": "array",
-							"items": {
-								"type": "ref",
-								"ref": "#event"
-							}
-						}
-					}
-				}
-			}
+			"description": "Get account history, e.g. log of updated email addresses or other identity information."
 		},
 		"event": {
 			"type": "object",
 			"required": ["details", "createdBy", "createdAt"],
 			"properties": {
 				"details": {
-					"type": "union",
 					"refs": [
 						"#accountCreated",
 						"#emailUpdated",
 						"#emailConfirmed",
 						"#passwordUpdated",
 						"#handleUpdated"
-					]
-				},
-				"createdBy": {
-					"type": "string"
+					],
+					"type": "union"
 				},
 				"createdAt": {
 					"type": "string",
 					"format": "datetime"
+				},
+				"createdBy": {
+					"type": "string"
+				}
+			}
+		},
+		"emailUpdated": {
+			"type": "object",
+			"required": ["email"],
+			"properties": {
+				"email": {
+					"type": "string"
+				}
+			}
+		},
+		"handleUpdated": {
+			"type": "object",
+			"required": ["handle"],
+			"properties": {
+				"handle": {
+					"type": "string",
+					"format": "handle"
 				}
 			}
 		},
@@ -93,15 +111,6 @@
 				}
 			}
 		},
-		"emailUpdated": {
-			"type": "object",
-			"required": ["email"],
-			"properties": {
-				"email": {
-					"type": "string"
-				}
-			}
-		},
 		"emailConfirmed": {
 			"type": "object",
 			"required": ["email"],
@@ -115,16 +124,7 @@
 			"type": "object",
 			"required": [],
 			"properties": {}
-		},
-		"handleUpdated": {
-			"type": "object",
-			"required": ["handle"],
-			"properties": {
-				"handle": {
-					"type": "string",
-					"format": "handle"
-				}
-			}
 		}
-	}
+	},
+	"lexicon": 1
 }

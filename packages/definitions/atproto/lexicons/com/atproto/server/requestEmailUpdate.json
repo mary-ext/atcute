@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.server.requestEmailUpdate",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Request a token in order to update email.",
 			"output": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["tokenRequired"],
@@ -15,8 +12,11 @@
 							"type": "boolean"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Request a token in order to update email."
 		}
-	}
+	},
+	"lexicon": 1
 }

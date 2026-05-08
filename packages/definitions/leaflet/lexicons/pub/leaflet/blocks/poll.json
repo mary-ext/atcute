@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.blocks.poll",
 	"defs": {
 		"main": {
@@ -7,10 +6,11 @@
 			"required": ["pollRef"],
 			"properties": {
 				"pollRef": {
-					"type": "ref",
-					"ref": "com.atproto.repo.strongRef"
+					"ref": "com.atproto.repo.strongRef",
+					"type": "ref"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }

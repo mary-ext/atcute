@@ -1,19 +1,17 @@
 {
-	"lexicon": 1,
 	"id": "fyi.frontpage.feed.vote",
 	"defs": {
 		"main": {
-			"type": "record",
-			"description": "Record containing a Frontpage vote.",
 			"key": "tid",
+			"type": "record",
 			"record": {
 				"type": "object",
 				"required": ["subject", "createdAt"],
 				"properties": {
 					"subject": {
+						"ref": "com.atproto.repo.strongRef",
 						"type": "ref",
-						"description": "The post or comment that this Frontpage vote is for.",
-						"ref": "com.atproto.repo.strongRef"
+						"description": "The post or comment that this Frontpage vote is for."
 					},
 					"createdAt": {
 						"type": "string",
@@ -21,7 +19,9 @@
 						"description": "Client-declared timestamp when this vote was originally created."
 					}
 				}
-			}
+			},
+			"description": "Record containing a Frontpage vote."
 		}
-	}
+	},
+	"lexicon": 1
 }

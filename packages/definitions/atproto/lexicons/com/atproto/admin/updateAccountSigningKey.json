@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.admin.updateAccountSigningKey",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Administrative action to update an account's signing key in their Did document.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"required": ["did", "signingKey"],
@@ -21,8 +18,11 @@
 							"description": "Did-key formatted public key"
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Administrative action to update an account's signing key in their Did document."
 		}
-	}
+	},
+	"lexicon": 1
 }

@@ -1,12 +1,9 @@
 {
-	"lexicon": 1,
 	"id": "com.atproto.admin.disableInviteCodes",
 	"defs": {
 		"main": {
 			"type": "procedure",
-			"description": "Disable some set of codes and/or all codes associated with a set of users.",
 			"input": {
-				"encoding": "application/json",
 				"schema": {
 					"type": "object",
 					"properties": {
@@ -23,8 +20,11 @@
 							}
 						}
 					}
-				}
-			}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Disable some set of codes and/or all codes associated with a set of users."
 		}
-	}
+	},
+	"lexicon": 1
 }

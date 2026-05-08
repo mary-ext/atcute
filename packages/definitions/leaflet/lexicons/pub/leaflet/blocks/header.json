@@ -1,5 +1,4 @@
 {
-	"lexicon": 1,
 	"id": "pub.leaflet.blocks.header",
 	"defs": {
 		"main": {
@@ -8,20 +7,21 @@
 			"properties": {
 				"level": {
 					"type": "integer",
-					"minimum": 1,
-					"maximum": 6
-				},
-				"plaintext": {
-					"type": "string"
+					"maximum": 6,
+					"minimum": 1
 				},
 				"facets": {
 					"type": "array",
 					"items": {
-						"type": "ref",
-						"ref": "pub.leaflet.richtext.facet"
+						"ref": "pub.leaflet.richtext.facet",
+						"type": "ref"
 					}
+				},
+				"plaintext": {
+					"type": "string"
 				}
 			}
 		}
-	}
+	},
+	"lexicon": 1
 }
