@@ -51,6 +51,7 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.blob', {
 			 * Content encoding
 			 */
 			encoding: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['base64', 'utf-8'])),
+			fileTooLarge: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			/**
 			 * Whether the file is binary
 			 */

@@ -18,6 +18,7 @@ export * as ShTangledGitTempListCommits from './types/sh/tangled/git/temp/listCo
 export * as ShTangledGitTempListLanguages from './types/sh/tangled/git/temp/listLanguages.ts';
 export * as ShTangledGitTempListTags from './types/sh/tangled/git/temp/listTags.ts';
 export * as ShTangledGraphFollow from './types/sh/tangled/graph/follow.ts';
+export * as ShTangledGraphVouch from './types/sh/tangled/graph/vouch.ts';
 export * as ShTangledKnot from './types/sh/tangled/knot.ts';
 export * as ShTangledKnotListKeys from './types/sh/tangled/knot/listKeys.ts';
 export * as ShTangledKnotMember from './types/sh/tangled/knot/member.ts';

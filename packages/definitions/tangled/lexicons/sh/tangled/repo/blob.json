@@ -70,6 +70,9 @@
 						"lastCommit": {
 							"type": "ref",
 							"ref": "#lastCommit"
+						},
+						"fileTooLarge": {
+							"type": "boolean"
 						}
 					}
 				}
