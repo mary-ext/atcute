@@ -72,26 +72,13 @@ export interface GenerateConfig {
 }
 
 export interface LexiconConfig {
-	/** @deprecated moved to `generate.outdir` */
-	outdir?: string;
-	/** @deprecated moved to `generate.files` */
-	files?: string[];
-	/** @deprecated moved to `generate.imports` */
-	imports?: string[];
-	/** @deprecated moved to `generate.mappings` */
-	mappings?: ImportMapping[];
-	/** @deprecated moved to `generate.modules` */
-	modules?: ModulesConfig;
 	formatter?: FormatterConfig;
 	generate?: GenerateConfig;
 	pull?: PullConfig;
 	export?: ExportConfig;
 }
 
-export type NormalizedConfig = Omit<
-	LexiconConfig,
-	'outdir' | 'files' | 'imports' | 'mappings' | 'modules'
-> & {
+export type NormalizedConfig = LexiconConfig & {
 	formatter: FormatterConfig;
 	root: string;
 };
@@ -213,27 +200,13 @@ const generateConfigSchema = v.looseObject({
 	clean: v.optional(v.boolean()),
 });
 
-export const lexiconConfigSchema: v.GenericSchema<
-	unknown,
-	Omit<LexiconConfig, 'formatter'> & { formatter: FormatterConfig }
-> = v.looseObject({
-	/** @deprecated moved to `generate.outdir` */
-	outdir: v.optional(nonEmptyString),
-	/** @deprecated moved to `generate.files` */
-	files: v.optional(
-		v.pipe(v.array(nonEmptyString), v.minLength(1, `must include at least one glob pattern`)),
-	),
-	/** @deprecated moved to `generate.imports` */
-	imports: v.optional(v.array(nonEmptyString)),
-	/** @deprecated moved to `generate.mappings` */
-	mappings: v.optional(v.array(importMappingSchema)),
-	/** @deprecated moved to `generate.modules` */
-	modules: v.optional(modulesConfigSchema),
+export const lexiconConfigSchema: v.GenericSchema<unknown, Omit<NormalizedConfig, 'root'>> = v.looseObject({
 	formatter: v.optional(formatterConfigSchema, (): FormatterConfig => ({ type: 'prettier' })),
 	generate: v.optional(generateConfigSchema),
 	pull: v.optional(pullConfigSchema),
 	export: v.optional(exportConfigSchema),
 });
+
 export const loadConfig = async (configPath?: string): Promise<NormalizedConfig> => {
 	let configFilename: string | undefined;
 
@@ -281,29 +254,5 @@ export const loadConfig = async (configPath?: string): Promise<NormalizedConfig>
 		process.exit(1);
 	}
 
-	const { outdir, files, imports, mappings, modules, generate, ...rest } = configResult.output;
-
-	// back-compat: top-level generate options were moved into `generate.*`. merge the legacy
-	// top-level values into `generate`, with nested `generate.*` winning on conflicts. the result
-	// is only present if at least one generate-related option was provided anywhere.
-	const hasLegacyTopLevel =
-		outdir !== undefined ||
-		files !== undefined ||
-		imports !== undefined ||
-		mappings !== undefined ||
-		modules !== undefined;
-
-	let normalizedGenerate: GenerateConfig | undefined;
-	if (generate || hasLegacyTopLevel) {
-		normalizedGenerate = {
-			outdir: generate?.outdir ?? outdir,
-			files: generate?.files ?? files,
-			imports: generate?.imports ?? imports,
-			mappings: generate?.mappings ?? mappings,
-			modules: generate?.modules ?? modules,
-			clean: generate?.clean,
-		};
-	}
-
-	return { ...rest, generate: normalizedGenerate, root: configDirname };
+	return { ...configResult.output, root: configDirname };
 };

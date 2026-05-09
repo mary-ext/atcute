@@ -16,8 +16,10 @@ where it should put the generated TypeScript schemas:
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['lexicons/**/*.json'],
-	outdir: 'src/lexicons/',
+	generate: {
+		files: ['lexicons/**/*.json'],
+		outdir: 'src/lexicons/',
+	},
 });
 ```
 
@@ -61,8 +63,10 @@ update your config to point to TypeScript files:
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['lexicons-src/**/*.ts'],
-	outdir: 'src/lexicons/',
+	generate: {
+		files: ['lexicons-src/**/*.ts'],
+		outdir: 'src/lexicons/',
+	},
 });
 ```
 
@@ -73,8 +77,10 @@ export command:
 
 ```ts
 export default defineLexiconConfig({
-	files: ['lexicons-src/**/*.ts'],
-	outdir: 'src/lexicons/',
+	generate: {
+		files: ['lexicons-src/**/*.ts'],
+		outdir: 'src/lexicons/',
+	},
 	export: {
 		outdir: 'lexicons/',
 		clean: true,
@@ -101,8 +107,10 @@ pull lexicons from git repositories using sparse checkout:
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['lexicons/**/*.json'],
-	outdir: 'src/lexicons/',
+	generate: {
+		files: ['lexicons/**/*.json'],
+		outdir: 'src/lexicons/',
+	},
 	pull: {
 		outdir: 'lexicons/',
 		clean: true,
@@ -124,8 +132,10 @@ pull lexicons directly from the AT Protocol network.
 
 ```ts
 export default defineLexiconConfig({
-	files: ['lexicons/**/*.json'],
-	outdir: 'src/lexicons/',
+	generate: {
+		files: ['lexicons/**/*.json'],
+		outdir: 'src/lexicons/',
+	},
 	pull: {
 		outdir: 'lexicons/',
 		sources: [
@@ -219,9 +229,11 @@ provide the `atcute:lexicons` metadata:
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['lexicons/**/*.json'],
-	outdir: 'src/lexicons/',
-	imports: ['@atcute/atproto', '@atcute/bluesky'],
+	generate: {
+		files: ['lexicons/**/*.json'],
+		outdir: 'src/lexicons/',
+		imports: ['@atcute/atproto', '@atcute/bluesky'],
+	},
 });
 ```
 
@@ -236,23 +248,25 @@ use the `mappings` configuration instead:
 import { defineLexiconConfig } from '@atcute/lex-cli';
 
 export default defineLexiconConfig({
-	files: ['lexicons/**/*.json'],
-	outdir: 'src/lexicons/',
-	mappings: [
-		{
-			nsid: ['com.atproto.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('com.atproto.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/atproto/types/${specifier}` };
+	generate: {
+		files: ['lexicons/**/*.json'],
+		outdir: 'src/lexicons/',
+		mappings: [
+			{
+				nsid: ['com.atproto.*'],
+				imports: (nsid) => {
+					const specifier = nsid.slice('com.atproto.'.length).replaceAll('.', '/');
+					return { type: 'namespace', from: `@atcute/atproto/types/${specifier}` };
+				},
 			},
-		},
-		{
-			nsid: ['app.bsky.*'],
-			imports: (nsid) => {
-				const specifier = nsid.slice('app.bsky.'.length).replaceAll('.', '/');
-				return { type: 'namespace', from: `@atcute/bluesky/types/app/${specifier}` };
+			{
+				nsid: ['app.bsky.*'],
+				imports: (nsid) => {
+					const specifier = nsid.slice('app.bsky.'.length).replaceAll('.', '/');
+					return { type: 'namespace', from: `@atcute/bluesky/types/app/${specifier}` };
+				},
 			},
-		},
-	],
+		],
+	},
 });
 ```
