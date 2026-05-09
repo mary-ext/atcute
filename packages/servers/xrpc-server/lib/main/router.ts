@@ -212,34 +212,6 @@ export class XRPCRouter {
 		}
 	}
 
-	/** @deprecated use `addQuery` and `addProcedure` instead */
-	add<TQuery extends XRPCQueryMetadata>(
-		query: TQuery | Namespaced<TQuery>,
-		config: QueryConfig<TQuery>,
-	): void;
-	add<TProcedure extends XRPCProcedureMetadata>(
-		procedure: TProcedure | Namespaced<TProcedure>,
-		config: ProcedureConfig<TProcedure>,
-	): void;
-	add(
-		operation:
-			| XRPCQueryMetadata
-			| XRPCProcedureMetadata
-			| Namespaced<XRPCQueryMetadata | XRPCProcedureMetadata>,
-		config: any,
-	): void {
-		const schema = unwrapLxm(operation);
-
-		switch (schema.type) {
-			case 'xrpc_query': {
-				return this.addQuery(schema, config);
-			}
-			case 'xrpc_procedure': {
-				return this.addProcedure(schema, config);
-			}
-		}
-	}
-
 	addQuery<TQuery extends XRPCQueryMetadata, TConfig extends QueryConfig<TQuery>>(
 		query: TQuery | Namespaced<TQuery>,
 		config: TConfig,
