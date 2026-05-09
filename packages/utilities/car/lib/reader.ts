@@ -9,9 +9,7 @@ export interface SyncCarReader {
 	readonly header: CarHeader;
 	readonly roots: CidLink[];
 
-	/** @deprecated do for..of on the reader directly */
-	iterate(): IterableIterator<CarEntry>;
-	[Symbol.iterator](): Iterator<CarEntry>;
+	[Symbol.iterator](): IterableIterator<CarEntry>;
 }
 
 export const fromUint8Array = (buffer: Uint8Array): SyncCarReader => {
@@ -22,7 +20,7 @@ export const fromUint8Array = (buffer: Uint8Array): SyncCarReader => {
 		header,
 		roots: header.data.roots,
 
-		iterate(): IterableIterator<CarEntry> {
+		[Symbol.iterator](): IterableIterator<CarEntry> {
 			return {
 				next(): IteratorResult<CarEntry> {
 					if (pos >= buffer.length) {
@@ -73,10 +71,6 @@ export const fromUint8Array = (buffer: Uint8Array): SyncCarReader => {
 					return this;
 				},
 			};
-		},
-
-		[Symbol.iterator](): Iterator<CarEntry> {
-			return this.iterate();
 		},
 	};
 };

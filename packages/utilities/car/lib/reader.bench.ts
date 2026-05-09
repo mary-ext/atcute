@@ -114,7 +114,7 @@ const checksumNextLoop = (bytes: Uint8Array): number => {
 	const car = fromUint8Array(bytes);
 	let sum = car.roots.length;
 
-	const iterator = car.iterate();
+	const iterator = car[Symbol.iterator]();
 	while (true) {
 		const next = iterator.next();
 		if (next.done) {
