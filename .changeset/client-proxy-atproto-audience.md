@@ -2,6 +2,14 @@
 '@atcute/client': major
 ---
 
-`Client`'s `proxy` option is now an `AtprotoAudience` string (e.g.
-`'did:web:api.bsky.chat#bsky_chat'`) instead of a `{ did, serviceId }` object. the
-`ServiceProxyOptions` type is gone.
+replace `Client`'s `proxy` option object with an `AtprotoAudience` string
+
+the `ServiceProxyOptions` type is gone.
+
+```ts
+// before
+new Client({ handler, proxy: { did: 'did:web:api.bsky.chat', serviceId: '#bsky_chat' } });
+
+// after
+new Client({ handler, proxy: 'did:web:api.bsky.chat#bsky_chat' });
+```

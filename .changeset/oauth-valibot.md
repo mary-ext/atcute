@@ -3,6 +3,17 @@
 '@atcute/oauth-crypto': major
 ---
 
-migrate from `@badrap/valita` to `valibot`. every exported schema (the `schemas/` directory in
-`@atcute/oauth-types`, plus `dpop`'s validators) is now a valibot schema — use
-`v.parse(schema, input)` / `v.safeParse(schema, input)` instead of `.parse(...)` / `.try(...)`.
+migrate from `@badrap/valita` to `valibot`
+
+exported schemas are now valibot schemas.
+
+```ts
+import * as v from 'valibot';
+import { oauthClientMetadataSchema } from '@atcute/oauth-types';
+
+// before
+const result = oauthClientMetadataSchema.try(input);
+
+// after
+const result = v.safeParse(oauthClientMetadataSchema, input);
+```
