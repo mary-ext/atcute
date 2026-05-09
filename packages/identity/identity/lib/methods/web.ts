@@ -1,11 +1,9 @@
 import type { Did } from '@atcute/lexicons/syntax';
 
-/** @deprecated use `isWebDid` instead */
-export const WEB_DID_RE =
+const WEB_DID_RE =
 	/^did:web:([a-zA-Z0-9%-]+(?:(?:\.[a-zA-Z0-9%-]+)*(?:\.[a-zA-Z]{2,}))?)?((?::[a-zA-Z0-9\-%.]+)+)?$/;
 
-/** @deprecated use `isAtprotoWebDid` instead */
-export const ATPROTO_WEB_DID_RE =
+const ATPROTO_WEB_DID_RE =
 	/^did:web:([a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*(?:\.[a-zA-Z]{2,})|localhost(?:%3[aA]\d+)?)$/;
 
 /**
