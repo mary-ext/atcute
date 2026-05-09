@@ -33,16 +33,17 @@ import {
 	oauthTokenResponseSchema,
 	atprotoAuthorizationServerMetadataSchema,
 } from '@atcute/oauth-types';
+import * as v from 'valibot';
 
 // validate client metadata
-const result = confidentialClientMetadataSchema.try(input);
-if (result.ok) {
-	console.log(result.value);
+const result = v.safeParse(confidentialClientMetadataSchema, input);
+if (result.success) {
+	console.log(result.output);
 }
 
 // validate token response
-const tokenResult = oauthTokenResponseSchema.try(response);
+const tokenResult = v.safeParse(oauthTokenResponseSchema, response);
 
 // validate authorization server metadata
-const asResult = atprotoAuthorizationServerMetadataSchema.try(metadata);
+const asResult = v.safeParse(atprotoAuthorizationServerMetadataSchema, metadata);
 ```
