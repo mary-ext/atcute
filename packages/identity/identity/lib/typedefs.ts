@@ -2,10 +2,8 @@ import { isDid, type Did } from '@atcute/lexicons/syntax';
 
 import * as v from 'valibot';
 
-/** @deprecated */
-export const FRAGMENT_RE = /^#[^#]+$/;
-/** @deprecated */
-export const MULTIBASE_RE = /^z[a-km-zA-HJ-NP-Z1-9]+$/;
+const FRAGMENT_RE = /^#[^#]+$/;
+const MULTIBASE_RE = /^z[a-km-zA-HJ-NP-Z1-9]+$/;
 
 export const rfc3968UriSchema = v.pipe(
 	v.string(),
