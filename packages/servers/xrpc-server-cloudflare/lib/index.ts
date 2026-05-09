@@ -28,7 +28,13 @@ export const createCloudflareWebSocket = (): WebSocketAdapter => {
 			};
 
 			server.accept();
-			handler(connection);
+
+			// observe synchronous throws / unawaited rejections from the handler so the
+			// socket is closed with an internal-error code instead of leaking as an
+			// unhandled rejection.
+			void (async () => handler(connection))().catch(() => {
+				server.close(1011, `internal server error`);
+			});
 
 			return new Response(null, { status: 101, webSocket: client });
 		},
