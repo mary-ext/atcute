@@ -154,14 +154,15 @@ use the validation schemas to check if a DID document is well-formed:
 
 ```ts
 import { defs } from '@atcute/identity';
+import * as v from 'valibot';
 
-const result = defs.didDocument.try(unknownData);
-if (result.ok) {
-	// result.value is a validated DidDocument
-	console.log(result.value.id);
+const result = v.safeParse(defs.didDocument, unknownData);
+if (result.success) {
+	// result.output is a validated DidDocument
+	console.log(result.output.id);
 } else {
 	// validation failed
-	console.error('invalid DID document');
+	console.error('invalid DID document', result.issues);
 }
 ```
 
