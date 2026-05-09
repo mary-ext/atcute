@@ -34,6 +34,11 @@ export interface JetstreamSubscriptionOptions {
 	onConnectionOpen?: (event: Event) => void;
 	onConnectionClose?: (event: CloseEvent) => void;
 	onConnectionError?: (event: ErrorEvent) => void;
+	/**
+	 * called when an event fails schema validation. the error is a valibot `ValiError` carrying
+	 * the validation issues. without a handler, invalid events are silently dropped.
+	 */
+	onError?: (err: unknown) => void;
 
 	/**
 	 * WebSocket connection options
@@ -90,6 +95,7 @@ export class JetstreamSubscription {
 			onConnectionClose,
 			onConnectionError,
 			onConnectionOpen,
+			onError,
 		} = this.#options;
 		const emitter = this.#emitter;
 
@@ -136,6 +142,7 @@ export class JetstreamSubscription {
 			if (validateEvents) {
 				const result = v.safeParse(jetstreamEventSchema, raw);
 				if (!result.success) {
+					onError?.(new v.ValiError(result.issues));
 					return;
 				}
 
@@ -196,21 +203,25 @@ export class JetstreamSubscription {
 	}
 
 	updateOptions(options: Partial<JetstreamSubscriptionOptions>): void {
+		const previousCursor = this.#cursor;
+
 		this.#options = { ...this.#options, ...options };
 		if (options.cursor !== undefined) {
 			this.#cursor = options.cursor;
 		}
 
 		if (this.#ws !== undefined) {
-			const isOptionsUpdate = Object.keys(options).every((key) => {
-				return key === 'wantedCollections' || key === 'wantedDids';
+			const cursorChanged = this.#cursor !== previousCursor;
+			const filtersChanged = 'wantedCollections' in options || 'wantedDids' in options;
+			const otherKeys = Object.keys(options).some((key) => {
+				return key !== 'wantedCollections' && key !== 'wantedDids' && key !== 'cursor';
 			});
 
-			if (isOptionsUpdate) {
-				this.#sendOptionsUpdate();
-			} else {
+			if (cursorChanged || otherKeys) {
 				this.#destroy();
 				this.#create();
+			} else if (filtersChanged) {
+				this.#sendOptionsUpdate();
 			}
 		}
 	}
