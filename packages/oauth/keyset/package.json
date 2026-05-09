@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/oauth-keyset",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "keyset management for AT Protocol OAuth",
 	"license": "0BSD",
 	"repository": {

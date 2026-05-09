@@ -1,4 +1,4 @@
-# @atcute/oauth-types
+# @atcute/oauth-crypto
 
 ## 1.0.0
 
@@ -18,20 +18,3 @@
   // after
   const result = v.safeParse(oauthClientMetadataSchema, input);
   ```
-
-### Patch Changes
-
-- Updated dependencies [f45af74]
-- Updated dependencies [6aa06fb]
-- Updated dependencies [1437627]
-- Updated dependencies [8d4aebc]
-- Updated dependencies [d64ddf1]
-  - @atcute/identity@2.0.0
-  - @atcute/lexicons@2.0.0
-  - @atcute/oauth-keyset@0.1.1
-
-## 0.1.1
-
-### Patch Changes
-
-- 0463193: public client support

@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/identity-resolver-node",
-	"version": "1.0.4",
+	"version": "2.0.0",
 	"description": "additional atproto identity resolvers for Node.js",
 	"keywords": [
 		"atproto",
@@ -39,8 +39,8 @@
 		"@types/node": "^25.6.0"
 	},
 	"peerDependencies": {
-		"@atcute/identity": "^1.0.0",
-		"@atcute/identity-resolver": "^1.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/identity": "^2.0.0",
+		"@atcute/identity-resolver": "^2.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

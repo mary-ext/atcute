@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/lexicon-doc",
-	"version": "2.2.1",
+	"version": "3.0.0",
 	"description": "type definitions and schemas for atproto lexicon documents",
 	"license": "0BSD",
 	"repository": {
@@ -45,6 +45,6 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

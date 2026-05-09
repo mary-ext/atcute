@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/leaflet",
-	"version": "1.0.25",
+	"version": "2.0.0",
 	"description": "Leaflet (pub.leaflet.*) schema definitions",
 	"keywords": [
 		"atcute",
@@ -42,7 +42,7 @@
 		"@atcute/lex-cli": "workspace:^"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	},
 	"atcute:lexicons": {
 		"mappings": {

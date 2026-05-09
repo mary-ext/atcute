@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/client",
-	"version": "4.2.2",
+	"version": "5.0.0",
 	"description": "lightweight and cute API client for AT Protocol",
 	"license": "0BSD",
 	"repository": {
@@ -39,6 +39,6 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

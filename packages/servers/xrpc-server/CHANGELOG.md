@@ -1,5 +1,34 @@
 # @atcute/xrpc-server
 
+## 2.0.0
+
+### Major Changes
+
+- 8003cd0: drop the deprecated `XRPCRouter#add` overload set
+
+  use `addQuery` and `addProcedure` directly.
+
+  ```ts
+  // before
+  router.add('com.example.getThing', handler);
+
+  // after
+  router.addQuery('com.example.getThing', handler);
+  router.addProcedure('com.example.doThing', handler);
+  ```
+
+### Patch Changes
+
+- 72fe096: internal: migrate the JWT parser from `@badrap/valita` to `valibot`. no API change.
+- Updated dependencies [f45af74]
+- Updated dependencies [6aa06fb]
+- Updated dependencies [1437627]
+- Updated dependencies [8d4aebc]
+- Updated dependencies [d64ddf1]
+  - @atcute/identity@2.0.0
+  - @atcute/identity-resolver@2.0.0
+  - @atcute/lexicons@2.0.0
+
 ## 1.0.0
 
 ### Major Changes

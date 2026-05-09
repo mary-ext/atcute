@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/identity-resolver",
-	"version": "1.2.3",
+	"version": "2.0.0",
 	"description": "atproto handle and DID document resolution",
 	"keywords": [
 		"atproto",
@@ -42,7 +42,7 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/identity": "^1.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/identity": "^2.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

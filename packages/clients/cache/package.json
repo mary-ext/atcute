@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/cache",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"description": "normalized cache store for AT Protocol clients",
 	"license": "0BSD",
 	"repository": {
@@ -34,6 +34,6 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

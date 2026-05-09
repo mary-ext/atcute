@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/identity",
-	"version": "1.1.5",
+	"version": "2.0.0",
 	"description": "syntax, type definitions and schemas for atproto handles, DIDs and DID documents",
 	"keywords": [
 		"atproto",
@@ -40,6 +40,6 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

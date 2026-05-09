@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/oauth-crypto",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "crypto helpers for AT Protocol OAuth",
 	"license": "0BSD",
 	"repository": {

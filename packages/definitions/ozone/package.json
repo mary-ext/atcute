@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/ozone",
-	"version": "3.1.16",
+	"version": "4.0.0",
 	"description": "Ozone (tools.ozone.*) scheam definitions",
 	"keywords": [
 		"atcute",
@@ -44,7 +44,7 @@
 		"@atcute/ozone": "file:"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	},
 	"atcute:lexicons": {
 		"mappings": {

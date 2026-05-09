@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/tap",
-	"version": "0.1.2",
+	"version": "1.0.0",
 	"description": "an atproto Tap client",
 	"license": "0BSD",
 	"repository": {
@@ -43,7 +43,7 @@
 		"ws": "^8.20.0"
 	},
 	"peerDependencies": {
-		"@atcute/identity": "^1.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/identity": "^2.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

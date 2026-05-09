@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/firehose",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"description": "lightweight and cute XRPC subscription client for AT Protocol",
 	"license": "0BSD",
 	"repository": {
@@ -38,6 +38,6 @@
 		"@atcute/atproto": "workspace:^"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/bluesky-moderation",
-	"version": "3.0.1",
+	"version": "4.0.0",
 	"description": "interprets Bluesky's content moderation labels",
 	"license": "0BSD",
 	"repository": {
@@ -36,8 +36,8 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/atproto": "^3.0.0",
-		"@atcute/bluesky": "^3.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/atproto": "^4.0.0",
+		"@atcute/bluesky": "^4.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

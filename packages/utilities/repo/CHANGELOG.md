@@ -1,5 +1,14 @@
 # @atcute/repo
 
+## 1.0.0
+
+### Patch Changes
+
+- Updated dependencies [319676a]
+- Updated dependencies [d64ddf1]
+  - @atcute/car@6.0.0
+  - @atcute/lexicons@2.0.0
+
 ## 0.1.5
 
 ### Patch Changes

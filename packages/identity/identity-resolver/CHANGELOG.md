@@ -1,5 +1,36 @@
 # @atcute/identity-resolver
 
+## 2.0.0
+
+### Major Changes
+
+- 8d4aebc: migrate from `@badrap/valita` to `valibot`
+
+  exported schemas are now valibot schemas.
+
+  ```ts
+  import * as v from 'valibot';
+  import { defs } from '@atcute/identity';
+
+  // before
+  const result = defs.didDocument.try(input);
+
+  // after
+  const result = v.safeParse(defs.didDocument, input);
+  ```
+
+### Patch Changes
+
+- Updated dependencies [f45af74]
+- Updated dependencies [6aa06fb]
+- Updated dependencies [1437627]
+- Updated dependencies [8d4aebc]
+- Updated dependencies [d64ddf1]
+- Updated dependencies [ceea6eb]
+  - @atcute/identity@2.0.0
+  - @atcute/lexicons@2.0.0
+  - @atcute/util-fetch@2.0.0
+
 ## 1.2.3
 
 ### Patch Changes

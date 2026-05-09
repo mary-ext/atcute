@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/bluesky-threading",
-	"version": "5.0.7",
+	"version": "6.0.0",
 	"description": "create Bluesky threads containing multiple posts with one write",
 	"license": "0BSD",
 	"repository": {
@@ -36,6 +36,6 @@
 		"@atcute/tid": "workspace:^"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

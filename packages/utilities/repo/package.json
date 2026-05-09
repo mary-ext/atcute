@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/repo",
-	"version": "0.1.5",
+	"version": "1.0.0",
 	"description": "AT Protocol repository decoder for AT Protocol.",
 	"keywords": [
 		"atproto",
@@ -48,6 +48,6 @@
 	"peerDependencies": {
 		"@atcute/cbor": "^2.0.0",
 		"@atcute/cid": "^2.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

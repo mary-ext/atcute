@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/password-session",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"description": "password-based session management for AT Protocol",
 	"license": "0BSD",
 	"repository": {
@@ -38,7 +38,7 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/identity": "^1.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/identity": "^2.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

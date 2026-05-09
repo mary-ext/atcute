@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/microcosm",
-	"version": "1.0.4",
+	"version": "2.0.0",
 	"description": "Microcosm (blue.microcosm.*, com.bad-example.*) schema definitions",
 	"license": "0BSD",
 	"repository": {
@@ -38,7 +38,7 @@
 		"@atcute/microcosm": "file:"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	},
 	"atcute:lexicons": {
 		"mappings": {

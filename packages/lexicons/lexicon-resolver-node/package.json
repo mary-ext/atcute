@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/lexicon-resolver-node",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"description": "additional atproto lexicon resolvers for Node.js",
 	"keywords": [
 		"atproto",
@@ -40,8 +40,8 @@
 		"@types/node": "^25.6.0"
 	},
 	"peerDependencies": {
-		"@atcute/identity": "^1.0.0",
-		"@atcute/lexicon-resolver": "^0.1.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/identity": "^2.0.0",
+		"@atcute/lexicon-resolver": "^1.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

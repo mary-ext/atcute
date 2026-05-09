@@ -1,5 +1,17 @@
 # @atcute/bluesky-threading
 
+## 6.0.0
+
+### Patch Changes
+
+- Updated dependencies [63a1d80]
+- Updated dependencies [0fb5499]
+- Updated dependencies [d64ddf1]
+  - @atcute/client@5.0.0
+  - @atcute/lexicons@2.0.0
+  - @atcute/atproto@4.0.0
+  - @atcute/bluesky@4.0.0
+
 ## 5.0.7
 
 ### Patch Changes

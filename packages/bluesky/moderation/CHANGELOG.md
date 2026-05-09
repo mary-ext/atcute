@@ -1,5 +1,14 @@
 # @atcute/bluesky-moderation
 
+## 4.0.0
+
+### Patch Changes
+
+- Updated dependencies [d64ddf1]
+  - @atcute/lexicons@2.0.0
+  - @atcute/atproto@4.0.0
+  - @atcute/bluesky@4.0.0
+
 ## 3.0.1
 
 ### Patch Changes

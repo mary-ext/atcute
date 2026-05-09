@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/frontpage",
-	"version": "2.0.3",
+	"version": "3.0.0",
 	"description": "Frontpage (fyi.unravel.frontpage.*) schema definitions",
 	"keywords": [
 		"atcute",
@@ -42,7 +42,7 @@
 		"@atcute/lex-cli": "workspace:^"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	},
 	"atcute:lexicons": {
 		"mappings": {

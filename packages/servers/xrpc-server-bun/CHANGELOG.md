@@ -1,5 +1,13 @@
 # @atcute/xrpc-server-bun
 
+## 2.0.0
+
+### Patch Changes
+
+- Updated dependencies [8003cd0]
+- Updated dependencies [72fe096]
+  - @atcute/xrpc-server@2.0.0
+
 ## 1.0.0
 
 ### Major Changes

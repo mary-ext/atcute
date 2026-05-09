@@ -1,5 +1,34 @@
 # @atcute/lexicon-doc
 
+## 3.0.0
+
+### Major Changes
+
+- cf19d96: migrate from `@badrap/valita` to `valibot`
+
+  exported schemas are now valibot schemas.
+
+  ```ts
+  import * as v from 'valibot';
+  import { lexiconDoc } from '@atcute/lexicon-doc';
+
+  // before
+  const result = lexiconDoc.try(input);
+
+  // after
+  const result = v.safeParse(lexiconDoc, input);
+  ```
+
+### Patch Changes
+
+- Updated dependencies [f45af74]
+- Updated dependencies [6aa06fb]
+- Updated dependencies [1437627]
+- Updated dependencies [8d4aebc]
+- Updated dependencies [d64ddf1]
+  - @atcute/identity@2.0.0
+  - @atcute/lexicons@2.0.0
+
 ## 2.2.1
 
 ### Patch Changes

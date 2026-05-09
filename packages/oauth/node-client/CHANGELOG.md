@@ -1,5 +1,27 @@
 # @atcute/oauth-node-client
 
+## 2.0.0
+
+### Patch Changes
+
+- Updated dependencies [63a1d80]
+- Updated dependencies [0fb5499]
+- Updated dependencies [f45af74]
+- Updated dependencies [6aa06fb]
+- Updated dependencies [1437627]
+- Updated dependencies [8d4aebc]
+- Updated dependencies [d64ddf1]
+- Updated dependencies [7d530ad]
+- Updated dependencies [ceea6eb]
+  - @atcute/client@5.0.0
+  - @atcute/identity@2.0.0
+  - @atcute/identity-resolver@2.0.0
+  - @atcute/lexicons@2.0.0
+  - @atcute/oauth-types@1.0.0
+  - @atcute/oauth-crypto@1.0.0
+  - @atcute/util-fetch@2.0.0
+  - @atcute/oauth-keyset@0.1.1
+
 ## 1.1.1
 
 ### Patch Changes

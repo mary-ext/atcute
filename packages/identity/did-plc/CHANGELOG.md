@@ -1,5 +1,36 @@
 # @atcute/did-plc
 
+## 1.0.0
+
+### Major Changes
+
+- 8fca39d: migrate from `@badrap/valita` to `valibot`
+
+  exported schemas are now valibot schemas.
+
+  ```ts
+  import * as v from 'valibot';
+  import { operation } from '@atcute/did-plc';
+
+  // before
+  const result = operation.try(input);
+
+  // after
+  const result = v.safeParse(operation, input);
+  ```
+
+### Patch Changes
+
+- Updated dependencies [f45af74]
+- Updated dependencies [6aa06fb]
+- Updated dependencies [1437627]
+- Updated dependencies [8d4aebc]
+- Updated dependencies [d64ddf1]
+- Updated dependencies [ceea6eb]
+  - @atcute/identity@2.0.0
+  - @atcute/lexicons@2.0.0
+  - @atcute/util-fetch@2.0.0
+
 ## 0.3.3
 
 ### Patch Changes

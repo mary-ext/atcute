@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/bluesky-richtext-builder",
-	"version": "3.0.1",
+	"version": "4.0.0",
 	"description": "builder pattern for Bluesky's rich text facets",
 	"license": "0BSD",
 	"repository": {
@@ -32,6 +32,6 @@
 		"@atcute/uint8array": "workspace:^"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

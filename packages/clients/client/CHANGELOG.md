@@ -1,5 +1,55 @@
 # @atcute/client
 
+## 5.0.0
+
+### Major Changes
+
+- 63a1d80: drop `CredentialManager`
+
+  use `PasswordSession` from `@atcute/password-session` instead.
+
+  ```ts
+  // before
+  import { CredentialManager } from '@atcute/client';
+
+  const manager = new CredentialManager({ service: 'https://bsky.social' });
+  await manager.login({ identifier, password });
+
+  // after
+  import { PasswordSession } from '@atcute/password-session';
+
+  const session = await PasswordSession.login({
+  	service: 'https://bsky.social',
+  	identifier,
+  	password,
+  });
+  ```
+
+- 0fb5499: replace `Client`'s `proxy` option object with an `AtprotoAudience` string
+
+  the `ServiceProxyOptions` type is gone.
+
+  ```ts
+  // before
+  new Client({
+  	handler,
+  	proxy: { did: 'did:web:api.bsky.chat', serviceId: '#bsky_chat' },
+  });
+
+  // after
+  new Client({ handler, proxy: 'did:web:api.bsky.chat#bsky_chat' });
+  ```
+
+### Patch Changes
+
+- Updated dependencies [f45af74]
+- Updated dependencies [6aa06fb]
+- Updated dependencies [1437627]
+- Updated dependencies [8d4aebc]
+- Updated dependencies [d64ddf1]
+  - @atcute/identity@2.0.0
+  - @atcute/lexicons@2.0.0
+
 ## 4.2.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/xrpc-server",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "a small web framework for handling XRPC operations",
 	"license": "0BSD",
 	"repository": {
@@ -49,6 +49,6 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

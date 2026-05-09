@@ -1,5 +1,20 @@
 # @atcute/oauth-browser-client
 
+## 4.0.0
+
+### Patch Changes
+
+- Updated dependencies [63a1d80]
+- Updated dependencies [0fb5499]
+- Updated dependencies [8d4aebc]
+- Updated dependencies [d64ddf1]
+- Updated dependencies [7d530ad]
+  - @atcute/client@5.0.0
+  - @atcute/identity-resolver@2.0.0
+  - @atcute/lexicons@2.0.0
+  - @atcute/oauth-types@1.0.0
+  - @atcute/oauth-crypto@1.0.0
+
 ## 3.0.1
 
 ### Patch Changes

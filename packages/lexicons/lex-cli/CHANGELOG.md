@@ -1,5 +1,51 @@
 # @atcute/lex-cli
 
+## 3.0.0
+
+### Major Changes
+
+- b094191: drop the deprecated top-level `outdir`, `files`, `imports`, `mappings`, and `modules`
+  keys from `LexiconConfig`
+
+  move them under `generate.*`.
+
+  ```ts
+  // before
+  defineLexiconConfig({
+  	outdir: './src/lexicons',
+  	files: ['./lexicons/**/*.json'],
+  });
+
+  // after
+  defineLexiconConfig({
+  	generate: {
+  		outdir: './src/lexicons',
+  		files: ['./lexicons/**/*.json'],
+  	},
+  });
+  ```
+
+### Patch Changes
+
+- 4da15ec: migrate internal config and metadata schemas from `@badrap/valita` to `valibot`. exported
+  types remain structurally compatible.
+- 898dbc4: write pulled lexicons in canonical key order
+
+  `lex-cli pull` now sorts keys into dag-cbor canonical order (shorter keys first, then
+  lexicographic) so output stays deterministic regardless of schema field declaration order.
+
+- Updated dependencies [f45af74]
+- Updated dependencies [6aa06fb]
+- Updated dependencies [1437627]
+- Updated dependencies [8d4aebc]
+- Updated dependencies [cf19d96]
+- Updated dependencies [d64ddf1]
+  - @atcute/identity@2.0.0
+  - @atcute/identity-resolver@2.0.0
+  - @atcute/lexicon-doc@3.0.0
+  - @atcute/lexicons@2.0.0
+  - @atcute/lexicon-resolver@1.0.0
+
 ## 2.8.2
 
 ### Patch Changes

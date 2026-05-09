@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/did-plc",
-	"version": "0.3.3",
+	"version": "1.0.0",
 	"description": "validations, type definitions and schemas for did:plc operations",
 	"keywords": [
 		"atproto",
@@ -51,7 +51,7 @@
 	"peerDependencies": {
 		"@atcute/cbor": "^2.0.0",
 		"@atcute/cid": "^2.0.0",
-		"@atcute/identity": "^1.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/identity": "^2.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

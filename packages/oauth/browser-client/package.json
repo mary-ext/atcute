@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/oauth-browser-client",
-	"version": "3.0.1",
+	"version": "4.0.0",
 	"description": "minimal OAuth browser client implementation for AT Protocol",
 	"license": "0BSD",
 	"repository": {
@@ -36,7 +36,7 @@
 		"nanoid": "^5.1.11"
 	},
 	"peerDependencies": {
-		"@atcute/identity-resolver": "^1.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/identity-resolver": "^2.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

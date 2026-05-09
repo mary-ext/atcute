@@ -1,5 +1,24 @@
 # @atcute/car
 
+## 6.0.0
+
+### Major Changes
+
+- 319676a: drop the deprecated `iterate()` method from `SyncCarReader`
+
+  iterate the reader directly with `for..of`, or call `reader[Symbol.iterator]()` for a manual
+  iterator.
+
+  ```ts
+  // before
+  for (const block of reader.iterate()) {
+  }
+
+  // after
+  for (const block of reader) {
+  }
+  ```
+
 ## 5.1.2
 
 ### Patch Changes

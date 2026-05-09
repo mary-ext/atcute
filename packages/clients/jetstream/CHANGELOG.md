@@ -1,5 +1,47 @@
 # @atcute/jetstream
 
+## 2.0.0
+
+### Major Changes
+
+- e8add56: migrate from `@badrap/valita` to `valibot`
+
+  exported event schemas are now valibot schemas.
+
+  ```ts
+  import * as v from 'valibot';
+  import { commitEventSchema } from '@atcute/jetstream';
+
+  // before
+  const result = commitEventSchema.try(input);
+
+  // after
+  const result = v.safeParse(commitEventSchema, input);
+  ```
+
+### Minor Changes
+
+- 777e60f: add an `onError` option
+
+  validation failures (a valibot `ValiError`) are now passed to `onError` instead of being silently
+  dropped.
+
+  ```ts
+  new JetstreamSubscription({
+  	onError: (err) => {
+  		// `err` is a `ValiError` for validation failures
+  	},
+  });
+  ```
+
+  `updateOptions` no longer reconnects when only `cursor` is passed and matches the current cursor.
+  filter-only updates still go in-band; cursor changes or other option changes still reconnect.
+
+### Patch Changes
+
+- Updated dependencies [d64ddf1]
+  - @atcute/lexicons@2.0.0
+
 ## 1.1.3
 
 ### Patch Changes

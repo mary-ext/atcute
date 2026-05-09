@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/lexicon-resolver",
-	"version": "0.1.7",
+	"version": "1.0.0",
 	"description": "atproto lexicon authority resolution",
 	"keywords": [
 		"atproto",
@@ -47,9 +47,9 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/identity": "^1.1.0",
-		"@atcute/identity-resolver": "^1.1.3",
-		"@atcute/lexicon-doc": "^2.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/identity": "^2.0.0",
+		"@atcute/identity-resolver": "^2.0.0",
+		"@atcute/lexicon-doc": "^3.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

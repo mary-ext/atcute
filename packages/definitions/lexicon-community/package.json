@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/lexicon-community",
-	"version": "1.1.6",
+	"version": "2.0.0",
 	"description": "Lexicon Community (community.lexicon.*) schema definitions",
 	"license": "0BSD",
 	"repository": {
@@ -37,7 +37,7 @@
 		"@atcute/lexicon-community": "file:"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	},
 	"atcute:lexicons": {
 		"mappings": {

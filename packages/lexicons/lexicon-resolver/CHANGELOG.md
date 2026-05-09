@@ -1,5 +1,23 @@
 # @atcute/lexicon-resolver
 
+## 1.0.0
+
+### Patch Changes
+
+- Updated dependencies [f45af74]
+- Updated dependencies [6aa06fb]
+- Updated dependencies [1437627]
+- Updated dependencies [8d4aebc]
+- Updated dependencies [cf19d96]
+- Updated dependencies [d64ddf1]
+- Updated dependencies [ceea6eb]
+  - @atcute/identity@2.0.0
+  - @atcute/identity-resolver@2.0.0
+  - @atcute/lexicon-doc@3.0.0
+  - @atcute/lexicons@2.0.0
+  - @atcute/util-fetch@2.0.0
+  - @atcute/repo@1.0.0
+
 ## 0.1.7
 
 ### Patch Changes

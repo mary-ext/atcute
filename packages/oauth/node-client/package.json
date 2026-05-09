@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/oauth-node-client",
-	"version": "1.1.1",
+	"version": "2.0.0",
 	"description": "atproto OAuth client for Node.js and other server runtimes",
 	"license": "0BSD",
 	"repository": {
@@ -44,7 +44,7 @@
 		"vitest": "^4.1.5"
 	},
 	"peerDependencies": {
-		"@atcute/identity-resolver": "^1.0.0",
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/identity-resolver": "^2.0.0",
+		"@atcute/lexicons": "^2.0.0"
 	}
 }

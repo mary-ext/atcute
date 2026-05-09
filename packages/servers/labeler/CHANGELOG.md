@@ -1,5 +1,13 @@
 # @atcute/labeler
 
+## 1.0.0
+
+### Patch Changes
+
+- Updated dependencies [d64ddf1]
+  - @atcute/lexicons@2.0.0
+  - @atcute/atproto@4.0.0
+
 ## 0.1.1
 
 ### Patch Changes

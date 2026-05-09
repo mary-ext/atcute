@@ -1,5 +1,56 @@
 # @atcute/identity
 
+## 2.0.0
+
+### Major Changes
+
+- f45af74: drop the deprecated `PLC_DID_RE` export
+
+  use `isPlcDid` instead.
+
+  ```ts
+  // before
+  PLC_DID_RE.test(input);
+
+  // after
+  isPlcDid(input);
+  ```
+
+- 6aa06fb: drop the deprecated `FRAGMENT_RE` and `MULTIBASE_RE` exports.
+- 1437627: drop the deprecated `WEB_DID_RE` and `ATPROTO_WEB_DID_RE` exports
+
+  use `isWebDid` / `isAtprotoWebDid` instead.
+
+  ```ts
+  // before
+  WEB_DID_RE.test(input);
+  ATPROTO_WEB_DID_RE.test(input);
+
+  // after
+  isWebDid(input);
+  isAtprotoWebDid(input);
+  ```
+
+- 8d4aebc: migrate from `@badrap/valita` to `valibot`
+
+  exported schemas are now valibot schemas.
+
+  ```ts
+  import * as v from 'valibot';
+  import { defs } from '@atcute/identity';
+
+  // before
+  const result = defs.didDocument.try(input);
+
+  // after
+  const result = v.safeParse(defs.didDocument, input);
+  ```
+
+### Patch Changes
+
+- Updated dependencies [d64ddf1]
+  - @atcute/lexicons@2.0.0
+
 ## 1.1.5
 
 ### Patch Changes

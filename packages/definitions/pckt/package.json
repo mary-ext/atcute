@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/pckt",
-	"version": "0.1.10",
+	"version": "1.0.0",
 	"description": "pckt (blog.pckt.*) schema definitions",
 	"keywords": [
 		"atcute",
@@ -41,7 +41,7 @@
 		"@atcute/lex-cli": "workspace:^"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^1.0.0"
+		"@atcute/lexicons": "^2.0.0"
 	},
 	"atcute:lexicons": {
 		"mappings": {
