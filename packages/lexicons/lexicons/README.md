@@ -69,19 +69,15 @@ parse AT URIs to extract their components:
 ```ts
 import { parseResourceUri, parseCanonicalResourceUri } from '@atcute/lexicons/syntax';
 
-// parse any AT URI (handle or DID authority)
+// parse any AT URI (handle or DID authority); throws SyntaxError on invalid input
 const uri = parseResourceUri('at://alice.bsky.social/app.bsky.feed.post/123');
-if (uri.ok) {
-	console.log(uri.value.repo); // 'alice.bsky.social'
-	console.log(uri.value.collection); // 'app.bsky.feed.post'
-	console.log(uri.value.rkey); // '123'
-}
+console.log(uri.repo); // 'alice.bsky.social'
+console.log(uri.collection); // 'app.bsky.feed.post'
+console.log(uri.rkey); // '123'
 
-// parse canonical AT URI (DID authority only)
+// parse canonical AT URI (DID authority only); throws SyntaxError on invalid input
 const canonical = parseCanonicalResourceUri('at://did:plc:123/app.bsky.feed.post/abc');
-if (canonical.ok) {
-	console.log(canonical.value.repo); // 'did:plc:123'
-}
+console.log(canonical.repo); // 'did:plc:123'
 ```
 
 ### branded types
