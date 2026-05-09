@@ -45,7 +45,7 @@ export const createDenoWebSocket = ({
 			};
 
 			socket.onclose = (ev) => {
-				controller.abort(`WebSocket connection closed with code ${ev.code}`);
+				controller.abort(new Error(`WebSocket connection closed with code ${ev.code}`));
 			};
 
 			return response;
