@@ -169,7 +169,7 @@ export const lexiconConfigSchema = v.object({
 	mappings: v.array(importMappingSchema).optional(),
 	/** @deprecated moved to `generate.modules` */
 	modules: modulesConfigSchema.optional(),
-	formatter: formatterConfigSchema.optional((): FormatterConfig => ({ type: 'prettier' })),
+	formatter: formatterConfigSchema.optional(),
 	generate: generateConfigSchema.optional(),
 	pull: pullConfigSchema.optional(),
 	export: exportConfigSchema.optional(),
@@ -179,8 +179,9 @@ export type LexiconConfig = v.Infer<typeof lexiconConfigSchema>;
 
 export type NormalizedConfig = Omit<
 	LexiconConfig,
-	'outdir' | 'files' | 'imports' | 'mappings' | 'modules'
+	'formatter' | 'outdir' | 'files' | 'imports' | 'mappings' | 'modules'
 > & {
+	formatter: FormatterConfig;
 	root: string;
 };
 
@@ -237,7 +238,16 @@ export const loadConfig = async (configPath?: string): Promise<NormalizedConfig>
 		process.exit(1);
 	}
 
-	const { outdir, files, imports, mappings, modules, generate, ...rest } = configResult.value;
+	const {
+		formatter = { type: 'prettier' },
+		outdir,
+		files,
+		imports,
+		mappings,
+		modules,
+		generate,
+		...rest
+	} = configResult.value;
 
 	// back-compat: top-level generate options were moved into `generate.*`. merge the legacy
 	// top-level values into `generate`, with nested `generate.*` winning on conflicts. the result
@@ -261,5 +271,5 @@ export const loadConfig = async (configPath?: string): Promise<NormalizedConfig>
 		};
 	}
 
-	return { ...rest, generate: normalizedGenerate, root: configDirname };
+	return { ...rest, formatter, generate: normalizedGenerate, root: configDirname };
 };
