@@ -12,6 +12,7 @@ npm install @atcute/lexicon-doc
 
 ```ts
 import { findExternalReferences, lexiconDoc } from '@atcute/lexicon-doc';
+import * as v from 'valibot';
 
 const rawDoc = {
 	lexicon: 1,
@@ -33,7 +34,7 @@ const rawDoc = {
 	},
 };
 
-const doc = lexiconDoc.parse(rawDoc, { mode: 'passthrough' });
+const doc = v.parse(lexiconDoc, rawDoc);
 //    ^? LexiconDoc
 
 const refs = findExternalReferences(doc);
