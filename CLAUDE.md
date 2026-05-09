@@ -73,6 +73,15 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
 - write code that satisfies the type system naturally; reach for `as Type` or `as const` only when
   TypeScript errors and no cleaner solution exists
 
+#### mutation
+
+- treat function arguments as immutable; callers expect their inputs to come back unchanged.
+  in-place operations like `array.sort()` or `Object.assign(target, ...)` are fine on values the
+  function owns — locals, clones, freshly constructed objects — but copy first (`array.toSorted()`,
+  `{ ...obj, ...patch }`) before touching anything reachable through a parameter. the exception is a
+  function whose documented purpose is to mutate its argument; the name and JSDoc should make that
+  intent obvious
+
 ### commit workflow
 
 we use conventional commits with these rules:
