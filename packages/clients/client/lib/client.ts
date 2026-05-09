@@ -1,5 +1,5 @@
-import type { Did } from '@atcute/lexicons';
 import type { XRPCProcedures, XRPCQueries } from '@atcute/lexicons/ambient';
+import type { AtprotoAudience } from '@atcute/lexicons/syntax';
 import * as v from '@atcute/lexicons/validations';
 import type {
 	InferInput,
@@ -187,30 +187,19 @@ type Namespaced<T> = { mainSchema: T };
 // #endregion
 
 // #region Client
-/** options for configuring service proxying */
-export type ServiceProxyOptions = {
-	/** DID identifier that the upstream service should look up */
-	did: Did;
-	/**
-	 * the specific service ID within the resolved DID document's `service` array
-	 * that the upstream service should forward requests to.
-	 *
-	 * must start with `#`
-	 *
-	 * common values include:
-	 * - `#atproto_pds` (personal data server)
-	 * - `#atproto_labeler` (labeler service)
-	 * - `#bsky_chat` (Bluesky chat service)
-	 */
-	serviceId: `#${string}`;
-};
-
 /** options for configuring the client */
 export type ClientOptions = {
 	/** the underlying fetch handler it should make requests with */
 	handler: FetchHandler | FetchHandlerObject;
-	/** service proxy configuration */
-	proxy?: ServiceProxyOptions | null;
+	/**
+	 * service proxy target, in the form `<did>#<service-id>`.
+	 *
+	 * common service ids include:
+	 * - `#atproto_pds` (personal data server)
+	 * - `#atproto_labeler` (labeler service)
+	 * - `#bsky_chat` (Bluesky chat service)
+	 */
+	proxy?: AtprotoAudience | null;
 };
 
 const JSON_CONTENT_TYPE_RE = /\bapplication\/json\b/;
@@ -218,7 +207,7 @@ const JSON_CONTENT_TYPE_RE = /\bapplication\/json\b/;
 /** XRPC API client */
 export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 	handler: FetchHandler;
-	proxy: ServiceProxyOptions | null;
+	proxy: AtprotoAudience | null;
 
 	constructor({ handler, proxy = null }: ClientOptions) {
 		this.handler = buildFetchHandler(handler);
@@ -354,7 +343,7 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 			body: input && !isWebInput ? JSON.stringify(input) : input,
 			headers: _mergeHeaders(headers, {
 				'content-type': input && !isWebInput ? 'application/json' : null,
-				'atproto-proxy': _constructProxyHeader(this.proxy),
+				'atproto-proxy': this.proxy,
 			}),
 			duplex: input instanceof ReadableStream ? 'half' : undefined,
 		});
@@ -464,14 +453,6 @@ const _constructSearchParams = (params: Record<string, unknown> | undefined): st
 	}
 
 	return searchParams ? `?` + searchParams.toString() : '';
-};
-
-const _constructProxyHeader = (proxy: ServiceProxyOptions | null | undefined): string | null => {
-	if (proxy != null) {
-		return `${proxy.did}${proxy.serviceId}`;
-	}
-
-	return null;
 };
 
 const _mergeHeaders = (

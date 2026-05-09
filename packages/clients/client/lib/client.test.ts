@@ -134,7 +134,7 @@ describe('params serializer', () => {
 describe('proxy', () => {
 	it('sets the proxy header', async () => {
 		const handler = vi.fn<FetchHandler>(() => Promise.resolve(Response.json({})));
-		const rpc = new Client({ handler, proxy: { did: 'did:web:api.bsky.chat', serviceId: '#bsky_chat' } });
+		const rpc = new Client({ handler, proxy: 'did:web:api.bsky.chat#bsky_chat' });
 
 		await rpc.get('com.atproto.server.describeServer');
 
