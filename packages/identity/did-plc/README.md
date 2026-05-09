@@ -54,13 +54,14 @@ const did = await deriveDidFromGenesisOp(signedGenesisOp);
 
 ```ts
 import { defs, processIndexedEntryLog } from '@atcute/did-plc';
+import * as v from 'valibot';
 
 const did = 'did:plc:ragtjsm2j2vknwkz3zp4oxrd';
 
 const response = await fetch(`https://plc.directory/${did}/log/audit`);
 const json = await response.json();
 
-const logs = defs.indexedEntryLog.parse(json);
+const logs = v.parse(defs.indexedEntryLog, json);
 const { canonical, nullified } = await processIndexedEntryLog(did, logs);
 ```
 
