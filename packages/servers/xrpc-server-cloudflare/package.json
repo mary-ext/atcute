@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/xrpc-server-cloudflare",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Cloudflare Workers WebSocket adapter for @atcute/xrpc-server",
 	"license": "0BSD",
 	"repository": {

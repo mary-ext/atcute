@@ -1,5 +1,13 @@
 # @atcute/xrpc-server-cloudflare
 
+## 1.0.1
+
+### Patch Changes
+
+- 1e8e283: `createCloudflareWebSocket` now observes synchronous throws and unawaited rejections from
+  the subscription handler and closes the socket with code `1011` instead of leaking the error as an
+  unhandled rejection.
+
 ## 1.0.0
 
 ### Major Changes

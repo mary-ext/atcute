@@ -1,5 +1,12 @@
 # @atcute/lex-cli
 
+## 2.8.2
+
+### Patch Changes
+
+- 58d124c: make `formatter` optional in `LexiconConfig`. it defaults to `{ type: 'prettier' }` when
+  omitted.
+
 ## 2.8.1
 
 ### Patch Changes

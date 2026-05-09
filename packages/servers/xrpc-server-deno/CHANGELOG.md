@@ -1,5 +1,12 @@
 # @atcute/xrpc-server-deno
 
+## 1.0.1
+
+### Patch Changes
+
+- 368100f: pass an `Error` to `controller.abort()` on socket close. `signal.reason` is now an
+  `Error`, matching the bun and node adapters.
+
 ## 1.0.0
 
 ### Major Changes
