@@ -49,15 +49,19 @@ export interface FirehoseSubscriptionOptions<TSchema extends XRPCSubscriptionMet
 	params?: ParamsOf<TSchema> | (() => ParamsOf<TSchema>);
 
 	/**
-	 * whether to validate incoming messages against the schema
+	 * whether to validate incoming events against the schema
 	 * @default true
 	 */
-	validateMessages?: boolean;
+	validateEvents?: boolean;
 
 	onConnectionOpen?: (event: Event) => void;
 	onConnectionClose?: (event: CloseEvent) => void;
 	onConnectionError?: (event: ErrorEvent) => void;
-	onError?: (error: string, message?: string) => void;
+	/**
+	 * called for non-fatal frame-level errors: atproto error frames (passed as `FirehoseError`)
+	 * and message validation failures (passed as `ValidationError`).
+	 */
+	onError?: (err: unknown) => void;
 
 	/**
 	 * WebSocket connection options

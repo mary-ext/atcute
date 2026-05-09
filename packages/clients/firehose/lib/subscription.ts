@@ -9,6 +9,20 @@ import { addTypeToBody, decodeFrame } from './frame-decoder.ts';
 import type { FirehoseSubscriptionOptions, MessageOf, ParamsOf } from './types.ts';
 
 /**
+ * non-fatal error frame received from the upstream firehose, carrying the
+ * atproto-spec `error` code alongside the human-readable `message`.
+ */
+export class FirehoseError extends Error {
+	override readonly name = 'FirehoseError';
+	/** atproto error code from the error frame */
+	readonly error: string;
+	constructor(error: string, message?: string) {
+		super(message ?? error);
+		this.error = error;
+	}
+}
+
+/**
  * generic XRPC subscription client for AT Protocol
  */
 export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
@@ -36,7 +50,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 			nsid,
 			params,
 			ws: wsOptions,
-			validateMessages = true,
+			validateEvents = true,
 			onConnectionClose,
 			onConnectionError,
 			onConnectionOpen,
@@ -85,15 +99,22 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 			const frame = decodeFrame(buffer);
 
 			if (frame.type === 'error') {
-				onError?.(frame.error, frame.message);
+				onError?.(new FirehoseError(frame.error, frame.message));
 				return;
 			}
 
 			let body = addTypeToBody(frame.body, frame.discriminator, nsid.nsid);
 
-			if (validateMessages && nsid.message !== null) {
+			if (validateEvents && nsid.message !== null) {
 				const result = safeParse(nsid.message, body);
 				if (!result.ok) {
+					if (onError) {
+						try {
+							result.throw();
+						} catch (err) {
+							onError(err);
+						}
+					}
 					return;
 				}
 				body = result.value;
