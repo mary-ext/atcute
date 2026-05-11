@@ -1,5 +1,15 @@
 # @atcute/uint8array
 
+## 1.1.2
+
+### Patch Changes
+
+- 3cfc6d0: silence Rollup `/*#__PURE__*/` warnings
+
+  Rollup-based bundlers (Vite, Astro SSR, etc.) used to warn that the package's `/*#__PURE__*/`
+  annotations sat on plain member reads — a position Rollup ignores. The annotations now apply to
+  IIFE calls, which Rollup recognizes.
+
 ## 1.1.1
 
 ### Patch Changes
