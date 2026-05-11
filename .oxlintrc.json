@@ -10,6 +10,7 @@
 		"curly": "warn",
 		"no-await-in-loop": "off",
 		"no-shadow": "off",
+		"no-underscore-dangle": "off",
 		"unicorn/prefer-add-event-listener": "off"
 	}
 }
