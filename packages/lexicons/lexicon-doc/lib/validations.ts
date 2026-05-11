@@ -610,6 +610,10 @@ const buildLexDefinableField = (
 			cell = buildLexArray(ctx, path, spec);
 			break;
 		}
+		case 'object': {
+			cell = buildLexObject(ctx, path, spec);
+			break;
+		}
 
 		default: {
 			spec satisfies never;

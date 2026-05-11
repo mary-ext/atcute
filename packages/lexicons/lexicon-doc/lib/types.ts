@@ -171,7 +171,7 @@ export type LexMeta = LexToken | LexRef | LexRefUnion | LexUnknown;
 /**
  * field definitions that can be declared inline in object properties and array items
  */
-export type LexDefinableField = LexConcrete | LexRef | LexRefUnion | LexUnknown | LexArray;
+export type LexDefinableField = LexConcrete | LexRef | LexRefUnion | LexUnknown | LexArray | LexObject;
 
 /**
  * all possible field definitions including those that must be referenced
