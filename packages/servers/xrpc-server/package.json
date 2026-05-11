@@ -44,7 +44,7 @@
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/xrpc-server": "file:",
 		"@mary-ext/simple-event-emitter": "^1.0.1",
-		"@types/node": "^25.6.0",
+		"@types/node": "^25.6.2",
 		"@vitest/coverage-v8": "^4.1.5",
 		"vitest": "^4.1.5"
 	},
