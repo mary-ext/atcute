@@ -1,18 +1,14 @@
+// oxlint-disable no-underscore-dangle
+
 import { allocUnsafe as _allocUnsafe, concatArrayBuffers as _concat } from 'bun';
 import { Buffer as NodeBuffer } from 'node:buffer';
 import { hash as _hash, timingSafeEqual as _timingSafeEqual } from 'node:crypto';
 
-const _byteLength = /*#__PURE__*/ NodeBuffer.byteLength;
+const _byteLength = /*#__PURE__*/ (() => NodeBuffer.byteLength)();
 
-// utf8Slice is undocumented and missing from @types/node, but exists at runtime
-// and is faster than toString('utf8') because it skips the encoding lookup
-const _bufferProto = NodeBuffer.prototype as NodeBuffer & {
-	utf8Slice(start?: number, end?: number): string;
-};
-
-const _compare = /*#__PURE__*/ _bufferProto.compare;
-const _equals = /*#__PURE__*/ _bufferProto.equals;
-const _utf8Slice = /*#__PURE__*/ _bufferProto.utf8Slice;
+const _compare = /*#__PURE__*/ (() => NodeBuffer.prototype.compare)();
+const _equals = /*#__PURE__*/ (() => NodeBuffer.prototype.equals)();
+const _utf8Slice = /*#__PURE__*/ (() => NodeBuffer.prototype.utf8Slice)();
 
 const textEncoder = new TextEncoder();
 
