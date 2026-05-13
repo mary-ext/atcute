@@ -19,7 +19,7 @@
 		},
 		"block": {
 			"type": "object",
-			"required": ["block", "x", "y", "width"],
+			"required": ["block", "width", "x", "y"],
 			"properties": {
 				"x": {
 					"type": "integer"
@@ -29,21 +29,21 @@
 				},
 				"block": {
 					"refs": [
-						"pub.leaflet.blocks.iframe",
-						"pub.leaflet.blocks.text",
 						"pub.leaflet.blocks.blockquote",
-						"pub.leaflet.blocks.header",
-						"pub.leaflet.blocks.image",
-						"pub.leaflet.blocks.unorderedList",
-						"pub.leaflet.blocks.orderedList",
-						"pub.leaflet.blocks.website",
-						"pub.leaflet.blocks.math",
-						"pub.leaflet.blocks.code",
-						"pub.leaflet.blocks.horizontalRule",
 						"pub.leaflet.blocks.bskyPost",
+						"pub.leaflet.blocks.button",
+						"pub.leaflet.blocks.code",
+						"pub.leaflet.blocks.header",
+						"pub.leaflet.blocks.horizontalRule",
+						"pub.leaflet.blocks.iframe",
+						"pub.leaflet.blocks.image",
+						"pub.leaflet.blocks.math",
+						"pub.leaflet.blocks.orderedList",
 						"pub.leaflet.blocks.page",
 						"pub.leaflet.blocks.poll",
-						"pub.leaflet.blocks.button"
+						"pub.leaflet.blocks.text",
+						"pub.leaflet.blocks.unorderedList",
+						"pub.leaflet.blocks.website"
 					],
 					"type": "union"
 				},
@@ -61,7 +61,7 @@
 		},
 		"quote": {
 			"type": "object",
-			"required": ["start", "end"],
+			"required": ["end", "start"],
 			"properties": {
 				"end": {
 					"ref": "#position",

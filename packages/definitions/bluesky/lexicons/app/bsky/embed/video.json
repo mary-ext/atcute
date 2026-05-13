@@ -70,7 +70,7 @@
 		},
 		"caption": {
 			"type": "object",
-			"required": ["lang", "file"],
+			"required": ["file", "lang"],
 			"properties": {
 				"file": {
 					"type": "blob",

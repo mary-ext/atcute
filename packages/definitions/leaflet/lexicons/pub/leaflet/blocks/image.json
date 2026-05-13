@@ -3,7 +3,7 @@
 	"defs": {
 		"main": {
 			"type": "object",
-			"required": ["image", "aspectRatio"],
+			"required": ["aspectRatio", "image"],
 			"properties": {
 				"alt": {
 					"type": "string",
@@ -26,7 +26,7 @@
 		},
 		"aspectRatio": {
 			"type": "object",
-			"required": ["width", "height"],
+			"required": ["height", "width"],
 			"properties": {
 				"width": {
 					"type": "integer"

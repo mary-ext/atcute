@@ -62,7 +62,7 @@
 		},
 		"notification": {
 			"type": "object",
-			"required": ["uri", "cid", "author", "reason", "record", "isRead", "indexedAt"],
+			"required": ["author", "cid", "indexedAt", "isRead", "reason", "record", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -90,19 +90,19 @@
 					"type": "string",
 					"description": "The reason why this notification was delivered - e.g. your post was liked, or you received a new follower.",
 					"knownValues": [
-						"like",
-						"repost",
+						"contact-match",
 						"follow",
-						"mention",
-						"reply",
-						"quote",
-						"starterpack-joined",
-						"verified",
-						"unverified",
+						"like",
 						"like-via-repost",
+						"mention",
+						"quote",
+						"reply",
+						"repost",
 						"repost-via-repost",
+						"starterpack-joined",
 						"subscribed-post",
-						"contact-match"
+						"unverified",
+						"verified"
 					]
 				},
 				"record": {

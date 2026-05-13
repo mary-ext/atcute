@@ -24,7 +24,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["ref", "path"],
+					"required": ["path", "ref"],
 					"properties": {
 						"ref": {
 							"type": "string",
@@ -43,7 +43,7 @@
 							"description": "File content (base64 encoded for binary files)"
 						},
 						"encoding": {
-							"enum": ["utf-8", "base64"],
+							"enum": ["base64", "utf-8"],
 							"type": "string",
 							"description": "Content encoding"
 						},
@@ -73,7 +73,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["repo", "ref", "path"],
+				"required": ["path", "ref", "repo"],
 				"properties": {
 					"raw": {
 						"type": "boolean",
@@ -97,7 +97,7 @@
 		},
 		"signature": {
 			"type": "object",
-			"required": ["name", "email", "when"],
+			"required": ["email", "name", "when"],
 			"properties": {
 				"name": {
 					"type": "string",

@@ -4,15 +4,15 @@
 		"queueView": {
 			"type": "object",
 			"required": [
+				"createdAt",
+				"createdBy",
+				"enabled",
 				"id",
 				"name",
-				"subjectTypes",
 				"reportTypes",
-				"createdBy",
-				"createdAt",
-				"updatedAt",
-				"enabled",
-				"stats"
+				"stats",
+				"subjectTypes",
+				"updatedAt"
 			],
 			"properties": {
 				"id": {
@@ -71,7 +71,7 @@
 					"type": "array",
 					"items": {
 						"type": "string",
-						"knownValues": ["account", "record", "message"]
+						"knownValues": ["account", "message", "record"]
 					},
 					"minLength": 1,
 					"description": "Subject types this queue accepts."
@@ -115,7 +115,7 @@
 		},
 		"assignmentView": {
 			"type": "object",
-			"required": ["id", "did", "queue", "startAt"],
+			"required": ["did", "id", "queue", "startAt"],
 			"properties": {
 				"id": {
 					"type": "integer"

@@ -10,9 +10,9 @@
 					"properties": {
 						"subject": {
 							"refs": [
+								"com.atproto.admin.defs#repoBlobRef",
 								"com.atproto.admin.defs#repoRef",
-								"com.atproto.repo.strongRef",
-								"com.atproto.admin.defs#repoBlobRef"
+								"com.atproto.repo.strongRef"
 							],
 							"type": "union"
 						},
@@ -35,9 +35,9 @@
 					"properties": {
 						"subject": {
 							"refs": [
+								"com.atproto.admin.defs#repoBlobRef",
 								"com.atproto.admin.defs#repoRef",
-								"com.atproto.repo.strongRef",
-								"com.atproto.admin.defs#repoBlobRef"
+								"com.atproto.repo.strongRef"
 							],
 							"type": "union"
 						},

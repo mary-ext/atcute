@@ -27,7 +27,7 @@
 			],
 			"message": {
 				"schema": {
-					"refs": ["#commit", "#sync", "#identity", "#account", "#info"],
+					"refs": ["#account", "#commit", "#identity", "#info", "#sync"],
 					"type": "union"
 				}
 			},
@@ -44,7 +44,7 @@
 		},
 		"sync": {
 			"type": "object",
-			"required": ["seq", "did", "blocks", "rev", "time"],
+			"required": ["blocks", "did", "rev", "seq", "time"],
 			"properties": {
 				"did": {
 					"type": "string",
@@ -76,17 +76,17 @@
 			"type": "object",
 			"nullable": ["since"],
 			"required": [
-				"seq",
-				"rebase",
-				"tooBig",
-				"repo",
-				"commit",
-				"rev",
-				"since",
-				"blocks",
-				"ops",
 				"blobs",
-				"time"
+				"blocks",
+				"commit",
+				"ops",
+				"rebase",
+				"repo",
+				"rev",
+				"seq",
+				"since",
+				"time",
+				"tooBig"
 			],
 			"properties": {
 				"ops": {
@@ -156,7 +156,7 @@
 		"repoOp": {
 			"type": "object",
 			"nullable": ["cid"],
-			"required": ["action", "path", "cid"],
+			"required": ["action", "cid", "path"],
 			"properties": {
 				"cid": {
 					"type": "cid-link",
@@ -171,14 +171,14 @@
 				},
 				"action": {
 					"type": "string",
-					"knownValues": ["create", "update", "delete"]
+					"knownValues": ["create", "delete", "update"]
 				}
 			},
 			"description": "A repo operation, ie a mutation of a single record."
 		},
 		"account": {
 			"type": "object",
-			"required": ["seq", "did", "time", "active"],
+			"required": ["active", "did", "seq", "time"],
 			"properties": {
 				"did": {
 					"type": "string",
@@ -198,14 +198,14 @@
 				"status": {
 					"type": "string",
 					"description": "If active=false, this optional field indicates a reason for why the account is not active.",
-					"knownValues": ["takendown", "suspended", "deleted", "deactivated", "desynchronized", "throttled"]
+					"knownValues": ["deactivated", "deleted", "desynchronized", "suspended", "takendown", "throttled"]
 				}
 			},
 			"description": "Represents a change to an account's status on a host (eg, PDS or Relay). The semantics of this event are that the status is at the host which emitted the event, not necessarily that at the currently active PDS. Eg, a Relay takedown would emit a takedown with active=false, even if the PDS is still active."
 		},
 		"identity": {
 			"type": "object",
-			"required": ["seq", "did", "time"],
+			"required": ["did", "seq", "time"],
 			"properties": {
 				"did": {
 					"type": "string",

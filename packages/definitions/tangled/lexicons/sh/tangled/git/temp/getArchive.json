@@ -27,7 +27,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["repo", "ref"],
+				"required": ["ref", "repo"],
 				"properties": {
 					"ref": {
 						"type": "string",
@@ -39,7 +39,7 @@
 						"description": "AT-URI of the repository"
 					},
 					"format": {
-						"enum": ["tar", "zip", "tar.gz", "tar.bz2", "tar.xz"],
+						"enum": ["tar", "tar.bz2", "tar.gz", "tar.xz", "zip"],
 						"type": "string",
 						"default": "tar.gz",
 						"description": "Archive format"

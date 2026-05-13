@@ -27,7 +27,7 @@
 		},
 		"suggestion": {
 			"type": "object",
-			"required": ["tag", "subjectType", "subject"],
+			"required": ["subject", "subjectType", "tag"],
 			"properties": {
 				"tag": {
 					"type": "string"

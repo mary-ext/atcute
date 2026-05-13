@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["policies", "createdAt"],
+				"required": ["createdAt", "policies"],
 				"properties": {
 					"labels": {
 						"refs": ["com.atproto.label.defs#selfLabels"],

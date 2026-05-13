@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["repo", "forkRef", "remoteRef"],
+					"required": ["forkRef", "remoteRef", "repo"],
 					"properties": {
 						"repo": {
 							"type": "string",

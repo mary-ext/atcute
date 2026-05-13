@@ -35,7 +35,7 @@
 		},
 		"main": {
 			"type": "object",
-			"required": ["index", "features"],
+			"required": ["features", "index"],
 			"properties": {
 				"index": {
 					"ref": "#byteSlice",
@@ -45,17 +45,17 @@
 					"type": "array",
 					"items": {
 						"refs": [
-							"#link",
-							"#didMention",
 							"#atMention",
-							"#code",
-							"#highlight",
-							"#underline",
-							"#strikethrough",
-							"#id",
 							"#bold",
+							"#code",
+							"#didMention",
+							"#footnote",
+							"#highlight",
+							"#id",
 							"#italic",
-							"#footnote"
+							"#link",
+							"#strikethrough",
+							"#underline"
 						],
 						"type": "union"
 					}
@@ -71,7 +71,7 @@
 		},
 		"footnote": {
 			"type": "object",
-			"required": ["footnoteId", "contentPlaintext"],
+			"required": ["contentPlaintext", "footnoteId"],
 			"properties": {
 				"footnoteId": {
 					"type": "string"
@@ -106,7 +106,7 @@
 		},
 		"byteSlice": {
 			"type": "object",
-			"required": ["byteStart", "byteEnd"],
+			"required": ["byteEnd", "byteStart"],
 			"properties": {
 				"byteEnd": {
 					"type": "integer",

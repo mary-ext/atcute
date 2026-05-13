@@ -3,7 +3,7 @@
 	"defs": {
 		"postView": {
 			"type": "object",
-			"required": ["uri", "cid", "author", "record", "indexedAt"],
+			"required": ["author", "cid", "indexedAt", "record", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -19,11 +19,11 @@
 				},
 				"embed": {
 					"refs": [
-						"app.bsky.embed.images#view",
-						"app.bsky.embed.video#view",
 						"app.bsky.embed.external#view",
+						"app.bsky.embed.images#view",
 						"app.bsky.embed.record#view",
-						"app.bsky.embed.recordWithMedia#view"
+						"app.bsky.embed.recordWithMedia#view",
+						"app.bsky.embed.video#view"
 					],
 					"type": "union"
 				},
@@ -72,14 +72,14 @@
 		},
 		"replyRef": {
 			"type": "object",
-			"required": ["root", "parent"],
+			"required": ["parent", "root"],
 			"properties": {
 				"root": {
-					"refs": ["#postView", "#notFoundPost", "#blockedPost"],
+					"refs": ["#blockedPost", "#notFoundPost", "#postView"],
 					"type": "union"
 				},
 				"parent": {
-					"refs": ["#postView", "#notFoundPost", "#blockedPost"],
+					"refs": ["#blockedPost", "#notFoundPost", "#postView"],
 					"type": "union"
 				},
 				"grandparentAuthor": {
@@ -95,7 +95,7 @@
 		},
 		"blockedPost": {
 			"type": "object",
-			"required": ["uri", "blocked", "author"],
+			"required": ["author", "blocked", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",
@@ -121,18 +121,18 @@
 				"event": {
 					"type": "string",
 					"knownValues": [
-						"app.bsky.feed.defs#requestLess",
-						"app.bsky.feed.defs#requestMore",
-						"app.bsky.feed.defs#clickthroughItem",
 						"app.bsky.feed.defs#clickthroughAuthor",
-						"app.bsky.feed.defs#clickthroughReposter",
 						"app.bsky.feed.defs#clickthroughEmbed",
-						"app.bsky.feed.defs#interactionSeen",
+						"app.bsky.feed.defs#clickthroughItem",
+						"app.bsky.feed.defs#clickthroughReposter",
 						"app.bsky.feed.defs#interactionLike",
-						"app.bsky.feed.defs#interactionRepost",
-						"app.bsky.feed.defs#interactionReply",
 						"app.bsky.feed.defs#interactionQuote",
-						"app.bsky.feed.defs#interactionShare"
+						"app.bsky.feed.defs#interactionReply",
+						"app.bsky.feed.defs#interactionRepost",
+						"app.bsky.feed.defs#interactionSeen",
+						"app.bsky.feed.defs#interactionShare",
+						"app.bsky.feed.defs#requestLess",
+						"app.bsky.feed.defs#requestMore"
 					]
 				},
 				"reqId": {
@@ -202,7 +202,7 @@
 					"description": "Unique identifier per request that may be passed back alongside interactions."
 				},
 				"reason": {
-					"refs": ["#reasonRepost", "#reasonPin"],
+					"refs": ["#reasonPin", "#reasonRepost"],
 					"type": "union"
 				},
 				"feedContext": {
@@ -214,7 +214,7 @@
 		},
 		"notFoundPost": {
 			"type": "object",
-			"required": ["uri", "notFound"],
+			"required": ["notFound", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",
@@ -264,7 +264,7 @@
 		},
 		"generatorView": {
 			"type": "object",
-			"required": ["uri", "cid", "did", "creator", "displayName", "indexedAt"],
+			"required": ["cid", "creator", "did", "displayName", "indexedAt", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -348,13 +348,13 @@
 					"type": "ref"
 				},
 				"parent": {
-					"refs": ["#threadViewPost", "#notFoundPost", "#blockedPost"],
+					"refs": ["#blockedPost", "#notFoundPost", "#threadViewPost"],
 					"type": "union"
 				},
 				"replies": {
 					"type": "array",
 					"items": {
-						"refs": ["#threadViewPost", "#notFoundPost", "#blockedPost"],
+						"refs": ["#blockedPost", "#notFoundPost", "#threadViewPost"],
 						"type": "union"
 					}
 				},
@@ -424,7 +424,7 @@
 					"format": "at-uri"
 				},
 				"reason": {
-					"refs": ["#skeletonReasonRepost", "#skeletonReasonPin"],
+					"refs": ["#skeletonReasonPin", "#skeletonReasonRepost"],
 					"type": "union"
 				},
 				"feedContext": {

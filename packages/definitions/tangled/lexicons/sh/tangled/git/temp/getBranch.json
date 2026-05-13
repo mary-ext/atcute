@@ -20,7 +20,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["name", "hash", "when"],
+					"required": ["hash", "name", "when"],
 					"properties": {
 						"hash": {
 							"type": "string",
@@ -49,7 +49,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["repo", "name"],
+				"required": ["name", "repo"],
 				"properties": {
 					"name": {
 						"type": "string",

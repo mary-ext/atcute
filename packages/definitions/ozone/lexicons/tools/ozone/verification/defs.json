@@ -3,7 +3,7 @@
 	"defs": {
 		"verificationView": {
 			"type": "object",
-			"required": ["issuer", "uri", "subject", "handle", "displayName", "createdAt"],
+			"required": ["createdAt", "displayName", "handle", "issuer", "subject", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",

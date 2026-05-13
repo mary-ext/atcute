@@ -10,12 +10,12 @@
 				"properties": {
 					"allowIncoming": {
 						"type": "string",
-						"knownValues": ["all", "none", "following"]
+						"knownValues": ["all", "following", "none"]
 					},
 					"allowGroupInvites": {
 						"type": "string",
 						"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Declaration about group chat invitation preferences for the record owner.",
-						"knownValues": ["all", "none", "following"]
+						"knownValues": ["all", "following", "none"]
 					}
 				}
 			},

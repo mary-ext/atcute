@@ -17,9 +17,9 @@
 						"default": "sh.tangled.repo.pull.status.open",
 						"description": "status of the pull request",
 						"knownValues": [
-							"sh.tangled.repo.pull.status.open",
 							"sh.tangled.repo.pull.status.closed",
-							"sh.tangled.repo.pull.status.merged"
+							"sh.tangled.repo.pull.status.merged",
+							"sh.tangled.repo.pull.status.open"
 						]
 					}
 				}

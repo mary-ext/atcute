@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["pages", "author", "title"],
+				"required": ["author", "pages", "title"],
 				"properties": {
 					"tags": {
 						"type": "array",
@@ -18,7 +18,7 @@
 					"pages": {
 						"type": "array",
 						"items": {
-							"refs": ["pub.leaflet.pages.linearDocument", "pub.leaflet.pages.canvas"],
+							"refs": ["pub.leaflet.pages.canvas", "pub.leaflet.pages.linearDocument"],
 							"type": "union"
 						}
 					},
@@ -41,7 +41,7 @@
 					},
 					"coverImage": {
 						"type": "blob",
-						"accept": ["image/png", "image/jpeg", "image/webp"],
+						"accept": ["image/jpeg", "image/png", "image/webp"],
 						"maxSize": 1000000
 					},
 					"description": {

@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["post", "createdAt"],
+				"required": ["createdAt", "post"],
 				"properties": {
 					"post": {
 						"type": "string",
@@ -16,7 +16,7 @@
 					"allow": {
 						"type": "array",
 						"items": {
-							"refs": ["#mentionRule", "#followerRule", "#followingRule", "#listRule"],
+							"refs": ["#followerRule", "#followingRule", "#listRule", "#mentionRule"],
 							"type": "union"
 						},
 						"maxLength": 5,

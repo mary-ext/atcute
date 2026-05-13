@@ -23,33 +23,33 @@
 			"properties": {
 				"block": {
 					"refs": [
-						"pub.leaflet.blocks.iframe",
-						"pub.leaflet.blocks.text",
 						"pub.leaflet.blocks.blockquote",
-						"pub.leaflet.blocks.header",
-						"pub.leaflet.blocks.image",
-						"pub.leaflet.blocks.unorderedList",
-						"pub.leaflet.blocks.orderedList",
-						"pub.leaflet.blocks.website",
-						"pub.leaflet.blocks.math",
-						"pub.leaflet.blocks.code",
-						"pub.leaflet.blocks.horizontalRule",
 						"pub.leaflet.blocks.bskyPost",
+						"pub.leaflet.blocks.button",
+						"pub.leaflet.blocks.code",
+						"pub.leaflet.blocks.header",
+						"pub.leaflet.blocks.horizontalRule",
+						"pub.leaflet.blocks.iframe",
+						"pub.leaflet.blocks.image",
+						"pub.leaflet.blocks.math",
+						"pub.leaflet.blocks.orderedList",
 						"pub.leaflet.blocks.page",
 						"pub.leaflet.blocks.poll",
-						"pub.leaflet.blocks.button"
+						"pub.leaflet.blocks.text",
+						"pub.leaflet.blocks.unorderedList",
+						"pub.leaflet.blocks.website"
 					],
 					"type": "union"
 				},
 				"alignment": {
 					"type": "string",
-					"knownValues": ["#textAlignLeft", "#textAlignCenter", "#textAlignRight", "#textAlignJustify"]
+					"knownValues": ["#textAlignCenter", "#textAlignJustify", "#textAlignLeft", "#textAlignRight"]
 				}
 			}
 		},
 		"quote": {
 			"type": "object",
-			"required": ["start", "end"],
+			"required": ["end", "start"],
 			"properties": {
 				"end": {
 					"ref": "#position",

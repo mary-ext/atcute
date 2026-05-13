@@ -42,7 +42,7 @@
 					"status": {
 						"type": "string",
 						"description": "Filter convos by their status. It is discouraged to call with \"request\" and preferred to call chat.bsky.convo.listConvoRequests, which also includes group join requests made by the user.",
-						"knownValues": ["request", "accepted"]
+						"knownValues": ["accepted", "request"]
 					},
 					"readState": {
 						"type": "string",
@@ -51,7 +51,7 @@
 					"lockStatus": {
 						"type": "string",
 						"description": "Filter by conversation lock status. Values follow chat.bsky.convo.defs#convoLockStatus.",
-						"knownValues": ["unlocked", "locked", "locked-permanently"]
+						"knownValues": ["locked", "locked-permanently", "unlocked"]
 					}
 				}
 			},

@@ -65,11 +65,11 @@
 					},
 					"sortField": {
 						"enum": [
-							"lastReviewedAt",
 							"lastReportedAt",
+							"lastReviewedAt",
+							"priorityScore",
 							"reportedRecordsCount",
-							"takendownRecordsCount",
-							"priorityScore"
+							"takendownRecordsCount"
 						],
 						"type": "string",
 						"default": "lastReportedAt"
@@ -105,10 +105,10 @@
 						"type": "string",
 						"description": "Specify when fetching subjects in a certain state",
 						"knownValues": [
-							"tools.ozone.moderation.defs#reviewOpen",
 							"tools.ozone.moderation.defs#reviewClosed",
 							"tools.ozone.moderation.defs#reviewEscalated",
-							"tools.ozone.moderation.defs#reviewNone"
+							"tools.ozone.moderation.defs#reviewNone",
+							"tools.ozone.moderation.defs#reviewOpen"
 						]
 					},
 					"subjectType": {
@@ -178,7 +178,7 @@
 					"ageAssuranceState": {
 						"type": "string",
 						"description": "If specified, only subjects with the given age assurance state will be returned.",
-						"knownValues": ["pending", "assured", "unknown", "reset", "blocked"]
+						"knownValues": ["assured", "blocked", "pending", "reset", "unknown"]
 					},
 					"hostingDeletedAfter": {
 						"type": "string",

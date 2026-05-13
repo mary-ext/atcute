@@ -7,7 +7,7 @@
 				"schema": {
 					"type": "object",
 					"nullable": ["swapRecord"],
-					"required": ["repo", "collection", "rkey", "record"],
+					"required": ["collection", "record", "repo", "rkey"],
 					"properties": {
 						"repo": {
 							"type": "string",
@@ -55,7 +55,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["uri", "cid"],
+					"required": ["cid", "uri"],
 					"properties": {
 						"cid": {
 							"type": "string",
@@ -71,7 +71,7 @@
 						},
 						"validationStatus": {
 							"type": "string",
-							"knownValues": ["valid", "unknown"]
+							"knownValues": ["unknown", "valid"]
 						}
 					}
 				},

@@ -44,7 +44,7 @@
 						"type": "array",
 						"items": {
 							"type": "string",
-							"knownValues": ["modlist", "curatelist"]
+							"knownValues": ["curatelist", "modlist"]
 						},
 						"description": "Optional filter by list purpose. If not specified, all supported types are returned."
 					}

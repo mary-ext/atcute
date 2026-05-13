@@ -20,7 +20,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["ref", "languages"],
+					"required": ["languages", "ref"],
 					"properties": {
 						"ref": {
 							"type": "string",
@@ -63,7 +63,7 @@
 		},
 		"language": {
 			"type": "object",
-			"required": ["name", "size", "percentage"],
+			"required": ["name", "percentage", "size"],
 			"properties": {
 				"name": {
 					"type": "string",

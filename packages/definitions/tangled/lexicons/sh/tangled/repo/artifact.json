@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["name", "tag", "createdAt", "artifact"],
+				"required": ["artifact", "createdAt", "name", "tag"],
 				"properties": {
 					"tag": {
 						"type": "bytes",

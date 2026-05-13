@@ -38,10 +38,10 @@
 					"type": "array",
 					"items": {
 						"refs": [
-							"app.bsky.feed.threadgate#mentionRule",
 							"app.bsky.feed.threadgate#followerRule",
 							"app.bsky.feed.threadgate#followingRule",
-							"app.bsky.feed.threadgate#listRule"
+							"app.bsky.feed.threadgate#listRule",
+							"app.bsky.feed.threadgate#mentionRule"
 						],
 						"type": "union"
 					},
@@ -112,7 +112,7 @@
 		},
 		"draftView": {
 			"type": "object",
-			"required": ["id", "draft", "createdAt", "updatedAt"],
+			"required": ["createdAt", "draft", "id", "updatedAt"],
 			"properties": {
 				"id": {
 					"type": "string",
@@ -138,7 +138,7 @@
 		},
 		"draftWithId": {
 			"type": "object",
-			"required": ["id", "draft"],
+			"required": ["draft", "id"],
 			"properties": {
 				"id": {
 					"type": "string",
@@ -200,7 +200,7 @@
 		},
 		"draftEmbedCaption": {
 			"type": "object",
-			"required": ["lang", "content"],
+			"required": ["content", "lang"],
 			"properties": {
 				"lang": {
 					"type": "string",

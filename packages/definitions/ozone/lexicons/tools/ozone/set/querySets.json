@@ -35,7 +35,7 @@
 						"type": "string"
 					},
 					"sortBy": {
-						"enum": ["name", "createdAt", "updatedAt"],
+						"enum": ["createdAt", "name", "updatedAt"],
 						"type": "string",
 						"default": "name"
 					},

@@ -72,7 +72,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["accessJwt", "refreshJwt", "handle", "did"],
+					"required": ["accessJwt", "did", "handle", "refreshJwt"],
 					"properties": {
 						"did": {
 							"type": "string",

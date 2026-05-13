@@ -18,7 +18,7 @@
 		},
 		"blobView": {
 			"type": "object",
-			"required": ["cid", "mimeType", "size", "createdAt"],
+			"required": ["cid", "createdAt", "mimeType", "size"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -46,7 +46,7 @@
 		},
 		"repoView": {
 			"type": "object",
-			"required": ["did", "handle", "relatedRecords", "indexedAt", "moderation"],
+			"required": ["did", "handle", "indexedAt", "moderation", "relatedRecords"],
 			"properties": {
 				"did": {
 					"type": "string",
@@ -107,7 +107,7 @@
 		},
 		"recordView": {
 			"type": "object",
-			"required": ["uri", "cid", "value", "blobCids", "indexedAt", "moderation", "repo"],
+			"required": ["blobCids", "cid", "indexedAt", "moderation", "repo", "uri", "value"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -180,11 +180,11 @@
 		},
 		"recordEvent": {
 			"type": "object",
-			"required": ["timestamp", "op"],
+			"required": ["op", "timestamp"],
 			"properties": {
 				"op": {
 					"type": "string",
-					"knownValues": ["create", "update", "delete"]
+					"knownValues": ["create", "delete", "update"]
 				},
 				"cid": {
 					"type": "string",
@@ -202,7 +202,7 @@
 		},
 		"subjectView": {
 			"type": "object",
-			"required": ["type", "subject"],
+			"required": ["subject", "type"],
 			"properties": {
 				"repo": {
 					"ref": "#repoViewDetail",
@@ -232,7 +232,7 @@
 		},
 		"accountEvent": {
 			"type": "object",
-			"required": ["timestamp", "active"],
+			"required": ["active", "timestamp"],
 			"properties": {
 				"active": {
 					"type": "boolean",
@@ -240,7 +240,7 @@
 				},
 				"status": {
 					"type": "string",
-					"knownValues": ["unknown", "deactivated", "deleted", "takendown", "suspended", "tombstoned"]
+					"knownValues": ["deactivated", "deleted", "suspended", "takendown", "tombstoned", "unknown"]
 				},
 				"comment": {
 					"type": "string"
@@ -280,7 +280,7 @@
 		},
 		"imageDetails": {
 			"type": "object",
-			"required": ["width", "height"],
+			"required": ["height", "width"],
 			"properties": {
 				"width": {
 					"type": "integer"
@@ -306,38 +306,38 @@
 		},
 		"modEventView": {
 			"type": "object",
-			"required": ["id", "event", "subject", "subjectBlobCids", "createdBy", "createdAt"],
+			"required": ["createdAt", "createdBy", "event", "id", "subject", "subjectBlobCids"],
 			"properties": {
 				"id": {
 					"type": "integer"
 				},
 				"event": {
 					"refs": [
-						"#modEventTakedown",
-						"#modEventReverseTakedown",
-						"#modEventComment",
-						"#modEventReport",
-						"#modEventLabel",
-						"#modEventAcknowledge",
-						"#modEventEscalate",
-						"#modEventMute",
-						"#modEventUnmute",
-						"#modEventMuteReporter",
-						"#modEventUnmuteReporter",
-						"#modEventEmail",
-						"#modEventResolveAppeal",
-						"#modEventDivert",
-						"#modEventTag",
 						"#accountEvent",
-						"#identityEvent",
-						"#recordEvent",
-						"#modEventPriorityScore",
 						"#ageAssuranceEvent",
 						"#ageAssuranceOverrideEvent",
 						"#ageAssurancePurgeEvent",
+						"#cancelScheduledTakedownEvent",
+						"#identityEvent",
+						"#modEventAcknowledge",
+						"#modEventComment",
+						"#modEventDivert",
+						"#modEventEmail",
+						"#modEventEscalate",
+						"#modEventLabel",
+						"#modEventMute",
+						"#modEventMuteReporter",
+						"#modEventPriorityScore",
+						"#modEventReport",
+						"#modEventResolveAppeal",
+						"#modEventReverseTakedown",
+						"#modEventTag",
+						"#modEventTakedown",
+						"#modEventUnmute",
+						"#modEventUnmuteReporter",
+						"#recordEvent",
 						"#revokeAccountCredentialsEvent",
-						"#scheduleTakedownEvent",
-						"#cancelScheduledTakedownEvent"
+						"#scheduleTakedownEvent"
 					],
 					"type": "union"
 				},
@@ -347,9 +347,9 @@
 				},
 				"subject": {
 					"refs": [
+						"chat.bsky.convo.defs#messageRef",
 						"com.atproto.admin.defs#repoRef",
-						"com.atproto.repo.strongRef",
-						"chat.bsky.convo.defs#messageRef"
+						"com.atproto.repo.strongRef"
 					],
 					"type": "union"
 				},
@@ -419,7 +419,7 @@
 		},
 		"videoDetails": {
 			"type": "object",
-			"required": ["width", "height", "length"],
+			"required": ["height", "length", "width"],
 			"properties": {
 				"width": {
 					"type": "integer"
@@ -576,15 +576,15 @@
 		"reporterStats": {
 			"type": "object",
 			"required": [
-				"did",
 				"accountReportCount",
+				"did",
+				"labeledAccountCount",
+				"labeledRecordCount",
 				"recordReportCount",
 				"reportedAccountCount",
 				"reportedRecordCount",
 				"takendownAccountCount",
-				"takendownRecordCount",
-				"labeledAccountCount",
-				"labeledRecordCount"
+				"takendownRecordCount"
 			],
 			"properties": {
 				"did": {
@@ -631,7 +631,7 @@
 			"properties": {
 				"status": {
 					"type": "string",
-					"knownValues": ["takendown", "suspended", "deleted", "deactivated", "unknown"]
+					"knownValues": ["deactivated", "deleted", "suspended", "takendown", "unknown"]
 				},
 				"createdAt": {
 					"type": "string",
@@ -694,7 +694,7 @@
 		},
 		"repoViewDetail": {
 			"type": "object",
-			"required": ["did", "handle", "relatedRecords", "indexedAt", "moderation"],
+			"required": ["did", "handle", "indexedAt", "moderation", "relatedRecords"],
 			"properties": {
 				"did": {
 					"type": "string",
@@ -844,7 +844,7 @@
 		},
 		"recordViewDetail": {
 			"type": "object",
-			"required": ["uri", "cid", "value", "blobs", "indexedAt", "moderation", "repo"],
+			"required": ["blobs", "cid", "indexedAt", "moderation", "repo", "uri", "value"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -897,7 +897,7 @@
 		},
 		"ageAssuranceEvent": {
 			"type": "object",
-			"required": ["createdAt", "status", "attemptId"],
+			"required": ["attemptId", "createdAt", "status"],
 			"properties": {
 				"access": {
 					"ref": "app.bsky.ageassurance.defs#access",
@@ -914,7 +914,7 @@
 				"status": {
 					"type": "string",
 					"description": "The status of the Age Assurance process.",
-					"knownValues": ["unknown", "pending", "assured"]
+					"knownValues": ["assured", "pending", "unknown"]
 				},
 				"attemptId": {
 					"type": "string",
@@ -946,7 +946,7 @@
 		},
 		"subjectStatusView": {
 			"type": "object",
-			"required": ["id", "subject", "createdAt", "updatedAt", "reviewState"],
+			"required": ["createdAt", "id", "reviewState", "subject", "updatedAt"],
 			"properties": {
 				"id": {
 					"type": "integer"
@@ -967,9 +967,9 @@
 				},
 				"subject": {
 					"refs": [
+						"chat.bsky.convo.defs#messageRef",
 						"com.atproto.admin.defs#repoRef",
-						"com.atproto.repo.strongRef",
-						"chat.bsky.convo.defs#messageRef"
+						"com.atproto.repo.strongRef"
 					],
 					"type": "union"
 				},
@@ -1050,7 +1050,7 @@
 				"ageAssuranceState": {
 					"type": "string",
 					"description": "Current age assurance state of the subject.",
-					"knownValues": ["pending", "assured", "unknown", "reset", "blocked"]
+					"knownValues": ["assured", "blocked", "pending", "reset", "unknown"]
 				},
 				"subjectRepoHandle": {
 					"type": "string"
@@ -1068,38 +1068,38 @@
 		},
 		"modEventViewDetail": {
 			"type": "object",
-			"required": ["id", "event", "subject", "subjectBlobs", "createdBy", "createdAt"],
+			"required": ["createdAt", "createdBy", "event", "id", "subject", "subjectBlobs"],
 			"properties": {
 				"id": {
 					"type": "integer"
 				},
 				"event": {
 					"refs": [
-						"#modEventTakedown",
-						"#modEventReverseTakedown",
-						"#modEventComment",
-						"#modEventReport",
-						"#modEventLabel",
-						"#modEventAcknowledge",
-						"#modEventEscalate",
-						"#modEventMute",
-						"#modEventUnmute",
-						"#modEventMuteReporter",
-						"#modEventUnmuteReporter",
-						"#modEventEmail",
-						"#modEventResolveAppeal",
-						"#modEventDivert",
-						"#modEventTag",
 						"#accountEvent",
-						"#identityEvent",
-						"#recordEvent",
-						"#modEventPriorityScore",
 						"#ageAssuranceEvent",
 						"#ageAssuranceOverrideEvent",
 						"#ageAssurancePurgeEvent",
+						"#cancelScheduledTakedownEvent",
+						"#identityEvent",
+						"#modEventAcknowledge",
+						"#modEventComment",
+						"#modEventDivert",
+						"#modEventEmail",
+						"#modEventEscalate",
+						"#modEventLabel",
+						"#modEventMute",
+						"#modEventMuteReporter",
+						"#modEventPriorityScore",
+						"#modEventReport",
+						"#modEventResolveAppeal",
+						"#modEventReverseTakedown",
+						"#modEventTag",
+						"#modEventTakedown",
+						"#modEventUnmute",
+						"#modEventUnmuteReporter",
+						"#recordEvent",
 						"#revokeAccountCredentialsEvent",
-						"#scheduleTakedownEvent",
-						"#cancelScheduledTakedownEvent"
+						"#scheduleTakedownEvent"
 					],
 					"type": "union"
 				},
@@ -1108,7 +1108,7 @@
 					"type": "ref"
 				},
 				"subject": {
-					"refs": ["#repoView", "#repoViewNotFound", "#recordView", "#recordViewNotFound"],
+					"refs": ["#recordView", "#recordViewNotFound", "#repoView", "#repoViewNotFound"],
 					"type": "union"
 				},
 				"createdAt": {
@@ -1141,10 +1141,10 @@
 		"subjectReviewState": {
 			"type": "string",
 			"knownValues": [
-				"tools.ozone.moderation.defs#reviewOpen",
-				"tools.ozone.moderation.defs#reviewEscalated",
 				"tools.ozone.moderation.defs#reviewClosed",
-				"tools.ozone.moderation.defs#reviewNone"
+				"tools.ozone.moderation.defs#reviewEscalated",
+				"tools.ozone.moderation.defs#reviewNone",
+				"tools.ozone.moderation.defs#reviewOpen"
 			]
 		},
 		"modEventAcknowledge": {
@@ -1161,7 +1161,7 @@
 		},
 		"scheduledActionView": {
 			"type": "object",
-			"required": ["id", "action", "did", "createdBy", "createdAt", "status"],
+			"required": ["action", "createdAt", "createdBy", "did", "id", "status"],
 			"properties": {
 				"id": {
 					"type": "integer",
@@ -1180,7 +1180,7 @@
 				"status": {
 					"type": "string",
 					"description": "Current status of the scheduled action",
-					"knownValues": ["pending", "executed", "cancelled", "failed"]
+					"knownValues": ["cancelled", "executed", "failed", "pending"]
 				},
 				"createdAt": {
 					"type": "string",
@@ -1358,7 +1358,7 @@
 				"status": {
 					"type": "string",
 					"description": "The status to be set for the user decided by a moderator, overriding whatever value the user had previously. Use reset to default to original state.",
-					"knownValues": ["assured", "reset", "blocked"]
+					"knownValues": ["assured", "blocked", "reset"]
 				},
 				"comment": {
 					"type": "string",

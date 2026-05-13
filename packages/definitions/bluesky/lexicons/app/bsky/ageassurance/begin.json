@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["email", "language", "countryCode"],
+					"required": ["countryCode", "email", "language"],
 					"properties": {
 						"email": {
 							"type": "string",

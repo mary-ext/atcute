@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["state", "metadata"],
+					"required": ["metadata", "state"],
 					"properties": {
 						"state": {
 							"ref": "app.bsky.ageassurance.defs#state",

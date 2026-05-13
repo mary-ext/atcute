@@ -13,13 +13,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('pub.leaflet.document'),
 		author: /*#__PURE__*/ v.actorIdentifierString(),
 		/**
-		 * @accept image/png, image/jpeg, image/webp
+		 * @accept image/jpeg, image/png, image/webp
 		 * @maxSize 1000000
 		 */
 		coverImage: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
 				/*#__PURE__*/ v.blobSize(1000000),
-				/*#__PURE__*/ v.blobAccept(['image/png', 'image/jpeg', 'image/webp']),
+				/*#__PURE__*/ v.blobAccept(['image/jpeg', 'image/png', 'image/webp']),
 			]),
 		),
 		/**

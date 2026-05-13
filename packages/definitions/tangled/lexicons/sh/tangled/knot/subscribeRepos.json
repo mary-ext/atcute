@@ -31,7 +31,7 @@
 		},
 		"gitSync1": {
 			"type": "object",
-			"required": ["seq", "did"],
+			"required": ["did", "seq"],
 			"properties": {
 				"did": {
 					"type": "string",
@@ -46,7 +46,7 @@
 		},
 		"gitSync2": {
 			"type": "object",
-			"required": ["seq", "repo"],
+			"required": ["repo", "seq"],
 			"properties": {
 				"seq": {
 					"type": "integer",
@@ -61,7 +61,7 @@
 		},
 		"identity": {
 			"type": "object",
-			"required": ["seq", "did", "time"],
+			"required": ["did", "seq", "time"],
 			"properties": {
 				"did": {
 					"type": "string",

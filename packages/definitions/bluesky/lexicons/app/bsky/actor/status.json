@@ -10,7 +10,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["status", "createdAt"],
+				"required": ["createdAt", "status"],
 				"properties": {
 					"embed": {
 						"refs": ["app.bsky.embed.external"],

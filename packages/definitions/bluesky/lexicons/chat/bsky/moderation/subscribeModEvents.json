@@ -31,7 +31,7 @@
 		},
 		"eventConvoFirstMessage": {
 			"type": "object",
-			"required": ["createdAt", "rev", "convoId", "user", "recipients"],
+			"required": ["convoId", "createdAt", "recipients", "rev", "user"],
 			"properties": {
 				"rev": {
 					"type": "string"

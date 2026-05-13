@@ -22,7 +22,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["repo", "ref"],
+				"required": ["ref", "repo"],
 				"properties": {
 					"ref": {
 						"type": "string",

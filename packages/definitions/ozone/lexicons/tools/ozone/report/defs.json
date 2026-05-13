@@ -40,50 +40,50 @@
 			"type": "string",
 			"knownValues": [
 				"tools.ozone.report.defs#reasonAppeal",
-				"tools.ozone.report.defs#reasonOther",
-				"tools.ozone.report.defs#reasonViolenceAnimal",
-				"tools.ozone.report.defs#reasonViolenceThreats",
-				"tools.ozone.report.defs#reasonViolenceGraphicContent",
-				"tools.ozone.report.defs#reasonViolenceGlorification",
-				"tools.ozone.report.defs#reasonViolenceExtremistContent",
-				"tools.ozone.report.defs#reasonViolenceTrafficking",
-				"tools.ozone.report.defs#reasonViolenceOther",
-				"tools.ozone.report.defs#reasonSexualAbuseContent",
-				"tools.ozone.report.defs#reasonSexualNCII",
-				"tools.ozone.report.defs#reasonSexualDeepfake",
-				"tools.ozone.report.defs#reasonSexualAnimal",
-				"tools.ozone.report.defs#reasonSexualUnlabeled",
-				"tools.ozone.report.defs#reasonSexualOther",
 				"tools.ozone.report.defs#reasonChildSafetyCSAM",
 				"tools.ozone.report.defs#reasonChildSafetyGroom",
-				"tools.ozone.report.defs#reasonChildSafetyPrivacy",
 				"tools.ozone.report.defs#reasonChildSafetyHarassment",
 				"tools.ozone.report.defs#reasonChildSafetyOther",
-				"tools.ozone.report.defs#reasonHarassmentTroll",
-				"tools.ozone.report.defs#reasonHarassmentTargeted",
-				"tools.ozone.report.defs#reasonHarassmentHateSpeech",
+				"tools.ozone.report.defs#reasonChildSafetyPrivacy",
 				"tools.ozone.report.defs#reasonHarassmentDoxxing",
+				"tools.ozone.report.defs#reasonHarassmentHateSpeech",
 				"tools.ozone.report.defs#reasonHarassmentOther",
+				"tools.ozone.report.defs#reasonHarassmentTargeted",
+				"tools.ozone.report.defs#reasonHarassmentTroll",
 				"tools.ozone.report.defs#reasonMisleadingBot",
-				"tools.ozone.report.defs#reasonMisleadingImpersonation",
-				"tools.ozone.report.defs#reasonMisleadingSpam",
-				"tools.ozone.report.defs#reasonMisleadingScam",
 				"tools.ozone.report.defs#reasonMisleadingElections",
+				"tools.ozone.report.defs#reasonMisleadingImpersonation",
 				"tools.ozone.report.defs#reasonMisleadingOther",
-				"tools.ozone.report.defs#reasonRuleSiteSecurity",
-				"tools.ozone.report.defs#reasonRuleProhibitedSales",
+				"tools.ozone.report.defs#reasonMisleadingScam",
+				"tools.ozone.report.defs#reasonMisleadingSpam",
+				"tools.ozone.report.defs#reasonOther",
 				"tools.ozone.report.defs#reasonRuleBanEvasion",
 				"tools.ozone.report.defs#reasonRuleOther",
+				"tools.ozone.report.defs#reasonRuleProhibitedSales",
+				"tools.ozone.report.defs#reasonRuleSiteSecurity",
 				"tools.ozone.report.defs#reasonSelfHarmContent",
 				"tools.ozone.report.defs#reasonSelfHarmED",
+				"tools.ozone.report.defs#reasonSelfHarmOther",
 				"tools.ozone.report.defs#reasonSelfHarmStunts",
 				"tools.ozone.report.defs#reasonSelfHarmSubstances",
-				"tools.ozone.report.defs#reasonSelfHarmOther"
+				"tools.ozone.report.defs#reasonSexualAbuseContent",
+				"tools.ozone.report.defs#reasonSexualAnimal",
+				"tools.ozone.report.defs#reasonSexualDeepfake",
+				"tools.ozone.report.defs#reasonSexualNCII",
+				"tools.ozone.report.defs#reasonSexualOther",
+				"tools.ozone.report.defs#reasonSexualUnlabeled",
+				"tools.ozone.report.defs#reasonViolenceAnimal",
+				"tools.ozone.report.defs#reasonViolenceExtremistContent",
+				"tools.ozone.report.defs#reasonViolenceGlorification",
+				"tools.ozone.report.defs#reasonViolenceGraphicContent",
+				"tools.ozone.report.defs#reasonViolenceOther",
+				"tools.ozone.report.defs#reasonViolenceThreats",
+				"tools.ozone.report.defs#reasonViolenceTrafficking"
 			]
 		},
 		"reportView": {
 			"type": "object",
-			"required": ["id", "eventId", "status", "subject", "reportType", "reportedBy", "reporter", "createdAt"],
+			"required": ["createdAt", "eventId", "id", "reportType", "reportedBy", "reporter", "status", "subject"],
 			"properties": {
 				"id": {
 					"type": "integer",
@@ -97,7 +97,7 @@
 				"status": {
 					"type": "string",
 					"description": "Current status of the report",
-					"knownValues": ["open", "closed", "escalated", "queued", "assigned"]
+					"knownValues": ["assigned", "closed", "escalated", "open", "queued"]
 				},
 				"actions": {
 					"type": "array",
@@ -200,7 +200,7 @@
 				"previousStatus": {
 					"type": "string",
 					"description": "The report's status before this activity. Populated automatically from the report row; not required in input.",
-					"knownValues": ["open", "closed", "escalated", "queued", "assigned"]
+					"knownValues": ["assigned", "closed", "escalated", "open", "queued"]
 				}
 			},
 			"description": "Activity recording a report being closed."
@@ -211,14 +211,14 @@
 				"previousStatus": {
 					"type": "string",
 					"description": "The report's status before this activity. Populated automatically from the report row; not required in input.",
-					"knownValues": ["open", "closed", "escalated", "queued", "assigned"]
+					"knownValues": ["assigned", "closed", "escalated", "open", "queued"]
 				}
 			},
 			"description": "Activity recording a report being routed to a queue."
 		},
 		"assignmentView": {
 			"type": "object",
-			"required": ["id", "did", "reportId", "startAt"],
+			"required": ["did", "id", "reportId", "startAt"],
 			"properties": {
 				"id": {
 					"type": "integer"
@@ -255,7 +255,7 @@
 				"previousStatus": {
 					"type": "string",
 					"description": "The report's status before this activity. Populated automatically from the report row; not required in input.",
-					"knownValues": ["open", "closed", "escalated", "queued", "assigned"]
+					"knownValues": ["assigned", "closed", "escalated", "open", "queued"]
 				}
 			},
 			"description": "Activity recording a closed report being reopened. Only valid when the report is in 'closed' status."
@@ -314,7 +314,7 @@
 		},
 		"reportAssignment": {
 			"type": "object",
-			"required": ["did", "assignedAt"],
+			"required": ["assignedAt", "did"],
 			"properties": {
 				"did": {
 					"type": "string",
@@ -344,7 +344,7 @@
 				"previousStatus": {
 					"type": "string",
 					"description": "The report's status before this activity. Populated automatically from the report row; not required in input.",
-					"knownValues": ["open", "closed", "escalated", "queued", "assigned"]
+					"knownValues": ["assigned", "closed", "escalated", "open", "queued"]
 				}
 			},
 			"description": "Activity recording a moderator being assigned to a report."
@@ -355,7 +355,7 @@
 				"previousStatus": {
 					"type": "string",
 					"description": "The report's status before this activity. Populated automatically from the report row; not required in input.",
-					"knownValues": ["open", "closed", "escalated", "queued", "assigned"]
+					"knownValues": ["assigned", "closed", "escalated", "open", "queued"]
 				}
 			},
 			"description": "Activity recording a report being escalated."
@@ -366,7 +366,7 @@
 		},
 		"reportActivityView": {
 			"type": "object",
-			"required": ["id", "reportId", "activity", "isAutomated", "createdBy", "createdAt"],
+			"required": ["activity", "createdAt", "createdBy", "id", "isAutomated", "reportId"],
 			"properties": {
 				"id": {
 					"type": "integer",
@@ -378,12 +378,12 @@
 				},
 				"activity": {
 					"refs": [
-						"#queueActivity",
 						"#assignmentActivity",
-						"#escalationActivity",
 						"#closeActivity",
-						"#reopenActivity",
-						"#noteActivity"
+						"#escalationActivity",
+						"#noteActivity",
+						"#queueActivity",
+						"#reopenActivity"
 					],
 					"type": "union",
 					"description": "The typed activity object describing what occurred."

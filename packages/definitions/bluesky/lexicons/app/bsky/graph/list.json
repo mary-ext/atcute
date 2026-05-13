@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["name", "purpose", "createdAt"],
+				"required": ["createdAt", "name", "purpose"],
 				"properties": {
 					"name": {
 						"type": "string",
@@ -16,7 +16,7 @@
 					},
 					"avatar": {
 						"type": "blob",
-						"accept": ["image/png", "image/jpeg"],
+						"accept": ["image/jpeg", "image/png"],
 						"maxSize": 1000000
 					},
 					"labels": {

@@ -15,7 +15,7 @@
 		},
 		"bookmarkView": {
 			"type": "object",
-			"required": ["subject", "item"],
+			"required": ["item", "subject"],
 			"properties": {
 				"item": {
 					"refs": [

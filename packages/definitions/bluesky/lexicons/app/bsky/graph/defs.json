@@ -7,7 +7,7 @@
 		},
 		"listView": {
 			"type": "object",
-			"required": ["uri", "cid", "creator", "name", "purpose", "indexedAt"],
+			"required": ["cid", "creator", "indexedAt", "name", "purpose", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -74,14 +74,14 @@
 		"listPurpose": {
 			"type": "string",
 			"knownValues": [
-				"app.bsky.graph.defs#modlist",
 				"app.bsky.graph.defs#curatelist",
+				"app.bsky.graph.defs#modlist",
 				"app.bsky.graph.defs#referencelist"
 			]
 		},
 		"listItemView": {
 			"type": "object",
-			"required": ["uri", "subject"],
+			"required": ["subject", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",
@@ -136,7 +136,7 @@
 		},
 		"listViewBasic": {
 			"type": "object",
-			"required": ["uri", "cid", "name", "purpose"],
+			"required": ["cid", "name", "purpose", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -213,7 +213,7 @@
 		},
 		"starterPackView": {
 			"type": "object",
-			"required": ["uri", "cid", "record", "creator", "indexedAt"],
+			"required": ["cid", "creator", "indexedAt", "record", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -273,7 +273,7 @@
 		},
 		"starterPackViewBasic": {
 			"type": "object",
-			"required": ["uri", "cid", "record", "creator", "indexedAt"],
+			"required": ["cid", "creator", "indexedAt", "record", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",

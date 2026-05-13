@@ -3,7 +3,7 @@
 	"defs": {
 		"hostStatus": {
 			"type": "string",
-			"knownValues": ["active", "idle", "offline", "throttled", "banned"]
+			"knownValues": ["active", "banned", "idle", "offline", "throttled"]
 		}
 	},
 	"lexicon": 1

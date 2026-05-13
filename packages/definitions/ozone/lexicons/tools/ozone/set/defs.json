@@ -19,7 +19,7 @@
 		},
 		"setView": {
 			"type": "object",
-			"required": ["name", "setSize", "createdAt", "updatedAt"],
+			"required": ["createdAt", "name", "setSize", "updatedAt"],
 			"properties": {
 				"name": {
 					"type": "string",

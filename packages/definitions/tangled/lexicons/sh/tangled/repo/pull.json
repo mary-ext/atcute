@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["target", "title", "createdAt", "rounds"],
+				"required": ["createdAt", "rounds", "target", "title"],
 				"properties": {
 					"body": {
 						"type": "string"
@@ -56,7 +56,7 @@
 		},
 		"round": {
 			"type": "object",
-			"required": ["patchBlob", "createdAt"],
+			"required": ["createdAt", "patchBlob"],
 			"properties": {
 				"createdAt": {
 					"type": "string",
@@ -84,7 +84,7 @@
 		},
 		"target": {
 			"type": "object",
-			"required": ["repo", "branch"],
+			"required": ["branch", "repo"],
 			"properties": {
 				"repo": {
 					"type": "string",

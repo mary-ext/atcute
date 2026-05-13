@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["token", "contacts"],
+					"required": ["contacts", "token"],
 					"properties": {
 						"token": {
 							"type": "string",

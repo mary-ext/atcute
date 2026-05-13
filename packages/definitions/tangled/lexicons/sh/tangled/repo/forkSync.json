@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["did", "source", "name", "branch"],
+					"required": ["branch", "did", "name", "source"],
 					"properties": {
 						"did": {
 							"type": "string",

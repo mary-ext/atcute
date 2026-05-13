@@ -3,4 +3,4 @@
 this directory contains lexicon documents pulled from the following sources:
 
 - https://github.com/frontpagefyi/frontpage.git
-  - commit: bb13eb0a51526aa23b8d1e392fc0966f12350b3b
+  - commit: 10678df9c3f72cbd82f0856a9f99c74dd22326d8

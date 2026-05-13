@@ -7,7 +7,7 @@
 		},
 		"joinLinkView": {
 			"type": "object",
-			"required": ["code", "enabledStatus", "requireApproval", "joinRule", "createdAt"],
+			"required": ["code", "createdAt", "enabledStatus", "joinRule", "requireApproval"],
 			"properties": {
 				"code": {
 					"type": "string"
@@ -31,7 +31,7 @@
 		},
 		"joinRequestView": {
 			"type": "object",
-			"required": ["convoId", "requestedBy", "requestedAt"],
+			"required": ["convoId", "requestedAt", "requestedBy"],
 			"properties": {
 				"convoId": {
 					"type": "string"
@@ -48,11 +48,11 @@
 		},
 		"linkEnabledStatus": {
 			"type": "string",
-			"knownValues": ["enabled", "disabled"]
+			"knownValues": ["disabled", "enabled"]
 		},
 		"joinLinkPreviewView": {
 			"type": "object",
-			"required": ["name", "owner", "memberCount", "requireApproval"],
+			"required": ["memberCount", "name", "owner", "requireApproval"],
 			"properties": {
 				"name": {
 					"type": "string"

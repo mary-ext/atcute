@@ -3,7 +3,7 @@
 	"defs": {
 		"syncStatus": {
 			"type": "object",
-			"required": ["syncedAt", "matchesCount"],
+			"required": ["matchesCount", "syncedAt"],
 			"properties": {
 				"syncedAt": {
 					"type": "string",
@@ -36,7 +36,7 @@
 		},
 		"matchAndContactIndex": {
 			"type": "object",
-			"required": ["match", "contactIndex"],
+			"required": ["contactIndex", "match"],
 			"properties": {
 				"match": {
 					"ref": "app.bsky.actor.defs#profileView",

@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["subject", "activitySubscription"],
+					"required": ["activitySubscription", "subject"],
 					"properties": {
 						"subject": {
 							"type": "string",

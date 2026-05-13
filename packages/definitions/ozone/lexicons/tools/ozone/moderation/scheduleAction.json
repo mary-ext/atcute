@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["action", "subjects", "createdBy", "scheduling"],
+					"required": ["action", "createdBy", "scheduling", "subjects"],
 					"properties": {
 						"action": {
 							"refs": ["#takedown"],
@@ -95,7 +95,7 @@
 		},
 		"failedScheduling": {
 			"type": "object",
-			"required": ["subject", "error"],
+			"required": ["error", "subject"],
 			"properties": {
 				"error": {
 					"type": "string"
@@ -132,7 +132,7 @@
 		},
 		"scheduledActionResults": {
 			"type": "object",
-			"required": ["succeeded", "failed"],
+			"required": ["failed", "succeeded"],
 			"properties": {
 				"failed": {
 					"type": "array",

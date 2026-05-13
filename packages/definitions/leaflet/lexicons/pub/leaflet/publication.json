@@ -40,7 +40,7 @@
 			"type": "object",
 			"properties": {
 				"primary": {
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"refs": ["pub.leaflet.theme.color#rgb", "pub.leaflet.theme.color#rgba"],
 					"type": "union"
 				},
 				"bodyFont": {
@@ -53,7 +53,7 @@
 					"minimum": 0
 				},
 				"accentText": {
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"refs": ["pub.leaflet.theme.color#rgb", "pub.leaflet.theme.color#rgba"],
 					"type": "union"
 				},
 				"headingFont": {
@@ -61,11 +61,11 @@
 					"maxLength": 100
 				},
 				"pageBackground": {
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"refs": ["pub.leaflet.theme.color#rgb", "pub.leaflet.theme.color#rgba"],
 					"type": "union"
 				},
 				"backgroundColor": {
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"refs": ["pub.leaflet.theme.color#rgb", "pub.leaflet.theme.color#rgba"],
 					"type": "union"
 				},
 				"backgroundImage": {
@@ -73,7 +73,7 @@
 					"type": "ref"
 				},
 				"accentBackground": {
-					"refs": ["pub.leaflet.theme.color#rgba", "pub.leaflet.theme.color#rgb"],
+					"refs": ["pub.leaflet.theme.color#rgb", "pub.leaflet.theme.color#rgba"],
 					"type": "union"
 				},
 				"showPageBackground": {

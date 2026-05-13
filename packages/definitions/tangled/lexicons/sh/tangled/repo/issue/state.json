@@ -16,7 +16,7 @@
 						"type": "string",
 						"default": "sh.tangled.repo.issue.state.open",
 						"description": "state of the issue",
-						"knownValues": ["sh.tangled.repo.issue.state.open", "sh.tangled.repo.issue.state.closed"]
+						"knownValues": ["sh.tangled.repo.issue.state.closed", "sh.tangled.repo.issue.state.open"]
 					}
 				}
 			}

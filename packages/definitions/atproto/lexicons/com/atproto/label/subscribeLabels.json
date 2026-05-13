@@ -23,7 +23,7 @@
 			],
 			"message": {
 				"schema": {
-					"refs": ["#labels", "#info"],
+					"refs": ["#info", "#labels"],
 					"type": "union"
 				}
 			},
@@ -40,7 +40,7 @@
 		},
 		"labels": {
 			"type": "object",
-			"required": ["seq", "labels"],
+			"required": ["labels", "seq"],
 			"properties": {
 				"seq": {
 					"type": "integer"

@@ -25,7 +25,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["did", "cids"],
+				"required": ["cids", "did"],
 				"properties": {
 					"did": {
 						"type": "string",

@@ -25,7 +25,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["did", "collection", "rkey"],
+				"required": ["collection", "did", "rkey"],
 				"properties": {
 					"did": {
 						"type": "string",

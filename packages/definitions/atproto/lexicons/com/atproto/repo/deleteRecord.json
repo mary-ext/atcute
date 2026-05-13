@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["repo", "collection", "rkey"],
+					"required": ["collection", "repo", "rkey"],
 					"properties": {
 						"repo": {
 							"type": "string",

@@ -22,7 +22,7 @@
 		},
 		"aspectRatio": {
 			"type": "object",
-			"required": ["width", "height"],
+			"required": ["height", "width"],
 			"properties": {
 				"width": {
 					"type": "integer"

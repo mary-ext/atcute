@@ -11,13 +11,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		/**
 		 * Avatar image for the feed.
 		 *
-		 * @accept image/png, image/jpeg
+		 * @accept image/jpeg, image/png
 		 * @maxSize 1000000
 		 */
 		avatar: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
 				/*#__PURE__*/ v.blobSize(1000000),
-				/*#__PURE__*/ v.blobAccept(['image/png', 'image/jpeg']),
+				/*#__PURE__*/ v.blobAccept(['image/jpeg', 'image/png']),
 			]),
 		),
 		/** Client-declared timestamp when this generator was created. */

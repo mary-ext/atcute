@@ -98,7 +98,7 @@
 				},
 				"include": {
 					"type": "string",
-					"knownValues": ["all", "accepted"]
+					"knownValues": ["accepted", "all"]
 				}
 			}
 		},
@@ -132,7 +132,7 @@
 		},
 		"subjectActivitySubscription": {
 			"type": "object",
-			"required": ["subject", "activitySubscription"],
+			"required": ["activitySubscription", "subject"],
 			"properties": {
 				"subject": {
 					"type": "string",

@@ -52,7 +52,7 @@
 		},
 		"cancellationResults": {
 			"type": "object",
-			"required": ["succeeded", "failed"],
+			"required": ["failed", "succeeded"],
 			"properties": {
 				"failed": {
 					"type": "array",

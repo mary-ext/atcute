@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["subject", "follows"],
+					"required": ["follows", "subject"],
 					"properties": {
 						"cursor": {
 							"type": "string"

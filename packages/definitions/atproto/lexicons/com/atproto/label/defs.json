@@ -3,7 +3,7 @@
 	"defs": {
 		"label": {
 			"type": "object",
-			"required": ["src", "uri", "val", "cts"],
+			"required": ["cts", "src", "uri", "val"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -66,13 +66,13 @@
 			"type": "string",
 			"knownValues": [
 				"!hide",
-				"!warn",
 				"!no-unauthenticated",
-				"porn",
-				"sexual",
-				"nudity",
+				"!warn",
+				"bot",
 				"graphic-media",
-				"bot"
+				"nudity",
+				"porn",
+				"sexual"
 			]
 		},
 		"selfLabels": {
@@ -92,7 +92,7 @@
 		},
 		"labelValueDefinition": {
 			"type": "object",
-			"required": ["identifier", "severity", "blurs", "locales"],
+			"required": ["blurs", "identifier", "locales", "severity"],
 			"properties": {
 				"blurs": {
 					"type": "string",
@@ -109,7 +109,7 @@
 				"severity": {
 					"type": "string",
 					"description": "How should a client visually convey this label? 'inform' means neutral and informational; 'alert' means negative and warning; 'none' means show nothing.",
-					"knownValues": ["inform", "alert", "none"]
+					"knownValues": ["alert", "inform", "none"]
 				},
 				"adultOnly": {
 					"type": "boolean",
@@ -125,14 +125,14 @@
 					"type": "string",
 					"default": "warn",
 					"description": "The default setting for this label.",
-					"knownValues": ["ignore", "warn", "hide"]
+					"knownValues": ["hide", "ignore", "warn"]
 				}
 			},
 			"description": "Declares a label value and its expected interpretations and behaviors."
 		},
 		"labelValueDefinitionStrings": {
 			"type": "object",
-			"required": ["lang", "name", "description"],
+			"required": ["description", "lang", "name"],
 			"properties": {
 				"lang": {
 					"type": "string",

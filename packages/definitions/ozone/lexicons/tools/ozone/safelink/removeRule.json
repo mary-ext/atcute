@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["url", "pattern"],
+					"required": ["pattern", "url"],
 					"properties": {
 						"url": {
 							"type": "string",

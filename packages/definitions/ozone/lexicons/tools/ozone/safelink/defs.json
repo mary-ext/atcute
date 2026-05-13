@@ -3,7 +3,7 @@
 	"defs": {
 		"event": {
 			"type": "object",
-			"required": ["id", "eventType", "url", "pattern", "action", "reason", "createdBy", "createdAt"],
+			"required": ["action", "createdAt", "createdBy", "eventType", "id", "pattern", "reason", "url"],
 			"properties": {
 				"id": {
 					"type": "integer",
@@ -47,7 +47,7 @@
 		},
 		"urlRule": {
 			"type": "object",
-			"required": ["url", "pattern", "action", "reason", "createdBy", "createdAt", "updatedAt"],
+			"required": ["action", "createdAt", "createdBy", "pattern", "reason", "updatedAt", "url"],
 			"properties": {
 				"url": {
 					"type": "string",
@@ -89,7 +89,7 @@
 		},
 		"eventType": {
 			"type": "string",
-			"knownValues": ["addRule", "updateRule", "removeRule"]
+			"knownValues": ["addRule", "removeRule", "updateRule"]
 		},
 		"actionType": {
 			"type": "string",
@@ -97,7 +97,7 @@
 		},
 		"reasonType": {
 			"type": "string",
-			"knownValues": ["csam", "spam", "phishing", "none"]
+			"knownValues": ["csam", "none", "phishing", "spam"]
 		},
 		"patternType": {
 			"type": "string",

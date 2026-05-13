@@ -8,7 +8,7 @@
 				"pages": {
 					"type": "array",
 					"items": {
-						"refs": ["pub.leaflet.pages.linearDocument", "pub.leaflet.pages.canvas"],
+						"refs": ["pub.leaflet.pages.canvas", "pub.leaflet.pages.linearDocument"],
 						"type": "union"
 					}
 				}

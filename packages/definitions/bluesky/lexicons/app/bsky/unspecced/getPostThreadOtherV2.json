@@ -35,7 +35,7 @@
 		},
 		"threadItem": {
 			"type": "object",
-			"required": ["uri", "depth", "value"],
+			"required": ["depth", "uri", "value"],
 			"properties": {
 				"uri": {
 					"type": "string",

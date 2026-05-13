@@ -9,7 +9,7 @@
 					"properties": {
 						"status": {
 							"type": "string",
-							"knownValues": ["request", "accepted"]
+							"knownValues": ["accepted", "request"]
 						}
 					}
 				},

@@ -23,7 +23,7 @@
 					"description": "If present, this item is a checklist item. true = checked, false = unchecked. If absent, this is a normal list item."
 				},
 				"content": {
-					"refs": ["pub.leaflet.blocks.text", "pub.leaflet.blocks.header", "pub.leaflet.blocks.image"],
+					"refs": ["pub.leaflet.blocks.header", "pub.leaflet.blocks.image", "pub.leaflet.blocks.text"],
 					"type": "union"
 				},
 				"children": {

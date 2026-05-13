@@ -26,7 +26,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["repo", "patch", "branch"],
+				"required": ["branch", "patch", "repo"],
 				"properties": {
 					"repo": {
 						"type": "string",

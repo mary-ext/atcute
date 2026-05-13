@@ -3,7 +3,7 @@
 	"defs": {
 		"jobStatus": {
 			"type": "object",
-			"required": ["jobId", "did", "state"],
+			"required": ["did", "jobId", "state"],
 			"properties": {
 				"did": {
 					"type": "string",

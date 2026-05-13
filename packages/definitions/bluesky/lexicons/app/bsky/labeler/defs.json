@@ -3,7 +3,7 @@
 	"defs": {
 		"labelerView": {
 			"type": "object",
-			"required": ["uri", "cid", "creator", "indexedAt"],
+			"required": ["cid", "creator", "indexedAt", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -71,7 +71,7 @@
 		},
 		"labelerViewDetailed": {
 			"type": "object",
-			"required": ["uri", "cid", "creator", "policies", "indexedAt"],
+			"required": ["cid", "creator", "indexedAt", "policies", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",

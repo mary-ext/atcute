@@ -3,7 +3,7 @@
 	"defs": {
 		"main": {
 			"type": "object",
-			"required": ["light", "dark"],
+			"required": ["dark", "light"],
 			"properties": {
 				"dark": {
 					"ref": "#palette",
@@ -41,7 +41,7 @@
 		},
 		"palette": {
 			"type": "object",
-			"required": ["link", "text", "accent", "background", "surfaceHover"],
+			"required": ["accent", "background", "link", "surfaceHover", "text"],
 			"properties": {
 				"link": {
 					"type": "string",

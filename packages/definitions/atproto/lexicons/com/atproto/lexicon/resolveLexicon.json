@@ -12,7 +12,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["uri", "cid", "schema"],
+					"required": ["cid", "schema", "uri"],
 					"properties": {
 						"cid": {
 							"type": "string",

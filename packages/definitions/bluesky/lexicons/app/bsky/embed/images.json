@@ -31,7 +31,7 @@
 		},
 		"image": {
 			"type": "object",
-			"required": ["image", "alt"],
+			"required": ["alt", "image"],
 			"properties": {
 				"alt": {
 					"type": "string",
@@ -51,7 +51,7 @@
 		},
 		"viewImage": {
 			"type": "object",
-			"required": ["thumb", "fullsize", "alt"],
+			"required": ["alt", "fullsize", "thumb"],
 			"properties": {
 				"alt": {
 					"type": "string",

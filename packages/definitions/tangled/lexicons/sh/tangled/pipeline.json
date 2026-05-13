@@ -36,7 +36,7 @@
 		},
 		"workflow": {
 			"type": "object",
-			"required": ["name", "engine", "clone", "raw"],
+			"required": ["clone", "engine", "name", "raw"],
 			"properties": {
 				"raw": {
 					"type": "string"
@@ -55,7 +55,7 @@
 		},
 		"cloneOpts": {
 			"type": "object",
-			"required": ["skip", "depth", "submodules"],
+			"required": ["depth", "skip", "submodules"],
 			"properties": {
 				"skip": {
 					"type": "boolean"
@@ -70,7 +70,7 @@
 		},
 		"triggerRepo": {
 			"type": "object",
-			"required": ["knot", "did", "defaultBranch"],
+			"required": ["defaultBranch", "did", "knot"],
 			"properties": {
 				"did": {
 					"type": "string",
@@ -94,7 +94,7 @@
 		},
 		"pushTriggerData": {
 			"type": "object",
-			"required": ["ref", "newSha", "oldSha"],
+			"required": ["newSha", "oldSha", "ref"],
 			"properties": {
 				"ref": {
 					"type": "string"
@@ -116,7 +116,7 @@
 			"required": ["kind", "repo"],
 			"properties": {
 				"kind": {
-					"enum": ["push", "pull_request", "manual"],
+					"enum": ["manual", "pull_request", "push"],
 					"type": "string"
 				},
 				"push": {
@@ -151,7 +151,7 @@
 		},
 		"pullRequestTriggerData": {
 			"type": "object",
-			"required": ["sourceBranch", "targetBranch", "sourceSha", "action"],
+			"required": ["action", "sourceBranch", "sourceSha", "targetBranch"],
 			"properties": {
 				"action": {
 					"type": "string"

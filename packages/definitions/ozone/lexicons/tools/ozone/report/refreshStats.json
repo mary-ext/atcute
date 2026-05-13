@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["startDate", "endDate"],
+					"required": ["endDate", "startDate"],
 					"properties": {
 						"endDate": {
 							"type": "string",

@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["repo", "collection", "record"],
+					"required": ["collection", "record", "repo"],
 					"properties": {
 						"repo": {
 							"type": "string",
@@ -50,7 +50,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["uri", "cid"],
+					"required": ["cid", "uri"],
 					"properties": {
 						"cid": {
 							"type": "string",
@@ -66,7 +66,7 @@
 						},
 						"validationStatus": {
 							"type": "string",
-							"knownValues": ["valid", "unknown"]
+							"knownValues": ["unknown", "valid"]
 						}
 					}
 				},

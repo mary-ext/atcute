@@ -49,7 +49,7 @@
 		},
 		"publicKey": {
 			"type": "object",
-			"required": ["did", "key", "createdAt"],
+			"required": ["createdAt", "did", "key"],
 			"properties": {
 				"did": {
 					"type": "string",

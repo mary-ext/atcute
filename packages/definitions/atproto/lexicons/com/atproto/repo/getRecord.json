@@ -30,7 +30,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["repo", "collection", "rkey"],
+				"required": ["collection", "repo", "rkey"],
 				"properties": {
 					"cid": {
 						"type": "string",

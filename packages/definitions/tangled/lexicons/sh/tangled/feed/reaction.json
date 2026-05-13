@@ -6,14 +6,14 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["subject", "reaction", "createdAt"],
+				"required": ["createdAt", "reaction", "subject"],
 				"properties": {
 					"subject": {
 						"type": "string",
 						"format": "at-uri"
 					},
 					"reaction": {
-						"enum": ["👍", "👎", "😆", "🎉", "🫤", "❤️", "🚀", "👀"],
+						"enum": ["❤️", "🎉", "👀", "👍", "👎", "😆", "🚀", "🫤"],
 						"type": "string"
 					},
 					"createdAt": {

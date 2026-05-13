@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["repo", "branch"],
+					"required": ["branch", "repo"],
 					"properties": {
 						"repo": {
 							"type": "string",

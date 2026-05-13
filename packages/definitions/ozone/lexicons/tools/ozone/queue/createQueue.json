@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["name", "subjectTypes", "reportTypes"],
+					"required": ["name", "reportTypes", "subjectTypes"],
 					"properties": {
 						"name": {
 							"type": "string",
@@ -34,7 +34,7 @@
 							"type": "array",
 							"items": {
 								"type": "string",
-								"knownValues": ["account", "record", "message"]
+								"knownValues": ["account", "message", "record"]
 							},
 							"minLength": 1,
 							"description": "Subject types this queue accepts"

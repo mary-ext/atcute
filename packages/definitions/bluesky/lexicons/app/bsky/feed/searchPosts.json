@@ -62,7 +62,7 @@
 						"type": "string",
 						"default": "latest",
 						"description": "Specifies the ranking order of results.",
-						"knownValues": ["top", "latest"]
+						"knownValues": ["latest", "top"]
 					},
 					"limit": {
 						"type": "integer",

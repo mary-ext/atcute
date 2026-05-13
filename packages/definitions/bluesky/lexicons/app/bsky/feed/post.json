@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["text", "createdAt"],
+				"required": ["createdAt", "text"],
 				"properties": {
 					"tags": {
 						"type": "array",
@@ -26,11 +26,11 @@
 					},
 					"embed": {
 						"refs": [
-							"app.bsky.embed.images",
-							"app.bsky.embed.video",
 							"app.bsky.embed.external",
+							"app.bsky.embed.images",
 							"app.bsky.embed.record",
-							"app.bsky.embed.recordWithMedia"
+							"app.bsky.embed.recordWithMedia",
+							"app.bsky.embed.video"
 						],
 						"type": "union"
 					},
@@ -97,7 +97,7 @@
 		},
 		"replyRef": {
 			"type": "object",
-			"required": ["root", "parent"],
+			"required": ["parent", "root"],
 			"properties": {
 				"root": {
 					"ref": "com.atproto.repo.strongRef",
@@ -111,7 +111,7 @@
 		},
 		"textSlice": {
 			"type": "object",
-			"required": ["start", "end"],
+			"required": ["end", "start"],
 			"properties": {
 				"end": {
 					"type": "integer",

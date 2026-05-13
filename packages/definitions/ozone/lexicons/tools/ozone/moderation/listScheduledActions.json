@@ -23,7 +23,7 @@
 							"type": "array",
 							"items": {
 								"type": "string",
-								"knownValues": ["pending", "executed", "cancelled", "failed"]
+								"knownValues": ["cancelled", "executed", "failed", "pending"]
 							},
 							"minLength": 1,
 							"description": "Filter actions by status"

@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["recipientDid", "content", "senderDid"],
+					"required": ["content", "recipientDid", "senderDid"],
 					"properties": {
 						"comment": {
 							"type": "string",

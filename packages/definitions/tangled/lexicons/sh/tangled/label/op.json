@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["subject", "add", "delete", "performedAt"],
+				"required": ["add", "delete", "performedAt", "subject"],
 				"properties": {
 					"add": {
 						"type": "array",

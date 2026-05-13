@@ -6,14 +6,14 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["subject", "status"],
+				"required": ["status", "subject"],
 				"properties": {
 					"status": {
 						"type": "string",
 						"default": "community.lexicon.calendar.rsvp#going",
 						"knownValues": [
-							"community.lexicon.calendar.rsvp#interested",
 							"community.lexicon.calendar.rsvp#going",
+							"community.lexicon.calendar.rsvp#interested",
 							"community.lexicon.calendar.rsvp#notgoing"
 						]
 					},

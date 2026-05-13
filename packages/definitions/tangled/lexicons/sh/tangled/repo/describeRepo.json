@@ -16,7 +16,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["repoDid", "ownerDid", "rkey"],
+					"required": ["ownerDid", "repoDid", "rkey"],
 					"properties": {
 						"rkey": {
 							"type": "string",

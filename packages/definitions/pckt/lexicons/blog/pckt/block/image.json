@@ -34,7 +34,7 @@
 					"description": "AT Protocol blob reference (10MB max). Used when image is uploaded to PDS."
 				},
 				"align": {
-					"enum": ["left", "center", "right"],
+					"enum": ["center", "left", "right"],
 					"type": "string",
 					"description": "Horizontal alignment of the image within its container"
 				},
@@ -54,7 +54,7 @@
 		},
 		"aspectRatio": {
 			"type": "object",
-			"required": ["width", "height"],
+			"required": ["height", "width"],
 			"properties": {
 				"width": {
 					"type": "integer",

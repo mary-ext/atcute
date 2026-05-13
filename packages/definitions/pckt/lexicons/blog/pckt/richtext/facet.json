@@ -30,7 +30,7 @@
 		},
 		"main": {
 			"type": "object",
-			"required": ["index", "features"],
+			"required": ["features", "index"],
 			"properties": {
 				"index": {
 					"ref": "#byteSlice",
@@ -40,16 +40,16 @@
 					"type": "array",
 					"items": {
 						"refs": [
-							"#link",
-							"#didMention",
 							"#atMention",
-							"#code",
-							"#highlight",
-							"#underline",
-							"#strikethrough",
-							"#id",
 							"#bold",
-							"#italic"
+							"#code",
+							"#didMention",
+							"#highlight",
+							"#id",
+							"#italic",
+							"#link",
+							"#strikethrough",
+							"#underline"
 						],
 						"type": "union"
 					}
@@ -73,7 +73,7 @@
 		},
 		"byteSlice": {
 			"type": "object",
-			"required": ["byteStart", "byteEnd"],
+			"required": ["byteEnd", "byteStart"],
 			"properties": {
 				"byteEnd": {
 					"type": "integer",

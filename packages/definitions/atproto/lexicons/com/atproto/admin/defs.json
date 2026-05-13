@@ -84,7 +84,7 @@
 		},
 		"repoBlobRef": {
 			"type": "object",
-			"required": ["did", "cid"],
+			"required": ["cid", "did"],
 			"properties": {
 				"cid": {
 					"type": "string",

@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["background", "foreground", "accent", "accentForeground"],
+				"required": ["accent", "accentForeground", "background", "foreground"],
 				"properties": {
 					"accent": {
 						"refs": ["site.standard.theme.color#rgb"],

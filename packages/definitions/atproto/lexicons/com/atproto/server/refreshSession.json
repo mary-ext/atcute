@@ -17,7 +17,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["accessJwt", "refreshJwt", "handle", "did"],
+					"required": ["accessJwt", "did", "handle", "refreshJwt"],
 					"properties": {
 						"did": {
 							"type": "string",
@@ -39,7 +39,7 @@
 						"status": {
 							"type": "string",
 							"description": "Hosting status of the account. If not specified, then assume 'active'.",
-							"knownValues": ["takendown", "suspended", "deactivated"]
+							"knownValues": ["deactivated", "suspended", "takendown"]
 						},
 						"accessJwt": {
 							"type": "string"

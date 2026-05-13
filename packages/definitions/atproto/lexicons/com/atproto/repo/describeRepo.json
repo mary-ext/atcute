@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["handle", "did", "didDoc", "collections", "handleIsCorrect"],
+					"required": ["collections", "did", "didDoc", "handle", "handleIsCorrect"],
 					"properties": {
 						"did": {
 							"type": "string",

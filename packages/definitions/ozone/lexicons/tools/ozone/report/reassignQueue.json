@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["reportId", "queueId"],
+					"required": ["queueId", "reportId"],
 					"properties": {
 						"comment": {
 							"type": "string",

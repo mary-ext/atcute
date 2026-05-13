@@ -3,7 +3,7 @@
 	"defs": {
 		"option": {
 			"type": "object",
-			"required": ["key", "value", "did", "scope", "createdBy", "lastUpdatedBy"],
+			"required": ["createdBy", "did", "key", "lastUpdatedBy", "scope", "value"],
 			"properties": {
 				"did": {
 					"type": "string",
@@ -40,9 +40,9 @@
 				"managerRole": {
 					"type": "string",
 					"knownValues": [
+						"tools.ozone.team.defs#roleAdmin",
 						"tools.ozone.team.defs#roleModerator",
 						"tools.ozone.team.defs#roleTriage",
-						"tools.ozone.team.defs#roleAdmin",
 						"tools.ozone.team.defs#roleVerifier"
 					]
 				},

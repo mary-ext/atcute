@@ -22,11 +22,11 @@
 						"type": "array",
 						"items": {
 							"enum": [
-								"merged-pull-request-count",
-								"closed-pull-request-count",
-								"open-pull-request-count",
-								"open-issue-count",
 								"closed-issue-count",
+								"closed-pull-request-count",
+								"merged-pull-request-count",
+								"open-issue-count",
+								"open-pull-request-count",
 								"repository-count",
 								"star-count"
 							],
@@ -38,7 +38,7 @@
 					},
 					"avatar": {
 						"type": "blob",
-						"accept": ["image/png", "image/jpeg"],
+						"accept": ["image/jpeg", "image/png"],
 						"maxSize": 1000000,
 						"description": "Small image to be displayed next to posts from account. AKA, 'profile picture'"
 					},

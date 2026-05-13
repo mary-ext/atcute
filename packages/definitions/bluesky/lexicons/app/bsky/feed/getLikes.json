@@ -3,7 +3,7 @@
 	"defs": {
 		"like": {
 			"type": "object",
-			"required": ["indexedAt", "createdAt", "actor"],
+			"required": ["actor", "createdAt", "indexedAt"],
 			"properties": {
 				"actor": {
 					"ref": "app.bsky.actor.defs#profileView",
@@ -24,7 +24,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["uri", "likes"],
+					"required": ["likes", "uri"],
 					"properties": {
 						"cid": {
 							"type": "string",

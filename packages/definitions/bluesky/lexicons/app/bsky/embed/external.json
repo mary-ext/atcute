@@ -24,7 +24,7 @@
 		},
 		"external": {
 			"type": "object",
-			"required": ["uri", "title", "description"],
+			"required": ["description", "title", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",
@@ -50,7 +50,7 @@
 		},
 		"viewExternal": {
 			"type": "object",
-			"required": ["uri", "title", "description"],
+			"required": ["description", "title", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",

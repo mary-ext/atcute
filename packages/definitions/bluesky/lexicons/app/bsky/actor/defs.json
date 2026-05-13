@@ -3,7 +3,7 @@
 	"defs": {
 		"nux": {
 			"type": "object",
-			"required": ["id", "completed"],
+			"required": ["completed", "id"],
 			"properties": {
 				"id": {
 					"type": "string",
@@ -29,7 +29,7 @@
 		},
 		"mutedWord": {
 			"type": "object",
-			"required": ["value", "targets"],
+			"required": ["targets", "value"],
 			"properties": {
 				"id": {
 					"type": "string"
@@ -64,7 +64,7 @@
 		},
 		"savedFeed": {
 			"type": "object",
-			"required": ["id", "type", "value", "pinned"],
+			"required": ["id", "pinned", "type", "value"],
 			"properties": {
 				"id": {
 					"type": "string"
@@ -83,7 +83,7 @@
 		},
 		"statusView": {
 			"type": "object",
-			"required": ["status", "record"],
+			"required": ["record", "status"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -133,21 +133,21 @@
 			"items": {
 				"refs": [
 					"#adultContentPref",
+					"#bskyAppStatePref",
 					"#contentLabelPref",
-					"#savedFeedsPref",
-					"#savedFeedsPrefV2",
-					"#personalDetailsPref",
 					"#declaredAgePref",
 					"#feedViewPref",
-					"#threadViewPref",
-					"#interestsPref",
-					"#mutedWordsPref",
 					"#hiddenPostsPref",
-					"#bskyAppStatePref",
+					"#interestsPref",
 					"#labelersPref",
+					"#liveEventPreferences",
+					"#mutedWordsPref",
+					"#personalDetailsPref",
 					"#postInteractionSettingsPref",
-					"#verificationPrefs",
-					"#liveEventPreferences"
+					"#savedFeedsPref",
+					"#savedFeedsPrefV2",
+					"#threadViewPref",
+					"#verificationPrefs"
 				],
 				"type": "union"
 			}
@@ -382,7 +382,7 @@
 				"sort": {
 					"type": "string",
 					"description": "Sorting mode for threads.",
-					"knownValues": ["oldest", "newest", "most-likes", "random", "hotness"]
+					"knownValues": ["hotness", "most-likes", "newest", "oldest", "random"]
 				}
 			}
 		},
@@ -486,7 +486,7 @@
 				},
 				"visibility": {
 					"type": "string",
-					"knownValues": ["ignore", "show", "warn", "hide"]
+					"knownValues": ["hide", "ignore", "show", "warn"]
 				}
 			}
 		},
@@ -562,7 +562,7 @@
 		},
 		"verificationView": {
 			"type": "object",
-			"required": ["issuer", "uri", "isValid", "createdAt"],
+			"required": ["createdAt", "isValid", "issuer", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",
@@ -629,7 +629,7 @@
 		},
 		"verificationState": {
 			"type": "object",
-			"required": ["verifications", "verifiedStatus", "trustedVerifierStatus"],
+			"required": ["trustedVerifierStatus", "verifications", "verifiedStatus"],
 			"properties": {
 				"verifications": {
 					"type": "array",
@@ -642,12 +642,12 @@
 				"verifiedStatus": {
 					"type": "string",
 					"description": "The user's status as a verified account.",
-					"knownValues": ["valid", "invalid", "none"]
+					"knownValues": ["invalid", "none", "valid"]
 				},
 				"trustedVerifierStatus": {
 					"type": "string",
 					"description": "The user's status as a trusted verifier.",
-					"knownValues": ["valid", "invalid", "none"]
+					"knownValues": ["invalid", "none", "valid"]
 				}
 			},
 			"description": "Represents the verification information about the user this object is attached to."
@@ -788,17 +788,17 @@
 			"properties": {
 				"allowIncoming": {
 					"type": "string",
-					"knownValues": ["all", "none", "following"]
+					"knownValues": ["all", "following", "none"]
 				},
 				"allowGroupInvites": {
 					"type": "string",
-					"knownValues": ["all", "none", "following"]
+					"knownValues": ["all", "following", "none"]
 				}
 			}
 		},
 		"profileAssociatedGerm": {
 			"type": "object",
-			"required": ["showButtonTo", "messageMeUrl"],
+			"required": ["messageMeUrl", "showButtonTo"],
 			"properties": {
 				"messageMeUrl": {
 					"type": "string",
@@ -806,7 +806,7 @@
 				},
 				"showButtonTo": {
 					"type": "string",
-					"knownValues": ["usersIFollow", "everyone"]
+					"knownValues": ["everyone", "usersIFollow"]
 				}
 			}
 		},
@@ -818,10 +818,10 @@
 					"type": "array",
 					"items": {
 						"refs": [
-							"app.bsky.feed.threadgate#mentionRule",
 							"app.bsky.feed.threadgate#followerRule",
 							"app.bsky.feed.threadgate#followingRule",
-							"app.bsky.feed.threadgate#listRule"
+							"app.bsky.feed.threadgate#listRule",
+							"app.bsky.feed.threadgate#mentionRule"
 						],
 						"type": "union"
 					},

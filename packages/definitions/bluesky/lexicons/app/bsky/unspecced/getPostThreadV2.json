@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["thread", "hasOtherReplies"],
+					"required": ["hasOtherReplies", "thread"],
 					"properties": {
 						"thread": {
 							"type": "array",
@@ -68,7 +68,7 @@
 		},
 		"threadItem": {
 			"type": "object",
-			"required": ["uri", "depth", "value"],
+			"required": ["depth", "uri", "value"],
 			"properties": {
 				"uri": {
 					"type": "string",
@@ -80,10 +80,10 @@
 				},
 				"value": {
 					"refs": [
-						"app.bsky.unspecced.defs#threadItemPost",
+						"app.bsky.unspecced.defs#threadItemBlocked",
 						"app.bsky.unspecced.defs#threadItemNoUnauthenticated",
 						"app.bsky.unspecced.defs#threadItemNotFound",
-						"app.bsky.unspecced.defs#threadItemBlocked"
+						"app.bsky.unspecced.defs#threadItemPost"
 					],
 					"type": "union"
 				}

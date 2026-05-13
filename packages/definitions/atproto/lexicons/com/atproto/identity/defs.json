@@ -3,7 +3,7 @@
 	"defs": {
 		"identityInfo": {
 			"type": "object",
-			"required": ["did", "handle", "didDoc"],
+			"required": ["did", "didDoc", "handle"],
 			"properties": {
 				"did": {
 					"type": "string",

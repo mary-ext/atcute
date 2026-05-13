@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["view", "isOnline", "isValid"],
+					"required": ["isOnline", "isValid", "view"],
 					"properties": {
 						"view": {
 							"ref": "app.bsky.feed.defs#generatorView",

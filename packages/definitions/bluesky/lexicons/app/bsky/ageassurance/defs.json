@@ -3,7 +3,7 @@
 	"defs": {
 		"event": {
 			"type": "object",
-			"required": ["createdAt", "status", "access", "attemptId", "countryCode"],
+			"required": ["access", "attemptId", "countryCode", "createdAt", "status"],
 			"properties": {
 				"email": {
 					"type": "string",
@@ -12,7 +12,7 @@
 				"access": {
 					"type": "string",
 					"description": "The access level granted based on Age Assurance data we've processed.",
-					"knownValues": ["unknown", "none", "safe", "full"]
+					"knownValues": ["full", "none", "safe", "unknown"]
 				},
 				"initIp": {
 					"type": "string",
@@ -25,7 +25,7 @@
 				"status": {
 					"type": "string",
 					"description": "The status of the Age Assurance process.",
-					"knownValues": ["unknown", "pending", "assured", "blocked"]
+					"knownValues": ["assured", "blocked", "pending", "unknown"]
 				},
 				"attemptId": {
 					"type": "string",
@@ -57,7 +57,7 @@
 		},
 		"state": {
 			"type": "object",
-			"required": ["status", "access"],
+			"required": ["access", "status"],
 			"properties": {
 				"access": {
 					"ref": "app.bsky.ageassurance.defs#access",
@@ -78,7 +78,7 @@
 		"access": {
 			"type": "string",
 			"description": "The access level granted based on Age Assurance data we've processed.",
-			"knownValues": ["unknown", "none", "safe", "full"]
+			"knownValues": ["full", "none", "safe", "unknown"]
 		},
 		"config": {
 			"type": "object",
@@ -98,7 +98,7 @@
 		"status": {
 			"type": "string",
 			"description": "The status of the Age Assurance process.",
-			"knownValues": ["unknown", "pending", "assured", "blocked"]
+			"knownValues": ["assured", "blocked", "pending", "unknown"]
 		},
 		"configRegion": {
 			"type": "object",
@@ -109,12 +109,12 @@
 					"items": {
 						"refs": [
 							"#configRegionRuleDefault",
-							"#configRegionRuleIfDeclaredOverAge",
-							"#configRegionRuleIfDeclaredUnderAge",
+							"#configRegionRuleIfAccountNewerThan",
+							"#configRegionRuleIfAccountOlderThan",
 							"#configRegionRuleIfAssuredOverAge",
 							"#configRegionRuleIfAssuredUnderAge",
-							"#configRegionRuleIfAccountNewerThan",
-							"#configRegionRuleIfAccountOlderThan"
+							"#configRegionRuleIfDeclaredOverAge",
+							"#configRegionRuleIfDeclaredUnderAge"
 						],
 						"type": "union"
 					},
@@ -160,7 +160,7 @@
 		},
 		"configRegionRuleIfAssuredOverAge": {
 			"type": "object",
-			"required": ["age", "access"],
+			"required": ["access", "age"],
 			"properties": {
 				"age": {
 					"type": "integer",
@@ -175,7 +175,7 @@
 		},
 		"configRegionRuleIfAssuredUnderAge": {
 			"type": "object",
-			"required": ["age", "access"],
+			"required": ["access", "age"],
 			"properties": {
 				"age": {
 					"type": "integer",
@@ -190,7 +190,7 @@
 		},
 		"configRegionRuleIfDeclaredOverAge": {
 			"type": "object",
-			"required": ["age", "access"],
+			"required": ["access", "age"],
 			"properties": {
 				"age": {
 					"type": "integer",
@@ -205,7 +205,7 @@
 		},
 		"configRegionRuleIfAccountNewerThan": {
 			"type": "object",
-			"required": ["date", "access"],
+			"required": ["access", "date"],
 			"properties": {
 				"date": {
 					"type": "string",
@@ -221,7 +221,7 @@
 		},
 		"configRegionRuleIfAccountOlderThan": {
 			"type": "object",
-			"required": ["date", "access"],
+			"required": ["access", "date"],
 			"properties": {
 				"date": {
 					"type": "string",
@@ -237,7 +237,7 @@
 		},
 		"configRegionRuleIfDeclaredUnderAge": {
 			"type": "object",
-			"required": ["age", "access"],
+			"required": ["access", "age"],
 			"properties": {
 				"age": {
 					"type": "integer",

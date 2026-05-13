@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["day", "month", "all"],
+					"required": ["all", "day", "month"],
 					"properties": {
 						"all": {
 							"ref": "#metadata",
@@ -37,7 +37,7 @@
 		},
 		"metadata": {
 			"type": "object",
-			"required": ["messagesSent", "messagesReceived", "convos", "convosStarted"],
+			"required": ["convos", "convosStarted", "messagesReceived", "messagesSent"],
 			"properties": {
 				"convos": {
 					"type": "integer"

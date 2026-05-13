@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["createdAt", "post", "blocks"],
+				"required": ["blocks", "createdAt", "post"],
 				"properties": {
 					"post": {
 						"ref": "com.atproto.repo.strongRef",

@@ -13,7 +13,7 @@
 					}
 				},
 				"textSize": {
-					"enum": ["default", "small", "large"],
+					"enum": ["default", "large", "small"],
 					"type": "string"
 				},
 				"plaintext": {

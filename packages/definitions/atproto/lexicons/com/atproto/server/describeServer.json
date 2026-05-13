@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["did", "availableUserDomains"],
+					"required": ["availableUserDomains", "did"],
 					"properties": {
 						"did": {
 							"type": "string",

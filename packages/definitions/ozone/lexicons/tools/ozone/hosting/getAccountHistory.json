@@ -45,10 +45,10 @@
 							"type": "string",
 							"knownValues": [
 								"accountCreated",
-								"emailUpdated",
 								"emailConfirmed",
-								"passwordUpdated",
-								"handleUpdated"
+								"emailUpdated",
+								"handleUpdated",
+								"passwordUpdated"
 							]
 						}
 					}
@@ -58,15 +58,15 @@
 		},
 		"event": {
 			"type": "object",
-			"required": ["details", "createdBy", "createdAt"],
+			"required": ["createdAt", "createdBy", "details"],
 			"properties": {
 				"details": {
 					"refs": [
 						"#accountCreated",
-						"#emailUpdated",
 						"#emailConfirmed",
-						"#passwordUpdated",
-						"#handleUpdated"
+						"#emailUpdated",
+						"#handleUpdated",
+						"#passwordUpdated"
 					],
 					"type": "union"
 				},

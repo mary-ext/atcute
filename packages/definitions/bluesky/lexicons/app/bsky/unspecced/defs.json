@@ -3,7 +3,7 @@
 	"defs": {
 		"trendView": {
 			"type": "object",
-			"required": ["topic", "displayName", "link", "startedAt", "postCount", "actors"],
+			"required": ["actors", "displayName", "link", "postCount", "startedAt", "topic"],
 			"properties": {
 				"link": {
 					"type": "string"
@@ -39,7 +39,7 @@
 		},
 		"skeletonTrend": {
 			"type": "object",
-			"required": ["topic", "displayName", "link", "startedAt", "postCount", "dids"],
+			"required": ["dids", "displayName", "link", "postCount", "startedAt", "topic"],
 			"properties": {
 				"dids": {
 					"type": "array",
@@ -75,7 +75,7 @@
 		},
 		"trendingTopic": {
 			"type": "object",
-			"required": ["topic", "link"],
+			"required": ["link", "topic"],
 			"properties": {
 				"link": {
 					"type": "string"
@@ -93,7 +93,7 @@
 		},
 		"threadItemPost": {
 			"type": "object",
-			"required": ["post", "moreParents", "moreReplies", "opThread", "hiddenByThreadgate", "mutedByViewer"],
+			"required": ["hiddenByThreadgate", "moreParents", "moreReplies", "mutedByViewer", "opThread", "post"],
 			"properties": {
 				"post": {
 					"ref": "app.bsky.feed.defs#postView",
@@ -123,7 +123,7 @@
 		},
 		"ageAssuranceEvent": {
 			"type": "object",
-			"required": ["createdAt", "status", "attemptId"],
+			"required": ["attemptId", "createdAt", "status"],
 			"properties": {
 				"email": {
 					"type": "string",
@@ -140,7 +140,7 @@
 				"status": {
 					"type": "string",
 					"description": "The status of the age assurance process.",
-					"knownValues": ["unknown", "pending", "assured"]
+					"knownValues": ["assured", "pending", "unknown"]
 				},
 				"attemptId": {
 					"type": "string",
@@ -169,7 +169,7 @@
 				"status": {
 					"type": "string",
 					"description": "The status of the age assurance process.",
-					"knownValues": ["unknown", "pending", "assured", "blocked"]
+					"knownValues": ["assured", "blocked", "pending", "unknown"]
 				},
 				"lastInitiatedAt": {
 					"type": "string",

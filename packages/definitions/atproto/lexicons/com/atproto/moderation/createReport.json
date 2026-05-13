@@ -34,7 +34,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["id", "reasonType", "subject", "reportedBy", "createdAt"],
+					"required": ["createdAt", "id", "reasonType", "reportedBy", "subject"],
 					"properties": {
 						"id": {
 							"type": "integer"

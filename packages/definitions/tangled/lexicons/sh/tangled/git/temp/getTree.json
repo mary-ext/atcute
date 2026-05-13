@@ -24,7 +24,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["ref", "files"],
+					"required": ["files", "ref"],
 					"properties": {
 						"ref": {
 							"type": "string",
@@ -60,7 +60,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["repo", "ref"],
+				"required": ["ref", "repo"],
 				"properties": {
 					"ref": {
 						"type": "string",
@@ -81,7 +81,7 @@
 		},
 		"readme": {
 			"type": "object",
-			"required": ["filename", "contents"],
+			"required": ["contents", "filename"],
 			"properties": {
 				"contents": {
 					"type": "string",
@@ -95,7 +95,7 @@
 		},
 		"signature": {
 			"type": "object",
-			"required": ["name", "email", "when"],
+			"required": ["email", "name", "when"],
 			"properties": {
 				"name": {
 					"type": "string",
@@ -114,7 +114,7 @@
 		},
 		"treeEntry": {
 			"type": "object",
-			"required": ["name", "mode", "size"],
+			"required": ["mode", "name", "size"],
 			"properties": {
 				"mode": {
 					"type": "string",

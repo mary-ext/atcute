@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["topics", "suggested"],
+					"required": ["suggested", "topics"],
 					"properties": {
 						"topics": {
 							"type": "array",

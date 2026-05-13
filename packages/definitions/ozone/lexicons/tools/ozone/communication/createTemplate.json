@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["subject", "contentMarkdown", "name"],
+					"required": ["contentMarkdown", "name", "subject"],
 					"properties": {
 						"lang": {
 							"type": "string",

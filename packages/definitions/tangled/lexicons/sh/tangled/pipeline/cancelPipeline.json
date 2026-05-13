@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["repo", "pipeline", "workflow"],
+					"required": ["pipeline", "repo", "workflow"],
 					"properties": {
 						"repo": {
 							"type": "string",

@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["did", "displayName", "createdAt"],
+				"required": ["createdAt", "did", "displayName"],
 				"properties": {
 					"did": {
 						"type": "string",
@@ -15,7 +15,7 @@
 					},
 					"avatar": {
 						"type": "blob",
-						"accept": ["image/png", "image/jpeg"],
+						"accept": ["image/jpeg", "image/png"],
 						"maxSize": 1000000,
 						"description": "Avatar image for the feed."
 					},

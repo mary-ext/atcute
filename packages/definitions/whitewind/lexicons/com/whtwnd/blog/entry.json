@@ -44,7 +44,7 @@
 						"format": "datetime"
 					},
 					"visibility": {
-						"enum": ["public", "url", "author"],
+						"enum": ["author", "public", "url"],
 						"type": "string",
 						"default": "public",
 						"description": "Tells the visibility of the article to AppView."

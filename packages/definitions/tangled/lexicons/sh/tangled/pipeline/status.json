@@ -6,14 +6,14 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["pipeline", "workflow", "status", "createdAt"],
+				"required": ["createdAt", "pipeline", "status", "workflow"],
 				"properties": {
 					"error": {
 						"type": "string",
 						"description": "error message if failed"
 					},
 					"status": {
-						"enum": ["pending", "running", "failed", "timeout", "cancelled", "success"],
+						"enum": ["cancelled", "failed", "pending", "running", "success", "timeout"],
 						"type": "string",
 						"description": "status of the workflow"
 					},

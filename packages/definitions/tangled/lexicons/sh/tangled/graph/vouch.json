@@ -6,10 +6,10 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["kind", "createdAt"],
+				"required": ["createdAt", "kind"],
 				"properties": {
 					"kind": {
-						"enum": ["vouch", "denounce"],
+						"enum": ["denounce", "vouch"],
 						"type": "string",
 						"default": "vouch",
 						"description": "Whether this user is being vouched for or denounced"

@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["filename", "description", "createdAt", "contents"],
+				"required": ["contents", "createdAt", "description", "filename"],
 				"properties": {
 					"contents": {
 						"type": "string",

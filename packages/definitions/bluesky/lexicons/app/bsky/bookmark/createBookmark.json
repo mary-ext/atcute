@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["uri", "cid"],
+					"required": ["cid", "uri"],
 					"properties": {
 						"cid": {
 							"type": "string",

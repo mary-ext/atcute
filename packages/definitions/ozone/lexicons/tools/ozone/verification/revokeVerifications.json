@@ -30,7 +30,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["revokedVerifications", "failedRevocations"],
+					"required": ["failedRevocations", "revokedVerifications"],
 					"properties": {
 						"failedRevocations": {
 							"type": "array",
@@ -56,7 +56,7 @@
 		},
 		"revokeError": {
 			"type": "object",
-			"required": ["uri", "error"],
+			"required": ["error", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",

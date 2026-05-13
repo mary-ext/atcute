@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["ref", "committerDid", "repo", "oldSha", "newSha", "meta"],
+				"required": ["committerDid", "meta", "newSha", "oldSha", "ref", "repo"],
 				"properties": {
 					"ref": {
 						"type": "string",
@@ -51,7 +51,7 @@
 		},
 		"meta": {
 			"type": "object",
-			"required": ["isDefaultRef", "commitCount"],
+			"required": ["commitCount", "isDefaultRef"],
 			"properties": {
 				"commitCount": {
 					"ref": "#commitCountBreakdown",
@@ -106,7 +106,7 @@
 		},
 		"individualEmailCommitCount": {
 			"type": "object",
-			"required": ["email", "count"],
+			"required": ["count", "email"],
 			"properties": {
 				"count": {
 					"type": "integer"

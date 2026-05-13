@@ -16,7 +16,7 @@
 						"writes": {
 							"type": "array",
 							"items": {
-								"refs": ["#create", "#update", "#delete"],
+								"refs": ["#create", "#delete", "#update"],
 								"type": "union",
 								"closed": true
 							}
@@ -52,7 +52,7 @@
 						"results": {
 							"type": "array",
 							"items": {
-								"refs": ["#createResult", "#updateResult", "#deleteResult"],
+								"refs": ["#createResult", "#deleteResult", "#updateResult"],
 								"type": "union",
 								"closed": true
 							}
@@ -118,7 +118,7 @@
 		},
 		"createResult": {
 			"type": "object",
-			"required": ["uri", "cid"],
+			"required": ["cid", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -130,7 +130,7 @@
 				},
 				"validationStatus": {
 					"type": "string",
-					"knownValues": ["valid", "unknown"]
+					"knownValues": ["unknown", "valid"]
 				}
 			}
 		},
@@ -141,7 +141,7 @@
 		},
 		"updateResult": {
 			"type": "object",
-			"required": ["uri", "cid"],
+			"required": ["cid", "uri"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -153,7 +153,7 @@
 				},
 				"validationStatus": {
 					"type": "string",
-					"knownValues": ["valid", "unknown"]
+					"knownValues": ["unknown", "valid"]
 				}
 			}
 		}

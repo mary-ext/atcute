@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["uri", "repostedBy"],
+					"required": ["repostedBy", "uri"],
 					"properties": {
 						"cid": {
 							"type": "string",

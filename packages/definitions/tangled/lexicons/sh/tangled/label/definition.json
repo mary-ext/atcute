@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["name", "valueType", "scope", "createdAt"],
+				"required": ["createdAt", "name", "scope", "valueType"],
 				"properties": {
 					"name": {
 						"type": "string",
@@ -44,7 +44,7 @@
 		},
 		"valueType": {
 			"type": "object",
-			"required": ["type", "format"],
+			"required": ["format", "type"],
 			"properties": {
 				"enum": {
 					"type": "array",
@@ -54,7 +54,7 @@
 					"description": "Closed set of values that this label can take."
 				},
 				"type": {
-					"enum": ["null", "boolean", "integer", "string"],
+					"enum": ["boolean", "integer", "null", "string"],
 					"type": "string",
 					"description": "The concrete type of this label's value."
 				},

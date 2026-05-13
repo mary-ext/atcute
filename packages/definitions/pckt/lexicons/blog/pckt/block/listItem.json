@@ -8,7 +8,7 @@
 				"content": {
 					"type": "array",
 					"items": {
-						"refs": ["blog.pckt.block.text", "blog.pckt.block.bulletList", "blog.pckt.block.orderedList"],
+						"refs": ["blog.pckt.block.bulletList", "blog.pckt.block.orderedList", "blog.pckt.block.text"],
 						"type": "union",
 						"closed": false
 					},

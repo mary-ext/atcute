@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["rkey", "name"],
+					"required": ["name", "rkey"],
 					"properties": {
 						"name": {
 							"type": "string",

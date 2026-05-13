@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["startReportId", "endReportId"],
+					"required": ["endReportId", "startReportId"],
 					"properties": {
 						"endReportId": {
 							"type": "integer",

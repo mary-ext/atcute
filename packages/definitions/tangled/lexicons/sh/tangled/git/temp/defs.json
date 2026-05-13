@@ -23,7 +23,7 @@
 		},
 		"blob": {
 			"type": "object",
-			"required": ["name", "mode", "size", "lastCommit"],
+			"required": ["lastCommit", "mode", "name", "size"],
 			"properties": {
 				"mode": {
 					"type": "string"
@@ -53,7 +53,7 @@
 		},
 		"branch": {
 			"type": "object",
-			"required": ["name", "commit"],
+			"required": ["commit", "name"],
 			"properties": {
 				"name": {
 					"type": "string",
@@ -68,7 +68,7 @@
 		},
 		"commit": {
 			"type": "object",
-			"required": ["hash", "author", "committer", "message", "tree"],
+			"required": ["author", "committer", "hash", "message", "tree"],
 			"properties": {
 				"hash": {
 					"ref": "#hash",
@@ -93,7 +93,7 @@
 		},
 		"signature": {
 			"type": "object",
-			"required": ["name", "email", "when"],
+			"required": ["email", "name", "when"],
 			"properties": {
 				"name": {
 					"type": "string",

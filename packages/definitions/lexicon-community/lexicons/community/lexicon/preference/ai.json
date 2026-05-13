@@ -6,10 +6,10 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["updatedAt", "scope", "preferences"],
+				"required": ["preferences", "scope", "updatedAt"],
 				"properties": {
 					"scope": {
-						"refs": ["#globalScope", "#entityScope", "#collectionScope"],
+						"refs": ["#collectionScope", "#entityScope", "#globalScope"],
 						"type": "union",
 						"description": "What this record's preferences apply to."
 					},

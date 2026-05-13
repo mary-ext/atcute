@@ -24,7 +24,7 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["repo", "collection"],
+				"required": ["collection", "repo"],
 				"properties": {
 					"repo": {
 						"type": "string",
@@ -56,7 +56,7 @@
 		},
 		"record": {
 			"type": "object",
-			"required": ["uri", "cid", "value"],
+			"required": ["cid", "uri", "value"],
 			"properties": {
 				"cid": {
 					"type": "string",

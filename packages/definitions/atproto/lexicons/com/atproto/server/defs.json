@@ -3,7 +3,7 @@
 	"defs": {
 		"inviteCode": {
 			"type": "object",
-			"required": ["code", "available", "disabled", "forAccount", "createdBy", "createdAt", "uses"],
+			"required": ["available", "code", "createdAt", "createdBy", "disabled", "forAccount", "uses"],
 			"properties": {
 				"code": {
 					"type": "string"
@@ -35,7 +35,7 @@
 		},
 		"inviteCodeUse": {
 			"type": "object",
-			"required": ["usedBy", "usedAt"],
+			"required": ["usedAt", "usedBy"],
 			"properties": {
 				"usedAt": {
 					"type": "string",

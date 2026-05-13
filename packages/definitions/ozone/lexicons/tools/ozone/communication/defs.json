@@ -3,7 +3,7 @@
 	"defs": {
 		"templateView": {
 			"type": "object",
-			"required": ["id", "name", "contentMarkdown", "disabled", "lastUpdatedBy", "createdAt", "updatedAt"],
+			"required": ["contentMarkdown", "createdAt", "disabled", "id", "lastUpdatedBy", "name", "updatedAt"],
 			"properties": {
 				"id": {
 					"type": "string"

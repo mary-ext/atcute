@@ -11,7 +11,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["did", "active"],
+					"required": ["active", "did"],
 					"properties": {
 						"did": {
 							"type": "string",
@@ -29,11 +29,11 @@
 							"type": "string",
 							"description": "If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.",
 							"knownValues": [
-								"takendown",
-								"suspended",
-								"deleted",
 								"deactivated",
+								"deleted",
 								"desynchronized",
+								"suspended",
+								"takendown",
 								"throttled"
 							]
 						}

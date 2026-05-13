@@ -17,14 +17,14 @@
 			"properties": {
 				"record": {
 					"refs": [
-						"#viewRecord",
-						"#viewNotFound",
 						"#viewBlocked",
 						"#viewDetached",
+						"#viewNotFound",
+						"#viewRecord",
 						"app.bsky.feed.defs#generatorView",
 						"app.bsky.graph.defs#listView",
-						"app.bsky.labeler.defs#labelerView",
-						"app.bsky.graph.defs#starterPackViewBasic"
+						"app.bsky.graph.defs#starterPackViewBasic",
+						"app.bsky.labeler.defs#labelerView"
 					],
 					"type": "union"
 				}
@@ -32,7 +32,7 @@
 		},
 		"viewRecord": {
 			"type": "object",
-			"required": ["uri", "cid", "author", "value", "indexedAt"],
+			"required": ["author", "cid", "indexedAt", "uri", "value"],
 			"properties": {
 				"cid": {
 					"type": "string",
@@ -54,11 +54,11 @@
 					"type": "array",
 					"items": {
 						"refs": [
-							"app.bsky.embed.images#view",
-							"app.bsky.embed.video#view",
 							"app.bsky.embed.external#view",
+							"app.bsky.embed.images#view",
 							"app.bsky.embed.record#view",
-							"app.bsky.embed.recordWithMedia#view"
+							"app.bsky.embed.recordWithMedia#view",
+							"app.bsky.embed.video#view"
 						],
 						"type": "union"
 					}
@@ -90,7 +90,7 @@
 		},
 		"viewBlocked": {
 			"type": "object",
-			"required": ["uri", "blocked", "author"],
+			"required": ["author", "blocked", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",
@@ -108,7 +108,7 @@
 		},
 		"viewDetached": {
 			"type": "object",
-			"required": ["uri", "detached"],
+			"required": ["detached", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",
@@ -122,7 +122,7 @@
 		},
 		"viewNotFound": {
 			"type": "object",
-			"required": ["uri", "notFound"],
+			"required": ["notFound", "uri"],
 			"properties": {
 				"uri": {
 					"type": "string",

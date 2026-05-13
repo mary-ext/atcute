@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["list", "items"],
+					"required": ["items", "list"],
 					"properties": {
 						"list": {
 							"ref": "app.bsky.graph.defs#listView",

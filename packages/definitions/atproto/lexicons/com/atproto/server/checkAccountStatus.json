@@ -8,14 +8,14 @@
 					"type": "object",
 					"required": [
 						"activated",
-						"validDid",
-						"repoCommit",
-						"repoRev",
-						"repoBlocks",
+						"expectedBlobs",
+						"importedBlobs",
 						"indexedRecords",
 						"privateStateValues",
-						"expectedBlobs",
-						"importedBlobs"
+						"repoBlocks",
+						"repoCommit",
+						"repoRev",
+						"validDid"
 					],
 					"properties": {
 						"repoRev": {

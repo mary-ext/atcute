@@ -24,7 +24,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["verifications", "failedVerifications"],
+					"required": ["failedVerifications", "verifications"],
 					"properties": {
 						"verifications": {
 							"type": "array",
@@ -64,7 +64,7 @@
 		},
 		"verificationInput": {
 			"type": "object",
-			"required": ["subject", "handle", "displayName"],
+			"required": ["displayName", "handle", "subject"],
 			"properties": {
 				"handle": {
 					"type": "string",

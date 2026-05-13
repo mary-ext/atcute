@@ -43,7 +43,7 @@
 					"status": {
 						"type": "string",
 						"description": "Filter by report status.",
-						"knownValues": ["open", "closed", "escalated", "queued", "assigned"]
+						"knownValues": ["assigned", "closed", "escalated", "open", "queued"]
 					},
 					"isMuted": {
 						"type": "boolean",

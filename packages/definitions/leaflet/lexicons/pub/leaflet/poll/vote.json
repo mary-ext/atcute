@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["poll", "option"],
+				"required": ["option", "poll"],
 				"properties": {
 					"poll": {
 						"ref": "com.atproto.repo.strongRef",
