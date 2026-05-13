@@ -9,10 +9,10 @@
 		"@changesets/cli": "^2.31.0",
 		"@mary/tar": "jsr:^0.3.2",
 		"@mitata/counters": "^0.0.8",
-		"@typescript/native-preview": "7.0.0-dev.20260510.1",
+		"@typescript/native-preview": "7.0.0-dev.20260511.1",
 		"mitata": "^1.0.34",
-		"oxfmt": "^0.48.0",
-		"oxlint": "^1.63.0",
+		"oxfmt": "^0.49.0",
+		"oxlint": "^1.64.0",
 		"oxlint-tsgolint": "^0.22.1",
 		"prettier": "^3.8.3",
 		"typescript": "~6.0.3"

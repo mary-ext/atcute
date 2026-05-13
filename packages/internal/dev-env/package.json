@@ -12,7 +12,7 @@
 	"dependencies": {
 		"@atproto/crypto": "^0.4.5",
 		"@atproto/identity": "^0.4.12",
-		"@atproto/pds": "^0.4.221",
+		"@atproto/pds": "^0.4.222",
 		"@did-plc/server": "^0.0.1",
 		"axios": "^1.16.0",
 		"get-port": "^7.2.0",

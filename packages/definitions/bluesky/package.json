@@ -45,8 +45,8 @@
 	"devDependencies": {
 		"@atcute/bluesky": "file:",
 		"@atcute/lex-cli": "workspace:^",
-		"@atproto/api": "^0.19.16",
-		"vitest": "^4.1.5"
+		"@atproto/api": "^0.19.17",
+		"vitest": "^4.1.6"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"
