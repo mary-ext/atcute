@@ -5,15 +5,14 @@ import * as AppBskyEmbedDefs from './defs.ts';
 
 const _imageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images#image')),
-	/**
-	 * Alt text description of the image, for accessibility.
-	 */
+	/** Alt text description of the image, for accessibility. */
 	alt: /*#__PURE__*/ v.string(),
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
 	/**
 	 * The raw image file. May be up to 2 MB, formerly limited to 1 MB.
+	 *
 	 * @accept image/*
 	 * @maxSize 2000000
 	 */
@@ -24,18 +23,14 @@ const _imageSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images')),
-	/**
-	 * @maxLength 4
-	 */
+	/** @maxLength 4 */
 	get images() {
 		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(imageSchema), [/*#__PURE__*/ v.arrayLength(0, 4)]);
 	},
 });
 const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images#view')),
-	/**
-	 * @maxLength 4
-	 */
+	/** @maxLength 4 */
 	get images() {
 		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(viewImageSchema), [
 			/*#__PURE__*/ v.arrayLength(0, 4),
@@ -44,19 +39,19 @@ const _viewSchema = /*#__PURE__*/ v.object({
 });
 const _viewImageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.images#viewImage')),
-	/**
-	 * Alt text description of the image, for accessibility.
-	 */
+	/** Alt text description of the image, for accessibility. */
 	alt: /*#__PURE__*/ v.string(),
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
 	/**
-	 * Fully-qualified URL where a large version of the image can be fetched. May or may not be the exact original blob. For example, CDN location provided by the App View.
+	 * Fully-qualified URL where a large version of the image can be fetched. May or may not be the exact
+	 * original blob. For example, CDN location provided by the App View.
 	 */
 	fullsize: /*#__PURE__*/ v.genericUriString(),
 	/**
-	 * Fully-qualified URL where a thumbnail of the image can be fetched. For example, CDN location provided by the App View.
+	 * Fully-qualified URL where a thumbnail of the image can be fetched. For example, CDN location provided by
+	 * the App View.
 	 */
 	thumb: /*#__PURE__*/ v.genericUriString(),
 });

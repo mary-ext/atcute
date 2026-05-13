@@ -9,25 +9,15 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.deleteRecord', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The NSID of the record collection.
-			 */
+			/** The NSID of the record collection. */
 			collection: /*#__PURE__*/ v.nsidString(),
-			/**
-			 * The handle or DID of the repo (aka, current account).
-			 */
+			/** The handle or DID of the repo (aka, current account). */
 			repo: /*#__PURE__*/ v.actorIdentifierString(),
-			/**
-			 * The Record Key.
-			 */
+			/** The Record Key. */
 			rkey: /*#__PURE__*/ v.recordKeyString(),
-			/**
-			 * Compare and swap with the previous commit by CID.
-			 */
+			/** Compare and swap with the previous commit by CID. */
 			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
-			/**
-			 * Compare and swap with the previous record by CID.
-			 */
+			/** Compare and swap with the previous record by CID. */
 			swapRecord: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		}),
 	},

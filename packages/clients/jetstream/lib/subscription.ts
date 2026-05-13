@@ -15,18 +15,19 @@ export interface JetstreamSubscriptionOptions {
 	cursor?: number;
 
 	/**
-	 * array of collection NSIDs that you're interested in receiving commit events
-	 * for, pass in an empty array for no commit events.
+	 * array of collection NSIDs that you're interested in receiving commit events for, pass in an empty array
+	 * for no commit events.
 	 */
 	wantedCollections?: string[];
 	/**
-	 * array of account DIDs that you're interested in receiving commit events
-	 * for, pass in an empty array for no commit events.
+	 * array of account DIDs that you're interested in receiving commit events for, pass in an empty array for
+	 * no commit events.
 	 */
 	wantedDids?: Did[];
 
 	/**
 	 * whether to validate Jetstream's events, you'd still need to validate the records.
+	 *
 	 * @default true
 	 */
 	validateEvents?: boolean;
@@ -35,14 +36,12 @@ export interface JetstreamSubscriptionOptions {
 	onConnectionClose?: (event: CloseEvent) => void;
 	onConnectionError?: (event: ErrorEvent) => void;
 	/**
-	 * called when an event fails schema validation. the error is a valibot `ValiError` carrying
-	 * the validation issues. without a handler, invalid events are silently dropped.
+	 * called when an event fails schema validation. the error is a valibot `ValiError` carrying the validation
+	 * issues. without a handler, invalid events are silently dropped.
 	 */
 	onError?: (err: unknown) => void;
 
-	/**
-	 * WebSocket connection options
-	 */
+	/** WebSocket connection options */
 	ws?: Options;
 }
 

@@ -7,9 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.contact.dismissMatch', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The subject's DID to dismiss the match with.
-			 */
+			/** The subject's DID to dismiss the match with. */
 			subject: /*#__PURE__*/ v.didString(),
 		}),
 	},

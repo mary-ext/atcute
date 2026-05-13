@@ -58,11 +58,9 @@ export const oauthClientMetadataSchema = v.looseObject({
 	logo_uri: v.optional(webUriSchema),
 
 	/**
-	 * default Maximum Authentication Age. specifies that the End-User MUST be
-	 * actively authenticated if the End-User was authenticated longer ago than
-	 * the specified number of seconds. the max_age request parameter overrides
-	 * this default value. if omitted, no default Maximum Authentication Age is
-	 * specified.
+	 * default Maximum Authentication Age. specifies that the End-User MUST be actively authenticated if the
+	 * End-User was authenticated longer ago than the specified number of seconds. the max_age request parameter
+	 * overrides this default value. if omitted, no default Maximum Authentication Age is specified.
 	 */
 	default_max_age: v.optional(v.number()),
 	require_auth_time: v.optional(v.boolean()),

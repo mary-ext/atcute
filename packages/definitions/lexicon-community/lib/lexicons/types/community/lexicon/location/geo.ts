@@ -6,9 +6,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	altitude: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	latitude: /*#__PURE__*/ v.string(),
 	longitude: /*#__PURE__*/ v.string(),
-	/**
-	 * The name of the location.
-	 */
+	/** The name of the location. */
 	name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 

@@ -18,6 +18,7 @@ const _decodeLut: Uint8Array = /*#__PURE__*/ (() => {
 
 /**
  * decodes an unpadded RFC 4648 base32 (lowercase) string to a Uint8Array
+ *
  * @param str base32 encoded string
  * @returns decoded buffer
  * @throws {SyntaxError} on invalid characters or malformed trailing bits

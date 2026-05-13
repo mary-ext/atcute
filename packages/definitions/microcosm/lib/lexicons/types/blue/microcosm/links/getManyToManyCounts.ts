@@ -6,50 +6,35 @@ const _countBySubjectSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('blue.microcosm.links.getManyToManyCounts#countBySubject'),
 	),
-	/**
-	 * number of distinct DIDs linking to this subject
-	 */
+	/** number of distinct DIDs linking to this subject */
 	distinct: /*#__PURE__*/ v.integer(),
-	/**
-	 * the secondary subject being counted
-	 */
+	/** the secondary subject being counted */
 	subject: /*#__PURE__*/ v.string(),
-	/**
-	 * total number of links to this subject
-	 */
+	/** total number of links to this subject */
 	total: /*#__PURE__*/ v.integer(),
 });
 const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getManyToManyCounts', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * filter links to those from specific users
-		 */
+		/** filter links to those from specific users */
 		did: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
 		/**
 		 * number of results to return
+		 *
+		 * @default 16
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 16
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			16,
 		),
-		/**
-		 * filter secondary links to specific subjects
-		 */
+		/** filter secondary links to specific subjects */
 		otherSubject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
-		/**
-		 * path to the secondary link in the many-to-many record (e.g., 'otherThing.uri')
-		 */
+		/** path to the secondary link in the many-to-many record (e.g., 'otherThing.uri') */
 		pathToOther: /*#__PURE__*/ v.string(),
-		/**
-		 * collection and path specification for the primary link (e.g., 'app.bsky.feed.like:subject.uri')
-		 */
+		/** collection and path specification for the primary link (e.g., 'app.bsky.feed.like:subject.uri') */
 		source: /*#__PURE__*/ v.string(),
-		/**
-		 * the primary target being linked to (at-uri, did, or uri)
-		 */
+		/** the primary target being linked to (at-uri, did, or uri) */
 		subject: /*#__PURE__*/ v.genericUriString(),
 	}),
 	output: {
@@ -58,9 +43,7 @@ const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getManyToManyCou
 			get counts_by_other_subject() {
 				return /*#__PURE__*/ v.array(countBySubjectSchema);
 			},
-			/**
-			 * pagination cursor
-			 */
+			/** pagination cursor */
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nullable(/*#__PURE__*/ v.string())),
 		}),
 	},

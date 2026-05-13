@@ -7,34 +7,22 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.forkStatus', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Branch to check status for
-			 */
+			/** Branch to check status for */
 			branch: /*#__PURE__*/ v.string(),
-			/**
-			 * DID of the fork owner
-			 */
+			/** DID of the fork owner */
 			did: /*#__PURE__*/ v.didString(),
-			/**
-			 * Hidden ref to use for comparison
-			 */
+			/** Hidden ref to use for comparison */
 			hiddenRef: /*#__PURE__*/ v.string(),
-			/**
-			 * Name of the forked repository
-			 */
+			/** Name of the forked repository */
 			name: /*#__PURE__*/ v.string(),
-			/**
-			 * Source repository URL
-			 */
+			/** Source repository URL */
 			source: /*#__PURE__*/ v.string(),
 		}),
 	},
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Fork status: 0=UpToDate, 1=FastForwardable, 2=Conflict, 3=MissingBranch
-			 */
+			/** Fork status: 0=UpToDate, 1=FastForwardable, 2=Conflict, 3=MissingBranch */
 			status: /*#__PURE__*/ v.integer(),
 		}),
 	},

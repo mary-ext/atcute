@@ -8,9 +8,8 @@ const SINGLE_SCOPE_RE = /^[\x21\x23-\x5B\x5D-\x7E]+$/;
 const singleScopeSchema = v.pipe(v.string(), v.regex(SINGLE_SCOPE_RE, `invalid OAuth scope`));
 
 /**
- * OAuth scope - either:
- * - a space-separated string (must include "atproto")
- * - an array of scope strings ('atproto' is added automatically)
+ * OAuth scope - either: - a space-separated string (must include "atproto") - an array of scope strings
+ * ('atproto' is added automatically)
  */
 export const scopeSchema = v.union([
 	v.pipe(

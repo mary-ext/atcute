@@ -5,10 +5,9 @@ import type { Result } from '../../types/misc.ts';
 /**
  * checks whether a request has a meaningful body.
  *
- * Node.js HTTP-to-fetch adapters always provide a `ReadableStream` for
- * `request.body`, even when no body content was sent. this function
- * uses `content-length` to handle that case while still respecting the
- * web `Request` API where `body === null` signals no body.
+ * Node.js HTTP-to-fetch adapters always provide a `ReadableStream` for `request.body`, even when no body
+ * content was sent. this function uses `content-length` to handle that case while still respecting the web
+ * `Request` API where `body === null` signals no body.
  *
  * @param request incoming request to check
  * @returns whether the request has body content

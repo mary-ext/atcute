@@ -36,8 +36,6 @@ export interface Store<K, V> {
 	 */
 	delete(key: K): Awaitable<void>;
 
-	/**
-	 * clears all entries from the store.
-	 */
+	/** clears all entries from the store. */
 	clear(): Awaitable<void>;
 }

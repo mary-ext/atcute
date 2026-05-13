@@ -1,6 +1,4 @@
-/**
- * signing algorithms supported by atproto oauth.
- */
+/** signing algorithms supported by atproto oauth. */
 export type SigningAlgorithm =
 	| 'ES256'
 	| 'ES384'

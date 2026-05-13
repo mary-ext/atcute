@@ -6,43 +6,29 @@ import * as ShTangledGitRefUpdate from '../git/refUpdate.ts';
 
 const _gitSync1Schema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.knot.subscribeRepos#gitSync1')),
-	/**
-	 * Repository DID identifier
-	 */
+	/** Repository DID identifier */
 	did: /*#__PURE__*/ v.didString(),
-	/**
-	 * The stream sequence number of this message.
-	 */
+	/** The stream sequence number of this message. */
 	seq: /*#__PURE__*/ v.integer(),
 });
 const _gitSync2Schema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.knot.subscribeRepos#gitSync2')),
-	/**
-	 * Repository AT-URI identifier
-	 */
+	/** Repository AT-URI identifier */
 	repo: /*#__PURE__*/ v.resourceUriString(),
-	/**
-	 * The stream sequence number of this message.
-	 */
+	/** The stream sequence number of this message. */
 	seq: /*#__PURE__*/ v.integer(),
 });
 const _identitySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.knot.subscribeRepos#identity')),
-	/**
-	 * Repository DID identifier
-	 */
+	/** Repository DID identifier */
 	did: /*#__PURE__*/ v.didString(),
-	/**
-	 * The stream sequence number of this message.
-	 */
+	/** The stream sequence number of this message. */
 	seq: /*#__PURE__*/ v.integer(),
 	time: /*#__PURE__*/ v.datetimeString(),
 });
 const _mainSchema = /*#__PURE__*/ v.subscription('sh.tangled.knot.subscribeRepos', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The last known event seq number to backfill from.
-		 */
+		/** The last known event seq number to backfill from. */
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	}),
 	get message() {

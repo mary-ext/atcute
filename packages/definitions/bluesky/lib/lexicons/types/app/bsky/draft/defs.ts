@@ -10,6 +10,7 @@ const _draftSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draft')),
 	/**
 	 * UUIDv4 identifier of the device that created this draft.
+	 *
 	 * @maxLength 100
 	 */
 	deviceId: /*#__PURE__*/ v.optional(
@@ -17,6 +18,7 @@ const _draftSchema = /*#__PURE__*/ v.object({
 	),
 	/**
 	 * The device and/or platform on which the draft was created.
+	 *
 	 * @maxLength 100
 	 */
 	deviceName: /*#__PURE__*/ v.optional(
@@ -24,6 +26,7 @@ const _draftSchema = /*#__PURE__*/ v.object({
 	),
 	/**
 	 * Indicates human language of posts primary text content.
+	 *
 	 * @maxLength 3
 	 */
 	langs: /*#__PURE__*/ v.optional(
@@ -33,6 +36,7 @@ const _draftSchema = /*#__PURE__*/ v.object({
 	),
 	/**
 	 * Embedding rules for the postgates to be created when this draft is published.
+	 *
 	 * @maxLength 5
 	 */
 	get postgateEmbeddingRules() {
@@ -45,6 +49,7 @@ const _draftSchema = /*#__PURE__*/ v.object({
 	},
 	/**
 	 * Array of draft posts that compose this draft.
+	 *
 	 * @minLength 1
 	 * @maxLength 100
 	 */
@@ -55,6 +60,7 @@ const _draftSchema = /*#__PURE__*/ v.object({
 	},
 	/**
 	 * Allow-rules for the threadgate to be created when this draft is published.
+	 *
 	 * @maxLength 5
 	 */
 	get threadgateAllow() {
@@ -75,9 +81,7 @@ const _draftSchema = /*#__PURE__*/ v.object({
 });
 const _draftEmbedCaptionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draftEmbedCaption')),
-	/**
-	 * @maxLength 10000
-	 */
+	/** @maxLength 10000 */
 	content: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 10000)]),
 	lang: /*#__PURE__*/ v.languageCodeString(),
 });
@@ -87,9 +91,7 @@ const _draftEmbedExternalSchema = /*#__PURE__*/ v.object({
 });
 const _draftEmbedImageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draftEmbedImage')),
-	/**
-	 * @maxGraphemes 2000
-	 */
+	/** @maxGraphemes 2000 */
 	alt: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringGraphemes(0, 2000)]),
 	),
@@ -101,6 +103,7 @@ const _draftEmbedLocalRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draftEmbedLocalRef')),
 	/**
 	 * Local, on-device ref to file to be embedded. Embeds are currently device-bound for drafts.
+	 *
 	 * @minLength 1
 	 * @maxLength 1024
 	 */
@@ -114,15 +117,11 @@ const _draftEmbedRecordSchema = /*#__PURE__*/ v.object({
 });
 const _draftEmbedVideoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draftEmbedVideo')),
-	/**
-	 * @maxGraphemes 2000
-	 */
+	/** @maxGraphemes 2000 */
 	alt: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringGraphemes(0, 2000)]),
 	),
-	/**
-	 * @maxLength 20
-	 */
+	/** @maxLength 20 */
 	get captions() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(draftEmbedCaptionSchema), [
@@ -136,9 +135,7 @@ const _draftEmbedVideoSchema = /*#__PURE__*/ v.object({
 });
 const _draftPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draftPost')),
-	/**
-	 * @maxLength 1
-	 */
+	/** @maxLength 1 */
 	get embedExternals() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(draftEmbedExternalSchema), [
@@ -146,9 +143,7 @@ const _draftPostSchema = /*#__PURE__*/ v.object({
 			]),
 		);
 	},
-	/**
-	 * @maxLength 4
-	 */
+	/** @maxLength 4 */
 	get embedImages() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(draftEmbedImageSchema), [
@@ -156,9 +151,7 @@ const _draftPostSchema = /*#__PURE__*/ v.object({
 			]),
 		);
 	},
-	/**
-	 * @maxLength 1
-	 */
+	/** @maxLength 1 */
 	get embedRecords() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(draftEmbedRecordSchema), [
@@ -166,9 +159,7 @@ const _draftPostSchema = /*#__PURE__*/ v.object({
 			]),
 		);
 	},
-	/**
-	 * @maxLength 1
-	 */
+	/** @maxLength 1 */
 	get embedVideos() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(draftEmbedVideoSchema), [
@@ -176,14 +167,14 @@ const _draftPostSchema = /*#__PURE__*/ v.object({
 			]),
 		);
 	},
-	/**
-	 * Self-label values for this post. Effectively content warnings.
-	 */
+	/** Self-label values for this post. Effectively content warnings. */
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 	},
 	/**
-	 * The primary post content. It has a higher limit than post contents to allow storing a larger text that can later be refined into smaller posts.
+	 * The primary post content. It has a higher limit than post contents to allow storing a larger text that
+	 * can later be refined into smaller posts.
+	 *
 	 * @maxLength 10000
 	 * @maxGraphemes 1000
 	 */
@@ -194,20 +185,14 @@ const _draftPostSchema = /*#__PURE__*/ v.object({
 });
 const _draftViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draftView')),
-	/**
-	 * The time the draft was created.
-	 */
+	/** The time the draft was created. */
 	createdAt: /*#__PURE__*/ v.datetimeString(),
 	get draft() {
 		return draftSchema;
 	},
-	/**
-	 * A TID to be used as a draft identifier.
-	 */
+	/** A TID to be used as a draft identifier. */
 	id: /*#__PURE__*/ v.tidString(),
-	/**
-	 * The time the draft was last updated.
-	 */
+	/** The time the draft was last updated. */
 	updatedAt: /*#__PURE__*/ v.datetimeString(),
 });
 const _draftWithIdSchema = /*#__PURE__*/ v.object({
@@ -215,9 +200,7 @@ const _draftWithIdSchema = /*#__PURE__*/ v.object({
 	get draft() {
 		return draftSchema;
 	},
-	/**
-	 * A TID to be used as a draft identifier.
-	 */
+	/** A TID to be used as a draft identifier. */
 	id: /*#__PURE__*/ v.tidString(),
 });
 

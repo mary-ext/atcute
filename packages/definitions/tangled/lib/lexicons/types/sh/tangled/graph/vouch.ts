@@ -9,11 +9,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
 		 * Whether this user is being vouched for or denounced
-		 * @default "vouch"
+		 *
+		 * @default 'vouch'
 		 */
 		kind: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['denounce', 'vouch']), 'vouch'),
 		/**
 		 * The reason for this vouch/denouncement
+		 *
 		 * @maxLength 2560
 		 * @maxGraphemes 256
 		 */

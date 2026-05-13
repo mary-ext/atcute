@@ -7,13 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.contact.sendNotification
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The DID of who this notification comes from.
-			 */
+			/** The DID of who this notification comes from. */
 			from: /*#__PURE__*/ v.didString(),
-			/**
-			 * The DID of who this notification should go to.
-			 */
+			/** The DID of who this notification should go to. */
 			to: /*#__PURE__*/ v.didString(),
 		}),
 	},

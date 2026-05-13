@@ -7,17 +7,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.delete', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * DID of the repository owner
-			 */
+			/** DID of the repository owner */
 			did: /*#__PURE__*/ v.didString(),
-			/**
-			 * Name of the repository to delete
-			 */
+			/** Name of the repository to delete */
 			name: /*#__PURE__*/ v.string(),
-			/**
-			 * Rkey of the repository record
-			 */
+			/** Rkey of the repository record */
 			rkey: /*#__PURE__*/ v.string(),
 		}),
 	},

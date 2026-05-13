@@ -9,20 +9,17 @@ const _eventConvoFirstMessageSchema = /*#__PURE__*/ v.object({
 	convoId: /*#__PURE__*/ v.string(),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
 	messageId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * The list of DIDs message recipients. Does not include the sender, which is in the `user` field
-	 */
+	/** The list of DIDs message recipients. Does not include the sender, which is in the `user` field */
 	recipients: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
 	rev: /*#__PURE__*/ v.string(),
-	/**
-	 * The DID of the message author.
-	 */
+	/** The DID of the message author. */
 	user: /*#__PURE__*/ v.didString(),
 });
 const _mainSchema = /*#__PURE__*/ v.subscription('chat.bsky.moderation.subscribeModEvents', {
 	params: /*#__PURE__*/ v.object({
 		/**
-		 * The last known event seq number to backfill from. Use '2222222222222' to backfill from the beginning. Don't specify a cursor to listen only for new events.
+		 * The last known event seq number to backfill from. Use '2222222222222' to backfill from the beginning.
+		 * Don't specify a cursor to listen only for new events.
 		 */
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),

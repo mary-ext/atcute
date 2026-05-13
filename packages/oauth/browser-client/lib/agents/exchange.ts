@@ -28,6 +28,7 @@ export interface AuthorizeOptions {
 
 /**
  * Create authentication URL for authorization
+ *
  * @param options
  * @returns URL to redirect the user for authorization
  */
@@ -91,6 +92,7 @@ export const createAuthorizationUrl = async (options: AuthorizeOptions): Promise
 
 /**
  * Finalize authorization
+ *
  * @param params Search params
  * @returns Session object, which you can use to instantiate user agents
  */

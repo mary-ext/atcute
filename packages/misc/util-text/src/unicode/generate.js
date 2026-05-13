@@ -1,14 +1,9 @@
 /**
  * generates grapheme break property lookup tables from UCD data files.
  *
- * to update Unicode version:
- *   1. download new UCD files from https://www.unicode.org/Public/UCD/latest/ucd/
- *      - GraphemeBreakProperty.txt
- *      - DerivedCoreProperties.txt
- *      - emoji/emoji-data.txt
- *      - auxiliary/GraphemeBreakTest.txt
- *   2. place them in data/
- *   3. run: node generate.js > grapheme-table.h
+ * to update Unicode version: 1. download new UCD files from https://www.unicode.org/Public/UCD/latest/ucd/ -
+ * GraphemeBreakProperty.txt - DerivedCoreProperties.txt - emoji/emoji-data.txt -
+ * auxiliary/GraphemeBreakTest.txt 2. place them in data/ 3. run: node generate.js > grapheme-table.h
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';

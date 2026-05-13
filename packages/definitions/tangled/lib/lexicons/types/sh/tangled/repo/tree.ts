@@ -7,41 +7,30 @@ const _lastCommitSchema = /*#__PURE__*/ v.object({
 	get author() {
 		return /*#__PURE__*/ v.optional(signatureSchema);
 	},
-	/**
-	 * Commit hash
-	 */
+	/** Commit hash */
 	hash: /*#__PURE__*/ v.string(),
-	/**
-	 * Commit message
-	 */
+	/** Commit message */
 	message: /*#__PURE__*/ v.string(),
-	/**
-	 * Commit timestamp
-	 */
+	/** Commit timestamp */
 	when: /*#__PURE__*/ v.datetimeString(),
 });
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.tree', {
 	params: /*#__PURE__*/ v.object({
 		/**
 		 * Path within the repository tree
-		 * @default ""
+		 *
+		 * @default ''
 		 */
 		path: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string(), ''),
-		/**
-		 * Git reference (branch, tag, or commit SHA)
-		 */
+		/** Git reference (branch, tag, or commit SHA) */
 		ref: /*#__PURE__*/ v.string(),
-		/**
-		 * Repository identifier in format 'did:plc:.../repoName'
-		 */
+		/** Repository identifier in format 'did:plc:.../repoName' */
 		repo: /*#__PURE__*/ v.string(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Parent directory path
-			 */
+			/** Parent directory path */
 			dotdot: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get files() {
 				return /*#__PURE__*/ v.array(treeEntrySchema);
@@ -49,47 +38,31 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.tree', {
 			get lastCommit() {
 				return /*#__PURE__*/ v.optional(lastCommitSchema);
 			},
-			/**
-			 * The parent path in the tree
-			 */
+			/** The parent path in the tree */
 			parent: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Readme for this file tree
-			 */
+			/** Readme for this file tree */
 			get readme() {
 				return /*#__PURE__*/ v.optional(readmeSchema);
 			},
-			/**
-			 * The git reference used
-			 */
+			/** The git reference used */
 			ref: /*#__PURE__*/ v.string(),
 		}),
 	},
 });
 const _readmeSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#readme')),
-	/**
-	 * Contents of the readme file
-	 */
+	/** Contents of the readme file */
 	contents: /*#__PURE__*/ v.string(),
-	/**
-	 * Name of the readme file
-	 */
+	/** Name of the readme file */
 	filename: /*#__PURE__*/ v.string(),
 });
 const _signatureSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.tree#signature')),
-	/**
-	 * Author email
-	 */
+	/** Author email */
 	email: /*#__PURE__*/ v.string(),
-	/**
-	 * Author name
-	 */
+	/** Author name */
 	name: /*#__PURE__*/ v.string(),
-	/**
-	 * Author timestamp
-	 */
+	/** Author timestamp */
 	when: /*#__PURE__*/ v.datetimeString(),
 });
 const _treeEntrySchema = /*#__PURE__*/ v.object({
@@ -97,17 +70,11 @@ const _treeEntrySchema = /*#__PURE__*/ v.object({
 	get last_commit() {
 		return /*#__PURE__*/ v.optional(lastCommitSchema);
 	},
-	/**
-	 * File mode
-	 */
+	/** File mode */
 	mode: /*#__PURE__*/ v.string(),
-	/**
-	 * Relative file or directory name
-	 */
+	/** Relative file or directory name */
 	name: /*#__PURE__*/ v.string(),
-	/**
-	 * File size in bytes
-	 */
+	/** File size in bytes */
 	size: /*#__PURE__*/ v.integer(),
 });
 

@@ -7,6 +7,7 @@ type BlockEntry = [cid: string, bytes: Uint8Array<ArrayBuffer>];
 
 /**
  * encodes data as CBOR, computes its CID, and adds it to the map
+ *
  * @param map the block map to add to
  * @param data the data to encode and add
  */
@@ -19,6 +20,7 @@ export const add = async (map: BlockMap, data: unknown): Promise<void> => {
 
 /**
  * copies multiple blocks from an iterable into the map
+ *
  * @param map the block map to add to
  * @param entries the block entries to add
  */
@@ -30,6 +32,7 @@ export const setMany = (map: BlockMap, entries: Iterable<Readonly<BlockEntry>>) 
 
 /**
  * removes multiple blocks from the map by their CIDs
+ *
  * @param map the block map to remove from
  * @param cids the CID strings to remove
  */

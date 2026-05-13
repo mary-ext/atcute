@@ -8,20 +8,22 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestionsSkel
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
 		/**
-		 * DID of the account to get suggestions relative to. If not provided, suggestions will be based on the viewer.
+		 * DID of the account to get suggestions relative to. If not provided, suggestions will be based on the
+		 * viewer.
 		 */
 		relativeToDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		/**
-		 * DID of the account making the request (not included for public/unauthenticated queries). Used to boost followed accounts in ranking.
+		 * DID of the account making the request (not included for public/unauthenticated queries). Used to boost
+		 * followed accounts in ranking.
 		 */
 		viewer: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	}),
@@ -34,15 +36,15 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestionsSkel
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
 			 * DEPRECATED: use recIdStr instead.
+			 *
 			 * @deprecated
 			 */
 			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-			/**
-			 * Snowflake for this recommendation, use when submitting recommendation events.
-			 */
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
 			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
-			 * DID of the account these suggestions are relative to. If this is returned undefined, suggestions are based on the viewer.
+			 * DID of the account these suggestions are relative to. If this is returned undefined, suggestions are
+			 * based on the viewer.
 			 */
 			relativeToDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		}),

@@ -9,11 +9,13 @@ import * as PubLeafletBlocksText from './text.ts';
 const _listItemSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.unorderedList#listItem')),
 	/**
-	 * If present, this item is a checklist item. true = checked, false = unchecked. If absent, this is a normal list item.
+	 * If present, this item is a checklist item. true = checked, false = unchecked. If absent, this is a normal
+	 * list item.
 	 */
 	checked: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/**
-	 * Nested unordered list items. Mutually exclusive with orderedListChildren; if both are present, children takes precedence.
+	 * Nested unordered list items. Mutually exclusive with orderedListChildren; if both are present, children
+	 * takes precedence.
 	 */
 	get children() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(listItemSchema));
@@ -26,7 +28,8 @@ const _listItemSchema = /*#__PURE__*/ v.object({
 		]);
 	},
 	/**
-	 * Nested ordered list items. Mutually exclusive with children; if both are present, children takes precedence.
+	 * Nested ordered list items. Mutually exclusive with children; if both are present, children takes
+	 * precedence.
 	 */
 	get orderedListChildren() {
 		return /*#__PURE__*/ v.optional(PubLeafletBlocksOrderedList.mainSchema);

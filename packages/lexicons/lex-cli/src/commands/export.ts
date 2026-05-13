@@ -12,6 +12,7 @@ import { loadLexicons } from '../lexicon-loader.ts';
 
 /**
  * ensures export configuration is present
+ *
  * @param config the normalized config
  * @returns the export config
  */
@@ -42,6 +43,7 @@ const writeLexicon = async (
 
 /**
  * runs the export command to write lexicon documents as JSON files
+ *
  * @param args parsed command arguments
  */
 export const handler = async (args: ExportCommand): Promise<void> => {

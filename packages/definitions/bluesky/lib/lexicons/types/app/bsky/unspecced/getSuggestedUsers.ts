@@ -6,14 +6,12 @@ import * as AppBskyActorDefs from '../actor/defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsers', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Category of users to get suggestions for.
-		 */
+		/** Category of users to get suggestions for. */
 		category: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 25
 		 * @minimum 1
 		 * @maximum 50
-		 * @default 25
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 50)]),
@@ -28,12 +26,11 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsers'
 			},
 			/**
 			 * DEPRECATED: use recIdStr instead.
+			 *
 			 * @deprecated
 			 */
 			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Snowflake for this recommendation, use when submitting recommendation events.
-			 */
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
 			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

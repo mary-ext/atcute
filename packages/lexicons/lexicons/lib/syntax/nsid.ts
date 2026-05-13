@@ -1,8 +1,6 @@
 import { isAsciiAlpha, isAsciiAlphaNum } from './utils/ascii.ts';
 
-/**
- * represents a namespace identifier (NSID)
- */
+/** represents a namespace identifier (NSID) */
 export type Nsid = `${string}.${string}.${string}`;
 
 // #__NO_SIDE_EFFECTS__

@@ -1,6 +1,4 @@
-/**
- * thrown when an MST key is invalid or malformed
- */
+/** thrown when an MST key is invalid or malformed */
 export class InvalidMstKeyError extends Error {
 	key: string;
 
@@ -10,9 +8,7 @@ export class InvalidMstKeyError extends Error {
 	}
 }
 
-/**
- * thrown when a referenced block cannot be found in the store
- */
+/** thrown when a referenced block cannot be found in the store */
 export class MissingBlockError extends Error {
 	cid: string;
 	def?: string;

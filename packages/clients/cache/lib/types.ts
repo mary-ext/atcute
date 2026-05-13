@@ -7,6 +7,7 @@ export type EntityTypeId = string;
 
 /**
  * definition for an entity type that can be normalized
+ *
  * @template T the object schema type
  */
 export interface EntityDefinition<T extends ObjectSchema = ObjectSchema> {
@@ -16,6 +17,7 @@ export interface EntityDefinition<T extends ObjectSchema = ObjectSchema> {
 	key: (entity: InferOutput<T>) => string;
 	/**
 	 * merge strategy when entity already exists in cache
+	 *
 	 * @param existing the currently cached entity
 	 * @param incoming the new entity data
 	 * @returns partial entity with fields to update
@@ -31,6 +33,7 @@ export type TypeSubscriber<T> = (key: string, entity: T | undefined) => void;
 
 /**
  * extract the $type literal value from an object schema
+ *
  * @param schema object schema with $type field
  * @returns the $type string value or undefined
  */

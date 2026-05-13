@@ -7,21 +7,15 @@ const _eventSchema = /*#__PURE__*/ v.object({
 	get action() {
 		return actionTypeSchema;
 	},
-	/**
-	 * Optional comment about the decision
-	 */
+	/** Optional comment about the decision */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
-	/**
-	 * DID of the user who created this rule
-	 */
+	/** DID of the user who created this rule */
 	createdBy: /*#__PURE__*/ v.didString(),
 	get eventType() {
 		return eventTypeSchema;
 	},
-	/**
-	 * Auto-incrementing row ID
-	 */
+	/** Auto-incrementing row ID */
 	id: /*#__PURE__*/ v.integer(),
 	get pattern() {
 		return patternTypeSchema;
@@ -29,9 +23,7 @@ const _eventSchema = /*#__PURE__*/ v.object({
 	get reason() {
 		return reasonTypeSchema;
 	},
-	/**
-	 * The URL that this rule applies to
-	 */
+	/** The URL that this rule applies to */
 	url: /*#__PURE__*/ v.string(),
 });
 const _eventTypeSchema = /*#__PURE__*/ v.string<'addRule' | 'removeRule' | 'updateRule' | (string & {})>();
@@ -42,17 +34,11 @@ const _urlRuleSchema = /*#__PURE__*/ v.object({
 	get action() {
 		return actionTypeSchema;
 	},
-	/**
-	 * Optional comment about the decision
-	 */
+	/** Optional comment about the decision */
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * Timestamp when the rule was created
-	 */
+	/** Timestamp when the rule was created */
 	createdAt: /*#__PURE__*/ v.datetimeString(),
-	/**
-	 * DID of the user added the rule.
-	 */
+	/** DID of the user added the rule. */
 	createdBy: /*#__PURE__*/ v.didString(),
 	get pattern() {
 		return patternTypeSchema;
@@ -60,13 +46,9 @@ const _urlRuleSchema = /*#__PURE__*/ v.object({
 	get reason() {
 		return reasonTypeSchema;
 	},
-	/**
-	 * Timestamp when the rule was last updated
-	 */
+	/** Timestamp when the rule was last updated */
 	updatedAt: /*#__PURE__*/ v.datetimeString(),
-	/**
-	 * The URL or domain to apply the rule to
-	 */
+	/** The URL or domain to apply the rule to */
 	url: /*#__PURE__*/ v.string(),
 });
 

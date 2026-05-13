@@ -7,6 +7,7 @@ import type { CarBlock } from './types.ts';
 
 /**
  * encodes a number as an unsigned varint (variable-length integer)
+ *
  * @param n the number to encode
  * @returns the varint-encoded bytes
  */
@@ -19,9 +20,10 @@ const encodeVarint = (n: number): Uint8Array<ArrayBuffer> => {
 
 /**
  * serializes a CAR v1 header
- * @internal
+ *
  * @param roots array of root CIDs (typically just one)
  * @returns the serialized header bytes
+ * @internal
  */
 export const serializeCarHeader = (roots: readonly CidLink[]): Uint8Array<ArrayBuffer> => {
 	const headerData = CBOR.encode({
@@ -40,10 +42,11 @@ export const serializeCarHeader = (roots: readonly CidLink[]): Uint8Array<ArrayB
 
 /**
  * serializes a single CAR entry (block)
- * @internal
+ *
  * @param cid the CID of the block (as bytes)
  * @param data the block data
  * @returns the serialized entry bytes
+ * @internal
  */
 export const serializeCarEntry = (cid: Uint8Array, data: Uint8Array): Uint8Array<ArrayBuffer> => {
 	const entrySize = encodeVarint(cid.length + data.length);
@@ -58,25 +61,24 @@ export const serializeCarEntry = (cid: Uint8Array, data: Uint8Array): Uint8Array
 
 /**
  * creates an async generator that yields CAR file chunks
+ *
+ * @example
+ * 	const blocks = async function* () {
+ * 		yield { cid: commitCid.bytes, data: commitBytes };
+ * 		yield { cid: nodeCid.bytes, data: nodeBytes };
+ * 	};
+ *
+ * 	// Stream chunks
+ * 	for await (const chunk of writeCarStream([rootCid], blocks())) {
+ * 		stream.write(chunk);
+ * 	}
+ *
+ * 	// Or collect into array (requires Array.fromAsync or polyfill)
+ * 	const chunks = await Array.fromAsync(writeCarStream([rootCid], blocks()));
+ *
  * @param root root CIDs for the CAR file
  * @param blocks async iterable of blocks to write
  * @yields Uint8Array chunks of the CAR file (header, then entries)
- *
- * @example
- * ```typescript
- * const blocks = async function* () {
- *   yield { cid: commitCid.bytes, data: commitBytes };
- *   yield { cid: nodeCid.bytes, data: nodeBytes };
- * };
- *
- * // Stream chunks
- * for await (const chunk of writeCarStream([rootCid], blocks())) {
- *   stream.write(chunk);
- * }
- *
- * // Or collect into array (requires Array.fromAsync or polyfill)
- * const chunks = await Array.fromAsync(writeCarStream([rootCid], blocks()));
- * ```
  */
 export async function* writeCarStream(
 	roots: CidLink[],

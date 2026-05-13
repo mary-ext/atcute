@@ -8,6 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('sh.tangled.actor.profile'),
 		/**
 		 * Small image to be displayed next to posts from account. AKA, 'profile picture'
+		 *
 		 * @accept image/png, image/jpeg
 		 * @maxSize 1000000
 		 */
@@ -17,12 +18,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.blobAccept(['image/png', 'image/jpeg']),
 			]),
 		),
-		/**
-		 * Include link to this account on Bluesky.
-		 */
+		/** Include link to this account on Bluesky. */
 		bluesky: /*#__PURE__*/ v.boolean(),
 		/**
 		 * Free-form profile description text.
+		 *
 		 * @maxLength 2560
 		 * @maxGraphemes 256
 		 */
@@ -43,6 +43,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		),
 		/**
 		 * Free-form location text.
+		 *
 		 * @maxLength 400
 		 * @maxGraphemes 40
 		 */
@@ -54,6 +55,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		),
 		/**
 		 * Pinned repositories. Values are repo DIDs for repos that have them, or AT-URIs for legacy repos.
+		 *
 		 * @minLength 0
 		 * @maxLength 6
 		 */
@@ -64,6 +66,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		),
 		/**
 		 * A handle the user prefers to be displayed as.
+		 *
 		 * @maxLength 253
 		 */
 		preferredHandle: /*#__PURE__*/ v.optional(
@@ -71,6 +74,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		),
 		/**
 		 * Preferred gender pronouns.
+		 *
 		 * @maxLength 40
 		 */
 		pronouns: /*#__PURE__*/ v.optional(

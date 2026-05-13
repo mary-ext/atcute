@@ -10,9 +10,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.group.removeMembers', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			convoId: /*#__PURE__*/ v.string(),
-			/**
-			 * @minLength 1
-			 */
+			/** @minLength 1 */
 			members: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
 				/*#__PURE__*/ v.arrayLength(1),
 			]),

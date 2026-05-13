@@ -7,7 +7,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.notification.declaration'),
 		/**
-		 * A declaration of the user's preference for allowing activity subscriptions from other users. Absence of a record implies 'followers'.
+		 * A declaration of the user's preference for allowing activity subscriptions from other users. Absence of
+		 * a record implies 'followers'.
 		 */
 		allowSubscriptions: /*#__PURE__*/ v.string<'followers' | 'mutuals' | 'none' | (string & {})>(),
 	}),

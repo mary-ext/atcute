@@ -6,12 +6,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.string(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('fyi.frontpage.feed.generator'),
-		/**
-		 * Whether the feed generator accepts interaction feedback.
-		 */
+		/** Whether the feed generator accepts interaction feedback. */
 		acceptsInteractions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		/**
 		 * Avatar image for the feed.
+		 *
 		 * @accept image/png, image/jpeg
 		 * @maxSize 1000000
 		 */
@@ -21,12 +20,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.blobAccept(['image/png', 'image/jpeg']),
 			]),
 		),
-		/**
-		 * Client-declared timestamp when this generator was created.
-		 */
+		/** Client-declared timestamp when this generator was created. */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
 		 * Description of the feed.
+		 *
 		 * @maxLength 3000
 		 * @maxGraphemes 300
 		 */
@@ -36,12 +34,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.stringGraphemes(0, 300),
 			]),
 		),
-		/**
-		 * DID of the feed generator service.
-		 */
+		/** DID of the feed generator service. */
 		did: /*#__PURE__*/ v.didString(),
 		/**
 		 * Display name for the feed.
+		 *
 		 * @maxLength 320
 		 * @maxGraphemes 32
 		 */

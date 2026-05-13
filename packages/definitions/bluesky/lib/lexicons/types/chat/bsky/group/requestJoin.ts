@@ -15,9 +15,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.group.requestJoin', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The group convo joined. This is only present in the case of status=joined
-			 */
+			/** The group convo joined. This is only present in the case of status=joined */
 			get convo() {
 				return /*#__PURE__*/ v.optional(ChatBskyConvoDefs.convoViewSchema);
 			},

@@ -11,9 +11,7 @@ interface LabelerOutboxOptions {
 	maxBufferSize?: number;
 }
 
-/**
- * internal helper that merges store backfill with local wake-ups
- */
+/** internal helper that merges store backfill with local wake-ups */
 export class LabelerOutbox {
 	#store: LabelStore;
 	#events: SimpleEventEmitter<[event: LabelEvent]>;
@@ -22,6 +20,7 @@ export class LabelerOutbox {
 
 	/**
 	 * creates an outbox
+	 *
 	 * @param store label store
 	 * @param wakeups local wakeup emitter
 	 * @param options outbox options

@@ -5,9 +5,7 @@ import * as BlogPcktBlockListItem from './listItem.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.bulletList')),
-	/**
-	 * Array of list items
-	 */
+	/** Array of list items */
 	get content() {
 		return /*#__PURE__*/ v.array(BlogPcktBlockListItem.mainSchema);
 	},

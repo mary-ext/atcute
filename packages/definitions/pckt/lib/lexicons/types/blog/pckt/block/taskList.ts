@@ -5,9 +5,7 @@ import * as BlogPcktBlockTaskItem from './taskItem.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.taskList')),
-	/**
-	 * Array of task items
-	 */
+	/** Array of task items */
 	get content() {
 		return /*#__PURE__*/ v.array(BlogPcktBlockTaskItem.mainSchema);
 	},

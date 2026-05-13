@@ -6,9 +6,7 @@ import * as ShTangledGitTempDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getHead', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * AT-URI of the repository
-		 */
+		/** AT-URI of the repository */
 		repo: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {

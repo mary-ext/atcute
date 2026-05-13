@@ -4,9 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getRepoStatus', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The DID of the repo.
-		 */
+		/** The DID of the repo. */
 		did: /*#__PURE__*/ v.didString(),
 	}),
 	output: {
@@ -14,12 +12,12 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getRepoStatus', {
 		schema: /*#__PURE__*/ v.object({
 			active: /*#__PURE__*/ v.boolean(),
 			did: /*#__PURE__*/ v.didString(),
-			/**
-			 * Optional field, the current rev of the repo, if active=true
-			 */
+			/** Optional field, the current rev of the repo, if active=true */
 			rev: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.tidString()),
 			/**
-			 * If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.
+			 * If active=false, this optional field indicates a possible reason for why the account is not active.
+			 * If active=false and no status is supplied, then the host makes no claim for why the repository is no
+			 * longer being hosted.
 			 */
 			status: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.string<

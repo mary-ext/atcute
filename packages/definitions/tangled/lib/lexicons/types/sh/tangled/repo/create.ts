@@ -7,25 +7,15 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.create', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Default branch to push to
-			 */
+			/** Default branch to push to */
 			defaultBranch: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Name of the repository
-			 */
+			/** Name of the repository */
 			name: /*#__PURE__*/ v.string(),
-			/**
-			 * Optional user-provided did:web to use as the repo identity instead of minting a did:plc.
-			 */
+			/** Optional user-provided did:web to use as the repo identity instead of minting a did:plc. */
 			repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
-			/**
-			 * Rkey of the repository record
-			 */
+			/** Rkey of the repository record */
 			rkey: /*#__PURE__*/ v.string(),
-			/**
-			 * A source URL to clone from, populate this when forking or importing a repository.
-			 */
+			/** A source URL to clone from, populate this when forking or importing a repository. */
 			source: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

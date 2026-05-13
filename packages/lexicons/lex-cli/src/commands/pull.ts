@@ -175,6 +175,7 @@ const writeSourceReadme = async (
 
 /**
  * runs the pull command to fetch lexicon documents from configured sources
+ *
  * @param args parsed command arguments
  */
 export const handler = async (args: PullCommand): Promise<void> => {

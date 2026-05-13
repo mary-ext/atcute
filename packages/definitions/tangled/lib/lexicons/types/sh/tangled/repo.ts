@@ -14,32 +14,21 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringGraphemes(1, 140)]),
 		),
-		/**
-		 * knot where the repo was created
-		 */
+		/** knot where the repo was created */
 		knot: /*#__PURE__*/ v.string(),
-		/**
-		 * List of labels that this repo subscribes to
-		 */
+		/** List of labels that this repo subscribes to */
 		labels: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString())),
-		/**
-		 * name of the repo
-		 */
+		/** name of the repo */
 		name: /*#__PURE__*/ v.string(),
-		/**
-		 * DID of the repo itself, if assigned
-		 */
+		/** DID of the repo itself, if assigned */
 		repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
-		/**
-		 * source of the repo
-		 */
+		/** source of the repo */
 		source: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-		/**
-		 * CI runner to send jobs to and receive results from
-		 */
+		/** CI runner to send jobs to and receive results from */
 		spindle: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
 		 * Topics related to the repo
+		 *
 		 * @maxLength 50
 		 */
 		topics: /*#__PURE__*/ v.optional(
@@ -50,9 +39,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				[/*#__PURE__*/ v.arrayLength(0, 50)],
 			),
 		),
-		/**
-		 * Any URI related to the repo
-		 */
+		/** Any URI related to the repo */
 		website: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	}),
 );

@@ -7,14 +7,12 @@ import * as AppBskyFeedDefs from './defs.ts';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getFeedSkeleton', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		/**
-		 * Reference to feed generator record describing the specific feed being requested.
-		 */
+		/** Reference to feed generator record describing the specific feed being requested. */
 		feed: /*#__PURE__*/ v.resourceUriString(),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
@@ -30,6 +28,7 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getFeedSkeleton', {
 			},
 			/**
 			 * Unique identifier per request that may be passed back alongside interactions.
+			 *
 			 * @maxLength 100
 			 */
 			reqId: /*#__PURE__*/ v.optional(

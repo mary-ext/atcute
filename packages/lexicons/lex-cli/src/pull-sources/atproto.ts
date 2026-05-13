@@ -25,8 +25,9 @@ import type { AtprotoSourceConfig } from '../config.ts';
 import type { PullResult, SourceLocation } from './types.ts';
 
 /**
- * discovers all published lexicons for an authority by listing records in the
- * com.atproto.lexicon.schema collection
+ * discovers all published lexicons for an authority by listing records in the com.atproto.lexicon.schema
+ * collection
+ *
  * @param authority the authority DID
  * @param didResolver DID document resolver
  * @returns array of NSID strings
@@ -93,6 +94,7 @@ const discoverLexiconsForAuthority = async (
 
 /**
  * pulls lexicon documents from AT Protocol network resolution
+ *
  * @param source atproto source configuration
  * @returns pulled lexicons and ISO timestamp
  */

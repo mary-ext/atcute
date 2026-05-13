@@ -5,22 +5,18 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listBlobs', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		/**
-		 * The DID of the repo.
-		 */
+		/** The DID of the repo. */
 		did: /*#__PURE__*/ v.didString(),
 		/**
+		 * @default 500
 		 * @minimum 1
 		 * @maximum 1000
-		 * @default 500
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 1000)]),
 			500,
 		),
-		/**
-		 * Optional revision of the repo to list blobs since.
-		 */
+		/** Optional revision of the repo to list blobs since. */
 		since: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.tidString()),
 	}),
 	output: {

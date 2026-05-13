@@ -4,13 +4,9 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.branch', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Branch name to get information for
-		 */
+		/** Branch name to get information for */
 		name: /*#__PURE__*/ v.string(),
-		/**
-		 * Repository identifier in format 'did:plc:.../repoName'
-		 */
+		/** Repository identifier in format 'did:plc:.../repoName' */
 		repo: /*#__PURE__*/ v.string(),
 	}),
 	output: {
@@ -19,46 +15,28 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.branch', {
 			get author() {
 				return /*#__PURE__*/ v.optional(signatureSchema);
 			},
-			/**
-			 * Latest commit hash on this branch
-			 */
+			/** Latest commit hash on this branch */
 			hash: /*#__PURE__*/ v.string(),
-			/**
-			 * Whether this is the default branch
-			 */
+			/** Whether this is the default branch */
 			isDefault: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			/**
-			 * Latest commit message
-			 */
+			/** Latest commit message */
 			message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Branch name
-			 */
+			/** Branch name */
 			name: /*#__PURE__*/ v.string(),
-			/**
-			 * Short commit hash
-			 */
+			/** Short commit hash */
 			shortHash: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Timestamp of latest commit
-			 */
+			/** Timestamp of latest commit */
 			when: /*#__PURE__*/ v.datetimeString(),
 		}),
 	},
 });
 const _signatureSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.branch#signature')),
-	/**
-	 * Author email
-	 */
+	/** Author email */
 	email: /*#__PURE__*/ v.string(),
-	/**
-	 * Author name
-	 */
+	/** Author name */
 	name: /*#__PURE__*/ v.string(),
-	/**
-	 * Author timestamp
-	 */
+	/** Author timestamp */
 	when: /*#__PURE__*/ v.datetimeString(),
 });
 

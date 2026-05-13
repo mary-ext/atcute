@@ -69,24 +69,21 @@ export interface XRPCRouterOptions {
 	middlewares?: FetchMiddleware[];
 	handleNotFound?: NotFoundHandler;
 	/**
-	 * optional handler for `/xrpc/_health`. when provided, the router answers
-	 * health-check requests by invoking this handler; when absent, the path
-	 * falls through to `handleNotFound`. `_health` is not part of the atproto
-	 * XRPC spec, so callers opt in explicitly.
+	 * optional handler for `/xrpc/_health`. when provided, the router answers health-check requests by invoking
+	 * this handler; when absent, the path falls through to `handleNotFound`. `_health` is not part of the
+	 * atproto XRPC spec, so callers opt in explicitly.
 	 */
 	handleHealthCheck?: HealthCheckHandler;
 	/** translates a thrown error into an HTTP response. */
 	handleException?: ExceptionHandler;
 	/**
-	 * fire-and-forget telemetry hook for unexpected HTTP errors. not invoked for
-	 * client-induced errors (aborted requests, `XRPCError` subclasses, thrown
-	 * `Response` objects).
+	 * fire-and-forget telemetry hook for unexpected HTTP errors. not invoked for client-induced errors (aborted
+	 * requests, `XRPCError` subclasses, thrown `Response` objects).
 	 */
 	onError?: ErrorObserver;
 	/**
-	 * fire-and-forget telemetry hook for unexpected subscription errors. not
-	 * invoked for aborted signals or `XRPCSubscriptionError` (which is
-	 * translated to an error frame).
+	 * fire-and-forget telemetry hook for unexpected subscription errors. not invoked for aborted signals or
+	 * `XRPCSubscriptionError` (which is translated to an error frame).
 	 */
 	onSocketError?: SocketErrorObserver;
 	websocket?: WebSocketAdapter;

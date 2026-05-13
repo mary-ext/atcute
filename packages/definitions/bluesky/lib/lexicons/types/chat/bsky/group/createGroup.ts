@@ -9,9 +9,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.group.createGroup', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * @maxLength 49
-			 */
+			/** @maxLength 49 */
 			members: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
 				/*#__PURE__*/ v.arrayLength(0, 49),
 			]),

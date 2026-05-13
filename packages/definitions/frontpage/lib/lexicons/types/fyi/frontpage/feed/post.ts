@@ -6,18 +6,15 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('fyi.frontpage.feed.post'),
-		/**
-		 * Client-declared timestamp when this post was originally created.
-		 */
+		/** Client-declared timestamp when this post was originally created. */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		/**
-		 * The piece of content that this Frontpage post is about.
-		 */
+		/** The piece of content that this Frontpage post is about. */
 		get subject() {
 			return /*#__PURE__*/ v.variant([urlSubjectSchema]);
 		},
 		/**
 		 * The title of the post.
+		 *
 		 * @maxLength 3000
 		 * @maxGraphemes 300
 		 */

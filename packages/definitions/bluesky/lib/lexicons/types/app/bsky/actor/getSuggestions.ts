@@ -8,9 +8,9 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.actor.getSuggestions', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
@@ -26,12 +26,11 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.actor.getSuggestions', {
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
 			 * DEPRECATED: use recIdStr instead.
+			 *
 			 * @deprecated
 			 */
 			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-			/**
-			 * Snowflake for this recommendation, use when submitting recommendation events.
-			 */
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
 			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

@@ -21,16 +21,12 @@ export class RepoEntry {
 		this.carEntry = carEntry;
 	}
 
-	/**
-	 * raw contents of this record
-	 */
+	/** raw contents of this record */
 	get bytes(): Uint8Array {
 		return this.carEntry.bytes;
 	}
 
-	/**
-	 * decoded contents of this record
-	 */
+	/** decoded contents of this record */
 	get record(): unknown {
 		return CBOR.decode(this.bytes);
 	}
@@ -49,6 +45,7 @@ export interface Commit {
 
 /**
  * checks if value is a valid commit object
+ *
  * @param value value to check
  * @returns true if the value is a valid commit object, false otherwise
  */

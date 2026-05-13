@@ -26,6 +26,7 @@ export interface DecodeResult {
 
 /**
  * encodes a varint
+ *
  * @param num Number to encode
  * @param buf Buffer to write on
  * @param offset Starting position on the buffer
@@ -89,6 +90,7 @@ export const encode = (num: number, buf: Uint8Array, offset = 0): number => {
 
 /**
  * decodes a varint and returns the value with the next byte offset
+ *
  * @param buf buffer to read from
  * @param offset starting position on the buffer
  * @param length maximum bytes to consume from offset
@@ -164,6 +166,7 @@ export const decode = (buf: Uint8Array, offset = 0, length = buf.length): Decode
 
 /**
  * Returns encoding length
+ *
  * @param num The number to encode
  * @returns Amount of bytes needed for encoding
  */

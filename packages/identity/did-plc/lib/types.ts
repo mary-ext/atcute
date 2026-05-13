@@ -74,9 +74,7 @@ export type IndexedEntryLog = [
 
 // #region client response types
 
-/**
- * current identity state derived from the did:plc operation log
- */
+/** current identity state derived from the did:plc operation log */
 export interface PlcState {
 	did: DidPlcString;
 	rotationKeys: DidKeyString[];
@@ -85,9 +83,7 @@ export interface PlcState {
 	services: Record<string, Service>;
 }
 
-/**
- * operation entry with sequence number from /export endpoint
- */
+/** operation entry with sequence number from /export endpoint */
 export interface SequencedEntry extends IndexedEntry {
 	type: 'sequenced_op';
 	seq: number;

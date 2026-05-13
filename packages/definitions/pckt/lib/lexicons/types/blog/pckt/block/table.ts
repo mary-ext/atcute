@@ -5,9 +5,7 @@ import * as BlogPcktBlockTableRow from './tableRow.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.table')),
-	/**
-	 * Array of table rows
-	 */
+	/** Array of table rows */
 	get content() {
 		return /*#__PURE__*/ v.array(BlogPcktBlockTableRow.mainSchema);
 	},

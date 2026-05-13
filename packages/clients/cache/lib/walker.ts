@@ -12,6 +12,7 @@ import { getTypeIdFromSchema } from './types.ts';
 
 /**
  * compiled walk function for a schema
+ *
  * @param data input data to walk
  * @returns walked data with entities swapped in
  */
@@ -20,9 +21,7 @@ export type WalkFn = (data: unknown) => unknown;
 /** identity walker - returns data unchanged */
 const identity: WalkFn = (data) => data;
 
-/**
- * context for building and executing schema walkers
- */
+/** context for building and executing schema walkers */
 export interface WalkerContext {
 	/** check if a type ID is a registered entity */
 	isEntityType: (typeId: EntityTypeId) => boolean;
@@ -30,10 +29,7 @@ export interface WalkerContext {
 	upsertEntity: (typeId: EntityTypeId, incoming: object) => object;
 }
 
-/**
- * walker cache that tracks schema -> compiled walker mappings
- * invalidated when entity definitions change
- */
+/** walker cache that tracks schema -> compiled walker mappings invalidated when entity definitions change */
 export class WalkerCache {
 	#ctx: WalkerContext;
 	#cache = new WeakMap<BaseSchema, WalkFn>();
@@ -49,6 +45,7 @@ export class WalkerCache {
 
 	/**
 	 * get or build a walker for a schema
+	 *
 	 * @param schema schema to get walker for
 	 * @returns walk function
 	 */

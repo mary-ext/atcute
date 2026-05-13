@@ -11,8 +11,8 @@ export interface CreateDpopFetchOptions {
 	/** server's supported DPoP signing algorithms */
 	supportedAlgs?: readonly string[];
 	/**
-	 * is the target an authorization server (true) or resource server (false)?
-	 * affects how `use_dpop_nonce` errors are detected.
+	 * is the target an authorization server (true) or resource server (false)? affects how `use_dpop_nonce`
+	 * errors are detected.
 	 */
 	isAuthServer?: boolean;
 	/** custom fetch implementation */

@@ -5,17 +5,15 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedFeedsSkeleton', {
 	params: /*#__PURE__*/ v.object({
 		/**
+		 * @default 10
 		 * @minimum 1
 		 * @maximum 25
-		 * @default 10
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 25)]),
 			10,
 		),
-		/**
-		 * DID of the account making the request (not included for public/unauthenticated queries).
-		 */
+		/** DID of the account making the request (not included for public/unauthenticated queries). */
 		viewer: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	}),
 	output: {

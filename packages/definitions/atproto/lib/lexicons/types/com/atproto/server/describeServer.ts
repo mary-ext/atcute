@@ -16,30 +16,20 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.describeServer', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * List of domain suffixes that can be used in account handles.
-			 */
+			/** List of domain suffixes that can be used in account handles. */
 			availableUserDomains: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
-			/**
-			 * Contact information
-			 */
+			/** Contact information */
 			get contact() {
 				return /*#__PURE__*/ v.optional(contactSchema);
 			},
 			did: /*#__PURE__*/ v.didString(),
-			/**
-			 * If true, an invite code must be supplied to create an account on this instance.
-			 */
+			/** If true, an invite code must be supplied to create an account on this instance. */
 			inviteCodeRequired: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			/**
-			 * URLs of service policy documents.
-			 */
+			/** URLs of service policy documents. */
 			get links() {
 				return /*#__PURE__*/ v.optional(linksSchema);
 			},
-			/**
-			 * If true, a phone verification token must be supplied to create an account on this instance.
-			 */
+			/** If true, a phone verification token must be supplied to create an account on this instance. */
 			phoneVerificationRequired: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		}),
 	},

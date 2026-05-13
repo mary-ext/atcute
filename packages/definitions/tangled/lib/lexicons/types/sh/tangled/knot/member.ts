@@ -7,9 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.knot.member'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		/**
-		 * domain that this member now belongs to
-		 */
+		/** domain that this member now belongs to */
 		domain: /*#__PURE__*/ v.string(),
 		subject: /*#__PURE__*/ v.didString(),
 	}),

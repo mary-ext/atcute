@@ -16,17 +16,16 @@ const _mainSchema = /*#__PURE__*/ v.query('blue.moji.collection.listCollection',
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
 		 * The number of records to return.
+		 *
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		/**
-		 * Flag to reverse the order of the returned records.
-		 */
+		/** Flag to reverse the order of the returned records. */
 		reverse: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	}),
 	output: {

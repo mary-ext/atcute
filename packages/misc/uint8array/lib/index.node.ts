@@ -180,6 +180,7 @@ const _shortString = (from: Uint8Array, p: number, length: number): string | nul
 
 /**
  * decodes a UTF-8 string from a given buffer
+ *
  * @param from source buffer
  * @param offset byte offset to start reading from
  * @param length number of bytes to read
@@ -201,6 +202,7 @@ export const decodeUtf8From = (
 
 /**
  * calculates the UTF-8 byte length of a string
+ *
  * @param str string to measure
  * @returns byte length when encoded as UTF-8
  */
@@ -210,6 +212,7 @@ export const getUtf8Length = (str: string): number => {
 
 /**
  * checks if a string's UTF-8 byte length is within a given range
+ *
  * @param str string to measure
  * @param min minimum byte length (inclusive)
  * @param max maximum byte length (inclusive)
@@ -238,6 +241,7 @@ export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuff
 
 /**
  * generates cryptographically secure random bytes
+ *
  * @param size number of bytes to generate
  * @returns buffer filled with random bytes
  */

@@ -1,14 +1,12 @@
 /**
- * thrown when client authentication method is no longer usable
- * (e.g., key removed from keyset or server no longer supports method).
+ * thrown when client authentication method is no longer usable (e.g., key removed from keyset or server no
+ * longer supports method).
  */
 export class AuthMethodUnsatisfiableError extends Error {
 	override name = 'AuthMethodUnsatisfiableError';
 }
 
-/**
- * thrown when a session is invalid and cannot be used.
- */
+/** thrown when a session is invalid and cannot be used. */
 export class TokenInvalidError extends Error {
 	override name = 'TokenInvalidError';
 
@@ -20,9 +18,7 @@ export class TokenInvalidError extends Error {
 	}
 }
 
-/**
- * thrown when token refresh fails.
- */
+/** thrown when token refresh fails. */
 export class TokenRefreshError extends Error {
 	override name = 'TokenRefreshError';
 
@@ -34,9 +30,7 @@ export class TokenRefreshError extends Error {
 	}
 }
 
-/**
- * thrown when a session has been revoked.
- */
+/** thrown when a session has been revoked. */
 export class TokenRevokedError extends Error {
 	override name = 'TokenRevokedError';
 
@@ -48,9 +42,7 @@ export class TokenRevokedError extends Error {
 	}
 }
 
-/**
- * thrown when OAuth response indicates an error.
- */
+/** thrown when OAuth response indicates an error. */
 export class OAuthResponseError extends Error {
 	override name = 'OAuthResponseError';
 
@@ -70,9 +62,7 @@ export class OAuthResponseError extends Error {
 	}
 }
 
-/**
- * thrown when OAuth callback contains an error.
- */
+/** thrown when OAuth callback contains an error. */
 export class OAuthCallbackError extends Error {
 	override name = 'OAuthCallbackError';
 
@@ -88,9 +78,7 @@ export class OAuthCallbackError extends Error {
 	}
 }
 
-/**
- * thrown when metadata resolution fails.
- */
+/** thrown when metadata resolution fails. */
 export class OAuthResolverError extends Error {
 	override name = 'OAuthResolverError';
 }

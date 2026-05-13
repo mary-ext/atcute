@@ -8,7 +8,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.sendEmail', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			/**
-			 * Additional comment by the sender that won't be used in the email itself but helpful to provide more context for moderators/reviewers
+			 * Additional comment by the sender that won't be used in the email itself but helpful to provide more
+			 * context for moderators/reviewers
 			 */
 			comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			content: /*#__PURE__*/ v.string(),

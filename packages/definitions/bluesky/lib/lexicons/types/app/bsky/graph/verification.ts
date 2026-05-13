@@ -6,21 +6,21 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.graph.verification'),
-		/**
-		 * Date of when the verification was created.
-		 */
+		/** Date of when the verification was created. */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
-		 * Display name of the subject the verification applies to at the moment of verifying, which might not be the same at the time of viewing. The verification is only valid if the current displayName matches the one at the time of verifying.
+		 * Display name of the subject the verification applies to at the moment of verifying, which might not be
+		 * the same at the time of viewing. The verification is only valid if the current displayName matches the
+		 * one at the time of verifying.
 		 */
 		displayName: /*#__PURE__*/ v.string(),
 		/**
-		 * Handle of the subject the verification applies to at the moment of verifying, which might not be the same at the time of viewing. The verification is only valid if the current handle matches the one at the time of verifying.
+		 * Handle of the subject the verification applies to at the moment of verifying, which might not be the
+		 * same at the time of viewing. The verification is only valid if the current handle matches the one at
+		 * the time of verifying.
 		 */
 		handle: /*#__PURE__*/ v.handleString(),
-		/**
-		 * DID of the subject the verification applies to.
-		 */
+		/** DID of the subject the verification applies to. */
 		subject: /*#__PURE__*/ v.didString(),
 	}),
 );

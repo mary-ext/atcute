@@ -8,9 +8,7 @@ import type { OAuthServerAgent } from './oauth-server-agent.ts';
 import type { SessionGetter } from './session-getter.ts';
 import type { TokenSet } from './types/token-set.ts';
 
-/**
- * token information for external use.
- */
+/** token information for external use. */
 export interface TokenInfo {
 	/** token expiration time */
 	expiresAt?: Date;
@@ -29,8 +27,7 @@ export interface TokenInfo {
 /**
  * represents an authenticated user session.
  *
- * provides methods for making authenticated requests to the user's PDS
- * and managing the session lifecycle.
+ * provides methods for making authenticated requests to the user's PDS and managing the session lifecycle.
  */
 export class OAuthSession implements FetchHandlerObject {
 	private readonly dpopFetch: typeof globalThis.fetch;
@@ -60,9 +57,7 @@ export class OAuthSession implements FetchHandlerObject {
 		});
 	}
 
-	/**
-	 * user's DID.
-	 */
+	/** user's DID. */
 	get did(): Did {
 		return this.sub;
 	}
@@ -100,9 +95,7 @@ export class OAuthSession implements FetchHandlerObject {
 		};
 	}
 
-	/**
-	 * signs out and revokes the session.
-	 */
+	/** signs out and revokes the session. */
 	async signOut(): Promise<void> {
 		try {
 			const tokenSet = await this.getTokenSet(false);

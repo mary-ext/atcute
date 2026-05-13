@@ -6,24 +6,17 @@ import * as ToolsOzoneVerificationDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.verification.listVerifications', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Filter to verifications created after this timestamp
-		 */
+		/** Filter to verifications created after this timestamp */
 		createdAfter: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-		/**
-		 * Filter to verifications created before this timestamp
-		 */
+		/** Filter to verifications created before this timestamp */
 		createdBefore: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-		/**
-		 * Pagination cursor
-		 */
+		/** Pagination cursor */
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		/**
-		 * Filter to verifications that are revoked or not. By default, includes both.
-		 */
+		/** Filter to verifications that are revoked or not. By default, includes both. */
 		isRevoked: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		/**
 		 * Filter to verifications from specific issuers
+		 *
 		 * @maxLength 100
 		 */
 		issuers: /*#__PURE__*/ v.optional(
@@ -33,9 +26,10 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.verification.listVerifica
 		),
 		/**
 		 * Maximum number of results to return
+		 *
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
@@ -43,11 +37,13 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.verification.listVerifica
 		),
 		/**
 		 * Sort direction for creation date
-		 * @default "desc"
+		 *
+		 * @default 'desc'
 		 */
 		sortDirection: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['asc', 'desc']), 'desc'),
 		/**
 		 * Filter to specific verified DIDs
+		 *
 		 * @maxLength 100
 		 */
 		subjects: /*#__PURE__*/ v.optional(

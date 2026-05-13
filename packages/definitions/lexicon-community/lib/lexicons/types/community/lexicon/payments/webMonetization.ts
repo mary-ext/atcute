@@ -6,13 +6,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.string(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('community.lexicon.payments.webMonetization'),
-		/**
-		 * Wallet address.
-		 */
+		/** Wallet address. */
 		address: /*#__PURE__*/ v.genericUriString(),
-		/**
-		 * Short, human-readable description of how this wallet is related to this account.
-		 */
+		/** Short, human-readable description of how this wallet is related to this account. */
 		note: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),
 );

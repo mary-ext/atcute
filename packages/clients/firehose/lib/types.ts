@@ -3,9 +3,7 @@ import type { BaseSchema } from '@atcute/lexicons/validations';
 
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 
-/**
- * extracts the params type from an XRPC subscription schema
- */
+/** extracts the params type from an XRPC subscription schema */
 export type ParamsOf<T> =
 	T extends XRPCSubscriptionMetadata<infer TParams, any, any>
 		? TParams extends null
@@ -15,9 +13,7 @@ export type ParamsOf<T> =
 				: never
 		: never;
 
-/**
- * extracts the message type from an XRPC subscription schema
- */
+/** extracts the message type from an XRPC subscription schema */
 export type MessageOf<T> =
 	T extends XRPCSubscriptionMetadata<any, infer TMessage, any>
 		? TMessage extends null
@@ -27,29 +23,24 @@ export type MessageOf<T> =
 				: never
 		: never;
 
-/**
- * configuration options for FirehoseSubscription
- */
+/** configuration options for FirehoseSubscription */
 export interface FirehoseSubscriptionOptions<TSchema extends XRPCSubscriptionMetadata> {
-	/**
-	 * XRPC service URL(s) to connect to
-	 */
+	/** XRPC service URL(s) to connect to */
 	service: string | string[];
 
-	/**
-	 * XRPC subscription schema from @atcute/lexicons
-	 */
+	/** XRPC subscription schema from @atcute/lexicons */
 	nsid: TSchema;
 
 	/**
-	 * subscription parameters - can be a static object or a function that returns
-	 * params. the function is called on each connection attempt, allowing for
-	 * dynamic cursor tracking and reconnection state management.
+	 * subscription parameters - can be a static object or a function that returns params. the function is
+	 * called on each connection attempt, allowing for dynamic cursor tracking and reconnection state
+	 * management.
 	 */
 	params?: ParamsOf<TSchema> | (() => ParamsOf<TSchema>);
 
 	/**
 	 * whether to validate incoming events against the schema
+	 *
 	 * @default true
 	 */
 	validateEvents?: boolean;
@@ -58,43 +49,31 @@ export interface FirehoseSubscriptionOptions<TSchema extends XRPCSubscriptionMet
 	onConnectionClose?: (event: CloseEvent) => void;
 	onConnectionError?: (event: ErrorEvent) => void;
 	/**
-	 * called for non-fatal frame-level errors: atproto error frames (passed as `FirehoseError`)
-	 * and message validation failures (passed as `ValidationError`).
+	 * called for non-fatal frame-level errors: atproto error frames (passed as `FirehoseError`) and message
+	 * validation failures (passed as `ValidationError`).
 	 */
 	onError?: (err: unknown) => void;
 
-	/**
-	 * WebSocket connection options
-	 */
+	/** WebSocket connection options */
 	ws?: Options;
 }
 
-/**
- * decoded CBOR frame header
- */
+/** decoded CBOR frame header */
 export interface FrameHeader {
-	/**
-	 * operation code: 1 for message, -1 for error
-	 */
+	/** operation code: 1 for message, -1 for error */
 	op: 1 | -1;
 
-	/**
-	 * type discriminator for message frames (relative to NSID, e.g., "#commit")
-	 */
+	/** type discriminator for message frames (relative to NSID, e.g., "#commit") */
 	t?: string;
 }
 
-/**
- * error frame body
- */
+/** error frame body */
 export interface ErrorFrameBody {
 	error: string;
 	message?: string;
 }
 
-/**
- * decoded frame result
- */
+/** decoded frame result */
 export type DecodedFrame =
 	| {
 			type: 'message';

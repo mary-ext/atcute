@@ -12,20 +12,17 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
 		 * The duration of the status in minutes. Applications can choose to impose minimum and maximum limits.
+		 *
 		 * @minimum 1
 		 */
 		durationMinutes: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1)]),
 		),
-		/**
-		 * An optional embed associated with the status.
-		 */
+		/** An optional embed associated with the status. */
 		get embed() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedExternal.mainSchema]));
 		},
-		/**
-		 * The status for the account.
-		 */
+		/** The status for the account. */
 		status: /*#__PURE__*/ v.string<'app.bsky.actor.status#live' | (string & {})>(),
 	}),
 );

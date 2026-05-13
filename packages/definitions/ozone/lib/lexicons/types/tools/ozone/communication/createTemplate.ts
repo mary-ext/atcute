@@ -9,25 +9,15 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.communication.createT
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Content of the template, markdown supported, can contain variable placeholders.
-			 */
+			/** Content of the template, markdown supported, can contain variable placeholders. */
 			contentMarkdown: /*#__PURE__*/ v.string(),
-			/**
-			 * DID of the user who is creating the template.
-			 */
+			/** DID of the user who is creating the template. */
 			createdBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
-			/**
-			 * Message language.
-			 */
+			/** Message language. */
 			lang: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.languageCodeString()),
-			/**
-			 * Name of the template.
-			 */
+			/** Name of the template. */
 			name: /*#__PURE__*/ v.string(),
-			/**
-			 * Subject of the message, used in emails.
-			 */
+			/** Subject of the message, used in emails. */
 			subject: /*#__PURE__*/ v.string(),
 		}),
 	},

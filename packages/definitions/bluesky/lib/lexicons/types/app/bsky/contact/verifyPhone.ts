@@ -7,12 +7,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.contact.verifyPhone', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The code received via SMS as a result of the call to `app.bsky.contact.startPhoneVerification`.
-			 */
+			/** The code received via SMS as a result of the call to `app.bsky.contact.startPhoneVerification`. */
 			code: /*#__PURE__*/ v.string(),
 			/**
-			 * The phone number to verify. Should be the same as the one passed to `app.bsky.contact.startPhoneVerification`.
+			 * The phone number to verify. Should be the same as the one passed to
+			 * `app.bsky.contact.startPhoneVerification`.
 			 */
 			phone: /*#__PURE__*/ v.string(),
 		}),
@@ -20,9 +19,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.contact.verifyPhone', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * JWT to be used in a call to `app.bsky.contact.importContacts`. It is only valid for a single call.
-			 */
+			/** JWT to be used in a call to `app.bsky.contact.importContacts`. It is only valid for a single call. */
 			token: /*#__PURE__*/ v.string(),
 		}),
 	},

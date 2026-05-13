@@ -1,13 +1,9 @@
-/**
- * base error type for labeler-specific failures
- */
+/** base error type for labeler-specific failures */
 export class LabelerError extends Error {
 	override name = 'LabelerError';
 }
 
-/**
- * error thrown when a subscription cursor is ahead of the store
- */
+/** error thrown when a subscription cursor is ahead of the store */
 export class FutureCursorError extends LabelerError {
 	override name = 'FutureCursorError';
 
@@ -16,6 +12,7 @@ export class FutureCursorError extends LabelerError {
 
 	/**
 	 * creates a future-cursor error
+	 *
 	 * @param cursor requested cursor
 	 * @param latest latest known sequence
 	 */
@@ -27,15 +24,11 @@ export class FutureCursorError extends LabelerError {
 	}
 }
 
-/**
- * error thrown when a subscriber cannot keep up with live events
- */
+/** error thrown when a subscriber cannot keep up with live events */
 export class ConsumerTooSlowError extends LabelerError {
 	override name = 'ConsumerTooSlowError';
 
-	/**
-	 * creates a consumer-too-slow error
-	 */
+	/** creates a consumer-too-slow error */
 	constructor() {
 		super(`stream consumer too slow`);
 	}

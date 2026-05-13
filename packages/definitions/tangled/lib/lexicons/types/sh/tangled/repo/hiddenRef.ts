@@ -7,34 +7,22 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.hiddenRef', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Fork reference name
-			 */
+			/** Fork reference name */
 			forkRef: /*#__PURE__*/ v.string(),
-			/**
-			 * Remote reference name
-			 */
+			/** Remote reference name */
 			remoteRef: /*#__PURE__*/ v.string(),
-			/**
-			 * AT-URI of the repository
-			 */
+			/** AT-URI of the repository */
 			repo: /*#__PURE__*/ v.resourceUriString(),
 		}),
 	},
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Error message if creation failed
-			 */
+			/** Error message if creation failed */
 			error: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * The created hidden ref name
-			 */
+			/** The created hidden ref name */
 			ref: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Whether the hidden ref was created successfully
-			 */
+			/** Whether the hidden ref was created successfully */
 			success: /*#__PURE__*/ v.boolean(),
 		}),
 	},

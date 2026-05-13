@@ -9,6 +9,10 @@
 	"singleQuote": true,
 	"bracketSpacing": true,
 
+	"jsdoc": {
+		"capitalizeDescriptions": false
+	},
+
 	"sortImports": {
 		"groups": [["builtin", "bun"], ["atcute"], ["external"], ["parent"], ["sibling", "index"]],
 		"customGroups": [

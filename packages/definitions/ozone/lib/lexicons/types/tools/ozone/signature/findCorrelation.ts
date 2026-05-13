@@ -6,9 +6,7 @@ import * as ToolsOzoneSignatureDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.signature.findCorrelation', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * @minLength 1
-		 */
+		/** @minLength 1 */
 		dids: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
 			/*#__PURE__*/ v.arrayLength(1),
 		]),

@@ -9,7 +9,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		issue: /*#__PURE__*/ v.resourceUriString(),
 		/**
 		 * state of the issue
-		 * @default "sh.tangled.repo.issue.state.open"
+		 *
+		 * @default 'sh.tangled.repo.issue.state.open'
 		 */
 		state: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<

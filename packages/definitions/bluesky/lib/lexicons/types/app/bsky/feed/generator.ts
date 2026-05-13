@@ -10,7 +10,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('app.bsky.feed.generator'),
 		/**
-		 * Declaration that a feed accepts feedback interactions from a client through app.bsky.feed.sendInteractions
+		 * Declaration that a feed accepts feedback interactions from a client through
+		 * app.bsky.feed.sendInteractions
 		 */
 		acceptsInteractions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		/**
@@ -51,9 +52,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			/*#__PURE__*/ v.stringLength(0, 240),
 			/*#__PURE__*/ v.stringGraphemes(0, 24),
 		]),
-		/**
-		 * Self-label values
-		 */
+		/** Self-label values */
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},

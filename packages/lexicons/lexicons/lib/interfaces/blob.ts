@@ -2,9 +2,7 @@ import type { Cid } from '../syntax/cid.ts';
 
 import { isCidLink, type CidLink } from './cid-link.ts';
 
-/**
- * represents a reference to a data blob
- */
+/** represents a reference to a data blob */
 export interface Blob<TMime extends string = string> {
 	$type: 'blob';
 	mimeType: TMime;
@@ -26,9 +24,7 @@ export const isBlob = (input: unknown): input is Blob => {
 	);
 };
 
-/**
- * deprecated interface representing an interface to a data blob
- */
+/** deprecated interface representing an interface to a data blob */
 export interface LegacyBlob<TMime extends string = string> {
 	cid: Cid;
 	mimeType: TMime;
@@ -46,9 +42,7 @@ export const isLegacyBlob = (input: unknown): input is LegacyBlob => {
 	);
 };
 
-/**
- * extracted blob reference from a record
- */
+/** extracted blob reference from a record */
 export interface BlobRef {
 	/** CID string */
 	cid: string;
@@ -63,9 +57,9 @@ export interface CollectBlobsOptions {
 }
 
 /**
- * extracts all blob references from a record object, including in undeclared
- * properties. by default only finds modern blobs; set `allowLegacy` to also
- * include legacy blob formats.
+ * extracts all blob references from a record object, including in undeclared properties. by default only
+ * finds modern blobs; set `allowLegacy` to also include legacy blob formats.
+ *
  * @param record record object to walk
  * @param options collection options
  * @returns array of blob references found

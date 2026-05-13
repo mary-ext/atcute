@@ -9,6 +9,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.verification.revokeVe
 		schema: /*#__PURE__*/ v.object({
 			/**
 			 * Reason for revoking the verification. This is optional and can be omitted if not needed.
+			 *
 			 * @maxLength 1000
 			 */
 			revokeReason: /*#__PURE__*/ v.optional(
@@ -16,6 +17,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.verification.revokeVe
 			),
 			/**
 			 * Array of verification record uris to revoke
+			 *
 			 * @maxLength 100
 			 */
 			uris: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
@@ -26,15 +28,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.verification.revokeVe
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * List of verification uris that couldn't be revoked, including failure reasons
-			 */
+			/** List of verification uris that couldn't be revoked, including failure reasons */
 			get failedRevocations() {
 				return /*#__PURE__*/ v.array(revokeErrorSchema);
 			},
-			/**
-			 * List of verification uris successfully revoked
-			 */
+			/** List of verification uris successfully revoked */
 			revokedVerifications: /*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()),
 		}),
 	},
@@ -43,13 +41,9 @@ const _revokeErrorSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.verification.revokeVerifications#revokeError'),
 	),
-	/**
-	 * Description of the error that occurred during revocation.
-	 */
+	/** Description of the error that occurred during revocation. */
 	error: /*#__PURE__*/ v.string(),
-	/**
-	 * The AT-URI of the verification record that failed to revoke.
-	 */
+	/** The AT-URI of the verification record that failed to revoke. */
 	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 

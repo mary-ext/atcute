@@ -7,10 +7,12 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listReposByCollectio
 		collection: /*#__PURE__*/ v.nsidString(),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
-		 * Maximum size of response set. Recommend setting a large maximum (1000+) when enumerating large DID lists.
+		 * Maximum size of response set. Recommend setting a large maximum (1000+) when enumerating large DID
+		 * lists.
+		 *
+		 * @default 500
 		 * @minimum 1
 		 * @maximum 2000
-		 * @default 500
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 2000)]),

@@ -4,9 +4,7 @@ import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { ClientAuthMethod } from '../oauth-client-auth.ts';
 import type { Store } from '../utils/store.ts';
 
-/**
- * stored authorization state, keyed by state ID (short-lived).
- */
+/** stored authorization state, keyed by state ID (short-lived). */
 export interface StoredState {
 	/** DPoP private key */
 	dpopKey: DpopPrivateJwk;

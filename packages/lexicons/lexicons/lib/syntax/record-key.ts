@@ -1,8 +1,6 @@
 import { isAsciiAlphaNum } from './utils/ascii.ts';
 
-/**
- * represents a record key
- */
+/** represents a record key */
 export type RecordKey = string;
 
 // #__NO_SIDE_EFFECTS__

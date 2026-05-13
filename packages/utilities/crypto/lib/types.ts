@@ -1,15 +1,11 @@
 export type DidKeyString = `did:key:${string}`;
 
-/**
- * Represents a public cryptographic key
- */
+/** Represents a public cryptographic key */
 export interface PublicKey {
 	readonly type: string;
 	readonly jwtAlg: string;
 
-	/**
-	 * Verifies a signature against provided data
-	 */
+	/** Verifies a signature against provided data */
 	verify(sig: Uint8Array, data: Uint8Array, options?: VerifyOptions): Promise<boolean>;
 
 	/**
@@ -28,19 +24,13 @@ export interface PublicKey {
 	exportPublicKey(format: 'rawHex'): Promise<string>;
 }
 
-/**
- * Represents a private cryptographic key
- */
+/** Represents a private cryptographic key */
 export interface PrivateKey extends PublicKey {
-	/**
-	 * Signs provided data using the private key
-	 */
+	/** Signs provided data using the private key */
 	sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>>;
 }
 
-/**
- * Represents an exportable private cryptographic key
- */
+/** Represents an exportable private cryptographic key */
 export interface PrivateKeyExportable extends PrivateKey {
 	/**
 	 * Exports the private key in a specified format:

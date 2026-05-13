@@ -1,8 +1,6 @@
 import type { AppBskyActorDefs, ChatBskyActorDefs } from '../lexicons/index.ts';
 
-/**
- * a union type of all possible profile views.
- */
+/** a union type of all possible profile views. */
 export type AnyProfileView =
 	| AppBskyActorDefs.ProfileViewBasic
 	| AppBskyActorDefs.ProfileView

@@ -6,16 +6,15 @@ import * as AppBskyUnspeccedDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getPostThreadOtherV2', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Reference (AT-URI) to post record. This is the anchor post.
-		 */
+		/** Reference (AT-URI) to post record. This is the anchor post. */
 		anchor: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			/**
-			 * A flat list of other thread items. The depth of each item is indicated by the depth property inside the item.
+			 * A flat list of other thread items. The depth of each item is indicated by the depth property inside
+			 * the item.
 			 */
 			get thread() {
 				return /*#__PURE__*/ v.array(threadItemSchema);
@@ -28,7 +27,8 @@ const _threadItemSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.literal('app.bsky.unspecced.getPostThreadOtherV2#threadItem'),
 	),
 	/**
-	 * The nesting level of this item in the thread. Depth 0 means the anchor item. Items above have negative depths, items below have positive depths.
+	 * The nesting level of this item in the thread. Depth 0 means the anchor item. Items above have negative
+	 * depths, items below have positive depths.
 	 */
 	depth: /*#__PURE__*/ v.integer(),
 	uri: /*#__PURE__*/ v.resourceUriString(),

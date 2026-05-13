@@ -7,65 +7,46 @@ const _itemSchema = /*#__PURE__*/ v.object({
 	get linkRecord() {
 		return linkRecordSchema;
 	},
-	/**
-	 * the secondary subject from the link record
-	 */
+	/** the secondary subject from the link record */
 	otherSubject: /*#__PURE__*/ v.string(),
 });
 const _linkRecordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.microcosm.links.getManyToMany#linkRecord')),
-	/**
-	 * the collection of the linking record
-	 */
+	/** the collection of the linking record */
 	collection: /*#__PURE__*/ v.nsidString(),
-	/**
-	 * the DID of the linking record's repository
-	 */
+	/** the DID of the linking record's repository */
 	did: /*#__PURE__*/ v.didString(),
-	/**
-	 * the record key of the linking record
-	 */
+	/** the record key of the linking record */
 	rkey: /*#__PURE__*/ v.recordKeyString(),
 });
 const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.links.getManyToMany', {
 	params: /*#__PURE__*/ v.object({
 		/**
 		 * number of results to return
+		 *
+		 * @default 16
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 16
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			16,
 		),
-		/**
-		 * filter linking records from specific users
-		 */
+		/** filter linking records from specific users */
 		linkDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
-		/**
-		 * filter secondary links to specific subjects
-		 */
+		/** filter secondary links to specific subjects */
 		otherSubject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
-		/**
-		 * path to the secondary link in the many-to-many record (e.g., 'otherThing.uri')
-		 */
+		/** path to the secondary link in the many-to-many record (e.g., 'otherThing.uri') */
 		pathToOther: /*#__PURE__*/ v.string(),
-		/**
-		 * collection and path specification for the primary link (e.g., 'app.bsky.feed.like:subject.uri')
-		 */
+		/** collection and path specification for the primary link (e.g., 'app.bsky.feed.like:subject.uri') */
 		source: /*#__PURE__*/ v.string(),
-		/**
-		 * the primary target being linked to (at-uri, did, or uri)
-		 */
+		/** the primary target being linked to (at-uri, did, or uri) */
 		subject: /*#__PURE__*/ v.genericUriString(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * pagination cursor
-			 */
+			/** pagination cursor */
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nullable(/*#__PURE__*/ v.string())),
 			get items() {
 				return /*#__PURE__*/ v.array(itemSchema);

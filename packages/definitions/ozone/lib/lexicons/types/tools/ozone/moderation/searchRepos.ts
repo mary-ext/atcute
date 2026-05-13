@@ -8,9 +8,9 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.searchRepos', 
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
@@ -19,6 +19,7 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.searchRepos', 
 		q: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
 		 * DEPRECATED: use 'q' instead
+		 *
 		 * @deprecated
 		 */
 		term: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

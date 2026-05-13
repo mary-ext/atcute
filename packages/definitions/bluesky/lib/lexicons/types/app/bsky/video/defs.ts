@@ -10,6 +10,7 @@ const _jobStatusSchema = /*#__PURE__*/ v.object({
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**
 	 * Progress within the current processing state.
+	 *
 	 * @minimum 0
 	 * @maximum 100
 	 */
@@ -17,7 +18,8 @@ const _jobStatusSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
 	),
 	/**
-	 * The state of the video processing job. All values not listed as a known value indicate that the job is in process.
+	 * The state of the video processing job. All values not listed as a known value indicate that the job is in
+	 * process.
 	 */
 	state: /*#__PURE__*/ v.string<'JOB_STATE_COMPLETED' | 'JOB_STATE_FAILED' | (string & {})>(),
 });

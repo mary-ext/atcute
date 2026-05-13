@@ -7,20 +7,19 @@ import * as AppBskyActorDefs from './defs.ts';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.actor.searchActorsTypeahead', {
 	params: /*#__PURE__*/ v.object({
 		/**
+		 * @default 10
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 10
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			10,
 		),
-		/**
-		 * Search query prefix; not a full query string.
-		 */
+		/** Search query prefix; not a full query string. */
 		q: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
 		 * DEPRECATED: use 'q' instead.
+		 *
 		 * @deprecated
 		 */
 		term: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

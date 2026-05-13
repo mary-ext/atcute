@@ -12,9 +12,8 @@ export const CODEC_RAW = 0x55;
 export const CODEC_DCBOR = 0x71;
 
 /**
- * represents a Content Identifier (CID), in particular, a limited subset of
- * CIDv1 as described by DASL specifications.
- * https://dasl.ing/cid.html
+ * represents a Content Identifier (CID), in particular, a limited subset of CIDv1 as described by DASL
+ * specifications. https://dasl.ing/cid.html
  */
 export interface Cid {
 	/** CID version, this is always `1` for CIDv1 */
@@ -37,6 +36,7 @@ export interface Cid {
 
 /**
  * creates a CID from a pre-computed SHA-256 digest
+ *
  * @param codec multicodec type for the data
  * @param digest raw SHA-256 hash bytes (must be 32 bytes)
  * @returns CID object
@@ -68,6 +68,7 @@ export const fromDigest = (codec: 0x55 | 0x71, digest: Uint8Array): Cid => {
 
 /**
  * creates a CID by hashing the provided data with SHA-256
+ *
  * @param codec multicodec type for the data
  * @param data raw data to hash
  * @returns CID object
@@ -79,6 +80,7 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 
 /**
  * decodes a CID from bytes, returning the CID and any remaining bytes
+ *
  * @param bytes raw CID bytes
  * @returns tuple of decoded CID and remainder bytes
  * @throws {RangeError} if the bytes are too short or contain invalid values
@@ -124,6 +126,7 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 
 /**
  * decodes a CID from bytes, expecting no remainder
+ *
  * @param bytes raw CID bytes
  * @returns decoded CID
  * @throws {RangeError} if the bytes are invalid or contain extra data
@@ -140,6 +143,7 @@ export const decode = (bytes: Uint8Array): Cid => {
 
 /**
  * parses a CID from a multibase base32 string
+ *
  * @param input base32-encoded CID string (with 'b' prefix)
  * @returns decoded CID
  * @throws {SyntaxError} if the string is not a valid multibase base32 string
@@ -157,6 +161,7 @@ export const fromString = (input: string): Cid => {
 
 /**
  * encodes a CID to a multibase base32 string
+ *
  * @param cid CID to encode
  * @returns base32-encoded string with 'b' prefix
  */
@@ -166,6 +171,7 @@ export const toString = (cid: Cid): string => {
 
 /**
  * parses a CID from binary format (with 0x00 prefix)
+ *
  * @param input binary CID bytes with 0x00 prefix
  * @returns decoded CID
  * @throws {RangeError} if the byte length is invalid
@@ -182,6 +188,7 @@ export const fromBinary = (input: Uint8Array): Cid => {
 
 /**
  * encodes a CID to binary format (with 0x00 prefix)
+ *
  * @param cid CID to encode
  * @returns binary CID bytes with 0x00 prefix
  */
@@ -195,6 +202,7 @@ export const toBinary = (cid: Cid): Uint8Array => {
 
 /**
  * checks if two CIDs are equal
+ *
  * @param a first CID
  * @param b second CID
  * @returns true if the CIDs have identical bytes

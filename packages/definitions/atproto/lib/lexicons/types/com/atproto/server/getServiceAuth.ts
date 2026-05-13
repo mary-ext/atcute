@@ -4,17 +4,14 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.getServiceAuth', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The DID of the service that the token will be used to authenticate with
-		 */
+		/** The DID of the service that the token will be used to authenticate with */
 		aud: /*#__PURE__*/ v.didString(),
 		/**
-		 * The time in Unix Epoch seconds that the JWT expires. Defaults to 60 seconds in the future. The service may enforce certain time bounds on tokens depending on the requested scope.
+		 * The time in Unix Epoch seconds that the JWT expires. Defaults to 60 seconds in the future. The service
+		 * may enforce certain time bounds on tokens depending on the requested scope.
 		 */
 		exp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-		/**
-		 * Lexicon (XRPC) method to bind the requested token to
-		 */
+		/** Lexicon (XRPC) method to bind the requested token to */
 		lxm: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nsidString()),
 	}),
 	output: {

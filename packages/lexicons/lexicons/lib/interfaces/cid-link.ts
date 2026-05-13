@@ -1,8 +1,6 @@
 import { isCid, type Cid } from '../syntax/cid.ts';
 
-/**
- * represents a content identifier (CID) reference
- */
+/** represents a content identifier (CID) reference */
 export interface CidLink {
 	$link: Cid;
 }
@@ -11,6 +9,7 @@ const CID_LINK_SYMBOL = Symbol.for('@atcute/cid-link-wrapper');
 
 /**
  * this should match with {@link file://./../../../../utilities/cid/lib/cid-link.ts}
+ *
  * @internal
  */
 export interface _CidLinkWrapper {
@@ -22,9 +21,7 @@ export interface _CidLinkWrapper {
 	toJSON(): CidLink;
 }
 
-/**
- * @internal
- */
+/** @internal */
 export const _isCidLinkWrapper = (input: unknown): input is _CidLinkWrapper => {
 	return typeof input === 'object' && input !== null && CID_LINK_SYMBOL in input;
 };

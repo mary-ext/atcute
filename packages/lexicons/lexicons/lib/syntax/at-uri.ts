@@ -5,8 +5,8 @@ import { isRecordKey, type RecordKey } from './record-key.ts';
 import { isAsciiAlphaNum } from './utils/ascii.ts';
 
 /**
- * represents a general AT Protocol URI, representing either an entire
- * repository, a specific collection within a repository, or a record.
+ * represents a general AT Protocol URI, representing either an entire repository, a specific collection
+ * within a repository, or a record.
  *
  * it allows using handles over DIDs, but this means that it won't be stable.
  */
@@ -176,9 +176,8 @@ export const parseResourceUri = (input: string): ParsedResourceUri => {
 /**
  * represents a canonical AT Protocol URI for a specific record.
  *
- * this URI format uses the account's DID as the authority, ensuring that
- * the URI remains valid even as the account changes handles, uniquely
- * identifying a specific piece of record within AT Protocol.
+ * this URI format uses the account's DID as the authority, ensuring that the URI remains valid even as the
+ * account changes handles, uniquely identifying a specific piece of record within AT Protocol.
  */
 export type CanonicalResourceUri = `at://${Did}/${Nsid}/${RecordKey}`;
 

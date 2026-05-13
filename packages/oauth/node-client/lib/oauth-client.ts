@@ -136,9 +136,8 @@ export interface CallbackResult {
 
 export interface RestoreOptions {
 	/**
-	 * 'auto' (default): refresh if token is stale
-	 * true: force refresh even if not stale
-	 * false: don't refresh, return session even if stale
+	 * 'auto' (default): refresh if token is stale true: force refresh even if not stale false: don't refresh,
+	 * return session even if stale
 	 */
 	refresh?: boolean | 'auto';
 }
@@ -146,8 +145,8 @@ export interface RestoreOptions {
 /**
  * OAuth client for AT Protocol.
  *
- * supports both confidential clients (with keyset for private_key_jwt) and
- * public clients (no keyset, uses token_endpoint_auth_method: 'none').
+ * supports both confidential clients (with keyset for private_key_jwt) and public clients (no keyset, uses
+ * token_endpoint_auth_method: 'none').
  *
  * handles authorization flow, session management, and token lifecycle.
  */
@@ -245,16 +244,12 @@ export class OAuthClient {
 		return this.keyset?.publicJwks;
 	}
 
-	/**
-	 * adds a listener for session events (updated, deleted).
-	 */
+	/** adds a listener for session events (updated, deleted). */
 	addEventListener(listener: SessionEventListener): void {
 		this.sessionGetter.addEventListener(listener);
 	}
 
-	/**
-	 * removes a session event listener.
-	 */
+	/** removes a session event listener. */
 	removeEventListener(listener: SessionEventListener): void {
 		this.sessionGetter.removeEventListener(listener);
 	}

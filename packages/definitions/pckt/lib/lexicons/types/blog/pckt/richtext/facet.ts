@@ -10,13 +10,9 @@ const _boldSchema = /*#__PURE__*/ v.object({
 });
 const _byteSliceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.richtext.facet#byteSlice')),
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	byteEnd: /*#__PURE__*/ v.integer(),
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	byteStart: /*#__PURE__*/ v.integer(),
 });
 const _codeSchema = /*#__PURE__*/ v.object({

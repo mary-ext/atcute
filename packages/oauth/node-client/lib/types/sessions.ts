@@ -6,9 +6,7 @@ import type { Store } from '../utils/store.ts';
 
 import type { TokenSet } from './token-set.ts';
 
-/**
- * stored session data, keyed by DID.
- */
+/** stored session data, keyed by DID. */
 export interface StoredSession {
 	/** DPoP private key */
 	dpopKey: DpopPrivateJwk;

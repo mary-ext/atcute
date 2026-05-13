@@ -16,49 +16,42 @@ type SupportedKid = `#${string}`;
 const DEFAULT_KID: SupportedKid = '#atproto';
 
 /**
- * replay-protection store for service JWTs. when configured on a verifier,
- * tokens must carry a `jti` claim and the verifier consults this store to
- * reject duplicates.
+ * replay-protection store for service JWTs. when configured on a verifier, tokens must carry a `jti` claim
+ * and the verifier consults this store to reject duplicates.
  */
 export interface ReplayStore {
 	/**
 	 * record a `(iss, jti)` pair seen now.
 	 *
-	 * @param key issuer + token identifier; implementations decide how to
-	 *   encode this into a storage key.
-	 * @param ttlSeconds how long the entry must be retained. implementations
-	 *   are free to retain it for longer.
-	 * @returns `true` if the pair was previously unseen (token is unique),
-	 *   `false` if the pair has been recorded before (replay).
+	 * @param key issuer + token identifier; implementations decide how to encode this into a storage key.
+	 * @param ttlSeconds how long the entry must be retained. implementations are free to retain it for longer.
+	 * @returns `true` if the pair was previously unseen (token is unique), `false` if the pair has been
+	 *   recorded before (replay).
 	 */
 	check(key: { iss: Did; jti: string }, ttlSeconds: number): Promise<boolean>;
 }
 
 export interface ServiceJwtVerifierOptions {
 	/**
-	 * list of `aud` values accepted by this service; each entry is a bare DID or a DID with
-	 * service fragment (e.g. `did:web:x.example#svc`), and incoming tokens must exact-match any entry.
+	 * list of `aud` values accepted by this service; each entry is a bare DID or a DID with service fragment
+	 * (e.g. `did:web:x.example#svc`), and incoming tokens must exact-match any entry.
 	 *
-	 * pass `null` to skip audience validation (accept any audience). an empty array rejects every
-	 * audience, which is useful when a service wants to fail closed until configured.
+	 * pass `null` to skip audience validation (accept any audience). an empty array rejects every audience,
+	 * which is useful when a service wants to fail closed until configured.
 	 */
 	acceptAudiences: (Did | AtprotoAudience)[] | null;
 	resolver: DidDocumentResolver;
 	/**
-	 * maximum token lifetime window in seconds. rejects tokens whose `exp` is
-	 * more than this far in the future or whose `iat` is more than this far in
-	 * the past. defaults to 300 (5 minutes), matching atproto convention.
+	 * maximum token lifetime window in seconds. rejects tokens whose `exp` is more than this far in the future
+	 * or whose `iat` is more than this far in the past. defaults to 300 (5 minutes), matching atproto
+	 * convention.
 	 */
 	maxAge?: number;
-	/**
-	 * clock-skew leeway in seconds applied to `exp` and `nbf` comparisons.
-	 * defaults to 5 seconds.
-	 */
+	/** clock-skew leeway in seconds applied to `exp` and `nbf` comparisons. defaults to 5 seconds. */
 	clockLeeway?: number;
 	/**
-	 * optional replay-protection store. when provided, tokens must carry a
-	 * `jti` claim and the verifier rejects any `(iss, jti)` the store reports
-	 * as previously seen.
+	 * optional replay-protection store. when provided, tokens must carry a `jti` claim and the verifier rejects
+	 * any `(iss, jti)` the store reports as previously seen.
 	 */
 	replayStore?: ReplayStore;
 }
@@ -93,16 +86,15 @@ export class ServiceJwtVerifier {
 	}
 
 	/**
-	 * parse the Authorization header, verify the bearer token, and return the
-	 * validated claims. throws {@link AuthRequiredError} with a populated
-	 * `WWW-Authenticate: Bearer` challenge on every failure path.
+	 * parse the Authorization header, verify the bearer token, and return the validated claims. throws
+	 * {@link AuthRequiredError} with a populated `WWW-Authenticate: Bearer` challenge on every failure path.
 	 *
-	 * @param request incoming request; `request.signal` is forwarded to DID
-	 *   resolution unless `options.signal` overrides it.
-	 * @param options verification options; `lxm` restricts which lexicon
-	 *   methods the token is allowed to invoke.
-	 * @throws {AuthRequiredError} on missing header, malformed token,
-	 *   signature mismatch, audience/lxm rejection, replay, or expiry.
+	 * @param request incoming request; `request.signal` is forwarded to DID resolution unless `options.signal`
+	 *   overrides it.
+	 * @param options verification options; `lxm` restricts which lexicon methods the token is allowed to
+	 *   invoke.
+	 * @throws {AuthRequiredError} on missing header, malformed token, signature mismatch, audience/lxm
+	 *   rejection, replay, or expiry.
 	 */
 	async verifyRequest(request: Request, options: VerifyJwtOptions): Promise<VerifiedJwt> {
 		const authorization = request.headers.get('authorization');

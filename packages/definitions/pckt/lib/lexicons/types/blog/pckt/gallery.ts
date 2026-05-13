@@ -10,6 +10,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('blog.pckt.gallery'),
 		/**
 		 * Optional caption for the entire gallery
+		 *
 		 * @maxLength 3000
 		 * @maxGraphemes 300
 		 */
@@ -21,6 +22,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		),
 		/**
 		 * Array of image blocks in display order
+		 *
 		 * @minLength 1
 		 * @maxLength 50
 		 */
@@ -31,6 +33,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		},
 		/**
 		 * Layout style for rendering the gallery (e.g. grid, carousel, masonry, list)
+		 *
 		 * @maxLength 50
 		 */
 		layout: /*#__PURE__*/ v.optional(
@@ -38,6 +41,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		),
 		/**
 		 * Optional title for the gallery
+		 *
 		 * @maxLength 200
 		 */
 		title: /*#__PURE__*/ v.optional(

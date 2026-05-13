@@ -8,9 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('community.lexicon.bookmarks.bookmark'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		subject: /*#__PURE__*/ v.genericUriString(),
-		/**
-		 * Tags for content the bookmark may be related to, for example 'news' or 'funny videos'
-		 */
+		/** Tags for content the bookmark may be related to, for example 'news' or 'funny videos' */
 		tags: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 	}),
 );

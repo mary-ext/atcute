@@ -7,7 +7,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('com.atproto.lexicon.schema'),
 		/**
-		 * Indicates the 'version' of the Lexicon language. Must be '1' for the current atproto/Lexicon schema system.
+		 * Indicates the 'version' of the Lexicon language. Must be '1' for the current atproto/Lexicon schema
+		 * system.
 		 */
 		lexicon: /*#__PURE__*/ v.integer(),
 	}),

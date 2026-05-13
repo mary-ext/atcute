@@ -78,9 +78,7 @@ const _triggerRepoSchema = /*#__PURE__*/ v.object({
 	did: /*#__PURE__*/ v.didString(),
 	knot: /*#__PURE__*/ v.string(),
 	repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * DID of the repo itself
-	 */
+	/** DID of the repo itself */
 	repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 });
 const _workflowSchema = /*#__PURE__*/ v.object({

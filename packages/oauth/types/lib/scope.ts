@@ -30,6 +30,7 @@ export interface RepoOptions {
 
 /**
  * builds a repo permission scope
+ *
  * @param options repo permission options
  * @returns scope string like `repo?collection=app.bsky.feed.post&action=create&action=update`
  */
@@ -57,6 +58,7 @@ export interface RpcOptions {
 
 /**
  * builds an rpc permission scope
+ *
  * @param options rpc permission options
  * @returns scope string like `rpc?lxm=app.bsky.feed.getFeed&aud=*`
  */
@@ -82,6 +84,7 @@ export interface AccountOptions {
 
 /**
  * builds an account permission scope
+ *
  * @param options account permission options
  * @returns scope string like `account?attr=email` or `account?attr=email&action=manage`
  */
@@ -99,12 +102,13 @@ export const account = (options: AccountOptions): string => {
 };
 
 export interface BlobOptions {
-	/** MIME type(s) to accept (e.g., 'image/*', '*\/*') */
+	/** MIME type(s) to accept (e.g., 'image/_', '_/*') */
 	accept: string[];
 }
 
 /**
  * builds a blob permission scope
+ *
  * @param options blob permission options
  * @returns scope string like `blob?accept=image/*`
  */
@@ -127,6 +131,7 @@ export interface IdentityOptions {
 
 /**
  * builds an identity permission scope
+ *
  * @param options identity permission options
  * @returns scope string like `identity?attr=handle`
  */
@@ -146,6 +151,7 @@ export interface IncludeOptions {
 
 /**
  * builds an include scope for lexicon-defined permission sets
+ *
  * @param options include scope options
  * @returns scope string like `include?nsid=app.bsky.permissions&aud=did:web:bsky.app%23appview`
  */

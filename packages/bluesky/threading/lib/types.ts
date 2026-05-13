@@ -22,10 +22,9 @@ export interface PostExternalEmbed {
 	/** Page description */
 	description?: string;
 	/**
-	 * Page thumbnail, accepts either a Web Blob instance or a blob returned from
-	 * the `com.atproto.repo.uploadBlob` procedure. Supplying the former requires
-	 * you to also supply an authenticated RPC instance for it to be able to make
-	 * procedure calls.
+	 * Page thumbnail, accepts either a Web Blob instance or a blob returned from the
+	 * `com.atproto.repo.uploadBlob` procedure. Supplying the former requires you to also supply an
+	 * authenticated RPC instance for it to be able to make procedure calls.
 	 */
 	thumbnail?: Blob | AtBlob;
 	/** Labels to describe this external embed */
@@ -35,20 +34,19 @@ export interface PostExternalEmbed {
 /** An image within the image embed */
 export interface ComposedImage {
 	/**
-	 * The image data, accepts either a Web Blob instance or a blob returned from
-	 * the `com.atproto.repo.uploadBlob` procedure. Supplying the former requires
-	 * you to also supply an authenticated RPC instance for it to be able to make
-	 * procedure calls.
+	 * The image data, accepts either a Web Blob instance or a blob returned from the
+	 * `com.atproto.repo.uploadBlob` procedure. Supplying the former requires you to also supply an
+	 * authenticated RPC instance for it to be able to make procedure calls.
 	 */
 	blob: Blob | AtBlob;
 	/**
-	 * Alternative text for this image, helps describe images for low-vision users
-	 * and provide context for everyone.
+	 * Alternative text for this image, helps describe images for low-vision users and provide context for
+	 * everyone.
 	 */
 	alt?: string;
 	/**
-	 * Aspect ratio of the image, supplying this is recommended as clients makes
-	 * use of it to properly display images.
+	 * Aspect ratio of the image, supplying this is recommended as clients makes use of it to properly display
+	 * images.
 	 */
 	aspectRatio?: MediaAspectRatio;
 }
@@ -66,25 +64,22 @@ export interface PostImageEmbed {
 export interface PostVideoEmbed {
 	type: 'video';
 	/**
-	 * The video data, accepts either a Web Blob instance or a blob returned from
-	 * the `com.atproto.repo.uploadBlob` procedure. Supplying the former requires
-	 * you to also supply an authenticated RPC instance for it to be able to make
-	 * procedure calls.
+	 * The video data, accepts either a Web Blob instance or a blob returned from the
+	 * `com.atproto.repo.uploadBlob` procedure. Supplying the former requires you to also supply an
+	 * authenticated RPC instance for it to be able to make procedure calls.
 	 */
 	blob: Blob | AtBlob;
 	/**
-	 * Alternative text for this video, helps describe video for low-vision users
-	 * and provide context for everyone.
+	 * Alternative text for this video, helps describe video for low-vision users and provide context for
+	 * everyone.
 	 */
 	alt?: string;
 	/**
-	 * Aspect ratio of the video, supplying this is recommended as clients makes
-	 * use of it to properly display the video.
+	 * Aspect ratio of the video, supplying this is recommended as clients makes use of it to properly display
+	 * the video.
 	 */
 	aspectRatio?: MediaAspectRatio;
-	/**
-	 * Labels to describe this video embed
-	 */
+	/** Labels to describe this video embed */
 	labels?: string[];
 }
 
@@ -97,8 +92,8 @@ export interface PostFeedEmbed {
 	/** AT-URI of the feed */
 	uri: ResourceUri;
 	/**
-	 * CID of the feed, if not supplied, requires you to also supply an RPC
-	 * instance for it to be able to make query calls.
+	 * CID of the feed, if not supplied, requires you to also supply an RPC instance for it to be able to make
+	 * query calls.
 	 */
 	cid?: string;
 }
@@ -109,8 +104,8 @@ export interface PostListEmbed {
 	/** AT-URI of the list */
 	uri: ResourceUri;
 	/**
-	 * CID of the list, if not supplied, requires you to also supply an RPC
-	 * instance for it to be able to make query calls.
+	 * CID of the list, if not supplied, requires you to also supply an RPC instance for it to be able to make
+	 * query calls.
 	 */
 	cid?: string;
 }
@@ -121,8 +116,8 @@ export interface PostQuoteEmbed {
 	/** AT-URI of the post */
 	uri: ResourceUri;
 	/**
-	 * CID of the post, if not supplied, requires you to also supply an RPC
-	 * instance for it to be able to make query calls.
+	 * CID of the post, if not supplied, requires you to also supply an RPC instance for it to be able to make
+	 * query calls.
 	 */
 	cid?: string;
 }
@@ -133,8 +128,8 @@ export interface PostStarterpackEmbed {
 	/** AT-URI of the post */
 	uri: ResourceUri;
 	/**
-	 * CID of the starter pack, if not supplied, requires you to also supply an
-	 * RPC instance for it to be able to make query calls.
+	 * CID of the starter pack, if not supplied, requires you to also supply an RPC instance for it to be able
+	 * to make query calls.
 	 */
 	cid?: string;
 }
@@ -181,21 +176,18 @@ export interface ComposedThread {
 	signal?: AbortSignal;
 	/** Author of the thread */
 	author: Did;
-	/**
-	 * The "creation time" for this thread,
-	 * if not supplied, the current time is used
-	 */
+	/** The "creation time" for this thread, if not supplied, the current time is used */
 	createdAt?: string | number | Date;
 	/**
-	 * The post it should reply to, accepts either an AT-URI of the post, a view
-	 * of the post, or an embed view of the post. Supplying an AT-URI requires you
-	 * to also supply an RPC instance for it to be able to make query calls.
+	 * The post it should reply to, accepts either an AT-URI of the post, a view of the post, or an embed view
+	 * of the post. Supplying an AT-URI requires you to also supply an RPC instance for it to be able to make
+	 * query calls.
 	 */
 	reply?: string | AppBskyFeedDefs.PostView | AppBskyEmbedRecord.ViewRecord;
 	/**
-	 * Thread gating to apply on this thread, this option can't be set if this is
-	 * a reply, especially to another user's thread. Leave this undefined to allow
-	 * everyone to reply to the thread, supply an empty object to deny everyone.
+	 * Thread gating to apply on this thread, this option can't be set if this is a reply, especially to another
+	 * user's thread. Leave this undefined to allow everyone to reply to the thread, supply an empty object to
+	 * deny everyone.
 	 */
 	gate?: ComposedThreadgate;
 	/** The language that all the posts are in, can be overridden per-post */

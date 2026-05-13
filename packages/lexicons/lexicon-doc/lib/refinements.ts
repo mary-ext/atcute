@@ -20,6 +20,7 @@ export interface RefineIssue {
 // #region Concrete types
 /**
  * validates constraints in lexicon boolean definitions.
+ *
  * @param spec boolean type definition to validate
  * @returns validation issues found
  */
@@ -41,6 +42,7 @@ export const refineLexBoolean = (spec: t.LexBoolean): RefineIssue[] => {
 
 /**
  * validates constraints in lexicon integer definitions.
+ *
  * @param spec integer type definition to validate
  * @returns validation issues found
  */
@@ -143,6 +145,7 @@ export const refineLexInteger = (spec: t.LexInteger): RefineIssue[] => {
 
 /**
  * validates constraints in lexicon string definitions.
+ *
  * @param spec string type definition to validate
  * @returns validation issues found
  */
@@ -330,6 +333,7 @@ export const refineLexString = (spec: t.LexString): RefineIssue[] => {
 
 /**
  * validates constraints in lexicon bytes definitions.
+ *
  * @param spec bytes type definition to validate
  * @returns validation issues found
  */
@@ -349,6 +353,7 @@ export const refineLexBytes = (spec: t.LexBytes): RefineIssue[] => {
 
 /**
  * validates constraints in lexicon blob definitions.
+ *
  * @param spec blob type definition to validate
  * @returns validation issues found
  */
@@ -397,6 +402,7 @@ export const refineLexRef = (spec: t.LexRef): RefineIssue[] => {
 
 /**
  * validates constraints in lexicon ref union definitions.
+ *
  * @param spec ref union type definition to validate
  * @returns validation issues found
  */
@@ -471,6 +477,7 @@ const refineLexDefinableField = (spec: t.LexDefinableField, deep: boolean = fals
 
 /**
  * validates constraints in lexicon array definitions.
+ *
  * @param spec array type definition to validate
  * @param deep whether nested schemas should be validated
  * @returns validation issues found
@@ -503,6 +510,7 @@ export const refineLexArray = (
 
 /**
  * validates constraints in lexicon object definitions.
+ *
  * @param spec object type definition to validate
  * @param deep whether nested schemas should be validated
  * @returns validation issues found
@@ -612,6 +620,7 @@ const refineLexLang = (spec: t.LexLang): RefineIssue[] => {
 // #region Sub-types
 /**
  * validates constraints in lexicon xrpc parameters definitions.
+ *
  * @param spec xrpc parameters type definition to validate
  * @param deep whether nested schemas should be validated
  * @returns validation issues found
@@ -624,6 +633,7 @@ const REPO_ACTIONS = new Set(['create', 'update', 'delete']);
 
 /**
  * validates constraints in lexicon permission definitions.
+ *
  * @param spec permission definition to validate
  * @returns validation issues found
  */
@@ -784,6 +794,7 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 // #region Primary types
 /**
  * validates constraints in lexicon record definitions.
+ *
  * @param spec record type definition to validate
  * @param deep whether nested schemas should be validated
  * @returns validation issues found
@@ -813,6 +824,7 @@ export const refineLexRecord = (spec: t.LexRecord, deep: boolean = false): Refin
 
 /**
  * validates constraints in lexicon xrpc query definitions.
+ *
  * @param spec xrpc query type definition to validate
  * @param deep whether nested schemas should be validated
  * @returns validation issues found
@@ -846,6 +858,7 @@ export const refineLexXrpcQuery = (spec: t.LexXrpcQuery, deep: boolean = false):
 
 /**
  * validates constraints in lexicon xrpc procedure definitions.
+ *
  * @param spec xrpc procedure type definition to validate
  * @param deep whether nested schemas should be validated
  * @returns validation issues found
@@ -888,6 +901,7 @@ export const refineLexXrpcProcedure = (spec: t.LexXrpcProcedure, deep: boolean =
 
 /**
  * validates constraints in lexicon xrpc subscription definitions.
+ *
  * @param spec xrpc subscription type definition to validate
  * @param deep whether nested schemas should be validated
  * @returns validation issues found
@@ -925,6 +939,7 @@ export const refineLexXrpcSubscription = (spec: t.LexXrpcSubscription, deep: boo
 
 /**
  * validates constraints in lexicon permission sets.
+ *
  * @param spec permission set definition to validate
  * @param deep whether nested schemas should be validated
  * @returns validation issues found
@@ -1035,6 +1050,7 @@ const refineUserType = (spec: t.LexUserType, deep: boolean = false): RefineIssue
 
 /**
  * validates constraints in lexicon documents.
+ *
  * @param spec lexicon document input to validate
  * @param deep whether nested schemas should be validated
  * @returns validation issues found

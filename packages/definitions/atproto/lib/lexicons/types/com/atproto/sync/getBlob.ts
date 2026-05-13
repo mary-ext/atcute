@@ -4,13 +4,9 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getBlob', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The CID of the blob to fetch
-		 */
+		/** The CID of the blob to fetch */
 		cid: /*#__PURE__*/ v.cidString(),
-		/**
-		 * The DID of the account.
-		 */
+		/** The DID of the account. */
 		did: /*#__PURE__*/ v.didString(),
 	}),
 	output: {

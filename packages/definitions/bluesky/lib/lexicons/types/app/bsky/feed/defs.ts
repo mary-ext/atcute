@@ -36,6 +36,7 @@ const _feedViewPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#feedViewPost')),
 	/**
 	 * Context provided by feed generator that may be passed back alongside interactions.
+	 *
 	 * @maxLength 2000
 	 */
 	feedContext: /*#__PURE__*/ v.optional(
@@ -52,6 +53,7 @@ const _feedViewPostSchema = /*#__PURE__*/ v.object({
 	},
 	/**
 	 * Unique identifier per request that may be passed back alongside interactions.
+	 *
 	 * @maxLength 100
 	 */
 	reqId: /*#__PURE__*/ v.optional(
@@ -90,9 +92,7 @@ const _generatorViewSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	get viewer() {
@@ -124,6 +124,7 @@ const _interactionSchema = /*#__PURE__*/ v.object({
 	),
 	/**
 	 * Context on a feed item that was originally supplied by the feed generator on getFeedSkeleton.
+	 *
 	 * @maxLength 2000
 	 */
 	feedContext: /*#__PURE__*/ v.optional(
@@ -132,6 +133,7 @@ const _interactionSchema = /*#__PURE__*/ v.object({
 	item: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	/**
 	 * Unique identifier per request that may be passed back alongside interactions.
+	 *
 	 * @maxLength 100
 	 */
 	reqId: /*#__PURE__*/ v.optional(
@@ -156,9 +158,7 @@ const _postViewSchema = /*#__PURE__*/ v.object({
 	},
 	bookmarkCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	cid: /*#__PURE__*/ v.cidString(),
-	/**
-	 * Debug information for internal development
-	 */
+	/** Debug information for internal development */
 	debug: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 	get embed() {
 		return /*#__PURE__*/ v.optional(
@@ -202,9 +202,7 @@ const _reasonRepostSchema = /*#__PURE__*/ v.object({
 });
 const _replyRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#replyRef')),
-	/**
-	 * When parent is a reply to another post, this is the author of that post.
-	 */
+	/** When parent is a reply to another post, this is the author of that post. */
 	get grandparentAuthor() {
 		return /*#__PURE__*/ v.optional(AppBskyActorDefs.profileViewBasicSchema);
 	},
@@ -220,7 +218,9 @@ const _requestMoreSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#requestMo
 const _skeletonFeedPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#skeletonFeedPost')),
 	/**
-	 * Context that will be passed through to client and may be passed to feed generator back alongside interactions.
+	 * Context that will be passed through to client and may be passed to feed generator back alongside
+	 * interactions.
+	 *
 	 * @maxLength 2000
 	 */
 	feedContext: /*#__PURE__*/ v.optional(

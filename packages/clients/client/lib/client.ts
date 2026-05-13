@@ -195,6 +195,7 @@ export type ClientOptions = {
 	 * service proxy target, in the form `<did>#<service-id>`.
 	 *
 	 * common service ids include:
+	 *
 	 * - `#atproto_pds` (personal data server)
 	 * - `#atproto_labeler` (labeler service)
 	 * - `#bsky_chat` (Bluesky chat service)
@@ -216,6 +217,7 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 
 	/**
 	 * clones this XRPC client
+	 *
 	 * @param opts options to merge with
 	 * @returns the cloned XRPC client
 	 */
@@ -228,6 +230,7 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 
 	/**
 	 * performs an XRPC query request (HTTP GET)
+	 *
 	 * @param name NSID of the query
 	 * @param options query options
 	 */
@@ -242,6 +245,7 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 
 	/**
 	 * performs an XRPC procedure request (HTTP POST)
+	 *
 	 * @param name NSID of the procedure
 	 * @param options procedure options
 	 */
@@ -256,6 +260,7 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 
 	/**
 	 * performs an XRPC call with schema validation
+	 *
 	 * @param schema the lexicon schema for the endpoint, or a namespace containing mainSchema
 	 * @param options call options
 	 */
@@ -492,14 +497,15 @@ export const isXRPCErrorPayload = (input: any): input is XRPCErrorPayload => {
 type ExtractSuccessData<R> = R extends { ok: true; data: infer D } ? D : never;
 
 /**
- * takes in the response returned by the client, and either returns the data if
- * it is a successful response, or throws if it's a failed response.
- * @param input either a ClientResponse, or a promise that resolves to a ClientResponse
- * @returns the data from a successful response
+ * takes in the response returned by the client, and either returns the data if it is a successful response,
+ * or throws if it's a failed response.
  *
  * @example
- * const data = await ok(client.get('com.atproto.server.describeServer'));
- * //    ^? ComAtprotoServerDescribeServer.Output
+ * 	const data = await ok(client.get('com.atproto.server.describeServer'));
+ * 	//    ^? ComAtprotoServerDescribeServer.Output
+ *
+ * @param input either a ClientResponse, or a promise that resolves to a ClientResponse
+ * @returns the data from a successful response
  */
 export const ok: {
 	<T extends UnknownClientResponse>(promise: Promise<T>): Promise<ExtractSuccessData<T>>;

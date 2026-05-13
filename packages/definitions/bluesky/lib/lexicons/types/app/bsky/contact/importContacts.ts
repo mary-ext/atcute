@@ -10,7 +10,10 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.contact.importContacts',
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			/**
-			 * List of phone numbers in global E.164 format (e.g., '+12125550123'). Phone numbers that cannot be normalized into a valid phone number will be discarded. Should not repeat the 'phone' input used in `app.bsky.contact.verifyPhone`.
+			 * List of phone numbers in global E.164 format (e.g., '+12125550123'). Phone numbers that cannot be
+			 * normalized into a valid phone number will be discarded. Should not repeat the 'phone' input used in
+			 * `app.bsky.contact.verifyPhone`.
+			 *
 			 * @minLength 1
 			 * @maxLength 1000
 			 */
@@ -18,7 +21,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.contact.importContacts',
 				/*#__PURE__*/ v.arrayLength(1, 1000),
 			]),
 			/**
-			 * JWT to authenticate the call. Use the JWT received as a response to the call to `app.bsky.contact.verifyPhone`.
+			 * JWT to authenticate the call. Use the JWT received as a response to the call to
+			 * `app.bsky.contact.verifyPhone`.
 			 */
 			token: /*#__PURE__*/ v.string(),
 		}),
@@ -27,7 +31,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.contact.importContacts',
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			/**
-			 * The users that matched during import and their indexes on the input contacts, so the client can correlate with its local list.
+			 * The users that matched during import and their indexes on the input contacts, so the client can
+			 * correlate with its local list.
 			 */
 			get matchesAndContactIndexes() {
 				return /*#__PURE__*/ v.array(AppBskyContactDefs.matchAndContactIndexSchema);

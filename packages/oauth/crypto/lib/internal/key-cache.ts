@@ -2,17 +2,15 @@ import type { PrivateJwk, PublicJwk } from '../jwk/types.ts';
 
 import { derivePublicJwk, importPrivateKeyFromJwk } from './jwk.ts';
 
-/**
- * cached key material for a JWK.
- */
+/** cached key material for a JWK. */
 export interface CachedKeyMaterial {
 	cryptoKey: CryptoKey;
 	publicJwk: PublicJwk;
 }
 
 /**
- * cache for imported keys.
- * uses WeakMap so entries are garbage collected when JWK objects are no longer referenced.
+ * cache for imported keys. uses WeakMap so entries are garbage collected when JWK objects are no longer
+ * referenced.
  */
 const keyCache = new WeakMap<PrivateJwk, CachedKeyMaterial>();
 
@@ -39,8 +37,8 @@ export const getCachedKeyMaterial = async (jwk: PrivateJwk): Promise<CachedKeyMa
 };
 
 /**
- * pre-populates the cache with already-imported key material.
- * useful for PKCS8 imports where we already have the CryptoKey.
+ * pre-populates the cache with already-imported key material. useful for PKCS8 imports where we already have
+ * the CryptoKey.
  *
  * @param jwk private JWK to cache for
  * @param cryptoKey already-imported CryptoKey

@@ -8,9 +8,9 @@ import { isLocalHostname } from './utils.ts';
 /**
  * user-facing client metadata for configuring a confidential OAuth client.
  *
- * this is a lean subset of OAuth client metadata, focused on what you actually provide.
- * the library will fill in atproto-required values like `dpop_bound_access_tokens`,
- * `token_endpoint_auth_method`, and default `grant_types` / `response_types`.
+ * this is a lean subset of OAuth client metadata, focused on what you actually provide. the library will fill
+ * in atproto-required values like `dpop_bound_access_tokens`, `token_endpoint_auth_method`, and default
+ * `grant_types` / `response_types`.
  */
 export const confidentialClientMetadataSchema = v.pipe(
 	v.looseObject({

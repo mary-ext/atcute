@@ -226,18 +226,14 @@ export class OAuthServerAgent {
 		return resolved.identity.pds;
 	}
 
-	/**
-	 * makes a token endpoint request.
-	 */
+	/** makes a token endpoint request. */
 	private async requestToken(params: Record<string, string | undefined>): Promise<AtprotoOAuthTokenResponse> {
 		const endpoint = this.serverMetadata.token_endpoint;
 		const { json } = await this.request(endpoint, params, processTokenResponse);
 		return json;
 	}
 
-	/**
-	 * makes a request to an authorization server endpoint.
-	 */
+	/** makes a request to an authorization server endpoint. */
 	private async request<T>(
 		endpoint: string,
 		params: Record<string, string | undefined>,

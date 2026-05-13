@@ -7,9 +7,9 @@ import * as AppBskyActorDefs from '../actor/defs.ts';
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsersForDiscover', {
 	params: /*#__PURE__*/ v.object({
 		/**
+		 * @default 25
 		 * @minimum 1
 		 * @maximum 50
-		 * @default 25
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 50)]),
@@ -22,9 +22,7 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedUsersF
 			get actors() {
 				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);
 			},
-			/**
-			 * Snowflake for this recommendation, use when submitting recommendation events.
-			 */
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
 			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

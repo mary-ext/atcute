@@ -8,7 +8,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('site.standard.graph.recommend'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
-		 * AT-URI reference to the document record being recommended (ex: at://did:plc:abc123/site.standard.document/xyz789).
+		 * AT-URI reference to the document record being recommended (ex:
+		 * at://did:plc:abc123/site.standard.document/xyz789).
 		 */
 		document: /*#__PURE__*/ v.resourceUriString(),
 	}),

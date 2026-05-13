@@ -14,9 +14,7 @@ class Stack<T> implements Iterable<T> {
 		return this.#size;
 	}
 
-	/**
-	 * clear the stack
-	 */
+	/** clear the stack */
 	clear(): void {
 		this.#head = undefined;
 		this.#tail = undefined;
@@ -25,6 +23,7 @@ class Stack<T> implements Iterable<T> {
 
 	/**
 	 * adds a value to the top of the stack
+	 *
 	 * @param value value to add
 	 * @returns the stack instance
 	 */
@@ -42,6 +41,7 @@ class Stack<T> implements Iterable<T> {
 
 	/**
 	 * removes the top value from the stack
+	 *
 	 * @returns last added value, or undefined if empty
 	 */
 	pop(): T | undefined {
@@ -62,6 +62,7 @@ class Stack<T> implements Iterable<T> {
 
 	/**
 	 * get the top value without removing from stack
+	 *
 	 * @returns last added value, or undefined if empty
 	 */
 	peek(): T | undefined {
@@ -70,15 +71,14 @@ class Stack<T> implements Iterable<T> {
 
 	/**
 	 * get the bottom value without removing from stack
+	 *
 	 * @returns first added value, or undefined if empty
 	 */
 	peekBottom(): T | undefined {
 		return this.#tail?.value;
 	}
 
-	/**
-	 * returns an iterator that drains all the values from stack
-	 */
+	/** returns an iterator that drains all the values from stack */
 	drain(): IterableIterator<T, undefined, undefined> {
 		// oxlint-disable-next-line no-this-alias
 		const self = this;
@@ -105,9 +105,7 @@ class Stack<T> implements Iterable<T> {
 		};
 	}
 
-	/**
-	 * iterates over the stack without draining
-	 */
+	/** iterates over the stack without draining */
 	[Symbol.iterator](): Iterator<T, undefined, undefined> {
 		let current = this.#head;
 

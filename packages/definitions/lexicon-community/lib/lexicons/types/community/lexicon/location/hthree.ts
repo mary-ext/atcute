@@ -3,13 +3,9 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('community.lexicon.location.hthree')),
-	/**
-	 * The name of the location.
-	 */
+	/** The name of the location. */
 	name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * The h3 encoded location.
-	 */
+	/** The h3 encoded location. */
 	value: /*#__PURE__*/ v.string(),
 });
 

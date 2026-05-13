@@ -21,8 +21,7 @@ export type XrpcHandlerOptions =
 	| XrpcProcedureHandlerOptions<XRPCProcedureMetadata>;
 
 /**
- * create a fetch handler for a single xrpc query or procedure.
- * requests are expected at `/xrpc/<nsid>`.
+ * create a fetch handler for a single xrpc query or procedure. requests are expected at `/xrpc/<nsid>`.
  * subscriptions are not supported.
  */
 export function createXrpcHandler<TQuery extends XRPCQueryMetadata>(

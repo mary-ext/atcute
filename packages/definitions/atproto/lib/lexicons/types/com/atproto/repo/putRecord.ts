@@ -9,35 +9,30 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.repo.putRecord', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The NSID of the record collection.
-			 */
+			/** The NSID of the record collection. */
 			collection: /*#__PURE__*/ v.nsidString(),
-			/**
-			 * The record to write.
-			 */
+			/** The record to write. */
 			record: /*#__PURE__*/ v.unknown(),
-			/**
-			 * The handle or DID of the repo (aka, current account).
-			 */
+			/** The handle or DID of the repo (aka, current account). */
 			repo: /*#__PURE__*/ v.actorIdentifierString(),
 			/**
 			 * The Record Key.
+			 *
 			 * @maxLength 512
 			 */
 			rkey: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.recordKeyString(), [
 				/*#__PURE__*/ v.stringLength(0, 512),
 			]),
-			/**
-			 * Compare and swap with the previous commit by CID.
-			 */
+			/** Compare and swap with the previous commit by CID. */
 			swapCommit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 			/**
-			 * Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause problems with golang implementation
+			 * Compare and swap with the previous record by CID. WARNING: nullable and optional field; may cause
+			 * problems with golang implementation
 			 */
 			swapRecord: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nullable(/*#__PURE__*/ v.cidString())),
 			/**
-			 * Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or leave unset to validate only for known Lexicons.
+			 * Can be set to 'false' to skip Lexicon schema validation of record data, 'true' to require it, or
+			 * leave unset to validate only for known Lexicons.
 			 */
 			validate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		}),

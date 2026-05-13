@@ -38,16 +38,17 @@ export interface PasswordSessionOptions {
 	fetch?: typeof fetch;
 
 	/**
-	 * called when session is successfully created or refreshed with new
-	 * credentials. use this to persist the updated session.
-	 * receives `this: PasswordSession` context.
+	 * called when session is successfully created or refreshed with new credentials. use this to persist the
+	 * updated session. receives `this: PasswordSession` context.
+	 *
 	 * @note must not throw
 	 */
 	onUpdate?: (this: PasswordSession, data: PasswordSessionData) => void | Promise<void>;
 
 	/**
-	 * called when a session refresh fails due to a transient error (network,
-	 * server down). the session is preserved — consider retry logic.
+	 * called when a session refresh fails due to a transient error (network, server down). the session is
+	 * preserved — consider retry logic.
+	 *
 	 * @note must not throw
 	 */
 	onUpdateFailure?: (
@@ -57,16 +58,17 @@ export interface PasswordSessionOptions {
 	) => void | Promise<void>;
 
 	/**
-	 * called when the session is terminated — either explicit logout or
-	 * server-side invalidation (expired/invalid refresh token).
-	 * use this to clean up persisted session data.
+	 * called when the session is terminated — either explicit logout or server-side invalidation
+	 * (expired/invalid refresh token). use this to clean up persisted session data.
+	 *
 	 * @note must not throw
 	 */
 	onDelete?: (this: PasswordSession, data: PasswordSessionData) => void | Promise<void>;
 
 	/**
-	 * called when logout network request fails due to a transient error.
-	 * the session stays active locally so you can retry.
+	 * called when logout network request fails due to a transient error. the session stays active locally so
+	 * you can retry.
+	 *
 	 * @note must not throw
 	 */
 	onDeleteFailure?: (
@@ -100,12 +102,11 @@ export interface PasswordSessionLoginOptions extends PasswordSessionOptions {
 /**
  * password-based authentication session for AT Protocol services.
  *
- * manages access/refresh token lifecycle, automatic refresh on 401, and
- * session persistence via callbacks. instances are always in an authenticated
- * state — use the static factories for validated construction.
+ * manages access/refresh token lifecycle, automatic refresh on 401, and session persistence via callbacks.
+ * instances are always in an authenticated state — use the static factories for validated construction.
  *
- * for browser-based applications, prefer OAuth-based authentication instead.
- * when using password auth, use app passwords rather than main account credentials.
+ * for browser-based applications, prefer OAuth-based authentication instead. when using password auth, use
+ * app passwords rather than main account credentials.
  */
 export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 	#sessionData: PasswordSessionData | null;
@@ -119,8 +120,9 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 	#onDeleteFailure: PasswordSessionOptions['onDeleteFailure'];
 
 	/**
-	 * construct with existing session data. tokens refresh lazily on 401.
-	 * use static `login()` or `resume()` for validated sessions.
+	 * construct with existing session data. tokens refresh lazily on 401. use static `login()` or `resume()`
+	 * for validated sessions.
+	 *
 	 * @param session existing session data
 	 * @param options session options
 	 */
@@ -141,6 +143,7 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 
 	/**
 	 * account DID
+	 *
 	 * @throws if the session has been destroyed
 	 */
 	get did(): Did {
@@ -154,6 +157,7 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 
 	/**
 	 * current session data — serialize this for persistence
+	 *
 	 * @throws if the session has been destroyed
 	 */
 	get session(): PasswordSessionData {
@@ -171,8 +175,9 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 	// --- static factories ---
 
 	/**
-	 * authenticate with credentials. optionally tries resuming a cached
-	 * session first, falling back to fresh createSession on failure.
+	 * authenticate with credentials. optionally tries resuming a cached session first, falling back to fresh
+	 * createSession on failure.
+	 *
 	 * @param credentials login credentials or URL shorthand (`https://handle:pass@service`)
 	 * @param options login options
 	 * @returns authenticated session
@@ -218,10 +223,10 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 	}
 
 	/**
-	 * resume from persisted session data. if the access token is still valid,
-	 * returns immediately and refreshes metadata in the background.
-	 * if expired, refreshes synchronously. throws only if the session is
+	 * resume from persisted session data. if the access token is still valid, returns immediately and refreshes
+	 * metadata in the background. if expired, refreshes synchronously. throws only if the session is
 	 * definitively invalid.
+	 *
 	 * @param session persisted session data
 	 * @param options session options
 	 * @returns resumed session
@@ -251,8 +256,8 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 	}
 
 	/**
-	 * delete a session server-side without resuming it.
-	 * useful for cleanup of orphaned sessions.
+	 * delete a session server-side without resuming it. useful for cleanup of orphaned sessions.
+	 *
 	 * @param session session data to delete
 	 * @param options session options
 	 */
@@ -269,10 +274,10 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 	}
 
 	/**
-	 * sign out — invalidates session server-side.
-	 * on success, the session is destroyed and `onDelete` is called.
-	 * on transient failure (network), `onDeleteFailure` is called and
-	 * the session stays active for retry.
+	 * sign out — invalidates session server-side. on success, the session is destroyed and `onDelete` is
+	 * called. on transient failure (network), `onDeleteFailure` is called and the session stays active for
+	 * retry.
+	 *
 	 * @throws on transient failure when the session couldn't be deleted
 	 */
 	async logout(): Promise<void> {
@@ -467,8 +472,8 @@ const buildSessionData = (
 };
 
 /**
- * parse a login URL into credentials.
- * format: `https://identifier:password@service`
+ * parse a login URL into credentials. format: `https://identifier:password@service`
+ *
  * @param input URL string or URL object
  * @returns parsed credentials
  */

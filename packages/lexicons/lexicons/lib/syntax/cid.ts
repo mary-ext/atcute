@@ -1,6 +1,4 @@
-/**
- * represents a content identifier (CID)
- */
+/** represents a content identifier (CID) */
 export type Cid = string;
 
 const DASL_CID_RE = /^baf[ky]rei[a-z2-7]{52}$/;

@@ -6,18 +6,15 @@ import * as ShTangledGitTempDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getEntity', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * path of the entity
-		 */
+		/** path of the entity */
 		path: /*#__PURE__*/ v.string(),
 		/**
 		 * Git reference (branch, tag, or commit SHA)
-		 * @default "HEAD"
+		 *
+		 * @default 'HEAD'
 		 */
 		ref: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string(), 'HEAD'),
-		/**
-		 * AT-URI of the repository
-		 */
+		/** AT-URI of the repository */
 		repo: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {

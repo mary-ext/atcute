@@ -8,9 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.disableAccountI
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			account: /*#__PURE__*/ v.didString(),
-			/**
-			 * Optional reason for disabled invites.
-			 */
+			/** Optional reason for disabled invites. */
 			note: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

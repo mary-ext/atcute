@@ -5,15 +5,11 @@ import * as BlogPcktRichtextFacet from '../richtext/facet.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.text')),
-	/**
-	 * Facets for text formatting and features
-	 */
+	/** Facets for text formatting and features */
 	get facets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(BlogPcktRichtextFacet.mainSchema));
 	},
-	/**
-	 * The plain text content
-	 */
+	/** The plain text content */
 	plaintext: /*#__PURE__*/ v.string(),
 });
 

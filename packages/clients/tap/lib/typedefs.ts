@@ -107,9 +107,7 @@ export interface TapRecordCreateEvent extends TapRecordBaseEvent {
 	action: 'create';
 	cid: string;
 
-	/**
-	 * record may be omitted if tap fails to decode the record body but still has a cid.
-	 */
+	/** record may be omitted if tap fails to decode the record body but still has a cid. */
 	record?: Record<string, unknown>;
 }
 
@@ -117,9 +115,7 @@ export interface TapRecordUpdateEvent extends TapRecordBaseEvent {
 	action: 'update';
 	cid: string;
 
-	/**
-	 * record may be omitted if tap fails to decode the record body but still has a cid.
-	 */
+	/** record may be omitted if tap fails to decode the record body but still has a cid. */
 	record?: Record<string, unknown>;
 }
 
@@ -150,6 +146,7 @@ export interface TapClientOptions {
 export interface TapSubscribeOptions {
 	/**
 	 * whether to validate incoming events.
+	 *
 	 * @default true
 	 */
 	validateEvents?: boolean;

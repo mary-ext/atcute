@@ -18,8 +18,8 @@ interface Entry<V> {
 /**
  * in-memory store with optional LRU eviction and TTL expiration.
  *
- * suitable for development, testing, or single-instance deployments.
- * for production with multiple instances, use a shared store (e.g., Redis).
+ * suitable for development, testing, or single-instance deployments. for production with multiple instances,
+ * use a shared store (e.g., Redis).
  */
 export class MemoryStore<K, V> implements Store<K, V>, Disposable {
 	#map: LRUCache<K, Entry<V>> | Map<K, Entry<V>>;
@@ -77,9 +77,7 @@ export class MemoryStore<K, V> implements Store<K, V>, Disposable {
 		this.#map.clear();
 	}
 
-	/**
-	 * stops background timers and releases resources.
-	 */
+	/** stops background timers and releases resources. */
 	dispose(): void {
 		if (this.#ttlTimer !== undefined) {
 			clearTimeout(this.#ttlTimer);

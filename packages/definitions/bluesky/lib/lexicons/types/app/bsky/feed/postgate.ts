@@ -12,6 +12,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
 		 * List of AT-URIs embedding this post that the author has detached from.
+		 *
 		 * @maxLength 50
 		 */
 		detachedEmbeddingUris: /*#__PURE__*/ v.optional(
@@ -20,7 +21,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			]),
 		),
 		/**
-		 * List of rules defining who can embed this post. If value is an empty array or is undefined, no particular rules apply and anyone can embed.
+		 * List of rules defining who can embed this post. If value is an empty array or is undefined, no
+		 * particular rules apply and anyone can embed.
+		 *
 		 * @maxLength 5
 		 */
 		get embeddingRules() {
@@ -30,9 +33,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				]),
 			);
 		},
-		/**
-		 * Reference (AT-URI) to the post record.
-		 */
+		/** Reference (AT-URI) to the post record. */
 		post: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );

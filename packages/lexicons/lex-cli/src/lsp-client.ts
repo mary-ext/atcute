@@ -88,6 +88,7 @@ const inferLanguageId = (filepath: string): string => {
 export interface LspClient {
 	/**
 	 * formats a document via LSP textDocument/formatting
+	 *
 	 * @param code source code to format
 	 * @param filepath filepath for language detection and URI
 	 * @returns formatted code
@@ -99,6 +100,7 @@ export interface LspClient {
 
 /**
  * creates an LSP client that communicates with a formatter over stdio
+ *
  * @param command shell command to spawn the LSP server
  * @param root project root for LSP rootUri
  * @returns an initialized LSP client ready for formatting

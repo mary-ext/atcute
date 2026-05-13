@@ -18,9 +18,7 @@ const _labelsSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.subscription('com.atproto.label.subscribeLabels', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The last known event seq number to backfill from.
-		 */
+		/** The last known event seq number to backfill from. */
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	}),
 	get message() {

@@ -4,7 +4,8 @@ import * as v from '@atcute/lexicons/validations';
 const _externalSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.external#external')),
 	/**
-	 * The URI of the Atmosphere record representing this external content, if it exists. Example: a site.standard.document record.
+	 * The URI of the Atmosphere record representing this external content, if it exists. Example: a
+	 * site.standard.document record.
 	 */
 	associatedRecord: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	description: /*#__PURE__*/ v.string(),

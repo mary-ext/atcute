@@ -21,9 +21,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.scheduleAc
 				return /*#__PURE__*/ v.variant([takedownSchema]);
 			},
 			createdBy: /*#__PURE__*/ v.didString(),
-			/**
-			 * This will be propagated to the moderation event when it is applied
-			 */
+			/** This will be propagated to the moderation event when it is applied */
 			get modTool() {
 				return /*#__PURE__*/ v.optional(ToolsOzoneModerationDefs.modToolSchema);
 			},
@@ -32,6 +30,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.scheduleAc
 			},
 			/**
 			 * Array of DID subjects to schedule the action for
+			 *
 			 * @maxLength 100
 			 */
 			subjects: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
@@ -59,40 +58,27 @@ const _schedulingConfigSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('tools.ozone.moderation.scheduleAction#schedulingConfig'),
 	),
-	/**
-	 * Earliest time to execute the action (for randomized scheduling)
-	 */
+	/** Earliest time to execute the action (for randomized scheduling) */
 	executeAfter: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	/**
-	 * Exact time to execute the action
-	 */
+	/** Exact time to execute the action */
 	executeAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	/**
-	 * Latest time to execute the action (for randomized scheduling)
-	 */
+	/** Latest time to execute the action (for randomized scheduling) */
 	executeUntil: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _takedownSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.scheduleAction#takedown')),
-	/**
-	 * If true, all other reports on content authored by this account will be resolved (acknowledged).
-	 */
+	/** If true, all other reports on content authored by this account will be resolved (acknowledged). */
 	acknowledgeAccountSubjects: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * Indicates how long the takedown should be in effect before automatically expiring.
-	 */
+	/** Indicates how long the takedown should be in effect before automatically expiring. */
 	durationInHours: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/**
-	 * Email content to be sent to the user upon takedown.
-	 */
+	/** Email content to be sent to the user upon takedown. */
 	emailContent: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * Subject of the email to be sent to the user upon takedown.
-	 */
+	/** Subject of the email to be sent to the user upon takedown. */
 	emailSubject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**
 	 * Names/Keywords of the policies that drove the decision.
+	 *
 	 * @maxLength 5
 	 */
 	policies: /*#__PURE__*/ v.optional(
@@ -100,17 +86,11 @@ const _takedownSchema = /*#__PURE__*/ v.object({
 			/*#__PURE__*/ v.arrayLength(0, 5),
 		]),
 	),
-	/**
-	 * Severity level of the violation (e.g., 'sev-0', 'sev-1', 'sev-2', etc.).
-	 */
+	/** Severity level of the violation (e.g., 'sev-0', 'sev-1', 'sev-2', etc.). */
 	severityLevel: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * Number of strikes to assign to the user when takedown is applied.
-	 */
+	/** Number of strikes to assign to the user when takedown is applied. */
 	strikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/**
-	 * When the strike should expire. If not provided, the strike never expires.
-	 */
+	/** When the strike should expire. If not provided, the strike never expires. */
 	strikeExpiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 

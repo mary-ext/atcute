@@ -7,9 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('fyi.unravel.frontpage.vote'),
-		/**
-		 * Client-declared timestamp when this vote was originally created.
-		 */
+		/** Client-declared timestamp when this vote was originally created. */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		get subject() {
 			return ComAtprotoRepoStrongRef.mainSchema;

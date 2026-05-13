@@ -4,9 +4,7 @@ import { MissingBlockError } from './errors.ts';
 import type { NodeStore } from './node-store.ts';
 import { NodeWalker } from './node-walker.ts';
 
-/**
- * Error thrown when validating a proof fails
- */
+/** Error thrown when validating a proof fails */
 export class InvalidProofError extends Error {
 	constructor(message: string) {
 		super(message);
@@ -14,9 +12,7 @@ export class InvalidProofError extends Error {
 	}
 }
 
-/**
- * Error thrown when constructing a proof fails
- */
+/** Error thrown when constructing a proof fails */
 export class ProofError extends Error {
 	constructor(message: string) {
 		super(message);
@@ -26,6 +22,7 @@ export class ProofError extends Error {
 
 /**
  * Finds a record path and builds a proof (works for both inclusion and exclusion proofs)
+ *
  * @param ns the node store
  * @param rootCid the MST root CID
  * @param rpath the record path to find
@@ -49,6 +46,7 @@ export const findRpathAndBuildProof = async (
 
 /**
  * Builds an exclusion proof for a record that should not exist
+ *
  * @param ns the node store
  * @param rootCid the MST root CID
  * @param rpath the record path
@@ -69,6 +67,7 @@ export const buildExclusionProof = async (
 
 /**
  * Builds an inclusion proof for a record that should exist
+ *
  * @param ns the node store
  * @param rootCid the MST root CID
  * @param rpath the record path
@@ -89,6 +88,7 @@ export const buildInclusionProof = async (
 
 /**
  * Verifies an inclusion proof - that a record exists in the MST
+ *
  * @param ns the node store (should only contain blocks from the proof)
  * @param rootCid the MST root CID
  * @param rpath the record path
@@ -111,6 +111,7 @@ export const verifyInclusion = async (ns: NodeStore, rootCid: string, rpath: str
 
 /**
  * Verifies an exclusion proof - that a record does not exist in the MST
+ *
  * @param ns the node store (should only contain blocks from the proof)
  * @param rootCid the MST root CID
  * @param rpath the record path

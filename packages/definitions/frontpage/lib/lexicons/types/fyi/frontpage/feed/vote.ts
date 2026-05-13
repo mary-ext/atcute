@@ -7,13 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('fyi.frontpage.feed.vote'),
-		/**
-		 * Client-declared timestamp when this vote was originally created.
-		 */
+		/** Client-declared timestamp when this vote was originally created. */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		/**
-		 * The post or comment that this Frontpage vote is for.
-		 */
+		/** The post or comment that this Frontpage vote is for. */
 		get subject() {
 			return ComAtprotoRepoStrongRef.mainSchema;
 		},

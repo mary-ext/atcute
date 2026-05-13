@@ -10,7 +10,8 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.contact.getSyncStatus', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			/**
-			 * If present, indicates the user has imported their contacts. If not present, indicates the user never used the feature or called `app.bsky.contact.removeData` and didn't import again since.
+			 * If present, indicates the user has imported their contacts. If not present, indicates the user never
+			 * used the feature or called `app.bsky.contact.removeData` and didn't import again since.
 			 */
 			get syncStatus() {
 				return /*#__PURE__*/ v.optional(AppBskyContactDefs.syncStatusSchema);

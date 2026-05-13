@@ -5,9 +5,7 @@ import * as BlogPcktBlockText from './text.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.blockquote')),
-	/**
-	 * Array of text blocks
-	 */
+	/** Array of text blocks */
 	get content() {
 		return /*#__PURE__*/ v.array(/*#__PURE__*/ v.variant([BlogPcktBlockText.mainSchema]));
 	},

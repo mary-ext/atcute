@@ -7,18 +7,14 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.reserveSigning
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The DID to reserve a key for.
-			 */
+			/** The DID to reserve a key for. */
 			did: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		}),
 	},
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The public key for the reserved signing key, in did:key serialization.
-			 */
+			/** The public key for the reserved signing key, in did:key serialization. */
 			signingKey: /*#__PURE__*/ v.string(),
 		}),
 	},

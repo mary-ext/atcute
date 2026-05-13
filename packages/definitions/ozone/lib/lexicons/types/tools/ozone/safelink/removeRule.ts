@@ -9,20 +9,14 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.safelink.removeRule',
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Optional comment about why the rule is being removed
-			 */
+			/** Optional comment about why the rule is being removed */
 			comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Optional DID of the user. Only respected when using admin auth.
-			 */
+			/** Optional DID of the user. Only respected when using admin auth. */
 			createdBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 			get pattern() {
 				return ToolsOzoneSafelinkDefs.patternTypeSchema;
 			},
-			/**
-			 * The URL or domain to remove the rule for
-			 */
+			/** The URL or domain to remove the rule for */
 			url: /*#__PURE__*/ v.string(),
 		}),
 	},

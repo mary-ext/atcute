@@ -9,17 +9,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.unspecced.initAgeAssuran
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * An ISO 3166-1 alpha-2 code of the user's location.
-			 */
+			/** An ISO 3166-1 alpha-2 code of the user's location. */
 			countryCode: /*#__PURE__*/ v.string(),
-			/**
-			 * The user's email address to receive assurance instructions.
-			 */
+			/** The user's email address to receive assurance instructions. */
 			email: /*#__PURE__*/ v.string(),
-			/**
-			 * The user's preferred language for communication during the assurance process.
-			 */
+			/** The user's preferred language for communication during the assurance process. */
 			language: /*#__PURE__*/ v.string(),
 		}),
 	},

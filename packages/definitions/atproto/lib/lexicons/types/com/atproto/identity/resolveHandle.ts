@@ -4,9 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.identity.resolveHandle', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The handle to resolve.
-		 */
+		/** The handle to resolve. */
 		handle: /*#__PURE__*/ v.handleString(),
 	}),
 	output: {

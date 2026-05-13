@@ -6,18 +6,15 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.publicKey'),
-		/**
-		 * key upload timestamp
-		 */
+		/** key upload timestamp */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
 		 * public key contents
+		 *
 		 * @maxLength 4096
 		 */
 		key: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 4096)]),
-		/**
-		 * human-readable name for this key
-		 */
+		/** human-readable name for this key */
 		name: /*#__PURE__*/ v.string(),
 	}),
 );

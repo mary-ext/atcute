@@ -8,13 +8,12 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.createSession'
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			/**
-			 * When true, instead of throwing error for takendown accounts, a valid response with a narrow scoped token will be returned
+			 * When true, instead of throwing error for takendown accounts, a valid response with a narrow scoped
+			 * token will be returned
 			 */
 			allowTakendown: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			authFactorToken: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Handle or other identifier supported by the server for the authenticating user.
-			 */
+			/** Handle or other identifier supported by the server for the authenticating user. */
 			identifier: /*#__PURE__*/ v.string(),
 			password: /*#__PURE__*/ v.string(),
 		}),
@@ -32,7 +31,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.server.createSession'
 			handle: /*#__PURE__*/ v.handleString(),
 			refreshJwt: /*#__PURE__*/ v.string(),
 			/**
-			 * If active=false, this optional field indicates a possible reason for why the account is not active. If active=false and no status is supplied, then the host makes no claim for why the repository is no longer being hosted.
+			 * If active=false, this optional field indicates a possible reason for why the account is not active.
+			 * If active=false and no status is supplied, then the host makes no claim for why the repository is no
+			 * longer being hosted.
 			 */
 			status: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.string<'deactivated' | 'suspended' | 'takendown' | (string & {})>(),

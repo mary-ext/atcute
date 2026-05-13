@@ -13,12 +13,14 @@ type Base58Binding = {
 
 /**
  * whether the native base58 module is available for the current runtime.
+ *
  * @internal
  */
 export let hasNative = false;
 
 /**
  * decodes a base58btc string to a Uint8Array
+ *
  * @param source base58btc encoded string
  * @returns decoded buffer
  */
@@ -27,6 +29,7 @@ export let fromBase58Btc: (source: string) => Uint8Array<ArrayBuffer> =
 
 /**
  * encodes a Uint8Array to a base58btc string
+ *
  * @param source source buffer
  * @returns base58btc encoded string
  */

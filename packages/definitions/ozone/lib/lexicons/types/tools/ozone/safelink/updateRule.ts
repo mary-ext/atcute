@@ -12,13 +12,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.safelink.updateRule',
 			get action() {
 				return ToolsOzoneSafelinkDefs.actionTypeSchema;
 			},
-			/**
-			 * Optional comment about the update
-			 */
+			/** Optional comment about the update */
 			comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Optional DID to credit as the creator. Only respected for admin_token authentication.
-			 */
+			/** Optional DID to credit as the creator. Only respected for admin_token authentication. */
 			createdBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 			get pattern() {
 				return ToolsOzoneSafelinkDefs.patternTypeSchema;
@@ -26,9 +22,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.safelink.updateRule',
 			get reason() {
 				return ToolsOzoneSafelinkDefs.reasonTypeSchema;
 			},
-			/**
-			 * The URL or domain to update the rule for
-			 */
+			/** The URL or domain to update the rule for */
 			url: /*#__PURE__*/ v.string(),
 		}),
 	},

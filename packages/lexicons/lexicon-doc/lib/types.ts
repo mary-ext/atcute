@@ -1,9 +1,7 @@
 import type { Nsid } from '@atcute/lexicons';
 
 // #region Concrete types
-/**
- * definition for a boolean field
- */
+/** definition for a boolean field */
 export interface LexBoolean {
 	type: 'boolean';
 	description?: string;
@@ -13,9 +11,7 @@ export interface LexBoolean {
 	const?: boolean;
 }
 
-/**
- * definition for a signed integer field
- */
+/** definition for a signed integer field */
 export interface LexInteger {
 	type: 'integer';
 	description?: string;
@@ -31,9 +27,7 @@ export interface LexInteger {
 	const?: number;
 }
 
-/**
- * formats allowed for string definitions
- */
+/** formats allowed for string definitions */
 export type LexStringFormat =
 	| 'datetime'
 	| 'uri'
@@ -47,9 +41,7 @@ export type LexStringFormat =
 	| 'tid'
 	| 'record-key';
 
-/**
- * definition for a string field
- */
+/** definition for a string field */
 export interface LexString {
 	type: 'string';
 	description?: string;
@@ -73,9 +65,7 @@ export interface LexString {
 	knownValues?: string[];
 }
 
-/**
- * definition for raw binary data
- */
+/** definition for raw binary data */
 export interface LexBytes {
 	type: 'bytes';
 	description?: string;
@@ -85,17 +75,13 @@ export interface LexBytes {
 	maxLength?: number;
 }
 
-/**
- * definition for a link to another resource
- */
+/** definition for a link to another resource */
 export interface LexCidLink {
 	type: 'cid-link';
 	description?: string;
 }
 
-/**
- * definition for binary attachments (images, videos, etc.)
- */
+/** definition for binary attachments (images, videos, etc.) */
 export interface LexBlob {
 	type: 'blob';
 	description?: string;
@@ -105,30 +91,22 @@ export interface LexBlob {
 	maxSize?: number;
 }
 
-/**
- * primitive type definitions
- */
+/** primitive type definitions */
 export type LexPrimitive = LexBoolean | LexInteger | LexString;
 
-/**
- * concrete type definitions
- */
+/** concrete type definitions */
 export type LexConcrete = LexBoolean | LexInteger | LexString | LexBytes | LexCidLink | LexBlob;
 // #endregion
 
 // #region Meta types
-/**
- * definition for an empty data value that exists only to be referenced by name
- */
+/** definition for an empty data value that exists only to be referenced by name */
 export interface LexToken {
 	type: 'token';
 	/** should clarify the meaning of the token */
 	description?: string;
 }
 
-/**
- * definition that references another schema for reuse
- */
+/** definition that references another schema for reuse */
 export interface LexRef {
 	type: 'ref';
 	description?: string;
@@ -136,9 +114,7 @@ export interface LexRef {
 	ref: string;
 }
 
-/**
- * union definition referencing multiple possible types at a schema location
- */
+/** union definition referencing multiple possible types at a schema location */
 export interface LexRefUnion {
 	type: 'union';
 	description?: string;
@@ -148,39 +124,27 @@ export interface LexRefUnion {
 	closed?: boolean;
 }
 
-/**
- * definition for an unknown type that allows any data object with no specific validation
- */
+/** definition for an unknown type that allows any data object with no specific validation */
 export interface LexUnknown {
 	type: 'unknown';
 	description?: string;
 }
 
-/**
- * meta definitions that can point to other schemas
- */
+/** meta definitions that can point to other schemas */
 export type LexRefVariant = LexRef | LexRefUnion;
 
-/**
- * meta definitions that provide indirection or represent abstract values
- */
+/** meta definitions that provide indirection or represent abstract values */
 export type LexMeta = LexToken | LexRef | LexRefUnion | LexUnknown;
 // #endregion
 
 // #region Container types
-/**
- * field definitions that can be declared inline in object properties and array items
- */
+/** field definitions that can be declared inline in object properties and array items */
 export type LexDefinableField = LexConcrete | LexRef | LexRefUnion | LexUnknown | LexArray;
 
-/**
- * all possible field definitions including those that must be referenced
- */
+/** all possible field definitions including those that must be referenced */
 export type LexField = LexConcrete | LexMeta | LexContainer;
 
-/**
- * definition for an array field
- */
+/** definition for an array field */
 export interface LexArray {
 	type: 'array';
 	description?: string;
@@ -192,9 +156,7 @@ export interface LexArray {
 	maxLength?: number;
 }
 
-/**
- * definition for an array field restricted to primitive element types
- */
+/** definition for an array field restricted to primitive element types */
 export interface LexPrimitiveArray {
 	type: 'array';
 	description?: string;
@@ -206,9 +168,7 @@ export interface LexPrimitiveArray {
 	maxLength?: number;
 }
 
-/**
- * object definition that can be nested or defined by reference
- */
+/** object definition that can be nested or defined by reference */
 export interface LexObject {
 	type: 'object';
 	description?: string;
@@ -220,16 +180,12 @@ export interface LexObject {
 	properties?: Record<string, LexDefinableField>;
 }
 
-/**
- * container definitions that can hold other types
- */
+/** container definitions that can hold other types */
 export type LexContainer = LexArray | LexObject;
 // #endregion
 
 // #region Miscellaneous
-/**
- * definition for an HTTP request or response body for XRPC endpoints
- */
+/** definition for an HTTP request or response body for XRPC endpoints */
 export interface LexXrpcBody {
 	description?: string;
 	/** MIME type for body contents (e.g., application/json) */
@@ -238,34 +194,26 @@ export interface LexXrpcBody {
 	schema?: LexRefVariant | LexObject;
 }
 
-/**
- * definition for event stream messages in subscriptions
- */
+/** definition for event stream messages in subscriptions */
 export interface LexXrpcSubscriptionMessage {
 	description?: string;
 	/** a union of refs */
 	schema?: LexRefUnion;
 }
 
-/**
- * definition for an error code that may be returned from XRPC endpoints
- */
+/** definition for an error code that may be returned from XRPC endpoints */
 export interface LexXrpcError {
 	/** short name for the error type, with no whitespace */
 	name: string;
 	description?: string;
 }
 
-/**
- * map of language-specific string translations
- */
+/** map of language-specific string translations */
 export type LexLang = Record<string, string | undefined>;
 // #endregion
 
 // #region Sub-types
-/**
- * definition for HTTP query parameters for XRPC endpoints
- */
+/** definition for HTTP query parameters for XRPC endpoints */
 export interface LexXrpcParameters {
 	type: 'params';
 	description?: string;
@@ -275,9 +223,7 @@ export interface LexXrpcParameters {
 	properties?: Record<string, LexPrimitive | LexPrimitiveArray>;
 }
 
-/**
- * definition for a permission entry within a permission set
- */
+/** definition for a permission entry within a permission set */
 export interface LexPermission {
 	type: 'permission';
 	/** resource this permission applies to */
@@ -287,9 +233,7 @@ export interface LexPermission {
 // #endregion
 
 // #region Primary types
-/**
- * definition for an object that can be stored in a repository record
- */
+/** definition for an object that can be stored in a repository record */
 export interface LexRecord {
 	type: 'record';
 	description?: string;
@@ -299,9 +243,7 @@ export interface LexRecord {
 	record: LexObject;
 }
 
-/**
- * definition for an XRPC query endpoint (HTTP GET)
- */
+/** definition for an XRPC query endpoint (HTTP GET) */
 export interface LexXrpcQuery {
 	type: 'query';
 	description?: string;
@@ -313,9 +255,7 @@ export interface LexXrpcQuery {
 	errors?: LexXrpcError[];
 }
 
-/**
- * definition for an XRPC procedure endpoint (HTTP POST)
- */
+/** definition for an XRPC procedure endpoint (HTTP POST) */
 export interface LexXrpcProcedure {
 	type: 'procedure';
 	description?: string;
@@ -329,9 +269,7 @@ export interface LexXrpcProcedure {
 	errors?: LexXrpcError[];
 }
 
-/**
- * definition for an XRPC subscription endpoint (WebSocket)
- */
+/** definition for an XRPC subscription endpoint (WebSocket) */
 export interface LexXrpcSubscription {
 	type: 'subscription';
 	description?: string;
@@ -343,9 +281,7 @@ export interface LexXrpcSubscription {
 	errors?: LexXrpcError[];
 }
 
-/**
- * definition for a set of permissions that can be requested
- */
+/** definition for a set of permissions that can be requested */
 export interface LexPermissionSet {
 	type: 'permission-set';
 	description?: string;
@@ -361,21 +297,15 @@ export interface LexPermissionSet {
 	permissions: LexPermission[];
 }
 
-/**
- * primary type definitions
- */
+/** primary type definitions */
 export type LexPrimary = LexRecord | LexXrpcQuery | LexXrpcProcedure | LexXrpcSubscription | LexPermissionSet;
 // #endregion
 
 // #region Document
-/**
- * type definitions that can be declared as named entries in a lexicon file
- */
+/** type definitions that can be declared as named entries in a lexicon file */
 export type LexUserType = LexPrimary | LexConcrete | LexToken | LexUnknown | LexContainer;
 
-/**
- * a lexicon document
- */
+/** a lexicon document */
 export interface LexiconDoc {
 	/** indicates lexicon language version; fixed value of 1 for this version */
 	lexicon: 1;

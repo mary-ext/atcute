@@ -9,9 +9,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('blue.moji.packs.pack'),
-		/**
-		 * @default false
-		 */
+		/** @default false */
 		adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
@@ -37,9 +35,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.blobAccept(['image/png', 'image/jpeg']),
 			]),
 		),
-		/**
-		 * Self-label values for this emoji. Effectively content warnings.
-		 */
+		/** Self-label values for this emoji. Effectively content warnings. */
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},

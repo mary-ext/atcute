@@ -3,10 +3,7 @@ import { derivePublicJwk } from '@atcute/oauth-crypto';
 
 import type { KeySearchOptions } from './types.ts';
 
-/**
- * preferred algorithm order for signing.
- * EC algorithms first (smaller, faster), then PSS, then PKCS#1 v1.5.
- */
+/** preferred algorithm order for signing. EC algorithms first (smaller, faster), then PSS, then PKCS#1 v1.5. */
 const PREFERRED_ALGORITHMS = [
 	'ES256',
 	'ES384',
@@ -19,9 +16,7 @@ const PREFERRED_ALGORITHMS = [
 	'RS512',
 ] as const;
 
-/**
- * a collection of private keys for client authentication.
- */
+/** a collection of private keys for client authentication. */
 export class Keyset {
 	private readonly keys: readonly ClientAssertionPrivateJwk[];
 	private _publicJwks: { keys: readonly PublicJwk[] } | undefined;
@@ -54,10 +49,7 @@ export class Keyset {
 		return this.keys.length;
 	}
 
-	/**
-	 * public JWKS for serving at client metadata or jwks_uri.
-	 * derived lazily on first access, then cached.
-	 */
+	/** public JWKS for serving at client metadata or jwks_uri. derived lazily on first access, then cached. */
 	get publicJwks(): { keys: readonly PublicJwk[] } {
 		this._publicJwks ||= { keys: this.keys.map((k) => derivePublicJwk(k, k.kid, k.alg)) };
 		return this._publicJwks;

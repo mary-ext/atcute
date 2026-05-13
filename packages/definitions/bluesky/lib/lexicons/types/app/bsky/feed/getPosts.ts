@@ -8,6 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getPosts', {
 	params: /*#__PURE__*/ v.object({
 		/**
 		 * List of post AT-URIs to return hydrated views for.
+		 *
 		 * @minLength 1
 		 * @maxLength 25
 		 */

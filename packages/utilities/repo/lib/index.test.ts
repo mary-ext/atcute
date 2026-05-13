@@ -13,9 +13,8 @@ import { fromStream, fromUint8Array, repoEntryTransform } from './index.ts';
 import type { Commit } from './types.ts';
 
 /**
- * builds a minimal CAR file containing a commit, single MST node, and one
- * record block. the MST node has two entries (different keys) pointing to
- * the same record CID.
+ * builds a minimal CAR file containing a commit, single MST node, and one record block. the MST node has two
+ * entries (different keys) pointing to the same record CID.
  */
 const buildDuplicateCidCar = async (): Promise<{
 	car: Uint8Array<ArrayBuffer>;

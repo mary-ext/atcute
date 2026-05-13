@@ -6,12 +6,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('fyi.unravel.frontpage.post'),
-		/**
-		 * Client-declared timestamp when this post was originally created.
-		 */
+		/** Client-declared timestamp when this post was originally created. */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
 		 * The title of the post.
+		 *
 		 * @maxLength 3000
 		 * @maxGraphemes 300
 		 */
@@ -19,9 +18,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			/*#__PURE__*/ v.stringLength(0, 3000),
 			/*#__PURE__*/ v.stringGraphemes(0, 300),
 		]),
-		/**
-		 * The URL of the post.
-		 */
+		/** The URL of the post. */
 		url: /*#__PURE__*/ v.genericUriString(),
 	}),
 );

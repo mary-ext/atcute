@@ -4,15 +4,14 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.log', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Pagination cursor (commit SHA)
-		 */
+		/** Pagination cursor (commit SHA) */
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
 		 * Maximum number of commits to return
+		 *
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
@@ -20,16 +19,13 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.log', {
 		),
 		/**
 		 * Path to filter commits by
-		 * @default ""
+		 *
+		 * @default ''
 		 */
 		path: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string(), ''),
-		/**
-		 * Git reference (branch, tag, or commit SHA)
-		 */
+		/** Git reference (branch, tag, or commit SHA) */
 		ref: /*#__PURE__*/ v.string(),
-		/**
-		 * Repository identifier in format 'did:plc:.../repoName'
-		 */
+		/** Repository identifier in format 'did:plc:.../repoName' */
 		repo: /*#__PURE__*/ v.string(),
 	}),
 	output: {

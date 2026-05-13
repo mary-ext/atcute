@@ -9,15 +9,11 @@ const _directConvoMemberSchema = /*#__PURE__*/ v.object({
 });
 const _groupConvoMemberSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.actor.defs#groupConvoMember')),
-	/**
-	 * Who added this member. Only present if the member was added (instead of joining via link).
-	 */
+	/** Who added this member. Only present if the member was added (instead of joining via link). */
 	get addedBy() {
 		return /*#__PURE__*/ v.optional(profileViewBasicSchema);
 	},
-	/**
-	 * The member's role within this conversation. Only present in group conversation member lists.
-	 */
+	/** The member's role within this conversation. Only present in group conversation member lists. */
 	get role() {
 		return memberRoleSchema;
 	},
@@ -32,9 +28,7 @@ const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(AppBskyActorDefs.profileAssociatedSchema);
 	},
 	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-	/**
-	 * Set to true when the actor cannot actively participate in conversations
-	 */
+	/** Set to true when the actor cannot actively participate in conversations */
 	chatDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	did: /*#__PURE__*/ v.didString(),
@@ -49,9 +43,7 @@ const _profileViewBasicSchema = /*#__PURE__*/ v.object({
 		]),
 	),
 	handle: /*#__PURE__*/ v.handleString(),
-	/**
-	 * Union field that has data specific to different kinds of convos.
-	 */
+	/** Union field that has data specific to different kinds of convos. */
 	get kind() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.variant([directConvoMemberSchema, groupConvoMemberSchema, pastGroupConvoMemberSchema]),

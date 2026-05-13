@@ -7,6 +7,7 @@
 
 /**
  * Decodes a JWT token
+ *
  * @param token The token string
  * @returns JSON object from the token
  */
@@ -35,6 +36,7 @@ export const decodeJwt = (token: string): unknown => {
 
 /**
  * Decodes a URL-safe Base64 string
+ *
  * @param str URL-safe Base64 that needed to be decoded
  * @returns The actual string
  */

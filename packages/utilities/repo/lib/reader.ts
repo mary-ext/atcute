@@ -47,11 +47,12 @@ export function* fromUint8Array(buf: Uint8Array): Generator<RepoEntry> {
 
 /**
  * reads a block from the blockmap and validates it against the provided validation function
- * @internal
+ *
  * @param map a mapping of CID string -> actual bytes
  * @param link a CID link to read
  * @param validate a validation function to validate the decoded data
  * @returns the decoded and validated data
+ * @internal
  */
 export const readEntry = <T>(map: EntryMap, link: CidLink, validate: (value: unknown) => value is T): T => {
 	const cid = link.$link;
@@ -67,10 +68,11 @@ export const readEntry = <T>(map: EntryMap, link: CidLink, validate: (value: unk
 
 /**
  * walks the entries of a Merkle Sorted Tree (MST) in a depth-first manner
- * @internal
+ *
  * @param map a mapping of CID string -> actual bytes
  * @param pointer a CID link to the root of the MST
  * @returns a generator that yields the entries of the MST
+ * @internal
  */
 export function* walkMstEntries(map: EntryMap, pointer: CidLink): Generator<NodeEntry> {
 	const data = readEntry(map, pointer, isNodeData);

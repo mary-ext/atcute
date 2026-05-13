@@ -1,11 +1,7 @@
-/**
- * represents a decentralized identifier (DID).
- */
+/** represents a decentralized identifier (DID). */
 export type Did<Method extends string = string> = `did:${Method}:${string}`;
 
-/**
- * represents a decentralized identifier with methods supported in atproto
- */
+/** represents a decentralized identifier with methods supported in atproto */
 export type AtprotoDid = Did<'plc' | 'web'>;
 
 export type AtprotoAudience = `${AtprotoDid}#${string}`;

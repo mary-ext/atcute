@@ -64,6 +64,7 @@ class RichtextBuilder {
 
 	/**
 	 * Add plain text to the rich text
+	 *
 	 * @param text The plain text
 	 * @returns The builder instance, for chaining
 	 */
@@ -76,6 +77,7 @@ class RichtextBuilder {
 
 	/**
 	 * Add decorated text to the rich text
+	 *
 	 * @param text The text itself
 	 * @param feature Feature to imbue on the text
 	 * @returns The builder instance, for chaining
@@ -109,6 +111,7 @@ class RichtextBuilder {
 
 	/**
 	 * Add link to the rich text
+	 *
 	 * @param text Text of the link
 	 * @param uri Valid URL, for example: https://example.com
 	 * @returns The builder instance, for chaining
@@ -119,6 +122,7 @@ class RichtextBuilder {
 
 	/**
 	 * Mention a user in rich text
+	 *
 	 * @param text Text of the mention, usually in the form of `@handle`
 	 * @param did Valid DID, for example: did:plc:ia76kvnndjutgedggx2ibrem
 	 * @returns The builder instance, for chaining
@@ -129,6 +133,7 @@ class RichtextBuilder {
 
 	/**
 	 * Add inline hashtag to the rich text
+	 *
 	 * @param text Text to display
 	 * @param tag The tag, without the pound prefix
 	 * @returns The builder instance, for chaining

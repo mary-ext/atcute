@@ -5,23 +5,24 @@ const _aspectRatioSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.image#aspectRatio')),
 	/**
 	 * Height component of aspect ratio
+	 *
 	 * @minimum 1
 	 */
 	height: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1)]),
 	/**
 	 * Width component of aspect ratio
+	 *
 	 * @minimum 1
 	 */
 	width: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1)]),
 });
 const _imageAttrsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.image#imageAttrs')),
-	/**
-	 * Horizontal alignment of the image within its container
-	 */
+	/** Horizontal alignment of the image within its container */
 	align: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['center', 'left', 'right'])),
 	/**
 	 * Alternative text description for accessibility and screen readers
+	 *
 	 * @maxLength 1000
 	 * @maxGraphemes 300
 	 */
@@ -31,14 +32,13 @@ const _imageAttrsSchema = /*#__PURE__*/ v.object({
 			/*#__PURE__*/ v.stringGraphemes(0, 300),
 		]),
 	),
-	/**
-	 * Image aspect ratio for proper layout before loading
-	 */
+	/** Image aspect ratio for proper layout before loading */
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(aspectRatioSchema);
 	},
 	/**
 	 * AT Protocol blob reference (10MB max). Used when image is uploaded to PDS.
+	 *
 	 * @accept image/*
 	 * @maxSize 10000000
 	 */
@@ -50,11 +50,13 @@ const _imageAttrsSchema = /*#__PURE__*/ v.object({
 	),
 	/**
 	 * Image source URL or blob reference (blob:CID format for AT Protocol blobs)
+	 *
 	 * @maxLength 2000
 	 */
 	src: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 	/**
 	 * Optional image title displayed on hover
+	 *
 	 * @maxLength 500
 	 * @maxGraphemes 200
 	 */
@@ -67,9 +69,7 @@ const _imageAttrsSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.image')),
-	/**
-	 * Image attributes
-	 */
+	/** Image attributes */
 	get attrs() {
 		return imageAttrsSchema;
 	},

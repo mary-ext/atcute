@@ -10,6 +10,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('app.bsky.actor.profile'),
 		/**
 		 * Small image to be displayed next to posts from account. AKA, 'profile picture'
+		 *
 		 * @accept image/png, image/jpeg
 		 * @maxSize 1000000
 		 */
@@ -21,6 +22,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		),
 		/**
 		 * Larger horizontal image to display behind profile view.
+		 *
 		 * @accept image/png, image/jpeg
 		 * @maxSize 1000000
 		 */
@@ -33,6 +35,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		/**
 		 * Free-form profile description text.
+		 *
 		 * @maxLength 2560
 		 * @maxGraphemes 256
 		 */
@@ -55,9 +58,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get joinedViaStarterPack() {
 			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
 		},
-		/**
-		 * Self-label values, specific to the Bluesky application, on the overall account.
-		 */
+		/** Self-label values, specific to the Bluesky application, on the overall account. */
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
@@ -66,6 +67,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		},
 		/**
 		 * Free-form pronouns text.
+		 *
 		 * @maxLength 200
 		 * @maxGraphemes 20
 		 */

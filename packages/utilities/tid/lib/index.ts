@@ -9,16 +9,12 @@ let lastCurrentTime = 0;
 
 const TID_RE = /^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{12}$/;
 
-/**
- * Creates a TID based off provided timestamp and clockid, with no validation.
- */
+/** Creates a TID based off provided timestamp and clockid, with no validation. */
 export const createRaw = (timestamp: number, clockid: number): string => {
 	return s32encode(timestamp).padStart(11, '2') + S32_2CHAR_TABLE[clockid]!;
 };
 
-/**
- * Creates a TID based off provided timestamp and clockid
- */
+/** Creates a TID based off provided timestamp and clockid */
 export const create = (timestamp: number, clockid: number): string => {
 	if (timestamp < 0 || !Number.isSafeInteger(timestamp)) {
 		throw new Error(`invalid timestamp`);
@@ -31,9 +27,7 @@ export const create = (timestamp: number, clockid: number): string => {
 	return createRaw(timestamp, clockid);
 };
 
-/**
- * Return a TID based on current time
- */
+/** Return a TID based on current time */
 export const now = (): string => {
 	const currentTime = getNow();
 	let timestamp: number;
@@ -51,9 +45,7 @@ export const now = (): string => {
 	return createRaw(timestamp, random(1024));
 };
 
-/**
- * Parses a TID, throws on invalid strings.
- */
+/** Parses a TID, throws on invalid strings. */
 export const parse = (tid: string): { timestamp: number; clockid: number } => {
 	if (tid.length !== 13) {
 		throw new Error(`invalid TID`);
@@ -80,9 +72,7 @@ export const parse = (tid: string): { timestamp: number; clockid: number } => {
 	return { timestamp, clockid };
 };
 
-/**
- * Validate if string is a valid TID
- */
+/** Validate if string is a valid TID */
 export const validate = (tid: string): boolean => {
 	return tid.length === 13 && TID_RE.test(tid);
 };

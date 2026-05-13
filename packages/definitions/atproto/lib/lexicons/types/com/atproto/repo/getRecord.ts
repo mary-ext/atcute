@@ -4,21 +4,13 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.getRecord', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The CID of the version of the record. If not specified, then return the most recent version.
-		 */
+		/** The CID of the version of the record. If not specified, then return the most recent version. */
 		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
-		/**
-		 * The NSID of the record collection.
-		 */
+		/** The NSID of the record collection. */
 		collection: /*#__PURE__*/ v.nsidString(),
-		/**
-		 * The handle or DID of the repo.
-		 */
+		/** The handle or DID of the repo. */
 		repo: /*#__PURE__*/ v.actorIdentifierString(),
-		/**
-		 * The Record Key.
-		 */
+		/** The Record Key. */
 		rkey: /*#__PURE__*/ v.recordKeyString(),
 	}),
 	output: {

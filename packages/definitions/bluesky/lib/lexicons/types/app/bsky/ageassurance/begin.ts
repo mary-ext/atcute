@@ -9,21 +9,13 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.ageassurance.begin', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * An ISO 3166-1 alpha-2 code of the user's location.
-			 */
+			/** An ISO 3166-1 alpha-2 code of the user's location. */
 			countryCode: /*#__PURE__*/ v.string(),
-			/**
-			 * The user's email address to receive Age Assurance instructions.
-			 */
+			/** The user's email address to receive Age Assurance instructions. */
 			email: /*#__PURE__*/ v.string(),
-			/**
-			 * The user's preferred language for communication during the Age Assurance process.
-			 */
+			/** The user's preferred language for communication during the Age Assurance process. */
 			language: /*#__PURE__*/ v.string(),
-			/**
-			 * An optional ISO 3166-2 code of the user's region or state within the country.
-			 */
+			/** An optional ISO 3166-2 code of the user's region or state within the country. */
 			regionCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

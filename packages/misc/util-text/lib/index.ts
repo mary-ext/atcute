@@ -4,6 +4,7 @@ const segmenter = new Intl.Segmenter();
 
 /**
  * returns the grapheme length of a string
+ *
  * @param text string to count graphemes in
  * @returns grapheme count
  */
@@ -24,6 +25,7 @@ export const getGraphemeLength = (text: string): number => {
 
 /**
  * checks if the grapheme length of a string is within the specified range
+ *
  * @param text string to check
  * @param min minimum grapheme length (inclusive)
  * @param max maximum grapheme length (inclusive)

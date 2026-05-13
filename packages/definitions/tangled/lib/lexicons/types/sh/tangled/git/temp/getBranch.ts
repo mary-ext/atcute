@@ -6,13 +6,9 @@ import * as ShTangledGitTempDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getBranch', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Branch name to get information for
-		 */
+		/** Branch name to get information for */
 		name: /*#__PURE__*/ v.string(),
-		/**
-		 * AT-URI of the repository
-		 */
+		/** AT-URI of the repository */
 		repo: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {
@@ -21,21 +17,13 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getBranch', {
 			get author() {
 				return /*#__PURE__*/ v.optional(ShTangledGitTempDefs.signatureSchema);
 			},
-			/**
-			 * Latest commit hash on this branch
-			 */
+			/** Latest commit hash on this branch */
 			hash: /*#__PURE__*/ v.string(),
-			/**
-			 * Latest commit message
-			 */
+			/** Latest commit message */
 			message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/**
-			 * Branch name
-			 */
+			/** Branch name */
 			name: /*#__PURE__*/ v.string(),
-			/**
-			 * Timestamp of latest commit
-			 */
+			/** Timestamp of latest commit */
 			when: /*#__PURE__*/ v.datetimeString(),
 		}),
 	},

@@ -1,9 +1,6 @@
 import { isAsciiAlpha, isAsciiAlphaNum } from './utils/ascii.ts';
 
-/**
- * represents an account's handle, using domains as a human-friendly
- * identifier.
- */
+/** represents an account's handle, using domains as a human-friendly identifier. */
 export type Handle = `${string}.${string}`;
 
 // validates a domain label: starts/ends with alphanumeric, middle allows hyphens, max 63 chars

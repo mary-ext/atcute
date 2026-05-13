@@ -1,14 +1,13 @@
 import type { LabelEvent, LabelStore, SignedLabel } from './types.ts';
 
-/**
- * in-memory label store useful for tests and simple deployments
- */
+/** in-memory label store useful for tests and simple deployments */
 export class MemoryLabelStore implements LabelStore {
 	#events: LabelEvent[] = [];
 	#latestSeq = 0;
 
 	/**
 	 * append signed labels
+	 *
 	 * @param labels signed labels
 	 * @returns emitted events
 	 */
@@ -30,6 +29,7 @@ export class MemoryLabelStore implements LabelStore {
 
 	/**
 	 * get latest sequence number
+	 *
 	 * @returns latest sequence, or `null`
 	 */
 	async getLatestSeq(): Promise<number | null> {
@@ -38,6 +38,7 @@ export class MemoryLabelStore implements LabelStore {
 
 	/**
 	 * list events after a sequence cursor
+	 *
 	 * @param options list options
 	 * @returns events in ascending order
 	 */
@@ -61,6 +62,7 @@ export class MemoryLabelStore implements LabelStore {
 
 	/**
 	 * advance the sequence counter without emitting events
+	 *
 	 * @param count number of sequence values to skip
 	 * @returns latest sequence after advancing
 	 */

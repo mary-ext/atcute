@@ -1,9 +1,7 @@
 import type { Did } from '@atcute/lexicons';
 import type { AtprotoOAuthScope } from '@atcute/oauth-types';
 
-/**
- * token set returned from token operations (exchange, refresh).
- */
+/** token set returned from token operations (exchange, refresh). */
 export interface TokenSet {
 	/** authorization server issuer */
 	iss: string;

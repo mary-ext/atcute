@@ -8,16 +8,12 @@ const _aspectRatioSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.image')),
-	/**
-	 * Alt text description of the image, for accessibility.
-	 */
+	/** Alt text description of the image, for accessibility. */
 	alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	get aspectRatio() {
 		return aspectRatioSchema;
 	},
-	/**
-	 * Whether the image should extend to the full width of the container, ignoring padding.
-	 */
+	/** Whether the image should extend to the full width of the container, ignoring padding. */
 	fullBleed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/**
 	 * @accept image/*

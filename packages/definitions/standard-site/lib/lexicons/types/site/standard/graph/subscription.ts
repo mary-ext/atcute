@@ -8,7 +8,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('site.standard.graph.subscription'),
 		createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		/**
-		 * AT-URI reference to the publication record being subscribed to (ex: at://did:plc:abc123/site.standard.publication/xyz789).
+		 * AT-URI reference to the publication record being subscribed to (ex:
+		 * at://did:plc:abc123/site.standard.publication/xyz789).
 		 */
 		publication: /*#__PURE__*/ v.resourceUriString(),
 	}),

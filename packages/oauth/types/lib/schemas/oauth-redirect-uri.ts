@@ -3,8 +3,7 @@ import * as v from 'valibot';
 import { httpsUriSchema, loopbackUriSchema, privateUseUriSchema } from './uri.ts';
 
 /**
- * this is a loopback URI with the additional restriction that the hostname
- * `localhost` is not allowed.
+ * this is a loopback URI with the additional restriction that the hostname `localhost` is not allowed.
  *
  * @see {@link https://datatracker.ietf.org/doc/html/rfc8252#section-8.3 Loopback Redirect Considerations} RFC8252
  *

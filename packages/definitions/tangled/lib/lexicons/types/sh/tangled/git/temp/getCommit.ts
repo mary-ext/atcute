@@ -6,13 +6,9 @@ import * as ShTangledGitTempDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getCommit', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * reference name to resolve
-		 */
+		/** reference name to resolve */
 		ref: /*#__PURE__*/ v.string(),
-		/**
-		 * AT-URI of the repository
-		 */
+		/** AT-URI of the repository */
 		repo: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {

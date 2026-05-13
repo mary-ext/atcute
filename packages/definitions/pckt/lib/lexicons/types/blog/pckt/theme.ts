@@ -5,37 +5,34 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.theme')),
 	/**
 	 * Background tile size as a percentage when tileBackground is true (optional)
+	 *
 	 * @minimum 5
 	 * @maximum 100
 	 */
 	backgroundTileSize: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(5, 100)]),
 	),
-	/**
-	 * Dark mode color palette
-	 */
+	/** Dark mode color palette */
 	get dark() {
 		return paletteSchema;
 	},
 	/**
 	 * Font family name (optional)
+	 *
 	 * @maxLength 100
 	 */
 	font: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 	),
-	/**
-	 * Light mode color palette
-	 */
+	/** Light mode color palette */
 	get light() {
 		return paletteSchema;
 	},
-	/**
-	 * Whether to tile the background image instead of covering (optional)
-	 */
+	/** Whether to tile the background image instead of covering (optional) */
 	tileBackground: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/**
 	 * Content background transparency percentage (optional)
+	 *
 	 * @minimum 0
 	 * @maximum 100
 	 */
@@ -47,26 +44,31 @@ const _paletteSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.theme#palette')),
 	/**
 	 * Accent color (hex value)
+	 *
 	 * @maxLength 7
 	 */
 	accent: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 7)]),
 	/**
 	 * Background color (hex value)
+	 *
 	 * @maxLength 7
 	 */
 	background: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 7)]),
 	/**
 	 * Link color (hex value)
+	 *
 	 * @maxLength 7
 	 */
 	link: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 7)]),
 	/**
 	 * Surface hover color (hex value)
+	 *
 	 * @maxLength 7
 	 */
 	surfaceHover: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 7)]),
 	/**
 	 * Primary text color (hex value)
+	 *
 	 * @maxLength 7
 	 */
 	text: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 7)]),

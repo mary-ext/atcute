@@ -8,9 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.identity.getRecommendedDi
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			alsoKnownAs: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
-			/**
-			 * Recommended rotation keys for PLC dids. Should be undefined (or ignored) for did:webs.
-			 */
+			/** Recommended rotation keys for PLC dids. Should be undefined (or ignored) for did:webs. */
 			rotationKeys: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			services: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 			verificationMethods: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),

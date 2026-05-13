@@ -44,9 +44,7 @@ const _listViewSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/**
 	 * @minLength 1
@@ -69,9 +67,7 @@ const _listViewBasicSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/**
 	 * @minLength 1
@@ -100,30 +96,18 @@ const _notFoundActorSchema = /*#__PURE__*/ v.object({
 const _referencelistSchema = /*#__PURE__*/ v.literal('app.bsky.graph.defs#referencelist');
 const _relationshipSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#relationship')),
-	/**
-	 * if the actor is blocked by this DID, contains the AT-URI of the block record
-	 */
+	/** if the actor is blocked by this DID, contains the AT-URI of the block record */
 	blockedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-	/**
-	 * if the actor is blocked by this DID via a block list, contains the AT-URI of the listblock record
-	 */
+	/** if the actor is blocked by this DID via a block list, contains the AT-URI of the listblock record */
 	blockedByList: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-	/**
-	 * if the actor blocks this DID, this is the AT-URI of the block record
-	 */
+	/** if the actor blocks this DID, this is the AT-URI of the block record */
 	blocking: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-	/**
-	 * if the actor blocks this DID via a block list, this is the AT-URI of the listblock record
-	 */
+	/** if the actor blocks this DID via a block list, this is the AT-URI of the listblock record */
 	blockingByList: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	did: /*#__PURE__*/ v.didString(),
-	/**
-	 * if the actor is followed by this DID, contains the AT-URI of the follow record
-	 */
+	/** if the actor is followed by this DID, contains the AT-URI of the follow record */
 	followedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-	/**
-	 * if the actor follows this DID, this is the AT-URI of the follow record
-	 */
+	/** if the actor follows this DID, this is the AT-URI of the follow record */
 	following: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _starterPackViewSchema = /*#__PURE__*/ v.object({
@@ -132,9 +116,7 @@ const _starterPackViewSchema = /*#__PURE__*/ v.object({
 	get creator() {
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
-	/**
-	 * @maxLength 3
-	 */
+	/** @maxLength 3 */
 	get feeds() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(AppBskyFeedDefs.generatorViewSchema), [
@@ -143,13 +125,9 @@ const _starterPackViewSchema = /*#__PURE__*/ v.object({
 		);
 	},
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	joinedAllTimeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	joinedWeekCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
@@ -157,9 +135,7 @@ const _starterPackViewSchema = /*#__PURE__*/ v.object({
 	get list() {
 		return /*#__PURE__*/ v.optional(listViewBasicSchema);
 	},
-	/**
-	 * @maxLength 12
-	 */
+	/** @maxLength 12 */
 	get listItemsSample() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(listItemViewSchema), [
@@ -177,20 +153,14 @@ const _starterPackViewBasicSchema = /*#__PURE__*/ v.object({
 		return AppBskyActorDefs.profileViewBasicSchema;
 	},
 	indexedAt: /*#__PURE__*/ v.datetimeString(),
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	joinedAllTimeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	joinedWeekCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	listItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	record: /*#__PURE__*/ v.unknown(),
 	uri: /*#__PURE__*/ v.resourceUriString(),

@@ -11,9 +11,7 @@ export interface PlcErrorBody {
 	message: string;
 }
 
-/**
- * error thrown when the plc server returns a non-ok response
- */
+/** error thrown when the plc server returns a non-ok response */
 export class PlcClientError extends Error {
 	override readonly name = 'PlcClientError';
 
@@ -28,6 +26,7 @@ export class PlcClientError extends Error {
 
 	/**
 	 * creates a PlcClientError from a failed fetch response
+	 *
 	 * @param response the failed response
 	 * @returns the error with parsed body if available
 	 */
@@ -100,9 +99,7 @@ export interface PlcRequestOptions {
 	signal?: AbortSignal;
 }
 
-/**
- * client for interacting with plc.directory
- */
+/** client for interacting with plc.directory */
 export class PlcClient {
 	readonly serviceUrl: string;
 	#fetch: typeof globalThis.fetch;
@@ -114,6 +111,7 @@ export class PlcClient {
 
 	/**
 	 * fetches the DID document for a did:plc
+	 *
 	 * @param did the did:plc identifier
 	 * @param options request options
 	 * @returns the DID document
@@ -132,6 +130,7 @@ export class PlcClient {
 
 	/**
 	 * fetches the current identity state for a did:plc
+	 *
 	 * @param did the did:plc identifier
 	 * @param options request options
 	 * @returns the current plc state
@@ -150,6 +149,7 @@ export class PlcClient {
 
 	/**
 	 * fetches the operation log for a did:plc
+	 *
 	 * @param did the did:plc identifier
 	 * @param options request options
 	 * @returns the operation log
@@ -168,6 +168,7 @@ export class PlcClient {
 
 	/**
 	 * fetches the auditable log for a did:plc (includes CIDs and timestamps)
+	 *
 	 * @param did the did:plc identifier
 	 * @param options request options
 	 * @returns the indexed entry log
@@ -186,6 +187,7 @@ export class PlcClient {
 
 	/**
 	 * fetches the last operation for a did:plc
+	 *
 	 * @param did the did:plc identifier
 	 * @param options request options
 	 * @returns the last operation or tombstone
@@ -207,6 +209,7 @@ export class PlcClient {
 
 	/**
 	 * submits a signed operation to plc.directory
+	 *
 	 * @param did the did:plc identifier
 	 * @param operation the signed operation to submit
 	 * @param options request options
@@ -232,6 +235,7 @@ export class PlcClient {
 
 	/**
 	 * checks if the plc directory is reachable
+	 *
 	 * @param options request options
 	 * @returns true if reachable
 	 */

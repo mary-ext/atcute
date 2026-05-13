@@ -37,9 +37,7 @@ const _formats_v0Schema = /*#__PURE__*/ v.object({
 });
 const _itemViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.collection.item#itemView')),
-	/**
-	 * @default false
-	 */
+	/** @default false */
 	adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
@@ -52,17 +50,15 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.string(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('blue.moji.collection.item'),
-		/**
-		 * @default false
-		 */
+		/** @default false */
 		adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 		alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		copyOf: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
+		 * @default '◌'
 		 * @maxLength 10
 		 * @maxGraphemes 1
-		 * @default "◌"
 		 */
 		fallbackText: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
@@ -71,21 +67,15 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			]),
 			'◌',
 		),
-		/**
-		 * Open union to allow for future formats
-		 */
+		/** Open union to allow for future formats */
 		get formats() {
 			return /*#__PURE__*/ v.variant([formats_v0Schema]);
 		},
-		/**
-		 * Self-label values for this emoji. Effectively content warnings.
-		 */
+		/** Self-label values for this emoji. Effectively content warnings. */
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
-		/**
-		 * Should be in the format :emoji:
-		 */
+		/** Should be in the format :emoji: */
 		name: /*#__PURE__*/ v.string(),
 	}),
 );

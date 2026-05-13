@@ -7,12 +7,11 @@ import * as ComAtprotoSyncDefs from './defs.ts';
 const _hostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.sync.listHosts#host')),
 	accountCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/**
-	 * hostname of server; not a URL (no scheme)
-	 */
+	/** hostname of server; not a URL (no scheme) */
 	hostname: /*#__PURE__*/ v.string(),
 	/**
-	 * Recent repo stream event sequence number. May be delayed from actual stream processing (eg, persisted cursor not in-memory cursor).
+	 * Recent repo stream event sequence number. May be delayed from actual stream processing (eg, persisted
+	 * cursor not in-memory cursor).
 	 */
 	seq: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get status() {
@@ -23,9 +22,9 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listHosts', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 200
 		 * @minimum 1
 		 * @maximum 1000
-		 * @default 200
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 1000)]),
@@ -37,7 +36,8 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.listHosts', {
 		schema: /*#__PURE__*/ v.object({
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
-			 * Sort order is not formally specified. Recommended order is by time host was first seen by the server, with oldest first.
+			 * Sort order is not formally specified. Recommended order is by time host was first seen by the server,
+			 * with oldest first.
 			 */
 			get hosts() {
 				return /*#__PURE__*/ v.array(hostSchema);

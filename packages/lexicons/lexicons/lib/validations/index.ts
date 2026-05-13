@@ -12,9 +12,9 @@ import { assert } from '../utils.ts';
 import { allowsEval, isArray, isObject, lazy, lazyProperty } from './utils.ts';
 
 /**
- * flag indicating whether xrpc schema generation helpers are used. set to true
- * when query() or procedure() is called. this enables conditional tree-shaking
- * of validation code when schemas are not used.
+ * flag indicating whether xrpc schema generation helpers are used. set to true when query() or procedure() is
+ * called. this enables conditional tree-shaking of validation code when schemas are not used.
+ *
  * @deprecated internal flag for tree-shaking, do not use directly
  */
 export let xrpcSchemaGenerated = false;

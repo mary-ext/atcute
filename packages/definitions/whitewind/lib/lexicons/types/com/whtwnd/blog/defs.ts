@@ -8,17 +8,13 @@ const _blobMetadataSchema = /*#__PURE__*/ v.object({
 });
 const _blogEntrySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.whtwnd.blog.defs#blogEntry')),
-	/**
-	 * @maxLength 100000
-	 */
+	/** @maxLength 100000 */
 	content: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100000)]),
 	createdAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _commentSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.whtwnd.blog.defs#comment')),
-	/**
-	 * @maxLength 1000
-	 */
+	/** @maxLength 1000 */
 	content: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 1000)]),
 	entryUri: /*#__PURE__*/ v.resourceUriString(),
 });

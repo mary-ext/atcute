@@ -5,13 +5,9 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getRecord', {
 	params: /*#__PURE__*/ v.object({
 		collection: /*#__PURE__*/ v.nsidString(),
-		/**
-		 * The DID of the repo.
-		 */
+		/** The DID of the repo. */
 		did: /*#__PURE__*/ v.didString(),
-		/**
-		 * Record Key
-		 */
+		/** Record Key */
 		rkey: /*#__PURE__*/ v.recordKeyString(),
 	}),
 	output: {

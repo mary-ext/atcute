@@ -1,13 +1,9 @@
-/**
- * checks if a hostname is a loopback address
- */
+/** checks if a hostname is a loopback address */
 export const isLoopbackHost = (hostname: string): boolean => {
 	return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
 };
 
-/**
- * checks if a hostname is an IP address (IPv4 or IPv6)
- */
+/** checks if a hostname is an IP address (IPv4 or IPv6) */
 export const isHostnameIP = (hostname: string): boolean => {
 	// IPv4
 	if (/^\d+\.\d+\.\d+\.\d+$/.test(hostname)) {
@@ -38,8 +34,8 @@ export const isLocalHostname = (hostname: string): boolean => {
 /**
  * extracts the path from a URL without relying on URL constructor normalization
  *
- * this is needed because the URL constructor normalizes paths (e.g., removes `.` and `..` segments),
- * which can be used to bypass validation checks
+ * this is needed because the URL constructor normalizes paths (e.g., removes `.` and `..` segments), which
+ * can be used to bypass validation checks
  */
 export const extractUrlPath = (url: string): string => {
 	const endOfProtocol = url.startsWith('https://') ? 8 : url.startsWith('http://') ? 7 : -1;
@@ -71,9 +67,7 @@ export const extractUrlPath = (url: string): string => {
 	return url.substring(pathStart, pathEnd) || '/';
 };
 
-/**
- * checks if an item is the last occurrence in an array (for duplicate detection)
- */
+/** checks if an item is the last occurrence in an array (for duplicate detection) */
 export const isLastOccurrence = <T>(item: T, index: number, array: readonly T[]): boolean => {
 	return array.lastIndexOf(item) === index;
 };

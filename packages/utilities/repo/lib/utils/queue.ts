@@ -18,9 +18,7 @@ class Queue<T> implements Iterable<T> {
 		return this.#size;
 	}
 
-	/**
-	 * clear the queue
-	 */
+	/** clear the queue */
 	clear(): void {
 		this.#head = undefined;
 		this.#tail = undefined;
@@ -29,6 +27,7 @@ class Queue<T> implements Iterable<T> {
 
 	/**
 	 * adds a value to the end of the queue
+	 *
 	 * @param value value to add
 	 * @returns the queue instance
 	 */
@@ -49,6 +48,7 @@ class Queue<T> implements Iterable<T> {
 
 	/**
 	 * adds a value to the front of the queue
+	 *
 	 * @param value value to add
 	 * @returns the queue instance
 	 */
@@ -67,6 +67,7 @@ class Queue<T> implements Iterable<T> {
 
 	/**
 	 * removes the first value from the queue
+	 *
 	 * @returns first queued value, or undefined if empty
 	 */
 	dequeue(): T | undefined {
@@ -88,15 +89,14 @@ class Queue<T> implements Iterable<T> {
 
 	/**
 	 * get the first value without removing from queue
+	 *
 	 * @returns first queued value, or undefined if empty
 	 */
 	peek(): T | undefined {
 		return this.#head?.value;
 	}
 
-	/**
-	 * returns an iterator that drains all values from the queue
-	 */
+	/** returns an iterator that drains all values from the queue */
 	drain(): IterableIterator<T, undefined, undefined> {
 		// oxlint-disable-next-line no-this-alias
 		const self = this;
@@ -124,9 +124,7 @@ class Queue<T> implements Iterable<T> {
 		};
 	}
 
-	/**
-	 * iterates over the queue without draining
-	 */
+	/** iterates over the queue without draining */
 	[Symbol.iterator](): Iterator<T, undefined, undefined> {
 		let current = this.#head;
 

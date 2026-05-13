@@ -9,7 +9,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		pull: /*#__PURE__*/ v.resourceUriString(),
 		/**
 		 * status of the pull request
-		 * @default "sh.tangled.repo.pull.status.open"
+		 *
+		 * @default 'sh.tangled.repo.pull.status.open'
 		 */
 		status: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<

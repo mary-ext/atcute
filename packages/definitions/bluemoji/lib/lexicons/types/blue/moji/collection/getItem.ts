@@ -6,13 +6,9 @@ import * as BlueMojiCollectionItem from './item.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('blue.moji.collection.getItem', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The Bluemoji alias/rkey.
-		 */
+		/** The Bluemoji alias/rkey. */
 		name: /*#__PURE__*/ v.string(),
-		/**
-		 * The handle or DID of the repo.
-		 */
+		/** The handle or DID of the repo. */
 		repo: /*#__PURE__*/ v.actorIdentifierString(),
 	}),
 	output: {

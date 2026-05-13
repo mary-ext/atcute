@@ -6,23 +6,19 @@ import * as AppBskyGraphDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getLists', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The account (actor) to enumerate lists from.
-		 */
+		/** The account (actor) to enumerate lists from. */
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		/**
-		 * Optional filter by list purpose. If not specified, all supported types are returned.
-		 */
+		/** Optional filter by list purpose. If not specified, all supported types are returned. */
 		purposes: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.array(/*#__PURE__*/ v.string<'curatelist' | 'modlist' | (string & {})>()),
 		),

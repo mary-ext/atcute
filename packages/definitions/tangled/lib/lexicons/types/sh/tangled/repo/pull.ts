@@ -26,9 +26,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 const _roundSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.repo.pull#round')),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
-	/**
-	 * @accept application/gzip
-	 */
+	/** @accept application/gzip */
 	patchBlob: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
 		/*#__PURE__*/ v.blobAccept(['application/gzip']),
 	]),

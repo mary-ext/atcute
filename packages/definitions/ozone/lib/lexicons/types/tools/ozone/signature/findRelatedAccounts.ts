@@ -10,9 +10,9 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.signature.findRelatedAcco
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		did: /*#__PURE__*/ v.didString(),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),

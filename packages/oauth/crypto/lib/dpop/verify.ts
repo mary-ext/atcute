@@ -57,9 +57,7 @@ export interface DpopVerifyOptions {
 	maxClockSkew?: number;
 }
 
-/**
- * error thrown when dpop verification fails.
- */
+/** error thrown when dpop verification fails. */
 export class DpopVerifyError extends Error {
 	code: 'missing' | 'invalid' | 'expired' | 'nonce_required';
 

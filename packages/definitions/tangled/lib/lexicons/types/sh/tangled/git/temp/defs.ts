@@ -7,32 +7,22 @@ const _blobSchema = /*#__PURE__*/ v.object({
 		return commitSchema;
 	},
 	mode: /*#__PURE__*/ v.string(),
-	/**
-	 * The file name
-	 */
+	/** The file name */
 	name: /*#__PURE__*/ v.string(),
-	/**
-	 * File size in bytes
-	 */
+	/** File size in bytes */
 	size: /*#__PURE__*/ v.integer(),
-	/**
-	 * Submodule information if path is a submodule
-	 */
+	/** Submodule information if path is a submodule */
 	get submodule() {
 		return /*#__PURE__*/ v.optional(submoduleSchema);
 	},
 });
 const _branchSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.git.temp.defs#branch')),
-	/**
-	 * hydrated commit object
-	 */
+	/** hydrated commit object */
 	get commit() {
 		return commitSchema;
 	},
-	/**
-	 * branch name
-	 */
+	/** branch name */
 	name: /*#__PURE__*/ v.string(),
 });
 const _commitSchema = /*#__PURE__*/ v.object({
@@ -54,40 +44,26 @@ const _commitSchema = /*#__PURE__*/ v.object({
 const _hashSchema = /*#__PURE__*/ v.string();
 const _signatureSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.git.temp.defs#signature')),
-	/**
-	 * Person email
-	 */
+	/** Person email */
 	email: /*#__PURE__*/ v.string(),
-	/**
-	 * Person name
-	 */
+	/** Person name */
 	name: /*#__PURE__*/ v.string(),
-	/**
-	 * Timestamp of the signature
-	 */
+	/** Timestamp of the signature */
 	when: /*#__PURE__*/ v.datetimeString(),
 });
 const _submoduleSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.git.temp.defs#submodule')),
-	/**
-	 * Branch to track in the submodule
-	 */
+	/** Branch to track in the submodule */
 	branch: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * Submodule name
-	 */
+	/** Submodule name */
 	name: /*#__PURE__*/ v.string(),
-	/**
-	 * Submodule repository URL
-	 */
+	/** Submodule repository URL */
 	url: /*#__PURE__*/ v.string(),
 });
 const _tagSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.git.temp.defs#tag')),
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * tag name
-	 */
+	/** tag name */
 	name: /*#__PURE__*/ v.string(),
 	get tagger() {
 		return signatureSchema;

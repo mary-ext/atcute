@@ -14,19 +14,19 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		},
 		performedAt: /*#__PURE__*/ v.datetimeString(),
 		/**
-		 * The subject (task, pull or discussion) of this label. Appviews may apply a `scope` check and refuse this op.
+		 * The subject (task, pull or discussion) of this label. Appviews may apply a `scope` check and refuse
+		 * this op.
 		 */
 		subject: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );
 const _operandSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.label.op#operand')),
-	/**
-	 * ATURI to the label definition
-	 */
+	/** ATURI to the label definition */
 	key: /*#__PURE__*/ v.resourceUriString(),
 	/**
-	 * Stringified value of the label. This is first unstringed by appviews and then interpreted as a concrete value.
+	 * Stringified value of the label. This is first unstringed by appviews and then interpreted as a concrete
+	 * value.
 	 */
 	value: /*#__PURE__*/ v.string(),
 });

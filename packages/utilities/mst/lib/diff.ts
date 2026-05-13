@@ -3,9 +3,7 @@ import type { CidLink } from '@atcute/cid';
 import type { NodeStore } from './node-store.ts';
 import { NodeWalker } from './node-walker.ts';
 
-/**
- * type of change to a record
- */
+/** type of change to a record */
 export const DeltaType = {
 	CREATED: 1,
 	UPDATED: 2,
@@ -13,9 +11,7 @@ export const DeltaType = {
 } as const;
 export type DeltaType = (typeof DeltaType)[keyof typeof DeltaType];
 
-/**
- * Represents a change to a single record
- */
+/** Represents a change to a single record */
 export interface RecordDelta {
 	/** type of change */
 	deltaType: DeltaType;
@@ -29,6 +25,7 @@ export interface RecordDelta {
 
 /**
  * Given two sets of MST nodes, returns an iterator of record-level changes
+ *
  * @param ns the node store
  * @param created set of node CIDs that were created
  * @param deleted set of node CIDs that were deleted
@@ -95,8 +92,8 @@ export async function* recordDiff(
 }
 
 /**
- * Slow but obvious MST diff implementation for testing
- * Enumerates all nodes in both trees and compares them
+ * Slow but obvious MST diff implementation for testing Enumerates all nodes in both trees and compares them
+ *
  * @param ns the node store
  * @param rootA CID of first MST root
  * @param rootB CID of second MST root
@@ -137,9 +134,7 @@ export const verySlowMstDiff = async (
 	return [created, deleted];
 };
 
-/**
- * Helper to iterate over all node CIDs in a tree
- */
+/** Helper to iterate over all node CIDs in a tree */
 async function* iterNodeCids(walker: NodeWalker): AsyncGenerator<string> {
 	// Always yield the current node
 	yield (await walker.frame.node.cid()).$link;
@@ -160,6 +155,7 @@ const EMPTY_NODE_CID = 'bafyreie5737gdxlw5i64vzichcalba3z2v5n6icifvx5xytvske7mr3
 
 /**
  * Efficiently computes the difference between two MSTs
+ *
  * @param ns the node store
  * @param rootA CID of first MST root
  * @param rootB CID of second MST root
@@ -203,9 +199,8 @@ export const mstDiff = async (
 };
 
 /**
- * Recursive helper for mstDiff
- * Theory: most trees that get compared will have lots of shared blocks (which we can skip over)
- * Completely different trees will inevitably have to visit every node.
+ * Recursive helper for mstDiff Theory: most trees that get compared will have lots of shared blocks (which we
+ * can skip over) Completely different trees will inevitably have to visit every node.
  */
 const mstDiffRecursive = async (
 	created: Set<string>,

@@ -39,9 +39,7 @@ const _blockSchema = /*#__PURE__*/ v.object({
 		]);
 	},
 	height: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/**
-	 * The rotation of the block in degrees
-	 */
+	/** The rotation of the block in degrees */
 	rotation: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	width: /*#__PURE__*/ v.integer(),
 	x: /*#__PURE__*/ v.integer(),

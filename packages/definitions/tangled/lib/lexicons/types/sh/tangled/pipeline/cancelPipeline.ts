@@ -7,17 +7,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.pipeline.cancelPipelin
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * pipeline at-uri
-			 */
+			/** pipeline at-uri */
 			pipeline: /*#__PURE__*/ v.resourceUriString(),
-			/**
-			 * repo at-uri, spindle can't resolve repo from pipeline at-uri yet
-			 */
+			/** repo at-uri, spindle can't resolve repo from pipeline at-uri yet */
 			repo: /*#__PURE__*/ v.resourceUriString(),
-			/**
-			 * workflow name
-			 */
+			/** workflow name */
 			workflow: /*#__PURE__*/ v.string(),
 		}),
 	},

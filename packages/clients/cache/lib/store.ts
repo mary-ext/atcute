@@ -17,9 +17,7 @@ export interface NormalizedCacheOptions {
 	wrapEntity?: (entity: unknown) => unknown;
 }
 
-/**
- * normalized cache store for AT Protocol responses
- */
+/** normalized cache store for AT Protocol responses */
 export class NormalizedCache {
 	#schemaToTypeId = new Map<ObjectSchema, EntityTypeId>();
 
@@ -103,6 +101,7 @@ export class NormalizedCache {
 
 	/**
 	 * register an entity type for normalization
+	 *
 	 * @param definition entity definition with schema, key extractor, and optional merge function
 	 */
 	define<T extends ObjectSchema>(definition: EntityDefinition<T>): void {
@@ -130,6 +129,7 @@ export class NormalizedCache {
 
 	/**
 	 * walk response using schema, normalize and cache entities
+	 *
 	 * @param schema the response schema
 	 * @param data the response data
 	 * @returns response with cached entity refs swapped in
@@ -140,6 +140,7 @@ export class NormalizedCache {
 
 	/**
 	 * create a reusable normalizer function for a schema
+	 *
 	 * @param schema the response schema
 	 * @returns function that normalizes data according to schema
 	 */
@@ -149,6 +150,7 @@ export class NormalizedCache {
 
 	/**
 	 * get entity from cache by schema and key
+	 *
 	 * @param schema the entity schema
 	 * @param key the entity key
 	 * @returns the cached entity or undefined if not found/collected
@@ -165,6 +167,7 @@ export class NormalizedCache {
 
 	/**
 	 * check if entity exists in cache
+	 *
 	 * @param schema the entity schema
 	 * @param key the entity key
 	 */
@@ -180,6 +183,7 @@ export class NormalizedCache {
 
 	/**
 	 * get all cached entities of a type
+	 *
 	 * @param schema the entity schema
 	 * @returns map of key to entity (only includes live refs)
 	 */
@@ -203,6 +207,7 @@ export class NormalizedCache {
 
 	/**
 	 * set entity directly in cache
+	 *
 	 * @param schema the entity schema
 	 * @param key the entity key
 	 * @param entity the entity to cache
@@ -230,6 +235,7 @@ export class NormalizedCache {
 
 	/**
 	 * update entity with updater function
+	 *
 	 * @param schema the entity schema
 	 * @param key the entity key
 	 * @param updater function that returns updated entity
@@ -260,6 +266,7 @@ export class NormalizedCache {
 
 	/**
 	 * delete entity from cache
+	 *
 	 * @param schema the entity schema
 	 * @param key the entity key
 	 * @returns true if entity was found and deleted
@@ -282,6 +289,7 @@ export class NormalizedCache {
 
 	/**
 	 * delete all entities of a type
+	 *
 	 * @param schema the entity schema
 	 */
 	deleteType(schema: ObjectSchema): void {
@@ -312,6 +320,7 @@ export class NormalizedCache {
 
 	/**
 	 * subscribe to changes for a specific entity
+	 *
 	 * @param schema the entity schema
 	 * @param key the entity key
 	 * @param callback called when entity changes
@@ -345,6 +354,7 @@ export class NormalizedCache {
 
 	/**
 	 * subscribe to all changes for an entity type
+	 *
 	 * @param schema the entity schema
 	 * @param callback called when any entity of this type changes
 	 * @returns unsubscribe function

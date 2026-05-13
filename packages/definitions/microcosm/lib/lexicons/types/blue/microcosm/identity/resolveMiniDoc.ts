@@ -4,29 +4,22 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.identity.resolveMiniDoc', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * handle or DID to resolve
-		 */
+		/** handle or DID to resolve */
 		identifier: /*#__PURE__*/ v.actorIdentifierString(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * DID, bi-directionally verified if a handle was provided in the query
-			 */
+			/** DID, bi-directionally verified if a handle was provided in the query */
 			did: /*#__PURE__*/ v.didString(),
 			/**
-			 * the validated handle of the account or 'handle.invalid' if the handle did not bi-directionally match the DID document
+			 * the validated handle of the account or 'handle.invalid' if the handle did not bi-directionally match
+			 * the DID document
 			 */
 			handle: /*#__PURE__*/ v.handleString(),
-			/**
-			 * the identity's PDS URL
-			 */
+			/** the identity's PDS URL */
 			pds: /*#__PURE__*/ v.genericUriString(),
-			/**
-			 * the atproto signing key publicKeyMultibase
-			 */
+			/** the atproto signing key publicKeyMultibase */
 			signing_key: /*#__PURE__*/ v.string(),
 		}),
 	},

@@ -2,8 +2,10 @@ import * as v from 'valibot';
 
 import { jwkPubSchema, jwkSchema, type Jwk, type JwkPub } from './jwk.ts';
 
-/** JWKS (JSON Web Key Set). implementations SHOULD ignore JWKs within a JWK Set that use unknown
- * `kty` values, are missing required members, or have values out of the supported ranges. */
+/**
+ * JWKS (JSON Web Key Set). implementations SHOULD ignore JWKs within a JWK Set that use unknown `kty` values,
+ * are missing required members, or have values out of the supported ranges.
+ */
 export const jwksSchema = v.looseObject({
 	keys: v.pipe(
 		v.array(v.unknown()),

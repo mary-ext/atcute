@@ -6,23 +6,19 @@ import * as AppBskyActorDefs from '../actor/defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getRepostedBy', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * If supplied, filters to reposts of specific version (by CID) of the post record.
-		 */
+		/** If supplied, filters to reposts of specific version (by CID) of the post record. */
 		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		/**
-		 * Reference (AT-URI) of post record
-		 */
+		/** Reference (AT-URI) of post record */
 		uri: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {

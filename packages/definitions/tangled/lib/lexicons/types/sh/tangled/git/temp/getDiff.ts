@@ -4,17 +4,11 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getDiff', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * AT-URI of the repository
-		 */
+		/** AT-URI of the repository */
 		repo: /*#__PURE__*/ v.resourceUriString(),
-		/**
-		 * First revision (commit, branch, or tag)
-		 */
+		/** First revision (commit, branch, or tag) */
 		rev1: /*#__PURE__*/ v.string(),
-		/**
-		 * Second revision (commit, branch, or tag)
-		 */
+		/** Second revision (commit, branch, or tag) */
 		rev2: /*#__PURE__*/ v.string(),
 	}),
 	output: {

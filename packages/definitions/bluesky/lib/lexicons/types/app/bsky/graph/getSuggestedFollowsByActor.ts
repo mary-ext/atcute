@@ -12,18 +12,19 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getSuggestedFollowsByA
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			/**
-			 * DEPRECATED, unused. Previously: if true, response has fallen-back to generic results, and is not scoped using relativeToDid
+			 * DEPRECATED, unused. Previously: if true, response has fallen-back to generic results, and is not
+			 * scoped using relativeToDid
+			 *
 			 * @default false
 			 */
 			isFallback: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 			/**
 			 * DEPRECATED: use recIdStr instead.
+			 *
 			 * @deprecated
 			 */
 			recId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-			/**
-			 * Snowflake for this recommendation, use when submitting recommendation events.
-			 */
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
 			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get suggestions() {
 				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);

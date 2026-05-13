@@ -4,37 +4,30 @@ import { assertMstKey } from './key.ts';
 import { NodeStore } from './node-store.ts';
 import { MSTNode, getKeyHeight } from './node.ts';
 
-/**
- * replaces element at index with a new value
- */
+/** replaces element at index with a new value */
 const replaceAt = <T>(arr: readonly T[], index: number, value: T): readonly T[] => {
 	return arr.with(index, value);
 };
 
-/**
- * inserts element at index
- */
+/** inserts element at index */
 const insertAt = <T>(arr: readonly T[], index: number, value: T): readonly T[] => {
 	return arr.toSpliced(index, 0, value);
 };
 
-/**
- * removes element at index
- */
+/** removes element at index */
 const removeAt = <T>(arr: readonly T[], index: number): readonly T[] => {
 	return arr.toSpliced(index, 1);
 };
 
 /**
- * NodeWrangler is where core MST transformation ops are implemented, backed
- * by a NodeStore
+ * NodeWrangler is where core MST transformation ops are implemented, backed by a NodeStore
  *
- * the external APIs take a CID (the MST root) and return a CID (the new root),
- * while storing any newly created nodes in the NodeStore.
+ * the external APIs take a CID (the MST root) and return a CID (the new root), while storing any newly
+ * created nodes in the NodeStore.
  *
- * neither method should ever fail - deleting a node that doesn't exist is a noop,
- * and adding the same node twice with the same value is also a nop. callers
- * can detect these cases by seeing if the initial and final CIDs changed.
+ * neither method should ever fail - deleting a node that doesn't exist is a noop, and adding the same node
+ * twice with the same value is also a nop. callers can detect these cases by seeing if the initial and final
+ * CIDs changed.
  */
 export class NodeWrangler {
 	/** underlying node store */
@@ -46,6 +39,7 @@ export class NodeWrangler {
 
 	/**
 	 * inserts or updates a record in the MST
+	 *
 	 * @param rootCid CID of the root node (or null for empty tree)
 	 * @param key the key to insert/update
 	 * @param val the value CID to associate with the key
@@ -73,6 +67,7 @@ export class NodeWrangler {
 
 	/**
 	 * deletes a record from the MST
+	 *
 	 * @param rootCid CID of the root node (or null for empty tree)
 	 * @param key the key to delete
 	 * @returns the new root CID
@@ -97,6 +92,7 @@ export class NodeWrangler {
 
 	/**
 	 * inserts a key-value pair into the current node
+	 *
 	 * @param node the node to insert into
 	 * @param key the key to insert
 	 * @param val the value to insert
@@ -131,6 +127,7 @@ export class NodeWrangler {
 
 	/**
 	 * recursively inserts a key-value pair, growing the tree if necessary
+	 *
 	 * @param node the current node
 	 * @param key the key to insert
 	 * @param val the value to insert
@@ -186,6 +183,7 @@ export class NodeWrangler {
 
 	/**
 	 * splits a subtree around a key, producing left and right subtrees
+	 *
 	 * @param nodeCid the CID of the subtree to split (or null)
 	 * @param key the key to split around
 	 * @returns tuple of [left subtree CID, right subtree CID]
@@ -218,6 +216,7 @@ export class NodeWrangler {
 
 	/**
 	 * strips empty nodes from the top of the tree
+	 *
 	 * @param nodeCid the CID of the node to check
 	 * @returns the CID after removing empty top nodes
 	 */
@@ -237,6 +236,7 @@ export class NodeWrangler {
 
 	/**
 	 * recursively deletes a key from the tree
+	 *
 	 * @param node the current node
 	 * @param key the key to delete
 	 * @param keyHeight the height of the key
@@ -302,6 +302,7 @@ export class NodeWrangler {
 
 	/**
 	 * merges two adjacent subtrees
+	 *
 	 * @param leftCid CID of the left subtree (or null)
 	 * @param rightCid CID of the right subtree (or null)
 	 * @returns the CID of the merged subtree (or null if both are null)

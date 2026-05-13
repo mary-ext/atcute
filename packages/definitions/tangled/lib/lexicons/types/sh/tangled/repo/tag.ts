@@ -4,13 +4,9 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.tag', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Repository identifier in format 'did:plc:.../repoName'
-		 */
+		/** Repository identifier in format 'did:plc:.../repoName' */
 		repo: /*#__PURE__*/ v.string(),
-		/**
-		 * Name of tag, such as v1.3.0
-		 */
+		/** Name of tag, such as v1.3.0 */
 		tag: /*#__PURE__*/ v.string(),
 	}),
 	output: {

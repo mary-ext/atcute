@@ -4,29 +4,22 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('blue.microcosm.repo.getRecordByUri', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * the at-uri of the record (identifier can be a DID or handle)
-		 */
+		/** the at-uri of the record (identifier can be a DID or handle) */
 		at_uri: /*#__PURE__*/ v.resourceUriString(),
 		/**
-		 * optional CID of the version of the record. if not specified, return the most recent version. if specified and a newer version exists, returns 404.
+		 * optional CID of the version of the record. if not specified, return the most recent version. if
+		 * specified and a newer version exists, returns 404.
 		 */
 		cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * CID for this exact version of the record
-			 */
+			/** CID for this exact version of the record */
 			cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
-			/**
-			 * at-uri for this record
-			 */
+			/** at-uri for this record */
 			uri: /*#__PURE__*/ v.resourceUriString(),
-			/**
-			 * the record itself
-			 */
+			/** the record itself */
 			value: /*#__PURE__*/ v.unknown(),
 		}),
 	},

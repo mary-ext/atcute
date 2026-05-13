@@ -4,19 +4,16 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('fyi.frontpage.feed.getFeedSkeleton', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Pagination cursor.
-		 */
+		/** Pagination cursor. */
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		/**
-		 * AT URI of the feed generator record.
-		 */
+		/** AT URI of the feed generator record. */
 		feed: /*#__PURE__*/ v.resourceUriString(),
 		/**
 		 * Maximum number of items to return.
+		 *
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
@@ -37,9 +34,7 @@ const _skeletonFeedPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('fyi.frontpage.feed.getFeedSkeleton#skeletonFeedPost'),
 	),
-	/**
-	 * AT URI of the post.
-	 */
+	/** AT URI of the post. */
 	post: /*#__PURE__*/ v.resourceUriString(),
 });
 

@@ -4,13 +4,9 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.sync.getRepo', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The DID of the repo.
-		 */
+		/** The DID of the repo. */
 		did: /*#__PURE__*/ v.didString(),
-		/**
-		 * The revision ('rev') of the repo to create a diff from.
-		 */
+		/** The revision ('rev') of the repo to create a diff from. */
 		since: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.tidString()),
 	}),
 	output: {

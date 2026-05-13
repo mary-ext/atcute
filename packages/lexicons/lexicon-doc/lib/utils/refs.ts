@@ -3,10 +3,8 @@ import { isNsid, type Nsid } from '@atcute/lexicons/syntax';
 import type { LexiconDoc, LexRefVariant, LexUserType } from '../types.ts';
 
 /**
- * represents a lexicon definition reference
- * - full NSID: `com.example.lexicon` (refers to #main)
- * - NSID with fragment: `com.example.lexicon#defId`
- * - relative ref: `#defId` (requires context NSID to resolve)
+ * represents a lexicon definition reference - full NSID: `com.example.lexicon` (refers to #main) - NSID with
+ * fragment: `com.example.lexicon#defId` - relative ref: `#defId` (requires context NSID to resolve)
  */
 export type LexiconRef = Nsid | `${Nsid}#${string}` | `#${string}`;
 
@@ -17,6 +15,7 @@ export interface ParsedLexiconRef {
 
 /**
  * formats a parsed lexicon reference back to a string
+ *
  * @param parsed the parsed reference
  * @param context if provided and matches parsed.nsid, outputs a relative ref (#defId)
  * @returns formatted lexicon reference string
@@ -33,6 +32,7 @@ export const formatLexiconRef = (parsed: ParsedLexiconRef, context?: Nsid): stri
 
 /**
  * parses a lexicon definition reference into its components
+ *
  * @param ref the lexicon reference to parse
  * @param context context NSID, required for relative refs (e.g., `#defId`)
  * @returns parsed reference with nsid and defId (defId defaults to 'main' if not specified)

@@ -2,9 +2,7 @@ import { decode, decodeFirst } from '@atcute/cbor';
 
 import type { DecodedFrame, ErrorFrameBody, FrameHeader } from './types.ts';
 
-/**
- * decodes a CBOR frame from a buffer
- */
+/** decodes a CBOR frame from a buffer */
 export const decodeFrame = (buffer: Uint8Array): DecodedFrame => {
 	const [header, afterHeader] = decodeFirst(buffer);
 
@@ -30,9 +28,7 @@ export const decodeFrame = (buffer: Uint8Array): DecodedFrame => {
 	}
 };
 
-/**
- * type guard for frame header
- */
+/** type guard for frame header */
 const isValidHeader = (value: unknown): value is FrameHeader => {
 	if (value === null || typeof value !== 'object') {
 		return false;
@@ -43,9 +39,7 @@ const isValidHeader = (value: unknown): value is FrameHeader => {
 	return (obj.op === 1 || obj.op === -1) && (obj.t === undefined || typeof obj.t === 'string');
 };
 
-/**
- * reconstructs full $type field from discriminator and nsid
- */
+/** reconstructs full $type field from discriminator and nsid */
 export const reconstructType = (discriminator: string | undefined, nsid: string): string | undefined => {
 	if (!discriminator) {
 		return undefined;
@@ -58,9 +52,7 @@ export const reconstructType = (discriminator: string | undefined, nsid: string)
 	return discriminator;
 };
 
-/**
- * adds $type field to message body if discriminator is present
- */
+/** adds $type field to message body if discriminator is present */
 export const addTypeToBody = (body: unknown, discriminator: string | undefined, nsid: string): unknown => {
 	const type = reconstructType(discriminator, nsid);
 

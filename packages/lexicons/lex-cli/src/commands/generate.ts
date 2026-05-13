@@ -13,9 +13,7 @@ import { loadLexicons } from '../lexicon-loader.ts';
 import { packageJsonSchema } from '../lexicon-metadata.ts';
 import { printValibotIssues } from '../utils/issues.ts';
 
-/**
- * resolves package imports to ImportMapping[]
- */
+/** resolves package imports to ImportMapping[] */
 const resolveImportsToMappings = async (
 	imports: string[],
 	configDirname: string,
@@ -147,6 +145,7 @@ const ensureGenerateConfig = (config: NormalizedConfig): ResolvedGenerateConfig 
 
 /**
  * runs the generate command to create type definitions from lexicon documents
+ *
  * @param args parsed command arguments
  */
 export const handler = async (args: GenerateCommand): Promise<void> => {

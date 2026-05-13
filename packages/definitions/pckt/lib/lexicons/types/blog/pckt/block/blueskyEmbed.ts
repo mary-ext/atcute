@@ -4,9 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.blueskyEmbed')),
-	/**
-	 * Strong reference to the Bluesky post
-	 */
+	/** Strong reference to the Bluesky post */
 	get postRef() {
 		return ComAtprotoRepoStrongRef.mainSchema;
 	},

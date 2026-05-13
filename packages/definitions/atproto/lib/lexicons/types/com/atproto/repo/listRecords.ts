@@ -4,28 +4,23 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.repo.listRecords', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The NSID of the record type.
-		 */
+		/** The NSID of the record type. */
 		collection: /*#__PURE__*/ v.nsidString(),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
 		 * The number of records to return.
+		 *
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		/**
-		 * The handle or DID of the repo.
-		 */
+		/** The handle or DID of the repo. */
 		repo: /*#__PURE__*/ v.actorIdentifierString(),
-		/**
-		 * Flag to reverse the order of the returned records.
-		 */
+		/** Flag to reverse the order of the returned records. */
 		reverse: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	}),
 	output: {

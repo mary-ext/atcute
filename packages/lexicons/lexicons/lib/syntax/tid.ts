@@ -1,6 +1,4 @@
-/**
- * represents a timestamp identifier (TID)
- */
+/** represents a timestamp identifier (TID) */
 export type Tid = string;
 
 const TID_RE = /^[234567abcdefghij][234567abcdefghijklmnopqrstuvwxyz]{12}$/;

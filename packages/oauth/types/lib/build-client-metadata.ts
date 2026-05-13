@@ -107,8 +107,8 @@ const buildLoopbackClientId = (redirectUris: readonly string[], scope: string): 
 /**
  * builds an atproto client metadata for a public client.
  *
- * public clients use `token_endpoint_auth_method: 'none'` and don't require a keyset.
- * per AT Protocol spec, they have shorter token lifetimes and cannot use silent sign-in.
+ * public clients use `token_endpoint_auth_method: 'none'` and don't require a keyset. per AT Protocol spec,
+ * they have shorter token lifetimes and cannot use silent sign-in.
  *
  * - if `client_id` is omitted: loopback client (client_id built from redirect_uris/scope)
  * - if `client_id` is provided: discoverable public client

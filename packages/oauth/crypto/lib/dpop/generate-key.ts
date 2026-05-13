@@ -5,9 +5,7 @@ import type { SigningAlgorithm } from '../jwk/types.ts';
 
 import type { DpopPrivateJwk } from './types.ts';
 
-/**
- * preferred algorithm order for DPoP key generation.
- */
+/** preferred algorithm order for DPoP key generation. */
 const PREFERRED_ALGORITHMS: readonly SigningAlgorithm[] = [
 	'ES256',
 	'ES384',

@@ -5,13 +5,9 @@ import * as BlogPcktBlockText from './text.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.taskItem')),
-	/**
-	 * Whether the task is completed
-	 */
+	/** Whether the task is completed */
 	checked: /*#__PURE__*/ v.boolean(),
-	/**
-	 * Array of text blocks
-	 */
+	/** Array of text blocks */
 	get content() {
 		return /*#__PURE__*/ v.array(/*#__PURE__*/ v.variant([BlogPcktBlockText.mainSchema]));
 	},

@@ -13,9 +13,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.group.createJoinLink', 
 			get joinRule() {
 				return ChatBskyGroupDefs.joinRuleSchema;
 			},
-			/**
-			 * @default false
-			 */
+			/** @default false */
 			requireApproval: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 		}),
 	},

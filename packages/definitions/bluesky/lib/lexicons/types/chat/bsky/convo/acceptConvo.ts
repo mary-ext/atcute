@@ -13,9 +13,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.convo.acceptConvo', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Rev when the convo was accepted. If not present, the convo was already accepted.
-			 */
+			/** Rev when the convo was accepted. If not present, the convo was already accepted. */
 			rev: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

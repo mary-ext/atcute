@@ -9,44 +9,38 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.safelink.queryEvents'
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Cursor for pagination
-			 */
+			/** Cursor for pagination */
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
 			 * Maximum number of results to return
+			 *
+			 * @default 50
 			 * @minimum 1
 			 * @maximum 100
-			 * @default 50
 			 */
 			limit: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 				50,
 			),
-			/**
-			 * Filter by pattern type
-			 */
+			/** Filter by pattern type */
 			patternType: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
 			 * Sort direction
-			 * @default "desc"
+			 *
+			 * @default 'desc'
 			 */
 			sortDirection: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.string<'asc' | 'desc' | (string & {})>(),
 				'desc',
 			),
-			/**
-			 * Filter by specific URLs or domains
-			 */
+			/** Filter by specific URLs or domains */
 			urls: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		}),
 	},
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Next cursor for pagination. Only present if there are more results.
-			 */
+			/** Next cursor for pagination. Only present if there are more results. */
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get events() {
 				return /*#__PURE__*/ v.array(ToolsOzoneSafelinkDefs.eventSchema);

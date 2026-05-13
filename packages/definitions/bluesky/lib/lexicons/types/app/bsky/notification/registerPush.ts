@@ -7,9 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.notification.registerPus
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * Set to true when the actor is age restricted
-			 */
+			/** Set to true when the actor is age restricted */
 			ageRestricted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			appId: /*#__PURE__*/ v.string(),
 			platform: /*#__PURE__*/ v.string<'android' | 'ios' | 'web' | (string & {})>(),

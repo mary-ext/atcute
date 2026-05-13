@@ -7,13 +7,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.sync.requestCrawl', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * specific repository to ensure crawling
-			 */
+			/** specific repository to ensure crawling */
 			ensureRepo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
-			/**
-			 * Hostname of the current service (eg, Knot) that is requesting to be crawled.
-			 */
+			/** Hostname of the current service (eg, Knot) that is requesting to be crawled. */
 			hostname: /*#__PURE__*/ v.string(),
 		}),
 	},

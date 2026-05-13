@@ -3,22 +3,18 @@ const textDecoder = new TextDecoder();
 
 const subtle = crypto.subtle;
 
-/**
- * creates an Uint8Array of the requested size, with the contents zeroed
- */
+/** creates an Uint8Array of the requested size, with the contents zeroed */
 export const alloc = (size: number): Uint8Array<ArrayBuffer> => {
 	return new Uint8Array(size);
 };
 
 /**
- * creates an Uint8Array of the requested size, where the contents may not be
- * zeroed out. only use if you're certain that the contents will be overwritten
+ * creates an Uint8Array of the requested size, where the contents may not be zeroed out. only use if you're
+ * certain that the contents will be overwritten
  */
 export const allocUnsafe = alloc;
 
-/**
- * compares two Uint8Array buffers
- */
+/** compares two Uint8Array buffers */
 export const compare = (a: Uint8Array, b: Uint8Array): number => {
 	const alen = a.length;
 	const blen = b.length;
@@ -46,9 +42,7 @@ export const compare = (a: Uint8Array, b: Uint8Array): number => {
 	return 0;
 };
 
-/**
- * checks if the two Uint8Array buffers are equal
- */
+/** checks if the two Uint8Array buffers are equal */
 export const equals = (a: Uint8Array, b: Uint8Array): boolean => {
 	if (a === b) {
 		return true;
@@ -66,9 +60,7 @@ export const equals = (a: Uint8Array, b: Uint8Array): boolean => {
 	return len === -1;
 };
 
-/**
- * checks if the two Uint8Array buffers are equal, timing-safe version
- */
+/** checks if the two Uint8Array buffers are equal, timing-safe version */
 export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
 	let len: number;
 	let out = 0;
@@ -81,9 +73,7 @@ export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
 	return len === -1 && out === 0;
 };
 
-/**
- * concatenates multiple Uint8Array buffers into one
- */
+/** concatenates multiple Uint8Array buffers into one */
 export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuffer> => {
 	let written = 0;
 
@@ -109,16 +99,12 @@ export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuf
 	return buffer;
 };
 
-/**
- * encodes a UTF-8 string
- */
+/** encodes a UTF-8 string */
 export const encodeUtf8 = (str: string): Uint8Array<ArrayBuffer> => {
 	return textEncoder.encode(str);
 };
 
-/**
- * encodes a UTF-8 string into a given buffer
- */
+/** encodes a UTF-8 string into a given buffer */
 export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, length?: number): number => {
 	let buffer: Uint8Array;
 
@@ -260,6 +246,7 @@ const _shortString = (from: Uint8Array, p: number, length: number): string | nul
 
 /**
  * decodes a UTF-8 string from a given buffer
+ *
  * @param from source buffer
  * @param offset byte offset to start reading from
  * @param length number of bytes to read
@@ -284,6 +271,7 @@ export const decodeUtf8From = (
 
 /**
  * calculates the UTF-8 byte length of a string
+ *
  * @param str string to measure
  * @returns byte length when encoded as UTF-8
  */
@@ -331,8 +319,9 @@ export const getUtf8Length = (str: string): number => {
 };
 
 /**
- * checks if a string's UTF-8 byte length is within a given range.
- * includes early-exit optimization when exceeding max length.
+ * checks if a string's UTF-8 byte length is within a given range. includes early-exit optimization when
+ * exceeding max length.
+ *
  * @param str string to measure
  * @param min minimum byte length (inclusive)
  * @param max maximum byte length (inclusive)
@@ -380,15 +369,14 @@ export const isUtf8LengthInRange = (str: string, min: number, max: number): bool
 	return u8pos >= min;
 };
 
-/**
- * get a SHA-256 digest of this buffer
- */
+/** get a SHA-256 digest of this buffer */
 export const toSha256 = async (buffer: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> => {
 	return new Uint8Array(await subtle.digest('SHA-256', buffer));
 };
 
 /**
  * generates cryptographically secure random bytes
+ *
  * @param size number of bytes to generate
  * @returns buffer filled with random bytes
  */

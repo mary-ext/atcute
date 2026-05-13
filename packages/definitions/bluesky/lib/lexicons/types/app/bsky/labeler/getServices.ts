@@ -6,13 +6,9 @@ import * as AppBskyLabelerDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.labeler.getServices', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * @default false
-		 */
+		/** @default false */
 		detailed: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
-		/**
-		 * @minLength 1
-		 */
+		/** @minLength 1 */
 		dids: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
 			/*#__PURE__*/ v.arrayLength(1),
 		]),

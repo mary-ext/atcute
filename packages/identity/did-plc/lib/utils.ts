@@ -26,6 +26,7 @@ export const wrapAtprotoPrefix = (str: string): string => {
 
 /**
  * derives the did:plc identifier from a genesis operation
+ *
  * @param op signed genesis operation
  * @returns the did:plc string
  */
@@ -82,6 +83,7 @@ export const isSignedOperationValid = async (
 
 /**
  * signs an unsigned plc operation
+ *
  * @param op unsigned operation to sign
  * @param key private key to sign with (must be one of the rotation keys)
  * @returns signed operation
@@ -95,6 +97,7 @@ export const signOperation = async (op: t.UnsignedOperation, key: PrivateKey): P
 
 /**
  * signs an unsigned plc tombstone
+ *
  * @param op unsigned tombstone to sign
  * @param key private key to sign with (must be one of the rotation keys)
  * @returns signed tombstone

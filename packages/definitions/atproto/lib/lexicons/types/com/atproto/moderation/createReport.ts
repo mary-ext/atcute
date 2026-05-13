@@ -17,6 +17,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.moderation.createRepo
 			},
 			/**
 			 * Additional context about the content and violation.
+			 *
 			 * @maxLength 20000
 			 * @maxGraphemes 2000
 			 */
@@ -26,9 +27,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.moderation.createRepo
 					/*#__PURE__*/ v.stringGraphemes(0, 2000),
 				]),
 			),
-			/**
-			 * Indicates the broad category of violation the report is for.
-			 */
+			/** Indicates the broad category of violation the report is for. */
 			get reasonType() {
 				return ComAtprotoModerationDefs.reasonTypeSchema;
 			},
@@ -70,13 +69,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.moderation.createRepo
 });
 const _modToolSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('com.atproto.moderation.createReport#modTool')),
-	/**
-	 * Additional arbitrary metadata about the source
-	 */
+	/** Additional arbitrary metadata about the source */
 	meta: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
-	/**
-	 * Name/identifier of the source (e.g., 'bsky-app/android', 'bsky-web/chrome')
-	 */
+	/** Name/identifier of the source (e.g., 'bsky-app/android', 'bsky-web/chrome') */
 	name: /*#__PURE__*/ v.string(),
 });
 

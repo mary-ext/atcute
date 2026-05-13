@@ -20,9 +20,9 @@ const MAX_ID_LENGTH = 32;
 const MAX_DID_KEY_LENGTH = 256; // k256 = 57, BLS12-381 = 143
 
 /**
- * Validate an incoming operation against soft constraints (length limits, counts, duplicates).
- * This should be used when preparing to submit a new operation to plc.directory.
- * Historical operations should only be validated against hard constraints (structure, signatures, hashes).
+ * Validate an incoming operation against soft constraints (length limits, counts, duplicates). This should be
+ * used when preparing to submit a new operation to plc.directory. Historical operations should only be
+ * validated against hard constraints (structure, signatures, hashes).
  */
 export const validateIncomingOp = (op: t.CompatibleOperationOrTombstone): void => {
 	// Check CBOR size limit
@@ -123,9 +123,7 @@ export const validateIncomingOp = (op: t.CompatibleOperationOrTombstone): void =
 	}
 };
 
-/**
- * Process an indexed entry by validating it and integrating it into the canonical log.
- */
+/** Process an indexed entry by validating it and integrating it into the canonical log. */
 export const processIndexedEntry = async (
 	did: t.DidPlcString,
 	canonical: t.IndexedEntryWithSigner[],
@@ -278,9 +276,7 @@ export const processIndexedEntry = async (
 	}
 };
 
-/**
- * Process an indexed entry log by sequentially processing each operation.
- */
+/** Process an indexed entry log by sequentially processing each operation. */
 export const processIndexedEntryLog = async (
 	did: t.DidPlcString,
 	ops: t.IndexedEntryLog,
@@ -300,17 +296,13 @@ export const processIndexedEntryLog = async (
 	return { canonical, nullified };
 };
 
-/**
- * Check whether an operation can still be disputed
- */
+/** Check whether an operation can still be disputed */
 export const isDisputePeriodActive = (disputed: t.IndexedEntry, now = Date.now()): boolean => {
 	const lapsed = now - new Date(disputed.createdAt).getTime();
 	return lapsed <= DISPUTE_WINDOW;
 };
 
-/**
- * Check if a key is authorized to dispute an operation
- */
+/** Check if a key is authorized to dispute an operation */
 export const isAuthorizedForDispute = (
 	base: t.IndexedEntryWithSigner<t.CompatibleOperation>,
 	disputed: t.IndexedEntryWithSigner,
@@ -333,9 +325,7 @@ export interface DisputeCandidate {
 	disputed: t.IndexedEntryWithSigner;
 }
 
-/**
- * Finds operations that can be disputed by a given key
- */
+/** Finds operations that can be disputed by a given key */
 export const getDisputeCandidates = (canonical: t.IndexedEntryWithSigner[], key: t.DidKeyString) => {
 	const candidates: DisputeCandidate[] = [];
 	const now = Date.now();

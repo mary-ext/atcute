@@ -6,29 +6,17 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.pipeline.status'),
-		/**
-		 * time of creation of this status update
-		 */
+		/** time of creation of this status update */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		/**
-		 * error message if failed
-		 */
+		/** error message if failed */
 		error: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		/**
-		 * exit code if failed
-		 */
+		/** exit code if failed */
 		exitCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-		/**
-		 * ATURI of the pipeline
-		 */
+		/** ATURI of the pipeline */
 		pipeline: /*#__PURE__*/ v.resourceUriString(),
-		/**
-		 * status of the workflow
-		 */
+		/** status of the workflow */
 		status: /*#__PURE__*/ v.literalEnum(['cancelled', 'failed', 'pending', 'running', 'success', 'timeout']),
-		/**
-		 * name of the workflow within this pipeline
-		 */
+		/** name of the workflow within this pipeline */
 		workflow: /*#__PURE__*/ v.resourceUriString(),
 	}),
 );

@@ -18,18 +18,19 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			return AppBskyLabelerDefs.labelerPoliciesSchema;
 		},
 		/**
-		 * The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed.
+		 * The set of report reason 'codes' which are in-scope for this service to review and action. These
+		 * usually align to policy categories. If not defined (distinct from empty array), all reason types are
+		 * allowed.
 		 */
 		get reasonTypes() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoModerationDefs.reasonTypeSchema));
 		},
 		/**
-		 * Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type.
+		 * Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct
+		 * from empty array), default is any record type.
 		 */
 		subjectCollections: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString())),
-		/**
-		 * The set of subject types (account, record, etc) this service accepts reports on.
-		 */
+		/** The set of subject types (account, record, etc) this service accepts reports on. */
 		get subjectTypes() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoModerationDefs.subjectTypeSchema));
 		},

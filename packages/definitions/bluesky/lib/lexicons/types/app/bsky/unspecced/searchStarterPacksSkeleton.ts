@@ -6,26 +6,23 @@ import * as AppBskyUnspeccedDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.searchStarterPacksSkeleton', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Optional pagination mechanism; may not necessarily allow scrolling through entire result set.
-		 */
+		/** Optional pagination mechanism; may not necessarily allow scrolling through entire result set. */
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 25
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 25
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			25,
 		),
 		/**
-		 * Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended.
+		 * Search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is
+		 * recommended.
 		 */
 		q: /*#__PURE__*/ v.string(),
-		/**
-		 * DID of the account making the request (not included for public/unauthenticated queries).
-		 */
+		/** DID of the account making the request (not included for public/unauthenticated queries). */
 		viewer: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	}),
 	output: {
@@ -33,7 +30,8 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.searchStarterPacks
 		schema: /*#__PURE__*/ v.object({
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
-			 * Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through all hits.
+			 * Count of search hits. Optional, may be rounded/truncated, and may not be possible to paginate through
+			 * all hits.
 			 */
 			hitsTotal: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 			get starterPacks() {

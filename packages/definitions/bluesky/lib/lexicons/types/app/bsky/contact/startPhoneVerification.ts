@@ -7,9 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.contact.startPhoneVerifi
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The phone number to receive the code via SMS.
-			 */
+			/** The phone number to receive the code via SMS. */
 			phone: /*#__PURE__*/ v.string(),
 		}),
 	},

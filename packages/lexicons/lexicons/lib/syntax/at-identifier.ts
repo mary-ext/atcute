@@ -1,10 +1,7 @@
 import { isDid, type Did } from './did.ts';
 import { isHandle, type Handle } from './handle.ts';
 
-/**
- * represents an account's identifier, either a {@link Did} or a
- * {@link Handle}
- */
+/** represents an account's identifier, either a {@link Did} or a {@link Handle} */
 export type ActorIdentifier = Did | Handle;
 
 // #__NO_SIDE_EFFECTS__

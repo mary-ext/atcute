@@ -4,42 +4,28 @@ import * as v from '@atcute/lexicons/validations';
 
 const _conflictInfoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.git.temp.analyzeMerge#conflictInfo')),
-	/**
-	 * Name of the conflicted file
-	 */
+	/** Name of the conflicted file */
 	filename: /*#__PURE__*/ v.string(),
-	/**
-	 * Reason for the conflict
-	 */
+	/** Reason for the conflict */
 	reason: /*#__PURE__*/ v.string(),
 });
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.analyzeMerge', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Target branch to merge into
-		 */
+		/** Target branch to merge into */
 		branch: /*#__PURE__*/ v.string(),
-		/**
-		 * Patch or pull request to check for merge conflicts
-		 */
+		/** Patch or pull request to check for merge conflicts */
 		patch: /*#__PURE__*/ v.string(),
-		/**
-		 * AT-URI of the repository
-		 */
+		/** AT-URI of the repository */
 		repo: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * List of files with merge conflicts
-			 */
+			/** List of files with merge conflicts */
 			get conflicts() {
 				return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(conflictInfoSchema));
 			},
-			/**
-			 * Whether the merge has conflicts
-			 */
+			/** Whether the merge has conflicts */
 			is_conflicted: /*#__PURE__*/ v.boolean(),
 		}),
 	},

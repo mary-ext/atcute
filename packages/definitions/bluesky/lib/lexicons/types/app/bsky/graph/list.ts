@@ -40,13 +40,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		},
 		/**
 		 * Display name for list; can not be empty.
+		 *
 		 * @minLength 1
 		 * @maxLength 64
 		 */
 		name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
-		/**
-		 * Defines the purpose of the list (aka, moderation-oriented or curration-oriented)
-		 */
+		/** Defines the purpose of the list (aka, moderation-oriented or curration-oriented) */
 		get purpose() {
 			return AppBskyGraphDefs.listPurposeSchema;
 		},

@@ -6,9 +6,7 @@ import * as AppBskyGraphDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getStarterPack', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Reference (AT-URI) of the starter pack record.
-		 */
+		/** Reference (AT-URI) of the starter pack record. */
 		starterPack: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {

@@ -43,9 +43,7 @@ const _packViewSchema = /*#__PURE__*/ v.object({
 	 * @maxLength 64
 	 */
 	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1, 64)]),
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	packItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	get viewer() {
@@ -70,9 +68,7 @@ const _packViewBasicSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(BlueMojiRichtextFacet.mainSchema));
 	},
 	indexedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	itemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));

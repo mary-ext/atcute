@@ -5,25 +5,20 @@ import type * as AppBskyEmbedRecordWithMedia from '../lexicons/types/app/bsky/em
 import type * as AppBskyFeedDefs from '../lexicons/types/app/bsky/feed/defs.ts';
 import type * as AppBskyFeedPost from '../lexicons/types/app/bsky/feed/post.ts';
 
-/**
- * a union type of all possible raw embeds.
- */
+/** a union type of all possible raw embeds. */
 export interface RawEmbeds {
 	media?: AppBskyEmbedRecordWithMedia.Main['media'];
 	record?: AppBskyEmbedRecordWithMedia.Main['record'];
 }
 
-/**
- * a raw media embed.
- */
+/** a raw media embed. */
 export type RawMediaEmbed = NonNullable<RawEmbeds['media']>;
-/**
- * a raw record embed.
- */
+/** a raw record embed. */
 export type RawRecordEmbed = NonNullable<RawEmbeds['record']>;
 
 /**
  * extracts raw media embed from a post record embed
+ *
  * @param embed the embed interface to extract from
  * @returns the extracted raw media embed, if any
  */
@@ -40,6 +35,7 @@ export const unwrapRawMediaEmbed = (embed: AppBskyFeedPost.Main['embed']): RawEm
 
 /**
  * extracts raw record embed from a post record embed
+ *
  * @param embed the embed interface to extract from
  * @returns the extracted raw record embed, if any
  */
@@ -55,6 +51,7 @@ export const unwrapRawRecordEmbed = (embed: AppBskyFeedPost.Main['embed']): RawE
 
 /**
  * extracts raw media and record embeds from a post record embed
+ *
  * @param embed the embed interface to extract from
  * @returns the extracted raw media and record embeds, if any
  */
@@ -65,25 +62,20 @@ export const unwrapRawEmbed = (embed: AppBskyFeedPost.Main['embed']): RawEmbeds 
 	};
 };
 
-/**
- * a union type of all possible embeds.
- */
+/** a union type of all possible embeds. */
 export interface Embeds {
 	media?: AppBskyEmbedRecordWithMedia.View['media'];
 	record?: AppBskyEmbedRecordWithMedia.View['record']['record'];
 }
 
-/**
- * a media embed.
- */
+/** a media embed. */
 export type MediaEmbed = NonNullable<Embeds['media']>;
-/**
- * a record embed.
- */
+/** a record embed. */
 export type RecordEmbed = NonNullable<Embeds['record']>;
 
 /**
  * extracts media embed from a post embed
+ *
  * @param embed the embed interface to extract from
  * @returns the extracted media embed, if any
  */
@@ -100,6 +92,7 @@ export const unwrapMediaEmbed = (embed: AppBskyFeedDefs.PostView['embed']): Embe
 
 /**
  * extracts record embed from a post embed
+ *
  * @param embed the embed interface to extract from
  * @returns the extracted record embed, if any
  */
@@ -115,6 +108,7 @@ export const unwrapRecordEmbed = (embed: AppBskyFeedDefs.PostView['embed']): Emb
 
 /**
  * extracts media and record embeds from a post embed
+ *
  * @param embed the embed interface to extract from
  * @returns the extracted media and record embeds, if any
  */
@@ -125,9 +119,7 @@ export const unwrapEmbed = (embed: AppBskyFeedDefs.PostView['embed']): Embeds =>
 	};
 };
 
-/**
- * a quote embed.
- */
+/** a quote embed. */
 export type QuoteEmbed = $type.enforce<
 	| AppBskyEmbedRecord.ViewBlocked
 	| AppBskyEmbedRecord.ViewDetached
@@ -137,6 +129,7 @@ export type QuoteEmbed = $type.enforce<
 
 /**
  * get quote embed from a record embed
+ *
  * @param embed the record embed to extract from
  * @returns the extracted quote embed, if any
  */

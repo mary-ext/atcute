@@ -4,41 +4,29 @@ import * as v from '@atcute/lexicons/validations';
 
 const _formats_v0Schema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.richtext.facet#formats_v0')),
-	/**
-	 * @default false
-	 */
+	/** @default false */
 	apng_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	gif_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
-	/**
-	 * @default false
-	 */
+	/** @default false */
 	lottie: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	png_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 	webp_128: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.richtext.facet')),
-	/**
-	 * @default false
-	 */
+	/** @default false */
 	adultOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * DID of the user posting the Bluemoji
-	 */
+	/** DID of the user posting the Bluemoji */
 	did: /*#__PURE__*/ v.string(),
 	get formats() {
 		return /*#__PURE__*/ v.variant([formats_v0Schema]);
 	},
-	/**
-	 * Self-label values for this emoji. Effectively content warnings.
-	 */
+	/** Self-label values for this emoji. Effectively content warnings. */
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 	},
-	/**
-	 * Name of the Bluemoji in :emoji: format
-	 */
+	/** Name of the Bluemoji in :emoji: format */
 	name: /*#__PURE__*/ v.string(),
 });
 

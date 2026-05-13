@@ -13,9 +13,7 @@ export let database: OAuthDatabase;
 export let identityResolver: ActorResolver;
 
 export interface ConfigureOAuthOptions {
-	/**
-	 * client metadata, necessary to drive the whole request
-	 */
+	/** client metadata, necessary to drive the whole request */
 	metadata: {
 		client_id: string;
 		redirect_uri: string;
@@ -24,14 +22,13 @@ export interface ConfigureOAuthOptions {
 	/** resolves actor identifiers into identity metadata */
 	identityResolver: ActorResolver;
 
-	/**
-	 * optional function to fetch DPoP-bound client assertions from your backend.
-	 */
+	/** optional function to fetch DPoP-bound client assertions from your backend. */
 	fetchClientAssertion?: ClientAssertionFetcher;
 
 	/**
 	 * name that will be used as prefix for storage keys needed to persist authentication.
-	 * @default "atcute-oauth"
+	 *
+	 * @default 'atcute-oauth'
 	 */
 	storageName?: string;
 }

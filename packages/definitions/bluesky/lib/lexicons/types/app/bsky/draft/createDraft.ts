@@ -17,9 +17,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.draft.createDraft', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The ID of the created draft.
-			 */
+			/** The ID of the created draft. */
 			id: /*#__PURE__*/ v.string(),
 		}),
 	},

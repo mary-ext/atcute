@@ -40,9 +40,8 @@ export interface SessionGetterOptions {
 	/**
 	 * lock function for coordinating token refresh across processes.
 	 *
-	 * only needed for multi-process/distributed deployments where multiple
-	 * instances might try to refresh the same session concurrently.
-	 * single-process deployments can omit this.
+	 * only needed for multi-process/distributed deployments where multiple instances might try to refresh the
+	 * same session concurrently. single-process deployments can omit this.
 	 */
 	requestLock?: LockFunction;
 }
@@ -50,8 +49,8 @@ export interface SessionGetterOptions {
 /**
  * manages session retrieval and automatic token refresh.
  *
- * wraps a session store with caching and staleness checking.
- * automatically refreshes tokens when they're about to expire.
+ * wraps a session store with caching and staleness checking. automatically refreshes tokens when they're
+ * about to expire.
  */
 export class SessionGetter extends CachedGetter<Did, StoredSession> {
 	private readonly listeners = new Set<SessionEventListener>();
@@ -145,16 +144,12 @@ export class SessionGetter extends CachedGetter<Did, StoredSession> {
 		this.requestLock = requestLock;
 	}
 
-	/**
-	 * adds a listener for session events.
-	 */
+	/** adds a listener for session events. */
 	addEventListener(listener: SessionEventListener): void {
 		this.listeners.add(listener);
 	}
 
-	/**
-	 * removes a session event listener.
-	 */
+	/** removes a session event listener. */
 	removeEventListener(listener: SessionEventListener): void {
 		this.listeners.delete(listener);
 	}

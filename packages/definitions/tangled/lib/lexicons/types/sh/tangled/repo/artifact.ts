@@ -8,24 +8,20 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.artifact'),
 		/**
 		 * the artifact
+		 *
 		 * @maxSize 52428800
 		 */
 		artifact: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [/*#__PURE__*/ v.blobSize(52428800)]),
-		/**
-		 * time of creation of this artifact
-		 */
+		/** time of creation of this artifact */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		/**
-		 * name of the artifact
-		 */
+		/** name of the artifact */
 		name: /*#__PURE__*/ v.string(),
-		/**
-		 * repo that this artifact is being uploaded to
-		 */
+		/** repo that this artifact is being uploaded to */
 		repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 		repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		/**
 		 * hash of the tag object that this artifact is attached to (only annotated tags are supported)
+		 *
 		 * @minLength 20
 		 * @maxLength 20
 		 */

@@ -29,9 +29,8 @@ const loopbackRedirectUrisSchema = v.pipe(
 /**
  * user-facing client metadata for configuring a loopback public OAuth client.
  *
- * loopback clients are for localhost development and CLI tools. they use
- * `http://localhost` as the client_id origin, which is built automatically
- * from the redirect_uris and scope.
+ * loopback clients are for localhost development and CLI tools. they use `http://localhost` as the client_id
+ * origin, which is built automatically from the redirect_uris and scope.
  */
 export const loopbackClientMetadataSchema = v.looseObject({
 	/** must not be provided for loopback clients */
@@ -40,9 +39,8 @@ export const loopbackClientMetadataSchema = v.looseObject({
 	/**
 	 * redirect URIs for authorization responses.
 	 *
-	 * must be loopback IP addresses (127.0.0.1 or [::1]).
-	 * per RFC 8252, port numbers are ignored during redirect URI matching,
-	 * allowing ephemeral ports.
+	 * must be loopback IP addresses (127.0.0.1 or [::1]). per RFC 8252, port numbers are ignored during
+	 * redirect URI matching, allowing ephemeral ports.
 	 */
 	redirect_uris: loopbackRedirectUrisSchema,
 
@@ -55,8 +53,8 @@ export type LoopbackClientMetadata = v.InferOutput<typeof loopbackClientMetadata
 /**
  * user-facing client metadata for configuring a discoverable public OAuth client.
  *
- * discoverable public clients have an HTTPS client_id URL where metadata is hosted,
- * but don't use a keyset (token_endpoint_auth_method: 'none').
+ * discoverable public clients have an HTTPS client_id URL where metadata is hosted, but don't use a keyset
+ * (token_endpoint_auth_method: 'none').
  */
 export const discoverablePublicClientMetadataSchema = v.looseObject({
 	/** discoverable HTTPS client_id URL */
@@ -68,9 +66,7 @@ export const discoverablePublicClientMetadataSchema = v.looseObject({
 	/** OAuth scope (must include "atproto") */
 	scope: scopeSchema,
 
-	/**
-	 * application type - defaults to 'web'.
-	 */
+	/** application type - defaults to 'web'. */
 	application_type: v.optional(v.picklist(['web', 'native'])),
 
 	/** optional client homepage */

@@ -36,9 +36,7 @@ export interface CarEntry {
 	bytesEnd: number;
 }
 
-/**
- * represents a block to be written to a CAR file
- */
+/** represents a block to be written to a CAR file */
 export interface CarBlock {
 	/** the CID of the block (as bytes) */
 	cid: Uint8Array;

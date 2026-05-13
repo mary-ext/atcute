@@ -1,6 +1,4 @@
-/**
- * represents an object containing raw binary data encoded as a base64 string
- */
+/** represents an object containing raw binary data encoded as a base64 string */
 export interface Bytes {
 	$bytes: string;
 }
@@ -9,6 +7,7 @@ const BYTES_SYMBOL = Symbol.for('@atcute/bytes-wrapper');
 
 /**
  * this should match with {@link file://./../../../../utilities/cbor/lib/bytes.ts}
+ *
  * @internal
  */
 export interface _BytesWrapper {
@@ -20,9 +19,7 @@ export interface _BytesWrapper {
 	toJSON(): Bytes;
 }
 
-/**
- * @internal
- */
+/** @internal */
 // #__NO_SIDE_EFFECTS__
 export const _isBytesWrapper = (input: unknown): input is _BytesWrapper => {
 	return typeof input === 'object' && input !== null && BYTES_SYMBOL in input;

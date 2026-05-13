@@ -10,7 +10,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('fyi.frontpage.feed.comment'),
 		/**
-		 * The content of the comment. Note, there are additional constraints placed on the total size of the content within the Frontpage AppView that are not possible to express in lexicon. Generally a comment can have a maximum length of 10,000 graphemes, the Frontpage AppView will enforce this limit.
+		 * The content of the comment. Note, there are additional constraints placed on the total size of the
+		 * content within the Frontpage AppView that are not possible to express in lexicon. Generally a comment
+		 * can have a maximum length of 10,000 graphemes, the Frontpage AppView will enforce this limit.
+		 *
 		 * @maxLength 200
 		 */
 		get blocks() {
@@ -18,9 +21,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.arrayLength(0, 200),
 			]);
 		},
-		/**
-		 * Client-declared timestamp when this comment was originally created.
-		 */
+		/** Client-declared timestamp when this comment was originally created. */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		get parent() {
 			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);

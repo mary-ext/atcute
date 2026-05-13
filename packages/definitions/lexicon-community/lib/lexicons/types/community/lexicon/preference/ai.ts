@@ -4,16 +4,12 @@ import * as v from '@atcute/lexicons/validations';
 
 const _collectionScopeSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('community.lexicon.preference.ai#collectionScope')),
-	/**
-	 * NSID of the collection this override applies to.
-	 */
+	/** NSID of the collection this override applies to. */
 	collection: /*#__PURE__*/ v.nsidString(),
 });
 const _entityScopeSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('community.lexicon.preference.ai#entityScope')),
-	/**
-	 * DID or domain of the entity this override applies to.
-	 */
+	/** DID or domain of the entity this override applies to. */
 	entity: /*#__PURE__*/ v.string(),
 });
 const _globalScopeSchema = /*#__PURE__*/ v.object({
@@ -26,52 +22,36 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get preferences() {
 			return preferenceSetSchema;
 		},
-		/**
-		 * What this record's preferences apply to.
-		 */
+		/** What this record's preferences apply to. */
 		get scope() {
 			return /*#__PURE__*/ v.variant([collectionScopeSchema, entityScopeSchema, globalScopeSchema]);
 		},
-		/**
-		 * Timestamp of the most recent change to this record.
-		 */
+		/** Timestamp of the most recent change to this record. */
 		updatedAt: /*#__PURE__*/ v.datetimeString(),
 	}),
 );
 const _preferenceSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('community.lexicon.preference.ai#preference')),
-	/**
-	 * Whether this usage is permitted (true) or denied (false).
-	 */
+	/** Whether this usage is permitted (true) or denied (false). */
 	allow: /*#__PURE__*/ v.boolean(),
-	/**
-	 * When this specific preference was last changed.
-	 */
+	/** When this specific preference was last changed. */
 	updatedAt: /*#__PURE__*/ v.datetimeString(),
 });
 const _preferenceSetSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('community.lexicon.preference.ai#preferenceSet')),
-	/**
-	 * Use for vector embeddings or semantic indexing.
-	 */
+	/** Use for vector embeddings or semantic indexing. */
 	get embedding() {
 		return /*#__PURE__*/ v.optional(preferenceSchema);
 	},
-	/**
-	 * Use at inference time for retrieval, RAG, or context injection.
-	 */
+	/** Use at inference time for retrieval, RAG, or context injection. */
 	get inference() {
 		return /*#__PURE__*/ v.optional(preferenceSchema);
 	},
-	/**
-	 * Use to generate synthetic content or interactions derived from user data.
-	 */
+	/** Use to generate synthetic content or interactions derived from user data. */
 	get syntheticContent() {
 		return /*#__PURE__*/ v.optional(preferenceSchema);
 	},
-	/**
-	 * Use as input for training, fine-tuning, distillation, or RLHF of ML models.
-	 */
+	/** Use as input for training, fine-tuning, distillation, or RLHF of ML models. */
 	get training() {
 		return /*#__PURE__*/ v.optional(preferenceSchema);
 	},

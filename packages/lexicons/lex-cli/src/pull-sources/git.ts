@@ -13,6 +13,7 @@ import type { PullResult, PulledLexicon, SourceLocation } from './types.ts';
 
 /**
  * pulls lexicon documents from a git repository source
+ *
  * @param source git source configuration
  * @param parseLexiconFile function to parse and validate lexicon files
  * @returns pulled lexicons and commit hash

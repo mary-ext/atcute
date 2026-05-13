@@ -6,27 +6,19 @@ import * as ComAtprotoLexiconSchema from './schema.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.lexicon.resolveLexicon', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * The lexicon NSID to resolve.
-		 */
+		/** The lexicon NSID to resolve. */
 		nsid: /*#__PURE__*/ v.nsidString(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/**
-			 * The CID of the lexicon schema record.
-			 */
+			/** The CID of the lexicon schema record. */
 			cid: /*#__PURE__*/ v.cidString(),
-			/**
-			 * The resolved lexicon schema record.
-			 */
+			/** The resolved lexicon schema record. */
 			get schema() {
 				return ComAtprotoLexiconSchema.mainSchema;
 			},
-			/**
-			 * The AT-URI of the lexicon schema record.
-			 */
+			/** The AT-URI of the lexicon schema record. */
 			uri: /*#__PURE__*/ v.resourceUriString(),
 		}),
 	},

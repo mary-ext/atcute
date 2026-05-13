@@ -5,9 +5,7 @@ import { oauthIssuerIdentifierSchema } from './oauth-issuer-identifier.ts';
 import { oauthPromptSchema } from './oauth-prompt.ts';
 import { webUriSchema } from './uri.ts';
 
-/**
- * @see {@link https://datatracker.ietf.org/doc/html/rfc8414}
- */
+/** @see {@link https://datatracker.ietf.org/doc/html/rfc8414} */
 export const oauthAuthorizationServerMetadataSchema = v.looseObject({
 	issuer: oauthIssuerIdentifierSchema,
 

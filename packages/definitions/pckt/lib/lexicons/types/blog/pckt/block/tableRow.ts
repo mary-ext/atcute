@@ -6,9 +6,7 @@ import * as BlogPcktBlockTableHeader from './tableHeader.ts';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.block.tableRow')),
-	/**
-	 * Array of table cells or header cells
-	 */
+	/** Array of table cells or header cells */
 	get content() {
 		return /*#__PURE__*/ v.array(
 			/*#__PURE__*/ v.variant([BlogPcktBlockTableCell.mainSchema, BlogPcktBlockTableHeader.mainSchema]),

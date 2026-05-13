@@ -4,9 +4,7 @@ import { oauthClientIdSchema } from './oauth-client-id.ts';
 import { httpsUriSchema } from './uri.ts';
 import { extractUrlPath, isHostnameIP } from './utils.ts';
 
-/**
- * @see {@link https://www.ietf.org/archive/id/draft-ietf-oauth-client-id-metadata-document-00.html}
- */
+/** @see {@link https://www.ietf.org/archive/id/draft-ietf-oauth-client-id-metadata-document-00.html} */
 export const oauthClientIdDiscoverableSchema = v.pipe(
 	oauthClientIdSchema,
 	httpsUriSchema,

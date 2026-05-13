@@ -15,6 +15,7 @@ const _lut2: string[] = /*#__PURE__*/ (() => {
 
 /**
  * encodes a Uint8Array to an unpadded RFC 4648 base32 (lowercase) string
+ *
  * @param bytes source buffer
  * @returns base32 encoded string
  */

@@ -15,10 +15,9 @@ import type { JSONResponse } from '../response.ts';
 /**
  * untyped variant of {@link QueryContext} / {@link ProcedureContext}.
  *
- * `input` is set only when the lexicon declares a `lex` input body and the
- * request JSON parsed successfully. for blob inputs (and for procedures that
- * declare no input at all) it is `undefined`; handlers that expect a blob
- * should stream from `request.body` directly.
+ * `input` is set only when the lexicon declares a `lex` input body and the request JSON parsed successfully.
+ * for blob inputs (and for procedures that declare no input at all) it is `undefined`; handlers that expect a
+ * blob should stream from `request.body` directly.
  */
 export type UnknownOperationContext = {
 	request: Request;

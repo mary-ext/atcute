@@ -1,8 +1,6 @@
 import { isUtf8LengthInRange } from '@atcute/uint8array';
 
-/**
- * represents a generic URI
- */
+/** represents a generic URI */
 export type GenericUri = `${string}:${string}`;
 
 const URI_RE = /^\w+:(?:\/\/)?[^\s/][^\s]*$/;

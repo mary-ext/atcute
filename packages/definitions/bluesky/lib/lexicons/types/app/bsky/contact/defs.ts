@@ -7,38 +7,34 @@ const _matchAndContactIndexSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.contact.defs#matchAndContactIndex')),
 	/**
 	 * The index of this match in the import contact input.
+	 *
 	 * @minimum 0
 	 * @maximum 999
 	 */
 	contactIndex: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 999)]),
-	/**
-	 * Profile of the matched user.
-	 */
+	/** Profile of the matched user. */
 	get match() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
 });
 const _notificationSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.contact.defs#notification')),
-	/**
-	 * The DID of who this notification comes from.
-	 */
+	/** The DID of who this notification comes from. */
 	from: /*#__PURE__*/ v.didString(),
-	/**
-	 * The DID of who this notification should go to.
-	 */
+	/** The DID of who this notification should go to. */
 	to: /*#__PURE__*/ v.didString(),
 });
 const _syncStatusSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.contact.defs#syncStatus')),
 	/**
-	 * Number of existing contact matches resulting of the user imports and of their imported contacts having imported the user. Matches stop being counted when the user either follows the matched contact or dismisses the match.
+	 * Number of existing contact matches resulting of the user imports and of their imported contacts having
+	 * imported the user. Matches stop being counted when the user either follows the matched contact or
+	 * dismisses the match.
+	 *
 	 * @minimum 0
 	 */
 	matchesCount: /*#__PURE__*/ v.integer(),
-	/**
-	 * Last date when contacts where imported.
-	 */
+	/** Last date when contacts where imported. */
 	syncedAt: /*#__PURE__*/ v.datetimeString(),
 });
 

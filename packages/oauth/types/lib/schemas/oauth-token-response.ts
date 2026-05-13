@@ -3,9 +3,7 @@ import * as v from 'valibot';
 import { oauthAuthorizationDetailsSchema } from './oauth-authorization-details.ts';
 import { oauthTokenTypeSchema } from './oauth-token-type.ts';
 
-/**
- * @see {@link https://www.rfc-editor.org/rfc/rfc6749.html#section-5.1 | RFC 6749 (OAuth2), Section 5.1}
- */
+/** @see {@link https://www.rfc-editor.org/rfc/rfc6749.html#section-5.1 | RFC 6749 (OAuth2), Section 5.1} */
 export const oauthTokenResponseSchema = v.looseObject({
 	// https://www.rfc-editor.org/rfc/rfc6749.html#section-5.1
 	access_token: v.string(),

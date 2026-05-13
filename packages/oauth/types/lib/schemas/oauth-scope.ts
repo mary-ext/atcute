@@ -8,8 +8,8 @@ export const OAUTH_SCOPE_REGEXP = /^[\x21\x23-\x5B\x5D-\x7E]+(?: [\x21\x23-\x5B\
 export const isOAuthScope = (input: string): boolean => OAUTH_SCOPE_REGEXP.test(input);
 
 /**
- * a (single) space separated list of non empty printable ASCII char string
- * (except backslash and double quote).
+ * a (single) space separated list of non empty printable ASCII char string (except backslash and double
+ * quote).
  *
  * @see {@link https://datatracker.ietf.org/doc/html/draft-ietf-oauth-v2-1-11#section-1.4.1}
  */

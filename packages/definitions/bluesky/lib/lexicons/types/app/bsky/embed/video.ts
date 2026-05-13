@@ -19,6 +19,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.video')),
 	/**
 	 * Alt text description of the video, for accessibility.
+	 *
 	 * @maxLength 10000
 	 * @maxGraphemes 1000
 	 */
@@ -31,20 +32,17 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
-	/**
-	 * @maxLength 20
-	 */
+	/** @maxLength 20 */
 	get captions() {
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(captionSchema), [/*#__PURE__*/ v.arrayLength(0, 20)]),
 		);
 	},
-	/**
-	 * A hint to the client about how to present the video.
-	 */
+	/** A hint to the client about how to present the video. */
 	presentation: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'default' | 'gif' | (string & {})>()),
 	/**
 	 * The mp4 video file. May be up to 100mb, formerly limited to 50mb.
+	 *
 	 * @accept video/mp4
 	 * @maxSize 100000000
 	 */
@@ -70,9 +68,7 @@ const _viewSchema = /*#__PURE__*/ v.object({
 	},
 	cid: /*#__PURE__*/ v.cidString(),
 	playlist: /*#__PURE__*/ v.genericUriString(),
-	/**
-	 * A hint to the client about how to present the video.
-	 */
+	/** A hint to the client about how to present the video. */
 	presentation: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'default' | 'gif' | (string & {})>()),
 	thumbnail: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 });

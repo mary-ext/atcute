@@ -8,20 +8,20 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.label.queryLabels', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 250
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 250)]),
 			50,
 		),
-		/**
-		 * Optional list of label sources (DIDs) to filter on.
-		 */
+		/** Optional list of label sources (DIDs) to filter on. */
 		sources: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString())),
 		/**
-		 * List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '*'; will match inclusive of the string leading to '*'), or a full URI.
+		 * List of AT URI patterns to match (boolean 'OR'). Each may be a prefix (ending with '_'; will match
+		 * inclusive of the string leading to '_'), or a full URI.
+		 *
 		 * @minLength 1
 		 */
 		uriPatterns: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [

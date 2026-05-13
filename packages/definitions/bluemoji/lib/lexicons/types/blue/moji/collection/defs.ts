@@ -8,9 +8,7 @@ const _collectionViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blue.moji.collection.defs#collectionView')),
 	avatar: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	cid: /*#__PURE__*/ v.cidString(),
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	collectionItemCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get creator() {
 		return AppBskyActorDefs.profileViewSchema;

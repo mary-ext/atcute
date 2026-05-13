@@ -19,9 +19,7 @@ export interface PackageJsonWithLexicons {
 	[key: string]: unknown;
 }
 
-/**
- * Schema for a single lexicon mapping entry
- */
+/** Schema for a single lexicon mapping entry */
 const lexiconMappingEntry: v.GenericSchema<unknown, LexiconMappingEntry> = v.looseObject({
 	type: v.picklist(['namespace', 'named']),
 	path: v.custom<LexiconMappingPath>(
@@ -30,9 +28,7 @@ const lexiconMappingEntry: v.GenericSchema<unknown, LexiconMappingEntry> = v.loo
 	),
 });
 
-/**
- * Schema for the atcute:lexicons field in package.json
- */
+/** Schema for the atcute:lexicons field in package.json */
 const mappingsSchema: v.GenericSchema<unknown, Record<string, LexiconMappingEntry>> = v.pipe(
 	v.record(v.string(), lexiconMappingEntry),
 	v.check((input) => {
@@ -49,9 +45,7 @@ const atcuteLexiconsField: v.GenericSchema<unknown, AtcuteLexiconsField> = v.loo
 	mappings: v.optional(mappingsSchema),
 });
 
-/**
- * Schema for package.json with atcute:lexicons field
- */
+/** Schema for package.json with atcute:lexicons field */
 export const packageJsonSchema: v.GenericSchema<unknown, PackageJsonWithLexicons> = v.looseObject({
 	'atcute:lexicons': v.optional(atcuteLexiconsField),
 });

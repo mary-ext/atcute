@@ -15,12 +15,14 @@ type GraphemeBinding = {
 
 /**
  * whether the native module is available for the current runtime.
+ *
  * @internal
  */
 export let hasNative = false;
 
 /**
  * returns the grapheme length of a string
+ *
  * @param text string to count graphemes in
  * @returns grapheme count
  */
@@ -28,6 +30,7 @@ export let getGraphemeLength: (text: string) => number = getGraphemeLengthJs;
 
 /**
  * checks if the grapheme length of a string is within the specified range
+ *
  * @param text string to check
  * @param min minimum grapheme length (inclusive)
  * @param max maximum grapheme length (inclusive)

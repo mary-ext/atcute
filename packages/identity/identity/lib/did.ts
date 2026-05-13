@@ -5,9 +5,7 @@ import { isAtprotoWebDid } from './methods/web.ts';
 
 const FRAGMENT_RE = /^(?:[A-Za-z0-9\-._~!$&'()*+,;=:@/?]|%[0-9A-Fa-f]{2})*$/;
 
-/**
- * checks if it's a DID identifier that is supported by atproto
- */
+/** checks if it's a DID identifier that is supported by atproto */
 export const isAtprotoDid = (input: unknown): input is AtprotoDid => {
 	return isPlcDid(input) || isAtprotoWebDid(input);
 };
@@ -26,9 +24,7 @@ export const isAtprotoAudience = (input: unknown): input is AtprotoAudience => {
 	return FRAGMENT_RE.test(input.slice(isep + 1)) && isAtprotoDid(input.slice(0, isep));
 };
 
-/**
- * returns the DID's method
- */
+/** returns the DID's method */
 export const extractDidMethod = <M extends string>(did: Did<M>): M => {
 	const isep = did.indexOf(':', 4);
 	const method = did.slice(4, isep);

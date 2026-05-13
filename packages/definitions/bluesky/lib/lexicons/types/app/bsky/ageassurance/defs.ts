@@ -4,29 +4,26 @@ import * as v from '@atcute/lexicons/validations';
 const _accessSchema = /*#__PURE__*/ v.string<'full' | 'none' | 'safe' | 'unknown' | (string & {})>();
 const _configSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.ageassurance.defs#config')),
-	/**
-	 * The per-region Age Assurance configuration.
-	 */
+	/** The per-region Age Assurance configuration. */
 	get regions() {
 		return /*#__PURE__*/ v.array(configRegionSchema);
 	},
 });
 const _configRegionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.ageassurance.defs#configRegion')),
-	/**
-	 * The ISO 3166-1 alpha-2 country code this configuration applies to.
-	 */
+	/** The ISO 3166-1 alpha-2 country code this configuration applies to. */
 	countryCode: /*#__PURE__*/ v.string(),
-	/**
-	 * The minimum age (as a whole integer) required to use Bluesky in this region.
-	 */
+	/** The minimum age (as a whole integer) required to use Bluesky in this region. */
 	minAccessAge: /*#__PURE__*/ v.integer(),
 	/**
-	 * The ISO 3166-2 region code this configuration applies to. If omitted, the configuration applies to the entire country.
+	 * The ISO 3166-2 region code this configuration applies to. If omitted, the configuration applies to the
+	 * entire country.
 	 */
 	regionCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**
-	 * The ordered list of Age Assurance rules that apply to this region. Rules should be applied in order, and the first matching rule determines the access level granted. The rules array should always include a default rule as the last item.
+	 * The ordered list of Age Assurance rules that apply to this region. Rules should be applied in order, and
+	 * the first matching rule determines the access level granted. The rules array should always include a
+	 * default rule as the last item.
 	 */
 	get rules() {
 		return /*#__PURE__*/ v.array(
@@ -57,9 +54,7 @@ const _configRegionRuleIfAccountNewerThanSchema = /*#__PURE__*/ v.object({
 	get access() {
 		return accessSchema;
 	},
-	/**
-	 * The date threshold as a datetime string.
-	 */
+	/** The date threshold as a datetime string. */
 	date: /*#__PURE__*/ v.datetimeString(),
 });
 const _configRegionRuleIfAccountOlderThanSchema = /*#__PURE__*/ v.object({
@@ -69,9 +64,7 @@ const _configRegionRuleIfAccountOlderThanSchema = /*#__PURE__*/ v.object({
 	get access() {
 		return accessSchema;
 	},
-	/**
-	 * The date threshold as a datetime string.
-	 */
+	/** The date threshold as a datetime string. */
 	date: /*#__PURE__*/ v.datetimeString(),
 });
 const _configRegionRuleIfAssuredOverAgeSchema = /*#__PURE__*/ v.object({
@@ -81,9 +74,7 @@ const _configRegionRuleIfAssuredOverAgeSchema = /*#__PURE__*/ v.object({
 	get access() {
 		return accessSchema;
 	},
-	/**
-	 * The age threshold as a whole integer.
-	 */
+	/** The age threshold as a whole integer. */
 	age: /*#__PURE__*/ v.integer(),
 });
 const _configRegionRuleIfAssuredUnderAgeSchema = /*#__PURE__*/ v.object({
@@ -93,9 +84,7 @@ const _configRegionRuleIfAssuredUnderAgeSchema = /*#__PURE__*/ v.object({
 	get access() {
 		return accessSchema;
 	},
-	/**
-	 * The age threshold as a whole integer.
-	 */
+	/** The age threshold as a whole integer. */
 	age: /*#__PURE__*/ v.integer(),
 });
 const _configRegionRuleIfDeclaredOverAgeSchema = /*#__PURE__*/ v.object({
@@ -105,9 +94,7 @@ const _configRegionRuleIfDeclaredOverAgeSchema = /*#__PURE__*/ v.object({
 	get access() {
 		return accessSchema;
 	},
-	/**
-	 * The age threshold as a whole integer.
-	 */
+	/** The age threshold as a whole integer. */
 	age: /*#__PURE__*/ v.integer(),
 });
 const _configRegionRuleIfDeclaredUnderAgeSchema = /*#__PURE__*/ v.object({
@@ -117,56 +104,32 @@ const _configRegionRuleIfDeclaredUnderAgeSchema = /*#__PURE__*/ v.object({
 	get access() {
 		return accessSchema;
 	},
-	/**
-	 * The age threshold as a whole integer.
-	 */
+	/** The age threshold as a whole integer. */
 	age: /*#__PURE__*/ v.integer(),
 });
 const _eventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.ageassurance.defs#event')),
-	/**
-	 * The access level granted based on Age Assurance data we've processed.
-	 */
+	/** The access level granted based on Age Assurance data we've processed. */
 	access: /*#__PURE__*/ v.string<'full' | 'none' | 'safe' | 'unknown' | (string & {})>(),
-	/**
-	 * The unique identifier for this instance of the Age Assurance flow, in UUID format.
-	 */
+	/** The unique identifier for this instance of the Age Assurance flow, in UUID format. */
 	attemptId: /*#__PURE__*/ v.string(),
-	/**
-	 * The IP address used when completing the Age Assurance flow.
-	 */
+	/** The IP address used when completing the Age Assurance flow. */
 	completeIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * The user agent used when completing the Age Assurance flow.
-	 */
+	/** The user agent used when completing the Age Assurance flow. */
 	completeUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * The ISO 3166-1 alpha-2 country code provided when beginning the Age Assurance flow.
-	 */
+	/** The ISO 3166-1 alpha-2 country code provided when beginning the Age Assurance flow. */
 	countryCode: /*#__PURE__*/ v.string(),
-	/**
-	 * The date and time of this write operation.
-	 */
+	/** The date and time of this write operation. */
 	createdAt: /*#__PURE__*/ v.datetimeString(),
-	/**
-	 * The email used for Age Assurance.
-	 */
+	/** The email used for Age Assurance. */
 	email: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * The IP address used when initiating the Age Assurance flow.
-	 */
+	/** The IP address used when initiating the Age Assurance flow. */
 	initIp: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * The user agent used when initiating the Age Assurance flow.
-	 */
+	/** The user agent used when initiating the Age Assurance flow. */
 	initUa: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * The ISO 3166-2 region code provided when beginning the Age Assurance flow.
-	 */
+	/** The ISO 3166-2 region code provided when beginning the Age Assurance flow. */
 	regionCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/**
-	 * The status of the Age Assurance process.
-	 */
+	/** The status of the Age Assurance process. */
 	status: /*#__PURE__*/ v.string<'assured' | 'blocked' | 'pending' | 'unknown' | (string & {})>(),
 });
 const _stateSchema = /*#__PURE__*/ v.object({
@@ -174,9 +137,7 @@ const _stateSchema = /*#__PURE__*/ v.object({
 	get access() {
 		return accessSchema;
 	},
-	/**
-	 * The timestamp when this state was last updated.
-	 */
+	/** The timestamp when this state was last updated. */
 	lastInitiatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	get status() {
 		return statusSchema;
@@ -184,9 +145,7 @@ const _stateSchema = /*#__PURE__*/ v.object({
 });
 const _stateMetadataSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.ageassurance.defs#stateMetadata')),
-	/**
-	 * The account creation timestamp.
-	 */
+	/** The account creation timestamp. */
 	accountCreatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _statusSchema = /*#__PURE__*/ v.string<'assured' | 'blocked' | 'pending' | 'unknown' | (string & {})>();

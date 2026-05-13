@@ -9,11 +9,13 @@ import * as PubLeafletBlocksUnorderedList from './unorderedList.ts';
 const _listItemSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.orderedList#listItem')),
 	/**
-	 * If present, this item is a checklist item. true = checked, false = unchecked. If absent, this is a normal list item.
+	 * If present, this item is a checklist item. true = checked, false = unchecked. If absent, this is a normal
+	 * list item.
 	 */
 	checked: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/**
-	 * Nested ordered list items. Mutually exclusive with unorderedListChildren; if both are present, children takes precedence.
+	 * Nested ordered list items. Mutually exclusive with unorderedListChildren; if both are present, children
+	 * takes precedence.
 	 */
 	get children() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(listItemSchema));
@@ -26,7 +28,8 @@ const _listItemSchema = /*#__PURE__*/ v.object({
 		]);
 	},
 	/**
-	 * A nested unordered list. Mutually exclusive with children; if both are present, children takes precedence.
+	 * A nested unordered list. Mutually exclusive with children; if both are present, children takes
+	 * precedence.
 	 */
 	get unorderedListChildren() {
 		return /*#__PURE__*/ v.optional(PubLeafletBlocksUnorderedList.mainSchema);
@@ -37,9 +40,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	get children() {
 		return /*#__PURE__*/ v.array(listItemSchema);
 	},
-	/**
-	 * The starting number for this ordered list. Defaults to 1 if not specified.
-	 */
+	/** The starting number for this ordered list. Defaults to 1 if not specified. */
 	startIndex: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 

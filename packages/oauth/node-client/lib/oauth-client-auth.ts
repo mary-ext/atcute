@@ -6,18 +6,14 @@ import {
 	type OAuthAuthorizationServerMetadata,
 } from '@atcute/oauth-types';
 
-/**
- * client authentication method for confidential clients using `private_key_jwt`.
- */
+/** client authentication method for confidential clients using `private_key_jwt`. */
 export interface ConfidentialClientAuthMethod {
 	method: 'private_key_jwt';
 	/** key ID used for signing */
 	kid: string;
 }
 
-/**
- * client authentication method for public clients using `none`.
- */
+/** client authentication method for public clients using `none`. */
 export interface PublicClientAuthMethod {
 	method: 'none';
 }
@@ -30,9 +26,7 @@ export interface PublicClientAuthMethod {
  */
 export type ClientAuthMethod = ConfidentialClientAuthMethod | PublicClientAuthMethod;
 
-/**
- * client credentials for a token endpoint request.
- */
+/** client credentials for a token endpoint request. */
 export interface ClientCredentials {
 	client_id: string;
 	client_assertion_type: typeof CLIENT_ASSERTION_TYPE_JWT_BEARER;

@@ -8,9 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('com.atproto.admin.updateAccountSi
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			did: /*#__PURE__*/ v.didString(),
-			/**
-			 * Did-key formatted public key
-			 */
+			/** Did-key formatted public key */
 			signingKey: /*#__PURE__*/ v.didString(),
 		}),
 	},

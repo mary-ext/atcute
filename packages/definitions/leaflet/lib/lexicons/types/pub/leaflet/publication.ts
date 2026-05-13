@@ -10,9 +10,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('pub.leaflet.publication'),
 		base_path: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		/**
-		 * @maxLength 2000
-		 */
+		/** @maxLength 2000 */
 		description: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 		),
@@ -26,9 +24,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.blobAccept(['image/*']),
 			]),
 		),
-		/**
-		 * @maxLength 2000
-		 */
+		/** @maxLength 2000 */
 		name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 		get preferences() {
 			return /*#__PURE__*/ v.optional(preferencesSchema);
@@ -40,25 +36,15 @@ const _mainSchema = /*#__PURE__*/ v.record(
 );
 const _preferencesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.publication#preferences')),
-	/**
-	 * @default true
-	 */
+	/** @default true */
 	showComments: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
-	/**
-	 * @default true
-	 */
+	/** @default true */
 	showInDiscover: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
-	/**
-	 * @default true
-	 */
+	/** @default true */
 	showMentions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
-	/**
-	 * @default true
-	 */
+	/** @default true */
 	showPrevNext: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
-	/**
-	 * @default true
-	 */
+	/** @default true */
 	showRecommends: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 });
 const _themeSchema = /*#__PURE__*/ v.object({
@@ -81,15 +67,11 @@ const _themeSchema = /*#__PURE__*/ v.object({
 	get backgroundImage() {
 		return /*#__PURE__*/ v.optional(PubLeafletThemeBackgroundImage.mainSchema);
 	},
-	/**
-	 * @maxLength 100
-	 */
+	/** @maxLength 100 */
 	bodyFont: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 	),
-	/**
-	 * @maxLength 100
-	 */
+	/** @maxLength 100 */
 	headingFont: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 	),
@@ -110,9 +92,7 @@ const _themeSchema = /*#__PURE__*/ v.object({
 			/*#__PURE__*/ v.variant([PubLeafletThemeColor.rgbSchema, PubLeafletThemeColor.rgbaSchema]),
 		);
 	},
-	/**
-	 * @default false
-	 */
+	/** @default false */
 	showPageBackground: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 });
 

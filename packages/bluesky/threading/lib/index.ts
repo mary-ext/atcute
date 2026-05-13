@@ -31,6 +31,7 @@ export type * from './types.ts';
 
 /**
  * Create post records and publish them
+ *
  * @param client An authenticated Bluesky RPC client
  * @param thread Composed thread
  * @returns An array of post records that were published
@@ -56,6 +57,7 @@ export async function publishThread(
 
 /**
  * Create post records without publishing, allows you to do it yourself.
+ *
  * @param thread Composed thread
  * @returns An array of post records
  */

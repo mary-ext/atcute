@@ -13,9 +13,7 @@ import { printValibotIssues } from './utils/issues.ts';
 /** file extensions recognized as module files */
 const MODULE_EXTENSIONS = new Set(['.js', '.cjs', '.mjs', '.ts', '.cts', '.mts']);
 
-/**
- * represents a loaded lexicon document with its source file
- */
+/** represents a loaded lexicon document with its source file */
 export interface LoadedLexicon {
 	nsid: string;
 	doc: LexiconDoc;
@@ -24,6 +22,7 @@ export interface LoadedLexicon {
 
 /**
  * checks if a filename is a module file based on extension
+ *
  * @param filename the filename to check
  * @returns true if it's a module file
  */
@@ -34,6 +33,7 @@ const isModuleFile = (filename: string): boolean => {
 
 /**
  * basic validation that a value looks like a LexDocumentBuilder
+ *
  * @param value the value to check
  * @returns true if it appears to be a LexDocumentBuilder
  */
@@ -50,6 +50,7 @@ const isLexDocumentBuilder = (value: unknown): value is LexDocumentBuilder => {
 
 /**
  * loads and validates a lexicon document from a JSON file
+ *
  * @param absolutePath absolute path to the JSON file
  * @param relativePath relative path for error messages
  * @returns parsed and validated lexicon document
@@ -96,6 +97,7 @@ const loadJsonFile = async (absolutePath: string, relativePath: string): Promise
 
 /**
  * loads a LexDocumentBuilder from a module file
+ *
  * @param absolutePath absolute path to the module file
  * @param relativePath relative path for error messages
  * @returns the LexDocumentBuilder from the module's default export
@@ -125,6 +127,7 @@ const loadModuleBuilder = async (absolutePath: string, relativePath: string): Pr
 
 /**
  * loads lexicon documents from glob patterns
+ *
  * @param patterns glob patterns to match files
  * @param root root directory for resolving paths
  * @returns array of loaded lexicon documents

@@ -9,14 +9,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('site.standard.publication'),
-		/**
-		 * Simplified publication theme for tools and apps to utilize when displaying content.
-		 */
+		/** Simplified publication theme for tools and apps to utilize when displaying content. */
 		get basicTheme() {
 			return /*#__PURE__*/ v.optional(SiteStandardThemeBasic.mainSchema);
 		},
 		/**
 		 * Brief description of the publication.
+		 *
 		 * @maxLength 30000
 		 * @maxGraphemes 3000
 		 */
@@ -28,6 +27,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		),
 		/**
 		 * Square image to identify the publication. Should be at least 256x256.
+		 *
 		 * @accept image/*
 		 * @maxSize 1000000
 		 */
@@ -37,14 +37,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.blobAccept(['image/*']),
 			]),
 		),
-		/**
-		 * Self-label values for this publication. Effectively content warnings.
-		 */
+		/** Self-label values for this publication. Effectively content warnings. */
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
 		/**
 		 * Name of the publication.
+		 *
 		 * @maxLength 5000
 		 * @maxGraphemes 500
 		 */
@@ -52,14 +51,13 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			/*#__PURE__*/ v.stringLength(0, 5000),
 			/*#__PURE__*/ v.stringGraphemes(0, 500),
 		]),
-		/**
-		 * Object containing platform specific preferences (with a few shared properties).
-		 */
+		/** Object containing platform specific preferences (with a few shared properties). */
 		get preferences() {
 			return /*#__PURE__*/ v.optional(preferencesSchema);
 		},
 		/**
-		 * Base publication url (ex: https://standard.site). The canonical document URL is formed by combining this value with the document path.
+		 * Base publication url (ex: https://standard.site). The canonical document URL is formed by combining
+		 * this value with the document path.
 		 */
 		url: /*#__PURE__*/ v.genericUriString(),
 	}),
@@ -68,6 +66,7 @@ const _preferencesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('site.standard.publication#preferences')),
 	/**
 	 * Boolean which decides whether the publication should appear in discovery feeds.
+	 *
 	 * @default true
 	 */
 	showInDiscover: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),

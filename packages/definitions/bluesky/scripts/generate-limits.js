@@ -39,9 +39,7 @@ const TARGETS = [
 
 // #region lexicon processing
 
-/**
- * @typedef {Record<string, number | Limits>} Limits
- */
+/** @typedef {Record<string, number | Limits>} Limits */
 
 /** @param {string} nsid */
 const nsidToPath = (nsid) => {
@@ -152,7 +150,7 @@ const extractDefLimits = (def) => {
 
 /**
  * @param {Target} target
- * @returns {Promise<{ name: string, nsid: string, limits: Limits } | null>}
+ * @returns {Promise<{ name: string; nsid: string; limits: Limits } | null>}
  */
 const processTarget = async (target) => {
 	const content = await fs.readFile(nsidToPath(target.nsid), 'utf-8');
@@ -239,7 +237,7 @@ const serializeLimits = (obj, indent) => {
 };
 
 const generate = async () => {
-	/** @type {{ name: string, nsid: string, limits: Limits }[]} */
+	/** @type {{ name: string; nsid: string; limits: Limits }[]} */
 	const results = [];
 
 	for (const target of TARGETS) {

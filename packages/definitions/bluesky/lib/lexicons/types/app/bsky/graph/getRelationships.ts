@@ -6,12 +6,11 @@ import * as AppBskyGraphDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getRelationships', {
 	params: /*#__PURE__*/ v.object({
-		/**
-		 * Primary account requesting relationships for.
-		 */
+		/** Primary account requesting relationships for. */
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
 		/**
 		 * List of 'other' accounts to be related back to the primary.
+		 *
 		 * @maxLength 30
 		 */
 		others: /*#__PURE__*/ v.optional(

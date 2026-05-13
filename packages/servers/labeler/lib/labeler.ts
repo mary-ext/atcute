@@ -16,9 +16,7 @@ import type {
 	SignedLabel,
 } from './types.ts';
 
-/**
- * signs, persists, and streams labels for an AT Protocol labeler service
- */
+/** signs, persists, and streams labels for an AT Protocol labeler service */
 export class Labeler {
 	readonly #serviceDid: Did;
 	readonly #signingKey: PrivateKey;
@@ -30,6 +28,7 @@ export class Labeler {
 
 	/**
 	 * creates a new labeler
+	 *
 	 * @param options labeler options
 	 */
 	constructor(options: LabelerOptions) {
@@ -42,6 +41,7 @@ export class Labeler {
 
 	/**
 	 * apply a single label operation
+	 *
 	 * @param op label operation
 	 * @returns stored label
 	 */
@@ -57,6 +57,7 @@ export class Labeler {
 
 	/**
 	 * apply label operations
+	 *
 	 * @param ops label operations
 	 * @param options batch defaults
 	 * @returns stored labels in event order
@@ -86,6 +87,7 @@ export class Labeler {
 
 	/**
 	 * subscribe to sequenced label events
+	 *
 	 * @param options subscription options
 	 * @returns async iterator of label events
 	 * @throws {LabelerFutureCursorError}

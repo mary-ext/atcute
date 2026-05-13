@@ -9,8 +9,8 @@ import { addTypeToBody, decodeFrame } from './frame-decoder.ts';
 import type { FirehoseSubscriptionOptions, MessageOf, ParamsOf } from './types.ts';
 
 /**
- * non-fatal error frame received from the upstream firehose, carrying the
- * atproto-spec `error` code alongside the human-readable `message`.
+ * non-fatal error frame received from the upstream firehose, carrying the atproto-spec `error` code alongside
+ * the human-readable `message`.
  */
 export class FirehoseError extends Error {
 	override readonly name = 'FirehoseError';
@@ -22,9 +22,7 @@ export class FirehoseError extends Error {
 	}
 }
 
-/**
- * generic XRPC subscription client for AT Protocol
- */
+/** generic XRPC subscription client for AT Protocol */
 export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 	#listening = 0;
 	#ws?: ReconnectingWebSocket;
@@ -33,9 +31,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 
 	#options: FirehoseSubscriptionOptions<TSchema>;
 
-	/**
-	 * creates a new firehose subscription
-	 */
+	/** creates a new firehose subscription */
 	constructor(options: FirehoseSubscriptionOptions<TSchema>) {
 		this.#options = options;
 	}
@@ -155,16 +151,12 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 		});
 	}
 
-	/**
-	 * get current subscription options
-	 */
+	/** get current subscription options */
 	getOptions(): ReadonlyDeep<FirehoseSubscriptionOptions<TSchema>> {
 		return this.#options as ReadonlyDeep<FirehoseSubscriptionOptions<TSchema>>;
 	}
 
-	/**
-	 * update subscription options, triggering a reconnection if currently connected
-	 */
+	/** update subscription options, triggering a reconnection if currently connected */
 	updateOptions(options: Partial<FirehoseSubscriptionOptions<TSchema>>): void {
 		this.#options = { ...this.#options, ...options };
 

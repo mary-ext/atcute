@@ -8,17 +8,15 @@ const _mainSchema = /*#__PURE__*/ v.query('blue.moji.packs.getPack', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		/**
-		 * Reference (AT-URI) of the pack record to hydrate.
-		 */
+		/** Reference (AT-URI) of the pack record to hydrate. */
 		pack: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {

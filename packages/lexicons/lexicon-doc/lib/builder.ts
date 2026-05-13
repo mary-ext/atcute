@@ -38,18 +38,14 @@ const requireReference = (ctx: BuildContext, def: DefType | MainType): t.LexRef 
 	return ref;
 };
 
-/**
- * annotations shared by lexicon builder definitions
- */
+/** annotations shared by lexicon builder definitions */
 export type Annotations = {
 	description?: string;
 };
 // #endregion
 
 // #region Concrete types
-/**
- * builder definition for a boolean field
- */
+/** builder definition for a boolean field */
 export interface LexBooleanBuilder extends Annotations {
 	type: 'boolean';
 	/** default boolean value */
@@ -60,6 +56,7 @@ export interface LexBooleanBuilder extends Annotations {
 
 /**
  * builds a boolean definition
+ *
  * @param def optional boolean definition options
  * @returns boolean builder definition
  */
@@ -84,9 +81,7 @@ const buildBooleanSchema = (_ctx: BuildContext, def: LexBooleanBuilder): t.LexBo
 	};
 };
 
-/**
- * builder definition for a signed integer field
- */
+/** builder definition for a signed integer field */
 export interface LexIntegerBuilder extends Annotations {
 	type: 'integer';
 	/** default integer value */
@@ -103,6 +98,7 @@ export interface LexIntegerBuilder extends Annotations {
 
 /**
  * builds an integer definition
+ *
  * @param def optional integer definition options
  * @returns integer builder definition
  */
@@ -184,9 +180,7 @@ const buildIntegerSchema = (_ctx: BuildContext, def: LexIntegerBuilder): t.LexIn
 	};
 };
 
-/**
- * builder definition for a string field
- */
+/** builder definition for a string field */
 export interface LexStringBuilder extends Annotations {
 	type: 'string';
 	/** semantic format constraint */
@@ -211,6 +205,7 @@ export interface LexStringBuilder extends Annotations {
 
 /**
  * builds a string definition
+ *
  * @param def optional string definition options
  * @returns string builder definition
  */
@@ -551,9 +546,7 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexStrin
 	};
 };
 
-/**
- * builder definition for raw binary data
- */
+/** builder definition for raw binary data */
 export interface LexBytesBuilder extends Annotations {
 	type: 'bytes';
 	/** minimum size in bytes */
@@ -564,6 +557,7 @@ export interface LexBytesBuilder extends Annotations {
 
 /**
  * builds a bytes definition
+ *
  * @param def optional bytes definition options
  * @returns bytes builder definition
  */
@@ -588,15 +582,14 @@ const buildBytesSchema = (_ctx: BuildContext, def: LexBytesBuilder): t.LexBytes 
 	};
 };
 
-/**
- * builder definition for a cid-link reference
- */
+/** builder definition for a cid-link reference */
 export interface LexCidLinkBuilder extends Annotations {
 	type: 'cid-link';
 }
 
 /**
  * builds a cid-link definition
+ *
  * @param def optional cid-link definition options
  * @returns cid-link builder definition
  */
@@ -611,9 +604,7 @@ const buildCidLinkSchema = (_ctx: BuildContext, def: LexCidLinkBuilder): t.LexCi
 	};
 };
 
-/**
- * builder definition for binary attachments
- */
+/** builder definition for binary attachments */
 export interface LexBlobBuilder extends Annotations {
 	type: 'blob';
 	/** allowed MIME types */
@@ -624,6 +615,7 @@ export interface LexBlobBuilder extends Annotations {
 
 /**
  * builds a blob definition
+ *
  * @param def optional blob definition options
  * @returns blob builder definition
  */
@@ -668,15 +660,14 @@ type LexConcreteBuilder =
 // #endregion
 
 // #region Meta types
-/**
- * builder definition for a named token reference
- */
+/** builder definition for a named token reference */
 export interface LexTokenBuilder extends Annotations {
 	type: 'token';
 }
 
 /**
  * builds a token definition
+ *
  * @param def optional token definition options
  * @returns token builder definition
  */
@@ -691,9 +682,7 @@ const buildTokenSchema = (_ctx: BuildContext, def: LexTokenBuilder): t.LexToken 
 	};
 };
 
-/**
- * builder definition for a ref to another schema
- */
+/** builder definition for a ref to another schema */
 export interface LexRefBuilder extends Annotations {
 	type: 'ref';
 	/** reference URI or fragment */
@@ -702,6 +691,7 @@ export interface LexRefBuilder extends Annotations {
 
 /**
  * builds a ref definition
+ *
  * @param def ref definition parameters
  * @returns ref builder definition
  */
@@ -717,9 +707,7 @@ const buildRefSchema = (_ctx: BuildContext, def: LexRefBuilder): t.LexRef => {
 	};
 };
 
-/**
- * builder definition for a union of referenced schemas
- */
+/** builder definition for a union of referenced schemas */
 export interface LexRefUnionBuilder extends Annotations {
 	type: 'union';
 	/** referenced variants for the union */
@@ -735,6 +723,7 @@ export interface LexRefUnionBuilder extends Annotations {
 
 /**
  * builds a union definition
+ *
  * @param def union definition parameters
  * @returns union builder definition
  */
@@ -770,15 +759,14 @@ const buildUnionSchema = (ctx: BuildContext, def: LexRefUnionBuilder): t.LexRefU
 	};
 };
 
-/**
- * builder definition for an unknown value
- */
+/** builder definition for an unknown value */
 export interface LexUnknownBuilder extends Annotations {
 	type: 'unknown';
 }
 
 /**
  * builds an unknown definition
+ *
  * @param def optional unknown definition options
  * @returns unknown builder definition
  */
@@ -847,9 +835,7 @@ const buildFieldSchema = (ctx: BuildContext, def: LexFieldBuilder): t.LexDefinab
 	}
 };
 
-/**
- * builder definition for an array field
- */
+/** builder definition for an array field */
 export interface LexArrayBuilder<TItems extends LexFieldBuilder = LexFieldBuilder> extends Annotations {
 	type: 'array';
 	/** schema for array elements */
@@ -864,6 +850,7 @@ type LexPrimitiveArrayBuilder = LexArrayBuilder<LexPrimitiveBuilder>;
 
 /**
  * builds an array definition
+ *
  * @param def array definition parameters
  * @returns array builder definition
  */
@@ -891,9 +878,7 @@ const buildArraySchema = (ctx: BuildContext, def: LexArrayBuilder): t.LexArray =
 	};
 };
 
-/**
- * wraps a field definition with requirement and nullability metadata
- */
+/** wraps a field definition with requirement and nullability metadata */
 export type FieldWrapper<T> = {
 	type: 'field-wrapper';
 	wrapped: T;
@@ -901,14 +886,10 @@ export type FieldWrapper<T> = {
 	nullable: boolean;
 };
 
-/**
- * optionally wrapped field definition
- */
+/** optionally wrapped field definition */
 export type MaybeFieldWrapper<T> = T | FieldWrapper<T>;
 
-/**
- * builder definition for an object schema
- */
+/** builder definition for an object schema */
 export interface LexObjectBuilder extends Annotations {
 	type: 'object';
 	/** property definitions keyed by name */
@@ -930,6 +911,7 @@ const wrapField = <T extends LexFieldBuilder>(
 
 /**
  * builds an object definition
+ *
  * @param def optional object definition options
  * @returns object builder definition
  */
@@ -949,6 +931,7 @@ export const object = (def: Omit<LexObjectBuilder, 'type'> = {}): LexObjectBuild
 
 /**
  * marks a field definition as required
+ *
  * @param def field definition to wrap
  * @returns wrapped field definition marked required
  */
@@ -962,6 +945,7 @@ export const required = <T extends LexFieldBuilder>(def: MaybeFieldWrapper<T>): 
 
 /**
  * marks a field definition as nullable
+ *
  * @param def field definition to wrap
  * @returns wrapped field definition marked nullable
  */
@@ -1080,9 +1064,7 @@ interface XrpcError {
 // #endregion
 
 // #region Sub-types
-/**
- * builder definition for XRPC query parameters
- */
+/** builder definition for XRPC query parameters */
 export interface LexXrpcParametersBuilder extends Annotations {
 	type: 'params';
 	/** query parameters limited to primitives and arrays */
@@ -1091,6 +1073,7 @@ export interface LexXrpcParametersBuilder extends Annotations {
 
 /**
  * builds a params definition
+ *
  * @param def optional params definition options
  * @returns params builder definition
  */
@@ -1134,9 +1117,7 @@ const buildXrpcParametersSchema = (ctx: BuildContext, def: LexXrpcParametersBuil
 
 export type RepoAction = 'create' | 'update' | 'delete';
 
-/**
- * builder definition for repository permissions
- */
+/** builder definition for repository permissions */
 export interface LexRepoPermissionBuilder {
 	type: 'repo-permission';
 	/** collections this permission covers */
@@ -1147,6 +1128,7 @@ export interface LexRepoPermissionBuilder {
 
 /**
  * builds a repository permission definition
+ *
  * @param def permission definition parameters
  * @returns repository permission builder definition
  */
@@ -1160,9 +1142,7 @@ export const repoPermission = (def: Omit<LexRepoPermissionBuilder, 'type'>): Lex
 	return { ...def, type: 'repo-permission' };
 };
 
-/**
- * builder definition for rpc permissions
- */
+/** builder definition for rpc permissions */
 export interface LexRpcPermissionBuilder {
 	type: 'rpc-permission';
 	/** allowed rpc methods (wildcards not allowed in permission sets) */
@@ -1173,6 +1153,7 @@ export interface LexRpcPermissionBuilder {
 
 /**
  * builds an rpc permission definition
+ *
  * @param def permission definition parameters
  * @returns rpc permission builder definition
  */
@@ -1250,9 +1231,7 @@ const buildPermissionSchema = (ctx: BuildContext, def: LexPermissionBuilder): t.
 // #endregion
 
 // #region Primary types
-/**
- * builder definition for a record object
- */
+/** builder definition for a record object */
 export interface LexRecordBuilder extends Annotations {
 	type: 'record';
 	/** record key type */
@@ -1263,6 +1242,7 @@ export interface LexRecordBuilder extends Annotations {
 
 /**
  * builds a record definition
+ *
  * @param def record definition parameters
  * @returns record builder definition
  */
@@ -1279,9 +1259,7 @@ const buildRecordSchema = (ctx: BuildContext, def: LexRecordBuilder): t.LexRecor
 	};
 };
 
-/**
- * builder definition for an XRPC query endpoint
- */
+/** builder definition for an XRPC query endpoint */
 export interface LexXrpcQueryBuilder extends Annotations {
 	type: 'query';
 	/** HTTP query parameters */
@@ -1294,6 +1272,7 @@ export interface LexXrpcQueryBuilder extends Annotations {
 
 /**
  * builds a query definition
+ *
  * @param def optional query definition options
  * @returns query builder definition
  */
@@ -1323,9 +1302,7 @@ const buildQuerySchema = (ctx: BuildContext, def: LexXrpcQueryBuilder): t.LexXrp
 	};
 };
 
-/**
- * builder definition for an XRPC procedure endpoint
- */
+/** builder definition for an XRPC procedure endpoint */
 export interface LexXrpcProcedureBuilder extends Annotations {
 	type: 'procedure';
 	/** HTTP query parameters */
@@ -1340,6 +1317,7 @@ export interface LexXrpcProcedureBuilder extends Annotations {
 
 /**
  * builds a procedure definition
+ *
  * @param def optional procedure definition options
  * @returns procedure builder definition
  */
@@ -1378,9 +1356,7 @@ const buildProcedureSchema = (ctx: BuildContext, def: LexXrpcProcedureBuilder): 
 	};
 };
 
-/**
- * builder definition for an XRPC subscription endpoint
- */
+/** builder definition for an XRPC subscription endpoint */
 export interface LexXrpcSubscriptionBuilder extends Annotations {
 	type: 'subscription';
 	/** HTTP query parameters */
@@ -1393,6 +1369,7 @@ export interface LexXrpcSubscriptionBuilder extends Annotations {
 
 /**
  * builds a subscription definition
+ *
  * @param def optional subscription definition options
  * @returns subscription builder definition
  */
@@ -1415,9 +1392,7 @@ const buildSubscriptionSchema = (
 	};
 };
 
-/**
- * builder definition for a permission set
- */
+/** builder definition for a permission set */
 export interface LexPermissionSetBuilder extends Annotations {
 	type: 'permission-set';
 	/** short title for the permission set */
@@ -1434,6 +1409,7 @@ export interface LexPermissionSetBuilder extends Annotations {
 
 /**
  * builds a permission set definition
+ *
  * @param def permission set definition parameters
  * @returns permission set builder definition
  */
@@ -1471,9 +1447,7 @@ type MainType =
 
 type DefType = LexConcreteBuilder | LexTokenBuilder | LexUnknownBuilder | LexContainerBuilder;
 
-/**
- * builder definition for a lexicon document
- */
+/** builder definition for a lexicon document */
 export interface LexDocumentBuilder {
 	/** nsid for this document */
 	id: Nsid;
@@ -1487,6 +1461,7 @@ export interface LexDocumentBuilder {
 
 /**
  * validates a lexicon document definition
+ *
  * @param doc document definition parameters
  * @returns lexicon document builder definition
  */
@@ -1586,6 +1561,7 @@ const buildDefSchema = (ctx: BuildContext, def: MainType | DefType): t.LexUserTy
 
 /**
  * builds lexicon documents into lexicon JSON schema objects
+ *
  * @param options collection of document builders to compile
  * @returns map of nsid to compiled lexicon document
  */

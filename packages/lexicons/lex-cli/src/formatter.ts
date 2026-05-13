@@ -7,6 +7,7 @@ import { createLspClient } from './lsp-client.ts';
 export interface Formatter {
 	/**
 	 * formats the given code
+	 *
 	 * @param code source code to format
 	 * @param filepath filepath hint for language detection and config resolution
 	 * @returns formatted code
@@ -71,6 +72,7 @@ class Semaphore {
 
 /**
  * creates a formatter from the given configuration
+ *
  * @param config formatter configuration
  * @param root project root for config resolution
  * @returns a formatter instance

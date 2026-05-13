@@ -8,17 +8,15 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getListFeed', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * @default 50
 		 * @minimum 1
 		 * @maximum 100
-		 * @default 50
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		/**
-		 * Reference (AT-URI) to the list record.
-		 */
+		/** Reference (AT-URI) to the list record. */
 		list: /*#__PURE__*/ v.resourceUriString(),
 	}),
 	output: {

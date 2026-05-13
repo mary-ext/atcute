@@ -40,6 +40,7 @@ export class GitError extends Error {
 
 /**
  * runs git with the provided arguments and throws when the command fails.
+ *
  * @param args positional arguments for git
  * @param options execution options
  * @returns stdout and stderr from git

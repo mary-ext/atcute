@@ -8,14 +8,13 @@ import * as AppBskyActorDefs from '../actor/defs.ts';
 const _labelerPoliciesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.labeler.defs#labelerPolicies')),
 	/**
-	 * Label values created by this labeler and scoped exclusively to it. Labels defined here will override global label definitions for this labeler.
+	 * Label values created by this labeler and scoped exclusively to it. Labels defined here will override
+	 * global label definitions for this labeler.
 	 */
 	get labelValueDefinitions() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelValueDefinitionSchema));
 	},
-	/**
-	 * The label values which this labeler publishes. May include global or custom labels.
-	 */
+	/** The label values which this labeler publishes. May include global or custom labels. */
 	get labelValues() {
 		return /*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelValueSchema);
 	},
@@ -30,9 +29,7 @@ const _labelerViewSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 	get viewer() {
@@ -49,26 +46,24 @@ const _labelerViewDetailedSchema = /*#__PURE__*/ v.object({
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
-	/**
-	 * @minimum 0
-	 */
+	/** @minimum 0 */
 	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get policies() {
 		return labelerPoliciesSchema;
 	},
 	/**
-	 * The set of report reason 'codes' which are in-scope for this service to review and action. These usually align to policy categories. If not defined (distinct from empty array), all reason types are allowed.
+	 * The set of report reason 'codes' which are in-scope for this service to review and action. These usually
+	 * align to policy categories. If not defined (distinct from empty array), all reason types are allowed.
 	 */
 	get reasonTypes() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoModerationDefs.reasonTypeSchema));
 	},
 	/**
-	 * Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct from empty array), default is any record type.
+	 * Set of record types (collection NSIDs) which can be reported to this service. If not defined (distinct
+	 * from empty array), default is any record type.
 	 */
 	subjectCollections: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.nsidString())),
-	/**
-	 * The set of subject types (account, record, etc) this service accepts reports on.
-	 */
+	/** The set of subject types (account, record, etc) this service accepts reports on. */
 	get subjectTypes() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoModerationDefs.subjectTypeSchema));
 	},

@@ -45,9 +45,7 @@ type MstDiffTestCase = v.InferOutput<typeof mstDiffTestCaseSchema>;
 
 const testSuiteRoot = path.join(__dirname, '../mst-test-suite');
 
-/**
- * Load a CAR file into a MemoryBlockStore and extract the root CID
- */
+/** Load a CAR file into a MemoryBlockStore and extract the root CID */
 const loadCar = async (relname: string): Promise<{ store: ReadonlyMemoryBlockStore; root: string }> => {
 	const filename = path.join(testSuiteRoot, relname);
 	const bytes = await fs.readFile(filename);
