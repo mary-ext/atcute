@@ -1,5 +1,5 @@
 {
-	"id": "chat.bsky.group.getGroupPublicInfo",
+	"id": "chat.bsky.group.getJoinLinkPreview",
 	"defs": {
 		"main": {
 			"type": "query",
@@ -11,10 +11,10 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["group"],
+					"required": ["joinLinkPreview"],
 					"properties": {
-						"group": {
-							"ref": "chat.bsky.group.defs#groupPublicView",
+						"joinLinkPreview": {
+							"ref": "chat.bsky.group.defs#joinLinkPreviewView",
 							"type": "ref"
 						}
 					}

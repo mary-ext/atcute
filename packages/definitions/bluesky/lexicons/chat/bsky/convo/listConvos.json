@@ -47,6 +47,11 @@
 					"readState": {
 						"type": "string",
 						"knownValues": ["unread"]
+					},
+					"lockStatus": {
+						"type": "string",
+						"description": "Filter by conversation lock status. Values follow chat.bsky.convo.defs#convoLockStatus.",
+						"knownValues": ["unlocked", "locked", "locked-permanently"]
 					}
 				}
 			},

@@ -29,25 +29,6 @@
 				}
 			}
 		},
-		"groupPublicView": {
-			"type": "object",
-			"required": ["name", "owner", "memberCount", "requireApproval"],
-			"properties": {
-				"name": {
-					"type": "string"
-				},
-				"owner": {
-					"ref": "chat.bsky.actor.defs#profileViewBasic",
-					"type": "ref"
-				},
-				"memberCount": {
-					"type": "integer"
-				},
-				"requireApproval": {
-					"type": "boolean"
-				}
-			}
-		},
 		"joinRequestView": {
 			"type": "object",
 			"required": ["convoId", "requestedBy", "requestedAt"],
@@ -68,6 +49,30 @@
 		"linkEnabledStatus": {
 			"type": "string",
 			"knownValues": ["enabled", "disabled"]
+		},
+		"joinLinkPreviewView": {
+			"type": "object",
+			"required": ["name", "owner", "memberCount", "requireApproval"],
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"convo": {
+					"ref": "chat.bsky.convo.defs#convoView",
+					"type": "ref",
+					"description": "Present only if the request is authenticated and the user is a member of the group."
+				},
+				"owner": {
+					"ref": "chat.bsky.actor.defs#profileViewBasic",
+					"type": "ref"
+				},
+				"memberCount": {
+					"type": "integer"
+				},
+				"requireApproval": {
+					"type": "boolean"
+				}
+			}
 		}
 	},
 	"lexicon": 1,

@@ -178,7 +178,7 @@ export * as ChatBskyGroupDisableJoinLink from './types/chat/bsky/group/disableJo
 export * as ChatBskyGroupEditGroup from './types/chat/bsky/group/editGroup.ts';
 export * as ChatBskyGroupEditJoinLink from './types/chat/bsky/group/editJoinLink.ts';
 export * as ChatBskyGroupEnableJoinLink from './types/chat/bsky/group/enableJoinLink.ts';
-export * as ChatBskyGroupGetGroupPublicInfo from './types/chat/bsky/group/getGroupPublicInfo.ts';
+export * as ChatBskyGroupGetJoinLinkPreview from './types/chat/bsky/group/getJoinLinkPreview.ts';
 export * as ChatBskyGroupListJoinRequests from './types/chat/bsky/group/listJoinRequests.ts';
 export * as ChatBskyGroupRejectJoinRequest from './types/chat/bsky/group/rejectJoinRequest.ts';
 export * as ChatBskyGroupRemoveMembers from './types/chat/bsky/group/removeMembers.ts';

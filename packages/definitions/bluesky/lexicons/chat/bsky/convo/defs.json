@@ -1,6 +1,19 @@
 {
 	"id": "chat.bsky.convo.defs",
 	"defs": {
+		"convoRef": {
+			"type": "object",
+			"required": ["did", "convoId"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				},
+				"convoId": {
+					"type": "string"
+				}
+			}
+		},
 		"convoKind": {
 			"type": "string",
 			"knownValues": ["direct", "group"]

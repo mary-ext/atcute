@@ -18,6 +18,10 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.listConvos', {
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
+		/** Filter by conversation lock status. Values follow chat.bsky.convo.defs#convoLockStatus. */
+		lockStatus: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.string<'locked' | 'locked-permanently' | 'unlocked' | (string & {})>(),
+		),
 		readState: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'unread' | (string & {})>()),
 		/**
 		 * Filter convos by their status. It is discouraged to call with "request" and preferred to call

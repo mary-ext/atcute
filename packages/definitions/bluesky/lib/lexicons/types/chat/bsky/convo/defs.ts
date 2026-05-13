@@ -10,6 +10,11 @@ const _convoKindSchema = /*#__PURE__*/ v.string<'direct' | 'group' | (string & {
 const _convoLockStatusSchema = /*#__PURE__*/ v.string<
 	'locked' | 'locked-permanently' | 'unlocked' | (string & {})
 >();
+const _convoRefSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#convoRef')),
+	convoId: /*#__PURE__*/ v.string(),
+	did: /*#__PURE__*/ v.didString(),
+});
 const _convoStatusSchema = /*#__PURE__*/ v.string<'accepted' | 'request' | (string & {})>();
 const _convoViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#convoView')),
@@ -565,6 +570,7 @@ const _systemMessageViewSchema = /*#__PURE__*/ v.object({
 
 type convoKind$schematype = typeof _convoKindSchema;
 type convoLockStatus$schematype = typeof _convoLockStatusSchema;
+type convoRef$schematype = typeof _convoRefSchema;
 type convoStatus$schematype = typeof _convoStatusSchema;
 type convoView$schematype = typeof _convoViewSchema;
 type deletedMessageView$schematype = typeof _deletedMessageViewSchema;
@@ -621,6 +627,7 @@ type systemMessageView$schematype = typeof _systemMessageViewSchema;
 
 export interface convoKindSchema extends convoKind$schematype {}
 export interface convoLockStatusSchema extends convoLockStatus$schematype {}
+export interface convoRefSchema extends convoRef$schematype {}
 export interface convoStatusSchema extends convoStatus$schematype {}
 export interface convoViewSchema extends convoView$schematype {}
 export interface deletedMessageViewSchema extends deletedMessageView$schematype {}
@@ -677,6 +684,7 @@ export interface systemMessageViewSchema extends systemMessageView$schematype {}
 
 export const convoKindSchema = _convoKindSchema as convoKindSchema;
 export const convoLockStatusSchema = _convoLockStatusSchema as convoLockStatusSchema;
+export const convoRefSchema = _convoRefSchema as convoRefSchema;
 export const convoStatusSchema = _convoStatusSchema as convoStatusSchema;
 export const convoViewSchema = _convoViewSchema as convoViewSchema;
 export const deletedMessageViewSchema = _deletedMessageViewSchema as deletedMessageViewSchema;
@@ -746,6 +754,7 @@ export const systemMessageViewSchema = _systemMessageViewSchema as systemMessage
 
 export type ConvoKind = v.InferInput<typeof convoKindSchema>;
 export type ConvoLockStatus = v.InferInput<typeof convoLockStatusSchema>;
+export interface ConvoRef extends v.InferInput<typeof convoRefSchema> {}
 export type ConvoStatus = v.InferInput<typeof convoStatusSchema>;
 export interface ConvoView extends v.InferInput<typeof convoViewSchema> {}
 export interface DeletedMessageView extends v.InferInput<typeof deletedMessageViewSchema> {}
