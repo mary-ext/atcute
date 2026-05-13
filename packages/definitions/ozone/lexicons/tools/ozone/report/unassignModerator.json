@@ -1,0 +1,36 @@
+{
+	"id": "tools.ozone.report.unassignModerator",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["reportId"],
+					"properties": {
+						"reportId": {
+							"type": "integer",
+							"description": "The ID of the report to unassign."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidAssignment",
+					"description": "The report ID is invalid."
+				}
+			],
+			"output": {
+				"schema": {
+					"ref": "tools.ozone.report.defs#assignmentView",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"description": "Remove report assignment."
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,114 @@
+{
+	"id": "tools.ozone.report.queryReports",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["reports"],
+					"properties": {
+						"cursor": {
+							"type": "string"
+						},
+						"reports": {
+							"type": "array",
+							"items": {
+								"ref": "tools.ozone.report.defs#reportView",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["status"],
+				"properties": {
+					"did": {
+						"type": "string",
+						"format": "did",
+						"description": "Filter to reports where the subject is this DID or any record owned by this DID. Unlike `subject` (which scopes to a specific account or record), this returns all reports tied to the DID across both account-level and record-level subjects."
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string",
+						"description": "Filter by report status.",
+						"knownValues": ["open", "closed", "escalated", "queued", "assigned"]
+					},
+					"isMuted": {
+						"type": "boolean",
+						"default": false,
+						"description": "Filter by muted status. true returns only muted reports, false returns only unmuted reports. Defaults to false."
+					},
+					"queueId": {
+						"type": "integer",
+						"description": "Filter by queue ID. Use -1 for unassigned reports."
+					},
+					"subject": {
+						"type": "string",
+						"format": "uri",
+						"description": "Filter by subject DID or AT-URI."
+					},
+					"sortField": {
+						"enum": ["createdAt", "updatedAt"],
+						"type": "string",
+						"default": "createdAt"
+					},
+					"assignedTo": {
+						"type": "string",
+						"format": "did",
+						"description": "Filter by the DID of the moderator permanently assigned to the report."
+					},
+					"collections": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "nsid"
+						},
+						"maxLength": 20,
+						"description": "If specified, reports where the subject belongs to the given collections will be returned. When subjectType is set to 'account', this will be ignored."
+					},
+					"reportTypes": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "Filter by report types (fully qualified string in the format of com.atproto.moderation.defs#reason<name>)."
+					},
+					"subjectType": {
+						"type": "string",
+						"description": "If specified, reports of the given type (account or record) will be returned.",
+						"knownValues": ["account", "record"]
+					},
+					"reportedAfter": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Retrieve reports created after a given timestamp"
+					},
+					"sortDirection": {
+						"enum": ["asc", "desc"],
+						"type": "string",
+						"default": "desc"
+					},
+					"reportedBefore": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Retrieve reports created before a given timestamp"
+					}
+				}
+			},
+			"description": "View moderation reports. Reports are individual instances of content being reported, as opposed to subject statuses which aggregate reports at the subject level."
+		}
+	},
+	"lexicon": 1
+}

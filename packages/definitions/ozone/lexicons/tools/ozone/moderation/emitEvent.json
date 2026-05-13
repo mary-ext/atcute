@@ -54,6 +54,11 @@
 							"type": "string",
 							"description": "An optional external ID for the event, used to deduplicate events from external systems. Fails when an event of same type with the same external ID exists for the same subject."
 						},
+						"reportAction": {
+							"ref": "#reportAction",
+							"type": "ref",
+							"description": "Optional report-level targeting. If provided, this event will be linked to specific reports and reporters may be notified."
+						},
 						"subjectBlobCids": {
 							"type": "array",
 							"items": {
@@ -82,6 +87,34 @@
 				"encoding": "application/json"
 			},
 			"description": "Take a moderation action on an actor."
+		},
+		"reportAction": {
+			"type": "object",
+			"properties": {
+				"all": {
+					"type": "boolean",
+					"description": "Target ALL reports on the subject"
+				},
+				"ids": {
+					"type": "array",
+					"items": {
+						"type": "integer"
+					},
+					"description": "Target specific report IDs"
+				},
+				"note": {
+					"type": "string",
+					"description": "Note to send to reporter(s) when actioning their report"
+				},
+				"types": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Target reports matching these report types on the subject (fully qualified NSIDs)"
+				}
+			},
+			"description": "Target specific reports when emitting a moderation event"
 		}
 	},
 	"lexicon": 1

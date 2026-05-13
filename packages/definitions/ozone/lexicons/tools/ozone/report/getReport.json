@@ -1,0 +1,33 @@
+{
+	"id": "tools.ozone.report.getReport",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "NotFound",
+					"description": "No report found."
+				}
+			],
+			"output": {
+				"schema": {
+					"ref": "tools.ozone.report.defs#reportView",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["id"],
+				"properties": {
+					"id": {
+						"type": "integer",
+						"description": "The ID of the report to retrieve."
+					}
+				}
+			},
+			"description": "Get details about a single moderation report by ID."
+		}
+	},
+	"lexicon": 1
+}

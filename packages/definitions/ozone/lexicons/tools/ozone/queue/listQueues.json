@@ -1,0 +1,63 @@
+{
+	"id": "tools.ozone.queue.listQueues",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["queues"],
+					"properties": {
+						"cursor": {
+							"type": "string"
+						},
+						"queues": {
+							"type": "array",
+							"items": {
+								"ref": "tools.ozone.queue.defs#queueView",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"enabled": {
+						"type": "boolean",
+						"description": "Filter by enabled status. If not specified, returns all queues."
+					},
+					"collection": {
+						"type": "string",
+						"description": "Filter queues by collection name (e.g. 'app.bsky.feed.post')."
+					},
+					"reportTypes": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"maxLength": 10,
+						"description": "Filter queues that handle any of these report reason types."
+					},
+					"subjectType": {
+						"type": "string",
+						"description": "Filter queues that handle this subject type ('account' or 'record')."
+					}
+				}
+			},
+			"description": "List all configured moderation queues with statistics."
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,48 @@
+{
+	"id": "tools.ozone.report.listActivities",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["activities"],
+					"properties": {
+						"cursor": {
+							"type": "string"
+						},
+						"activities": {
+							"type": "array",
+							"items": {
+								"ref": "tools.ozone.report.defs#reportActivityView",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["reportId"],
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"reportId": {
+						"type": "integer",
+						"description": "ID of the report whose activities to list"
+					}
+				}
+			},
+			"description": "List all activities for a report, sorted most-recent-first."
+		}
+	},
+	"lexicon": 1
+}

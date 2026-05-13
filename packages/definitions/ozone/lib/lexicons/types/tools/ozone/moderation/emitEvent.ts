@@ -49,6 +49,13 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 			get modTool() {
 				return /*#__PURE__*/ v.optional(ToolsOzoneModerationDefs.modToolSchema);
 			},
+			/**
+			 * Optional report-level targeting. If provided, this event will be linked to specific reports and
+			 * reporters may be notified.
+			 */
+			get reportAction() {
+				return /*#__PURE__*/ v.optional(reportActionSchema);
+			},
 			get subject() {
 				return /*#__PURE__*/ v.variant([
 					ComAtprotoAdminDefs.repoRefSchema,
@@ -65,12 +72,28 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 		},
 	},
 });
+const _reportActionSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.emitEvent#reportAction')),
+	/** Target ALL reports on the subject */
+	all: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/** Target specific report IDs */
+	ids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.integer())),
+	/** Note to send to reporter(s) when actioning their report */
+	note: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/** Target reports matching these report types on the subject (fully qualified NSIDs) */
+	types: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+});
 
 type main$schematype = typeof _mainSchema;
+type reportAction$schematype = typeof _reportActionSchema;
 
 export interface mainSchema extends main$schematype {}
+export interface reportActionSchema extends reportAction$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
+export const reportActionSchema = _reportActionSchema as reportActionSchema;
+
+export interface ReportAction extends v.InferInput<typeof reportActionSchema> {}
 
 export interface $params {}
 export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}

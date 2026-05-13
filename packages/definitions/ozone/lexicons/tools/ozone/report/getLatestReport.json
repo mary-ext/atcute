@@ -1,0 +1,33 @@
+{
+	"id": "tools.ozone.report.getLatestReport",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "NotFound",
+					"description": "No report found."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["report"],
+					"properties": {
+						"report": {
+							"ref": "tools.ozone.report.defs#reportView",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {}
+			},
+			"description": "Get the most recent report."
+		}
+	},
+	"lexicon": 1
+}

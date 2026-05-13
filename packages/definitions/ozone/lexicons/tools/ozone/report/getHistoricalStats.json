@@ -1,0 +1,71 @@
+{
+	"id": "tools.ozone.report.getHistoricalStats",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["stats"],
+					"properties": {
+						"stats": {
+							"type": "array",
+							"items": {
+								"ref": "tools.ozone.report.defs#historicalStats",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 30,
+						"maximum": 100,
+						"minimum": 1,
+						"description": "Maximum number of entries to return."
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor."
+					},
+					"endDate": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Latest date to include (inclusive)."
+					},
+					"queueId": {
+						"type": "integer",
+						"description": "Filter stats by queue. Use -1 for unqueued reports."
+					},
+					"startDate": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Earliest date to include (inclusive)."
+					},
+					"reportTypes": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "Filter stats by report types."
+					},
+					"moderatorDid": {
+						"type": "string",
+						"format": "did",
+						"description": "Filter stats by moderator DID."
+					}
+				}
+			},
+			"description": "Get historical daily report statistics. Returns a paginated list of daily stat snapshots, newest first. Filter by queue, moderator, or report type."
+		}
+	},
+	"lexicon": 1
+}
