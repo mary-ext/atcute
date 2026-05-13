@@ -2,11 +2,11 @@
 	"id": "sh.tangled.repo",
 	"defs": {
 		"main": {
-			"key": "tid",
+			"key": "any",
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["name", "knot", "createdAt"],
+				"required": ["knot", "createdAt"],
 				"properties": {
 					"knot": {
 						"type": "string",
@@ -14,7 +14,7 @@
 					},
 					"name": {
 						"type": "string",
-						"description": "name of the repo"
+						"description": "Cosmetic name of the repo."
 					},
 					"labels": {
 						"type": "array",

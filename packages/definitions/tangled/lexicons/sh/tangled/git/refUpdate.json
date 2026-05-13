@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["ref", "committerDid", "repoName", "oldSha", "newSha", "meta"],
+				"required": ["ref", "committerDid", "repo", "oldSha", "newSha", "meta"],
 				"properties": {
 					"ref": {
 						"type": "string",
@@ -17,6 +17,11 @@
 					"meta": {
 						"ref": "#meta",
 						"type": "ref"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repo itself"
 					},
 					"newSha": {
 						"type": "string",
@@ -30,19 +35,10 @@
 						"minLength": 40,
 						"description": "old SHA of this ref"
 					},
-					"repoDid": {
-						"type": "string",
-						"format": "did",
-						"description": "DID of the repo itself"
-					},
 					"ownerDid": {
 						"type": "string",
 						"format": "did",
 						"description": "did of the owner of the repo"
-					},
-					"repoName": {
-						"type": "string",
-						"description": "name of the repo"
 					},
 					"committerDid": {
 						"type": "string",

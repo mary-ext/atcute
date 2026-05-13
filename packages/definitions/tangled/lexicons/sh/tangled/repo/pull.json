@@ -75,31 +75,23 @@
 			"properties": {
 				"repo": {
 					"type": "string",
-					"format": "at-uri"
+					"format": "did"
 				},
 				"branch": {
 					"type": "string"
-				},
-				"repoDid": {
-					"type": "string",
-					"format": "did"
 				}
 			}
 		},
 		"target": {
 			"type": "object",
-			"required": ["branch"],
+			"required": ["repo", "branch"],
 			"properties": {
 				"repo": {
 					"type": "string",
-					"format": "at-uri"
+					"format": "did"
 				},
 				"branch": {
 					"type": "string"
-				},
-				"repoDid": {
-					"type": "string",
-					"format": "did"
 				}
 			}
 		}

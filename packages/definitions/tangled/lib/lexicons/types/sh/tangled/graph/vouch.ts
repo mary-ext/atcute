@@ -8,6 +8,16 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('sh.tangled.graph.vouch'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/**
+		 * Optional list of ATURIs serving as evidence for this vouch (ex. issues, PRs)
+		 *
+		 * @maxLength 10
+		 */
+		evidences: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
+				/*#__PURE__*/ v.arrayLength(0, 10),
+			]),
+		),
+		/**
 		 * Whether this user is being vouched for or denounced
 		 *
 		 * @default 'vouch'

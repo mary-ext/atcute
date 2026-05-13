@@ -6,21 +6,17 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["title", "createdAt"],
+				"required": ["repo", "title", "createdAt"],
 				"properties": {
 					"body": {
 						"type": "string"
 					},
 					"repo": {
 						"type": "string",
-						"format": "at-uri"
+						"format": "did"
 					},
 					"title": {
 						"type": "string"
-					},
-					"repoDid": {
-						"type": "string",
-						"format": "did"
 					},
 					"mentions": {
 						"type": "array",

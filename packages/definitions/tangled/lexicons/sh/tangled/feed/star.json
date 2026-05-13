@@ -6,20 +6,37 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["createdAt"],
+				"required": ["subject", "createdAt"],
 				"properties": {
 					"subject": {
-						"type": "string",
-						"format": "at-uri"
+						"refs": ["#repo", "#string"],
+						"type": "union",
+						"closed": true
 					},
 					"createdAt": {
 						"type": "string",
 						"format": "datetime"
-					},
-					"subjectDid": {
-						"type": "string",
-						"format": "did"
 					}
+				}
+			}
+		},
+		"repo": {
+			"type": "object",
+			"required": ["did"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		},
+		"string": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
 				}
 			}
 		}

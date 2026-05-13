@@ -6,16 +6,12 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["subject", "createdAt"],
+				"required": ["subject", "repo", "createdAt"],
 				"properties": {
 					"repo": {
 						"type": "string",
-						"format": "at-uri",
-						"description": "repo to add this user to"
-					},
-					"repoDid": {
-						"type": "string",
-						"format": "did"
+						"format": "did",
+						"description": "repo DID to add this user to"
 					},
 					"subject": {
 						"type": "string",

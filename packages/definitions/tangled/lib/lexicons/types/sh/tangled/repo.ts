@@ -3,7 +3,7 @@ import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.record(
-	/*#__PURE__*/ v.tidString(),
+	/*#__PURE__*/ v.string(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo'),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
@@ -18,8 +18,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		knot: /*#__PURE__*/ v.string(),
 		/** List of labels that this repo subscribes to */
 		labels: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString())),
-		/** name of the repo */
-		name: /*#__PURE__*/ v.string(),
+		/** Cosmetic name of the repo. */
+		name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/** DID of the repo itself, if assigned */
 		repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		/** source of the repo */

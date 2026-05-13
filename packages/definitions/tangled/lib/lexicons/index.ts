@@ -43,6 +43,7 @@ export * as ShTangledRepoCompare from './types/sh/tangled/repo/compare.ts';
 export * as ShTangledRepoCreate from './types/sh/tangled/repo/create.ts';
 export * as ShTangledRepoDelete from './types/sh/tangled/repo/delete.ts';
 export * as ShTangledRepoDeleteBranch from './types/sh/tangled/repo/deleteBranch.ts';
+export * as ShTangledRepoDescribeRepo from './types/sh/tangled/repo/describeRepo.ts';
 export * as ShTangledRepoDiff from './types/sh/tangled/repo/diff.ts';
 export * as ShTangledRepoForkStatus from './types/sh/tangled/repo/forkStatus.ts';
 export * as ShTangledRepoForkSync from './types/sh/tangled/repo/forkSync.ts';

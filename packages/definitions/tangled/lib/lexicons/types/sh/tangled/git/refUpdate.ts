@@ -62,9 +62,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			/*#__PURE__*/ v.stringGraphemes(0, 256),
 		]),
 		/** DID of the repo itself */
-		repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
-		/** name of the repo */
-		repoName: /*#__PURE__*/ v.string(),
+		repo: /*#__PURE__*/ v.didString(),
 	}),
 );
 const _metaSchema = /*#__PURE__*/ v.object({
