@@ -1,5 +1,11 @@
 # @atcute/lex-cli
 
+## 3.0.1
+
+### Patch Changes
+
+- 916ff5f: canonicalize set-like arrays on pull
+
 ## 3.0.0
 
 ### Major Changes
