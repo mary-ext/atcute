@@ -6,8 +6,8 @@ import * as ShTangledGitTempDefs from './defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getHead', {
 	params: /*#__PURE__*/ v.object({
-		/** AT-URI of the repository */
-		repo: /*#__PURE__*/ v.resourceUriString(),
+		/** DID of the repository */
+		repo: /*#__PURE__*/ v.didString(),
 	}),
 	output: {
 		type: 'lex',

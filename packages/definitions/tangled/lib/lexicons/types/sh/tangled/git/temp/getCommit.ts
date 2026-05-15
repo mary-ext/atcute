@@ -8,8 +8,8 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getCommit', {
 	params: /*#__PURE__*/ v.object({
 		/** reference name to resolve */
 		ref: /*#__PURE__*/ v.string(),
-		/** AT-URI of the repository */
-		repo: /*#__PURE__*/ v.resourceUriString(),
+		/** DID of the repository */
+		repo: /*#__PURE__*/ v.didString(),
 	}),
 	output: {
 		type: 'lex',

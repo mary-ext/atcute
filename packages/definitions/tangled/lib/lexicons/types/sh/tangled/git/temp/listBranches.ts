@@ -17,8 +17,8 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.listBranches', {
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		/** AT-URI of the repository */
-		repo: /*#__PURE__*/ v.resourceUriString(),
+		/** DID of the repository */
+		repo: /*#__PURE__*/ v.didString(),
 	}),
 	output: {
 		type: 'blob',

@@ -90,7 +90,8 @@
 					},
 					"repo": {
 						"type": "string",
-						"description": "Repository identifier in format 'did:plc:.../repoName'"
+						"format": "did",
+						"description": "DID of the repository"
 					}
 				}
 			}

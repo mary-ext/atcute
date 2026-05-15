@@ -19,8 +19,8 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.listCommits', {
 		),
 		/** Git reference (branch, tag, or commit SHA) */
 		ref: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		/** AT-URI of the repository */
-		repo: /*#__PURE__*/ v.resourceUriString(),
+		/** DID of the repository */
+		repo: /*#__PURE__*/ v.didString(),
 	}),
 	output: {
 		type: 'blob',

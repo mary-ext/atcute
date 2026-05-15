@@ -35,8 +35,8 @@
 					},
 					"repo": {
 						"type": "string",
-						"format": "at-uri",
-						"description": "AT-URI of the repository"
+						"format": "did",
+						"description": "DID of the repository"
 					},
 					"format": {
 						"enum": ["tar", "tar.bz2", "tar.gz", "tar.xz", "zip"],

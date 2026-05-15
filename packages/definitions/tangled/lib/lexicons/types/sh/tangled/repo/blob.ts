@@ -26,8 +26,8 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.blob', {
 		raw: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 		/** Git reference (branch, tag, or commit SHA) */
 		ref: /*#__PURE__*/ v.string(),
-		/** Repository identifier in format 'did:plc:.../repoName' */
-		repo: /*#__PURE__*/ v.string(),
+		/** DID of the repository */
+		repo: /*#__PURE__*/ v.didString(),
 	}),
 	output: {
 		type: 'lex',

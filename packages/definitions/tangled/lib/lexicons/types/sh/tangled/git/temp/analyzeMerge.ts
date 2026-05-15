@@ -15,8 +15,8 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.analyzeMerge', {
 		branch: /*#__PURE__*/ v.string(),
 		/** Patch or pull request to check for merge conflicts */
 		patch: /*#__PURE__*/ v.string(),
-		/** AT-URI of the repository */
-		repo: /*#__PURE__*/ v.resourceUriString(),
+		/** DID of the repository */
+		repo: /*#__PURE__*/ v.didString(),
 	}),
 	output: {
 		type: 'lex',

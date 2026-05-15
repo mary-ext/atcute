@@ -4,8 +4,8 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getTag', {
 	params: /*#__PURE__*/ v.object({
-		/** AT-URI of the repository */
-		repo: /*#__PURE__*/ v.resourceUriString(),
+		/** DID of the repository */
+		repo: /*#__PURE__*/ v.didString(),
 		/** Name of tag, such as v1.3.0 */
 		tag: /*#__PURE__*/ v.string(),
 	}),
