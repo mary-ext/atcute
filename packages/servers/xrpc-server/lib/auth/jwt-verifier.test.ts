@@ -11,18 +11,35 @@ import { AuthRequiredError } from '../main/xrpc-error.ts';
 import { createServiceJwt } from './jwt-creator.ts';
 import { ServiceJwtVerifier, type ReplayStore } from './jwt-verifier.ts';
 
+const encodeJwtPart = (data: unknown): string => toBase64Url(encodeUtf8(JSON.stringify(data)));
+
 // re-sign a header/payload pair with the given keypair, producing a valid-signature JWT. used
 // to construct tokens that exercise code paths `createServiceJwt` wouldn't (e.g. custom `kid`,
 // missing `lxm`, synthetic `nbf`, stale `iat`).
 const signRaw = async (keypair: PrivateKeyExportable, header: unknown, payload: unknown): Promise<string> => {
-	const encode = (data: unknown) => toBase64Url(encodeUtf8(JSON.stringify(data)));
-
-	const headerB64 = encode(header);
-	const payloadB64 = encode(payload);
+	const headerB64 = encodeJwtPart(header);
+	const payloadB64 = encodeJwtPart(payload);
 	const signature = await keypair.sign(encodeUtf8(`${headerB64}.${payloadB64}`));
 
 	return `${headerB64}.${payloadB64}.${toBase64Url(signature)}`;
 };
+
+const makeResolver = (kp: PrivateKeyExportable) => ({
+	async resolve(did: Did) {
+		return {
+			'@context': [],
+			id: did,
+			verificationMethod: [
+				{
+					id: `${did}#atproto`,
+					type: 'Multikey',
+					controller: did,
+					publicKeyMultibase: await kp.exportPublicKey('multikey'),
+				},
+			],
+		};
+	},
+});
 
 const decodePortion = <T>(part: string): T => {
 	return JSON.parse(decodeUtf8From(fromBase64Url(part)));
@@ -63,23 +80,6 @@ describe('ServiceJwtVerifier', () => {
 
 	beforeAll(async () => {
 		keypair = await Secp256k1PrivateKeyExportable.createKeypair();
-	});
-
-	const makeResolver = (kp: PrivateKeyExportable) => ({
-		async resolve(did: Did) {
-			return {
-				'@context': [],
-				id: did,
-				verificationMethod: [
-					{
-						id: `${did}#atproto`,
-						type: 'Multikey',
-						controller: did,
-						publicKeyMultibase: await kp.exportPublicKey('multikey'),
-					},
-				],
-			};
-		},
 	});
 
 	it('verifies a valid JWT with bare DID audience', async () => {

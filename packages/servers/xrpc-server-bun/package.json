@@ -30,7 +30,7 @@
 		"@atcute/atproto": "workspace:^",
 		"@atcute/cbor": "workspace:^",
 		"@atcute/xrpc-server": "workspace:^",
-		"@types/bun": "^1.3.13"
+		"@types/bun": "^1.3.14"
 	},
 	"peerDependencies": {
 		"@atcute/xrpc-server": "workspace:^"

@@ -11,6 +11,18 @@ type Base58Binding = {
 	decode: (source: string) => Uint8Array<ArrayBuffer>;
 };
 
+const getPrebuildDir = (): string => {
+	if (platform === 'linux') {
+		const ldd = readFileSync('/usr/bin/ldd', 'utf-8');
+		const libc = ldd.includes('musl') ? 'musl' : ldd.includes('GNU C Library') ? 'glibc' : null;
+		if (libc === null) {
+			throw new Error(`unable to detect libc`);
+		}
+		return `${platform}-${arch}-${libc}`;
+	}
+	return `${platform}-${arch}`;
+};
+
 /**
  * whether the native base58 module is available for the current runtime.
  *
@@ -36,18 +48,6 @@ export let fromBase58Btc: (source: string) => Uint8Array<ArrayBuffer> =
 export let toBase58Btc: (source: Uint8Array) => string = /*#__PURE__*/ createBtcBaseEncode(BASE58BTC_CHARSET);
 
 try {
-	const getPrebuildDir = (): string => {
-		if (platform === 'linux') {
-			const ldd = readFileSync('/usr/bin/ldd', 'utf-8');
-			const libc = ldd.includes('musl') ? 'musl' : ldd.includes('GNU C Library') ? 'glibc' : null;
-			if (libc === null) {
-				throw new Error(`unable to detect libc`);
-			}
-			return `${platform}-${arch}-${libc}`;
-		}
-		return `${platform}-${arch}`;
-	};
-
 	const require = createRequire(import.meta.url);
 	const binding: Base58Binding = require(`../../prebuilds/${getPrebuildDir()}/base58.node`);
 

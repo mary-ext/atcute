@@ -40,7 +40,7 @@
 	"devDependencies": {
 		"@types/ws": "^8.18.1",
 		"vitest": "^4.1.6",
-		"ws": "^8.20.0"
+		"ws": "^8.20.1"
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^2.0.0",

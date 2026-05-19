@@ -13,6 +13,18 @@ type GraphemeBinding = {
 	isGraphemeLengthInRange: (str: string, min: number, max: number) => boolean;
 };
 
+const getPrebuildDir = (): string => {
+	if (platform === 'linux') {
+		const ldd = readFileSync('/usr/bin/ldd', 'utf-8');
+		const libc = ldd.includes('musl') ? 'musl' : ldd.includes('GNU C Library') ? 'glibc' : null;
+		if (libc === null) {
+			throw new Error(`unable to detect libc`);
+		}
+		return `${platform}-${arch}-${libc}`;
+	}
+	return `${platform}-${arch}`;
+};
+
 /**
  * whether the native module is available for the current runtime.
  *
@@ -40,18 +52,6 @@ export let isGraphemeLengthInRange: (text: string, min: number, max: number) => 
 	isGraphemeLengthInRangeJs;
 
 try {
-	const getPrebuildDir = (): string => {
-		if (platform === 'linux') {
-			const ldd = readFileSync('/usr/bin/ldd', 'utf-8');
-			const libc = ldd.includes('musl') ? 'musl' : ldd.includes('GNU C Library') ? 'glibc' : null;
-			if (libc === null) {
-				throw new Error(`unable to detect libc`);
-			}
-			return `${platform}-${arch}-${libc}`;
-		}
-		return `${platform}-${arch}`;
-	};
-
 	const require = createRequire(import.meta.url);
 	const binding: GraphemeBinding = require(`../prebuilds/${getPrebuildDir()}/grapheme.node`);
 

@@ -27,7 +27,7 @@
 	},
 	"devDependencies": {
 		"@atcute/xrpc-server": "workspace:^",
-		"@types/deno": "^2.5.0"
+		"@types/deno": "^2.7.0"
 	},
 	"peerDependencies": {
 		"@atcute/xrpc-server": "workspace:^"

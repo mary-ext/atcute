@@ -35,7 +35,7 @@
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/xrpc-server": "workspace:^",
 		"@remix-run/node-fetch-server": "^0.13.1",
-		"@types/node": "^25.7.0",
+		"@types/node": "^25.9.0",
 		"@types/ws": "^8.18.1",
 		"vitest": "^4.1.6"
 	},

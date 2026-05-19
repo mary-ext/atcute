@@ -6,6 +6,14 @@ import { describe, expect, it } from 'vitest';
 import type { CarBlock } from './types.ts';
 import { serializeCarEntry, serializeCarHeader, writeCarStream } from './writer.ts';
 
+const multiBlockGenerator = async function* (): AsyncGenerator<CarBlock> {
+	for (let i = 0; i < 5; i++) {
+		const blockCid = await CID.create(0x55, encodeUtf8(`block${i}`));
+		const blockData = encodeUtf8(`data${i}`);
+		yield { cid: blockCid.bytes, data: blockData };
+	}
+};
+
 describe('serializeCarHeader', () => {
 	it('should serialize a header with one root', async () => {
 		const cid = CID.toCidLink(await CID.create(0x55, encodeUtf8('test')));
@@ -68,15 +76,7 @@ describe('writeCarStream', () => {
 	it('should stream a CAR with multiple blocks', async () => {
 		const rootCid = CID.toCidLink(await CID.create(0x55, encodeUtf8('root')));
 
-		const blocks = async function* (): AsyncGenerator<CarBlock> {
-			for (let i = 0; i < 5; i++) {
-				const blockCid = await CID.create(0x55, encodeUtf8(`block${i}`));
-				const blockData = encodeUtf8(`data${i}`);
-				yield { cid: blockCid.bytes, data: blockData };
-			}
-		};
-
-		const chunks = await Array.fromAsync(writeCarStream([rootCid], blocks()));
+		const chunks = await Array.fromAsync(writeCarStream([rootCid], multiBlockGenerator()));
 		const car = concat(chunks);
 
 		expect(chunks).toHaveLength(6); // header + 5 blocks

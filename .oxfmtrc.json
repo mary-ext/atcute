@@ -14,7 +14,7 @@
 	},
 
 	"sortImports": {
-		"groups": [["builtin", "bun"], ["atcute"], ["external"], ["parent"], ["sibling", "index"]],
+		"groups": [["builtin", "bun"], ["atcute"], ["external"], ["internal"], ["parent"], ["sibling", "index"]],
 		"customGroups": [
 			{
 				"groupName": "bun",
@@ -23,6 +23,10 @@
 			{
 				"groupName": "atcute",
 				"elementNamePattern": ["@atcute/**"]
+			},
+			{
+				"groupName": "internal",
+				"elementNamePattern": ["#**"]
 			}
 		]
 	},

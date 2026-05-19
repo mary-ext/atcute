@@ -56,7 +56,7 @@
 		"@atcute/uint8array": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/node": "^25.7.0",
+		"@types/node": "^25.9.0",
 		"@vitest/coverage-v8": "^4.1.6",
 		"vitest": "^4.1.6",
 		"zig-build": "^0.3.0"
