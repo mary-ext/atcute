@@ -41,9 +41,12 @@
 				"description": {
 					"type": "string"
 				},
-				"associatedRecord": {
-					"type": "string",
-					"format": "at-uri",
+				"associatedRecords": {
+					"type": "array",
+					"items": {
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
+					},
 					"description": "The URI of the Atmosphere record representing this external content, if it exists. Example: a site.standard.document record."
 				}
 			}

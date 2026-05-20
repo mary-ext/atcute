@@ -180,6 +180,7 @@ export * as ChatBskyGroupEditJoinLink from './types/chat/bsky/group/editJoinLink
 export * as ChatBskyGroupEnableJoinLink from './types/chat/bsky/group/enableJoinLink.ts';
 export * as ChatBskyGroupGetJoinLinkPreview from './types/chat/bsky/group/getJoinLinkPreview.ts';
 export * as ChatBskyGroupListJoinRequests from './types/chat/bsky/group/listJoinRequests.ts';
+export * as ChatBskyGroupListMutualGroups from './types/chat/bsky/group/listMutualGroups.ts';
 export * as ChatBskyGroupRejectJoinRequest from './types/chat/bsky/group/rejectJoinRequest.ts';
 export * as ChatBskyGroupRemoveMembers from './types/chat/bsky/group/removeMembers.ts';
 export * as ChatBskyGroupRequestJoin from './types/chat/bsky/group/requestJoin.ts';

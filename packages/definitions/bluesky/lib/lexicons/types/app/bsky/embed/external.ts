@@ -1,3 +1,4 @@
+import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
@@ -7,7 +8,9 @@ const _externalSchema = /*#__PURE__*/ v.object({
 	 * The URI of the Atmosphere record representing this external content, if it exists. Example: a
 	 * site.standard.document record.
 	 */
-	associatedRecord: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	get associatedRecords() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoRepoStrongRef.mainSchema));
+	},
 	description: /*#__PURE__*/ v.string(),
 	/**
 	 * @accept image/*

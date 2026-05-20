@@ -33,8 +33,8 @@ const _convoViewSchema = /*#__PURE__*/ v.object({
 	},
 	/**
 	 * Members of this conversation. For direct convos, it will be an immutable list of the 2 members. For group
-	 * convos, it will a list of important members (the first few members, the viewer, the member who invited
-	 * the viewer, the member who sent the last message, the member who sent the last reaction), but will not
+	 * convos, it will a list of important members (the first few members, the viewer, the member who added the
+	 * viewer, the member who sent the last message, the member who sent the last reaction), but will not
 	 * contain the full list of members. Use chat.bsky.convo.getConvoMembers to list all members.
 	 */
 	get members() {
