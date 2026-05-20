@@ -26,6 +26,18 @@
 					"minimum": 0,
 					"description": "Content background transparency percentage (optional)"
 				},
+				"highlightColor": {
+					"type": "string",
+					"maxLength": 16,
+					"description": "Highlight color for quoted passages (optional)",
+					"knownValues": ["theme", "yellow"]
+				},
+				"highlightShape": {
+					"type": "string",
+					"maxLength": 32,
+					"description": "Highlight shape for quoted passages (optional)",
+					"knownValues": ["chisel", "felt", "loose", "round", "scratchy", "square"]
+				},
 				"tileBackground": {
 					"type": "boolean",
 					"description": "Whether to tile the background image instead of covering (optional)"

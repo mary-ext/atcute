@@ -24,6 +24,27 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	font: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 	),
+	/**
+	 * Highlight color for quoted passages (optional)
+	 *
+	 * @maxLength 16
+	 */
+	highlightColor: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string<'theme' | 'yellow' | (string & {})>(), [
+			/*#__PURE__*/ v.stringLength(0, 16),
+		]),
+	),
+	/**
+	 * Highlight shape for quoted passages (optional)
+	 *
+	 * @maxLength 32
+	 */
+	highlightShape: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(
+			/*#__PURE__*/ v.string<'chisel' | 'felt' | 'loose' | 'round' | 'scratchy' | 'square' | (string & {})>(),
+			[/*#__PURE__*/ v.stringLength(0, 32)],
+		),
+	),
 	/** Light mode color palette */
 	get light() {
 		return paletteSchema;
