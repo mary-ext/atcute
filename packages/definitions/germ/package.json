@@ -1,0 +1,53 @@
+{
+	"name": "@atcute/germ",
+	"version": "1.0.0",
+	"description": "Germ Network (com.germnetwork.*) schema definitions",
+	"keywords": [
+		"atcute",
+		"atproto",
+		"germnetwork"
+	],
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/definitions/germ"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts",
+		"!dist/**/*.{test,bench}.*"
+	],
+	"type": "module",
+	"exports": {
+		".": "./dist/index.js",
+		"./types/*": "./dist/lexicons/types/com/germnetwork/*.js"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsgo",
+		"pull": "lex-cli pull",
+		"generate": "lex-cli generate",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/lexicons": "workspace:^"
+	},
+	"devDependencies": {
+		"@atcute/lex-cli": "workspace:^"
+	},
+	"peerDependencies": {
+		"@atcute/lexicons": "^2.0.0"
+	},
+	"atcute:lexicons": {
+		"mappings": {
+			"com.germnetwork.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
+	}
+}

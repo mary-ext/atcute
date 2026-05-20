@@ -59,6 +59,7 @@ for authenticated requests, see the [client docs](./packages/clients/client) or 
 | [`bluemoji`](./packages/definitions/bluemoji): `blue.moji.*` definitions                                    |
 | [`bluesky`](./packages/definitions/bluesky): `app.bsky.*`, `chat.bsky.*` definitions                        |
 | [`frontpage`](./packages/definitions/frontpage): `fyi.unravel.frontpage.*` definitions                      |
+| [`germ`](./packages/definitions/germ): `com.germnetwork.*` definitions                                      |
 | [`leaflet`](./packages/definitions/leaflet): `pub.leaflet.*` definitions                                    |
 | [`lexicon-community`](./packages/definitions/lexicon-community): `community.lexicon.*` definitions          |
 | [`microcosm`](./packages/definitions/microcosm): `blue.microcosm.*`, `com.bad-example.*` definitions        |

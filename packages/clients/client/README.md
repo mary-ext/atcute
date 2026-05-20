@@ -43,17 +43,18 @@ available packages:
 | package                                                            | schemas                                 |
 | ------------------------------------------------------------------ | --------------------------------------- |
 | [`@atcute/atproto`](../../definitions/atproto)                     | `com.atproto.*`                         |
-| [`@atcute/bluesky`](../../definitions/bluesky)                     | `app.bsky.*`, `chat.bsky.*`             |
-| [`@atcute/ozone`](../../definitions/ozone)                         | `tools.ozone.*`                         |
 | [`@atcute/bluemoji`](../../definitions/bluemoji)                   | `blue.moji.*`                           |
+| [`@atcute/bluesky`](../../definitions/bluesky)                     | `app.bsky.*`, `chat.bsky.*`             |
 | [`@atcute/frontpage`](../../definitions/frontpage)                 | `fyi.unravel.frontpage.*`               |
+| [`@atcute/germ`](../../definitions/germ)                           | `com.germnetwork.*`                     |
 | [`@atcute/leaflet`](../../definitions/leaflet)                     | `pub.leaflet.*`                         |
-| [`@atcute/whitewind`](../../definitions/whitewind)                 | `com.whtwnd.*`                          |
-| [`@atcute/tangled`](../../definitions/tangled)                     | `sh.tangled.*`                          |
+| [`@atcute/lexicon-community`](../../definitions/lexicon-community) | `community.lexicon.*`                   |
 | [`@atcute/microcosm`](../../definitions/microcosm)                 | `blue.microcosm.*`, `com.bad-example.*` |
+| [`@atcute/ozone`](../../definitions/ozone)                         | `tools.ozone.*`                         |
 | [`@atcute/pckt`](../../definitions/pckt)                           | `blog.pckt.*`                           |
 | [`@atcute/standard-site`](../../definitions/standard-site)         | `site.standard.*`                       |
-| [`@atcute/lexicon-community`](../../definitions/lexicon-community) | `community.lexicon.*`                   |
+| [`@atcute/tangled`](../../definitions/tangled)                     | `sh.tangled.*`                          |
+| [`@atcute/whitewind`](../../definitions/whitewind)                 | `com.whtwnd.*`                          |
 
 you can register multiple packages to combine their types.
 

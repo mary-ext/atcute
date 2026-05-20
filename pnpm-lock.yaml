@@ -351,6 +351,16 @@ importers:
         specifier: workspace:^
         version: link:../../lexicons/lex-cli
 
+  packages/definitions/germ:
+    dependencies:
+      '@atcute/lexicons':
+        specifier: workspace:^
+        version: link:../../lexicons/lexicons
+    devDependencies:
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../../lexicons/lex-cli
+
   packages/definitions/leaflet:
     dependencies:
       '@atcute/atproto':
