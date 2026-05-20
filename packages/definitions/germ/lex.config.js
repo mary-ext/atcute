@@ -4,6 +4,7 @@ export default defineLexiconConfig({
 	formatter: {
 		type: 'lsp',
 		command: 'oxfmt --lsp',
+		passes: 2,
 	},
 	generate: {
 		files: ['lexicons/**/*.json'],

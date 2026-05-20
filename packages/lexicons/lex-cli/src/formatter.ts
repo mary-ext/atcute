@@ -1,5 +1,7 @@
 import { spawn } from 'node:child_process';
 
+import pc from 'picocolors';
+
 import type { FormatterConfig } from './config.ts';
 import { createLspClient } from './lsp-client.ts';
 
@@ -70,14 +72,7 @@ class Semaphore {
 
 // #endregion
 
-/**
- * creates a formatter from the given configuration
- *
- * @param config formatter configuration
- * @param root project root for config resolution
- * @returns a formatter instance
- */
-export const createFormatter = async (config: FormatterConfig, root: string): Promise<Formatter> => {
+const createBaseFormatter = async (config: FormatterConfig, root: string): Promise<Formatter> => {
 	switch (config.type) {
 		case 'prettier': {
 			const prettier = await import('prettier');
@@ -156,4 +151,53 @@ export const createFormatter = async (config: FormatterConfig, root: string): Pr
 			};
 		}
 	}
+};
+
+// upper bound on `'auto'` passes; a formatter that has not stabilized by here is unlikely to, and
+// may be oscillating, so stop rather than loop forever
+const MAX_AUTO_PASSES = 5;
+
+const withPasses = (base: Formatter, passes: 'auto' | number): Formatter => {
+	if (passes === 1) {
+		return base;
+	}
+
+	return {
+		async format(code, filepath) {
+			let current = await base.format(code, filepath);
+
+			if (passes === 'auto') {
+				for (let pass = 1; pass < MAX_AUTO_PASSES; pass++) {
+					const next = await base.format(current, filepath);
+					if (next === current) {
+						return next;
+					}
+					current = next;
+				}
+
+				console.warn(pc.yellow(`formatter did not stabilize after ${MAX_AUTO_PASSES} passes: ${filepath}`));
+				return current;
+			}
+
+			for (let pass = 1; pass < passes; pass++) {
+				current = await base.format(current, filepath);
+			}
+			return current;
+		},
+		async dispose() {
+			await base.dispose();
+		},
+	};
+};
+
+/**
+ * creates a formatter from the given configuration
+ *
+ * @param config formatter configuration
+ * @param root project root for config resolution
+ * @returns a formatter instance, repeating per `config.passes`
+ */
+export const createFormatter = async (config: FormatterConfig, root: string): Promise<Formatter> => {
+	const base = await createBaseFormatter(config, root);
+	return withPasses(base, config.passes);
 };

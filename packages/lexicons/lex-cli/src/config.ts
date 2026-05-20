@@ -54,9 +54,9 @@ export interface ExportConfig {
 }
 
 export type FormatterConfig =
-	| { type: 'prettier' }
-	| { type: 'command'; command: string; concurrency: number }
-	| { type: 'lsp'; command: string };
+	| { type: 'prettier'; passes: 'auto' | number }
+	| { type: 'command'; command: string; concurrency: number; passes: 'auto' | number }
+	| { type: 'lsp'; command: string; passes: 'auto' | number };
 
 export interface ModulesConfig {
 	importSuffix?: string;
@@ -134,8 +134,22 @@ const exportConfigSchema = v.looseObject({
 	clean: v.optional(v.boolean()),
 });
 
+// some formatters are not idempotent; running them once can leave output that a second run would
+// still change. `passes` lets a config compensate: a fixed count, or `'auto'` to repeat until the
+// output stabilizes.
+const formatterPassesSchema = v.optional(
+	v.union([
+		v.literal('auto'),
+		v.pipe(
+			v.number(),
+			v.check((value) => Number.isInteger(value) && value > 0, `must be a positive integer or "auto"`),
+		),
+	]),
+	1,
+);
+
 const formatterConfigSchema = v.union([
-	v.looseObject({ type: v.literal('prettier') }),
+	v.looseObject({ type: v.literal('prettier'), passes: formatterPassesSchema }),
 	v.looseObject({
 		type: v.literal('command'),
 		command: nonEmptyString,
@@ -146,10 +160,12 @@ const formatterConfigSchema = v.union([
 			),
 			() => 1,
 		),
+		passes: formatterPassesSchema,
 	}),
 	v.looseObject({
 		type: v.literal('lsp'),
 		command: nonEmptyString,
+		passes: formatterPassesSchema,
 	}),
 ]);
 
@@ -201,7 +217,7 @@ const generateConfigSchema = v.looseObject({
 });
 
 export const lexiconConfigSchema: v.GenericSchema<unknown, Omit<NormalizedConfig, 'root'>> = v.looseObject({
-	formatter: v.optional(formatterConfigSchema, (): FormatterConfig => ({ type: 'prettier' })),
+	formatter: v.optional(formatterConfigSchema, (): FormatterConfig => ({ type: 'prettier', passes: 1 })),
 	generate: v.optional(generateConfigSchema),
 	pull: v.optional(pullConfigSchema),
 	export: v.optional(exportConfigSchema),
