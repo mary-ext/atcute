@@ -77,6 +77,10 @@
 					"description": {
 						"type": "string",
 						"description": "The description of the event."
+					},
+					"rsvpExpected": {
+						"type": "boolean",
+						"description": "Whether a response is requested from attendees."
 					}
 				}
 			},

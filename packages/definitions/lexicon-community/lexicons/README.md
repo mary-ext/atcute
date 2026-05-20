@@ -3,4 +3,4 @@
 this directory contains lexicon documents pulled from the following sources:
 
 - https://github.com/lexicon-community/lexicon.git
-  - commit: b8ad464a5972ec520b438cd33b7306aa21249b6c
+  - commit: 91c50cbd84a9da8014332a6e37812c276889c8ac
