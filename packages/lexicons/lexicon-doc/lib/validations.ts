@@ -1,7 +1,10 @@
+// oxlint-disable typescript/no-explicit-any
+
 import type { Nsid } from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
 import {
+	type RefineIssue,
 	refineLexArray,
 	refineLexBlob,
 	refineLexBoolean,
@@ -12,10 +15,9 @@ import {
 	refineLexRef,
 	refineLexRefUnion,
 	refineLexString,
-	type RefineIssue,
 } from './refinements.ts';
 import type * as t from './types.ts';
-import { formatLexiconRef, parseLexiconRef, type ParsedLexiconRef } from './utils/refs.ts';
+import { type ParsedLexiconRef, formatLexiconRef, parseLexiconRef } from './utils/refs.ts';
 
 export interface RecordValidatorInput {
 	key: string | null;
@@ -365,7 +367,7 @@ const buildLexCidLink = (ctx: BuildContext, _path: LexPath, spec: t.LexCidLink):
 		return cell;
 	}
 
-	let schema: v.BaseSchema = v.cidLink();
+	const schema: v.BaseSchema = v.cidLink();
 
 	cell = eager(schema);
 	ctx.cache.set(spec, cell);
@@ -439,7 +441,7 @@ const buildLexToken = (ctx: BuildContext, path: LexPath, spec: t.LexToken): Cell
 		return cell;
 	}
 
-	let schema: v.BaseSchema = v.literal(formatLexiconRef(path));
+	const schema: v.BaseSchema = v.literal(formatLexiconRef(path));
 
 	cell = eager(schema);
 	ctx.cache.set(spec, cell);
@@ -532,7 +534,7 @@ const buildLexRefUnion = (ctx: BuildContext, path: LexPath, spec: t.LexRefUnion)
 	return lazy(() => {
 		const members = lazyMembers.map((cell) => cell.value);
 
-		let schema: v.BaseSchema = v.variant(members as any);
+		const schema: v.BaseSchema = v.variant(members as any);
 
 		return schema;
 	});
@@ -544,7 +546,7 @@ const buildLexUnknown = (ctx: BuildContext, _path: LexPath, spec: t.LexUnknown):
 		return cell;
 	}
 
-	let schema: v.BaseSchema = v.unknown();
+	const schema: v.BaseSchema = v.unknown();
 
 	cell = eager(schema);
 	ctx.cache.set(spec, cell);
@@ -736,7 +738,7 @@ const buildLexObject = (
 			}
 		}
 
-		let schema: v.BaseSchema = v.object(obj);
+		const schema: v.BaseSchema = v.object(obj);
 
 		return schema;
 	});

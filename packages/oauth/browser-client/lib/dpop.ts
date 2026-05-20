@@ -1,4 +1,4 @@
-import { createDpopProofSigner, sha256Base64Url, type DpopPrivateJwk } from '@atcute/oauth-crypto';
+import { type DpopPrivateJwk, createDpopProofSigner, sha256Base64Url } from '@atcute/oauth-crypto';
 
 import { database } from './environment.ts';
 import { extractContentType } from './utils/response.ts';

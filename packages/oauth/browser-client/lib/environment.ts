@@ -1,6 +1,6 @@
 import type { ActorResolver } from '@atcute/identity-resolver';
 
-import { createOAuthDatabase, type OAuthDatabase } from './store/db.ts';
+import { type OAuthDatabase, createOAuthDatabase } from './store/db.ts';
 import type { ClientAssertionFetcher } from './types/client-assertion.ts';
 
 export let CLIENT_ID: string;

@@ -2,7 +2,7 @@ import type { AppBskyRichtextFacet } from '@atcute/bluesky';
 
 import { expect, expectTypeOf, it } from 'vitest';
 
-import { segmentize, type Facet, type RichtextSegment } from './index.ts';
+import { type Facet, type RichtextSegment, segmentize } from './index.ts';
 
 it('does utf8 slicing', () => {
 	expect(

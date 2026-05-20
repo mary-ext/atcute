@@ -1,4 +1,4 @@
-import { isCid, type Cid } from '../syntax/cid.ts';
+import { type Cid, isCid } from '../syntax/cid.ts';
 
 /** represents a content identifier (CID) reference */
 export interface CidLink {
@@ -27,6 +27,7 @@ export const _isCidLinkWrapper = (input: unknown): input is _CidLinkWrapper => {
 };
 
 export const isCidLink = (input: unknown): input is CidLink => {
+	// oxlint-disable-next-line typescript/no-explicit-any
 	const v = input as any;
 
 	return typeof v === 'object' && v !== null && (CID_LINK_SYMBOL in v || isCid(v.$link));

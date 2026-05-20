@@ -1,11 +1,11 @@
 import { LabelTarget } from '../behaviors.ts';
 import {
+	type ModerationDecision,
 	considerBlockedBy,
 	considerBlocking,
 	considerLabel,
 	considerPermanentMute,
 	createModerationDecision,
-	type ModerationDecision,
 } from '../decision.ts';
 import type { ModerationOptions, ProfileSubject } from '../types.ts';
 

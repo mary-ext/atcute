@@ -4,7 +4,7 @@ import * as CID from '@atcute/cid';
 import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
 
 import { assertMstKey } from './key.ts';
-import { isNodeData, type NodeData, type TreeEntry } from './types.ts';
+import { type NodeData, type TreeEntry, isNodeData } from './types.ts';
 
 /**
  * represents a node in a Merkle Search Tree (MST) stores sorted keys, their associated values (CIDs), and
@@ -312,7 +312,7 @@ export const getKeyHeight = async (key: string): Promise<number> => {
  */
 const commonPrefixLength = (a: string, b: string): number => {
 	let idx = 0;
-	for (let len = Math.min(a.length, b.length); idx < len; idx++) {
+	for (const len = Math.min(a.length, b.length); idx < len; idx++) {
 		if (a[idx] !== b[idx]) {
 			break;
 		}

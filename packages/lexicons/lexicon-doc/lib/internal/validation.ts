@@ -12,7 +12,7 @@ import {
 	isTid,
 } from '@atcute/lexicons/syntax';
 
-import * as t from '../types.ts';
+import type * as t from '../types.ts';
 
 export const KEY_RE = /^[a-zA-Z][a-zA-Z0-9_]{0,62}?$/;
 

@@ -1,7 +1,7 @@
 import type { CidLink } from '@atcute/cid';
 
-import { NodeStore } from './node-store.ts';
-import { MSTNode, getKeyHeight } from './node.ts';
+import { type NodeStore } from './node-store.ts';
+import { type MSTNode, getKeyHeight } from './node.ts';
 import Stack from './utils/stack.ts';
 
 /**

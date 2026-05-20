@@ -4,7 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 import { describe, expect, it, vi } from 'vitest';
 
 import { json } from './response.ts';
-import { defaultNotFoundHandler, XRPCRouter } from './router.ts';
+import { XRPCRouter, defaultNotFoundHandler } from './router.ts';
 import { MockWebSocketAdapter } from './utils/websocket-mock.ts';
 import { InvalidRequestError, XRPCSubscriptionError } from './xrpc-error.ts';
 
@@ -1053,7 +1053,7 @@ describe('XRPCRouter', () => {
 			const mock = adapter.attach(router);
 			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
 
-			let frames: Uint8Array[] = [];
+			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
 				client.onMessage.subscribe((data) => {
 					frames.push(data);
@@ -1089,7 +1089,7 @@ describe('XRPCRouter', () => {
 			const mock = adapter.attach(router);
 			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
 
-			let frames: Uint8Array[] = [];
+			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
 				client.onMessage.subscribe((data) => {
 					frames.push(data);

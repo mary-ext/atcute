@@ -1,5 +1,5 @@
-import { isBytes, type Bytes } from '@atcute/cbor';
-import { isCidLink, type CidLink } from '@atcute/cid';
+import { type Bytes, isBytes } from '@atcute/cbor';
+import { type CidLink, isCidLink } from '@atcute/cid';
 
 /** represents a single entry in an MST node */
 export interface TreeEntry {

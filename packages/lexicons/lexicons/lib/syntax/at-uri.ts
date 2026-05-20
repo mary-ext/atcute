@@ -1,7 +1,7 @@
-import { isActorIdentifier, type ActorIdentifier } from './at-identifier.ts';
-import { isDid, type Did } from './did.ts';
-import { isNsid, type Nsid } from './nsid.ts';
-import { isRecordKey, type RecordKey } from './record-key.ts';
+import { type ActorIdentifier, isActorIdentifier } from './at-identifier.ts';
+import { type Did, isDid } from './did.ts';
+import { type Nsid, isNsid } from './nsid.ts';
+import { type RecordKey, isRecordKey } from './record-key.ts';
 import { isAsciiAlphaNum } from './utils/ascii.ts';
 
 /**

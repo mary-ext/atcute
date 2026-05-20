@@ -1,20 +1,22 @@
 import { dirname as getDirname, relative as getRelativePath } from 'node:path/posix';
 
-import type {
-	LexDefinableField,
-	LexiconDoc,
-	LexObject,
-	LexRecord,
-	LexRefVariant,
-	LexUnknown,
-	LexUserType,
-	LexXrpcBody,
-	LexXrpcParameters,
-	LexXrpcProcedure,
-	LexXrpcQuery,
-	LexXrpcSubscription,
+import {
+	type LexDefinableField,
+	type LexObject,
+	type LexRecord,
+	type LexRefVariant,
+	type LexUnknown,
+	type LexUserType,
+	type LexXrpcBody,
+	type LexXrpcParameters,
+	type LexXrpcProcedure,
+	type LexXrpcQuery,
+	type LexXrpcSubscription,
+	type LexiconDoc,
+	type ParsedLexiconRef,
+	formatLexiconRef,
+	parseLexiconRef,
 } from '@atcute/lexicon-doc';
-import { formatLexiconRef, parseLexiconRef, type ParsedLexiconRef } from '@atcute/lexicon-doc';
 
 export interface SourceFile {
 	filename: string;
@@ -611,7 +613,7 @@ const generateJsdocField = (spec: LexUserType | LexRefVariant | LexUnknown) => {
 	const lines: string[] = [];
 
 	if ('description' in spec && spec.description) {
-		let desc = spec.description
+		const desc = spec.description
 			.replace(/\*\//g, '*\\/')
 			.replace(/@/g, '\\@')
 			.replace(/\r?\n/g, ' ')
@@ -765,7 +767,7 @@ const generateType = (
 				item = `(() => { return ${item}; })`;
 			}
 
-			let pipe: string[] = [];
+			const pipe: string[] = [];
 
 			if ((spec.minLength ?? 0) > 0 || spec.maxLength !== undefined) {
 				if (spec.maxLength === undefined) {
@@ -799,7 +801,7 @@ const generateType = (
 			return call;
 		}
 		case 'integer': {
-			let pipe: string[] = [];
+			const pipe: string[] = [];
 
 			if ((spec.minimum ?? 0) > 0 || spec.maximum !== undefined) {
 				if (spec.maximum === undefined) {
@@ -826,7 +828,7 @@ const generateType = (
 			return call;
 		}
 		case 'string': {
-			let pipe: string[] = [];
+			const pipe: string[] = [];
 
 			if ((spec.minLength ?? 0) > 0 || spec.maxLength !== undefined) {
 				if (spec.maxLength === undefined) {
@@ -917,7 +919,7 @@ const generateType = (
 
 		// LexBlob
 		case 'blob': {
-			let pipe: string[] = [];
+			const pipe: string[] = [];
 
 			if (spec.maxSize !== undefined) {
 				pipe.push(`${PURE} v.blobSize(${lit(spec.maxSize)})`);
@@ -939,7 +941,7 @@ const generateType = (
 
 		// LexIpldType
 		case 'bytes': {
-			let pipe: string[] = [];
+			const pipe: string[] = [];
 
 			if ((spec.minLength ?? 0) > 0 || spec.maxLength !== undefined) {
 				if (spec.maxLength === undefined) {

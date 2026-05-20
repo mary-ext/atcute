@@ -1,6 +1,6 @@
 import { isAtprotoAudience } from '@atcute/identity';
 import type { Did, Nsid } from '@atcute/lexicons';
-import { isDid, isNsid, type AtprotoAudience } from '@atcute/lexicons/syntax';
+import { type AtprotoAudience, isDid, isNsid } from '@atcute/lexicons/syntax';
 import { fromBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
 
@@ -82,7 +82,9 @@ const readJwtPortion = <T>(schema: v.GenericSchema<unknown, T>, input: string): 
 		if (result.success) {
 			return { ok: true, value: result.output };
 		}
-	} catch {}
+	} catch {
+		/* empty */
+	}
 
 	return {
 		ok: false,
@@ -96,7 +98,9 @@ const readJwtPortion = <T>(schema: v.GenericSchema<unknown, T>, input: string): 
 const readJwtSignature = (input: string): Result<Uint8Array<ArrayBuffer>, AuthError> => {
 	try {
 		return { ok: true, value: fromBase64Url(input) };
-	} catch {}
+	} catch {
+		/* empty */
+	}
 
 	return {
 		ok: false,

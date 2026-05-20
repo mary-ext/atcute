@@ -1,4 +1,4 @@
-import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
+import { type SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 
 import { AsyncBuffer } from './async-buffer.ts';
 

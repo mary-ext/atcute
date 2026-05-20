@@ -1,5 +1,5 @@
 import { getAtprotoHandle, getPdsEndpoint } from '@atcute/identity';
-import { isDid, type ActorIdentifier, type Did, type Handle } from '@atcute/lexicons/syntax';
+import { type ActorIdentifier, type Did, type Handle, isDid } from '@atcute/lexicons/syntax';
 
 import { ActorResolutionError } from '../errors.ts';
 import type {
@@ -60,7 +60,9 @@ export class LocalActorResolver implements ActorResolver {
 					if (resolved === did) {
 						handle = writtenHandle;
 					}
-				} catch {}
+				} catch {
+					/* empty */
+				}
 			}
 		} else if (getAtprotoHandle(doc) === actor) {
 			handle = actor as Handle;

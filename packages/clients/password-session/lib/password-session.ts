@@ -2,12 +2,12 @@ import type { ComAtprotoServerCreateSession } from '@atcute/atproto';
 import {
 	Client,
 	ClientResponseError,
+	type FetchHandlerObject,
 	isXRPCErrorPayload,
 	ok,
 	simpleFetchHandler,
-	type FetchHandlerObject,
 } from '@atcute/client';
-import { getPdsEndpoint, type DidDocument } from '@atcute/identity';
+import { type DidDocument, getPdsEndpoint } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons';
 
 // #region session data
@@ -547,7 +547,9 @@ const isExpiredTokenResponse = async (response: Response): Promise<boolean> => {
 		if (isXRPCErrorPayload(data)) {
 			return data.error === 'ExpiredToken';
 		}
-	} catch {}
+	} catch {
+		/* empty */
+	}
 
 	return false;
 };

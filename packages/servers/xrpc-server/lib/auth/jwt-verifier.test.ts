@@ -1,4 +1,4 @@
-import { Secp256k1PrivateKeyExportable, type PrivateKeyExportable } from '@atcute/crypto';
+import { type PrivateKeyExportable, Secp256k1PrivateKeyExportable } from '@atcute/crypto';
 import type { Did, Nsid } from '@atcute/lexicons';
 import type { AtprotoAudience } from '@atcute/lexicons/syntax';
 import { fromBase64Url, toBase64Url } from '@atcute/multibase';
@@ -9,7 +9,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { AuthRequiredError } from '../main/xrpc-error.ts';
 
 import { createServiceJwt } from './jwt-creator.ts';
-import { ServiceJwtVerifier, type ReplayStore } from './jwt-verifier.ts';
+import { type ReplayStore, ServiceJwtVerifier } from './jwt-verifier.ts';
 
 const encodeJwtPart = (data: unknown): string => toBase64Url(encodeUtf8(JSON.stringify(data)));
 

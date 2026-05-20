@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-explicit-any
+
 export type Middleware<TParams extends any[], TReturn> = (
 	...params: [...TParams, next: (...params: TParams) => TReturn]
 ) => TReturn;

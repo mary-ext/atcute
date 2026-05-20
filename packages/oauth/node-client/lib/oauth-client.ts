@@ -1,35 +1,40 @@
 import type { ActorResolver } from '@atcute/identity-resolver';
 import type { ActorIdentifier, Did } from '@atcute/lexicons';
-import type { ClientAssertionPrivateJwk, DpopNonceCache } from '@atcute/oauth-crypto';
-import { generateDpopKey, generatePkce, type PublicJwk } from '@atcute/oauth-crypto';
+import {
+	type ClientAssertionPrivateJwk,
+	type DpopNonceCache,
+	type PublicJwk,
+	generateDpopKey,
+	generatePkce,
+} from '@atcute/oauth-crypto';
 import { Keyset } from '@atcute/oauth-keyset';
 import {
-	buildClientMetadata,
-	buildPublicClientMetadata,
-	FALLBACK_ALG,
 	type ConfidentialClientMetadata,
+	FALLBACK_ALG,
 	type OAuthClientMetadata,
 	type OAuthPrompt,
 	type OAuthResponseMode,
 	type PublicClientMetadata,
+	buildClientMetadata,
+	buildPublicClientMetadata,
 } from '@atcute/oauth-types';
 
 import { nanoid } from 'nanoid';
 
 import { OAuthCallbackError, TokenRevokedError } from './errors.ts';
-import { OAuthServerAgent } from './oauth-server-agent.ts';
+import { type OAuthServerAgent } from './oauth-server-agent.ts';
 import { OAuthServerFactory } from './oauth-server-factory.ts';
 import { OAuthSession } from './oauth-session.ts';
 import {
-	AuthorizationServerMetadataResolver,
 	type AuthorizationServerMetadataCache,
+	AuthorizationServerMetadataResolver,
 } from './resolvers/authorization-server-metadata.ts';
 import { OAuthResolver } from './resolvers/index.ts';
 import {
-	ProtectedResourceMetadataResolver,
 	type ProtectedResourceMetadataCache,
+	ProtectedResourceMetadataResolver,
 } from './resolvers/protected-resource-metadata.ts';
-import { SessionGetter, type SessionEventListener } from './session-getter.ts';
+import { type SessionEventListener, SessionGetter } from './session-getter.ts';
 import type { SessionStore } from './types/sessions.ts';
 import type { StateStore, StoredState } from './types/states.ts';
 import type { LockFunction } from './utils/lock.ts';

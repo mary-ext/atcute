@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import { lexiconConfigSchema, type LexiconConfig } from './config.ts';
+import { type LexiconConfig, lexiconConfigSchema } from './config.ts';
 
 export type { LexiconConfig };
 

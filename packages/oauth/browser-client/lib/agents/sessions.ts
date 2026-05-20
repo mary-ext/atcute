@@ -69,6 +69,7 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 	let promise: Promise<PendingItem<Session>>;
 
 	if (locks) {
+		// oxlint-disable-next-line typescript/no-explicit-any
 		promise = locks.request<PendingItem<Session>>(`atcute-oauth:${sub}`, run as any);
 	} else {
 		promise = run();

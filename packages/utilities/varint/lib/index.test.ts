@@ -1,4 +1,4 @@
-import { it, expect, describe } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { decode, encode, encodingLength } from './index.ts';
 
@@ -50,7 +50,7 @@ describe('encodingLength', () => {
 	it('matches encode() outputs', () => {
 		const buf = new Uint8Array(10);
 		for (let i = 0; i <= 53; i++) {
-			let n = 2 ** i - 1;
+			const n = 2 ** i - 1;
 
 			expect(encodingLength(n)).toBe(encode(n, buf));
 		}

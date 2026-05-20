@@ -6,12 +6,12 @@ import * as mock from './_test-util/mock.ts';
 import { type ModerationTestSuiteResultFlag } from './_test-util/moderation-behavior.ts';
 import {
 	DisplayContext,
+	type InterpretedLabelDefinition,
+	LabelPreference,
+	type ModerationOptions,
 	getDisplayRestrictions,
 	interpretLabelValueDefinition,
-	LabelPreference,
 	moderatePost,
-	type InterpretedLabelDefinition,
-	type ModerationOptions,
 } from './index.ts';
 
 interface ScenarioResult {

@@ -10,7 +10,7 @@ import {
 } from '@atcute/identity-resolver';
 import { NodeDnsHandleResolver } from '@atcute/identity-resolver-node';
 import { isActorIdentifier } from '@atcute/lexicons/syntax';
-import { MemoryStore, OAuthClient, scope, type StoredState } from '@atcute/oauth-node-client';
+import { MemoryStore, OAuthClient, type StoredState, scope } from '@atcute/oauth-node-client';
 
 const TEN_MINUTES_MS = 10 * 60_000;
 

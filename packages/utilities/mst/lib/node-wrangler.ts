@@ -1,7 +1,7 @@
 import type { CidLink } from '@atcute/cid';
 
 import { assertMstKey } from './key.ts';
-import { NodeStore } from './node-store.ts';
+import { type NodeStore } from './node-store.ts';
 import { MSTNode, getKeyHeight } from './node.ts';
 
 /** replaces element at index with a new value */

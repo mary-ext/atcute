@@ -4,7 +4,7 @@ import { isKeyDid, isPlcDid } from '@atcute/identity';
 
 import * as v from 'valibot';
 
-import * as t from './types.ts';
+import type * as t from './types.ts';
 
 // #region Strings
 export const didPlcString = v.custom<t.DidPlcString>(isPlcDid, `must be a did:plc`);

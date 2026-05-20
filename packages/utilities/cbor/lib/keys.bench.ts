@@ -1,4 +1,4 @@
-import { bench, run, summary, do_not_optimize } from 'mitata';
+import { bench, do_not_optimize, run, summary } from 'mitata';
 
 import { getOrderedObjectKeys } from './encode.ts';
 

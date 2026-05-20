@@ -1,5 +1,6 @@
 import { DEV } from 'esm-env';
 
+// oxlint-disable-next-line typescript/no-explicit-any
 export const assert: { (condition: any, message?: string): asserts condition } = (condition, message) => {
 	if (!condition) {
 		if (DEV) {

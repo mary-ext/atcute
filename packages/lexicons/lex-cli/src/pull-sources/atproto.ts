@@ -1,21 +1,21 @@
 import { getPdsEndpoint, isAtprotoDid } from '@atcute/identity';
-import type { DidDocumentResolver } from '@atcute/identity-resolver';
 import {
 	CompositeDidDocumentResolver,
 	CompositeHandleResolver,
+	type DidDocumentResolver,
 	DohJsonHandleResolver,
 	PlcDidDocumentResolver,
 	WebDidDocumentResolver,
 	WellKnownHandleResolver,
 } from '@atcute/identity-resolver';
-import { refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
+import { type LexiconDoc, refineLexiconDoc } from '@atcute/lexicon-doc';
 import { DohJsonLexiconAuthorityResolver, LexiconSchemaResolver } from '@atcute/lexicon-resolver';
 import {
+	type AtprotoDid,
+	type Nsid,
 	isHandle,
 	isNsid,
 	parseCanonicalResourceUri,
-	type AtprotoDid,
-	type Nsid,
 } from '@atcute/lexicons/syntax';
 
 import pc from 'picocolors';

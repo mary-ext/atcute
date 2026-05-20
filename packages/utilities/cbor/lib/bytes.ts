@@ -26,6 +26,7 @@ export class BytesWrapper implements Bytes {
 }
 
 export const isBytes = (value: unknown): value is Bytes => {
+	// oxlint-disable-next-line typescript/no-explicit-any
 	const val = value as any;
 
 	return (

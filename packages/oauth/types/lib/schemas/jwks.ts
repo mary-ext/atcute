@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import { jwkPubSchema, jwkSchema, type Jwk, type JwkPub } from './jwk.ts';
+import { type Jwk, type JwkPub, jwkPubSchema, jwkSchema } from './jwk.ts';
 
 /**
  * JWKS (JSON Web Key Set). implementations SHOULD ignore JWKs within a JWK Set that use unknown `kty` values,

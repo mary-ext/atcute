@@ -1,5 +1,4 @@
-import type { ClientAssertionPrivateJwk, PublicJwk } from '@atcute/oauth-crypto';
-import { derivePublicJwk } from '@atcute/oauth-crypto';
+import { type ClientAssertionPrivateJwk, type PublicJwk, derivePublicJwk } from '@atcute/oauth-crypto';
 
 import type { KeySearchOptions } from './types.ts';
 

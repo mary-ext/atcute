@@ -1,8 +1,8 @@
 import {
-	safeParse,
 	type XRPCProcedureMetadata,
 	type XRPCQueryMetadata,
 	type XRPCSubscriptionMetadata,
+	safeParse,
 } from '@atcute/lexicons/validations';
 
 import type { Literal, Promisable } from '../types/misc.ts';
@@ -16,8 +16,8 @@ import type {
 } from './types/operation.ts';
 import type { WebSocketAdapter } from './types/websocket.ts';
 import { encodeErrorFrame, encodeMessageFrame, extractMessageType, omitMessageType } from './utils/frames.ts';
-import { createAsyncMiddlewareRunner, type Middleware } from './utils/middlewares.ts';
-import { unwrapLxm, type Namespaced } from './utils/namespaced.ts';
+import { type Middleware, createAsyncMiddlewareRunner } from './utils/middlewares.ts';
+import { type Namespaced, unwrapLxm } from './utils/namespaced.ts';
 import { constructMimeValidator, hasRequestBody } from './utils/request-input.ts';
 import { constructParamsHandler } from './utils/request-params.ts';
 import { invalidRequest, validationError } from './utils/response.ts';
@@ -240,6 +240,7 @@ export class XRPCRouter {
 					params: params,
 				};
 
+				// oxlint-disable-next-line typescript/no-explicit-any
 				const output = await handler(context as any);
 
 				if (output instanceof Response) {
@@ -294,6 +295,7 @@ export class XRPCRouter {
 					}
 
 					if (inputSchema !== null) {
+						// oxlint-disable-next-line typescript/no-explicit-any
 						let raw: any;
 						try {
 							raw = await request.json();
@@ -321,6 +323,7 @@ export class XRPCRouter {
 					input: input,
 				};
 
+				// oxlint-disable-next-line typescript/no-explicit-any
 				const output = await handler(context as any);
 
 				if (output instanceof Response) {

@@ -1,7 +1,7 @@
 import type { CarEntry } from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
-import { isBytes, type Bytes } from '@atcute/cbor';
-import { isCidLink, type CidLink } from '@atcute/cid';
+import { type Bytes, isBytes } from '@atcute/cbor';
+import { type CidLink, isCidLink } from '@atcute/cid';
 
 export class RepoEntry {
 	/** the collection this record belongs to */

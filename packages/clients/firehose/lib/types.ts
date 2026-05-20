@@ -1,5 +1,6 @@
-import type { InferOutput, XRPCSubscriptionMetadata } from '@atcute/lexicons/validations';
-import type { BaseSchema } from '@atcute/lexicons/validations';
+// oxlint-disable typescript/no-explicit-any
+
+import type { BaseSchema, InferOutput, XRPCSubscriptionMetadata } from '@atcute/lexicons/validations';
 
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 

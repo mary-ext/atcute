@@ -1,4 +1,4 @@
-import * as t from './types.ts';
+import type * as t from './types.ts';
 
 export class PlcError extends Error {
 	override name = 'PlcError';

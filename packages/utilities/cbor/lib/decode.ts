@@ -1,7 +1,9 @@
-import { CidLinkWrapper, fromBinary, type CidLink } from '@atcute/cid';
+// oxlint-disable typescript/no-explicit-any
+
+import { type CidLink, CidLinkWrapper, fromBinary } from '@atcute/cid';
 import { decodeUtf8From } from '@atcute/uint8array';
 
-import { toBytes, type Bytes } from './bytes.ts';
+import { type Bytes, toBytes } from './bytes.ts';
 
 interface State {
 	b: Uint8Array;

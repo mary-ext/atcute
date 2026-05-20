@@ -1,8 +1,8 @@
 import {
-	AppBskyActorDefs,
-	AppBskyFeedDefs,
-	AppBskyFeedPost,
-	AppBskyGraphStarterpack,
+	type AppBskyActorDefs,
+	type AppBskyFeedDefs,
+	type AppBskyFeedPost,
+	type AppBskyGraphStarterpack,
 	unwrapEmbed,
 	unwrapRecordEmbed,
 } from '@atcute/bluesky';
@@ -10,6 +10,7 @@ import type { CanonicalResourceUri } from '@atcute/lexicons';
 
 import { LabelTarget } from '../behaviors.ts';
 import {
+	type ModerationDecision,
 	considerBlockedBy,
 	considerBlocking,
 	considerHidden,
@@ -18,7 +19,6 @@ import {
 	createModerationDecision,
 	downgradeDecision,
 	mergeModerationDecisions,
-	type ModerationDecision,
 } from '../decision.ts';
 import { matchesKeywordFilters } from '../internal/keyword-filter.ts';
 import type { KeywordFilter } from '../keyword-filter.ts';

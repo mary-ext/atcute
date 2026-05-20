@@ -1,14 +1,14 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
-import { lexiconDoc, refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
+import { type LexiconDoc, lexiconDoc, refineLexiconDoc } from '@atcute/lexicon-doc';
 
 import pc from 'picocolors';
 import * as v from 'valibot';
 
 import type { PullCommand } from '../cli.ts';
-import { loadConfig, type NormalizedConfig, type PullConfig, type SourceConfig } from '../config.ts';
-import { createFormatter, type Formatter } from '../formatter.ts';
+import { type NormalizedConfig, type PullConfig, type SourceConfig, loadConfig } from '../config.ts';
+import { type Formatter, createFormatter } from '../formatter.ts';
 import { pullAtprotoSource } from '../pull-sources/atproto.ts';
 import { pullGitSource } from '../pull-sources/git.ts';
 import type { PullResult, PulledLexicon, SourceLocation } from '../pull-sources/types.ts';

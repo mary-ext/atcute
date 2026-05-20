@@ -29,7 +29,9 @@ export const resolveFromService = async (
 			try {
 				const metadata = await getOAuthAuthorizationServerMetadata(host);
 				return { metadata };
-			} catch {}
+			} catch {
+				/* empty */
+			}
 		}
 
 		throw err;

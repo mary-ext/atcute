@@ -4,7 +4,7 @@ import { getGraphemeLength, isGraphemeLengthInRange } from '@atcute/util-text';
 
 import { DELIMITED_MIME_TYPE_RE, KEY_RE, MIME_TYPE_RE, validateStringFormat } from './internal/validation.ts';
 import type * as t from './types.ts';
-import { formatLexiconRef, type ParsedLexiconRef } from './utils/refs.ts';
+import { type ParsedLexiconRef, formatLexiconRef } from './utils/refs.ts';
 
 // #region Utilities
 type BuildContext = {

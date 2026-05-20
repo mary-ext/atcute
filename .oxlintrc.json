@@ -1,16 +1,48 @@
 {
 	"$schema": "https://unpkg.com/oxlint/configuration_schema.json",
 	"ignorePatterns": ["packages/definitions/**/lib/lexicons/**"],
+	"plugins": ["eslint", "typescript", "unicorn", "oxc", "import"],
 	"categories": {
-		"correctness": "warn",
+		"correctness": "error",
 		"suspicious": "warn",
 		"perf": "warn"
 	},
 	"rules": {
 		"curly": "warn",
+		"no-array-constructor": "error",
 		"no-await-in-loop": "off",
+		"no-case-declarations": "error",
+		"no-control-regex": "off",
+		"no-empty": "warn",
+		"no-prototype-builtins": "warn",
+		"no-regex-spaces": "warn",
 		"no-shadow": "off",
 		"no-underscore-dangle": "off",
+		"prefer-const": ["warn", { "destructuring": "all" }],
+		"prefer-rest-params": "warn",
+		"prefer-spread": "warn",
+		"sort-imports": ["warn", { "ignoreDeclarationSort": true }],
+		"import/no-duplicates": ["error", { "prefer-inline": true }],
+		"import/no-empty-named-blocks": "off",
+		"import/no-unassigned-import": "off",
+		"typescript/consistent-type-imports": [
+			"warn",
+			{ "prefer": "type-imports", "fixStyle": "inline-type-imports", "disallowTypeAnnotations": false }
+		],
+		"typescript/no-explicit-any": "warn",
+		"typescript/no-misused-promises": "warn",
+		"typescript/no-namespace": ["error", { "allowDeclarations": true }],
+		"typescript/no-require-imports": "error",
+		"typescript/require-await": "warn",
+		"typescript/restrict-plus-operands": "warn",
 		"unicorn/prefer-add-event-listener": "off"
-	}
+	},
+	"overrides": [
+		{
+			"files": ["**/*.test.ts"],
+			"rules": {
+				"typescript/no-explicit-any": "off"
+			}
+		}
+	]
 }

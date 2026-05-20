@@ -1,6 +1,6 @@
 import type { AppBskyActorDefs } from '@atcute/bluesky';
 
-import { KeywordFilterFlags, type KeywordFilter } from '../keyword-filter.ts';
+import { type KeywordFilter, KeywordFilterFlags } from '../keyword-filter.ts';
 
 const EMPTY_ARRAY: never[] = [];
 

@@ -1,10 +1,9 @@
 import * as CBOR from '@atcute/cbor';
-import type { PrivateKey } from '@atcute/crypto';
-import { verifySigWithDidKey } from '@atcute/crypto';
+import { type PrivateKey, verifySigWithDidKey } from '@atcute/crypto';
 import { fromBase64Url, toBase32, toBase64Url } from '@atcute/multibase';
 import { toSha256 } from '@atcute/uint8array';
 
-import * as t from './types.ts';
+import type * as t from './types.ts';
 
 export const wrapHttpPrefix = (str: string): string => {
 	if (str.startsWith('http://') || str.startsWith('https://')) {

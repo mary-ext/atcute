@@ -1,11 +1,4 @@
 import {
-	isCid,
-	isDatetime,
-	isDid,
-	isHandle,
-	isNsid,
-	isRecordKey,
-	isTid,
 	type Cid,
 	type Datetime,
 	type Did,
@@ -13,6 +6,13 @@ import {
 	type Nsid,
 	type RecordKey,
 	type Tid,
+	isCid,
+	isDatetime,
+	isDid,
+	isHandle,
+	isNsid,
+	isRecordKey,
+	isTid,
 } from '@atcute/lexicons/syntax';
 
 import * as v from 'valibot';

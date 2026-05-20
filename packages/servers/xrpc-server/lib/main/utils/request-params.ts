@@ -1,10 +1,10 @@
 import {
-	safeParse,
 	type ArraySchema,
 	type BaseSchema,
 	type ObjectSchema,
 	type OptionalSchema,
 	type ValidationResult,
+	safeParse,
 } from '@atcute/lexicons/validations';
 
 import type { Literal } from '../../types/misc.ts';

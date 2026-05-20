@@ -27,10 +27,12 @@ export class OAuthResponseError extends Error {
 	override name = 'OAuthResponseError';
 
 	readonly response: Response;
+	// oxlint-disable-next-line typescript/no-explicit-any
 	readonly data: any;
 	readonly error: string | undefined;
 	readonly description: string | undefined;
 
+	// oxlint-disable-next-line typescript/no-explicit-any
 	constructor(response: Response, data: any) {
 		const error = ifString(ifObject(data)?.['error']);
 		const errorDescription = ifString(ifObject(data)?.['error_description']);
@@ -73,5 +75,6 @@ const ifString = (v: unknown): string | undefined => {
 	return typeof v === 'string' ? v : undefined;
 };
 const ifObject = (v: unknown): Record<string, unknown> | undefined => {
+	// oxlint-disable-next-line typescript/no-explicit-any
 	return typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as any) : undefined;
 };

@@ -1,5 +1,5 @@
 import { fromBase32, toBase32 } from '@atcute/multibase';
-import { allocUnsafe, toSha256, equals as isBufferEqual } from '@atcute/uint8array';
+import { allocUnsafe, equals as isBufferEqual, toSha256 } from '@atcute/uint8array';
 
 /** CID version, always `1` for CIDv1 */
 export const CID_VERSION = 1;

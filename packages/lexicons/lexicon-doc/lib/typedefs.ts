@@ -1,8 +1,8 @@
-import { isNsid, type Nsid } from '@atcute/lexicons/syntax';
+import { type Nsid, isNsid } from '@atcute/lexicons/syntax';
 
 import * as v from 'valibot';
 
-import * as t from './types.ts';
+import type * as t from './types.ts';
 
 const integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 

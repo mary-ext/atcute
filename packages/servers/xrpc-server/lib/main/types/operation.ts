@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-explicit-any
+
 import type {
 	InferOutput,
 	ObjectSchema,

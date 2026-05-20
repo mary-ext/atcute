@@ -5,8 +5,8 @@ import {
 	AmbiguousHandleError,
 	DidNotFoundError,
 	FailedHandleResolutionError,
-	InvalidResolvedHandleError,
 	type HandleResolver,
+	InvalidResolvedHandleError,
 	type ResolveHandleOptions,
 } from '@atcute/identity-resolver';
 import type { AtprotoDid, Handle } from '@atcute/lexicons/syntax';

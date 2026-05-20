@@ -1,4 +1,4 @@
-import { isDid, type Did } from '@atcute/lexicons/syntax';
+import { type Did, isDid } from '@atcute/lexicons/syntax';
 
 import * as v from 'valibot';
 

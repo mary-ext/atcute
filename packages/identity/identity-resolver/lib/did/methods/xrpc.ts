@@ -1,4 +1,4 @@
-import { defs, type DidDocument } from '@atcute/identity';
+import { type DidDocument, defs } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons/syntax';
 import {
 	FailedResponseError,

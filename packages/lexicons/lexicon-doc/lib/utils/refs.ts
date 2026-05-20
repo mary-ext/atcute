@@ -1,6 +1,6 @@
-import { isNsid, type Nsid } from '@atcute/lexicons/syntax';
+import { type Nsid, isNsid } from '@atcute/lexicons/syntax';
 
-import type { LexiconDoc, LexRefVariant, LexUserType } from '../types.ts';
+import type { LexRefVariant, LexUserType, LexiconDoc } from '../types.ts';
 
 /**
  * represents a lexicon definition reference - full NSID: `com.example.lexicon` (refers to #main) - NSID with

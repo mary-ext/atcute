@@ -2,10 +2,10 @@ import { decodeUtf8From } from '@atcute/uint8array';
 
 import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
-import { WebSocketServer, type RawData, type WebSocket } from 'ws';
+import { type RawData, type WebSocket, WebSocketServer } from 'ws';
 
 import { TapSubscription } from './tap-subscription.ts';
-import { flattenTapEvent, tapEventWireSchema, tapRecordEventWireSchema } from './typedefs.ts';
+import { flattenTapEvent, tapEventWireSchema, type tapRecordEventWireSchema } from './typedefs.ts';
 
 type RecordEventWire = v.InferOutput<typeof tapRecordEventWireSchema>;
 

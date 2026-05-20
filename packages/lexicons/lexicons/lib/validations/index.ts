@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-explicit-any
+
 import { isUtf8LengthInRange } from '@atcute/uint8array';
 import { isGraphemeLengthInRange } from '@atcute/util-text';
 

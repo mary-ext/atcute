@@ -1,9 +1,9 @@
 import { LabelTarget } from '../behaviors.ts';
 import {
+	type ModerationDecision,
 	considerLabels,
 	createModerationDecision,
 	mergeModerationDecisions,
-	type ModerationDecision,
 } from '../decision.ts';
 import type { FeedGeneratorSubject, ModerationOptions } from '../types.ts';
 

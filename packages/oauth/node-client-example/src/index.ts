@@ -9,17 +9,17 @@ import {
 	WellKnownHandleResolver,
 } from '@atcute/identity-resolver';
 import { NodeDnsHandleResolver } from '@atcute/identity-resolver-node';
-import { isActorIdentifier, isDid, type Did } from '@atcute/lexicons/syntax';
-import type { ClientAssertionPrivateJwk } from '@atcute/oauth-node-client';
+import { type Did, isActorIdentifier, isDid } from '@atcute/lexicons/syntax';
 import {
+	type AuthorizeTarget,
+	type ClientAssertionPrivateJwk,
 	MemoryStore,
 	OAuthCallbackError,
 	OAuthClient,
-	type AuthorizeTarget,
 	type StoredState,
 } from '@atcute/oauth-node-client';
 
-import { Hono, type Context } from 'hono';
+import { type Context, Hono } from 'hono';
 import { deleteCookie, getSignedCookie, setSignedCookie } from 'hono/cookie';
 
 const SESSION_COOKIE = 'atcute_oauth_did';

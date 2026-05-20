@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-explicit-any
+
 type Transformer<I, O = I> = (input: I) => Promise<O>;
 
 type PipelineInput<T extends readonly Transformer<any>[]> = T extends [Transformer<infer I, any>, ...any[]]

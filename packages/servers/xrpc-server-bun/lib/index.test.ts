@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
 
-import { ComAtprotoLabelDefs, ComAtprotoLabelSubscribeLabels } from '@atcute/atproto';
+import { type ComAtprotoLabelDefs, ComAtprotoLabelSubscribeLabels } from '@atcute/atproto';
 import { decode, decodeFirst } from '@atcute/cbor';
 import { XRPCRouter } from '@atcute/xrpc-server';
 

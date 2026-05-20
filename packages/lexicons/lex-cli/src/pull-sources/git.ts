@@ -7,7 +7,7 @@ import type { LexiconDoc } from '@atcute/lexicon-doc';
 import pc from 'picocolors';
 
 import type { GitSourceConfig } from '../config.ts';
-import { runGit, GitError } from '../git.ts';
+import { GitError, runGit } from '../git.ts';
 
 import type { PullResult, PulledLexicon, SourceLocation } from './types.ts';
 

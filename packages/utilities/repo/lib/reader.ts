@@ -6,7 +6,7 @@ import * as CID from '@atcute/cid';
 import { isNodeData } from '@atcute/mst';
 import { decodeUtf8From } from '@atcute/uint8array';
 
-import { isCommit, RepoEntry } from './types.ts';
+import { RepoEntry, isCommit } from './types.ts';
 import { assert } from './utils.ts';
 import { parseMstKey } from './utils/mst.ts';
 

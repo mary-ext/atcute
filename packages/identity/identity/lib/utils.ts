@@ -17,7 +17,9 @@ export const isAtprotoServiceEndpoint = (input: string): boolean => {
 	} else {
 		try {
 			url = new URL(input);
-		} catch {}
+		} catch {
+			/* empty */
+		}
 	}
 
 	return (

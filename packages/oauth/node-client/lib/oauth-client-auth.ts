@@ -1,4 +1,4 @@
-import { createClientAssertion, type ClientAssertionPrivateJwk } from '@atcute/oauth-crypto';
+import { type ClientAssertionPrivateJwk, createClientAssertion } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import {
 	CLIENT_ASSERTION_TYPE_JWT_BEARER,

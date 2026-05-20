@@ -2,7 +2,7 @@ import type { XRPCProcedureMetadata, XRPCQueryMetadata } from '@atcute/lexicons/
 
 import { XRPCRouter, type XRPCRouterOptions } from './router.ts';
 import type { ProcedureConfig, QueryConfig } from './types/operation.ts';
-import { unwrapLxm, type Namespaced } from './utils/namespaced.ts';
+import { type Namespaced, unwrapLxm } from './utils/namespaced.ts';
 
 type XrpcHandlerRouterOptions = Pick<XRPCRouterOptions, 'middlewares' | 'handleNotFound' | 'handleException'>;
 

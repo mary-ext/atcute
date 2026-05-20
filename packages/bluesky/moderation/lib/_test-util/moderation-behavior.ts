@@ -2,7 +2,7 @@ import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 
 import { expect } from 'vitest';
 
-import { LabelPreference, type DisplayRestrictions, type ModerationOptions } from '../index.ts';
+import { type DisplayRestrictions, type LabelPreference, type ModerationOptions } from '../index.ts';
 
 import * as m from './mock.ts';
 
@@ -136,6 +136,7 @@ expect.extend({
 
 declare module 'vitest' {
 	// oxlint-disable-next-line no-unused-vars -- required for module augmentation
+	// oxlint-disable-next-line typescript/no-explicit-any
 	interface Assertion<T = any> {
 		toBeModerationResult(
 			expected?: ModerationTestSuiteResultFlag[],
@@ -151,6 +152,7 @@ declare module 'vitest' {
 			context?: string,
 			stringifiedResult?: string,
 			ignoreCause?: boolean,
+			// oxlint-disable-next-line typescript/no-explicit-any
 		): any;
 	}
 }

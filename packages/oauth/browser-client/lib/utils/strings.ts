@@ -7,7 +7,9 @@ export const isValidUrl = (urlString: string): boolean => {
 	} else {
 		try {
 			url = new URL(urlString);
-		} catch {}
+		} catch {
+			/* empty */
+		}
 	}
 
 	if (url !== null) {

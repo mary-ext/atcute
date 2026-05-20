@@ -1,14 +1,14 @@
 import * as http from 'node:http';
 
-import { ComAtprotoLabelDefs, ComAtprotoLabelSubscribeLabels } from '@atcute/atproto';
+import { type ComAtprotoLabelDefs, ComAtprotoLabelSubscribeLabels } from '@atcute/atproto';
 import { decode, decodeFirst } from '@atcute/cbor';
 import * as v from '@atcute/lexicons/validations';
-import { InvalidRequestError, json, XRPCRouter } from '@atcute/xrpc-server';
+import { InvalidRequestError, XRPCRouter, json } from '@atcute/xrpc-server';
 
 import { createRequestListener } from '@remix-run/node-fetch-server';
 import { describe, expect, it } from 'vitest';
 
-import { createNodeWebSocket, type NodeWebSocket } from './index.ts';
+import { type NodeWebSocket, createNodeWebSocket } from './index.ts';
 
 // #region test helpers
 

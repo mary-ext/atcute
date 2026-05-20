@@ -82,4 +82,6 @@ try {
 	};
 
 	hasNative = true;
-} catch {}
+} catch {
+	/* empty */
+}

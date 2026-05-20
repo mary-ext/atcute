@@ -1,14 +1,14 @@
-import { defs as identityDefs, type DidDocument } from '@atcute/identity';
+import { type DidDocument, defs as identityDefs } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons';
 
 import * as v from 'valibot';
 
 import { TapSubscription } from './tap-subscription.ts';
 import {
-	repoInfoSchema,
 	type RepoInfo,
 	type TapClientOptions,
 	type TapSubscribeOptions,
+	repoInfoSchema,
 } from './typedefs.ts';
 import { formatAdminAuthHeader } from './utils.ts';
 

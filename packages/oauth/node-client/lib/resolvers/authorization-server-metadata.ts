@@ -1,7 +1,7 @@
 import {
+	type AtprotoAuthorizationServerMetadata,
 	atprotoAuthorizationServerMetadataValidator,
 	oauthIssuerIdentifierSchema,
-	type AtprotoAuthorizationServerMetadata,
 } from '@atcute/oauth-types';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 

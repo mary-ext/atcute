@@ -4,7 +4,7 @@ import type { AtprotoAuthorizationServerMetadata, OAuthClientMetadata } from '@a
 
 import { type ClientAuthMethod, negotiateClientAuth } from './oauth-client-auth.ts';
 import { OAuthServerAgent } from './oauth-server-agent.ts';
-import { OAuthResolver } from './resolvers/index.ts';
+import { type OAuthResolver } from './resolvers/index.ts';
 
 export interface OAuthServerFactoryOptions {
 	/** client metadata */

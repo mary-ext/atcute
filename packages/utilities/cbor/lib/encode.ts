@@ -260,6 +260,7 @@ const writeCid = (state: State, val: CidLink): void => {
 	state.p += len;
 };
 
+// oxlint-disable-next-line typescript/no-explicit-any
 const writeValue = (state: State, val: any): void => {
 	switch (typeof val) {
 		case 'boolean': {
@@ -367,7 +368,7 @@ const createState = (): State => {
 	};
 };
 
-export const encode = (value: any): Uint8Array<ArrayBuffer> => {
+export const encode = (value: unknown): Uint8Array<ArrayBuffer> => {
 	const state = createState();
 
 	writeValue(state, value);

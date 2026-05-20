@@ -1,14 +1,14 @@
 import type { AppBskyGraphDefs } from '@atcute/bluesky';
 import type { Did } from '@atcute/lexicons';
 
-import { DisplayContext, ModerationAction, type BehaviorMapping, type LabelTarget } from './behaviors.ts';
+import { type BehaviorMapping, DisplayContext, type LabelTarget, ModerationAction } from './behaviors.ts';
 import type { KeywordFilter } from './keyword-filter.ts';
 import {
 	BUILTIN_LABELS,
-	isCustomLabelValue,
+	type InterpretedLabelDefinition,
 	LabelFlags,
 	LabelPreference,
-	type InterpretedLabelDefinition,
+	isCustomLabelValue,
 } from './label.ts';
 import type { Label, LabelerPreference, ModerationOptions } from './types.ts';
 

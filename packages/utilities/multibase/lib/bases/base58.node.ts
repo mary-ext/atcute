@@ -55,4 +55,6 @@ try {
 	toBase58Btc = binding.encode;
 
 	hasNative = true;
-} catch {}
+} catch {
+	/* empty */
+}

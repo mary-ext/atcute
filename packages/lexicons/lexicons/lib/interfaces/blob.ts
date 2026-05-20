@@ -1,6 +1,6 @@
 import type { Cid } from '../syntax/cid.ts';
 
-import { isCidLink, type CidLink } from './cid-link.ts';
+import { type CidLink, isCidLink } from './cid-link.ts';
 
 /** represents a reference to a data blob */
 export interface Blob<TMime extends string = string> {
@@ -11,6 +11,7 @@ export interface Blob<TMime extends string = string> {
 }
 
 export const isBlob = (input: unknown): input is Blob => {
+	// oxlint-disable-next-line typescript/no-explicit-any
 	const v = input as any;
 
 	return (
@@ -31,6 +32,7 @@ export interface LegacyBlob<TMime extends string = string> {
 }
 
 export const isLegacyBlob = (input: unknown): input is LegacyBlob => {
+	// oxlint-disable-next-line typescript/no-explicit-any
 	const v = input as any;
 
 	return (

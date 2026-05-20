@@ -7,8 +7,7 @@ import {
 	isOptionalSchema,
 	isVariantSchema,
 } from './predicates.ts';
-import type { EntityTypeId } from './types.ts';
-import { getTypeIdFromSchema } from './types.ts';
+import { type EntityTypeId, getTypeIdFromSchema } from './types.ts';
 
 /**
  * compiled walk function for a schema

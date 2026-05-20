@@ -4,10 +4,10 @@ import {
 	HIDE_BEHAVIOR,
 	KEYWORD_MUTE_BEHAVIOR,
 	LabelTarget,
-	ModerationAction,
 	MUTE_BEHAVIOR,
+	ModerationAction,
 } from './behaviors.ts';
-import { ModerationCauseType, type ModerationCause, type ModerationDecision } from './decision.ts';
+import { type ModerationCause, ModerationCauseType, type ModerationDecision } from './decision.ts';
 import { LabelPreference } from './label.ts';
 
 export interface DisplayRestrictions {

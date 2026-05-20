@@ -9,8 +9,8 @@ import {
 } from './_test-util/moderation-behavior.ts';
 import {
 	DisplayContext,
-	getDisplayRestrictions,
 	LabelPreference,
+	getDisplayRestrictions,
 	moderatePost,
 	moderateProfile,
 } from './index.ts';

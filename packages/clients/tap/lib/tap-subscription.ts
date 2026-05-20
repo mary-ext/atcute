@@ -7,11 +7,11 @@ import type { ReadonlyDeep } from 'type-fest';
 import * as v from 'valibot';
 
 import {
-	flattenTapEvent,
-	tapEventWireSchema,
 	type TapEvent,
 	type TapSubscribeOptions,
 	type TapSubscriptionMessage,
+	flattenTapEvent,
+	tapEventWireSchema,
 } from './typedefs.ts';
 import { formatAdminAuthHeader } from './utils.ts';
 
@@ -156,6 +156,7 @@ export class TapSubscription {
 				evt = flattenTapEvent(result.output);
 			} else {
 				try {
+					// oxlint-disable-next-line typescript/no-explicit-any
 					evt = flattenTapEvent(raw as any);
 				} catch (err) {
 					onError?.(err);
@@ -260,6 +261,7 @@ const createAuthedWebSocket = (authorization: string) => {
 
 	return class AuthedWebSocket extends WebSocketCtor {
 		constructor(url: string | URL, protocols?: string | string[]) {
+			// oxlint-disable-next-line typescript/no-explicit-any
 			super(url, protocols as any, {
 				headers: {
 					Authorization: authorization,

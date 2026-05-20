@@ -1,7 +1,12 @@
 import type { BaseSchema, InferOutput, ObjectSchema } from '@atcute/lexicons/validations';
 
-import type { EntityDefinition, EntitySubscriber, EntityTypeId, TypeSubscriber } from './types.ts';
-import { getTypeIdFromSchema } from './types.ts';
+import {
+	type EntityDefinition,
+	type EntitySubscriber,
+	type EntityTypeId,
+	type TypeSubscriber,
+	getTypeIdFromSchema,
+} from './types.ts';
 import { WalkerCache } from './walker.ts';
 
 type AnyEntityDefinition = EntityDefinition<ObjectSchema>;
@@ -92,6 +97,7 @@ export class NormalizedCache {
 		}
 
 		// new entity - wrap and store it
+		// oxlint-disable-next-line typescript/no-explicit-any
 		const entity: any = this.#wrapEntity ? this.#wrapEntity(incoming) : incoming;
 		store.entities.set(key, new WeakRef(entity));
 		this.#registry.register(entity, { typeId, key });
@@ -226,6 +232,7 @@ export class NormalizedCache {
 			Object.assign(existing, entity);
 			this.#notifySubscribers(store, key, existing);
 		} else {
+			// oxlint-disable-next-line typescript/no-explicit-any
 			const wrapped: any = this.#wrapEntity ? this.#wrapEntity(entity) : entity;
 			store.entities.set(key, new WeakRef(wrapped));
 			this.#registry.register(wrapped, { typeId, key });

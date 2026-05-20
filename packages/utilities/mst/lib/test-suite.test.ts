@@ -15,7 +15,7 @@ import {
 	LoggingBlockStore,
 	MemoryBlockStore,
 	OverlayBlockStore,
-	ReadonlyMemoryBlockStore,
+	type ReadonlyMemoryBlockStore,
 } from './stores.ts';
 import { setMany } from './utils/blockmap.ts';
 

@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-explicit-any
 // oxlint-disable no-useless-spread
 
 import { toBase16 } from '@atcute/multibase';

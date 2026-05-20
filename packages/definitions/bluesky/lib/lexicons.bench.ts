@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-explicit-any
+
 // realistic validation benchmark using post shapes sampled from the Bluesky firehose
 // distribution (20k sample from Jetstream, 2026-03-18):
 //   reply: 32.5% | plain-text: 22.5% | external+link: 6.7% | images: 6.7%

@@ -13,7 +13,7 @@ import type * as AppBskyFeedPost from '@atcute/bluesky/types/app/feed/post';
 import type * as AppBskyFeedThreadgate from '@atcute/bluesky/types/app/feed/threadgate';
 import type {} from '@atcute/bluesky/types/app/graph/getList'; // oxlint-disable-line unicorn/require-module-specifiers -- ambient type augmentation
 import type {} from '@atcute/bluesky/types/app/graph/getStarterPack'; // oxlint-disable-line unicorn/require-module-specifiers -- ambient type augmentation
-import { ClientResponseError, ok, type Client } from '@atcute/client';
+import { type Client, ClientResponseError, ok } from '@atcute/client';
 import type { $type, Blob as AtBlob, CanonicalResourceUri, ResourceUri } from '@atcute/lexicons';
 import * as TID from '@atcute/tid';
 
@@ -222,6 +222,7 @@ export async function createThread(
 
 			if (type === 'external') {
 				const rawThumb = embed.thumbnail;
+				// oxlint-disable-next-line typescript/no-explicit-any
 				let thumb: AtBlob<any> | undefined;
 
 				if (rawThumb !== undefined) {
@@ -250,6 +251,7 @@ export async function createThread(
 				for (const image of embed.images) {
 					const aspectRatio = image.aspectRatio;
 					const rawBlob = image.blob;
+					// oxlint-disable-next-line typescript/no-explicit-any
 					let blob: AtBlob<any>;
 
 					if (rawBlob instanceof Blob) {
@@ -275,6 +277,7 @@ export async function createThread(
 			if (type === 'video') {
 				const aspectRatio = embed.aspectRatio;
 				const rawBlob = embed.blob;
+				// oxlint-disable-next-line typescript/no-explicit-any
 				let blob: AtBlob<any> | undefined;
 
 				if (rawBlob instanceof Blob) {

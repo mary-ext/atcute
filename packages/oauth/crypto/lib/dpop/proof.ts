@@ -1,7 +1,6 @@
 import { nanoid } from 'nanoid';
 
-import type { CachedKeyMaterial } from '../internal/key-cache.ts';
-import { getCachedKeyMaterial } from '../internal/key-cache.ts';
+import { type CachedKeyMaterial, getCachedKeyMaterial } from '../internal/key-cache.ts';
 import { signJwt } from '../jwt/index.ts';
 
 import type { DpopPrivateJwk } from './types.ts';

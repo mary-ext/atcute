@@ -1,14 +1,14 @@
 import {
-	isDid,
-	isHandle,
-	isNsid,
-	isRecordKey,
-	isTid,
 	type Did,
 	type Handle,
 	type Nsid,
 	type RecordKey,
 	type Tid,
+	isDid,
+	isHandle,
+	isNsid,
+	isRecordKey,
+	isTid,
 } from '@atcute/lexicons/syntax';
 
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
@@ -216,6 +216,7 @@ export const flattenTapEvent = (wire: v.InferOutput<typeof tapEventWireSchema>):
 				default: {
 					wire.record satisfies never;
 
+					// oxlint-disable-next-line typescript/no-explicit-any
 					const obj = wire.record as any;
 					throw new Error(`unknown "${obj.action}" action`);
 				}
@@ -225,6 +226,7 @@ export const flattenTapEvent = (wire: v.InferOutput<typeof tapEventWireSchema>):
 		default: {
 			wire satisfies never;
 
+			// oxlint-disable-next-line typescript/no-explicit-any
 			const obj = wire as any;
 			throw new Error(`unknown "${obj.type}" type`);
 		}

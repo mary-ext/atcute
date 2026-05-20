@@ -62,6 +62,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 		expiresAt: (item: Schema[N]['value']) => null | number,
 		persistUpdatedAt = false,
 	): SimpleStore<Schema[N]['key'], Schema[N]['value']> => {
+		// oxlint-disable-next-line typescript/no-explicit-any
 		let store: any;
 
 		const storageKey = `${name}:${subname}`;
@@ -96,7 +97,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 					return;
 				}
 
-				let now = Date.now();
+				const now = Date.now();
 				let changed = false;
 
 				read();

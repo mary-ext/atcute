@@ -8,11 +8,11 @@ import { LabelerOutbox } from './internal/outbox.ts';
 import { buildLabels, signLabel } from './signing.ts';
 import type {
 	ApplyLabelsOptions,
-	LabelerOptions,
 	LabelEvent,
 	LabelOp,
-	LabelSubscriptionOptions,
 	LabelStore,
+	LabelSubscriptionOptions,
+	LabelerOptions,
 	SignedLabel,
 } from './types.ts';
 

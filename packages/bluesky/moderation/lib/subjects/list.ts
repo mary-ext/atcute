@@ -2,10 +2,10 @@ import { parseCanonicalResourceUri } from '@atcute/lexicons';
 
 import { LabelTarget } from '../behaviors.ts';
 import {
+	type ModerationDecision,
 	considerLabels,
 	createModerationDecision,
 	mergeModerationDecisions,
-	type ModerationDecision,
 } from '../decision.ts';
 import type { ListSubject, ModerationOptions } from '../types.ts';
 

@@ -1,5 +1,5 @@
-import { TestPdsServer, type PdsServerOptions } from './pds.ts';
-import { TestPlcServer, type PlcServerOptions } from './plc.ts';
+import { type PdsServerOptions, TestPdsServer } from './pds.ts';
+import { type PlcServerOptions, TestPlcServer } from './plc.ts';
 import { mockNetworkUtilities } from './utils.ts';
 
 export type NetworkConfig = {

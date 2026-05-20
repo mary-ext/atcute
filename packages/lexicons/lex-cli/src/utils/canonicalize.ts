@@ -1,7 +1,6 @@
 import type {
 	LexArray,
 	LexDefinableField,
-	LexiconDoc,
 	LexObject,
 	LexPrimitive,
 	LexPrimitiveArray,
@@ -9,6 +8,7 @@ import type {
 	LexXrpcBody,
 	LexXrpcParameters,
 	LexXrpcSubscriptionMessage,
+	LexiconDoc,
 } from '@atcute/lexicon-doc';
 
 /**

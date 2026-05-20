@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import * as url from 'node:url';
 
 import { isAtprotoDid } from '@atcute/identity';
-import { isHandle, isNsid, type Nsid } from '@atcute/lexicons/syntax';
+import { type Nsid, isHandle, isNsid } from '@atcute/lexicons/syntax';
 
 import pc from 'picocolors';
 import * as v from 'valibot';

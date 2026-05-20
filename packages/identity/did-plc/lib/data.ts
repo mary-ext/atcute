@@ -4,7 +4,7 @@ import { isKeyDid } from '@atcute/identity';
 
 import { DISPUTE_WINDOW } from './constants.ts';
 import * as err from './errors.ts';
-import * as t from './types.ts';
+import type * as t from './types.ts';
 import { deriveDidFromGenesisOp, isSignedOperationValid, normalizeOp } from './utils.ts';
 
 // soft constraint limits for incoming operations

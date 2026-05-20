@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-explicit-any
+
 export declare namespace $type {
 	type get<TObject extends { $type?: string }> = NonNullable<TObject['$type']>;
 

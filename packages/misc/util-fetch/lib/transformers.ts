@@ -109,6 +109,7 @@ const createStreamIterator: <T>(stream: ReadableStream<T>) => AsyncIterableItera
 						return this;
 					},
 					next() {
+						// oxlint-disable-next-line typescript/no-explicit-any
 						return reader.read() as Promise<IteratorResult<any>>;
 					},
 					async return() {

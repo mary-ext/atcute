@@ -62,7 +62,7 @@ export class OAuthUserAgent implements FetchHandlerObject {
 
 		headers.set('authorization', `${session.token.type} ${session.token.access}`);
 
-		let response = await this.#fetch(url.href, { ...init, headers });
+		const response = await this.#fetch(url.href, { ...init, headers });
 		if (!isInvalidTokenResponse(response)) {
 			return response;
 		}

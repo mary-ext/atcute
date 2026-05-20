@@ -1,4 +1,4 @@
-import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
+import { type SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 
 import { ConsumerTooSlowError } from '../errors.ts';
 import type { LabelEvent, LabelStore } from '../types.ts';

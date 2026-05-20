@@ -5,7 +5,7 @@ import type { OAuthAuthorizationServerMetadata, OAuthPrompt } from '@atcute/oaut
 
 import { nanoid } from 'nanoid';
 
-import { CLIENT_ID, database, REDIRECT_URI } from '../environment.ts';
+import { CLIENT_ID, REDIRECT_URI, database } from '../environment.ts';
 import { AuthorizationError, LoginError } from '../errors.ts';
 import { resolveFromIdentifier, resolveFromService } from '../resolvers.ts';
 import type { Session } from '../types/token.ts';

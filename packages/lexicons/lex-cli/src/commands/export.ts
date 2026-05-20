@@ -6,8 +6,8 @@ import type { LexiconDoc } from '@atcute/lexicon-doc';
 import pc from 'picocolors';
 
 import type { ExportCommand } from '../cli.ts';
-import { loadConfig, type ExportConfig, type NormalizedConfig } from '../config.ts';
-import { createFormatter, type Formatter } from '../formatter.ts';
+import { type ExportConfig, type NormalizedConfig, loadConfig } from '../config.ts';
+import { type Formatter, createFormatter } from '../formatter.ts';
 import { loadLexicons } from '../lexicon-loader.ts';
 
 /**

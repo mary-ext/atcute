@@ -1,4 +1,4 @@
-import { webDidToDocumentUrl, type DidDocument } from '@atcute/identity';
+import { type DidDocument, webDidToDocumentUrl } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons/syntax';
 import { FailedResponseError } from '@atcute/util-fetch';
 

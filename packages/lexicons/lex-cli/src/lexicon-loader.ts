@@ -2,8 +2,8 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import * as url from 'node:url';
 
-import { lexiconDoc, refineLexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
-import { build, type LexDocumentBuilder } from '@atcute/lexicon-doc/builder';
+import { type LexiconDoc, lexiconDoc, refineLexiconDoc } from '@atcute/lexicon-doc';
+import { type LexDocumentBuilder, build } from '@atcute/lexicon-doc/builder';
 
 import pc from 'picocolors';
 import * as v from 'valibot';
@@ -38,13 +38,16 @@ const isModuleFile = (filename: string): boolean => {
  * @returns true if it appears to be a LexDocumentBuilder
  */
 const isLexDocumentBuilder = (value: unknown): value is LexDocumentBuilder => {
+	// oxlint-disable-next-line typescript/no-explicit-any
+	const lex = value as any;
+
 	return (
-		typeof value === 'object' &&
-		value !== null &&
-		'id' in value &&
-		typeof (value as any).id === 'string' &&
-		'defs' in value &&
-		typeof (value as any).defs === 'object'
+		typeof lex === 'object' &&
+		lex !== null &&
+		'id' in lex &&
+		typeof lex.id === 'string' &&
+		'defs' in lex &&
+		typeof lex.defs === 'object'
 	);
 };
 
@@ -113,6 +116,7 @@ const loadModuleBuilder = async (absolutePath: string, relativePath: string): Pr
 		process.exit(1);
 	}
 
+	// oxlint-disable-next-line typescript/no-explicit-any
 	const defaultExport = (mod as any)?.default;
 	if (!isLexDocumentBuilder(defaultExport)) {
 		console.error(

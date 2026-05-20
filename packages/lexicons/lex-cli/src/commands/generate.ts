@@ -6,8 +6,8 @@ import pc from 'picocolors';
 import * as v from 'valibot';
 
 import type { GenerateCommand } from '../cli.ts';
-import { generateLexiconApi, type ImportMapping } from '../codegen.ts';
-import { loadConfig, type GenerateConfig, type NormalizedConfig } from '../config.ts';
+import { type ImportMapping, generateLexiconApi } from '../codegen.ts';
+import { type GenerateConfig, type NormalizedConfig, loadConfig } from '../config.ts';
 import { createFormatter } from '../formatter.ts';
 import { loadLexicons } from '../lexicon-loader.ts';
 import { packageJsonSchema } from '../lexicon-metadata.ts';
@@ -34,6 +34,8 @@ const resolveImportsToMappings = async (
 					const content = await fs.readFile(candidatePath, 'utf8');
 					packageJson = JSON.parse(content);
 					break;
+
+					// oxlint-disable-next-line typescript/no-explicit-any
 				} catch (err: any) {
 					if (err.code !== 'ENOENT') {
 						console.error(pc.bold(pc.red(`failed to read package.json for "${packageName}":`)));

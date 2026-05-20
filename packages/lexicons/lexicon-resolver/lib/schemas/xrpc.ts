@@ -1,21 +1,21 @@
 import {
-	getPublicKeyFromDidController,
 	P256PublicKey,
-	Secp256k1PublicKey,
 	type PublicKey,
+	Secp256k1PublicKey,
+	getPublicKeyFromDidController,
 } from '@atcute/crypto';
 import { getAtprotoVerificationMaterial, getPdsEndpoint } from '@atcute/identity';
 import type { DidDocumentResolver } from '@atcute/identity-resolver';
-import { lexiconDoc, type LexiconDoc } from '@atcute/lexicon-doc';
+import { type LexiconDoc, lexiconDoc } from '@atcute/lexicon-doc';
 import type { AtprotoDid, Nsid } from '@atcute/lexicons/syntax';
-import { verifyRecord, type VerifiedRecord } from '@atcute/repo';
+import { type VerifiedRecord, verifyRecord } from '@atcute/repo';
 import { FailedResponseError } from '@atcute/util-fetch';
 
 import * as v from 'valibot';
 
 import { LEXICON_SCHEMA_COLLECTION } from '../constants.ts';
 import * as err from '../errors.ts';
-import type { ResolvedSchema, ResolveLexiconRecordOptions } from '../types.ts';
+import type { ResolveLexiconRecordOptions, ResolvedSchema } from '../types.ts';
 
 export interface LexiconSchemaResolverOptions {
 	didDocumentResolver: DidDocumentResolver;
@@ -108,12 +108,13 @@ export class LexiconSchemaResolver {
 		}
 
 		// Step 4: Parse into lexicon schema
-		const rawSchema = verifiedRecord.record;
+		// oxlint-disable-next-line typescript/no-explicit-any
+		const rawSchema = verifiedRecord.record as any;
 		if (
 			typeof rawSchema !== 'object' ||
 			rawSchema === null ||
-			(rawSchema as any).$type !== LEXICON_SCHEMA_COLLECTION ||
-			(rawSchema as any).id !== nsid
+			rawSchema.$type !== LEXICON_SCHEMA_COLLECTION ||
+			rawSchema.id !== nsid
 		) {
 			throw new err.InvalidLexiconSchemaError(nsid);
 		}

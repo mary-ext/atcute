@@ -77,7 +77,7 @@ export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
 export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuffer> => {
 	let written = 0;
 
-	let len = arrays.length;
+	const len = arrays.length;
 	let idx: number;
 
 	if (size === undefined) {

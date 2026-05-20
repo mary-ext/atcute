@@ -1,4 +1,4 @@
-import { extractDidMethod, type DidDocument } from '@atcute/identity';
+import { type DidDocument, extractDidMethod } from '@atcute/identity';
 import type { Did } from '@atcute/lexicons/syntax';
 
 import * as err from '../errors.ts';

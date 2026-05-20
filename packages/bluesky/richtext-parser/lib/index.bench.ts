@@ -1,4 +1,4 @@
-import { bench, run, do_not_optimize } from 'mitata';
+import { bench, do_not_optimize, run } from 'mitata';
 
 import { tokenize } from './index.ts';
 

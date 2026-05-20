@@ -2,7 +2,7 @@ import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 import type { AppBskyLabelerDefs } from '@atcute/bluesky';
 import type { Did } from '@atcute/lexicons';
 
-import { DisplayContext, LabelTarget, ModerationAction, type LabelBehaviorMatrix } from './behaviors.ts';
+import { DisplayContext, type LabelBehaviorMatrix, LabelTarget, ModerationAction } from './behaviors.ts';
 
 export const LabelPreference = {
 	/** ignore this label */

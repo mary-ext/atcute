@@ -1,4 +1,4 @@
-import { safeParse, type XRPCSubscriptionMetadata } from '@atcute/lexicons/validations';
+import { type XRPCSubscriptionMetadata, safeParse } from '@atcute/lexicons/validations';
 
 import { EventIterator } from '@mary-ext/event-iterator';
 import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';

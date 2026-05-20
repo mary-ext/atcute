@@ -1,4 +1,4 @@
-import { CidLinkWrapper, type Cid, type CidLink } from '@atcute/cid';
+import { type Cid, type CidLink, CidLinkWrapper } from '@atcute/cid';
 
 export interface CarV1Header {
 	version: 1;

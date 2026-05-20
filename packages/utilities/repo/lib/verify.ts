@@ -3,10 +3,10 @@ import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 import type { PublicKey } from '@atcute/crypto';
 import type { AtprotoDid } from '@atcute/lexicons/syntax';
-import { isNodeData, type NodeData } from '@atcute/mst';
+import { type NodeData, isNodeData } from '@atcute/mst';
 import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
 
-import { isCommit, type Commit } from './types.ts';
+import { type Commit, isCommit } from './types.ts';
 
 type BlockMap = Map<string, Uint8Array>;
 

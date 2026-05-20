@@ -1,5 +1,5 @@
-import { getPublicKeyFromDidController, verifySig, type FoundPublicKey } from '@atcute/crypto';
-import { getVerificationMaterial, type DidDocument } from '@atcute/identity';
+import { type FoundPublicKey, getPublicKeyFromDidController, verifySig } from '@atcute/crypto';
+import { type DidDocument, getVerificationMaterial } from '@atcute/identity';
 import { type DidDocumentResolver } from '@atcute/identity-resolver';
 import type { Did, Nsid } from '@atcute/lexicons';
 import type { AtprotoAudience } from '@atcute/lexicons/syntax';
@@ -8,7 +8,7 @@ import * as uint8arrays from '@atcute/uint8array';
 import { AuthRequiredError } from '../main/xrpc-error.ts';
 import type { Result } from '../types/misc.ts';
 
-import { parseJwt, type ParsedJwt } from './jwt.ts';
+import { type ParsedJwt, parseJwt } from './jwt.ts';
 import type { AuthError } from './types.ts';
 
 type SupportedKid = `#${string}`;

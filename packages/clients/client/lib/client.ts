@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-explicit-any
+
 import type { XRPCProcedures, XRPCQueries } from '@atcute/lexicons/ambient';
 import type { AtprotoAudience } from '@atcute/lexicons/syntax';
 import * as v from '@atcute/lexicons/validations';
@@ -11,7 +13,7 @@ import type {
 	XRPCQueryMetadata,
 } from '@atcute/lexicons/validations';
 
-import { buildFetchHandler, type FetchHandler, type FetchHandlerObject } from './fetch-handler.ts';
+import { type FetchHandler, type FetchHandlerObject, buildFetchHandler } from './fetch-handler.ts';
 
 // #region Type utilities
 type RequiredKeysOf<TType extends object> = TType extends any
@@ -369,7 +371,9 @@ export class Client<TQueries = XRPCQueries, TProcedures = XRPCProcedures> {
 						if (isXRPCErrorPayload(parsed)) {
 							json = parsed;
 						}
-					} catch {}
+					} catch {
+						/* empty */
+					}
 				} else {
 					await response.body?.cancel();
 				}
@@ -481,13 +485,15 @@ const _mergeHeaders = (
 	return headers ?? init;
 };
 
-export const isXRPCErrorPayload = (input: any): input is XRPCErrorPayload => {
-	if (typeof input !== 'object' || input == null) {
+export const isXRPCErrorPayload = (input: unknown): input is XRPCErrorPayload => {
+	const val = input as any;
+
+	if (typeof val !== 'object' || val == null) {
 		return false;
 	}
 
-	const kindType = typeof input.error;
-	const messageType = typeof input.message;
+	const kindType = typeof val.error;
+	const messageType = typeof val.message;
 
 	return kindType === 'string' && (messageType === 'undefined' || messageType === 'string');
 };

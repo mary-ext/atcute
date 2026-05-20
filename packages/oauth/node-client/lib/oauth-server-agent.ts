@@ -1,25 +1,24 @@
 import type { Did } from '@atcute/lexicons';
-import type { DpopNonceCache, DpopPrivateJwk } from '@atcute/oauth-crypto';
-import { createDpopFetch } from '@atcute/oauth-crypto';
+import { type DpopNonceCache, type DpopPrivateJwk, createDpopFetch } from '@atcute/oauth-crypto';
 import type { Keyset } from '@atcute/oauth-keyset';
 import {
-	atprotoOAuthTokenResponseSchema,
-	oauthParResponseSchema,
 	type AtprotoAuthorizationServerMetadata,
 	type AtprotoOAuthTokenResponse,
 	type OAuthClientMetadata,
 	type OAuthParResponse,
+	atprotoOAuthTokenResponseSchema,
+	oauthParResponseSchema,
 } from '@atcute/oauth-types';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 
 import { JSON_MIME, PAR_RESPONSE_MAX_SIZE, TOKEN_RESPONSE_MAX_SIZE } from './constants.ts';
 import { OAuthResponseError, TokenRefreshError } from './errors.ts';
 import {
-	createClientAssertionFactory,
 	type ClientAuthMethod,
 	type ClientCredentialsFactory,
+	createClientAssertionFactory,
 } from './oauth-client-auth.ts';
-import { OAuthResolver } from './resolvers/index.ts';
+import { type OAuthResolver } from './resolvers/index.ts';
 import type { TokenSet } from './types/token-set.ts';
 
 const processTokenResponse = pipe(

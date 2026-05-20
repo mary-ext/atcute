@@ -3,7 +3,7 @@ import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import * as varint from '@atcute/varint';
 
-import { isCarV1Header, type CarEntry, type CarHeader } from './types.ts';
+import { type CarEntry, type CarHeader, isCarV1Header } from './types.ts';
 
 export interface SyncCarReader {
 	readonly header: CarHeader;

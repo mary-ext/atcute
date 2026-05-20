@@ -1,6 +1,6 @@
 import {
-	atprotoProtectedResourceMetadataValidator,
 	type AtprotoProtectedResourceMetadata,
+	atprotoProtectedResourceMetadataValidator,
 } from '@atcute/oauth-types';
 import { parseResponseAsJson, pipe, validateJsonWith } from '@atcute/util-fetch';
 

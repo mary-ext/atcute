@@ -1,9 +1,9 @@
 import type { Did } from '@atcute/lexicons';
-import { createDpopProofSigner, type DpopPrivateJwk } from '@atcute/oauth-crypto';
+import { type DpopPrivateJwk, createDpopProofSigner } from '@atcute/oauth-crypto';
 import type { AtprotoOAuthTokenResponse, OAuthParResponse } from '@atcute/oauth-types';
 
 import { createDPoPFetch } from '../dpop.ts';
-import { CLIENT_ID, fetchClientAssertion, REDIRECT_URI } from '../environment.ts';
+import { CLIENT_ID, REDIRECT_URI, fetchClientAssertion } from '../environment.ts';
 import { FetchResponseError, OAuthResponseError, TokenRefreshError } from '../errors.ts';
 import { resolveFromIdentifier } from '../resolvers.ts';
 import type { PersistedAuthorizationServerMetadata } from '../types/server.ts';
@@ -27,9 +27,13 @@ export class OAuthServerAgent {
 		payload: Record<string, unknown>,
 	): Promise<OAuthParResponse>;
 	async request(endpoint: 'token', payload: Record<string, unknown>): Promise<AtprotoOAuthTokenResponse>;
+	// oxlint-disable-next-line typescript/no-explicit-any
 	async request(endpoint: 'revocation', payload: Record<string, unknown>): Promise<any>;
+	// oxlint-disable-next-line typescript/no-explicit-any
 	async request(endpoint: 'introspection', payload: Record<string, unknown>): Promise<any>;
+	// oxlint-disable-next-line typescript/no-explicit-any
 	async request(endpoint: string, payload: Record<string, unknown>): Promise<any> {
+		// oxlint-disable-next-line typescript/no-explicit-any
 		const url: string | undefined = (this.#metadata as any)[`${endpoint}_endpoint`];
 		if (!url) {
 			throw new Error(`no endpoint for ${endpoint}`);
@@ -73,7 +77,9 @@ export class OAuthServerAgent {
 	async revoke(token: string): Promise<void> {
 		try {
 			await this.request('revocation', { token: token });
-		} catch {}
+		} catch {
+			/* empty */
+		}
 	}
 
 	async exchangeCode(code: string, verifier?: string): Promise<{ info: ExchangeInfo; token: TokenInfo }> {

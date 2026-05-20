@@ -6,10 +6,10 @@ import { describe, expect, it } from 'vitest';
 import { NodeStore } from './node-store.ts';
 import { NodeWrangler } from './node-wrangler.ts';
 import {
-	buildExclusionProof,
-	buildInclusionProof,
 	InvalidProofError,
 	ProofError,
+	buildExclusionProof,
+	buildInclusionProof,
 	verifyExclusion,
 	verifyInclusion,
 } from './proof.ts';

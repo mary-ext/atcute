@@ -4,12 +4,12 @@ import * as v from 'valibot';
 
 import { FALLBACK_ALG } from './constants.ts';
 import {
-	confidentialClientMetadataSchema,
 	type ConfidentialClientMetadata,
+	confidentialClientMetadataSchema,
 } from './schemas/atcute-confidential-client-metadata.ts';
 import {
-	publicClientMetadataSchema,
 	type PublicClientMetadata,
+	publicClientMetadataSchema,
 } from './schemas/atcute-public-client-metadata.ts';
 import { DEFAULT_ATPROTO_OAUTH_SCOPE } from './schemas/atproto-oauth-scope.ts';
 import type { OAuthClientMetadata } from './schemas/oauth-client-metadata.ts';

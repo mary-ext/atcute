@@ -1,6 +1,6 @@
 import { toBase32 } from '@atcute/multibase';
 
-import { decode, fromString, type Cid } from './codec.ts';
+import { type Cid, decode, fromString } from './codec.ts';
 
 const CID_LINK_SYMBOL = Symbol.for('@atcute/cid-link-wrapper');
 
@@ -34,6 +34,7 @@ export class CidLinkWrapper implements CidLink {
 }
 
 export const isCidLink = (value: unknown): value is CidLink => {
+	// oxlint-disable-next-line typescript/no-explicit-any
 	const val = value as any;
 
 	return (

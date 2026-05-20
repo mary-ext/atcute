@@ -1,5 +1,5 @@
-import { isDid, type Did } from './did.ts';
-import { isHandle, type Handle } from './handle.ts';
+import { type Did, isDid } from './did.ts';
+import { type Handle, isHandle } from './handle.ts';
 
 /** represents an account's identifier, either a {@link Did} or a {@link Handle} */
 export type ActorIdentifier = Did | Handle;

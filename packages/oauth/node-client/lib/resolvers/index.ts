@@ -4,8 +4,8 @@ import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
 
 import { OAuthResolverError } from '../errors.ts';
 
-import { AuthorizationServerMetadataResolver } from './authorization-server-metadata.ts';
-import { ProtectedResourceMetadataResolver } from './protected-resource-metadata.ts';
+import { type AuthorizationServerMetadataResolver } from './authorization-server-metadata.ts';
+import { type ProtectedResourceMetadataResolver } from './protected-resource-metadata.ts';
 
 export interface ResolveOptions {
 	signal?: AbortSignal;
