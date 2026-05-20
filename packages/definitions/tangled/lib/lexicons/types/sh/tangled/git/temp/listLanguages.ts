@@ -4,16 +4,8 @@ import * as v from '@atcute/lexicons/validations';
 
 const _languageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.git.temp.listLanguages#language')),
-	/** Hex color code for this language */
-	color: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/** File extensions associated with this language */
-	extensions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
-	/** Number of files in this language */
-	fileCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Programming language name */
 	name: /*#__PURE__*/ v.string(),
-	/** Percentage of total codebase (0-100) */
-	percentage: /*#__PURE__*/ v.integer(),
 	/** Total size of files in this language (bytes) */
 	size: /*#__PURE__*/ v.integer(),
 });
@@ -36,10 +28,8 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.listLanguages', {
 			},
 			/** The git reference used */
 			ref: /*#__PURE__*/ v.string(),
-			/** Total number of files analyzed */
-			totalFiles: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 			/** Total size of all analyzed files in bytes */
-			totalSize: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+			total: /*#__PURE__*/ v.integer(),
 		}),
 	},
 });
