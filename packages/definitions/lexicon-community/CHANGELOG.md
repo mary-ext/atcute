@@ -1,5 +1,11 @@
 # @atcute/lexicon-community
 
+## 2.0.1
+
+### Patch Changes
+
+- 058ab3e: pull latest Lexicon Community lexicons
+
 ## 2.0.0
 
 ### Patch Changes

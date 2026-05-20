@@ -1,5 +1,12 @@
 # @atcute/lex-cli
 
+## 3.1.0
+
+### Minor Changes
+
+- ad5dee4: add a `passes` option to the formatter config, repeating formatting a fixed number of
+  times or, with `'auto'`, until the output stabilizes
+
 ## 3.0.1
 
 ### Patch Changes
