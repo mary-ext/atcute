@@ -88,6 +88,10 @@
 				"memberCount": {
 					"type": "integer",
 					"description": "The total number of members in the group conversation."
+				},
+				"joinRequestCount": {
+					"type": "integer",
+					"description": "The total number of pending join requests for the group conversation. Only present for the owner. Capped at 21."
 				}
 			},
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]."

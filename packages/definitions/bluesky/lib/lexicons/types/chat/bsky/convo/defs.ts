@@ -66,6 +66,11 @@ const _groupConvoSchema = /*#__PURE__*/ v.object({
 	get joinLink() {
 		return /*#__PURE__*/ v.optional(ChatBskyGroupDefs.joinLinkViewSchema);
 	},
+	/**
+	 * The total number of pending join requests for the group conversation. Only present for the owner. Capped
+	 * at 21.
+	 */
+	joinRequestCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** The lock status of the conversation. */
 	get lockStatus() {
 		return convoLockStatusSchema;

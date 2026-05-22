@@ -1,0 +1,40 @@
+{
+	"id": "chat.bsky.group.getJoinLinkPreviews",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["joinLinkPreviews"],
+					"properties": {
+						"joinLinkPreviews": {
+							"type": "array",
+							"items": {
+								"ref": "chat.bsky.group.defs#joinLinkPreviewView",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["codes"],
+				"properties": {
+					"codes": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"maxLength": 50,
+						"minLength": 1
+					}
+				}
+			},
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Get public information about groups from join links. Invalid or disabled codes are silently omitted from results."
+		}
+	},
+	"lexicon": 1
+}

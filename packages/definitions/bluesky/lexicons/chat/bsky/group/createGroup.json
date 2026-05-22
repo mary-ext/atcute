@@ -34,13 +34,16 @@
 					"name": "BlockedActor"
 				},
 				{
-					"name": "UserForbidsGroups"
+					"name": "NewAccountCannotCreateGroup"
 				},
 				{
 					"name": "NotFollowedBySender"
 				},
 				{
 					"name": "RecipientNotFound"
+				},
+				{
+					"name": "UserForbidsGroups"
 				}
 			],
 			"output": {

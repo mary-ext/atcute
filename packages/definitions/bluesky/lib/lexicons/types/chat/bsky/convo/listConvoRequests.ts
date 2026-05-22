@@ -27,7 +27,7 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.listConvoRequests', {
 				return /*#__PURE__*/ v.array(
 					/*#__PURE__*/ v.variant([
 						ChatBskyConvoDefs.convoViewSchema,
-						ChatBskyGroupDefs.joinRequestViewSchema,
+						ChatBskyGroupDefs.joinRequestConvoViewSchema,
 					]),
 				);
 			},

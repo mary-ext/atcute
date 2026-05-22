@@ -6,16 +6,27 @@ import * as ChatBskyConvoDefs from '../convo/defs.ts';
 
 const _joinLinkPreviewViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.group.defs#joinLinkPreviewView')),
+	code: /*#__PURE__*/ v.string(),
 	/** Present only if the request is authenticated and the user is a member of the group. */
 	get convo() {
 		return /*#__PURE__*/ v.optional(ChatBskyConvoDefs.convoViewSchema);
 	},
+	get enabledStatus() {
+		return linkEnabledStatusSchema;
+	},
+	get joinRule() {
+		return joinRuleSchema;
+	},
 	memberCount: /*#__PURE__*/ v.integer(),
+	memberLimit: /*#__PURE__*/ v.integer(),
 	name: /*#__PURE__*/ v.string(),
 	get owner() {
 		return ChatBskyActorDefs.profileViewBasicSchema;
 	},
 	requireApproval: /*#__PURE__*/ v.boolean(),
+	get viewer() {
+		return /*#__PURE__*/ v.optional(joinLinkViewerStateSchema);
+	},
 });
 const _joinLinkViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.group.defs#joinLinkView')),
@@ -28,6 +39,21 @@ const _joinLinkViewSchema = /*#__PURE__*/ v.object({
 		return joinRuleSchema;
 	},
 	requireApproval: /*#__PURE__*/ v.boolean(),
+});
+const _joinLinkViewerStateSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.group.defs#joinLinkViewerState')),
+	requestedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+});
+const _joinRequestConvoViewSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.group.defs#joinRequestConvoView')),
+	convoId: /*#__PURE__*/ v.string(),
+	memberCount: /*#__PURE__*/ v.integer(),
+	memberLimit: /*#__PURE__*/ v.integer(),
+	name: /*#__PURE__*/ v.string(),
+	get owner() {
+		return ChatBskyActorDefs.profileViewBasicSchema;
+	},
+	requestedAt: /*#__PURE__*/ v.datetimeString(),
 });
 const _joinRequestViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.group.defs#joinRequestView')),
@@ -42,24 +68,32 @@ const _linkEnabledStatusSchema = /*#__PURE__*/ v.string<'disabled' | 'enabled' |
 
 type joinLinkPreviewView$schematype = typeof _joinLinkPreviewViewSchema;
 type joinLinkView$schematype = typeof _joinLinkViewSchema;
+type joinLinkViewerState$schematype = typeof _joinLinkViewerStateSchema;
+type joinRequestConvoView$schematype = typeof _joinRequestConvoViewSchema;
 type joinRequestView$schematype = typeof _joinRequestViewSchema;
 type joinRule$schematype = typeof _joinRuleSchema;
 type linkEnabledStatus$schematype = typeof _linkEnabledStatusSchema;
 
 export interface joinLinkPreviewViewSchema extends joinLinkPreviewView$schematype {}
 export interface joinLinkViewSchema extends joinLinkView$schematype {}
+export interface joinLinkViewerStateSchema extends joinLinkViewerState$schematype {}
+export interface joinRequestConvoViewSchema extends joinRequestConvoView$schematype {}
 export interface joinRequestViewSchema extends joinRequestView$schematype {}
 export interface joinRuleSchema extends joinRule$schematype {}
 export interface linkEnabledStatusSchema extends linkEnabledStatus$schematype {}
 
 export const joinLinkPreviewViewSchema = _joinLinkPreviewViewSchema as joinLinkPreviewViewSchema;
 export const joinLinkViewSchema = _joinLinkViewSchema as joinLinkViewSchema;
+export const joinLinkViewerStateSchema = _joinLinkViewerStateSchema as joinLinkViewerStateSchema;
+export const joinRequestConvoViewSchema = _joinRequestConvoViewSchema as joinRequestConvoViewSchema;
 export const joinRequestViewSchema = _joinRequestViewSchema as joinRequestViewSchema;
 export const joinRuleSchema = _joinRuleSchema as joinRuleSchema;
 export const linkEnabledStatusSchema = _linkEnabledStatusSchema as linkEnabledStatusSchema;
 
 export interface JoinLinkPreviewView extends v.InferInput<typeof joinLinkPreviewViewSchema> {}
 export interface JoinLinkView extends v.InferInput<typeof joinLinkViewSchema> {}
+export interface JoinLinkViewerState extends v.InferInput<typeof joinLinkViewerStateSchema> {}
+export interface JoinRequestConvoView extends v.InferInput<typeof joinRequestConvoViewSchema> {}
 export interface JoinRequestView extends v.InferInput<typeof joinRequestViewSchema> {}
 export type JoinRule = v.InferInput<typeof joinRuleSchema>;
 export type LinkEnabledStatus = v.InferInput<typeof linkEnabledStatusSchema>;

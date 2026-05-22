@@ -31,9 +31,6 @@
 					"name": "BlockedActor"
 				},
 				{
-					"name": "UserForbidsGroups"
-				},
-				{
 					"name": "ConvoLocked"
 				},
 				{
@@ -50,6 +47,9 @@
 				},
 				{
 					"name": "RecipientNotFound"
+				},
+				{
+					"name": "UserForbidsGroups"
 				}
 			],
 			"output": {

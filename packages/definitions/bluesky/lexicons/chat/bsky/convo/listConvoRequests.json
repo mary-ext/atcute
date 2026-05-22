@@ -14,7 +14,7 @@
 						"requests": {
 							"type": "array",
 							"items": {
-								"refs": ["chat.bsky.convo.defs#convoView", "chat.bsky.group.defs#joinRequestView"],
+								"refs": ["chat.bsky.convo.defs#convoView", "chat.bsky.group.defs#joinRequestConvoView"],
 								"type": "union"
 							}
 						}
@@ -36,7 +36,7 @@
 					}
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a page of incoming conversation requests for the user. Direct convo requests are returned as convoView; group join requests are returned as joinRequestView."
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a page of incoming conversation requests for the user. Direct convo requests are returned as convoView; group join requests made by the user are returned as joinRequestConvoView."
 		}
 	},
 	"lexicon": 1

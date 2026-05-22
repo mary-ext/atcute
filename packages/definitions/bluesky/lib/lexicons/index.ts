@@ -32,6 +32,7 @@ export * as AppBskyDraftGetDrafts from './types/app/bsky/draft/getDrafts.ts';
 export * as AppBskyDraftUpdateDraft from './types/app/bsky/draft/updateDraft.ts';
 export * as AppBskyEmbedDefs from './types/app/bsky/embed/defs.ts';
 export * as AppBskyEmbedExternal from './types/app/bsky/embed/external.ts';
+export * as AppBskyEmbedGetEmbedExternalView from './types/app/bsky/embed/getEmbedExternalView.ts';
 export * as AppBskyEmbedImages from './types/app/bsky/embed/images.ts';
 export * as AppBskyEmbedRecord from './types/app/bsky/embed/record.ts';
 export * as AppBskyEmbedRecordWithMedia from './types/app/bsky/embed/recordWithMedia.ts';
@@ -147,6 +148,7 @@ export * as ChatBskyActorDeclaration from './types/chat/bsky/actor/declaration.t
 export * as ChatBskyActorDefs from './types/chat/bsky/actor/defs.ts';
 export * as ChatBskyActorDeleteAccount from './types/chat/bsky/actor/deleteAccount.ts';
 export * as ChatBskyActorExportAccountData from './types/chat/bsky/actor/exportAccountData.ts';
+export * as ChatBskyActorGetStatus from './types/chat/bsky/actor/getStatus.ts';
 export * as ChatBskyConvoAcceptConvo from './types/chat/bsky/convo/acceptConvo.ts';
 export * as ChatBskyConvoAddReaction from './types/chat/bsky/convo/addReaction.ts';
 export * as ChatBskyConvoDefs from './types/chat/bsky/convo/defs.ts';
@@ -178,7 +180,7 @@ export * as ChatBskyGroupDisableJoinLink from './types/chat/bsky/group/disableJo
 export * as ChatBskyGroupEditGroup from './types/chat/bsky/group/editGroup.ts';
 export * as ChatBskyGroupEditJoinLink from './types/chat/bsky/group/editJoinLink.ts';
 export * as ChatBskyGroupEnableJoinLink from './types/chat/bsky/group/enableJoinLink.ts';
-export * as ChatBskyGroupGetJoinLinkPreview from './types/chat/bsky/group/getJoinLinkPreview.ts';
+export * as ChatBskyGroupGetJoinLinkPreviews from './types/chat/bsky/group/getJoinLinkPreviews.ts';
 export * as ChatBskyGroupListJoinRequests from './types/chat/bsky/group/listJoinRequests.ts';
 export * as ChatBskyGroupListMutualGroups from './types/chat/bsky/group/listMutualGroups.ts';
 export * as ChatBskyGroupRejectJoinRequest from './types/chat/bsky/group/rejectJoinRequest.ts';

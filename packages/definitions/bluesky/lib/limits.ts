@@ -73,6 +73,11 @@ export const embedVideo = {
 
 /** limits for `app.bsky.embed.external` */
 export const embedExternal = {
+	colorRGB: {
+		b: { maximum: 255 },
+		g: { maximum: 255 },
+		r: { maximum: 255 },
+	},
 	external: {
 		thumb: { maxSize: 1_000_000 },
 	},
