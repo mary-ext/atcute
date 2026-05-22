@@ -1,6 +1,8 @@
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
+import * as PubLeafletThemeColor from '../theme/color.ts';
+
 const _atMentionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#atMention')),
 	atURI: /*#__PURE__*/ v.genericUriString(),
@@ -33,6 +35,11 @@ const _footnoteSchema = /*#__PURE__*/ v.object({
 });
 const _highlightSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#highlight')),
+	get color() {
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.variant([PubLeafletThemeColor.rgbSchema, PubLeafletThemeColor.rgbaSchema]),
+		);
+	},
 });
 const _idSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.richtext.facet#id')),

@@ -10,6 +10,8 @@ export * as PubLeafletBlocksMath from './types/pub/leaflet/blocks/math.ts';
 export * as PubLeafletBlocksOrderedList from './types/pub/leaflet/blocks/orderedList.ts';
 export * as PubLeafletBlocksPage from './types/pub/leaflet/blocks/page.ts';
 export * as PubLeafletBlocksPoll from './types/pub/leaflet/blocks/poll.ts';
+export * as PubLeafletBlocksPostsList from './types/pub/leaflet/blocks/postsList.ts';
+export * as PubLeafletBlocksStandardSitePost from './types/pub/leaflet/blocks/standardSitePost.ts';
 export * as PubLeafletBlocksText from './types/pub/leaflet/blocks/text.ts';
 export * as PubLeafletBlocksUnorderedList from './types/pub/leaflet/blocks/unorderedList.ts';
 export * as PubLeafletBlocksWebsite from './types/pub/leaflet/blocks/website.ts';
@@ -23,6 +25,7 @@ export * as PubLeafletPagesLinearDocument from './types/pub/leaflet/pages/linear
 export * as PubLeafletPollDefinition from './types/pub/leaflet/poll/definition.ts';
 export * as PubLeafletPollVote from './types/pub/leaflet/poll/vote.ts';
 export * as PubLeafletPublication from './types/pub/leaflet/publication.ts';
+export * as PubLeafletPublicationPage from './types/pub/leaflet/publicationPage.ts';
 export * as PubLeafletRichtextFacet from './types/pub/leaflet/richtext/facet.ts';
 export * as PubLeafletThemeBackgroundImage from './types/pub/leaflet/theme/backgroundImage.ts';
 export * as PubLeafletThemeColor from './types/pub/leaflet/theme/color.ts';

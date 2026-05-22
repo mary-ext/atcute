@@ -1,0 +1,23 @@
+{
+	"id": "pub.leaflet.blocks.standardSitePost",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"cid": {
+					"type": "string"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"size": {
+					"type": "string",
+					"knownValues": ["large", "medium", "small"]
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

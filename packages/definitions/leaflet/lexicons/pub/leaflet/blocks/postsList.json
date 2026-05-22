@@ -1,0 +1,22 @@
+{
+	"id": "pub.leaflet.blocks.postsList",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": [],
+			"properties": {
+				"view": {
+					"type": "string",
+					"knownValues": ["compact", "full"]
+				},
+				"filterByTag": {
+					"type": "string"
+				},
+				"highlightFirstPost": {
+					"type": "boolean"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

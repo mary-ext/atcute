@@ -13,6 +13,8 @@ import * as PubLeafletBlocksMath from '../blocks/math.ts';
 import * as PubLeafletBlocksOrderedList from '../blocks/orderedList.ts';
 import * as PubLeafletBlocksPage from '../blocks/page.ts';
 import * as PubLeafletBlocksPoll from '../blocks/poll.ts';
+import * as PubLeafletBlocksPostsList from '../blocks/postsList.ts';
+import * as PubLeafletBlocksStandardSitePost from '../blocks/standardSitePost.ts';
 import * as PubLeafletBlocksText from '../blocks/text.ts';
 import * as PubLeafletBlocksUnorderedList from '../blocks/unorderedList.ts';
 import * as PubLeafletBlocksWebsite from '../blocks/website.ts';
@@ -38,6 +40,8 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksOrderedList.mainSchema,
 			PubLeafletBlocksPage.mainSchema,
 			PubLeafletBlocksPoll.mainSchema,
+			PubLeafletBlocksPostsList.mainSchema,
+			PubLeafletBlocksStandardSitePost.mainSchema,
 			PubLeafletBlocksText.mainSchema,
 			PubLeafletBlocksUnorderedList.mainSchema,
 			PubLeafletBlocksWebsite.mainSchema,

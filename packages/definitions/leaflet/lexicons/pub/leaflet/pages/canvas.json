@@ -41,6 +41,8 @@
 						"pub.leaflet.blocks.orderedList",
 						"pub.leaflet.blocks.page",
 						"pub.leaflet.blocks.poll",
+						"pub.leaflet.blocks.postsList",
+						"pub.leaflet.blocks.standardSitePost",
 						"pub.leaflet.blocks.text",
 						"pub.leaflet.blocks.unorderedList",
 						"pub.leaflet.blocks.website"
