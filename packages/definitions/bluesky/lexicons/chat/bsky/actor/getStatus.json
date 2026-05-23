@@ -6,7 +6,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["canCreateGroups", "chatDisabled"],
+					"required": ["canCreateGroups", "chatDisabled", "groupMemberLimit"],
 					"properties": {
 						"chatDisabled": {
 							"type": "boolean",
@@ -15,6 +15,10 @@
 						"canCreateGroups": {
 							"type": "boolean",
 							"description": "Whether the viewer's account is allowed to create group chats. New accounts are restricted from creating groups."
+						},
+						"groupMemberLimit": {
+							"type": "integer",
+							"description": "The maximum number of members allowed in a group conversation."
 						}
 					}
 				},

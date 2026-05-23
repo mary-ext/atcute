@@ -14,6 +14,8 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.actor.getStatus', {
 			canCreateGroups: /*#__PURE__*/ v.boolean(),
 			/** True when the viewer's account is disabled and cannot actively participate in chat. */
 			chatDisabled: /*#__PURE__*/ v.boolean(),
+			/** The maximum number of members allowed in a group conversation. */
+			groupMemberLimit: /*#__PURE__*/ v.integer(),
 		}),
 	},
 });

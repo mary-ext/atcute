@@ -3,6 +3,8 @@ import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
+import * as AppBskyActorDefs from '../actor/defs.ts';
+
 const _colorRGBSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.external#colorRGB')),
 	/**
@@ -55,6 +57,10 @@ const _viewSchema = /*#__PURE__*/ v.object({
 });
 const _viewExternalSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.external#viewExternal')),
+	/** Profiles of the owners of the Atmosphere records that backed this view. */
+	get associatedProfiles() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyActorDefs.profileViewBasicSchema));
+	},
 	/** StrongRefs (uri+cid) of the Atmosphere records that backed this view. */
 	get associatedRefs() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoRepoStrongRef.mainSchema));

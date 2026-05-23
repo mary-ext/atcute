@@ -64,7 +64,7 @@
 		},
 		"groupConvo": {
 			"type": "object",
-			"required": ["createdAt", "lockStatus", "memberCount", "name"],
+			"required": ["createdAt", "lockStatus", "memberCount", "memberLimit", "name"],
 			"properties": {
 				"name": {
 					"type": "string",
@@ -88,6 +88,10 @@
 				"memberCount": {
 					"type": "integer",
 					"description": "The total number of members in the group conversation."
+				},
+				"memberLimit": {
+					"type": "integer",
+					"description": "The maximum number of members allowed in the group conversation."
 				},
 				"joinRequestCount": {
 					"type": "integer",

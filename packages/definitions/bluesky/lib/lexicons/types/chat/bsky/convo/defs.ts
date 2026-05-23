@@ -77,6 +77,8 @@ const _groupConvoSchema = /*#__PURE__*/ v.object({
 	},
 	/** The total number of members in the group conversation. */
 	memberCount: /*#__PURE__*/ v.integer(),
+	/** The maximum number of members allowed in the group conversation. */
+	memberLimit: /*#__PURE__*/ v.integer(),
 	/**
 	 * The display name of the group conversation.
 	 *

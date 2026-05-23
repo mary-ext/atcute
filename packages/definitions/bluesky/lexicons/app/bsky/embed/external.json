@@ -123,6 +123,14 @@
 						"type": "ref"
 					},
 					"description": "StrongRefs (uri+cid) of the Atmosphere records that backed this view."
+				},
+				"associatedProfiles": {
+					"type": "array",
+					"items": {
+						"ref": "app.bsky.actor.defs#profileViewBasic",
+						"type": "ref"
+					},
+					"description": "Profiles of the owners of the Atmosphere records that backed this view."
 				}
 			}
 		},
