@@ -86,6 +86,7 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
 
 we use conventional commits with these rules:
 
+- a commit represents one logical work
 - accepted types: `feat`, `fix`, `refactor`, `docs`, `chore`
   - feat
     - new additions to public API surface
@@ -93,9 +94,11 @@ we use conventional commits with these rules:
     - Markdown document changes (README.md and similar)
   - chore
     - build/tooling/dependency changes
-    - code comment-only changes (incl. JSDoc)
-    - test-only changes
+    - tests, code comments, or JSDoc changes
     - mass-autofixes from linters and formatters
+- commit type describes the substance of the change as a whole, not a category to split it by. tests
+  written for a feature ship in the `feat` commit; `chore` applies when test, comment, or JSDoc work
+  is the entire change
 - optional scope is the package name, e.g. `refactor(package-a):`
 - omit the scope when the change does not involve any specific package, or when it touches most/all
   packages
@@ -107,14 +110,6 @@ scope selection when multiple packages are involved:
 - if the change primarily involves `package-a` over `package-b`, pick `package-a`
 - if changes in `package-a` and `package-b` hinge on `package-c` (even if `package-c` itself was not
   modified), pick `package-c`
-
-granularity — each commit represents one logical change:
-
-- split distinct changes into separate commits rather than bundling them
-- pair each changeset with the single commit it describes, so the changeset's git hash maps to the
-  right change; do not write one changeset covering multiple commits
-- pair each README update with the commit it documents, rather than batching doc updates across
-  multiple changes
 
 ### documentation
 
