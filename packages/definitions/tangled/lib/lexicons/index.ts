@@ -1,4 +1,5 @@
 export * as ShTangledActorProfile from './types/sh/tangled/actor/profile.ts';
+export * as ShTangledFeedComment from './types/sh/tangled/feed/comment.ts';
 export * as ShTangledFeedReaction from './types/sh/tangled/feed/reaction.ts';
 export * as ShTangledFeedStar from './types/sh/tangled/feed/star.ts';
 export * as ShTangledGitRefUpdate from './types/sh/tangled/git/refUpdate.ts';
@@ -26,6 +27,7 @@ export * as ShTangledKnotSubscribeRepos from './types/sh/tangled/knot/subscribeR
 export * as ShTangledKnotVersion from './types/sh/tangled/knot/version.ts';
 export * as ShTangledLabelDefinition from './types/sh/tangled/label/definition.ts';
 export * as ShTangledLabelOp from './types/sh/tangled/label/op.ts';
+export * as ShTangledMarkupMarkdown from './types/sh/tangled/markup/markdown.ts';
 export * as ShTangledOwner from './types/sh/tangled/owner.ts';
 export * as ShTangledPipeline from './types/sh/tangled/pipeline.ts';
 export * as ShTangledPipelineCancelPipeline from './types/sh/tangled/pipeline/cancelPipeline.ts';

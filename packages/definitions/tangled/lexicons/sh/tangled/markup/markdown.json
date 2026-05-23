@@ -1,0 +1,30 @@
+{
+	"id": "sh.tangled.markup.markdown",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["text"],
+			"properties": {
+				"text": {
+					"type": "string",
+					"description": "Final post-processed markdown content that will be rendered"
+				},
+				"blobs": {
+					"type": "array",
+					"items": {
+						"type": "blob",
+						"accept": ["image/*"],
+						"maxSize": 1000000
+					},
+					"description": "list of blobs referenced in markdown"
+				},
+				"original": {
+					"type": "string",
+					"description": "Original Markdown before post-processing. Used to restore original input on edit."
+				}
+			},
+			"description": "Tangled Flavored Markdown format text"
+		}
+	},
+	"lexicon": 1
+}
