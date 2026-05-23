@@ -4,6 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.standardSitePost')),
 	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	showPublicationTheme: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	size: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'large' | 'medium' | 'small' | (string & {})>()),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 });
