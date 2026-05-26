@@ -1,5 +1,13 @@
 # @atcute/pckt
 
+## 1.0.2
+
+### Patch Changes
+
+- 1c0b335: pull latest pckt lexicons
+- Updated dependencies [b15c486]
+  - @atcute/atproto@4.0.1
+
 ## 1.0.1
 
 ### Patch Changes

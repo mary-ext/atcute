@@ -1,5 +1,18 @@
 # @atcute/xrpc-server-node
 
+## 2.1.0
+
+### Minor Changes
+
+- 894ab08: add `createUpgradeListener(router)` on `NodeWebSocket`. it returns the bare `'upgrade'`
+  listener without attaching it to a server, so callers can wrap its invocation in their own context
+  (e.g. running it inside an `AsyncLocalStorage.run`) before delegating.
+
+### Patch Changes
+
+- 4c66188: `injectWebSocket` no longer claims non-`/xrpc/*` upgrade requests, letting other
+  listeners on the same server (e.g. Vite HMR, in-app WebSocket routes) handle them.
+
 ## 2.0.0
 
 ### Patch Changes
