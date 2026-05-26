@@ -1,0 +1,39 @@
+{
+	"id": "blog.pckt.domain.remove",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"errors": [
+				{
+					"name": "BlogNotFound"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["message"],
+					"properties": {
+						"message": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["blog"],
+				"properties": {
+					"blog": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the publication record. Authority MUST match the caller's DID."
+					}
+				}
+			},
+			"description": "Remove the custom domain from a publication."
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}

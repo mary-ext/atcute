@@ -1,0 +1,43 @@
+{
+	"id": "blog.pckt.domain.getStatus",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "BlogNotFound"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"description": "Custom hostname status (null when no domain configured)."
+						},
+						"sslStatus": {
+							"type": "string",
+							"description": "SSL provisioning state (null when no domain configured)."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["blog"],
+				"properties": {
+					"blog": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the publication record. Authority MUST match the caller's DID."
+					}
+				}
+			},
+			"description": "Get the current SSL and hostname status for a publication's custom domain."
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}

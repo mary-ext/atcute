@@ -1,0 +1,66 @@
+{
+	"id": "blog.pckt.domain.set",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["domain"],
+					"properties": {
+						"domain": {
+							"type": "string",
+							"maxLength": 253,
+							"description": "Fully-qualified domain name (lowercase)."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "BlogNotFound"
+				},
+				{
+					"name": "PlanLimitReached"
+				},
+				{
+					"name": "InvalidDomain"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["domain", "verified"],
+					"properties": {
+						"domain": {
+							"type": "string"
+						},
+						"verified": {
+							"type": "boolean"
+						},
+						"verificationToken": {
+							"type": "string",
+							"description": "Token to install as a TXT record at _pckt-verify.<domain>."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["blog"],
+				"properties": {
+					"blog": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the publication record (site.standard.publication). Authority MUST match the caller's DID."
+					}
+				}
+			},
+			"description": "Set or update the custom domain for a publication. Returns a verification token that must be installed as a TXT record before calling verify."
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}

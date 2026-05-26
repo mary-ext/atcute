@@ -1,0 +1,48 @@
+{
+	"id": "blog.pckt.domain.verify",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"errors": [
+				{
+					"name": "BlogNotFound"
+				},
+				{
+					"name": "NoDomainConfigured"
+				},
+				{
+					"name": "VerificationFailed"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["message", "verified"],
+					"properties": {
+						"message": {
+							"type": "string"
+						},
+						"verified": {
+							"type": "boolean"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["blog"],
+				"properties": {
+					"blog": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the publication record. Authority MUST match the caller's DID."
+					}
+				}
+			},
+			"description": "Verify DNS for the publication's custom domain. Checks the CNAME (or A-record fallback for apex) and the TXT verification record, then requests an SSL certificate."
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}
