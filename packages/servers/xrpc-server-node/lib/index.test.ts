@@ -417,6 +417,44 @@ describe('subscription', () => {
 		client.close();
 	});
 
+	it('does not interfere with non-xrpc upgrade requests', async () => {
+		const ws = createNodeWebSocket();
+		const router = new XRPCRouter({ websocket: ws.adapter });
+
+		router.addSubscription(ComAtprotoLabelSubscribeLabels.mainSchema, {
+			async *handler() {},
+		});
+
+		const instance = http.createServer(createRequestListener(router.fetch));
+		ws.injectWebSocket(instance, router);
+
+		let coexistingHandlerSawRequest = false;
+		instance.on('upgrade', (request, socket) => {
+			if (request.url?.startsWith('/xrpc/')) {
+				return;
+			}
+
+			// pretend to be vite hmr / adonis ws / etc. — handle the upgrade ourselves
+			coexistingHandlerSawRequest = true;
+			socket.destroy();
+		});
+
+		await new Promise<void>((resolve) => instance.listen(0, () => resolve()));
+		const port = (instance.address() as { port: number }).port;
+
+		try {
+			const client = new WebSocket(`ws://localhost:${port}/some-other-path`);
+			await new Promise<void>((resolve) => {
+				client.onerror = () => resolve();
+				client.onclose = () => resolve();
+			});
+		} finally {
+			instance.close();
+		}
+
+		expect(coexistingHandlerSawRequest).toBe(true);
+	});
+
 	it('stops sending when client disconnects', async () => {
 		const ws = createNodeWebSocket();
 		const router = new XRPCRouter({ websocket: ws.adapter });

@@ -48,7 +48,14 @@ export const createNodeWebSocket = ({
 		},
 		injectWebSocket(server, router) {
 			server.on('upgrade', async (request: IncomingMessage, socket: Duplex, head: Buffer) => {
-				const url = new URL(request.url || '/', `http://${request.headers.host || 'localhost'}`);
+				// Node's 'upgrade' event is shared across all listeners; bail before touching the socket
+				// when the request isn't ours, so other listeners (Vite HMR, in-app WebSocket routes,
+				// etc.) can handle it.
+				if (!request.url?.startsWith('/xrpc/')) {
+					return;
+				}
+
+				const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
 				const headers = new Headers();
 
 				for (const [key, value] of Object.entries(request.headers)) {
