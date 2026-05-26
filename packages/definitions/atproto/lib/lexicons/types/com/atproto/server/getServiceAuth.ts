@@ -4,8 +4,12 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.getServiceAuth', {
 	params: /*#__PURE__*/ v.object({
-		/** The DID of the service that the token will be used to authenticate with */
-		aud: /*#__PURE__*/ v.didString(),
+		/**
+		 * The DID or `did#serviceId` reference of the service that the token will be used to authenticate with.
+		 *
+		 * @maxLength 2048
+		 */
+		aud: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2048)]),
 		/**
 		 * The time in Unix Epoch seconds that the JWT expires. Defaults to 60 seconds in the future. The service
 		 * may enforce certain time bounds on tokens depending on the requested scope.
