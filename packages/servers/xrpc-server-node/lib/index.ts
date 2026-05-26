@@ -12,6 +12,17 @@ type Promisable<T> = T | Promise<T>;
 export interface NodeWebSocket {
 	adapter: WebSocketAdapter;
 	wss: WebSocketServer;
+	/**
+	 * builds the `'upgrade'` listener without attaching it to a server. useful when other handlers (e.g. Vite
+	 * HMR) share the same server and need to filter by path, or when callers need to wrap the listener (e.g.
+	 * running it inside an `AsyncLocalStorage.run`).
+	 *
+	 * @param router router that resolves the incoming request
+	 * @returns listener compatible with `server.on('upgrade', ...)`
+	 */
+	createUpgradeListener(
+		router: XRPCRouter,
+	): (request: IncomingMessage, socket: Duplex, head: Buffer) => Promise<void>;
 	injectWebSocket(server: Server | Http2Server | Http2SecureServer, router: XRPCRouter): void;
 }
 
@@ -33,6 +44,96 @@ export const createNodeWebSocket = ({
 	const context = new AsyncLocalStorage<WebSocketHandlerContext>();
 	const wss = new WebSocketServer({ noServer: true });
 
+	const createUpgradeListener = (
+		router: XRPCRouter,
+	): ((request: IncomingMessage, socket: Duplex, head: Buffer) => Promise<void>) => {
+		return async (request, socket, head) => {
+			// Node's 'upgrade' event is shared across all listeners; bail before touching the socket
+			// when the request isn't ours, so other listeners (Vite HMR, in-app WebSocket routes,
+			// etc.) can handle it.
+			if (!request.url?.startsWith('/xrpc/')) {
+				return;
+			}
+
+			const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
+			const headers = new Headers();
+
+			for (const [key, value] of Object.entries(request.headers)) {
+				if (value !== undefined) {
+					if (Array.isArray(value)) {
+						for (const v of value) {
+							headers.append(key, v);
+						}
+					} else {
+						headers.set(key, value);
+					}
+				}
+			}
+
+			const ctx: WebSocketHandlerContext = {
+				handler: null,
+			};
+
+			const response = await context.run(ctx, async (): Promise<Response> => {
+				const webRequest = new Request(url, { method: request.method, headers });
+				const response = await router.fetch(webRequest);
+
+				return response;
+			});
+
+			if (ctx.handler) {
+				const handler = ctx.handler;
+
+				wss.handleUpgrade(request, socket, head, (ws) => {
+					wss.emit('connection', ws, request);
+
+					const controller = new AbortController();
+					const signal = controller.signal;
+					const connection: WebSocketConnection = {
+						signal: signal,
+						send(data) {
+							return new Promise((resolve, reject) => {
+								ws.send(data, (err) => {
+									if (err) {
+										reject(err);
+									} else {
+										resolve();
+									}
+								});
+							});
+						},
+						async drain() {
+							if (ws.bufferedAmount <= highWaterMark) {
+								return;
+							}
+
+							while (!signal.aborted && ws.readyState === 1 && ws.bufferedAmount > lowWaterMark) {
+								await sleep(10, signal);
+							}
+						},
+						close(code, reason) {
+							ws.close(code, reason);
+						},
+					};
+
+					ws.onclose = (ev) => {
+						controller.abort(new Error(`WebSocket connection closed with code ${ev.code}`));
+					};
+
+					handler(connection);
+				});
+			} else {
+				socket.end(
+					`HTTP/1.1 ${response.status} ${response.statusText}\r\n` +
+						Array.from(response.headers.entries())
+							.map(([k, v]) => `${k}: ${v}`)
+							.join('\r\n') +
+						'\r\n\r\n',
+				);
+			}
+		};
+	};
+
 	return {
 		wss,
 		adapter: {
@@ -46,92 +147,9 @@ export const createNodeWebSocket = ({
 				return new Response(null);
 			},
 		},
+		createUpgradeListener,
 		injectWebSocket(server, router) {
-			server.on('upgrade', async (request: IncomingMessage, socket: Duplex, head: Buffer) => {
-				// Node's 'upgrade' event is shared across all listeners; bail before touching the socket
-				// when the request isn't ours, so other listeners (Vite HMR, in-app WebSocket routes,
-				// etc.) can handle it.
-				if (!request.url?.startsWith('/xrpc/')) {
-					return;
-				}
-
-				const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
-				const headers = new Headers();
-
-				for (const [key, value] of Object.entries(request.headers)) {
-					if (value !== undefined) {
-						if (Array.isArray(value)) {
-							for (const v of value) {
-								headers.append(key, v);
-							}
-						} else {
-							headers.set(key, value);
-						}
-					}
-				}
-
-				const ctx: WebSocketHandlerContext = {
-					handler: null,
-				};
-
-				const response = await context.run(ctx, async (): Promise<Response> => {
-					const webRequest = new Request(url, { method: request.method, headers });
-					const response = await router.fetch(webRequest);
-
-					return response;
-				});
-
-				if (ctx.handler) {
-					const handler = ctx.handler;
-
-					wss.handleUpgrade(request, socket, head, (ws) => {
-						wss.emit('connection', ws, request);
-
-						const controller = new AbortController();
-						const signal = controller.signal;
-						const connection: WebSocketConnection = {
-							signal: signal,
-							send(data) {
-								return new Promise((resolve, reject) => {
-									ws.send(data, (err) => {
-										if (err) {
-											reject(err);
-										} else {
-											resolve();
-										}
-									});
-								});
-							},
-							async drain() {
-								if (ws.bufferedAmount <= highWaterMark) {
-									return;
-								}
-
-								while (!signal.aborted && ws.readyState === 1 && ws.bufferedAmount > lowWaterMark) {
-									await sleep(10, signal);
-								}
-							},
-							close(code, reason) {
-								ws.close(code, reason);
-							},
-						};
-
-						ws.onclose = (ev) => {
-							controller.abort(new Error(`WebSocket connection closed with code ${ev.code}`));
-						};
-
-						handler(connection);
-					});
-				} else {
-					socket.end(
-						`HTTP/1.1 ${response.status} ${response.statusText}\r\n` +
-							Array.from(response.headers.entries())
-								.map(([k, v]) => `${k}: ${v}`)
-								.join('\r\n') +
-							'\r\n\r\n',
-					);
-				}
-			});
+			server.on('upgrade', createUpgradeListener(router));
 		},
 	};
 };

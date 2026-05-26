@@ -455,6 +455,53 @@ describe('subscription', () => {
 		expect(coexistingHandlerSawRequest).toBe(true);
 	});
 
+	it('allows callers to wrap the listener returned by createUpgradeListener', async () => {
+		const ws = createNodeWebSocket();
+		const router = new XRPCRouter({ websocket: ws.adapter });
+
+		router.addSubscription(ComAtprotoLabelSubscribeLabels.mainSchema, {
+			async *handler() {
+				yield {
+					$type: 'com.atproto.label.subscribeLabels#labels',
+					labels: [],
+					seq: 1,
+				};
+			},
+		});
+
+		const listener = ws.createUpgradeListener(router);
+		let wrappedCount = 0;
+
+		const instance = http.createServer(createRequestListener(router.fetch));
+		instance.on('upgrade', (request, socket, head) => {
+			if (!request.url?.startsWith('/xrpc/')) {
+				return;
+			}
+
+			wrappedCount++;
+			listener(request, socket, head);
+		});
+
+		await new Promise<void>((resolve) => instance.listen(0, () => resolve()));
+		const port = (instance.address() as { port: number }).port;
+
+		try {
+			const client = new WebSocket(`ws://localhost:${port}/xrpc/com.atproto.label.subscribeLabels`);
+			client.binaryType = 'arraybuffer';
+
+			await new Promise<void>((resolve, reject) => {
+				client.onmessage = () => resolve();
+				client.onerror = () => reject(new Error('WebSocket error'));
+			});
+
+			client.close();
+		} finally {
+			instance.close();
+		}
+
+		expect(wrappedCount).toBe(1);
+	});
+
 	it('stops sending when client disconnects', async () => {
 		const ws = createNodeWebSocket();
 		const router = new XRPCRouter({ websocket: ws.adapter });
