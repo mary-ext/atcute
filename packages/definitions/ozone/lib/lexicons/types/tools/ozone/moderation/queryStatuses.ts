@@ -131,11 +131,13 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryStatuses'
 		/** The subject to get the status for. */
 		subject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 		/**
-		 * If specified, subjects of the given type (account or record) will be returned. When this is set to
-		 * 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject is set,
-		 * this will be ignored.
+		 * If specified, subjects of the given type (account, record, or conversation) will be returned. When this
+		 * is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords or subject
+		 * is set, this will be ignored.
 		 */
-		subjectType: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'account' | 'record' | (string & {})>()),
+		subjectType: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.string<'account' | 'conversation' | 'record' | (string & {})>(),
+		),
 		/** @maxLength 25 */
 		tags: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [

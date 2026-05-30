@@ -128,6 +128,11 @@ const _cancelScheduledTakedownEventSchema = /*#__PURE__*/ v.object({
 	),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
+const _convoViewSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#convoView')),
+	convoId: /*#__PURE__*/ v.string(),
+	did: /*#__PURE__*/ v.didString(),
+});
 const _identityEventSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#identityEvent')),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
@@ -364,6 +369,7 @@ const _modEventViewSchema = /*#__PURE__*/ v.object({
 	},
 	get subject() {
 		return /*#__PURE__*/ v.variant([
+			ChatBskyConvoDefs.convoRefSchema,
 			ChatBskyConvoDefs.messageRefSchema,
 			ComAtprotoAdminDefs.repoRefSchema,
 			ComAtprotoRepoStrongRef.mainSchema,
@@ -411,6 +417,7 @@ const _modEventViewDetailSchema = /*#__PURE__*/ v.object({
 	},
 	get subject() {
 		return /*#__PURE__*/ v.variant([
+			convoViewSchema,
 			recordViewSchema,
 			recordViewNotFoundSchema,
 			repoViewSchema,
@@ -699,6 +706,7 @@ const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 	},
 	get subject() {
 		return /*#__PURE__*/ v.variant([
+			ChatBskyConvoDefs.convoRefSchema,
 			ChatBskyConvoDefs.messageRefSchema,
 			ComAtprotoAdminDefs.repoRefSchema,
 			ComAtprotoRepoStrongRef.mainSchema,
@@ -756,6 +764,7 @@ type ageAssuranceOverrideEvent$schematype = typeof _ageAssuranceOverrideEventSch
 type ageAssurancePurgeEvent$schematype = typeof _ageAssurancePurgeEventSchema;
 type blobView$schematype = typeof _blobViewSchema;
 type cancelScheduledTakedownEvent$schematype = typeof _cancelScheduledTakedownEventSchema;
+type convoView$schematype = typeof _convoViewSchema;
 type identityEvent$schematype = typeof _identityEventSchema;
 type imageDetails$schematype = typeof _imageDetailsSchema;
 type modEventAcknowledge$schematype = typeof _modEventAcknowledgeSchema;
@@ -813,6 +822,7 @@ export interface ageAssuranceOverrideEventSchema extends ageAssuranceOverrideEve
 export interface ageAssurancePurgeEventSchema extends ageAssurancePurgeEvent$schematype {}
 export interface blobViewSchema extends blobView$schematype {}
 export interface cancelScheduledTakedownEventSchema extends cancelScheduledTakedownEvent$schematype {}
+export interface convoViewSchema extends convoView$schematype {}
 export interface identityEventSchema extends identityEvent$schematype {}
 export interface imageDetailsSchema extends imageDetails$schematype {}
 export interface modEventAcknowledgeSchema extends modEventAcknowledge$schematype {}
@@ -872,6 +882,7 @@ export const ageAssurancePurgeEventSchema = _ageAssurancePurgeEventSchema as age
 export const blobViewSchema = _blobViewSchema as blobViewSchema;
 export const cancelScheduledTakedownEventSchema =
 	_cancelScheduledTakedownEventSchema as cancelScheduledTakedownEventSchema;
+export const convoViewSchema = _convoViewSchema as convoViewSchema;
 export const identityEventSchema = _identityEventSchema as identityEventSchema;
 export const imageDetailsSchema = _imageDetailsSchema as imageDetailsSchema;
 export const modEventAcknowledgeSchema = _modEventAcknowledgeSchema as modEventAcknowledgeSchema;
@@ -934,6 +945,7 @@ export interface BlobView extends v.InferInput<typeof blobViewSchema> {}
 export interface CancelScheduledTakedownEvent extends v.InferInput<
 	typeof cancelScheduledTakedownEventSchema
 > {}
+export interface ConvoView extends v.InferInput<typeof convoViewSchema> {}
 export interface IdentityEvent extends v.InferInput<typeof identityEventSchema> {}
 export interface ImageDetails extends v.InferInput<typeof imageDetailsSchema> {}
 export interface ModEventAcknowledge extends v.InferInput<typeof modEventAcknowledgeSchema> {}

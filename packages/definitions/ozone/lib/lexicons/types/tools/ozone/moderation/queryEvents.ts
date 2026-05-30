@@ -72,11 +72,13 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryEvents', 
 		sortDirection: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['asc', 'desc']), 'desc'),
 		subject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 		/**
-		 * If specified, only events where the subject is of the given type (account or record) will be returned.
-		 * When this is set to 'account' the 'collections' parameter will be ignored. When includeAllUserRecords
-		 * or subject is set, this will be ignored.
+		 * If specified, only events where the subject is of the given type (account, record, or conversation)
+		 * will be returned. When this is set to 'account' the 'collections' parameter will be ignored. When
+		 * includeAllUserRecords or subject is set, this will be ignored.
 		 */
-		subjectType: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'account' | 'record' | (string & {})>()),
+		subjectType: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.string<'account' | 'conversation' | 'record' | (string & {})>(),
+		),
 		/**
 		 * The types of events (fully qualified string in the format of
 		 * tools.ozone.moderation.defs#modEvent<name>) to filter by. If not specified, all events are returned.

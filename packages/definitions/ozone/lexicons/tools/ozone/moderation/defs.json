@@ -96,6 +96,19 @@
 				}
 			}
 		},
+		"convoView": {
+			"type": "object",
+			"required": ["convoId", "did"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				},
+				"convoId": {
+					"type": "string"
+				}
+			}
+		},
 		"moderation": {
 			"type": "object",
 			"properties": {
@@ -347,6 +360,7 @@
 				},
 				"subject": {
 					"refs": [
+						"chat.bsky.convo.defs#convoRef",
 						"chat.bsky.convo.defs#messageRef",
 						"com.atproto.admin.defs#repoRef",
 						"com.atproto.repo.strongRef"
@@ -967,6 +981,7 @@
 				},
 				"subject": {
 					"refs": [
+						"chat.bsky.convo.defs#convoRef",
 						"chat.bsky.convo.defs#messageRef",
 						"com.atproto.admin.defs#repoRef",
 						"com.atproto.repo.strongRef"
@@ -1108,7 +1123,7 @@
 					"type": "ref"
 				},
 				"subject": {
-					"refs": ["#recordView", "#recordViewNotFound", "#repoView", "#repoViewNotFound"],
+					"refs": ["#convoView", "#recordView", "#recordViewNotFound", "#repoView", "#repoViewNotFound"],
 					"type": "union"
 				},
 				"createdAt": {
