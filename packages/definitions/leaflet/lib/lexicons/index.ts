@@ -11,6 +11,7 @@ export * as PubLeafletBlocksOrderedList from './types/pub/leaflet/blocks/ordered
 export * as PubLeafletBlocksPage from './types/pub/leaflet/blocks/page.ts';
 export * as PubLeafletBlocksPoll from './types/pub/leaflet/blocks/poll.ts';
 export * as PubLeafletBlocksPostsList from './types/pub/leaflet/blocks/postsList.ts';
+export * as PubLeafletBlocksSignup from './types/pub/leaflet/blocks/signup.ts';
 export * as PubLeafletBlocksStandardSitePost from './types/pub/leaflet/blocks/standardSitePost.ts';
 export * as PubLeafletBlocksText from './types/pub/leaflet/blocks/text.ts';
 export * as PubLeafletBlocksUnorderedList from './types/pub/leaflet/blocks/unorderedList.ts';
