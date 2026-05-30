@@ -171,6 +171,7 @@ export * as ChatBskyConvoUnlockConvo from './types/chat/bsky/convo/unlockConvo.t
 export * as ChatBskyConvoUnmuteConvo from './types/chat/bsky/convo/unmuteConvo.ts';
 export * as ChatBskyConvoUpdateAllRead from './types/chat/bsky/convo/updateAllRead.ts';
 export * as ChatBskyConvoUpdateRead from './types/chat/bsky/convo/updateRead.ts';
+export * as ChatBskyEmbedJoinLink from './types/chat/bsky/embed/joinLink.ts';
 export * as ChatBskyGroupAddMembers from './types/chat/bsky/group/addMembers.ts';
 export * as ChatBskyGroupApproveJoinRequest from './types/chat/bsky/group/approveJoinRequest.ts';
 export * as ChatBskyGroupCreateGroup from './types/chat/bsky/group/createGroup.ts';
@@ -186,7 +187,12 @@ export * as ChatBskyGroupListMutualGroups from './types/chat/bsky/group/listMutu
 export * as ChatBskyGroupRejectJoinRequest from './types/chat/bsky/group/rejectJoinRequest.ts';
 export * as ChatBskyGroupRemoveMembers from './types/chat/bsky/group/removeMembers.ts';
 export * as ChatBskyGroupRequestJoin from './types/chat/bsky/group/requestJoin.ts';
+export * as ChatBskyGroupUpdateJoinRequestsRead from './types/chat/bsky/group/updateJoinRequestsRead.ts';
+export * as ChatBskyGroupWithdrawJoinRequest from './types/chat/bsky/group/withdrawJoinRequest.ts';
+export * as ChatBskyModerationDefs from './types/chat/bsky/moderation/defs.ts';
 export * as ChatBskyModerationGetActorMetadata from './types/chat/bsky/moderation/getActorMetadata.ts';
+export * as ChatBskyModerationGetConvo from './types/chat/bsky/moderation/getConvo.ts';
+export * as ChatBskyModerationGetConvoMembers from './types/chat/bsky/moderation/getConvoMembers.ts';
 export * as ChatBskyModerationGetMessageContext from './types/chat/bsky/moderation/getMessageContext.ts';
 export * as ChatBskyModerationSubscribeModEvents from './types/chat/bsky/moderation/subscribeModEvents.ts';
 export * as ChatBskyModerationUpdateActorAccess from './types/chat/bsky/moderation/updateActorAccess.ts';

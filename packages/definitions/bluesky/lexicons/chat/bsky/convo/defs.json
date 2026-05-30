@@ -96,6 +96,10 @@
 				"joinRequestCount": {
 					"type": "integer",
 					"description": "The total number of pending join requests for the group conversation. Only present for the owner. Capped at 21."
+				},
+				"unreadJoinRequestCount": {
+					"type": "integer",
+					"description": "The number of unread join requests for the group conversation. Only present for the owner."
 				}
 			},
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]."
@@ -141,7 +145,7 @@
 					"maxGraphemes": 1000
 				},
 				"embed": {
-					"refs": ["app.bsky.embed.record#view"],
+					"refs": ["app.bsky.embed.record#view", "chat.bsky.embed.joinLink#view"],
 					"type": "union"
 				},
 				"facets": {
@@ -280,7 +284,7 @@
 					"maxGraphemes": 1000
 				},
 				"embed": {
-					"refs": ["app.bsky.embed.record"],
+					"refs": ["app.bsky.embed.record", "chat.bsky.embed.joinLink"],
 					"type": "union"
 				},
 				"facets": {
@@ -733,6 +737,19 @@
 				}
 			}
 		},
+		"logReadJoinRequests": {
+			"type": "object",
+			"required": ["convoId", "rev"],
+			"properties": {
+				"rev": {
+					"type": "string"
+				},
+				"convoId": {
+					"type": "string"
+				}
+			},
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating the group owner marked join requests as read. Only the owner gets this."
+		},
 		"logRejectJoinRequest": {
 			"type": "object",
 			"required": ["convoId", "member", "rev"],
@@ -798,7 +815,7 @@
 					"type": "string"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was made by the viewer."
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was made by the requester. Only requester actor gets this."
 		},
 		"messageAndReactionView": {
 			"type": "object",
@@ -963,6 +980,37 @@
 				}
 			},
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating a user was removed from the group convo."
+		},
+		"logWithdrawIncomingJoinRequest": {
+			"type": "object",
+			"required": ["convoId", "member", "rev"],
+			"properties": {
+				"rev": {
+					"type": "string"
+				},
+				"member": {
+					"ref": "chat.bsky.actor.defs#profileViewBasic",
+					"type": "ref",
+					"description": "Prospective member who withdrew their join request."
+				},
+				"convoId": {
+					"type": "string"
+				}
+			},
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a prospective member withdrew their join request. Only the owner gets this."
+		},
+		"logWithdrawOutgoingJoinRequest": {
+			"type": "object",
+			"required": ["convoId", "rev"],
+			"properties": {
+				"rev": {
+					"type": "string"
+				},
+				"convoId": {
+					"type": "string"
+				}
+			},
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating the viewer withdrew their own join request. Only requester actor gets this."
 		},
 		"systemMessageDataCreateJoinLink": {
 			"type": "object",

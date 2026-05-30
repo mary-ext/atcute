@@ -33,12 +33,15 @@
 									"chat.bsky.convo.defs#logMuteConvo",
 									"chat.bsky.convo.defs#logOutgoingJoinRequest",
 									"chat.bsky.convo.defs#logReadConvo",
+									"chat.bsky.convo.defs#logReadJoinRequests",
 									"chat.bsky.convo.defs#logReadMessage",
 									"chat.bsky.convo.defs#logRejectJoinRequest",
 									"chat.bsky.convo.defs#logRemoveMember",
 									"chat.bsky.convo.defs#logRemoveReaction",
 									"chat.bsky.convo.defs#logUnlockConvo",
-									"chat.bsky.convo.defs#logUnmuteConvo"
+									"chat.bsky.convo.defs#logUnmuteConvo",
+									"chat.bsky.convo.defs#logWithdrawIncomingJoinRequest",
+									"chat.bsky.convo.defs#logWithdrawOutgoingJoinRequest"
 								],
 								"type": "union"
 							}

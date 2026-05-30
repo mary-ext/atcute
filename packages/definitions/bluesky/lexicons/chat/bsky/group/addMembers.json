@@ -31,6 +31,9 @@
 					"name": "BlockedActor"
 				},
 				{
+					"name": "BlockedSubject"
+				},
+				{
 					"name": "ConvoLocked"
 				},
 				{

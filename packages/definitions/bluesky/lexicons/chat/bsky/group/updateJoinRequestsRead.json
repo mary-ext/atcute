@@ -1,0 +1,38 @@
+{
+	"id": "chat.bsky.group.updateJoinRequestsRead",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["convoId"],
+					"properties": {
+						"convoId": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidConvo"
+				},
+				{
+					"name": "InsufficientRole"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": [],
+					"properties": {}
+				},
+				"encoding": "application/json"
+			},
+			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Marks all join requests as read for the group owner."
+		}
+	},
+	"lexicon": 1
+}

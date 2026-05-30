@@ -517,6 +517,10 @@ const _verificationViewSchema = /*#__PURE__*/ v.object({
 	isValid: /*#__PURE__*/ v.boolean(),
 	/** The user who issued this verification. */
 	issuer: /*#__PURE__*/ v.didString(),
+	/** The display name of the issuer. */
+	issuerDisplayName: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/** The handle of the issuer. */
+	issuerHandle: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.handleString()),
 	/** The AT-URI of the verification record. */
 	uri: /*#__PURE__*/ v.resourceUriString(),
 });

@@ -234,6 +234,17 @@ const _eventGroupChatUpdatedSchema = /*#__PURE__*/ v.object({
 		| (string & {})
 	>(),
 });
+const _eventRateLimitExceededSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('chat.bsky.moderation.subscribeModEvents#eventRateLimitExceeded'),
+	),
+	/** The DID of the user who hit the rate limit. */
+	actorDid: /*#__PURE__*/ v.didString(),
+	createdAt: /*#__PURE__*/ v.datetimeString(),
+	/** The NSID of the endpoint that was rate limited. */
+	endpoint: /*#__PURE__*/ v.string(),
+	rev: /*#__PURE__*/ v.string(),
+});
 const _mainSchema = /*#__PURE__*/ v.subscription('chat.bsky.moderation.subscribeModEvents', {
 	params: /*#__PURE__*/ v.object({
 		/**
@@ -254,6 +265,7 @@ const _mainSchema = /*#__PURE__*/ v.subscription('chat.bsky.moderation.subscribe
 			eventGroupChatMemberJoinedSchema,
 			eventGroupChatMemberLeftSchema,
 			eventGroupChatUpdatedSchema,
+			eventRateLimitExceededSchema,
 		]);
 	},
 });
@@ -268,6 +280,7 @@ type eventGroupChatMemberAdded$schematype = typeof _eventGroupChatMemberAddedSch
 type eventGroupChatMemberJoined$schematype = typeof _eventGroupChatMemberJoinedSchema;
 type eventGroupChatMemberLeft$schematype = typeof _eventGroupChatMemberLeftSchema;
 type eventGroupChatUpdated$schematype = typeof _eventGroupChatUpdatedSchema;
+type eventRateLimitExceeded$schematype = typeof _eventRateLimitExceededSchema;
 type main$schematype = typeof _mainSchema;
 
 export interface eventChatAcceptedSchema extends eventChatAccepted$schematype {}
@@ -280,6 +293,7 @@ export interface eventGroupChatMemberAddedSchema extends eventGroupChatMemberAdd
 export interface eventGroupChatMemberJoinedSchema extends eventGroupChatMemberJoined$schematype {}
 export interface eventGroupChatMemberLeftSchema extends eventGroupChatMemberLeft$schematype {}
 export interface eventGroupChatUpdatedSchema extends eventGroupChatUpdated$schematype {}
+export interface eventRateLimitExceededSchema extends eventRateLimitExceeded$schematype {}
 export interface mainSchema extends main$schematype {}
 
 export const eventChatAcceptedSchema = _eventChatAcceptedSchema as eventChatAcceptedSchema;
@@ -298,6 +312,7 @@ export const eventGroupChatMemberJoinedSchema =
 export const eventGroupChatMemberLeftSchema =
 	_eventGroupChatMemberLeftSchema as eventGroupChatMemberLeftSchema;
 export const eventGroupChatUpdatedSchema = _eventGroupChatUpdatedSchema as eventGroupChatUpdatedSchema;
+export const eventRateLimitExceededSchema = _eventRateLimitExceededSchema as eventRateLimitExceededSchema;
 export const mainSchema = _mainSchema as mainSchema;
 
 export interface EventChatAccepted extends v.InferInput<typeof eventChatAcceptedSchema> {}
@@ -314,6 +329,7 @@ export interface EventGroupChatMemberAdded extends v.InferInput<typeof eventGrou
 export interface EventGroupChatMemberJoined extends v.InferInput<typeof eventGroupChatMemberJoinedSchema> {}
 export interface EventGroupChatMemberLeft extends v.InferInput<typeof eventGroupChatMemberLeftSchema> {}
 export interface EventGroupChatUpdated extends v.InferInput<typeof eventGroupChatUpdatedSchema> {}
+export interface EventRateLimitExceeded extends v.InferInput<typeof eventRateLimitExceededSchema> {}
 
 export interface $params extends v.InferInput<mainSchema['params']> {}
 export type $message = v.InferInput<mainSchema['message']>;

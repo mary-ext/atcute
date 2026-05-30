@@ -24,7 +24,8 @@
 						"#eventGroupChatMemberAdded",
 						"#eventGroupChatMemberJoined",
 						"#eventGroupChatMemberLeft",
-						"#eventGroupChatUpdated"
+						"#eventGroupChatUpdated",
+						"#eventRateLimitExceeded"
 					],
 					"type": "union"
 				}
@@ -271,6 +272,29 @@
 				}
 			},
 			"description": "Fired when the first message was sent on a convo."
+		},
+		"eventRateLimitExceeded": {
+			"type": "object",
+			"required": ["actorDid", "createdAt", "endpoint", "rev"],
+			"properties": {
+				"rev": {
+					"type": "string"
+				},
+				"actorDid": {
+					"type": "string",
+					"format": "did",
+					"description": "The DID of the user who hit the rate limit."
+				},
+				"endpoint": {
+					"type": "string",
+					"description": "The NSID of the endpoint that was rate limited."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			},
+			"description": "Fired when a user exceeds a rate limit."
 		},
 		"eventGroupChatMemberLeft": {
 			"type": "object",

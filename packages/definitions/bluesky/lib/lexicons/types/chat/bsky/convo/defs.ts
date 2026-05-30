@@ -4,6 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 import * as AppBskyEmbedRecord from '../../../app/bsky/embed/record.ts';
 import * as AppBskyRichtextFacet from '../../../app/bsky/richtext/facet.ts';
 import * as ChatBskyActorDefs from '../actor/defs.ts';
+import * as ChatBskyEmbedJoinLink from '../embed/joinLink.ts';
 import * as ChatBskyGroupDefs from '../group/defs.ts';
 
 const _convoKindSchema = /*#__PURE__*/ v.string<'direct' | 'group' | (string & {})>();
@@ -89,6 +90,8 @@ const _groupConvoSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.stringLength(0, 1280),
 		/*#__PURE__*/ v.stringGraphemes(0, 128),
 	]),
+	/** The number of unread join requests for the group conversation. Only present for the owner. */
+	unreadJoinRequestCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _logAcceptConvoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logAcceptConvo')),
@@ -292,6 +295,11 @@ const _logReadConvoSchema = /*#__PURE__*/ v.object({
 	},
 	rev: /*#__PURE__*/ v.string(),
 });
+const _logReadJoinRequestsSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logReadJoinRequests')),
+	convoId: /*#__PURE__*/ v.string(),
+	rev: /*#__PURE__*/ v.string(),
+});
 const _logReadMessageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logReadMessage')),
 	convoId: /*#__PURE__*/ v.string(),
@@ -358,6 +366,24 @@ const _logUnmuteConvoSchema = /*#__PURE__*/ v.object({
 	convoId: /*#__PURE__*/ v.string(),
 	rev: /*#__PURE__*/ v.string(),
 });
+const _logWithdrawIncomingJoinRequestSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logWithdrawIncomingJoinRequest'),
+	),
+	convoId: /*#__PURE__*/ v.string(),
+	/** Prospective member who withdrew their join request. */
+	get member() {
+		return ChatBskyActorDefs.profileViewBasicSchema;
+	},
+	rev: /*#__PURE__*/ v.string(),
+});
+const _logWithdrawOutgoingJoinRequestSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('chat.bsky.convo.defs#logWithdrawOutgoingJoinRequest'),
+	),
+	convoId: /*#__PURE__*/ v.string(),
+	rev: /*#__PURE__*/ v.string(),
+});
 const _messageAndReactionViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageAndReactionView')),
 	get message() {
@@ -370,7 +396,9 @@ const _messageAndReactionViewSchema = /*#__PURE__*/ v.object({
 const _messageInputSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageInput')),
 	get embed() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedRecord.mainSchema]));
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.variant([AppBskyEmbedRecord.mainSchema, ChatBskyEmbedJoinLink.mainSchema]),
+		);
 	},
 	/** Annotations of text (mentions, URLs, hashtags, etc) */
 	get facets() {
@@ -394,7 +422,9 @@ const _messageRefSchema = /*#__PURE__*/ v.object({
 const _messageViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageView')),
 	get embed() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([AppBskyEmbedRecord.viewSchema]));
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.variant([AppBskyEmbedRecord.viewSchema, ChatBskyEmbedJoinLink.viewSchema]),
+		);
 	},
 	/** Annotations of text (mentions, URLs, hashtags, etc) */
 	get facets() {
@@ -604,12 +634,15 @@ type logMemberLeave$schematype = typeof _logMemberLeaveSchema;
 type logMuteConvo$schematype = typeof _logMuteConvoSchema;
 type logOutgoingJoinRequest$schematype = typeof _logOutgoingJoinRequestSchema;
 type logReadConvo$schematype = typeof _logReadConvoSchema;
+type logReadJoinRequests$schematype = typeof _logReadJoinRequestsSchema;
 type logReadMessage$schematype = typeof _logReadMessageSchema;
 type logRejectJoinRequest$schematype = typeof _logRejectJoinRequestSchema;
 type logRemoveMember$schematype = typeof _logRemoveMemberSchema;
 type logRemoveReaction$schematype = typeof _logRemoveReactionSchema;
 type logUnlockConvo$schematype = typeof _logUnlockConvoSchema;
 type logUnmuteConvo$schematype = typeof _logUnmuteConvoSchema;
+type logWithdrawIncomingJoinRequest$schematype = typeof _logWithdrawIncomingJoinRequestSchema;
+type logWithdrawOutgoingJoinRequest$schematype = typeof _logWithdrawOutgoingJoinRequestSchema;
 type messageAndReactionView$schematype = typeof _messageAndReactionViewSchema;
 type messageInput$schematype = typeof _messageInputSchema;
 type messageRef$schematype = typeof _messageRefSchema;
@@ -661,12 +694,15 @@ export interface logMemberLeaveSchema extends logMemberLeave$schematype {}
 export interface logMuteConvoSchema extends logMuteConvo$schematype {}
 export interface logOutgoingJoinRequestSchema extends logOutgoingJoinRequest$schematype {}
 export interface logReadConvoSchema extends logReadConvo$schematype {}
+export interface logReadJoinRequestsSchema extends logReadJoinRequests$schematype {}
 export interface logReadMessageSchema extends logReadMessage$schematype {}
 export interface logRejectJoinRequestSchema extends logRejectJoinRequest$schematype {}
 export interface logRemoveMemberSchema extends logRemoveMember$schematype {}
 export interface logRemoveReactionSchema extends logRemoveReaction$schematype {}
 export interface logUnlockConvoSchema extends logUnlockConvo$schematype {}
 export interface logUnmuteConvoSchema extends logUnmuteConvo$schematype {}
+export interface logWithdrawIncomingJoinRequestSchema extends logWithdrawIncomingJoinRequest$schematype {}
+export interface logWithdrawOutgoingJoinRequestSchema extends logWithdrawOutgoingJoinRequest$schematype {}
 export interface messageAndReactionViewSchema extends messageAndReactionView$schematype {}
 export interface messageInputSchema extends messageInput$schematype {}
 export interface messageRefSchema extends messageRef$schematype {}
@@ -718,12 +754,17 @@ export const logMemberLeaveSchema = _logMemberLeaveSchema as logMemberLeaveSchem
 export const logMuteConvoSchema = _logMuteConvoSchema as logMuteConvoSchema;
 export const logOutgoingJoinRequestSchema = _logOutgoingJoinRequestSchema as logOutgoingJoinRequestSchema;
 export const logReadConvoSchema = _logReadConvoSchema as logReadConvoSchema;
+export const logReadJoinRequestsSchema = _logReadJoinRequestsSchema as logReadJoinRequestsSchema;
 export const logReadMessageSchema = _logReadMessageSchema as logReadMessageSchema;
 export const logRejectJoinRequestSchema = _logRejectJoinRequestSchema as logRejectJoinRequestSchema;
 export const logRemoveMemberSchema = _logRemoveMemberSchema as logRemoveMemberSchema;
 export const logRemoveReactionSchema = _logRemoveReactionSchema as logRemoveReactionSchema;
 export const logUnlockConvoSchema = _logUnlockConvoSchema as logUnlockConvoSchema;
 export const logUnmuteConvoSchema = _logUnmuteConvoSchema as logUnmuteConvoSchema;
+export const logWithdrawIncomingJoinRequestSchema =
+	_logWithdrawIncomingJoinRequestSchema as logWithdrawIncomingJoinRequestSchema;
+export const logWithdrawOutgoingJoinRequestSchema =
+	_logWithdrawOutgoingJoinRequestSchema as logWithdrawOutgoingJoinRequestSchema;
 export const messageAndReactionViewSchema = _messageAndReactionViewSchema as messageAndReactionViewSchema;
 export const messageInputSchema = _messageInputSchema as messageInputSchema;
 export const messageRefSchema = _messageRefSchema as messageRefSchema;
@@ -788,12 +829,19 @@ export interface LogMemberLeave extends v.InferInput<typeof logMemberLeaveSchema
 export interface LogMuteConvo extends v.InferInput<typeof logMuteConvoSchema> {}
 export interface LogOutgoingJoinRequest extends v.InferInput<typeof logOutgoingJoinRequestSchema> {}
 export interface LogReadConvo extends v.InferInput<typeof logReadConvoSchema> {}
+export interface LogReadJoinRequests extends v.InferInput<typeof logReadJoinRequestsSchema> {}
 export interface LogReadMessage extends v.InferInput<typeof logReadMessageSchema> {}
 export interface LogRejectJoinRequest extends v.InferInput<typeof logRejectJoinRequestSchema> {}
 export interface LogRemoveMember extends v.InferInput<typeof logRemoveMemberSchema> {}
 export interface LogRemoveReaction extends v.InferInput<typeof logRemoveReactionSchema> {}
 export interface LogUnlockConvo extends v.InferInput<typeof logUnlockConvoSchema> {}
 export interface LogUnmuteConvo extends v.InferInput<typeof logUnmuteConvoSchema> {}
+export interface LogWithdrawIncomingJoinRequest extends v.InferInput<
+	typeof logWithdrawIncomingJoinRequestSchema
+> {}
+export interface LogWithdrawOutgoingJoinRequest extends v.InferInput<
+	typeof logWithdrawOutgoingJoinRequestSchema
+> {}
 export interface MessageAndReactionView extends v.InferInput<typeof messageAndReactionViewSchema> {}
 export interface MessageInput extends v.InferInput<typeof messageInputSchema> {}
 export interface MessageRef extends v.InferInput<typeof messageRefSchema> {}

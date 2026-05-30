@@ -34,6 +34,9 @@
 					"name": "BlockedActor"
 				},
 				{
+					"name": "BlockedSubject"
+				},
+				{
 					"name": "NewAccountCannotCreateGroup"
 				},
 				{

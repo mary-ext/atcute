@@ -582,6 +582,15 @@
 					"type": "string",
 					"format": "datetime",
 					"description": "Timestamp when the verification was created."
+				},
+				"issuerHandle": {
+					"type": "string",
+					"format": "handle",
+					"description": "The handle of the issuer."
+				},
+				"issuerDisplayName": {
+					"type": "string",
+					"description": "The display name of the issuer."
 				}
 			},
 			"description": "An individual verification for an associated subject."
