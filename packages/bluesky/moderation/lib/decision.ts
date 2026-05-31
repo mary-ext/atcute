@@ -61,6 +61,7 @@ export interface HiddenModerationCause {
 export interface LabelModerationCause {
 	type: typeof ModerationCauseType.Label;
 	priority: 1 | 2 | 5 | 7 | 8;
+	/** did of the labeler that applied this label, or null when self-applied */
 	source: Did | null;
 
 	label: Label;
@@ -317,7 +318,7 @@ export const considerLabel = (
 	decision.causes.push({
 		type: ModerationCauseType.Label,
 		priority,
-		source: isSelfApplied ? label.src : null,
+		source: isSelfApplied ? null : src,
 
 		label: label,
 		labelDef: labelDef,
