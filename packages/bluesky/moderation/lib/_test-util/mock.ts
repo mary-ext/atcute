@@ -91,6 +91,28 @@ export const embedRecordView = ({
 	};
 };
 
+export const embedRecordBlockedView = ({
+	did,
+	viewer,
+}: {
+	did: Did;
+	viewer?: AppBskyActorDefs.ViewerState;
+}): $type.enforce<AppBskyEmbedRecord.View> => {
+	return {
+		$type: 'app.bsky.embed.record#view',
+		record: {
+			$type: 'app.bsky.embed.record#viewBlocked',
+			uri: `at://${did}/app.bsky.feed.post/fake`,
+			blocked: true,
+			author: {
+				$type: 'app.bsky.feed.defs#blockedAuthor',
+				did,
+				viewer,
+			},
+		},
+	};
+};
+
 export const profileView = ({
 	handle,
 	displayName,

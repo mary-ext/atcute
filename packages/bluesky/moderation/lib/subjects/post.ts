@@ -16,6 +16,7 @@ import {
 	considerHidden,
 	considerKeywordMute,
 	considerLabels,
+	considerPermanentMute,
 	createModerationDecision,
 	downgradeDecision,
 	mergeModerationDecisions,
@@ -75,6 +76,10 @@ const decideEmbed = (
 				const viewer = author.viewer;
 
 				const decision = createModerationDecision(author.did, opts);
+
+				if (viewer?.muted) {
+					considerPermanentMute(decision, viewer.mutedByList ?? null);
+				}
 
 				if (viewer?.blocking) {
 					considerBlocking(decision, viewer.blockingByList ?? null);
