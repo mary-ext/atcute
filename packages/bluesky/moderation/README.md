@@ -79,6 +79,9 @@ getDisplayRestrictions(decision, DisplayContext.ProfileView);
 
 // profile avatar/banner
 getDisplayRestrictions(decision, DisplayContext.ProfileMedia);
+
+// profile display name/description
+getDisplayRestrictions(decision, DisplayContext.ProfileBio);
 ```
 
 ### loading preferences
