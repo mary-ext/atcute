@@ -43,7 +43,8 @@ export const createKeywordPattern = (matchers: KeywordMatch | KeywordMatch[]): R
 		}
 	}
 
-	return new RegExp(re, 'i');
+	// an empty source compiles to a pattern that matches every string; never match instead
+	return new RegExp(re || '(?!)', 'i');
 };
 
 const ESCAPE_RE = /[.*+?^${}()|[\]\\]/g;

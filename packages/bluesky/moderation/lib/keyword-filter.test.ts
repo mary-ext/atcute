@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { interpretMutedWordPreference } from './index.ts';
+import { createKeywordPattern, interpretMutedWordPreference } from './index.ts';
 import { matchesKeywordFilters } from './internal/keyword-filter.ts';
 
 describe('muted word expiry', () => {
@@ -54,5 +54,12 @@ describe('tag matching', () => {
 		const filter = interpretMutedWordPreference({ value: 'spoiler', targets: ['tag'] });
 
 		expect(matchesKeywordFilters({ filters: [filter], text: 'a spoiler appears', tags: [] })).toBe(null);
+	});
+});
+
+describe('createKeywordPattern', () => {
+	it('never matches for an empty or whitespace-only value', () => {
+		expect(createKeywordPattern({ value: '   ', whole: true }).test('literally anything')).toBe(false);
+		expect(createKeywordPattern([]).test('literally anything')).toBe(false);
 	});
 });
