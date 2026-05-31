@@ -1,7 +1,7 @@
 import type { AppBskyActorDefs } from '@atcute/bluesky';
 
 const WORD_CHAR_RE = /^\w$/;
-const WHITESPACE_RE = /\s+/;
+const WHITESPACE_RE = /\s+/g;
 
 export interface KeywordMatch {
 	/** keyword value */

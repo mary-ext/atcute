@@ -62,4 +62,12 @@ describe('createKeywordPattern', () => {
 		expect(createKeywordPattern({ value: '   ', whole: true }).test('literally anything')).toBe(false);
 		expect(createKeywordPattern([]).test('literally anything')).toBe(false);
 	});
+
+	it('normalizes every whitespace gap in a multi-word phrase', () => {
+		const pattern = createKeywordPattern({ value: 'foo bar baz', whole: true });
+
+		expect(pattern.test('a foo bar baz here')).toBe(true);
+		expect(pattern.test('a foo bar  baz here')).toBe(true);
+		expect(pattern.test('a foo bar\tbaz here')).toBe(true);
+	});
 });
