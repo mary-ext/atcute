@@ -59,3 +59,4 @@ export { moderateList } from './subjects/list.ts';
 export { moderateNotification } from './subjects/notification.ts';
 export { moderatePost } from './subjects/post.ts';
 export { moderateProfile } from './subjects/profile.ts';
+export { moderateStatus } from './subjects/status.ts';
