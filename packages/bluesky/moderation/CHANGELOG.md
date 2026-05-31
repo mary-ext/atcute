@@ -1,5 +1,27 @@
 # @atcute/bluesky-moderation
 
+## 4.1.0
+
+### Minor Changes
+
+- cea8506: honor `expiresAt` on muted word filters; expired filters no longer match
+- 5b55365: add the `ProfileBio` display context for a profile's display name and description,
+  blurred by forced labels (`!hide`, `!warn`, `!no-unauthenticated`) but not by media labels such as
+  `porn`
+- 15fe3f2: add `moderateStatus` for moderating account live statuses
+
+### Patch Changes
+
+- a1bbf74: consider mutes on the author of a blocked quote post
+- 23559d0: match hashtags against content-targeted muted words, not just tag-targeted ones
+- 391ed17: fix an empty or whitespace-only keyword filter matching every post instead of nothing
+- 70b6a0c: fix hidden post detection to match quoted posts against their own uri
+- 47c17b6: fix label cause `source` to hold the labeler did; it is now null only for self-applied
+  labels
+- 757b46a: normalize every whitespace gap in a multi-word keyword, not just the first, so phrases
+  match regardless of spacing
+- 02c845f: apply `temporaryMutes` during profile moderation; the preference previously had no effect
+
 ## 4.0.0
 
 ### Patch Changes
