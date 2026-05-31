@@ -28,6 +28,7 @@ export {
 } from './keyword-filter.ts';
 export {
 	BlurLevel,
+	BUILTIN_LABELS,
 	interpretLabelerDefinition,
 	interpretLabelerDefinitions,
 	interpretLabelValueDefinition,
