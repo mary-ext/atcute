@@ -50,10 +50,10 @@
 	},
 	"devDependencies": {
 		"@noble/curves": "^2.2.0",
-		"@types/node": "^25.9.0",
-		"@vitest/browser-playwright": "^4.1.6",
-		"@vitest/coverage-v8": "^4.1.6",
+		"@types/node": "^25.9.1",
+		"@vitest/browser-playwright": "^4.1.7",
+		"@vitest/coverage-v8": "^4.1.7",
 		"playwright": "^1.60.0",
-		"vitest": "^4.1.6"
+		"vitest": "^4.1.7"
 	}
 }

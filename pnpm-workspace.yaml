@@ -18,4 +18,4 @@ allowBuilds:
   sharp: true
 
 patchedDependencies:
-  '@atproto/pds': patches/@atproto__pds.patch
+  '@atproto/pds@0.5.1': patches/@atproto__pds@0.5.1.patch

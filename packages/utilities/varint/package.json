@@ -28,6 +28,6 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"vitest": "^4.1.6"
+		"vitest": "^4.1.7"
 	}
 }

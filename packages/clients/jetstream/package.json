@@ -31,7 +31,7 @@
 		"@mary-ext/simple-event-emitter": "^1.0.1",
 		"partysocket": "^1.1.19",
 		"type-fest": "^4.41.0",
-		"valibot": "^1.4.0"
+		"valibot": "^1.4.1"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

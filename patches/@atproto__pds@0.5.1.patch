@@ -1,16 +1,15 @@
 diff --git a/dist/db/db.js b/dist/db/db.js
-index b34a3a195cead4ba7e36e80482873a044906216f..6fa7c83d712a1b4ff1fff170a06eddfa4652ee67 100644
+index e0b6f0a96f903ed0b286c7ffc234012b2e5e3eba..cf1aec652e0a36778de6b85cfb6eb24b39e7f635 100644
 --- a/dist/db/db.js
 +++ b/dist/db/db.js
-@@ -5,13 +5,76 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
- Object.defineProperty(exports, "__esModule", { value: true });
- exports.Database = void 0;
- const node_assert_1 = __importDefault(require("node:assert"));
--const better_sqlite3_1 = __importDefault(require("better-sqlite3"));
-+const node_sqlite_1 = require("node:sqlite");
- const kysely_1 = require("kysely");
- const logger_1 = require("../logger");
- const util_1 = require("./util");
+@@ -1,11 +1,74 @@
+ import assert from 'node:assert';
+-import SqliteDB from 'better-sqlite3';
+-import { Kysely, SqliteDialect, sql, } from 'kysely';
++import { DatabaseSync } from 'node:sqlite';
++import { CompiledQuery, Kysely, SqliteAdapter, SqliteIntrospector, SqliteQueryCompiler, sql, } from 'kysely';
+ import { dbLogger } from '../logger.js';
+ import { retrySqlite } from './util.js';
  const DEFAULT_PRAGMAS = {
  // strict: 'ON', // @TODO strictness should live on table defs instead
  };
@@ -64,30 +63,30 @@ index b34a3a195cead4ba7e36e80482873a044906216f..6fa7c83d712a1b4ff1fff170a06eddfa
 +    }
 +    async acquireConnection() { await this.#mutex.lock(); return this.#connection; }
 +    async releaseConnection() { this.#mutex.unlock(); }
-+    async beginTransaction(connection) { await connection.executeQuery(kysely_1.CompiledQuery.raw('begin')); }
-+    async commitTransaction(connection) { await connection.executeQuery(kysely_1.CompiledQuery.raw('commit')); }
-+    async rollbackTransaction(connection) { await connection.executeQuery(kysely_1.CompiledQuery.raw('rollback')); }
++    async beginTransaction(connection) { await connection.executeQuery(CompiledQuery.raw('begin')); }
++    async commitTransaction(connection) { await connection.executeQuery(CompiledQuery.raw('commit')); }
++    async rollbackTransaction(connection) { await connection.executeQuery(CompiledQuery.raw('rollback')); }
 +    async destroy() { this.#db?.close(); }
 +}
 +class NodeSqliteDialect {
 +    #config;
 +    constructor(config) { this.#config = config; }
 +    createDriver() { return new NodeSqliteDriver(this.#config); }
-+    createQueryCompiler() { return new kysely_1.SqliteQueryCompiler(); }
-+    createAdapter() { return new kysely_1.SqliteAdapter(); }
-+    createIntrospector(db) { return new kysely_1.SqliteIntrospector(db); }
++    createQueryCompiler() { return new SqliteQueryCompiler(); }
++    createAdapter() { return new SqliteAdapter(); }
++    createIntrospector(db) { return new SqliteIntrospector(db); }
 +}
- class Database {
+ export class Database {
      constructor(db) {
-         Object.defineProperty(this, "db", {
-@@ -34,18 +97,16 @@ class Database {
-         });
+         this.db = db;
+@@ -13,18 +76,16 @@ export class Database {
+         this.commitHooks = [];
      }
      static sqlite(location, opts) {
--        const sqliteDb = new better_sqlite3_1.default(location, {
+-        const sqliteDb = new SqliteDB(location, {
 -            timeout: 0, // handled by application
 -        });
-+        const sqliteDb = new node_sqlite_1.DatabaseSync(location);
++        const sqliteDb = new DatabaseSync(location);
          const pragmas = {
              ...DEFAULT_PRAGMAS,
              ...(opts?.pragmas ?? {}),
@@ -96,8 +95,8 @@ index b34a3a195cead4ba7e36e80482873a044906216f..6fa7c83d712a1b4ff1fff170a06eddfa
 -            sqliteDb.pragma(`${pragma} = ${pragmas[pragma]}`);
 +            sqliteDb.prepare(`PRAGMA ${pragma} = ${pragmas[pragma]}`).run();
          }
-         const db = new kysely_1.Kysely({
--            dialect: new kysely_1.SqliteDialect({
+         const db = new Kysely({
+-            dialect: new SqliteDialect({
 +            dialect: new NodeSqliteDialect({
                  database: sqliteDb,
              }),

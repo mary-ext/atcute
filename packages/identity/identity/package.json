@@ -33,11 +33,11 @@
 	},
 	"dependencies": {
 		"@atcute/lexicons": "workspace:^",
-		"valibot": "^1.4.0"
+		"valibot": "^1.4.1"
 	},
 	"devDependencies": {
-		"@vitest/coverage-v8": "^4.1.6",
-		"vitest": "^4.1.6"
+		"@vitest/coverage-v8": "^4.1.7",
+		"vitest": "^4.1.7"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

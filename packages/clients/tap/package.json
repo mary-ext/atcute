@@ -35,12 +35,12 @@
 		"@mary-ext/simple-event-emitter": "^1.0.1",
 		"partysocket": "^1.1.19",
 		"type-fest": "^4.41.0",
-		"valibot": "^1.4.0"
+		"valibot": "^1.4.1"
 	},
 	"devDependencies": {
 		"@types/ws": "^8.18.1",
-		"vitest": "^4.1.6",
-		"ws": "^8.20.1"
+		"vitest": "^4.1.7",
+		"ws": "^8.21.0"
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^2.0.0",

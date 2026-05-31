@@ -37,11 +37,11 @@
 		"@atcute/oauth-types": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
 		"nanoid": "^5.1.11",
-		"valibot": "^1.4.0"
+		"valibot": "^1.4.1"
 	},
 	"devDependencies": {
-		"@types/node": "^25.9.0",
-		"vitest": "^4.1.6"
+		"@types/node": "^25.9.1",
+		"vitest": "^4.1.7"
 	},
 	"peerDependencies": {
 		"@atcute/identity-resolver": "^2.0.0",

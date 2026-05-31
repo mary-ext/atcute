@@ -38,13 +38,13 @@
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/repo": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
-		"valibot": "^1.4.0"
+		"valibot": "^1.4.1"
 	},
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
-		"@vitest/coverage-v8": "^4.1.6",
-		"vitest": "^4.1.6"
+		"@vitest/coverage-v8": "^4.1.7",
+		"vitest": "^4.1.7"
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^2.0.0",
