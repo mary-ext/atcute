@@ -64,6 +64,8 @@ export type KeywordFilterFlags = (typeof KeywordFilterFlags)[keyof typeof Keywor
 export interface KeywordFilter {
 	/** unique identifier for this filter */
 	id?: string;
+	/** epoch milliseconds after which this filter no longer applies */
+	expiresAt?: number;
 	/** pattern to match */
 	pattern: RegExp;
 	/** indicates how the filter should act */
@@ -71,7 +73,7 @@ export interface KeywordFilter {
 }
 
 export const interpretMutedWordPreference = (pref: AppBskyActorDefs.MutedWord): KeywordFilter => {
-	const { actorTarget, targets } = pref;
+	const { actorTarget, expiresAt, targets } = pref;
 
 	let flags = 0;
 
@@ -86,8 +88,17 @@ export const interpretMutedWordPreference = (pref: AppBskyActorDefs.MutedWord): 
 		flags |= KeywordFilterFlags.NoFollowing;
 	}
 
+	let expiry: number | undefined;
+	if (expiresAt !== undefined) {
+		const ts = Date.parse(expiresAt);
+		if (!Number.isNaN(ts)) {
+			expiry = ts;
+		}
+	}
+
 	return {
 		id: pref.id,
+		expiresAt: expiry,
 		pattern: createKeywordPattern({ value: pref.value, whole: true }),
 		flags: flags,
 	};

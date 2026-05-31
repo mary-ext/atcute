@@ -15,8 +15,14 @@ export const matchesKeywordFilters = ({
 	tags?: string[];
 	actor?: AppBskyActorDefs.ProfileView | AppBskyActorDefs.ProfileViewBasic;
 }): KeywordFilter | null => {
+	const now = Date.now();
+
 	for (let i = 0, il = filters.length; i < il; i++) {
 		const filter = filters[i];
+
+		if (filter.expiresAt !== undefined && filter.expiresAt <= now) {
+			continue;
+		}
 
 		if (actor && filter.flags & KeywordFilterFlags.NoFollowing) {
 			if (actor.viewer?.following) {
