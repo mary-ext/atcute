@@ -30,7 +30,8 @@ export const matchesKeywordFilters = ({
 			}
 		}
 
-		if (filter.flags & KeywordFilterFlags.ApplyTopic) {
+		// a `content` filter applies to tags as well, not just `tag` filters
+		if (filter.flags & (KeywordFilterFlags.ApplyContent | KeywordFilterFlags.ApplyTopic)) {
 			for (let j = 0, jl = tags.length; j < jl; j++) {
 				const tag = tags[j];
 

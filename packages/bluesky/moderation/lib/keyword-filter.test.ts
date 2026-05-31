@@ -32,3 +32,27 @@ describe('muted word expiry', () => {
 		expect(matchesKeywordFilters({ filters: [filter], text: 'a spoiler appears' })).toBe(filter);
 	});
 });
+
+describe('tag matching', () => {
+	it('matches a tag with a content-targeted filter', () => {
+		const filter = interpretMutedWordPreference({ value: 'spoiler', targets: ['content'] });
+
+		expect(matchesKeywordFilters({ filters: [filter], text: 'nothing here', tags: ['spoiler'] })).toBe(
+			filter,
+		);
+	});
+
+	it('matches a tag with a tag-targeted filter', () => {
+		const filter = interpretMutedWordPreference({ value: 'spoiler', targets: ['tag'] });
+
+		expect(matchesKeywordFilters({ filters: [filter], text: 'nothing here', tags: ['spoiler'] })).toBe(
+			filter,
+		);
+	});
+
+	it('does not match content with a tag-only filter', () => {
+		const filter = interpretMutedWordPreference({ value: 'spoiler', targets: ['tag'] });
+
+		expect(matchesKeywordFilters({ filters: [filter], text: 'a spoiler appears', tags: [] })).toBe(null);
+	});
+});
