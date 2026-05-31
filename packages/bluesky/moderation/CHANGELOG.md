@@ -1,5 +1,11 @@
 # @atcute/bluesky-moderation
 
+## 4.2.0
+
+### Minor Changes
+
+- 20d752e: export `BUILTIN_LABELS`, the mapping of Bluesky's built-in label definitions
+
 ## 4.1.0
 
 ### Minor Changes
