@@ -5,6 +5,7 @@ import {
 	considerBlocking,
 	considerLabel,
 	considerPermanentMute,
+	considerTemporaryMute,
 	createModerationDecision,
 } from '../decision.ts';
 import type { ModerationOptions, ProfileSubject } from '../types.ts';
@@ -26,6 +27,8 @@ export const moderateProfile = (subject: ProfileSubject, opts: ModerationOptions
 			considerBlockedBy(decision);
 		}
 	}
+
+	considerTemporaryMute(decision, opts);
 
 	if (subject.labels?.length) {
 		for (const label of subject.labels) {
