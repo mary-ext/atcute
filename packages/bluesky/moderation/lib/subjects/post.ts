@@ -106,7 +106,7 @@ const checkHiddenPost = (subject: PostSubject, hiddenPosts: CanonicalResourceUri
 			case 'app.bsky.embed.record#viewDetached':
 			case 'app.bsky.embed.record#viewNotFound':
 			case 'app.bsky.embed.record#viewRecord': {
-				return hiddenPosts.includes(subject.uri as CanonicalResourceUri);
+				return hiddenPosts.includes(record.uri as CanonicalResourceUri);
 			}
 		}
 	}
