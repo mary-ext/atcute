@@ -108,11 +108,13 @@ export const getLabelBehaviorMatrix = (
 					[DisplayContext.ProfileList]: ModerationAction.Blur,
 					[DisplayContext.ProfileView]: ModerationAction.Blur,
 					[DisplayContext.ProfileMedia]: ModerationAction.Blur,
+					[DisplayContext.ProfileBio]: ModerationAction.Blur,
 					[DisplayContext.ContentList]: ModerationAction.Blur,
 					[DisplayContext.ContentView]: ModerationAction.Blur,
 				},
 				[LabelTarget.Profile]: {
 					[DisplayContext.ProfileMedia]: ModerationAction.Blur,
+					[DisplayContext.ProfileBio]: ModerationAction.Blur,
 				},
 				[LabelTarget.Content]: {
 					[DisplayContext.ContentList]: ModerationAction.Blur,

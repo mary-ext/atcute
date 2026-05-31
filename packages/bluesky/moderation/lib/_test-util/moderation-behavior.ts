@@ -24,6 +24,7 @@ export interface ModerationTestSuiteScenario {
 		profileList?: ModerationTestSuiteResultFlag[];
 		profileView?: ModerationTestSuiteResultFlag[];
 		profileMedia?: ModerationTestSuiteResultFlag[];
+		profileBio?: ModerationTestSuiteResultFlag[];
 		contentList?: ModerationTestSuiteResultFlag[];
 		contentView?: ModerationTestSuiteResultFlag[];
 		contentMedia?: ModerationTestSuiteResultFlag[];

@@ -20,6 +20,8 @@ export const DisplayContext = {
 	ProfileView: 'profileView',
 	/** profile's avatar or banner */
 	ProfileMedia: 'profileMedia',
+	/** profile's display name or description */
+	ProfileBio: 'profileBio',
 	/** profile in a list */
 	ProfileList: 'profileList',
 } as const;

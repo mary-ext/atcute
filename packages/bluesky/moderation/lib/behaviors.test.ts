@@ -125,6 +125,7 @@ const SCENARIOS: SuiteScenarios = {
 			profileList: ['filter', 'blur', 'noOverride'],
 			profileView: ['blur', 'noOverride'],
 			profileMedia: ['blur', 'noOverride'],
+			profileBio: ['blur', 'noOverride'],
 			contentList: ['filter', 'blur', 'noOverride'],
 			contentView: ['blur', 'noOverride'],
 		},
@@ -178,6 +179,7 @@ const SCENARIOS: SuiteScenarios = {
 			profileList: ['blur'],
 			profileView: ['blur'],
 			profileMedia: ['blur'],
+			profileBio: ['blur'],
 			contentList: ['blur'],
 			contentView: ['blur'],
 		},
@@ -375,6 +377,7 @@ const SCENARIOS: SuiteScenarios = {
 		labels: { account: ['porn'] },
 		behaviors: {
 			profileMedia: ['blur'],
+			profileBio: [],
 		},
 	},
 	"Blur-media label ('porn') on profile (warn)": {
@@ -597,6 +600,7 @@ const SCENARIOS: SuiteScenarios = {
 			profileList: ['filter', 'blur', 'noOverride'],
 			profileView: ['alert'],
 			profileMedia: ['blur', 'noOverride'],
+			profileBio: [],
 			contentList: ['filter', 'blur', 'noOverride'],
 			contentView: ['blur', 'noOverride'],
 		},
@@ -851,6 +855,13 @@ describe('Post moderation behaviors', () => {
 			'avatar',
 			JSON.stringify(res, null, 2),
 		);
+		if (scenario.behaviors.profileBio !== undefined) {
+			expect(getDisplayRestrictions(res, DisplayContext.ProfileBio)).toBeModerationResult(
+				scenario.behaviors.profileBio,
+				'profileBio',
+				JSON.stringify(res, null, 2),
+			);
+		}
 		expect(getDisplayRestrictions(res, DisplayContext.ContentList)).toBeModerationResult(
 			scenario.behaviors.contentList,
 			'contentList',
