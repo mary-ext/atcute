@@ -1,5 +1,15 @@
 # @atcute/bluemoji
 
+## 4.0.1
+
+### Patch Changes
+
+- a836d6a: declare `sideEffects: false` so bundlers can tree-shake unused schema modules pulled in
+  through the barrel
+- Updated dependencies [a836d6a]
+  - @atcute/atproto@4.0.2
+  - @atcute/bluesky@4.0.5
+
 ## 4.0.0
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @atcute/bluesky
 
+## 4.0.5
+
+### Patch Changes
+
+- a836d6a: declare `sideEffects: false` so bundlers can tree-shake unused schema modules pulled in
+  through the barrel
+- Updated dependencies [a836d6a]
+  - @atcute/atproto@4.0.2
+
 ## 4.0.4
 
 ### Patch Changes

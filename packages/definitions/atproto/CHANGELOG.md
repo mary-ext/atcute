@@ -1,5 +1,12 @@
 # @atcute/atproto
 
+## 4.0.2
+
+### Patch Changes
+
+- a836d6a: declare `sideEffects: false` so bundlers can tree-shake unused schema modules pulled in
+  through the barrel
+
 ## 4.0.1
 
 ### Patch Changes
