@@ -12,10 +12,12 @@
 		},
 		"bold": {
 			"type": "object",
+			"properties": {},
 			"description": "Facet feature for bold text"
 		},
 		"code": {
 			"type": "object",
+			"properties": {},
 			"description": "Facet feature for inline code"
 		},
 		"link": {
@@ -58,6 +60,7 @@
 		},
 		"italic": {
 			"type": "object",
+			"properties": {},
 			"description": "Facet feature for italic text"
 		},
 		"atMention": {
@@ -88,10 +91,12 @@
 		},
 		"highlight": {
 			"type": "object",
+			"properties": {},
 			"description": "Facet feature for highlighted text"
 		},
 		"underline": {
 			"type": "object",
+			"properties": {},
 			"description": "Facet feature for underline markup"
 		},
 		"didMention": {
@@ -107,6 +112,7 @@
 		},
 		"strikethrough": {
 			"type": "object",
+			"properties": {},
 			"description": "Facet feature for strikethrough markup"
 		}
 	},
