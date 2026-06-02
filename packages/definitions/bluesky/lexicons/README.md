@@ -3,4 +3,4 @@
 this directory contains lexicon documents pulled from the following sources:
 
 - https://github.com/bluesky-social/atproto.git
-  - commit: 8f0c19f18072e8d2aebf57c055c8679cf38a8356
+  - commit: 7f5c4ceb0b6872cb921ba9c2fab8c38614414f6c

@@ -193,6 +193,7 @@ export * as ChatBskyModerationDefs from './types/chat/bsky/moderation/defs.ts';
 export * as ChatBskyModerationGetActorMetadata from './types/chat/bsky/moderation/getActorMetadata.ts';
 export * as ChatBskyModerationGetConvo from './types/chat/bsky/moderation/getConvo.ts';
 export * as ChatBskyModerationGetConvoMembers from './types/chat/bsky/moderation/getConvoMembers.ts';
+export * as ChatBskyModerationGetConvos from './types/chat/bsky/moderation/getConvos.ts';
 export * as ChatBskyModerationGetMessageContext from './types/chat/bsky/moderation/getMessageContext.ts';
 export * as ChatBskyModerationSubscribeModEvents from './types/chat/bsky/moderation/subscribeModEvents.ts';
 export * as ChatBskyModerationUpdateActorAccess from './types/chat/bsky/moderation/updateActorAccess.ts';
