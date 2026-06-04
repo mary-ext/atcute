@@ -7,10 +7,13 @@
 			"properties": {
 				"view": {
 					"type": "string",
-					"knownValues": ["compact", "full"]
+					"knownValues": ["medium", "small"]
 				},
-				"filterByTag": {
-					"type": "string"
+				"filterByTags": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
 				},
 				"highlightFirstPost": {
 					"type": "boolean"
