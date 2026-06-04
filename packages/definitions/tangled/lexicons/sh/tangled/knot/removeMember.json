@@ -1,0 +1,24 @@
+{
+	"id": "sh.tangled.knot.removeMember",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["subject"],
+					"properties": {
+						"subject": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the member to remove"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Remove a member from this knot"
+		}
+	},
+	"lexicon": 1
+}

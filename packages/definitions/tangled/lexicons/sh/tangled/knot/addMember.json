@@ -1,0 +1,24 @@
+{
+	"id": "sh.tangled.knot.addMember",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["subject"],
+					"properties": {
+						"subject": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the member to add"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Add a member to this knot"
+		}
+	},
+	"lexicon": 1
+}

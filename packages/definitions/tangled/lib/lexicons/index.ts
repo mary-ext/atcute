@@ -21,8 +21,12 @@ export * as ShTangledGitTempListTags from './types/sh/tangled/git/temp/listTags.
 export * as ShTangledGraphFollow from './types/sh/tangled/graph/follow.ts';
 export * as ShTangledGraphVouch from './types/sh/tangled/graph/vouch.ts';
 export * as ShTangledKnot from './types/sh/tangled/knot.ts';
+export * as ShTangledKnotAddMember from './types/sh/tangled/knot/addMember.ts';
 export * as ShTangledKnotListKeys from './types/sh/tangled/knot/listKeys.ts';
+export * as ShTangledKnotListMembers from './types/sh/tangled/knot/listMembers.ts';
+export * as ShTangledKnotListMembersBy from './types/sh/tangled/knot/listMembersBy.ts';
 export * as ShTangledKnotMember from './types/sh/tangled/knot/member.ts';
+export * as ShTangledKnotRemoveMember from './types/sh/tangled/knot/removeMember.ts';
 export * as ShTangledKnotSubscribeRepos from './types/sh/tangled/knot/subscribeRepos.ts';
 export * as ShTangledKnotVersion from './types/sh/tangled/knot/version.ts';
 export * as ShTangledLabelDefinition from './types/sh/tangled/label/definition.ts';
@@ -34,6 +38,7 @@ export * as ShTangledPipelineCancelPipeline from './types/sh/tangled/pipeline/ca
 export * as ShTangledPipelineStatus from './types/sh/tangled/pipeline/status.ts';
 export * as ShTangledPublicKey from './types/sh/tangled/publicKey.ts';
 export * as ShTangledRepo from './types/sh/tangled/repo.ts';
+export * as ShTangledRepoAddCollaborator from './types/sh/tangled/repo/addCollaborator.ts';
 export * as ShTangledRepoAddSecret from './types/sh/tangled/repo/addSecret.ts';
 export * as ShTangledRepoArchive from './types/sh/tangled/repo/archive.ts';
 export * as ShTangledRepoArtifact from './types/sh/tangled/repo/artifact.ts';
@@ -57,6 +62,8 @@ export * as ShTangledRepoIssueState from './types/sh/tangled/repo/issue/state.ts
 export * as ShTangledRepoIssueStateClosed from './types/sh/tangled/repo/issue/state/closed.ts';
 export * as ShTangledRepoIssueStateOpen from './types/sh/tangled/repo/issue/state/open.ts';
 export * as ShTangledRepoLanguages from './types/sh/tangled/repo/languages.ts';
+export * as ShTangledRepoListCollaborators from './types/sh/tangled/repo/listCollaborators.ts';
+export * as ShTangledRepoListCollaboratorsBy from './types/sh/tangled/repo/listCollaboratorsBy.ts';
 export * as ShTangledRepoListSecrets from './types/sh/tangled/repo/listSecrets.ts';
 export * as ShTangledRepoLog from './types/sh/tangled/repo/log.ts';
 export * as ShTangledRepoMerge from './types/sh/tangled/repo/merge.ts';
@@ -67,6 +74,7 @@ export * as ShTangledRepoPullStatus from './types/sh/tangled/repo/pull/status.ts
 export * as ShTangledRepoPullStatusClosed from './types/sh/tangled/repo/pull/status/closed.ts';
 export * as ShTangledRepoPullStatusMerged from './types/sh/tangled/repo/pull/status/merged.ts';
 export * as ShTangledRepoPullStatusOpen from './types/sh/tangled/repo/pull/status/open.ts';
+export * as ShTangledRepoRemoveCollaborator from './types/sh/tangled/repo/removeCollaborator.ts';
 export * as ShTangledRepoRemoveSecret from './types/sh/tangled/repo/removeSecret.ts';
 export * as ShTangledRepoSetDefaultBranch from './types/sh/tangled/repo/setDefaultBranch.ts';
 export * as ShTangledRepoTag from './types/sh/tangled/repo/tag.ts';

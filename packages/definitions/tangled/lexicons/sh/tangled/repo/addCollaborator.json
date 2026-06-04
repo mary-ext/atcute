@@ -1,0 +1,29 @@
+{
+	"id": "sh.tangled.repo.addCollaborator",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["repo", "subject"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository to add the collaborator to"
+						},
+						"subject": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the collaborator to add"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Add a collaborator to a repository on this knot"
+		}
+	},
+	"lexicon": 1
+}
