@@ -6,7 +6,12 @@
 			"required": ["media", "record"],
 			"properties": {
 				"media": {
-					"refs": ["app.bsky.embed.external", "app.bsky.embed.images", "app.bsky.embed.video"],
+					"refs": [
+						"app.bsky.embed.external",
+						"app.bsky.embed.gallery",
+						"app.bsky.embed.images",
+						"app.bsky.embed.video"
+					],
 					"type": "union"
 				},
 				"record": {
@@ -20,7 +25,12 @@
 			"required": ["media", "record"],
 			"properties": {
 				"media": {
-					"refs": ["app.bsky.embed.external#view", "app.bsky.embed.images#view", "app.bsky.embed.video#view"],
+					"refs": [
+						"app.bsky.embed.external#view",
+						"app.bsky.embed.gallery#view",
+						"app.bsky.embed.images#view",
+						"app.bsky.embed.video#view"
+					],
 					"type": "union"
 				},
 				"record": {

@@ -27,6 +27,7 @@
 					"embed": {
 						"refs": [
 							"app.bsky.embed.external",
+							"app.bsky.embed.gallery",
 							"app.bsky.embed.images",
 							"app.bsky.embed.record",
 							"app.bsky.embed.recordWithMedia",

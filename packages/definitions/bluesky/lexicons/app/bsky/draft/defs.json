@@ -91,6 +91,10 @@
 					},
 					"maxLength": 1
 				},
+				"embedGallery": {
+					"ref": "#draftEmbedGallery",
+					"type": "ref"
+				},
 				"embedRecords": {
 					"type": "array",
 					"items": {
@@ -212,6 +216,16 @@
 				}
 			}
 		},
+		"draftEmbedGallery": {
+			"type": "object",
+			"required": ["items"],
+			"properties": {
+				"items": {
+					"ref": "#draftEmbedGalleryItems",
+					"type": "ref"
+				}
+			}
+		},
 		"draftEmbedExternal": {
 			"type": "object",
 			"required": ["uri"],
@@ -233,6 +247,15 @@
 					"description": "Local, on-device ref to file to be embedded. Embeds are currently device-bound for drafts."
 				}
 			}
+		},
+		"draftEmbedGalleryItems": {
+			"type": "array",
+			"items": {
+				"refs": ["#draftEmbedImage"],
+				"type": "union"
+			},
+			"maxLength": 20,
+			"description": "The schema-level maxLength of 20 is a future-proof ceiling. Clients should currently enforce a soft limit of 10 items in authoring UIs."
 		}
 	},
 	"lexicon": 1

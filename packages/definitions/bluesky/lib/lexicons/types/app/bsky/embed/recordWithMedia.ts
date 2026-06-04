@@ -2,6 +2,7 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
 import * as AppBskyEmbedExternal from './external.ts';
+import * as AppBskyEmbedGallery from './gallery.ts';
 import * as AppBskyEmbedImages from './images.ts';
 import * as AppBskyEmbedRecord from './record.ts';
 import * as AppBskyEmbedVideo from './video.ts';
@@ -11,6 +12,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	get media() {
 		return /*#__PURE__*/ v.variant([
 			AppBskyEmbedExternal.mainSchema,
+			AppBskyEmbedGallery.mainSchema,
 			AppBskyEmbedImages.mainSchema,
 			AppBskyEmbedVideo.mainSchema,
 		]);
@@ -24,6 +26,7 @@ const _viewSchema = /*#__PURE__*/ v.object({
 	get media() {
 		return /*#__PURE__*/ v.variant([
 			AppBskyEmbedExternal.viewSchema,
+			AppBskyEmbedGallery.viewSchema,
 			AppBskyEmbedImages.viewSchema,
 			AppBskyEmbedVideo.viewSchema,
 		]);

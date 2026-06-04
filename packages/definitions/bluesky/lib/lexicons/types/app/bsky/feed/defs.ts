@@ -4,6 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 
 import * as AppBskyActorDefs from '../actor/defs.ts';
 import * as AppBskyEmbedExternal from '../embed/external.ts';
+import * as AppBskyEmbedGallery from '../embed/gallery.ts';
 import * as AppBskyEmbedImages from '../embed/images.ts';
 import * as AppBskyEmbedRecord from '../embed/record.ts';
 import * as AppBskyEmbedRecordWithMedia from '../embed/recordWithMedia.ts';
@@ -164,6 +165,7 @@ const _postViewSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.variant([
 				AppBskyEmbedExternal.viewSchema,
+				AppBskyEmbedGallery.viewSchema,
 				AppBskyEmbedImages.viewSchema,
 				AppBskyEmbedRecord.viewSchema,
 				AppBskyEmbedRecordWithMedia.viewSchema,

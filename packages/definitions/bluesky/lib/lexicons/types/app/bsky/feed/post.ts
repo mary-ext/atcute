@@ -5,6 +5,7 @@ import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
 import * as AppBskyEmbedExternal from '../embed/external.ts';
+import * as AppBskyEmbedGallery from '../embed/gallery.ts';
 import * as AppBskyEmbedImages from '../embed/images.ts';
 import * as AppBskyEmbedRecord from '../embed/record.ts';
 import * as AppBskyEmbedRecordWithMedia from '../embed/recordWithMedia.ts';
@@ -30,6 +31,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 			return /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.variant([
 					AppBskyEmbedExternal.mainSchema,
+					AppBskyEmbedGallery.mainSchema,
 					AppBskyEmbedImages.mainSchema,
 					AppBskyEmbedRecord.mainSchema,
 					AppBskyEmbedRecordWithMedia.mainSchema,

@@ -32,6 +32,7 @@ export * as AppBskyDraftGetDrafts from './types/app/bsky/draft/getDrafts.ts';
 export * as AppBskyDraftUpdateDraft from './types/app/bsky/draft/updateDraft.ts';
 export * as AppBskyEmbedDefs from './types/app/bsky/embed/defs.ts';
 export * as AppBskyEmbedExternal from './types/app/bsky/embed/external.ts';
+export * as AppBskyEmbedGallery from './types/app/bsky/embed/gallery.ts';
 export * as AppBskyEmbedGetEmbedExternalView from './types/app/bsky/embed/getEmbedExternalView.ts';
 export * as AppBskyEmbedImages from './types/app/bsky/embed/images.ts';
 export * as AppBskyEmbedRecord from './types/app/bsky/embed/record.ts';

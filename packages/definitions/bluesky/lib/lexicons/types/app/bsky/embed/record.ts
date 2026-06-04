@@ -9,6 +9,7 @@ import * as AppBskyGraphDefs from '../graph/defs.ts';
 import * as AppBskyLabelerDefs from '../labeler/defs.ts';
 
 import * as AppBskyEmbedExternal from './external.ts';
+import * as AppBskyEmbedGallery from './gallery.ts';
 import * as AppBskyEmbedImages from './images.ts';
 import * as AppBskyEmbedRecordWithMedia from './recordWithMedia.ts';
 import * as AppBskyEmbedVideo from './video.ts';
@@ -63,6 +64,7 @@ const _viewRecordSchema = /*#__PURE__*/ v.object({
 			/*#__PURE__*/ v.array(
 				/*#__PURE__*/ v.variant([
 					AppBskyEmbedExternal.viewSchema,
+					AppBskyEmbedGallery.viewSchema,
 					AppBskyEmbedImages.viewSchema,
 					viewSchema,
 					AppBskyEmbedRecordWithMedia.viewSchema,

@@ -89,6 +89,18 @@ const _draftEmbedExternalSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draftEmbedExternal')),
 	uri: /*#__PURE__*/ v.genericUriString(),
 });
+const _draftEmbedGallerySchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draftEmbedGallery')),
+	get items() {
+		return draftEmbedGalleryItemsSchema;
+	},
+});
+const _draftEmbedGalleryItemsSchema = /*#__PURE__*/ v.constrain(
+	/*#__PURE__*/ v.array(() => {
+		return /*#__PURE__*/ v.variant([draftEmbedImageSchema]);
+	}),
+	[/*#__PURE__*/ v.arrayLength(0, 20)],
+);
 const _draftEmbedImageSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.draft.defs#draftEmbedImage')),
 	/** @maxGraphemes 2000 */
@@ -142,6 +154,9 @@ const _draftPostSchema = /*#__PURE__*/ v.object({
 				/*#__PURE__*/ v.arrayLength(0, 1),
 			]),
 		);
+	},
+	get embedGallery() {
+		return /*#__PURE__*/ v.optional(draftEmbedGallerySchema);
 	},
 	/** @maxLength 4 */
 	get embedImages() {
@@ -207,6 +222,8 @@ const _draftWithIdSchema = /*#__PURE__*/ v.object({
 type draft$schematype = typeof _draftSchema;
 type draftEmbedCaption$schematype = typeof _draftEmbedCaptionSchema;
 type draftEmbedExternal$schematype = typeof _draftEmbedExternalSchema;
+type draftEmbedGallery$schematype = typeof _draftEmbedGallerySchema;
+type draftEmbedGalleryItems$schematype = typeof _draftEmbedGalleryItemsSchema;
 type draftEmbedImage$schematype = typeof _draftEmbedImageSchema;
 type draftEmbedLocalRef$schematype = typeof _draftEmbedLocalRefSchema;
 type draftEmbedRecord$schematype = typeof _draftEmbedRecordSchema;
@@ -218,6 +235,8 @@ type draftWithId$schematype = typeof _draftWithIdSchema;
 export interface draftSchema extends draft$schematype {}
 export interface draftEmbedCaptionSchema extends draftEmbedCaption$schematype {}
 export interface draftEmbedExternalSchema extends draftEmbedExternal$schematype {}
+export interface draftEmbedGallerySchema extends draftEmbedGallery$schematype {}
+export interface draftEmbedGalleryItemsSchema extends draftEmbedGalleryItems$schematype {}
 export interface draftEmbedImageSchema extends draftEmbedImage$schematype {}
 export interface draftEmbedLocalRefSchema extends draftEmbedLocalRef$schematype {}
 export interface draftEmbedRecordSchema extends draftEmbedRecord$schematype {}
@@ -229,6 +248,8 @@ export interface draftWithIdSchema extends draftWithId$schematype {}
 export const draftSchema = _draftSchema as draftSchema;
 export const draftEmbedCaptionSchema = _draftEmbedCaptionSchema as draftEmbedCaptionSchema;
 export const draftEmbedExternalSchema = _draftEmbedExternalSchema as draftEmbedExternalSchema;
+export const draftEmbedGallerySchema = _draftEmbedGallerySchema as draftEmbedGallerySchema;
+export const draftEmbedGalleryItemsSchema = _draftEmbedGalleryItemsSchema as draftEmbedGalleryItemsSchema;
 export const draftEmbedImageSchema = _draftEmbedImageSchema as draftEmbedImageSchema;
 export const draftEmbedLocalRefSchema = _draftEmbedLocalRefSchema as draftEmbedLocalRefSchema;
 export const draftEmbedRecordSchema = _draftEmbedRecordSchema as draftEmbedRecordSchema;
@@ -240,6 +261,8 @@ export const draftWithIdSchema = _draftWithIdSchema as draftWithIdSchema;
 export interface Draft extends v.InferInput<typeof draftSchema> {}
 export interface DraftEmbedCaption extends v.InferInput<typeof draftEmbedCaptionSchema> {}
 export interface DraftEmbedExternal extends v.InferInput<typeof draftEmbedExternalSchema> {}
+export interface DraftEmbedGallery extends v.InferInput<typeof draftEmbedGallerySchema> {}
+export interface DraftEmbedGalleryItems extends v.InferInput<typeof draftEmbedGalleryItemsSchema> {}
 export interface DraftEmbedImage extends v.InferInput<typeof draftEmbedImageSchema> {}
 export interface DraftEmbedLocalRef extends v.InferInput<typeof draftEmbedLocalRefSchema> {}
 export interface DraftEmbedRecord extends v.InferInput<typeof draftEmbedRecordSchema> {}
