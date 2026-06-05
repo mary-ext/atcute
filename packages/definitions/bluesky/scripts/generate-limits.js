@@ -15,18 +15,19 @@ const OUTPUT_PATH = new URL('../lib/limits.ts', import.meta.url);
 /** @type {Target[]} lexicons to generate limits for, in output order */
 const TARGETS = [
 	// records
-	{ nsid: 'app.bsky.feed.post', name: 'feedPost' },
 	{ nsid: 'app.bsky.actor.profile', name: 'actorProfile' },
 	{ nsid: 'app.bsky.feed.generator', name: 'feedGenerator' },
-	{ nsid: 'app.bsky.feed.threadgate', name: 'feedThreadgate' },
+	{ nsid: 'app.bsky.feed.post', name: 'feedPost' },
 	{ nsid: 'app.bsky.feed.postgate', name: 'feedPostgate' },
+	{ nsid: 'app.bsky.feed.threadgate', name: 'feedThreadgate' },
 	{ nsid: 'app.bsky.graph.list', name: 'graphList' },
 	{ nsid: 'app.bsky.graph.starterpack', name: 'graphStarterpack' },
 
 	// embeds
+	{ nsid: 'app.bsky.embed.external', name: 'embedExternal' },
+	{ nsid: 'app.bsky.embed.gallery', name: 'embedGallery' },
 	{ nsid: 'app.bsky.embed.images', name: 'embedImages' },
 	{ nsid: 'app.bsky.embed.video', name: 'embedVideo' },
-	{ nsid: 'app.bsky.embed.external', name: 'embedExternal' },
 
 	// richtext
 	{ nsid: 'app.bsky.richtext.facet', name: 'richtextFacet' },
