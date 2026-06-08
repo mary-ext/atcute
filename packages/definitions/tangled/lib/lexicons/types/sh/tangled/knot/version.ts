@@ -7,6 +7,11 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.knot.version', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Protocol capability tokens this knot implements, such as knot-acl. Knots that omit this field are
+			 * treated as legacy.
+			 */
+			capabilities: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			version: /*#__PURE__*/ v.string(),
 		}),
 	},

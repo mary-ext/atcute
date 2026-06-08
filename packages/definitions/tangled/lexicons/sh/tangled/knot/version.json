@@ -11,6 +11,13 @@
 					"properties": {
 						"version": {
 							"type": "string"
+						},
+						"capabilities": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Protocol capability tokens this knot implements, such as knot-acl. Knots that omit this field are treated as legacy."
 						}
 					}
 				},
