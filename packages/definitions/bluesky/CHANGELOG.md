@@ -1,5 +1,12 @@
 # @atcute/bluesky
 
+## 4.0.7
+
+### Patch Changes
+
+- e577e91: add `app.bsky.embed.gallery` limits
+- 4ce627c: pull latest Bluesky lexicons
+
 ## 4.0.6
 
 ### Patch Changes
