@@ -10,9 +10,9 @@
 					"properties": {
 						"name": {
 							"type": "string",
-							"maxLength": 1280,
+							"maxLength": 500,
 							"minLength": 1,
-							"maxGraphemes": 128
+							"maxGraphemes": 50
 						},
 						"members": {
 							"type": "array",

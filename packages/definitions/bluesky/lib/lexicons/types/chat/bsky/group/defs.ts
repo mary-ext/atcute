@@ -4,6 +4,16 @@ import * as v from '@atcute/lexicons/validations';
 import * as ChatBskyActorDefs from '../actor/defs.ts';
 import * as ChatBskyConvoDefs from '../convo/defs.ts';
 
+const _disabledJoinLinkPreviewViewSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('chat.bsky.group.defs#disabledJoinLinkPreviewView'),
+	),
+	code: /*#__PURE__*/ v.string(),
+});
+const _invalidJoinLinkPreviewViewSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.group.defs#invalidJoinLinkPreviewView')),
+	code: /*#__PURE__*/ v.string(),
+});
 const _joinLinkPreviewViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.group.defs#joinLinkPreviewView')),
 	code: /*#__PURE__*/ v.string(),
@@ -11,9 +21,7 @@ const _joinLinkPreviewViewSchema = /*#__PURE__*/ v.object({
 	get convo() {
 		return /*#__PURE__*/ v.optional(ChatBskyConvoDefs.convoViewSchema);
 	},
-	get enabledStatus() {
-		return linkEnabledStatusSchema;
-	},
+	convoId: /*#__PURE__*/ v.string(),
 	get joinRule() {
 		return joinRuleSchema;
 	},
@@ -53,7 +61,9 @@ const _joinRequestConvoViewSchema = /*#__PURE__*/ v.object({
 	get owner() {
 		return ChatBskyActorDefs.profileViewBasicSchema;
 	},
-	requestedAt: /*#__PURE__*/ v.datetimeString(),
+	get viewer() {
+		return joinLinkViewerStateSchema;
+	},
 });
 const _joinRequestViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.group.defs#joinRequestView')),
@@ -66,6 +76,8 @@ const _joinRequestViewSchema = /*#__PURE__*/ v.object({
 const _joinRuleSchema = /*#__PURE__*/ v.string<'anyone' | 'followedByOwner' | (string & {})>();
 const _linkEnabledStatusSchema = /*#__PURE__*/ v.string<'disabled' | 'enabled' | (string & {})>();
 
+type disabledJoinLinkPreviewView$schematype = typeof _disabledJoinLinkPreviewViewSchema;
+type invalidJoinLinkPreviewView$schematype = typeof _invalidJoinLinkPreviewViewSchema;
 type joinLinkPreviewView$schematype = typeof _joinLinkPreviewViewSchema;
 type joinLinkView$schematype = typeof _joinLinkViewSchema;
 type joinLinkViewerState$schematype = typeof _joinLinkViewerStateSchema;
@@ -74,6 +86,8 @@ type joinRequestView$schematype = typeof _joinRequestViewSchema;
 type joinRule$schematype = typeof _joinRuleSchema;
 type linkEnabledStatus$schematype = typeof _linkEnabledStatusSchema;
 
+export interface disabledJoinLinkPreviewViewSchema extends disabledJoinLinkPreviewView$schematype {}
+export interface invalidJoinLinkPreviewViewSchema extends invalidJoinLinkPreviewView$schematype {}
 export interface joinLinkPreviewViewSchema extends joinLinkPreviewView$schematype {}
 export interface joinLinkViewSchema extends joinLinkView$schematype {}
 export interface joinLinkViewerStateSchema extends joinLinkViewerState$schematype {}
@@ -82,6 +96,10 @@ export interface joinRequestViewSchema extends joinRequestView$schematype {}
 export interface joinRuleSchema extends joinRule$schematype {}
 export interface linkEnabledStatusSchema extends linkEnabledStatus$schematype {}
 
+export const disabledJoinLinkPreviewViewSchema =
+	_disabledJoinLinkPreviewViewSchema as disabledJoinLinkPreviewViewSchema;
+export const invalidJoinLinkPreviewViewSchema =
+	_invalidJoinLinkPreviewViewSchema as invalidJoinLinkPreviewViewSchema;
 export const joinLinkPreviewViewSchema = _joinLinkPreviewViewSchema as joinLinkPreviewViewSchema;
 export const joinLinkViewSchema = _joinLinkViewSchema as joinLinkViewSchema;
 export const joinLinkViewerStateSchema = _joinLinkViewerStateSchema as joinLinkViewerStateSchema;
@@ -90,6 +108,8 @@ export const joinRequestViewSchema = _joinRequestViewSchema as joinRequestViewSc
 export const joinRuleSchema = _joinRuleSchema as joinRuleSchema;
 export const linkEnabledStatusSchema = _linkEnabledStatusSchema as linkEnabledStatusSchema;
 
+export interface DisabledJoinLinkPreviewView extends v.InferInput<typeof disabledJoinLinkPreviewViewSchema> {}
+export interface InvalidJoinLinkPreviewView extends v.InferInput<typeof invalidJoinLinkPreviewViewSchema> {}
 export interface JoinLinkPreviewView extends v.InferInput<typeof joinLinkPreviewViewSchema> {}
 export interface JoinLinkView extends v.InferInput<typeof joinLinkViewSchema> {}
 export interface JoinLinkViewerState extends v.InferInput<typeof joinLinkViewerStateSchema> {}

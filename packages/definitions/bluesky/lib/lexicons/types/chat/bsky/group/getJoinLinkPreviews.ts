@@ -18,7 +18,13 @@ const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.group.getJoinLinkPreviews',
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			get joinLinkPreviews() {
-				return /*#__PURE__*/ v.array(ChatBskyGroupDefs.joinLinkPreviewViewSchema);
+				return /*#__PURE__*/ v.array(
+					/*#__PURE__*/ v.variant([
+						ChatBskyGroupDefs.disabledJoinLinkPreviewViewSchema,
+						ChatBskyGroupDefs.invalidJoinLinkPreviewViewSchema,
+						ChatBskyGroupDefs.joinLinkPreviewViewSchema,
+					]),
+				);
 			},
 		}),
 	},

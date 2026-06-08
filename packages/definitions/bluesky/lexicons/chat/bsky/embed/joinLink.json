@@ -16,8 +16,12 @@
 			"required": ["joinLinkPreview"],
 			"properties": {
 				"joinLinkPreview": {
-					"ref": "chat.bsky.group.defs#joinLinkPreviewView",
-					"type": "ref"
+					"refs": [
+						"chat.bsky.group.defs#disabledJoinLinkPreviewView",
+						"chat.bsky.group.defs#invalidJoinLinkPreviewView",
+						"chat.bsky.group.defs#joinLinkPreviewView"
+					],
+					"type": "union"
 				}
 			}
 		}

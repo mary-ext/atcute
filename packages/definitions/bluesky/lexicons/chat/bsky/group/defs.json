@@ -27,7 +27,8 @@
 				"requireApproval": {
 					"type": "boolean"
 				}
-			}
+			},
+			"description": "Join link view to be used within a group view, so the convo is surrounding, not specified inside this view."
 		},
 		"joinRequestView": {
 			"type": "object",
@@ -44,7 +45,8 @@
 					"ref": "chat.bsky.actor.defs#profileViewBasic",
 					"type": "ref"
 				}
-			}
+			},
+			"description": "A join request from the perspective of the group owner."
 		},
 		"linkEnabledStatus": {
 			"type": "string",
@@ -54,7 +56,7 @@
 			"type": "object",
 			"required": [
 				"code",
-				"enabledStatus",
+				"convoId",
 				"joinRule",
 				"memberCount",
 				"memberLimit",
@@ -82,6 +84,9 @@
 					"ref": "#joinLinkViewerState",
 					"type": "ref"
 				},
+				"convoId": {
+					"type": "string"
+				},
 				"joinRule": {
 					"ref": "#joinRule",
 					"type": "ref"
@@ -92,14 +97,11 @@
 				"memberLimit": {
 					"type": "integer"
 				},
-				"enabledStatus": {
-					"ref": "#linkEnabledStatus",
-					"type": "ref"
-				},
 				"requireApproval": {
 					"type": "boolean"
 				}
-			}
+			},
+			"description": "Preview that can be shown in feeds, including to unauthenticated viewers."
 		},
 		"joinLinkViewerState": {
 			"type": "object",
@@ -112,13 +114,17 @@
 		},
 		"joinRequestConvoView": {
 			"type": "object",
-			"required": ["convoId", "memberCount", "memberLimit", "name", "owner", "requestedAt"],
+			"required": ["convoId", "memberCount", "memberLimit", "name", "owner", "viewer"],
 			"properties": {
 				"name": {
 					"type": "string"
 				},
 				"owner": {
 					"ref": "chat.bsky.actor.defs#profileViewBasic",
+					"type": "ref"
+				},
+				"viewer": {
+					"ref": "#joinLinkViewerState",
 					"type": "ref"
 				},
 				"convoId": {
@@ -129,13 +135,29 @@
 				},
 				"memberLimit": {
 					"type": "integer"
-				},
-				"requestedAt": {
-					"type": "string",
-					"format": "datetime"
 				}
 			},
 			"description": "A join request from the perspective of the requester, including enough group context to render the request in a list (e.g. group name, owner, member count)."
+		},
+		"invalidJoinLinkPreviewView": {
+			"type": "object",
+			"required": ["code"],
+			"properties": {
+				"code": {
+					"type": "string"
+				}
+			},
+			"description": "Preview for a join link code that does not map to an existing link. Carries only the code so clients can correlate with the input and render an invalid state."
+		},
+		"disabledJoinLinkPreviewView": {
+			"type": "object",
+			"required": ["code"],
+			"properties": {
+				"code": {
+					"type": "string"
+				}
+			},
+			"description": "Preview for a disabled join link. Carries only the code so clients can correlate with the input and render a disabled state."
 		}
 	},
 	"lexicon": 1,

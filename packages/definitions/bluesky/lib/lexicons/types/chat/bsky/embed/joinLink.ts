@@ -11,7 +11,11 @@ const _mainSchema = /*#__PURE__*/ v.object({
 const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.embed.joinLink#view')),
 	get joinLinkPreview() {
-		return ChatBskyGroupDefs.joinLinkPreviewViewSchema;
+		return /*#__PURE__*/ v.variant([
+			ChatBskyGroupDefs.disabledJoinLinkPreviewViewSchema,
+			ChatBskyGroupDefs.invalidJoinLinkPreviewViewSchema,
+			ChatBskyGroupDefs.joinLinkPreviewViewSchema,
+		]);
 	},
 });
 
