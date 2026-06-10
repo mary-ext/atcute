@@ -9,6 +9,11 @@ import {
 } from './index.node.ts';
 import { getGraphemeLength, isGraphemeLengthInRange } from './index.ts';
 
+// the native binding copies into a 4096-unit stack buffer and only heap-allocates beyond that, so
+// these cover both sides of that boundary. non-ASCII keeps the JS wrapper from short-circuiting
+// before the native call, and BMP (1 unit) vs astral (2 units) graphemes exercise both buffer paths.
+const STACK_BUF_MAX = 4096;
+
 const inputs = [
 	{ label: 'ascii', text: 'hello world', expected: 11 },
 	{ label: 'empty', text: '', expected: 0 },
@@ -18,6 +23,11 @@ const inputs = [
 	{ label: 'combining', text: 'e\u0301', expected: 1 },
 	{ label: 'CRLF', text: 'a\r\nb', expected: 3 },
 	{ label: 'hangul', text: '\uAC00\uB098\uB2E4', expected: 3 },
+	{ label: 'stack boundary -1', text: '\u3042'.repeat(STACK_BUF_MAX - 1), expected: STACK_BUF_MAX - 1 },
+	{ label: 'stack boundary', text: '\u3042'.repeat(STACK_BUF_MAX), expected: STACK_BUF_MAX },
+	{ label: 'stack boundary +1', text: '\u3042'.repeat(STACK_BUF_MAX + 1), expected: STACK_BUF_MAX + 1 },
+	{ label: 'long bmp (heap)', text: '\u3042'.repeat(5000), expected: 5000 },
+	{ label: 'long astral (heap)', text: '\u{1F600}'.repeat(5000), expected: 5000 },
 ];
 
 it('getGraphemeLength', () => {
@@ -45,6 +55,14 @@ describe.skipIf(!hasNative)('native', () => {
 		expect(isGraphemeLengthInRangeNode('hello', 0, 4)).toBe(false);
 		expect(isGraphemeLengthInRangeNode('hello', 6, 10)).toBe(false);
 		expect(isGraphemeLengthInRangeNode('\u{1F468}\u200D\u{1F469}\u200D\u{1F467}', 0, 1)).toBe(true);
+
+		// long strings exercise the native heap path past the 4096-unit stack buffer; non-ASCII and a
+		// non-trivial min/max keep the JS wrapper from short-circuiting before the native call
+		const longBmp = '\u3042'.repeat(5000); // 5000 graphemes across 5000 utf16 units
+		expect(isGraphemeLengthInRangeNode(longBmp, 0, 300)).toBe(false);
+		expect(isGraphemeLengthInRangeNode(longBmp, 0, 4999)).toBe(false);
+		expect(isGraphemeLengthInRangeNode(longBmp, 5000, 5000)).toBe(true);
+		expect(isGraphemeLengthInRangeNode('\u{1F600}'.repeat(5000), 0, 300)).toBe(false);
 	});
 });
 

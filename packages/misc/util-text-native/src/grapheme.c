@@ -31,6 +31,11 @@
 // #region generated grapheme break property tables (Unicode 17.0.0)
 #include "unicode/grapheme-table.h"
 _Static_assert(NUM_CHAR_BREAK_PROPS <= 32, "bitmask tables require NUM_CHAR_BREAK_PROPS <= 32");
+
+/** looks up the grapheme break property of a codepoint through the two-stage table */
+static inline uint32_t char_break_prop(uint32_t cp) {
+	return char_break_minor[char_break_major[cp >> 8] + (cp & 0xFF)];
+}
 // #endregion
 
 // #region break rules (UAX #29)
@@ -260,7 +265,7 @@ static int grapheme_count_impl(const char16_t *str, int len, int max_len) {
 	uint32_t p0;
 
 	if (i > 0) {
-		p0 = char_break_bmp[str[i - 1]];
+		p0 = char_break_prop(str[i - 1]);
 	} else {
 		// string starts with non-ASCII; decode first char properly
 		uint32_t first = str[0];
@@ -271,30 +276,45 @@ static int grapheme_count_impl(const char16_t *str, int len, int max_len) {
 				if (cp >= 0x1F1E6 && cp <= 0x1F1FF) {
 					p0 = CHAR_BREAK_PROP_REGIONAL_INDICATOR;
 				} else {
-					uint32_t hi = cp >> 8;
-					p0 = char_break_minor[char_break_major[hi] + (cp & 0xFF)];
+					p0 = char_break_prop(cp);
 				}
 				i = 2;
 			} else {
-				p0 = char_break_bmp[0xFFFD];
+				p0 = char_break_prop(0xFFFD);
 				i = 1;
 			}
 		} else if (first >= 0xDC00 && first <= 0xDFFF) {
-			p0 = char_break_bmp[0xFFFD];
+			p0 = char_break_prop(0xFFFD);
 			i = 1;
 		} else {
-			p0 = char_break_bmp[first];
+			p0 = char_break_prop(first);
 			i = 1;
 		}
 		count = 1;
 	}
 
-	// single pass: BMP-direct with inline surrogate handling
+	// single pass with inline surrogate handling
 	while (i < len) {
 		uint32_t first = str[i];
 
 		if (likely(first < 0xD800 || first > 0xDFFF)) {
-			uint32_t p1 = char_break_bmp[first];
+			uint32_t p1 = char_break_prop(first);
+
+			if (p0 == CHAR_BREAK_PROP_OTHER && p1 == CHAR_BREAK_PROP_OTHER) {
+				// GB999: OTHER↔OTHER always breaks, and the break-state is already cleared.
+				// p0 stays OTHER, so opportunistically devour a printable-ASCII run (all OTHER)
+				// without further table lookups.
+				count++;
+				i++;
+				while (i < len && str[i] >= 0x20 && str[i] <= 0x7E) {
+					count++;
+					i++;
+				}
+				if (max_len >= 0 && count > max_len) {
+					return count;
+				}
+				continue;
+			}
 
 			if (is_grapheme_break(&st, p0, p1)) {
 				count++;
@@ -314,8 +334,7 @@ static int grapheme_count_impl(const char16_t *str, int len, int max_len) {
 				if (cp >= 0x1F1E6 && cp <= 0x1F1FF) {
 					p1 = CHAR_BREAK_PROP_REGIONAL_INDICATOR;
 				} else {
-					uint32_t hi = cp >> 8;
-					p1 = char_break_minor[char_break_major[hi] + (cp & 0xFF)];
+					p1 = char_break_prop(cp);
 				}
 
 				if (is_grapheme_break(&st, p0, p1)) {
@@ -328,13 +347,13 @@ static int grapheme_count_impl(const char16_t *str, int len, int max_len) {
 				p0 = p1;
 				i += 2;
 			} else {
-				uint32_t p1 = char_break_bmp[0xFFFD];
+				uint32_t p1 = char_break_prop(0xFFFD);
 				if (is_grapheme_break(&st, p0, p1)) count++;
 				p0 = p1;
 				i++;
 			}
 		} else {
-			uint32_t p1 = char_break_bmp[0xFFFD];
+			uint32_t p1 = char_break_prop(0xFFFD);
 			if (is_grapheme_break(&st, p0, p1)) count++;
 			p0 = p1;
 			i++;
@@ -361,25 +380,40 @@ static bool grapheme_count_in_range(const char16_t *str, int len, int min_len, i
 
 // #region NAPI exports
 
+/**
+ * loads a JS string as UTF-16 into the caller's stack buffer, falling back to a heap allocation only
+ * when the string overflows it. this copies in a single NAPI call for the common (short) case rather
+ * than the usual query-length-then-copy pair. on return *out_buf points at the data and must be freed
+ * iff it differs from stack_buf.
+ */
+static size_t load_string_utf16(napi_env env, napi_value value, char16_t *stack_buf, char16_t **out_buf) {
+	size_t len;
+	napi_get_value_string_utf16(env, value, stack_buf, STACK_BUF_MAX, &len);
+
+	// a full buffer means the string may have been truncated; re-query its exact length to be sure
+	if (len == STACK_BUF_MAX - 1) {
+		size_t full_len;
+		napi_get_value_string_utf16(env, value, NULL, 0, &full_len);
+		if (full_len >= STACK_BUF_MAX) {
+			char16_t *heap = (char16_t *)__builtin_malloc((full_len + 1) * sizeof(char16_t));
+			napi_get_value_string_utf16(env, value, heap, full_len + 1, &full_len);
+			*out_buf = heap;
+			return full_len;
+		}
+	}
+
+	*out_buf = stack_buf;
+	return len;
+}
+
 static napi_value napi_get_grapheme_length(napi_env env, napi_callback_info info) {
 	size_t argc = 1;
 	napi_value argv[1];
 	napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
 
-	size_t utf16_len;
-	napi_get_value_string_utf16(env, argv[0], NULL, 0, &utf16_len);
-
-	if (utf16_len == 0) {
-		napi_value result;
-		napi_create_int32(env, 0, &result);
-		return result;
-	}
-
 	char16_t stack_buf[STACK_BUF_MAX];
-	char16_t *buf =
-		(utf16_len < STACK_BUF_MAX) ? stack_buf : (char16_t *)__builtin_malloc((utf16_len + 1) * sizeof(char16_t));
-
-	napi_get_value_string_utf16(env, argv[0], buf, utf16_len + 1, &utf16_len);
+	char16_t *buf;
+	size_t utf16_len = load_string_utf16(env, argv[0], stack_buf, &buf);
 
 	int result_count = grapheme_count(buf, (int)utf16_len);
 
@@ -399,28 +433,18 @@ static napi_value napi_is_grapheme_length_in_range(napi_env env, napi_callback_i
 	napi_get_value_int32(env, argv[1], &min_len);
 	napi_get_value_int32(env, argv[2], &max_len);
 
-	size_t utf16_len;
-	napi_get_value_string_utf16(env, argv[0], NULL, 0, &utf16_len);
-
-	if ((int32_t)utf16_len < min_len) {
-		napi_value r;
-		napi_get_boolean(env, 0, &r);
-		return r;
-	}
-
-	if (min_len == 0 && (int32_t)utf16_len <= max_len) {
-		napi_value r;
-		napi_get_boolean(env, 1, &r);
-		return r;
-	}
-
 	char16_t stack_buf[STACK_BUF_MAX];
-	char16_t *buf =
-		(utf16_len < STACK_BUF_MAX) ? stack_buf : (char16_t *)__builtin_malloc((utf16_len + 1) * sizeof(char16_t));
+	char16_t *buf;
+	size_t utf16_len = load_string_utf16(env, argv[0], stack_buf, &buf);
 
-	napi_get_value_string_utf16(env, argv[0], buf, utf16_len + 1, &utf16_len);
-
-	bool in_range = grapheme_count_in_range(buf, (int)utf16_len, min_len, max_len);
+	bool in_range;
+	if ((int32_t)utf16_len < min_len) {
+		in_range = false;
+	} else if (min_len == 0 && (int32_t)utf16_len <= max_len) {
+		in_range = true;
+	} else {
+		in_range = grapheme_count_in_range(buf, (int)utf16_len, min_len, max_len);
+	}
 
 	if (buf != stack_buf) __builtin_free(buf);
 

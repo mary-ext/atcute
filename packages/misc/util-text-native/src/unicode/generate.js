@@ -318,9 +318,8 @@ for (const name of PROPS) {
 }
 output += `\tNUM_CHAR_BREAK_PROPS,\n};\n\n`;
 
-// tables
-output += formatArray('char_break_bmp', Array.from(props.subarray(0, 0x10000)));
-output += '\n';
+// tables — a single two-stage (major/minor) table covers the whole codepoint range, including
+// the BMP, so no separate direct BMP table is emitted
 output += formatArray('char_break_major', major);
 output += '\n';
 output += formatArray('char_break_minor', minor);
