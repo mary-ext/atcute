@@ -786,6 +786,19 @@ importers:
       vitest:
         specifier: ^4.1.7
         version: 4.1.7(@types/node@25.9.1)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(vite@8.0.10(@types/node@25.9.1))
+
+  packages/misc/util-text-native:
+    dependencies:
+      unicode-segmenter:
+        specifier: ^0.14.5
+        version: 0.14.5
+    devDependencies:
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
+      vitest:
+        specifier: ^4.1.7
+        version: 4.1.7(@types/node@25.9.1)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(vite@8.0.10(@types/node@25.9.1))
       zig-build:
         specifier: ^0.3.0
         version: 0.3.0

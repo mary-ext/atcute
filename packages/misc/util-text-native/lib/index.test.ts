@@ -2,6 +2,11 @@ import { readFileSync } from 'node:fs';
 
 import { describe, expect, it } from 'vitest';
 
+import {
+	getGraphemeLength as getGraphemeLengthNode,
+	hasNative,
+	isGraphemeLengthInRange as isGraphemeLengthInRangeNode,
+} from './index.node.ts';
 import { getGraphemeLength, isGraphemeLengthInRange } from './index.ts';
 
 const inputs = [
@@ -26,6 +31,21 @@ it('isGraphemeLengthInRange', () => {
 	expect(isGraphemeLengthInRange('hello', 0, 4)).toBe(false);
 	expect(isGraphemeLengthInRange('hello', 6, 10)).toBe(false);
 	expect(isGraphemeLengthInRange('\u{1F468}\u200D\u{1F469}\u200D\u{1F467}', 0, 1)).toBe(true);
+});
+
+describe.skipIf(!hasNative)('native', () => {
+	it('getGraphemeLength', () => {
+		for (const { text, expected } of inputs) {
+			expect(getGraphemeLengthNode(text)).toBe(expected);
+		}
+	});
+
+	it('isGraphemeLengthInRange', () => {
+		expect(isGraphemeLengthInRangeNode('hello', 0, 10)).toBe(true);
+		expect(isGraphemeLengthInRangeNode('hello', 0, 4)).toBe(false);
+		expect(isGraphemeLengthInRangeNode('hello', 6, 10)).toBe(false);
+		expect(isGraphemeLengthInRangeNode('\u{1F468}\u200D\u{1F469}\u200D\u{1F467}', 0, 1)).toBe(true);
+	});
 });
 
 // #region Unicode conformance tests (GraphemeBreakTest.txt)
@@ -72,6 +92,12 @@ const conformanceCases = parseGraphemeBreakTest('src/unicode/data/GraphemeBreakT
 describe('Unicode GraphemeBreakTest conformance (js)', () => {
 	it.each(conformanceCases)('line $line', ({ text, clusters }) => {
 		expect(getGraphemeLength(text)).toBe(clusters);
+	});
+});
+
+describe.skipIf(!hasNative)('Unicode GraphemeBreakTest conformance (native)', () => {
+	it.each(conformanceCases)('line $line', ({ text, clusters }) => {
+		expect(getGraphemeLengthNode(text)).toBe(clusters);
 	});
 });
 

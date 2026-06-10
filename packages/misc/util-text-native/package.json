@@ -1,11 +1,11 @@
 {
-	"name": "@atcute/util-text",
-	"version": "1.3.1",
-	"description": "internal text utilities",
+	"name": "@atcute/util-text-native",
+	"version": "1.0.0",
+	"description": "internal text utilities with native grapheme counting",
 	"license": "0BSD",
 	"repository": {
 		"url": "https://github.com/mary-ext/atcute",
-		"directory": "packages/misc/util-text"
+		"directory": "packages/misc/util-text-native"
 	},
 	"files": [
 		"dist/",
@@ -14,6 +14,7 @@
 		"lib/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts",
+		"prebuilds/**/*.node",
 		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",
@@ -21,6 +22,7 @@
 	"exports": {
 		".": {
 			"react-native": "./dist/index.rn.js",
+			"node": "./dist/index.node.js",
 			"default": "./dist/index.js"
 		}
 	},
@@ -28,15 +30,17 @@
 		"access": "public"
 	},
 	"scripts": {
+		"build:native": "node build.native.js",
 		"build": "tsgo",
 		"test": "vitest",
-		"prepublish": "rm -rf dist; pnpm run build"
+		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
 	},
 	"dependencies": {
 		"unicode-segmenter": "^0.14.5"
 	},
 	"devDependencies": {
 		"@types/node": "^25.9.1",
-		"vitest": "^4.1.7"
+		"vitest": "^4.1.7",
+		"zig-build": "^0.3.0"
 	}
 }
