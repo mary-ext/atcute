@@ -14,6 +14,7 @@
 		"oxfmt": "^0.52.0",
 		"oxlint": "^1.67.0",
 		"oxlint-tsgolint": "^0.23.0",
-		"typescript": "~6.0.3"
+		"typescript": "~6.0.3",
+		"zig-build": "^0.3.0"
 	}
 }

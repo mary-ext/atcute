@@ -1,0 +1,2 @@
+CompileFlags:
+    Add: [-Inode_modules/.napi-include]
