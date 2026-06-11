@@ -1,6 +1,28 @@
+[settings]
+experimental = true
+
 [tools]
 bun = "latest"
 node = "24"
 pnpm = "11"
 python = "3.11"
 uv = "latest"
+
+[tasks.install-deps]
+description = "Install dependencies via pnpm"
+run = "pnpm i"
+
+[tasks.download-napi]
+description = "Download napi files in ~/.zig-build"
+depends = ["install-deps"]
+shell = "node -e"
+run = """
+import { fetchDeps } from 'zig-build/dist/deps.js'
+await fetchDeps([void 0])
+"""
+
+[[hooks.postinstall]]
+task = "download-napi"
+
+[[hooks.postinstall]]
+run = "ln -sf $HOME/.zig-build/node/`node -v`/include/node node_modules/.napi-include"

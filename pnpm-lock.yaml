@@ -40,6 +40,9 @@ importers:
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
+      zig-build:
+        specifier: ^0.3.0
+        version: 0.3.0
 
   packages/bluesky/moderation:
     dependencies:
