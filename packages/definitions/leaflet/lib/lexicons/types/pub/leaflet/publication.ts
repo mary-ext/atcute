@@ -4,6 +4,7 @@ import * as v from '@atcute/lexicons/validations';
 
 import * as PubLeafletThemeBackgroundImage from './theme/backgroundImage.ts';
 import * as PubLeafletThemeColor from './theme/color.ts';
+import * as PubLeafletThemeWordmark from './theme/wordmark.ts';
 
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
@@ -94,6 +95,9 @@ const _themeSchema = /*#__PURE__*/ v.object({
 	},
 	/** @default false */
 	showPageBackground: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+	get wordmark() {
+		return /*#__PURE__*/ v.optional(PubLeafletThemeWordmark.mainSchema);
+	},
 });
 
 type main$schematype = typeof _mainSchema;

@@ -30,3 +30,4 @@ export * as PubLeafletPublicationPage from './types/pub/leaflet/publicationPage.
 export * as PubLeafletRichtextFacet from './types/pub/leaflet/richtext/facet.ts';
 export * as PubLeafletThemeBackgroundImage from './types/pub/leaflet/theme/backgroundImage.ts';
 export * as PubLeafletThemeColor from './types/pub/leaflet/theme/color.ts';
+export * as PubLeafletThemeWordmark from './types/pub/leaflet/theme/wordmark.ts';

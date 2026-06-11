@@ -47,6 +47,10 @@
 					"type": "string",
 					"maxLength": 100
 				},
+				"wordmark": {
+					"ref": "pub.leaflet.theme.wordmark",
+					"type": "ref"
+				},
 				"pageWidth": {
 					"type": "integer",
 					"maximum": 1600,
