@@ -59,7 +59,9 @@ try {
 	const nativeIsGraphemeLengthInRange = binding.isGraphemeLengthInRange;
 
 	getGraphemeLength = (text) => {
-		if (isAsciiWithoutCr(text)) {
+		// the JS ASCII scan only beats the native round-trip on short strings; past ~2 dozen units the
+		// native copy-and-count is faster, so gate the shortcut by length rather than always scanning.
+		if (text.length <= 24 && isAsciiWithoutCr(text)) {
 			return text.length;
 		}
 		return nativeGetGraphemeLength(text);
@@ -74,10 +76,9 @@ try {
 		if (min === 0 && utf16Len <= max) {
 			return true;
 		}
-		if (isAsciiWithoutCr(text)) {
-			return utf16Len <= max;
-		}
 
+		// reaching here means the string already exceeds max (or clears a nonzero min floor), so it is
+		// long enough that native counting with early termination beats a full JS ASCII pre-scan.
 		return nativeIsGraphemeLengthInRange(text, min, max);
 	};
 
