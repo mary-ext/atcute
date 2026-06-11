@@ -205,6 +205,7 @@ const _eventGroupChatUpdatedSchema = /*#__PURE__*/ v.object({
 	/** Why the group was locked. Only present when updateType is 'locked'. */
 	lockReason: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.string<
+			| 'convo_taken_down'
 			| 'label_applied'
 			| 'owner_action'
 			| 'owner_deactivated'

@@ -194,6 +194,7 @@
 					"type": "string",
 					"description": "Why the group was locked. Only present when updateType is 'locked'.",
 					"knownValues": [
+						"convo_taken_down",
 						"label_applied",
 						"owner_action",
 						"owner_deactivated",

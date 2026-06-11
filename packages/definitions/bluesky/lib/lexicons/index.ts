@@ -160,6 +160,7 @@ export * as ChatBskyConvoGetConvoForMembers from './types/chat/bsky/convo/getCon
 export * as ChatBskyConvoGetConvoMembers from './types/chat/bsky/convo/getConvoMembers.ts';
 export * as ChatBskyConvoGetLog from './types/chat/bsky/convo/getLog.ts';
 export * as ChatBskyConvoGetMessages from './types/chat/bsky/convo/getMessages.ts';
+export * as ChatBskyConvoGetUnreadCounts from './types/chat/bsky/convo/getUnreadCounts.ts';
 export * as ChatBskyConvoLeaveConvo from './types/chat/bsky/convo/leaveConvo.ts';
 export * as ChatBskyConvoListConvoRequests from './types/chat/bsky/convo/listConvoRequests.ts';
 export * as ChatBskyConvoListConvos from './types/chat/bsky/convo/listConvos.ts';

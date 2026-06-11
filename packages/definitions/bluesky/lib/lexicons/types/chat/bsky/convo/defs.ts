@@ -76,6 +76,11 @@ const _groupConvoSchema = /*#__PURE__*/ v.object({
 	get lockStatus() {
 		return convoLockStatusSchema;
 	},
+	/**
+	 * Whether the lock status is being forced by a moderation override (account inactivation or convo takedown)
+	 * rather than the owner's own setting.
+	 */
+	lockStatusModerationOverride: /*#__PURE__*/ v.boolean(),
 	/** The total number of members in the group conversation. */
 	memberCount: /*#__PURE__*/ v.integer(),
 	/** The maximum number of members allowed in the group conversation. */

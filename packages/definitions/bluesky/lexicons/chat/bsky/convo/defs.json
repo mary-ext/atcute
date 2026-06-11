@@ -64,7 +64,14 @@
 		},
 		"groupConvo": {
 			"type": "object",
-			"required": ["createdAt", "lockStatus", "memberCount", "memberLimit", "name"],
+			"required": [
+				"createdAt",
+				"lockStatus",
+				"lockStatusModerationOverride",
+				"memberCount",
+				"memberLimit",
+				"name"
+			],
 			"properties": {
 				"name": {
 					"type": "string",
@@ -100,6 +107,10 @@
 				"unreadJoinRequestCount": {
 					"type": "integer",
 					"description": "The number of unread join requests for the group conversation. Only present for the owner."
+				},
+				"lockStatusModerationOverride": {
+					"type": "boolean",
+					"description": "Whether the lock status is being forced by a moderation override (account inactivation or convo takedown) rather than the owner's own setting."
 				}
 			},
 			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]."
