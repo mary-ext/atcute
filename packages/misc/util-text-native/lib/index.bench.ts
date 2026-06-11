@@ -25,6 +25,8 @@ const cases = {
 	post: 'just mass-migrated to bsky from twitter!! \u{1F389}\u{1F389}\u{1F389}\n\nfollow me for cat pics \u{1F431} and hot takes \u{1F525}\n\n#bsky #newhere #introduction',
 	postJa:
 		'きょうの天気はとても良かったです\u{2600}\uFE0F 散歩に行ってきました\u{1F6B6}\u200D\u2640\uFE0F\nお花見のシーズンですね\u{1F338}\u{1F338}',
+	postKo:
+		'\uC624\uB298 \uB0A0\uC528\uAC00 \uC815\uB9D0 \uC88B\uB124\uC694 \uC0B0\uCC45\uD558\uB7EC \uACF5\uC6D0\uC5D0 \uAC14\uB2E4\uC654\uC5B4\uC694 \uBC9A\uAF43\uC774 \uD65C\uC9DD \uD53C\uC5C8\uB354\uB77C\uACE0\uC694 \uAE30\uBD84\uC774 \uB108\uBB34 \uC88B\uC544\uC694',
 	postEmoji:
 		'\u{1F468}\u200D\u{1F4BB} shipping code at 2am \u{1F602}\u{1F602}\u{1F602} \u{1F1FA}\u{1F1F8}\u{1F1E7}\u{1F1F7} who needs sleep when you have \u2615\u2615\u2615 #devlife \u{1F525}\u{1F4AF}',
 	altText:

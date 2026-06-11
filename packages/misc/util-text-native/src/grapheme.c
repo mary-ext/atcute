@@ -166,6 +166,11 @@ static inline bool is_gb9c_linker(uint32_t p) {
 	       p == CHAR_BREAK_PROP_BOTH_EXTEND_ICB_LINKER;
 }
 
+/** whether cp is a precomposed Hangul syllable (U+AC00..U+D7A3); each forms its own grapheme */
+static inline bool is_hangul_syllable(uint32_t cp) {
+	return cp - 0xAC00u <= 0xD7A3u - 0xAC00u;
+}
+
 static inline int ascii_grapheme_count(const char16_t *str, int len) {
 	int count = len;
 
@@ -313,6 +318,25 @@ static int grapheme_count_impl(const char16_t *str, int len, int max_len) {
 				if (max_len >= 0 && count > max_len) {
 					return count;
 				}
+				continue;
+			}
+
+			if ((p0 == CHAR_BREAK_PROP_HANGUL_LV || p0 == CHAR_BREAK_PROP_HANGUL_LVT) &&
+			    is_hangul_syllable(first)) {
+				// GB6/GB7/GB8: precomposed Hangul syllables always break from one another, and a
+				// preceding syllable guarantees the break-state is already cleared. devour the run
+				// without the state machine, stopping before any trailing jamo or combining mark so
+				// the transition out of the run is resolved normally.
+				count++;
+				i++;
+				while (i < len && is_hangul_syllable(str[i])) {
+					count++;
+					i++;
+				}
+				if (max_len >= 0 && count > max_len) {
+					return count;
+				}
+				p0 = char_break_prop(str[i - 1]);
 				continue;
 			}
 
