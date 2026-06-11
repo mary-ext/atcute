@@ -458,8 +458,33 @@ static napi_value napi_is_grapheme_length_in_range(napi_env env, napi_callback_i
 	napi_get_value_int32(env, argv[2], &max_len);
 
 	char16_t stack_buf[STACK_BUF_MAX];
-	char16_t *buf;
-	size_t utf16_len = load_string_utf16(env, argv[0], stack_buf, &buf);
+	char16_t *buf = stack_buf;
+	size_t utf16_len;
+	napi_get_value_string_utf16(env, argv[0], stack_buf, STACK_BUF_MAX, &utf16_len);
+
+	// a full buffer means the string may have been truncated; re-query its exact length to be sure
+	if (utf16_len == STACK_BUF_MAX - 1) {
+		size_t full_len;
+		napi_get_value_string_utf16(env, argv[0], NULL, 0, &full_len);
+		if (full_len >= STACK_BUF_MAX) {
+			// the string overflows the buffer. grapheme count only grows with length, so if the prefix
+			// already loaded exceeds max the whole string does too — reject without copying the rest.
+			// drop a trailing high surrogate first so a pair split at the boundary can't over-count.
+			int prefix_len = STACK_BUF_MAX - 1;
+			if (stack_buf[prefix_len - 1] >= 0xD800 && stack_buf[prefix_len - 1] <= 0xDBFF) {
+				prefix_len--;
+			}
+			if (grapheme_count_impl(stack_buf, prefix_len, max_len) > max_len) {
+				napi_value r;
+				napi_get_boolean(env, false, &r);
+				return r;
+			}
+
+			buf = (char16_t *)__builtin_malloc((full_len + 1) * sizeof(char16_t));
+			napi_get_value_string_utf16(env, argv[0], buf, full_len + 1, &full_len);
+			utf16_len = full_len;
+		}
+	}
 
 	bool in_range;
 	if ((int32_t)utf16_len < min_len) {

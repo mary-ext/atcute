@@ -68,6 +68,17 @@ describe.skipIf(!hasNative)('native', () => {
 		expect(isGraphemeLengthInRangeNode(longBmp, 0, 4999)).toBe(false);
 		expect(isGraphemeLengthInRangeNode(longBmp, 5000, 5000)).toBe(true);
 		expect(isGraphemeLengthInRangeNode('\u{1F600}'.repeat(5000), 0, 300)).toBe(false);
+
+		// an overflowing string that is a single cluster must not be rejected from its prefix
+		const giantCluster = 'a' + '́'.repeat(5000); // 1 grapheme across 5001 utf16 units
+		expect(isGraphemeLengthInRangeNode(giantCluster, 0, 1)).toBe(true);
+		expect(isGraphemeLengthInRangeNode(giantCluster, 1, 1)).toBe(true);
+
+		// a surrogate pair split at the 4096-unit prefix boundary must not over-count and reject:
+		// 4092 ASCII + wave + skin-tone modifier = 4093 graphemes, the modifier pair straddling it
+		const splitBoundary = 'a'.repeat(4092) + '👋🏻';
+		expect(isGraphemeLengthInRangeNode(splitBoundary, 4093, 4093)).toBe(true);
+		expect(isGraphemeLengthInRangeNode(splitBoundary, 0, 4092)).toBe(false);
 	});
 });
 
