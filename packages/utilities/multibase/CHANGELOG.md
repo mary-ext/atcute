@@ -1,5 +1,11 @@
 # @atcute/multibase
 
+## 1.2.1
+
+### Patch Changes
+
+- 6165047: silence Rollup `/*#__PURE__*/` warnings
+
 ## 1.2.0
 
 ### Minor Changes
