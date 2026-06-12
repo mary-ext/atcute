@@ -14,13 +14,14 @@ export interface SyncCarReader {
 
 export const fromUint8Array = (buffer: Uint8Array): SyncCarReader => {
 	const { header, nextOffset: headerOffset } = readHeader(buffer, 0);
-	let pos = headerOffset;
 
 	return {
 		header,
 		roots: header.data.roots,
 
 		[Symbol.iterator](): IterableIterator<CarEntry> {
+			let pos = headerOffset;
+
 			return {
 				next(): IteratorResult<CarEntry> {
 					if (pos >= buffer.length) {

@@ -74,3 +74,17 @@ describe('empty chunks', () => {
 		expect(entries).toHaveLength(1);
 	});
 });
+
+describe('sync reader iteration', () => {
+	// the reader is an iterable, not a one-shot iterator; iterating it again must replay
+	// from the first block rather than resume from where the previous pass stopped
+	it('replays entries on each iteration', () => {
+		const reader = fromUint8Array(validCar());
+
+		const first = Array.from(reader);
+		const second = Array.from(reader);
+
+		expect(first).toHaveLength(1);
+		expect(second).toEqual(first);
+	});
+});
