@@ -36,10 +36,10 @@ export const createRfc4648Encode = (alphabet: string, bitsPerChar: number, pad: 
 };
 
 export const createRfc4648Decode = (alphabet: string, bitsPerChar: number, pad: boolean) => {
-	// Build the character lookup table:
-	const codes: Record<string, number> = {};
+	// Build the character lookup table: charCode -> value, 0xff for invalid characters.
+	const codes = new Uint8Array(256).fill(0xff);
 	for (let i = 0; i < alphabet.length; ++i) {
-		codes[alphabet[i]] = i;
+		codes[alphabet.charCodeAt(i)] = i;
 	}
 
 	return (str: string): Uint8Array<ArrayBuffer> => {
@@ -59,8 +59,9 @@ export const createRfc4648Decode = (alphabet: string, bitsPerChar: number, pad: 
 		let written = 0; // Next byte to write
 		for (let i = 0; i < end; ++i) {
 			// Read one character from the string:
-			const value = codes[str[i]];
-			if (value === undefined) {
+			const code = str.charCodeAt(i);
+			const value = code < 256 ? codes[code] : 0xff;
+			if (value === 0xff) {
 				throw new SyntaxError(`invalid base string`);
 			}
 
