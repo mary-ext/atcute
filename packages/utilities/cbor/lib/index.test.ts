@@ -382,6 +382,29 @@ describe('non-ascii map key ordering', () => {
 	});
 });
 
+describe('float decoding', () => {
+	// DRISL forbids NaN and infinities; negative zero is the only special float allowed.
+	it('rejects NaN', () => {
+		expect(() => decode(fromBase16('fb7ff8000000000000'))).toThrow();
+	});
+
+	it('rejects positive infinity', () => {
+		expect(() => decode(fromBase16('fb7ff0000000000000'))).toThrow();
+	});
+
+	it('rejects negative infinity', () => {
+		expect(() => decode(fromBase16('fbfff0000000000000'))).toThrow();
+	});
+
+	it('accepts negative zero', () => {
+		expect(Object.is(decode(fromBase16('fb8000000000000000')), -0)).toBe(true);
+	});
+
+	it('accepts subnormal numbers', () => {
+		expect(decode(fromBase16('fb0000000000000001'))).toBe(5e-324);
+	});
+});
+
 function decodeCborMultiple(bytes: Uint8Array, expected: number): unknown[] {
 	const values: unknown[] = [];
 

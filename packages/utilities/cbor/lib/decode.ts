@@ -61,6 +61,11 @@ const readFloat64 = (state: State): number => {
 	const view = (state.v ??= new DataView(state.b.buffer, state.b.byteOffset, state.b.byteLength));
 	const value = view.getFloat64(state.p);
 
+	// DRISL forbids NaN and infinities; -0 and subnormals are finite and remain allowed.
+	if (!Number.isFinite(value)) {
+		throw new RangeError(`NaN and Infinity values not supported`);
+	}
+
 	state.p += 8;
 	return value;
 };
