@@ -15,6 +15,12 @@ interface State {
 	kl: number;
 }
 
+const requireBytes = (state: State, needed: number): void => {
+	if (needed > state.b.length - state.p) {
+		throw new RangeError(`unexpected end of input`);
+	}
+};
+
 const readArgument = (state: State, info: number): number => {
 	if (info < 24) {
 		return info;
@@ -23,6 +29,7 @@ const readArgument = (state: State, info: number): number => {
 	let arg: number;
 	switch (info) {
 		case 24: {
+			requireBytes(state, 1);
 			arg = readUint8(state);
 			if (arg < 24) {
 				throw new TypeError(`non-canonical argument encoding`);
@@ -30,6 +37,7 @@ const readArgument = (state: State, info: number): number => {
 			break;
 		}
 		case 25: {
+			requireBytes(state, 2);
 			arg = readUint16(state);
 			if (arg < 0x100) {
 				throw new TypeError(`non-canonical argument encoding`);
@@ -37,6 +45,7 @@ const readArgument = (state: State, info: number): number => {
 			break;
 		}
 		case 26: {
+			requireBytes(state, 4);
 			arg = readUint32(state);
 			if (arg < 0x10000) {
 				throw new TypeError(`non-canonical argument encoding`);
@@ -44,6 +53,7 @@ const readArgument = (state: State, info: number): number => {
 			break;
 		}
 		case 27: {
+			requireBytes(state, 8);
 			arg = readUint53(state);
 			if (arg < 0x100000000) {
 				throw new TypeError(`non-canonical argument encoding`);
@@ -58,6 +68,8 @@ const readArgument = (state: State, info: number): number => {
 };
 
 const readFloat64 = (state: State): number => {
+	requireBytes(state, 8);
+
 	const view = (state.v ??= new DataView(state.b.buffer, state.b.byteOffset, state.b.byteLength));
 	const value = view.getFloat64(state.p);
 
@@ -106,6 +118,8 @@ const readUint53 = (state: State): number => {
 };
 
 const readString = (state: State, length: number): string => {
+	requireBytes(state, length);
+
 	const string = decodeUtf8From(state.b, state.p, length);
 	state.p += length;
 
@@ -113,18 +127,24 @@ const readString = (state: State, length: number): string => {
 };
 
 const readBytes = (state: State, length: number): Bytes => {
+	requireBytes(state, length);
+
 	const slice = state.b.subarray(state.p, (state.p += length));
 
 	return toBytes(slice);
 };
 
 const readCid = (state: State, length: number): CidLink => {
+	requireBytes(state, length);
+
 	const cid = fromBinary(state.b.subarray(state.p, (state.p += length)));
 
 	return new CidLinkWrapper(cid.bytes);
 };
 
 const decodeStringKey = (state: State): string => {
+	requireBytes(state, 1);
+
 	const prelude = readUint8(state);
 
 	const type = prelude >> 5;
@@ -185,6 +205,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 	let value: any;
 
 	jump: while (state.p < len) {
+		// the loop condition guarantees the prelude byte; deeper reads guard themselves via requireBytes
 		const prelude = readUint8(state);
 
 		const type = prelude >> 5;
@@ -210,6 +231,10 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 			}
 			case 4: {
 				if (arg > 0) {
+					// each element needs at least one byte, so reject lengths larger than the remaining
+					// input before allocating — a truncated header must not force a huge allocation.
+					requireBytes(state, arg);
+
 					// oxlint-disable-next-line no-new-array
 					stack = { t: 1, c: (value = new Array(arg)), k: null, r: arg, n: stack };
 					continue jump;
@@ -232,6 +257,8 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 			case 6: {
 				switch (arg) {
 					case 42: {
+						requireBytes(state, 1);
+
 						const prelude = readUint8(state);
 
 						const type = prelude >> 5;
@@ -345,10 +372,12 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 			stack = stack.n;
 		}
 
-		break;
+		// a complete value: returning here means falling out of the loop can only happen when the
+		// input ends mid-structure (or is empty), which the throw below reports.
+		return [value, buf.subarray(state.p)];
 	}
 
-	return [value, buf.subarray(state.p)];
+	throw new RangeError(`unexpected end of input`);
 };
 
 export const decode = (buf: Uint8Array): any => {

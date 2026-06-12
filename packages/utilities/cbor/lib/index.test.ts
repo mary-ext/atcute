@@ -405,6 +405,48 @@ describe('float decoding', () => {
 	});
 });
 
+describe('truncated input', () => {
+	it('rejects empty input', () => {
+		expect(() => decode(new Uint8Array(0))).toThrow();
+	});
+
+	it('rejects a truncated string', () => {
+		// 0x63 declares a 3-byte string but no bytes follow
+		expect(() => decode(fromBase16('63'))).toThrow();
+		expect(() => decode(fromBase16('6361'))).toThrow();
+	});
+
+	it('rejects a truncated byte string', () => {
+		// 0x42 declares 2 bytes but none follow
+		expect(() => decode(fromBase16('42'))).toThrow();
+	});
+
+	it('rejects a truncated argument', () => {
+		// 0x1a is a 4-byte unsigned integer argument, only 2 bytes follow
+		expect(() => decode(fromBase16('1a0001'))).toThrow();
+	});
+
+	it('rejects a truncated float', () => {
+		// 0xfb is a 8-byte float, only 1 byte follows
+		expect(() => decode(fromBase16('fb00'))).toThrow();
+	});
+
+	it('rejects an array with missing elements', () => {
+		// array of 3, only one element present
+		expect(() => decode(fromBase16('8301'))).toThrow();
+	});
+
+	it('rejects a map with missing entries', () => {
+		// map of 2, only one entry present
+		expect(() => decode(fromBase16('a2616101'))).toThrow();
+	});
+
+	it('does not allocate for an array longer than the input', () => {
+		// claims ~16M elements with no payload; must reject rather than allocate
+		expect(() => decode(fromBase16('9a00ffffff'))).toThrow();
+	});
+});
+
 function decodeCborMultiple(bytes: Uint8Array, expected: number): unknown[] {
 	const values: unknown[] = [];
 
