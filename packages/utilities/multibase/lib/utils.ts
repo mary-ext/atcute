@@ -234,8 +234,8 @@ export const createBtcBaseDecode = (alphabet: string) => {
 				let i = 0;
 				for (let it3 = size - 1; (carry !== 0 || i < length) && it3 !== -1; it3--, i++) {
 					carry += BASE2 * b256[it3];
-					b256[it3] = carry & 0xff;
-					carry = (carry - (carry & 0xff)) / 256;
+					b256[it3] = carry;
+					carry >>>= 8;
 				}
 				if (carry !== 0) {
 					throw new Error('non-zero carry');
@@ -256,8 +256,8 @@ export const createBtcBaseDecode = (alphabet: string) => {
 			let i = 0;
 			for (let it3 = size - 1; (carry !== 0 || i < length) && it3 !== -1; it3--, i++) {
 				carry += BASE * b256[it3];
-				b256[it3] = carry & 0xff;
-				carry = carry >>> 8;
+				b256[it3] = carry;
+				carry >>>= 8;
 			}
 			if (carry !== 0) {
 				throw new Error('non-zero carry');
