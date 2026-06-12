@@ -405,6 +405,18 @@ describe('float decoding', () => {
 	});
 });
 
+describe('integer range', () => {
+	it('accepts the minimum safe integer', () => {
+		// -(2^53 - 1), the smallest value the encoder will emit
+		expect(decode(fromBase16('3b001ffffffffffffe'))).toBe(Number.MIN_SAFE_INTEGER);
+	});
+
+	it('rejects a negative integer below the safe range', () => {
+		// -(2^53); one past MIN_SAFE_INTEGER, so it cannot be re-encoded
+		expect(() => decode(fromBase16('3b001fffffffffffff'))).toThrow();
+	});
+});
+
 describe('truncated input', () => {
 	it('rejects empty input', () => {
 		expect(() => decode(new Uint8Array(0))).toThrow();

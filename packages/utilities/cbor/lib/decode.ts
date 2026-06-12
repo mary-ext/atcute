@@ -219,6 +219,11 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 			}
 			case 1: {
 				value = -1 - arg;
+				// `readUint53` caps the argument at the safe-integer range, but negation shifts the
+				// lower bound by one, so -(2^53) can slip through; reject it to match the encoder.
+				if (value < Number.MIN_SAFE_INTEGER) {
+					throw new RangeError(`can't decode integers beyond safe integer range`);
+				}
 				break;
 			}
 			case 2: {
