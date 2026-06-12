@@ -46,24 +46,26 @@ export const carEntryTransform = (): ReadableWritablePair<CarEntry, Uint8Array> 
 };
 
 export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReader => {
-	let chunk = new Uint8Array(0) as Uint8Array; // annoying!
+	let chunk: Uint8Array = new Uint8Array(0);
+	let chunkPos = 0;
 	let offset = 0;
 
 	let _header: CarHeader | undefined;
 
 	const reader = stream.getReader();
 
-	// refills `chunk` until it holds at least one byte; returns false once the stream ends.
+	// advances to the next chunk holding an unread byte; returns false once the stream ends.
 	// a readable stream may legally emit zero-length chunks, so this must loop past them
 	// rather than treat an empty chunk as data
-	const readMore = async (): Promise<boolean> => {
-		while (chunk.length === 0) {
+	const refill = async (): Promise<boolean> => {
+		while (chunkPos >= chunk.length) {
 			const { value, done } = await reader.read();
 			if (done) {
 				return false;
 			}
 
 			chunk = value;
+			chunkPos = 0;
 		}
 
 		return true;
@@ -82,17 +84,15 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 				throw new RangeError(`varint too long`);
 			}
 
-			if (!(await readMore())) {
+			if (chunkPos >= chunk.length && !(await refill())) {
 				throw new Error(`unexpected eof while decoding varint`);
 			}
 
-			const byte = chunk[0];
-			chunk = chunk.subarray(1);
+			const byte = chunk[chunkPos++];
+			offset++;
 
 			value += shift < 28 ? (byte & REST) << shift : (byte & REST) * 2 ** shift;
 			shift += 7;
-
-			offset++;
 
 			if ((byte & MSB) === 0) {
 				return value;
@@ -101,19 +101,29 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 	};
 
 	const readExact = async (n: number): Promise<Uint8Array> => {
+		// fast path: the bytes are contiguous in the current chunk, so hand back a view into
+		// it instead of copying (the sync reader returns views into its source buffer too)
+		if (chunkPos + n <= chunk.length) {
+			const buffer = chunk.subarray(chunkPos, chunkPos + n);
+			chunkPos += n;
+			offset += n;
+			return buffer;
+		}
+
+		// slow path: the read spans chunk boundaries, so assemble it into a fresh buffer
 		const buffer = new Uint8Array(n);
 		let written = 0;
 
 		while (written < n) {
-			if (!(await readMore())) {
+			if (chunkPos >= chunk.length && !(await refill())) {
 				throw new Error('unexpected eof while reading data');
 			}
 
-			const taken = Math.min(n - written, chunk.length);
-			buffer.set(chunk.subarray(0, taken), written);
+			const taken = Math.min(n - written, chunk.length - chunkPos);
+			buffer.set(chunk.subarray(chunkPos, chunkPos + taken), written);
 
 			written += taken;
-			chunk = chunk.subarray(taken);
+			chunkPos += taken;
 		}
 
 		offset += n;
@@ -203,7 +213,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 			}
 
 			while (true) {
-				if (!(await readMore())) {
+				if (!(await refill())) {
 					return;
 				}
 

@@ -85,6 +85,27 @@ describe('overlong varint', () => {
 	});
 });
 
+describe('chunk boundaries', () => {
+	// feeding one byte at a time forces every read to span chunk boundaries, exercising the
+	// streaming reader's copying slow path; the result must match the sync reader exactly
+	it('reads identically regardless of chunking', async () => {
+		const header = validHeader();
+		const entries: Uint8Array[] = [];
+		for (let i = 0; i < 3; i++) {
+			const cid = CID.fromDigest(CID.CODEC_RAW, new Uint8Array(32).fill(i + 1));
+			entries.push(serializeCarEntry(cid.bytes, encodeUtf8(`block ${i}`)));
+		}
+
+		const car = concat([header, ...entries]);
+
+		const expected = Array.from(fromUint8Array(car));
+		const streamed = await Array.fromAsync(fromStream(streamOfChunks([...car].map((b) => Uint8Array.of(b)))));
+
+		expect(streamed).toEqual(expected);
+		expect(streamed).toHaveLength(3);
+	});
+});
+
 describe('sync reader iteration', () => {
 	// the reader is an iterable, not a one-shot iterator; iterating it again must replay
 	// from the first block rather than resume from where the previous pass stopped
