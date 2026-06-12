@@ -10,7 +10,7 @@ export * as ShTangledGitTempGetBlob from './types/sh/tangled/git/temp/getBlob.ts
 export * as ShTangledGitTempGetBranch from './types/sh/tangled/git/temp/getBranch.ts';
 export * as ShTangledGitTempGetCommit from './types/sh/tangled/git/temp/getCommit.ts';
 export * as ShTangledGitTempGetDiff from './types/sh/tangled/git/temp/getDiff.ts';
-export * as ShTangledGitTempGetEntity from './types/sh/tangled/git/temp/getEntity.ts';
+export * as ShTangledGitTempGetEntry from './types/sh/tangled/git/temp/getEntry.ts';
 export * as ShTangledGitTempGetHead from './types/sh/tangled/git/temp/getHead.ts';
 export * as ShTangledGitTempGetTag from './types/sh/tangled/git/temp/getTag.ts';
 export * as ShTangledGitTempGetTree from './types/sh/tangled/git/temp/getTree.ts';

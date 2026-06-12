@@ -4,12 +4,12 @@ import * as v from '@atcute/lexicons/validations';
 
 import * as ShTangledGitTempDefs from './defs.ts';
 
-const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getEntity', {
+const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getEntry', {
 	params: /*#__PURE__*/ v.object({
 		/** path of the entity */
 		path: /*#__PURE__*/ v.string(),
 		/**
-		 * Git reference (branch, tag, or commit SHA)
+		 * Git revision (branch, tag, or commit id)
 		 *
 		 * @default 'HEAD'
 		 */
@@ -19,9 +19,19 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getEntity', {
 	}),
 	output: {
 		type: 'lex',
-		get schema() {
-			return ShTangledGitTempDefs.blobSchema;
-		},
+		schema: /*#__PURE__*/ v.object({
+			get lastCommit() {
+				return /*#__PURE__*/ v.optional(ShTangledGitTempDefs.commitSchema);
+			},
+			mode: /*#__PURE__*/ v.literalEnum(['0040000', '0100644', '0100664', '0100755', '0120000', '0160000']),
+			/** The file name */
+			name: /*#__PURE__*/ v.string(),
+			oid: /*#__PURE__*/ v.string(),
+			/** Submodule information if path is a submodule */
+			get submodule() {
+				return /*#__PURE__*/ v.optional(ShTangledGitTempDefs.submoduleSchema);
+			},
+		}),
 	},
 });
 
@@ -32,10 +42,10 @@ export interface mainSchema extends main$schematype {}
 export const mainSchema = _mainSchema as mainSchema;
 
 export interface $params extends v.InferInput<mainSchema['params']> {}
-export type $output = v.InferXRPCBodyInput<mainSchema['output']>;
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'sh.tangled.git.temp.getEntity': mainSchema;
+		'sh.tangled.git.temp.getEntry': mainSchema;
 	}
 }

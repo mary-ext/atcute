@@ -1,0 +1,77 @@
+{
+	"id": "sh.tangled.git.temp.getEntry",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "Git reference not found"
+				},
+				{
+					"name": "EntryNotFound",
+					"description": "Entry not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["mode", "name", "oid"],
+					"properties": {
+						"oid": {
+							"type": "string"
+						},
+						"mode": {
+							"enum": ["0040000", "0100644", "0100664", "0100755", "0120000", "0160000"],
+							"type": "string"
+						},
+						"name": {
+							"type": "string",
+							"description": "The file name"
+						},
+						"submodule": {
+							"ref": "sh.tangled.git.temp.defs#submodule",
+							"type": "ref",
+							"description": "Submodule information if path is a submodule"
+						},
+						"lastCommit": {
+							"ref": "sh.tangled.git.temp.defs#commit",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["path", "repo"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"default": "HEAD",
+						"description": "Git revision (branch, tag, or commit id)"
+					},
+					"path": {
+						"type": "string",
+						"description": "path of the entity"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					}
+				}
+			},
+			"description": "get metadata of blob by ref and path"
+		}
+	},
+	"lexicon": 1
+}

@@ -21,33 +21,6 @@
 				}
 			}
 		},
-		"blob": {
-			"type": "object",
-			"required": ["lastCommit", "mode", "name", "size"],
-			"properties": {
-				"mode": {
-					"type": "string"
-				},
-				"name": {
-					"type": "string",
-					"description": "The file name"
-				},
-				"size": {
-					"type": "integer",
-					"description": "File size in bytes"
-				},
-				"submodule": {
-					"ref": "#submodule",
-					"type": "ref",
-					"description": "Submodule information if path is a submodule"
-				},
-				"lastCommit": {
-					"ref": "#commit",
-					"type": "ref"
-				}
-			},
-			"description": "blob metadata. This object doesn't include the blob content"
-		},
 		"hash": {
 			"type": "string"
 		},
