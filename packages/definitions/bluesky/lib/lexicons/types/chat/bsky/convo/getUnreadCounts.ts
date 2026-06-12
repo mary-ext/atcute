@@ -3,7 +3,14 @@ import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('chat.bsky.convo.getUnreadCounts', {
-	params: null,
+	params: /*#__PURE__*/ v.object({
+		/**
+		 * When false, group convos are excluded from the counts.
+		 *
+		 * @default true
+		 */
+		includeGroupChats: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
@@ -28,7 +35,7 @@ export interface mainSchema extends main$schematype {}
 
 export const mainSchema = _mainSchema as mainSchema;
 
-export interface $params {}
+export interface $params extends v.InferInput<mainSchema['params']> {}
 export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
