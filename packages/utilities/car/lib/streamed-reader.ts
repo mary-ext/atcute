@@ -53,6 +53,22 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 
 	const reader = stream.getReader();
 
+	// refills `chunk` until it holds at least one byte; returns false once the stream ends.
+	// a readable stream may legally emit zero-length chunks, so this must loop past them
+	// rather than treat an empty chunk as data
+	const readMore = async (): Promise<boolean> => {
+		while (chunk.length === 0) {
+			const { value, done } = await reader.read();
+			if (done) {
+				return false;
+			}
+
+			chunk = value;
+		}
+
+		return true;
+	};
+
 	const readVarint = async (): Promise<number> => {
 		let value = 0;
 		let shift = 0;
@@ -61,13 +77,8 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 		const REST = 0x7f;
 
 		while (true) {
-			if (chunk.length === 0) {
-				const { value, done } = await reader.read();
-				if (done) {
-					throw new Error(`unexpected eof while decoding varint`);
-				}
-
-				chunk = value;
+			if (!(await readMore())) {
+				throw new Error(`unexpected eof while decoding varint`);
 			}
 
 			const byte = chunk[0];
@@ -89,14 +100,8 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 		let written = 0;
 
 		while (written < n) {
-			if (chunk.length === 0) {
-				const { value, done } = await reader.read();
-
-				if (done) {
-					throw new Error('unexpected eof while reading data');
-				}
-
-				chunk = value;
+			if (!(await readMore())) {
+				throw new Error('unexpected eof while reading data');
 			}
 
 			const taken = Math.min(n - written, chunk.length);
@@ -193,14 +198,8 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 			}
 
 			while (true) {
-				if (chunk.length === 0) {
-					const { value, done } = await reader.read();
-
-					if (done) {
-						return;
-					}
-
-					chunk = value;
+				if (!(await readMore())) {
+					return;
 				}
 
 				const entryStart = offset;
