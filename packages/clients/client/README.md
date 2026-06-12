@@ -385,3 +385,39 @@ class MyHandler implements FetchHandlerObject {
 
 const rpc = new Client({ handler: new MyHandler() });
 ```
+
+### rate limiting
+
+`retryFetchHandler` wraps another handler to retry rate-limited (HTTP 429) responses. the delay
+comes from the `Retry-After` or `RateLimit-Reset` header when present, otherwise exponential backoff
+— usually the only option in browsers, where CORS hides the `RateLimit-*` headers.
+
+```ts
+import { Client, retryFetchHandler, simpleFetchHandler } from '@atcute/client';
+
+const rpc = new Client({
+	handler: retryFetchHandler({
+		handler: simpleFetchHandler({ service: 'https://bsky.social' }),
+		maxRetries: 3, // attempts before giving up (default 3)
+		maxDelay: 60_000, // upper bound on a retry delay, in ms (default 60s)
+		fallbackDelay: 1_000, // backoff base when no header is present, or null to not retry (default 1s)
+		shouldRetry: (response) => response.status === 429, // widen to retry other statuses
+	}),
+});
+```
+
+`parseRateLimitHeaders` reads the `RateLimit-*` headers off a response where they're exposed,
+returning `null` when they're absent or malformed:
+
+```ts
+import { parseRateLimitHeaders } from '@atcute/client';
+
+const response = await rpc.post('com.atproto.repo.createRecord', {
+	/* ... */
+});
+
+const info = parseRateLimitHeaders(response.headers);
+if (info) {
+	console.log(`${info.remaining}/${info.limit} remaining, resets at ${info.reset.toISOString()}`);
+}
+```
