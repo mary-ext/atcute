@@ -72,11 +72,16 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 	const readVarint = async (): Promise<number> => {
 		let value = 0;
 		let shift = 0;
+		let bytes = 0;
 
 		const MSB = 0x80;
 		const REST = 0x7f;
 
 		while (true) {
+			if (++bytes > 8) {
+				throw new RangeError(`varint too long`);
+			}
+
 			if (!(await readMore())) {
 				throw new Error(`unexpected eof while decoding varint`);
 			}

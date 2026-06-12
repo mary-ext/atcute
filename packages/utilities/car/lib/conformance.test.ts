@@ -75,6 +75,16 @@ describe('empty chunks', () => {
 	});
 });
 
+describe('overlong varint', () => {
+	// the sync reader caps varints at 8 bytes (matching the encodable range); the streaming
+	// reader must reject overlong varints too instead of looping until the stream ends
+	it('is rejected by the streaming reader', async () => {
+		const overlong = Uint8Array.from([0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01]);
+
+		await expect(fromStream(streamOf(overlong)).header()).rejects.toThrowError(/varint too long/);
+	});
+});
+
 describe('sync reader iteration', () => {
 	// the reader is an iterable, not a one-shot iterator; iterating it again must replay
 	// from the first block rather than resume from where the previous pass stopped
