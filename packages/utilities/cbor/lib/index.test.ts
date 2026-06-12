@@ -1,5 +1,5 @@
 import * as CID from '@atcute/cid';
-import { fromBase64, toBase16 } from '@atcute/multibase';
+import { fromBase16, fromBase64, toBase16 } from '@atcute/multibase';
 
 import { describe, expect, it } from 'vitest';
 
@@ -355,6 +355,31 @@ it('throws on duplicate map keys', () => {
 	const malformedCbor = new Uint8Array([0xa2, 0x61, 0x61, 0x01, 0x61, 0x61, 0x02]);
 
 	expect(() => decode(malformedCbor)).toThrow('map keys are not in canonical order or contain duplicates');
+});
+
+describe('non-ascii map key ordering', () => {
+	// canonical CBOR orders map keys by UTF-8 byte length, then bytewise on the UTF-8 bytes.
+	// "é" is one UTF-16 code unit but two UTF-8 bytes (0xc3 0xa9), so it must sort *after* "aa"
+	// (both two bytes, 0x61 0x61 < 0xc3 0xa9), not before it as a UTF-16 length compare would.
+	it('orders keys by utf8 byte length, not utf16 length', () => {
+		expect(getOrderedObjectKeys({ é: 1, aa: 2 })).toEqual(['aa', 'é']);
+		expect(getOrderedObjectKeys({ 中: 1, ab: 2 })).toEqual(['ab', '中']);
+	});
+
+	it('encodes non-ascii keys in canonical order', () => {
+		// a2 (map 2) | 62 6161 (key "aa") 02 | 62 c3a9 (key "é") 01
+		expect(toBase16(encode({ é: 1, aa: 2 }))).toBe('a26261610262c3a901');
+	});
+
+	it('decodes a map with non-ascii keys in canonical order', () => {
+		expect(decode(fromBase16('a26261610262c3a901'))).toEqual({ aa: 2, é: 1 });
+	});
+
+	it('throws on non-ascii keys ordered by utf16 length', () => {
+		// {"é": 1, "aa": 2}: valid under a UTF-16 length compare, but non-canonical under UTF-8
+		const malformedCbor = fromBase16('a262c3a90162616102');
+		expect(() => decode(malformedCbor)).toThrow('map keys are not in canonical order or contain duplicates');
+	});
 });
 
 function decodeCborMultiple(bytes: Uint8Array, expected: number): unknown[] {

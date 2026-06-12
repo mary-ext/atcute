@@ -1,5 +1,5 @@
 import { type CidLink, CidLinkWrapper, fromString } from '@atcute/cid';
-import { allocUnsafe, concat, encodeUtf8Into } from '@atcute/uint8array';
+import { allocUnsafe, compare, concat, encodeUtf8, encodeUtf8Into, getUtf8Length } from '@atcute/uint8array';
 
 import { IS_NODE_RUNTIME } from '#runtime';
 
@@ -382,15 +382,69 @@ export const encode = (value: unknown): Uint8Array<ArrayBuffer> => {
 	return concat(state.c, state.l + state.p);
 };
 
+// re-sorts an already-collected key array by UTF-8 byte length, then bytewise on the UTF-8 bytes.
+// only needed when a key is non-ASCII; UTF-8 lengths/bytes are cached so each key is encoded at most
+// once, and the bytewise tiebreak only materializes bytes for equal-length keys.
+const sortUtf8Keys = (keys: string[]): void => {
+	const len = keys.length;
+	// oxlint-disable-next-line no-new-array
+	const lengths: number[] = new Array(len);
+	// oxlint-disable-next-line no-new-array
+	const bytes: (Uint8Array | undefined)[] = new Array(len);
+
+	for (let i = 0; i < len; i++) {
+		lengths[i] = getUtf8Length(keys[i]);
+	}
+
+	for (let i = 1; i < len; i++) {
+		const keyA = keys[i];
+		const lenA = lengths[i];
+
+		let j = i - 1;
+		for (; j >= 0; j--) {
+			let cmp = lenA - lengths[j];
+			if (cmp === 0) {
+				// Note: keys are always distinct, so equal-length keys can never be byte-equal.
+				cmp = compare((bytes[i] ??= encodeUtf8(keyA)), (bytes[j] ??= encodeUtf8(keys[j])));
+			}
+
+			if (cmp > 0) {
+				break;
+			}
+
+			keys[j + 1] = keys[j];
+			lengths[j + 1] = lengths[j];
+			bytes[j + 1] = bytes[j];
+		}
+
+		keys[j + 1] = keyA;
+		lengths[j + 1] = lenA;
+		bytes[j + 1] = bytes[i];
+	}
+};
+
 /** @internal */
 export const getOrderedObjectKeys = (obj: Record<string, unknown>): string[] => {
 	const keys = Object.keys(obj);
 	let len = 0;
+	let ascii = true;
 
 	for (let i = 0; i < keys.length; i++) {
 		const valA = keys[i];
 		if (obj[valA] === undefined) {
 			continue;
+		}
+
+		// for ASCII keys, UTF-16 length equals UTF-8 byte length and JS string comparison equals
+		// bytewise UTF-8 comparison, so the cheap sort below is already canonical; a non-ASCII key
+		// can diverge, so flag it for a UTF-8-correct re-sort.
+		if (ascii) {
+			for (let k = 0; k < valA.length; k++) {
+				if (valA.charCodeAt(k) > 0x7f) {
+					ascii = false;
+					break;
+				}
+			}
 		}
 
 		const lenA = valA.length;
@@ -411,5 +465,10 @@ export const getOrderedObjectKeys = (obj: Record<string, unknown>): string[] => 
 	}
 
 	keys.length = len;
+
+	if (!ascii) {
+		sortUtf8Keys(keys);
+	}
+
 	return keys;
 };

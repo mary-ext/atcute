@@ -9,6 +9,10 @@ interface State {
 	b: Uint8Array;
 	v: DataView | null;
 	p: number;
+	/** byte offset of the last decoded map key (for canonical-order comparison) */
+	ks: number;
+	/** byte length of the last decoded map key */
+	kl: number;
 }
 
 const readArgument = (state: State, info: number): number => {
@@ -125,6 +129,9 @@ const decodeStringKey = (state: State): string => {
 
 	const info = prelude & 0x1f;
 	const length = info < 24 ? info : readArgument(state, info);
+
+	state.ks = state.p;
+	state.kl = length;
 	return readString(state, length);
 };
 
@@ -136,6 +143,10 @@ type Container =
 			c: Record<string, unknown>;
 			/** held key (as we decode the value) */
 			k: string;
+			/** byte offset of the held key (for canonical-order comparison) */
+			ks: number;
+			/** byte length of the held key */
+			kl: number;
 			/** remaining elements (key + value) */
 			r: number;
 			/** next container in stack */
@@ -161,6 +172,8 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 		b: buf,
 		v: null,
 		p: 0,
+		ks: 0,
+		kl: 0,
 	};
 
 	let stack: Container | null = null;
@@ -206,7 +219,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 					// We'll read the key of the first item here.
 					const first = decodeStringKey(state);
 
-					stack = { t: 0, c: value, k: first, r: arg, n: stack };
+					stack = { t: 0, c: value, k: first, ks: state.ks, kl: state.kl, r: arg, n: stack };
 					continue jump;
 				}
 				break;
@@ -289,14 +302,34 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 
 				if (!stack.t) {
 					// Read the key of the next map item
-					const prevKey = stack.k;
-					const key = decodeStringKey(state);
-					stack.k = key;
+					const prevStart = stack.ks;
+					const prevLength = stack.kl;
 
-					const cmp = key.length - prevKey.length || (key > prevKey ? 1 : key < prevKey ? -1 : 0);
+					stack.k = decodeStringKey(state);
+
+					const curStart = state.ks;
+					const curLength = state.kl;
+
+					// Canonical CBOR orders map keys by UTF-8 byte length, then bytewise on the raw
+					// UTF-8 bytes. Comparing the buffer slices directly avoids the UTF-16 semantics
+					// of JS string comparison, which diverges for non-ASCII keys.
+					let cmp = curLength - prevLength;
+					if (cmp === 0) {
+						const buf = state.b;
+						for (let i = 0; i < curLength; i++) {
+							cmp = buf[curStart + i] - buf[prevStart + i];
+							if (cmp !== 0) {
+								break;
+							}
+						}
+					}
+
 					if (cmp <= 0) {
 						throw new TypeError(`map keys are not in canonical order or contain duplicates`);
 					}
+
+					stack.ks = curStart;
+					stack.kl = curLength;
 				}
 
 				continue jump;
