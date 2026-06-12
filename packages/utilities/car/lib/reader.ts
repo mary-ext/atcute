@@ -34,13 +34,17 @@ export const fromUint8Array = (buffer: Uint8Array): SyncCarReader => {
 					const { value: entryLength, nextOffset: lengthOffset } = varint.decode(buffer, pos, 8);
 					pos = lengthOffset;
 
+					if (entryLength < 36) {
+						throw new RangeError(`invalid car block; length=${entryLength}`);
+					}
+
 					const cidStart = pos;
 					const { cid, nextOffset: cidOffset } = readCid(buffer, pos);
 					pos = cidOffset;
 
 					const bytesStart = pos;
-					const bytesSize = entryLength - (bytesStart - cidStart);
-					if (bytesSize < 0 || bytesStart + bytesSize > buffer.length) {
+					const bytesSize = entryLength - 36;
+					if (bytesStart + bytesSize > buffer.length) {
 						throw new RangeError('unexpected end of data');
 					}
 

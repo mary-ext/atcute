@@ -206,11 +206,15 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 				const entryStart = offset;
 				const entrySize = await readVarint();
 
+				if (entrySize < 36) {
+					throw new RangeError(`invalid car block; length=${entrySize}`);
+				}
+
 				const cidStart = offset;
 				const cid = await readCid();
 
 				const bytesStart = offset;
-				const bytesSize = entrySize - (bytesStart - cidStart);
+				const bytesSize = entrySize - 36;
 				const bytes = await readExact(bytesSize);
 
 				const cidEnd = bytesStart;
