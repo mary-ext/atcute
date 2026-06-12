@@ -6,19 +6,6 @@ import * as varint from '@atcute/varint';
 import type { CarBlock } from './types.ts';
 
 /**
- * encodes a number as an unsigned varint (variable-length integer)
- *
- * @param n the number to encode
- * @returns the varint-encoded bytes
- */
-const encodeVarint = (n: number): Uint8Array<ArrayBuffer> => {
-	const length = varint.encodingLength(n);
-	const buf = allocUnsafe(length);
-	varint.encode(n, buf, 0);
-	return buf;
-};
-
-/**
  * serializes a CAR v1 header
  *
  * @param roots array of root CIDs (typically just one)
@@ -31,11 +18,11 @@ export const serializeCarHeader = (roots: readonly CidLink[]): Uint8Array<ArrayB
 		roots: roots,
 	});
 
-	const headerSize = encodeVarint(headerData.length);
-	const result = allocUnsafe(headerSize.length + headerData.length);
+	const prefixSize = varint.encodingLength(headerData.length);
+	const result = allocUnsafe(prefixSize + headerData.length);
 
-	result.set(headerSize, 0);
-	result.set(headerData, headerSize.length);
+	varint.encode(headerData.length, result, 0);
+	result.set(headerData, prefixSize);
 
 	return result;
 };
@@ -49,12 +36,13 @@ export const serializeCarHeader = (roots: readonly CidLink[]): Uint8Array<ArrayB
  * @internal
  */
 export const serializeCarEntry = (cid: Uint8Array, data: Uint8Array): Uint8Array<ArrayBuffer> => {
-	const entrySize = encodeVarint(cid.length + data.length);
-	const result = allocUnsafe(entrySize.length + cid.length + data.length);
+	const entrySize = cid.length + data.length;
+	const prefixSize = varint.encodingLength(entrySize);
+	const result = allocUnsafe(prefixSize + entrySize);
 
-	result.set(entrySize, 0);
-	result.set(cid, entrySize.length);
-	result.set(data, entrySize.length + cid.length);
+	varint.encode(entrySize, result, 0);
+	result.set(cid, prefixSize);
+	result.set(data, prefixSize + cid.length);
 
 	return result;
 };
