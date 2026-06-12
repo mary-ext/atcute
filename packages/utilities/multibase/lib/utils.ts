@@ -127,8 +127,9 @@ export const createBtcBaseEncode = (alphabet: string) => {
 				let i = 0;
 				for (let it1 = size - 1; (carry !== 0 || i < length) && it1 !== -1; it1--, i++) {
 					carry = carry + 16777216 * bN[it1];
-					bN[it1] = (carry % BASE) | 0;
-					carry = (carry / BASE) | 0;
+					const q = (carry / BASE) | 0;
+					bN[it1] = carry - q * BASE;
+					carry = q;
 				}
 
 				length = i;
@@ -143,8 +144,9 @@ export const createBtcBaseEncode = (alphabet: string) => {
 			let i = 0;
 			for (let it1 = size - 1; (carry !== 0 || i < length) && it1 !== -1; it1--, i++) {
 				carry = carry + 256 * bN[it1];
-				bN[it1] = (carry % BASE) | 0;
-				carry = (carry / BASE) | 0;
+				const q = (carry / BASE) | 0;
+				bN[it1] = carry - q * BASE;
+				carry = q;
 			}
 
 			length = i;
