@@ -399,13 +399,16 @@ const sortUtf8Keys = (keys: string[]): void => {
 	for (let i = 1; i < len; i++) {
 		const keyA = keys[i];
 		const lenA = lengths[i];
+		// hold keyA's bytes in a local: the inner loop shifts bytes[i] away, so reading the cache
+		// back through bytes[i] on later iterations would compare against the wrong key's bytes.
+		let bytesA = bytes[i];
 
 		let j = i - 1;
 		for (; j >= 0; j--) {
 			let cmp = lenA - lengths[j];
 			if (cmp === 0) {
 				// Note: keys are always distinct, so equal-length keys can never be byte-equal.
-				cmp = compare((bytes[i] ??= encodeUtf8(keyA)), (bytes[j] ??= encodeUtf8(keys[j])));
+				cmp = compare((bytesA ??= encodeUtf8(keyA)), (bytes[j] ??= encodeUtf8(keys[j])));
 			}
 
 			if (cmp > 0) {
@@ -419,7 +422,7 @@ const sortUtf8Keys = (keys: string[]): void => {
 
 		keys[j + 1] = keyA;
 		lengths[j + 1] = lenA;
-		bytes[j + 1] = bytes[i];
+		bytes[j + 1] = bytesA;
 	}
 };
 
