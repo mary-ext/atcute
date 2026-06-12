@@ -33,14 +33,29 @@ export const fromBase32 = (str: string): Uint8Array<ArrayBuffer> => {
 	// process 8-character groups (= 40 bits = 5 bytes each)
 	const fullGroups = end - (end % 8);
 	for (; i < fullGroups; i += 8) {
-		const c0 = _decodeLut[str.charCodeAt(i)];
-		const c1 = _decodeLut[str.charCodeAt(i + 1)];
-		const c2 = _decodeLut[str.charCodeAt(i + 2)];
-		const c3 = _decodeLut[str.charCodeAt(i + 3)];
-		const c4 = _decodeLut[str.charCodeAt(i + 4)];
-		const c5 = _decodeLut[str.charCodeAt(i + 5)];
-		const c6 = _decodeLut[str.charCodeAt(i + 6)];
-		const c7 = _decodeLut[str.charCodeAt(i + 7)];
+		const k0 = str.charCodeAt(i);
+		const k1 = str.charCodeAt(i + 1);
+		const k2 = str.charCodeAt(i + 2);
+		const k3 = str.charCodeAt(i + 3);
+		const k4 = str.charCodeAt(i + 4);
+		const k5 = str.charCodeAt(i + 5);
+		const k6 = str.charCodeAt(i + 6);
+		const k7 = str.charCodeAt(i + 7);
+
+		// any char code >= 128 is non-ASCII and outside the lookup table; reject it
+		// before indexing so it isn't read as undefined (which would coerce to 0)
+		if ((k0 | k1 | k2 | k3 | k4 | k5 | k6 | k7) & ~0x7f) {
+			throw new SyntaxError(`invalid base string`);
+		}
+
+		const c0 = _decodeLut[k0];
+		const c1 = _decodeLut[k1];
+		const c2 = _decodeLut[k2];
+		const c3 = _decodeLut[k3];
+		const c4 = _decodeLut[k4];
+		const c5 = _decodeLut[k5];
+		const c6 = _decodeLut[k6];
+		const c7 = _decodeLut[k7];
 
 		// valid base32 values are 0-31 (5 bits), so any value with bits
 		// outside the low 5 means 0xff was in the mix
@@ -61,7 +76,8 @@ export const fromBase32 = (str: string): Uint8Array<ArrayBuffer> => {
 		let bits = 0;
 		let buffer = 0;
 		for (; i < end; ++i) {
-			const value = _decodeLut[str.charCodeAt(i)];
+			const code = str.charCodeAt(i);
+			const value = code < 0x80 ? _decodeLut[code] : 0xff;
 			if (value & 0xe0) {
 				throw new SyntaxError(`invalid base string`);
 			}
