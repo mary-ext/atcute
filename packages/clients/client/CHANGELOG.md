@@ -1,5 +1,12 @@
 # @atcute/client
 
+## 5.1.0
+
+### Minor Changes
+
+- 99de512: add `retryFetchHandler`, a middleware that retries rate-limited (429) responses with
+  backoff, and `parseRateLimitHeaders` for reading the server's `RateLimit-*` headers
+
 ## 5.0.0
 
 ### Major Changes

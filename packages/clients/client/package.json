@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/client",
-	"version": "5.0.0",
+	"version": "5.1.0",
 	"description": "lightweight and cute API client for AT Protocol",
 	"license": "0BSD",
 	"repository": {
