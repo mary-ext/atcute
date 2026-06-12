@@ -4,8 +4,8 @@ import { allocUnsafe } from '@atcute/uint8array';
 
 const UPPER_RE = /[A-F]/;
 
-const _hexSlice = NodeBuffer.prototype.hexSlice;
-const _hexWrite = NodeBuffer.prototype.hexWrite;
+const _hexSlice = /*#__PURE__*/ (() => NodeBuffer.prototype.hexSlice)();
+const _hexWrite = /*#__PURE__*/ (() => NodeBuffer.prototype.hexWrite)();
 
 export const fromBase16 = (str: string): Uint8Array<ArrayBuffer> => {
 	if (UPPER_RE.test(str)) {

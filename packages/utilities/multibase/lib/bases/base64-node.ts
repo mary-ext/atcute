@@ -3,12 +3,12 @@ import { Buffer as NodeBuffer } from 'node:buffer';
 import { allocUnsafe } from '@atcute/uint8array';
 
 // `base64` has padding
-const _base64Slice = /*#__PURE__*/ NodeBuffer.prototype.base64Slice;
-const _base64Write = /*#__PURE__*/ NodeBuffer.prototype.base64Write;
+const _base64Slice = /*#__PURE__*/ (() => NodeBuffer.prototype.base64Slice)();
+const _base64Write = /*#__PURE__*/ (() => NodeBuffer.prototype.base64Write)();
 
 // `base64url` has no padding
-const _base64UrlSlice = /*#__PURE__*/ NodeBuffer.prototype.base64urlSlice;
-const _base64UrlWrite = /*#__PURE__*/ NodeBuffer.prototype.base64urlWrite;
+const _base64UrlSlice = /*#__PURE__*/ (() => NodeBuffer.prototype.base64urlSlice)();
+const _base64UrlWrite = /*#__PURE__*/ (() => NodeBuffer.prototype.base64urlWrite)();
 
 const getBase64ByteLength = (str: string, padded: boolean): number => {
 	let length = str.length;
