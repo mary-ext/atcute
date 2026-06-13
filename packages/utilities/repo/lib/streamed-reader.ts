@@ -6,7 +6,7 @@ import { isNodeData } from '@atcute/mst';
 
 import { RepoEntry, isCommit } from './types.ts';
 import { assert } from './utils.ts';
-import { decodeMstKey, parseMstKey } from './utils/mst.ts';
+import { MAX_NODE_ENTRIES, decodeMstKey, parseMstKey } from './utils/mst.ts';
 import Queue from './utils/queue.ts';
 
 type EntryMeta = { t: 0 } | { t: 1 } | { t: 2; k: string };
@@ -158,6 +158,11 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 
 								const entries = node.e;
 								const left = node.l;
+
+								assert(
+									entries.length <= MAX_NODE_ENTRIES,
+									`mst node has too many entries; count=${entries.length}`,
+								);
 
 								let lastKey = '';
 

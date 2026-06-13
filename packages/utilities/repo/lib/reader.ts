@@ -7,7 +7,7 @@ import { isNodeData } from '@atcute/mst';
 
 import { RepoEntry, isCommit } from './types.ts';
 import { assert } from './utils.ts';
-import { decodeMstKey, parseMstKey } from './utils/mst.ts';
+import { MAX_MST_DEPTH, MAX_NODE_ENTRIES, decodeMstKey, parseMstKey } from './utils/mst.ts';
 
 /** @internal */
 type EntryMap = Map<string, CarEntry>;
@@ -70,17 +70,22 @@ export const readEntry = <T>(map: EntryMap, link: CidLink, validate: (value: unk
  *
  * @param map a mapping of CID string -> actual bytes
  * @param pointer a CID link to the root of the MST
+ * @param depth current traversal depth, used to bound recursion
  * @returns a generator that yields the entries of the MST
  * @internal
  */
-export function* walkMstEntries(map: EntryMap, pointer: CidLink): Generator<NodeEntry> {
+export function* walkMstEntries(map: EntryMap, pointer: CidLink, depth: number = 0): Generator<NodeEntry> {
+	assert(depth <= MAX_MST_DEPTH, `mst is too deep; depth=${depth}`);
+
 	const data = readEntry(map, pointer, isNodeData);
 	const entries = data.e;
+
+	assert(entries.length <= MAX_NODE_ENTRIES, `mst node has too many entries; count=${entries.length}`);
 
 	let lastKey = '';
 
 	if (data.l !== null) {
-		yield* walkMstEntries(map, data.l);
+		yield* walkMstEntries(map, data.l, depth + 1);
 	}
 
 	for (let i = 0, il = entries.length; i < il; i++) {
@@ -92,7 +97,7 @@ export function* walkMstEntries(map: EntryMap, pointer: CidLink): Generator<Node
 		yield { key: key, cid: entry.v };
 
 		if (entry.t !== null) {
-			yield* walkMstEntries(map, entry.t);
+			yield* walkMstEntries(map, entry.t, depth + 1);
 		}
 	}
 }

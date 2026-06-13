@@ -7,6 +7,7 @@ import { type NodeData, isNodeData } from '@atcute/mst';
 import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
 
 import { type Commit, isCommit } from './types.ts';
+import { MAX_MST_DEPTH, MAX_NODE_ENTRIES } from './utils/mst.ts';
 
 type BlockMap = Map<string, Uint8Array>;
 
@@ -120,10 +121,15 @@ const dfs = async (
 	from: string | undefined,
 	targetKey: string,
 	visited = new Set<string>(),
+	recursionDepth = 0,
 ): Promise<DfsResult> => {
 	// If there's no starting point, return empty state
 	if (from == null) {
 		return { found: false };
+	}
+
+	if (recursionDepth > MAX_MST_DEPTH) {
+		throw new Error(`mst is too deep; depth=${recursionDepth}`);
 	}
 
 	// Check for cycles
@@ -151,8 +157,12 @@ const dfs = async (
 		node = decoded;
 	}
 
+	if (node.e.length > MAX_NODE_ENTRIES) {
+		throw new Error(`mst node has too many entries; count=${node.e.length}`);
+	}
+
 	// Recursively process the left child
-	const left = await dfs(blockmap, node.l?.$link, targetKey, visited);
+	const left = await dfs(blockmap, node.l?.$link, targetKey, visited, recursionDepth + 1);
 
 	let key = '';
 	let found = left.found;
@@ -208,7 +218,7 @@ const dfs = async (
 		}
 
 		// Process right child
-		const right = await dfs(blockmap, entry.t?.$link, targetKey, visited);
+		const right = await dfs(blockmap, entry.t?.$link, targetKey, visited, recursionDepth + 1);
 
 		// Check ordering with right subtree
 		if (right.min && right.min < lastKey) {

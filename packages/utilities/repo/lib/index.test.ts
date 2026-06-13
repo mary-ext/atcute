@@ -11,6 +11,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { fromStream, fromUint8Array, repoEntryTransform } from './index.ts';
 import type { Commit } from './types.ts';
+import { MAX_MST_DEPTH, MAX_NODE_ENTRIES } from './utils/mst.ts';
 
 /**
  * builds a minimal CAR file containing a commit, single MST node, and one record block. the MST node has two
@@ -466,5 +467,67 @@ describe('malformed mst nodes', () => {
 
 		expect(() => Array.from(fromUint8Array(car))).toThrow(/invalid repo path/);
 		await expect(Array.fromAsync(fromStream(new Blob([car]).stream()))).rejects.toThrow(/invalid repo path/);
+	});
+});
+
+/** builds a car whose MST is a left-spine chain of `chainLength` nodes, bottoming out in one record entry */
+const buildDeepCar = async (chainLength: number): Promise<Uint8Array<ArrayBuffer>> => {
+	const recordData = CBOR.encode({ $type: 'app.bsky.feed.post' });
+	const recordCid = await CID.create(0x71, recordData);
+
+	const blocks: { cid: Uint8Array; data: Uint8Array }[] = [{ cid: recordCid.bytes, data: recordData }];
+
+	const leafBytes = CBOR.encode({
+		e: [{ k: toBytes(encodeUtf8('app.bsky.feed.post/aaaa')), p: 0, t: null, v: toCidLink(recordCid) }],
+		l: null,
+	});
+	let childCid = await CID.create(0x71, leafBytes);
+	blocks.push({ cid: childCid.bytes, data: leafBytes });
+
+	for (let i = 0; i < chainLength; i++) {
+		const nodeBytes = CBOR.encode({ e: [], l: toCidLink(childCid) });
+		childCid = await CID.create(0x71, nodeBytes);
+		blocks.push({ cid: childCid.bytes, data: nodeBytes });
+	}
+
+	const commit: Commit = {
+		version: 3,
+		did: 'did:plc:test',
+		data: toCidLink(childCid),
+		rev: '1',
+		prev: null,
+		sig: toBytes(new Uint8Array(64)),
+	};
+	const commitBytes = CBOR.encode(commit);
+	const commitCid = await CID.create(0x71, commitBytes);
+
+	const chunks = await Array.fromAsync(
+		writeCarStream([toCidLink(commitCid)], [{ cid: commitCid.bytes, data: commitBytes }, ...blocks]),
+	);
+	return concat(chunks);
+};
+
+describe('resource limits', () => {
+	it('rejects a tree deeper than the recursion limit', async () => {
+		const car = await buildDeepCar(MAX_MST_DEPTH + 2);
+
+		expect(() => Array.from(fromUint8Array(car))).toThrow(/too deep/);
+	});
+
+	it('rejects a node with more entries than the limit', async () => {
+		const recordData = CBOR.encode({ $type: 'app.bsky.feed.post' });
+		const recordCid = await CID.create(0x71, recordData);
+		const value = toCidLink(recordCid);
+
+		const entries: TreeEntry[] = Array.from({ length: MAX_NODE_ENTRIES + 1 }, () => ({
+			k: toBytes(encodeUtf8('app.bsky.feed.post/aaaa')),
+			p: 0,
+			t: null,
+			v: value,
+		}));
+		const car = await buildNodeCar(entries, [{ cid: recordCid.bytes, data: recordData }]);
+
+		expect(() => Array.from(fromUint8Array(car))).toThrow(/too many entries/);
+		await expect(Array.fromAsync(fromStream(new Blob([car]).stream()))).rejects.toThrow(/too many entries/);
 	});
 });
