@@ -2,12 +2,12 @@ import { writeCarStream } from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
 import { toBytes } from '@atcute/cbor';
 import * as CID from '@atcute/cid';
-import { fromCidLink, toCidLink, toString } from '@atcute/cid';
-import { MSTNode } from '@atcute/mst';
+import { type CidLink, fromCidLink, toCidLink, toString } from '@atcute/cid';
+import { MSTNode, type TreeEntry } from '@atcute/mst';
 import { fromBase64 } from '@atcute/multibase';
-import { concat } from '@atcute/uint8array';
+import { concat, encodeUtf8 } from '@atcute/uint8array';
 
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import { fromStream, fromUint8Array, repoEntryTransform } from './index.ts';
 import type { Commit } from './types.ts';
@@ -366,5 +366,88 @@ describe('multiple roots', () => {
 			{ collection: 'app.bsky.feed.post', rkey: 'aaaa' },
 			{ collection: 'app.bsky.feed.post', rkey: 'aaab' },
 		]);
+	});
+});
+
+/**
+ * builds a car with a single, hand-crafted (possibly malformed) MST node as the root's data. any additional
+ * record blocks referenced by the node's entries should be passed so the walk can resolve them.
+ */
+const buildNodeCar = async (
+	entries: TreeEntry[],
+	records: { cid: Uint8Array; data: Uint8Array }[] = [],
+): Promise<Uint8Array<ArrayBuffer>> => {
+	const nodeBytes = CBOR.encode({ e: entries, l: null });
+	const nodeCid = await CID.create(0x71, nodeBytes);
+
+	const commit: Commit = {
+		version: 3,
+		did: 'did:plc:test',
+		data: toCidLink(nodeCid),
+		rev: '1',
+		prev: null,
+		sig: toBytes(new Uint8Array(64)),
+	};
+	const commitBytes = CBOR.encode(commit);
+	const commitCid = await CID.create(0x71, commitBytes);
+
+	const chunks = await Array.fromAsync(
+		writeCarStream(
+			[toCidLink(commitCid)],
+			[{ cid: commitCid.bytes, data: commitBytes }, { cid: nodeCid.bytes, data: nodeBytes }, ...records],
+		),
+	);
+
+	return concat(chunks);
+};
+
+describe('malformed mst nodes', () => {
+	let value: CidLink;
+	let record: { cid: Uint8Array; data: Uint8Array };
+	const suffix = (str: string): TreeEntry['k'] => toBytes(encodeUtf8(str));
+
+	beforeAll(async () => {
+		const data = CBOR.encode({ $type: 'app.bsky.feed.post' });
+		const cid = await CID.create(0x71, data);
+
+		value = toCidLink(cid);
+		record = { cid: cid.bytes, data };
+	});
+
+	it('rejects a key prefix length larger than the previous key', async () => {
+		const car = await buildNodeCar([{ p: 5, k: suffix('app.bsky.feed.post/aaaa'), v: value, t: null }]);
+
+		expect(() => Array.from(fromUint8Array(car))).toThrow(/key prefix length out of range/);
+		await expect(Array.fromAsync(fromStream(new Blob([car]).stream()))).rejects.toThrow(
+			/key prefix length out of range/,
+		);
+	});
+
+	it('rejects suboptimal (non-maximal) prefix compaction', async () => {
+		const car = await buildNodeCar(
+			[
+				{ p: 0, k: suffix('app.bsky.feed.post/aaaa'), v: value, t: null },
+				{ p: 0, k: suffix('app.bsky.feed.post/aaab'), v: value, t: null },
+			],
+			[record],
+		);
+
+		expect(() => Array.from(fromUint8Array(car))).toThrow(/suboptimal key prefix length/);
+		await expect(Array.fromAsync(fromStream(new Blob([car]).stream()))).rejects.toThrow(
+			/suboptimal key prefix length/,
+		);
+	});
+
+	it('rejects entries that are out of sort order', async () => {
+		const car = await buildNodeCar(
+			[
+				{ p: 0, k: suffix('app.bsky.feed.post/zzzz'), v: value, t: null },
+				{ p: 19, k: suffix('aaaa'), v: value, t: null },
+			],
+			[record],
+		);
+
+		expect(() => Array.from(fromUint8Array(car))).toThrow(/out of order/);
+		await expect(Array.fromAsync(fromStream(new Blob([car]).stream()))).rejects.toThrow(/out of order/);
 	});
 });

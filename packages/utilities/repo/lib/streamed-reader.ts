@@ -3,11 +3,10 @@ import * as CAR from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
 import * as CID from '@atcute/cid';
 import { isNodeData } from '@atcute/mst';
-import { decodeUtf8From } from '@atcute/uint8array';
 
 import { RepoEntry, isCommit } from './types.ts';
 import { assert } from './utils.ts';
-import { parseMstKey } from './utils/mst.ts';
+import { decodeMstKey, parseMstKey } from './utils/mst.ts';
 import Queue from './utils/queue.ts';
 
 type EntryMeta = { t: 0 } | { t: 1 } | { t: 2; k: string };
@@ -170,9 +169,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 									const entry = entries[i];
 									const next = entry.t;
 
-									const key_str = decodeUtf8From(CBOR.fromBytes(entry.k));
-									const key = lastKey.slice(0, entry.p) + key_str;
-
+									const key = decodeMstKey(lastKey, entry);
 									lastKey = key;
 
 									request(entry.v.$link, { t: 2, k: key });

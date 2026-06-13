@@ -4,11 +4,10 @@ import * as CBOR from '@atcute/cbor';
 import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import { isNodeData } from '@atcute/mst';
-import { decodeUtf8From } from '@atcute/uint8array';
 
 import { RepoEntry, isCommit } from './types.ts';
 import { assert } from './utils.ts';
-import { parseMstKey } from './utils/mst.ts';
+import { decodeMstKey, parseMstKey } from './utils/mst.ts';
 
 /** @internal */
 type EntryMap = Map<string, CarEntry>;
@@ -87,9 +86,7 @@ export function* walkMstEntries(map: EntryMap, pointer: CidLink): Generator<Node
 	for (let i = 0, il = entries.length; i < il; i++) {
 		const entry = entries[i];
 
-		const key_str = decodeUtf8From(CBOR.fromBytes(entry.k));
-		const key = lastKey.slice(0, entry.p) + key_str;
-
+		const key = decodeMstKey(lastKey, entry);
 		lastKey = key;
 
 		yield { key: key, cid: entry.v };
