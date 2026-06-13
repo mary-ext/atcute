@@ -9,7 +9,7 @@ import { concat, encodeUtf8 } from '@atcute/uint8array';
 
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { fromStream, fromUint8Array, repoEntryTransform } from './index.ts';
+import { fromStream, fromUint8Array, repoEntryTransform, verifyRecord } from './index.ts';
 import type { Commit } from './types.ts';
 import { MAX_MST_DEPTH, MAX_NODE_ENTRIES } from './utils/mst.ts';
 
@@ -529,5 +529,78 @@ describe('resource limits', () => {
 
 		expect(() => Array.from(fromUint8Array(car))).toThrow(/too many entries/);
 		await expect(Array.fromAsync(fromStream(new Blob([car]).stream()))).rejects.toThrow(/too many entries/);
+	});
+});
+
+describe('verifyRecord', () => {
+	let value: CidLink;
+	let recordData: Uint8Array;
+	let recordCid: Awaited<ReturnType<typeof CID.create>>;
+	const suffix = (str: string): TreeEntry['k'] => toBytes(encodeUtf8(str));
+
+	beforeAll(async () => {
+		recordData = CBOR.encode({ $type: 'app.bsky.feed.post', text: 'hi' });
+		recordCid = await CID.create(0x71, recordData);
+		value = toCidLink(recordCid);
+	});
+
+	it('returns the record for a valid inclusion proof', async () => {
+		const car = await buildNodeCar(
+			[{ p: 0, k: suffix('app.bsky.feed.post/aaaa'), v: value, t: null }],
+			[{ cid: recordCid.bytes, data: recordData }],
+		);
+
+		const result = await verifyRecord({ carBytes: car, collection: 'app.bsky.feed.post', rkey: 'aaaa' });
+
+		expect(result.cid).toBe(toString(recordCid));
+		expect(result.record).toEqual({ $type: 'app.bsky.feed.post', text: 'hi' });
+	});
+
+	it('descends sub-trees to find a nested record', async () => {
+		// buildDeepCar nests a single record at app.bsky.feed.post/aaaa beneath a chain of left sub-trees
+		const car = await buildDeepCar(3);
+
+		const result = await verifyRecord({ carBytes: car, collection: 'app.bsky.feed.post', rkey: 'aaaa' });
+
+		expect(result.record).toEqual({ $type: 'app.bsky.feed.post' });
+	});
+
+	it('throws when the record is not present', async () => {
+		const car = await buildNodeCar(
+			[{ p: 0, k: suffix('app.bsky.feed.post/aaaa'), v: value, t: null }],
+			[{ cid: recordCid.bytes, data: recordData }],
+		);
+
+		await expect(
+			verifyRecord({ carBytes: car, collection: 'app.bsky.feed.post', rkey: 'zzzz' }),
+		).rejects.toThrow(/could not find record/);
+	});
+
+	it('throws when a block does not match its cid', async () => {
+		const car = await buildNodeCar(
+			[{ p: 0, k: suffix('app.bsky.feed.post/aaaa'), v: value, t: null }],
+			// the record block is stored under the wrong (record) cid, so its bytes will not hash to it
+			[{ cid: recordCid.bytes, data: CBOR.encode({ $type: 'app.bsky.feed.post', text: 'tampered' }) }],
+		);
+
+		await expect(
+			verifyRecord({ carBytes: car, collection: 'app.bsky.feed.post', rkey: 'aaaa' }),
+		).rejects.toThrow(/cid does not match bytes/);
+	});
+
+	it('throws when the commit did does not match', async () => {
+		const car = await buildNodeCar(
+			[{ p: 0, k: suffix('app.bsky.feed.post/aaaa'), v: value, t: null }],
+			[{ cid: recordCid.bytes, data: recordData }],
+		);
+
+		await expect(
+			verifyRecord({
+				carBytes: car,
+				collection: 'app.bsky.feed.post',
+				rkey: 'aaaa',
+				did: 'did:plc:someoneelse',
+			}),
+		).rejects.toThrow(/did in commit does not match/);
 	});
 });

@@ -1,20 +1,22 @@
+import type { CarEntry } from '@atcute/car';
 import * as CAR from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
+import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import type { PublicKey } from '@atcute/crypto';
 import type { AtprotoDid } from '@atcute/lexicons/syntax';
-import { type NodeData, isNodeData } from '@atcute/mst';
-import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
+import { isNodeData } from '@atcute/mst';
 
-import { type Commit, isCommit } from './types.ts';
-import { MAX_MST_DEPTH, MAX_NODE_ENTRIES } from './utils/mst.ts';
+import { isCommit } from './types.ts';
+import { assert } from './utils.ts';
+import { MAX_MST_DEPTH, MAX_NODE_ENTRIES, decodeMstKey } from './utils/mst.ts';
 
-type BlockMap = Map<string, Uint8Array>;
+type BlockMap = Map<string, CarEntry>;
 
 export interface VerifiedRecord {
 	/** CID of the record */
 	cid: string;
-	/** Record data */
+	/** decoded record data */
 	record: unknown;
 }
 
@@ -26,6 +28,24 @@ export interface VerifyRecordOptions {
 	carBytes: Uint8Array;
 }
 
+/**
+ * verifies that a record is committed at `collection/rkey` in a repository CAR, and returns it.
+ *
+ * the CAR may be a full repository export or a compact inclusion proof (as returned by
+ * `com.atproto.sync.getRecord`). authenticity rests on three things: every block read is checked against its
+ * CID, the commit is signed (when a public key is given), and the walk descends only by CIDs reachable from
+ * the signed commit. it does not validate the overall tree shape (depth layering, sibling ordering) — that is
+ * a separate, whole-repo concern and is not required to prove a single record's inclusion.
+ *
+ * @param options.did expected repository DID; rejected if the commit's DID differs
+ * @param options.collection collection of the target record
+ * @param options.rkey record key of the target record
+ * @param options.publicKey signing key to verify the commit signature against; skipped if omitted
+ * @param options.carBytes the CAR archive bytes
+ * @returns the target record's CID and decoded data
+ * @throws if the CAR is malformed, a block does not match its CID, the DID or signature is invalid, or the
+ *   record cannot be found
+ */
 export const verifyRecord = async ({
 	did,
 	collection,
@@ -33,41 +53,28 @@ export const verifyRecord = async ({
 	publicKey,
 	carBytes,
 }: VerifyRecordOptions): Promise<VerifiedRecord> => {
-	// read the car
-	let blockmap: BlockMap;
-	let commit: Commit;
-	{
-		const reader = CAR.fromUint8Array(carBytes);
-		if (reader.header.data.roots.length < 1) {
-			throw new Error(`car must have at least one root`);
-		}
+	const reader = CAR.fromUint8Array(carBytes);
+	assert(reader.header.data.roots.length >= 1, `car must have at least one root`);
 
-		blockmap = new Map();
-		for (const entry of reader) {
-			const cidString = CID.toString(entry.cid);
-
-			// Verify that `bytes` matches its associated CID
-			const expectedCid = CID.toString(await CID.create(entry.cid.codec as 85 | 113, entry.bytes));
-			if (cidString !== expectedCid) {
-				throw new Error(`cid does not match bytes`);
-			}
-
-			blockmap.set(cidString, entry.bytes);
-		}
-
-		if (blockmap.size === 0) {
-			throw new Error(`car must have at least one block`);
-		}
-
-		commit = readBlock(blockmap, reader.header.data.roots[0].$link, isCommit);
+	// index blocks by CID without hashing them yet; the descent verifies each block it actually reads, so an
+	// unrelated bad block never costs work and partial proofs (with unlinked blocks omitted) are fine
+	const blockmap: BlockMap = new Map();
+	for (const entry of reader) {
+		blockmap.set(CID.toString(entry.cid), entry);
 	}
 
-	// verify did in commit matches the did
-	if (did !== undefined && commit.did !== did) {
-		throw new Error(`did in commit does not match expected did`);
+	assert(blockmap.size >= 1, `car must have at least one block`);
+
+	const commitEntry = await loadVerified(blockmap, reader.header.data.roots[0].$link);
+	assert(commitEntry !== undefined, `cid not found in blockmap; cid=${reader.header.data.roots[0].$link}`);
+
+	const commit = CBOR.decode(commitEntry.bytes);
+	assert(isCommit(commit), `expected commit block`);
+
+	if (did !== undefined) {
+		assert(commit.did === did, `did in commit does not match expected did`);
 	}
 
-	// verify signature contained in commit is valid (if publicKey provided)
 	if (publicKey) {
 		const { sig, ...unsigned } = commit;
 
@@ -77,178 +84,106 @@ export const verifyRecord = async ({
 			data as Uint8Array<ArrayBuffer>,
 		);
 
-		if (!valid) {
-			throw new Error(`signature verification failed`);
-		}
+		assert(valid, `signature verification failed`);
 	}
 
-	// find and verify the record in the commit
 	const targetKey = `${collection}/${rkey}`;
-	const { found } = await dfs(blockmap, commit.data.$link, targetKey);
-	if (!found) {
-		throw new Error(`could not find record in car`);
-	}
+	const found = await descend(blockmap, commit.data, targetKey);
+	assert(found !== null, `could not find record in car`);
 
-	return {
-		cid: found.cid,
-		record: found.record,
-	};
+	return found;
 };
 
-const readBlock = <T>(blockmap: BlockMap, cid: string, validate: (value: unknown) => value is T): T => {
-	const bytes = blockmap.get(cid);
-	if (!bytes) {
-		throw new Error(`cid not found in blockmap; cid=${cid}`);
+/**
+ * looks up a block and verifies that its bytes hash to the CID it is keyed by
+ *
+ * @param blockmap a mapping of CID string -> car entry
+ * @param cid the CID to read
+ * @returns the verified entry, or undefined if the block is absent
+ * @throws if the block's bytes do not match its CID
+ * @internal
+ */
+const loadVerified = async (blockmap: BlockMap, cid: string): Promise<CarEntry | undefined> => {
+	const entry = blockmap.get(cid);
+	if (entry === undefined) {
+		return undefined;
 	}
 
-	const decoded = CBOR.decode(bytes);
-	if (!validate(decoded)) {
-		throw new Error(`validation failed for cid=${cid}`);
-	}
+	const expected = CID.toString(await CID.create(entry.cid.codec as 85 | 113, entry.bytes));
+	assert(cid === expected, `cid does not match bytes; cid=${cid}`);
 
-	return decoded;
+	return entry;
 };
 
-interface DfsResult {
-	found: false | { cid: string; record: unknown };
-	min?: string;
-	max?: string;
-	depth?: number;
-}
-
-const dfs = async (
+/**
+ * descends an MST toward a target key, following only the sub-tree whose key range can contain it
+ *
+ * @param blockmap a mapping of CID string -> car entry
+ * @param pointer a CID link to the current MST node
+ * @param targetKey the full repo path being located
+ * @param depth current traversal depth, used to bound recursion
+ * @returns the record if found, or null if it is not present on the descended path
+ * @internal
+ */
+const descend = async (
 	blockmap: BlockMap,
-	from: string | undefined,
+	pointer: CidLink,
 	targetKey: string,
-	visited = new Set<string>(),
-	recursionDepth = 0,
-): Promise<DfsResult> => {
-	// If there's no starting point, return empty state
-	if (from == null) {
-		return { found: false };
+	depth: number = 0,
+): Promise<VerifiedRecord | null> => {
+	assert(depth <= MAX_MST_DEPTH, `mst is too deep; depth=${depth}`);
+
+	const block = await loadVerified(blockmap, pointer.$link);
+	if (block === undefined) {
+		// a node on the path is absent (e.g. a proof that does not cover this key)
+		return null;
 	}
 
-	if (recursionDepth > MAX_MST_DEPTH) {
-		throw new Error(`mst is too deep; depth=${recursionDepth}`);
-	}
+	const node = CBOR.decode(block.bytes);
+	assert(isNodeData(node), `invalid mst node; cid=${pointer.$link}`);
 
-	// Check for cycles
-	{
-		if (visited.has(from)) {
-			throw new Error(`cycle detected; cid=${from}`);
-		}
+	const entries = node.e;
+	assert(entries.length <= MAX_NODE_ENTRIES, `mst node has too many entries; count=${entries.length}`);
 
-		visited.add(from);
-	}
+	// scan entries in key order; `subtree` tracks the sub-tree holding keys just before the current entry. the
+	// target either matches an entry exactly, or falls into the one sub-tree whose range covers it
+	let lastKey = '';
+	let subtree: CidLink | null = node.l;
 
-	// Get the block data
-	let node: NodeData;
-	{
-		const bytes = blockmap.get(from);
-		if (!bytes) {
-			return { found: false };
-		}
+	for (let i = 0, il = entries.length; i < il; i++) {
+		const entry = entries[i];
+		const key = decodeMstKey(lastKey, entry);
+		lastKey = key;
 
-		const decoded = CBOR.decode(bytes);
-		if (!isNodeData(decoded)) {
-			throw new Error(`invalid mst node; cid=${from}`);
-		}
-
-		node = decoded;
-	}
-
-	if (node.e.length > MAX_NODE_ENTRIES) {
-		throw new Error(`mst node has too many entries; count=${node.e.length}`);
-	}
-
-	// Recursively process the left child
-	const left = await dfs(blockmap, node.l?.$link, targetKey, visited, recursionDepth + 1);
-
-	let key = '';
-	let found = left.found;
-	let depth: number | undefined;
-	let firstKey: string | undefined;
-	let lastKey: string | undefined;
-
-	// Process all entries in this node
-	for (const entry of node.e) {
-		// Construct the key by truncating and appending
-		key = key.substring(0, entry.p) + decodeUtf8From(CBOR.fromBytes(entry.k));
-
-		// Check if this is our target key
 		if (key === targetKey) {
-			const recordBytes = blockmap.get(entry.v.$link);
-			if (recordBytes) {
-				const record = CBOR.decode(recordBytes);
-				found = { cid: entry.v.$link, record };
-			}
+			return await loadRecord(blockmap, entry.v);
 		}
 
-		// Calculate depth based on leading zeros in the hash
-		const keyDigest = await toSha256(encodeUtf8(key));
-		let zeroCount = 0;
-
-		outerLoop: for (const byte of keyDigest) {
-			for (let bit = 7; bit >= 0; bit--) {
-				if (((byte >> bit) & 1) !== 0) {
-					break outerLoop;
-				}
-				zeroCount++;
-			}
+		if (key > targetKey) {
+			break;
 		}
 
-		const thisDepth = Math.floor(zeroCount / 2);
-
-		// Ensure consistent depth
-		if (depth === undefined) {
-			depth = thisDepth;
-		} else if (depth !== thisDepth) {
-			throw new Error(`node has entries with different depths; cid=${from}`);
-		}
-
-		// Track first and last keys
-		if (lastKey === undefined) {
-			firstKey = key;
-			lastKey = key;
-		}
-
-		// Check key ordering
-		if (lastKey > key) {
-			throw new Error(`entries are out of order; cid=${from}`);
-		}
-
-		// Process right child
-		const right = await dfs(blockmap, entry.t?.$link, targetKey, visited, recursionDepth + 1);
-
-		// Check ordering with right subtree
-		if (right.min && right.min < lastKey) {
-			throw new Error(`entries are out of order; cid=${from}`);
-		}
-
-		found = found || right.found;
-
-		// Check depth ordering
-		if (left.depth !== undefined && left.depth >= thisDepth) {
-			throw new Error(`depths are out of order; cid=${from}`);
-		}
-
-		if (right.depth !== undefined && right.depth >= thisDepth) {
-			throw new Error(`depths are out of order; cid=${from}`);
-		}
-
-		// Update last key based on right subtree
-		lastKey = right.max ?? key;
+		subtree = entry.t;
 	}
 
-	// Check ordering with left subtree
-	if (left.max && firstKey && left.max > firstKey) {
-		throw new Error(`entries are out of order; cid=${from}`);
+	return subtree !== null ? descend(blockmap, subtree, targetKey, depth + 1) : null;
+};
+
+/**
+ * reads and verifies a record block
+ *
+ * @param blockmap a mapping of CID string -> car entry
+ * @param pointer a CID link to the record block
+ * @returns the record if present, or null if its block is absent
+ * @internal
+ */
+const loadRecord = async (blockmap: BlockMap, pointer: CidLink): Promise<VerifiedRecord | null> => {
+	const cid = pointer.$link;
+
+	const block = await loadVerified(blockmap, cid);
+	if (block === undefined) {
+		return null;
 	}
 
-	return {
-		found,
-		min: firstKey,
-		max: lastKey,
-		depth,
-	};
+	return { cid, record: CBOR.decode(block.bytes) };
 };
