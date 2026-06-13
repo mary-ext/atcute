@@ -1,13 +1,13 @@
 import * as CBOR from '@atcute/cbor';
-import type { TreeEntry } from '@atcute/mst';
+import { type TreeEntry, isMstKey } from '@atcute/mst';
 import { decodeUtf8From } from '@atcute/uint8array';
 
 import { assert } from '../utils.ts';
 
 export const parseMstKey = (key: string): { collection: string; rkey: string } => {
-	const slash = key.indexOf('/');
-	assert(slash !== -1, `invalid mst key; key=${key}`);
+	assert(isMstKey(key), `invalid repo path; key=${key}`);
 
+	const slash = key.indexOf('/');
 	return { collection: key.slice(0, slash), rkey: key.slice(slash + 1) };
 };
 

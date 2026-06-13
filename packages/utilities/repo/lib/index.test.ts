@@ -450,4 +450,21 @@ describe('malformed mst nodes', () => {
 		expect(() => Array.from(fromUint8Array(car))).toThrow(/out of order/);
 		await expect(Array.fromAsync(fromStream(new Blob([car]).stream()))).rejects.toThrow(/out of order/);
 	});
+
+	it('rejects a repo path with more than two segments', async () => {
+		const car = await buildNodeCar(
+			[{ p: 0, k: suffix('app.bsky.feed.post/aaaa/bbbb'), v: value, t: null }],
+			[record],
+		);
+
+		expect(() => Array.from(fromUint8Array(car))).toThrow(/invalid repo path/);
+		await expect(Array.fromAsync(fromStream(new Blob([car]).stream()))).rejects.toThrow(/invalid repo path/);
+	});
+
+	it('rejects a repo path with an empty record key', async () => {
+		const car = await buildNodeCar([{ p: 0, k: suffix('app.bsky.feed.post/'), v: value, t: null }], [record]);
+
+		expect(() => Array.from(fromUint8Array(car))).toThrow(/invalid repo path/);
+		await expect(Array.fromAsync(fromStream(new Blob([car]).stream()))).rejects.toThrow(/invalid repo path/);
+	});
 });
