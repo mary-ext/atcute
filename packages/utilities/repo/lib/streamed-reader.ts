@@ -118,7 +118,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 
 				{
 					const roots = await car.roots();
-					assert(roots.length === 1, `expected only 1 root in the car archive; got=${roots.length}`);
+					assert(roots.length >= 1, `expected at least 1 root in the car archive; got=${roots.length}`);
 
 					const rootCid = roots[0].$link;
 					request(rootCid, { t: 0 });

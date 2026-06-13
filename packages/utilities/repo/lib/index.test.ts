@@ -15,13 +15,19 @@ import type { Commit } from './types.ts';
 /**
  * builds a minimal CAR file containing a commit, single MST node, and one record block. the MST node has two
  * entries (different keys) pointing to the same record CID.
+ *
+ * @param options.extraRoot append a second root CID to the CAR header (spec-legal; meaning undefined)
  */
-const buildDuplicateCidCar = async (): Promise<{
+const buildDuplicateCidCar = async (
+	options: { extraRoot?: boolean } = {},
+): Promise<{
 	car: Uint8Array<ArrayBuffer>;
 	recordCid: string;
 	record: unknown;
 	keys: [string, string];
 }> => {
+	const { extraRoot = false } = options;
+
 	const record = { $type: 'app.bsky.feed.post', text: 'hello', createdAt: '2025-01-01T00:00:00.000Z' };
 	const recordBytes = CBOR.encode(record);
 	const recordCid = await CID.create(0x71, recordBytes);
@@ -46,14 +52,11 @@ const buildDuplicateCidCar = async (): Promise<{
 	const commitLink = toCidLink(commitCid);
 
 	const chunks = await Array.fromAsync(
-		writeCarStream(
-			[commitLink],
-			[
-				{ cid: commitCid.bytes, data: commitBytes },
-				{ cid: nodeCid.bytes, data: nodeBytes },
-				{ cid: recordCid.bytes, data: recordBytes },
-			],
-		),
+		writeCarStream(extraRoot ? [commitLink, toCidLink(nodeCid)] : [commitLink], [
+			{ cid: commitCid.bytes, data: commitBytes },
+			{ cid: nodeCid.bytes, data: nodeBytes },
+			{ cid: recordCid.bytes, data: recordBytes },
+		]),
 	);
 
 	return {
@@ -328,6 +331,40 @@ describe('duplicate CID handling', () => {
 		expect(result).toEqual([
 			{ collection: 'app.bsky.feed.post', rkey: 'aaaa', cid: recordCid, record },
 			{ collection: 'app.bsky.feed.post', rkey: 'aaab', cid: recordCid, record },
+		]);
+	});
+});
+
+describe('multiple roots', () => {
+	it('fromUint8Array reads a car with more than one root', async () => {
+		const { car } = await buildDuplicateCidCar({ extraRoot: true });
+
+		const result = Array.from(fromUint8Array(car), (entry) => ({
+			collection: entry.collection,
+			rkey: entry.rkey,
+		}));
+
+		expect(result).toEqual([
+			{ collection: 'app.bsky.feed.post', rkey: 'aaaa' },
+			{ collection: 'app.bsky.feed.post', rkey: 'aaab' },
+		]);
+	});
+
+	it('fromStream reads a car with more than one root', async () => {
+		const { car } = await buildDuplicateCidCar({ extraRoot: true });
+
+		const blob = new Blob([car]);
+		await using repo = fromStream(blob.stream());
+
+		const result = await Array.fromAsync(repo, (entry) => ({
+			collection: entry.collection,
+			rkey: entry.rkey,
+		}));
+
+		expect(repo.missingBlocks).toEqual([]);
+		expect(result).toEqual([
+			{ collection: 'app.bsky.feed.post', rkey: 'aaaa' },
+			{ collection: 'app.bsky.feed.post', rkey: 'aaab' },
 		]);
 	});
 });

@@ -37,8 +37,8 @@ export const verifyRecord = async ({
 	let commit: Commit;
 	{
 		const reader = CAR.fromUint8Array(carBytes);
-		if (reader.header.data.roots.length !== 1) {
-			throw new Error(`car must have exactly one root`);
+		if (reader.header.data.roots.length < 1) {
+			throw new Error(`car must have at least one root`);
 		}
 
 		blockmap = new Map();

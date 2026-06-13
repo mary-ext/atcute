@@ -23,7 +23,7 @@ export function* fromUint8Array(buf: Uint8Array): Generator<RepoEntry> {
 	const car = CAR.fromUint8Array(buf);
 	const roots = car.roots;
 
-	assert(roots.length === 1, `expected only 1 root in the car archive; got=${roots.length}`);
+	assert(roots.length >= 1, `expected at least 1 root in the car archive; got=${roots.length}`);
 
 	const map: EntryMap = new Map();
 	for (const entry of car) {
