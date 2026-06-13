@@ -1,6 +1,5 @@
 import * as CBOR from '@atcute/cbor';
 import { type TreeEntry, isMstKey } from '@atcute/mst';
-import { decodeUtf8From } from '@atcute/uint8array';
 
 import { assert } from '../utils.ts';
 
@@ -17,22 +16,28 @@ export const MAX_MST_DEPTH = 256;
  */
 export const MAX_NODE_ENTRIES = 8192;
 
+/**
+ * splits a validated MST key into its collection and record key. the key must already be validated (see
+ * {@link decodeMstKey}, which enforces {@link isMstKey}).
+ *
+ * @param key the full MST key (`collection/rkey`)
+ * @returns the collection and record key
+ * @internal
+ */
 export const parseMstKey = (key: string): { collection: string; rkey: string } => {
-	assert(isMstKey(key), `invalid repo path; key=${key}`);
-
 	const slash = key.indexOf('/');
 	return { collection: key.slice(0, slash), rkey: key.slice(slash + 1) };
 };
 
 /**
  * reconstructs and validates an MST key from its prefix-compressed tree entry. the prefix length must be in
- * range, the prefix compaction must be maximal (deterministic), and keys must be strictly increasing within a
- * node.
+ * range, the resulting key must be a valid repo path, the prefix compaction must be maximal (deterministic),
+ * and keys must be strictly increasing within a node.
  *
  * @param prevKey the previous entry's key in the same node (empty string for the first entry)
  * @param entry the tree entry to decode
  * @returns the full key for this entry
- * @throws if the entry's prefix length, prefix compaction, or sort order is invalid
+ * @throws if the entry's prefix length, repo path, prefix compaction, or sort order is invalid
  * @internal
  */
 export const decodeMstKey = (prevKey: string, entry: TreeEntry): string => {
@@ -42,10 +47,19 @@ export const decodeMstKey = (prevKey: string, entry: TreeEntry): string => {
 		`invalid mst node; key prefix length out of range; p=${prefixLen}`,
 	);
 
-	const suffix = decodeUtf8From(CBOR.fromBytes(entry.k));
+	// the spec counts the shared prefix and sorts keys by raw bytes, and valid repo paths are ASCII. decode the
+	// suffix bytes 1:1 into code units (as the atproto reference does) so `p` (a byte count) is a valid string
+	// index and string comparison matches byte order; any non-ASCII byte yields a code unit `isMstKey` rejects
+	const bytes = CBOR.fromBytes(entry.k);
+	let suffix = '';
+	for (let i = 0, il = bytes.length; i < il; i++) {
+		suffix += String.fromCharCode(bytes[i]);
+	}
+
 	assert(prevKey[prefixLen] !== suffix[0], `invalid mst node; suboptimal key prefix length`);
 
 	const key = prevKey.slice(0, prefixLen) + suffix;
+	assert(isMstKey(key), `invalid repo path; key=${key}`);
 	assert(key > prevKey, `invalid mst node; keys are out of order`);
 
 	return key;
