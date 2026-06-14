@@ -7,7 +7,7 @@
 static const char BASE58BTC_CHARSET[] = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
 // inverse lookup: ASCII code -> base58 value, 0xff = invalid
-static const uint8_t BASE58BTC_MAP[128] = {
+static const uint8_t BASE58BTC_MAP[256] = {
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -16,6 +16,16 @@ static const uint8_t BASE58BTC_MAP[128] = {
 	0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0xff, 0xff, 0xff, 0xff, 0xff,
 	0xff, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0xff, 0x2c, 0x2d, 0x2e,
 	0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0xff, 0xff, 0xff, 0xff, 0xff,
+
+	// Padding allows for guaranteed in-bounds read by a u8 index, eliminating some branches
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 };
 
 #define BASE 58
@@ -152,12 +162,12 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 
 	// single call: read string directly into a stack buffer if it fits
 	char stack_str[STACK_STR_MAX];
-	char *str;
+	char *str = stack_str;
 	size_t str_len;
 
 	NAPI_CALL_TYPE_ERROR_ON_STATUS(
 		env,
-		napi_get_value_string_latin1(env, argv[0], NULL, 0, &str_len),
+		napi_get_value_string_latin1(env, argv[0], stack_str, STACK_STR_MAX, &str_len),
 		napi_string_expected,
 		ERR_INVALID_ARG,
 		"invalid argument: expected string"
@@ -170,13 +180,15 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 		return result;
 	}
 
-	if (str_len < STACK_STR_MAX) {
-		str = stack_str;
-	} else {
-		str = (char *)malloc(str_len + 1);
-		NAPI_CHECK_ALLOC(env, str);
+	// a full buffer means the string may have been truncated; re-query its exact length to be sure
+	if (str_len == STACK_BUF_MAX - 1) {
+		NAPI_CALL(env, napi_get_value_string_latin1(env, argv[0], NULL, 0, &str_len));
+		if (str_len >= STACK_BUF_MAX) {
+			str = (char *)malloc(str_len + 1);
+			NAPI_CHECK_ALLOC(env, str);
+			NAPI_CALL(env, napi_get_value_string_latin1(env, argv[0], str, str_len + 1, &str_len));
+		}
 	}
-	NAPI_CALL(env, napi_get_value_string_latin1(env, argv[0], str, str_len + 1, &str_len));
 
 	// count and skip leading '1's (leader character)
 	size_t psz = 0;
@@ -207,8 +219,8 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 
 	// process 3 chars at a time where possible
 	// BASE^3 = 195112, max carry = 195112 * 255 + 195111 = 49948771, fits uint32
+	size_t rem = remaining % 3;
 	{
-		size_t rem = remaining % 3;
 		size_t triple_end = str_len - rem;
 
 		while (psz < triple_end) {
@@ -216,15 +228,13 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 			uint8_t r1 = (uint8_t)str[psz + 1];
 			uint8_t r2 = (uint8_t)str[psz + 2];
 
-			if ((r0 | r1 | r2) & 0x80) {
-				goto invalid;
-			}
-
+			// Read guaranteed to be in-bounds.
 			uint8_t c0 = BASE58BTC_MAP[r0];
 			uint8_t c1 = BASE58BTC_MAP[r1];
 			uint8_t c2 = BASE58BTC_MAP[r2];
 
-			if (c0 == 0xff || c1 == 0xff || c2 == 0xff) {
+			// Only 0xff has the msb set in BASE58BTC_MAP.
+			if ((c0 | c1 | c2) & 0x80) {
 				goto invalid;
 			}
 
@@ -243,18 +253,14 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 	}
 
 	// remaining 1-2 characters
-	if (remaining % 3 >= 2) {
+	if (rem >= 2) {
 		uint8_t r0 = (uint8_t)str[psz];
 		uint8_t r1 = (uint8_t)str[psz + 1];
-
-		if ((r0 | r1) & 0x80) {
-			goto invalid;
-		}
 
 		uint8_t c0 = BASE58BTC_MAP[r0];
 		uint8_t c1 = BASE58BTC_MAP[r1];
 
-		if (c0 == 0xff || c1 == 0xff) {
+		if ((c0 | c1) & 0x80) {
 			goto invalid;
 		}
 
@@ -273,13 +279,8 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 
 	if (psz < str_len) {
 		uint8_t r = (uint8_t)str[psz];
-
-		if (r & 0x80) {
-			goto invalid;
-		}
-
 		uint8_t c = BASE58BTC_MAP[r];
-		if (c == 0xff) {
+		if (c & 0x80) {
 			goto invalid;
 		}
 
