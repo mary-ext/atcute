@@ -1,2 +1,2 @@
 CompileFlags:
-    Add: [-Inode_modules/.napi-include]
+    Add: [-Inode_modules/.napi-include, -Inative-shared]

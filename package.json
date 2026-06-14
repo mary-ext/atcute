@@ -9,6 +9,7 @@
 		"@changesets/cli": "^2.31.0",
 		"@mary/tar": "jsr:^0.3.2",
 		"@mitata/counters": "^0.0.8",
+		"@pnpm/workspace.root-finder": "^1100.0.1",
 		"@typescript/native-preview": "7.0.0-dev.20260527.2",
 		"mitata": "^1.0.34",
 		"oxfmt": "^0.52.0",

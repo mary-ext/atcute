@@ -4,10 +4,10 @@
  * includes ASCII fast path and inlined UTF-8 decoder.
  */
 
+#include "napi_utils.h"
 #include <node_api.h>
-#include <stdbool.h>
-#include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #define STACK_BUF_MAX 4096
 
@@ -410,62 +410,92 @@ static bool grapheme_count_in_range(const char16_t *str, int len, int min_len, i
  * than the usual query-length-then-copy pair. on return *out_buf points at the data and must be freed
  * iff it differs from stack_buf.
  */
-static size_t load_string_utf16(napi_env env, napi_value value, char16_t *stack_buf, char16_t **out_buf) {
+static napi_status load_string_utf16(napi_env env, napi_value value, char16_t *stack_buf, char16_t **out_buf, size_t *out_len) {
 	size_t len;
-	napi_get_value_string_utf16(env, value, stack_buf, STACK_BUF_MAX, &len);
+	NAPI_CHECKED(napi_get_value_string_utf16(env, value, stack_buf, STACK_BUF_MAX, &len));
 
 	// a full buffer means the string may have been truncated; re-query its exact length to be sure
 	if (len == STACK_BUF_MAX - 1) {
 		size_t full_len;
-		napi_get_value_string_utf16(env, value, NULL, 0, &full_len);
+		NAPI_CHECKED(napi_get_value_string_utf16(env, value, NULL, 0, &full_len));
 		if (full_len >= STACK_BUF_MAX) {
-			char16_t *heap = (char16_t *)__builtin_malloc((full_len + 1) * sizeof(char16_t));
-			napi_get_value_string_utf16(env, value, heap, full_len + 1, &full_len);
+			char16_t *heap = (char16_t *)malloc((full_len + 1) * sizeof(char16_t));
+			NAPI_CHECK_ALLOC(env, heap);
+
+			NAPI_CHECKED_CLEANUP(napi_get_value_string_utf16(env, value, heap, full_len + 1, &full_len), {
+				free(heap);
+			});
+
 			*out_buf = heap;
-			return full_len;
+			*out_len = full_len;
+			return napi_ok;
 		}
 	}
 
 	*out_buf = stack_buf;
-	return len;
+	*out_len = len;
+	return napi_ok;
 }
 
 static napi_value napi_get_grapheme_length(napi_env env, napi_callback_info info) {
-	size_t argc = 1;
-	napi_value argv[1];
-	napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
+	NAPI_GET_ARGS(env, info, 1);
 
 	char16_t stack_buf[STACK_BUF_MAX];
 	char16_t *buf;
-	size_t utf16_len = load_string_utf16(env, argv[0], stack_buf, &buf);
+	size_t utf16_len;
+	NAPI_CALL_TYPE_ERROR_ON_STATUS(
+		env,
+		load_string_utf16(env, argv[0], stack_buf, &buf, &utf16_len),
+		napi_string_expected,
+		ERR_INVALID_ARG,
+		"invalid argument: expected string"
+	);
 
 	int result_count = grapheme_count(buf, (int)utf16_len);
 
-	if (buf != stack_buf) __builtin_free(buf);
+	if (buf != stack_buf) free(buf);
 
 	napi_value result;
-	napi_create_int32(env, result_count, &result);
+	NAPI_CALL(env, napi_create_int32(env, result_count, &result));
 	return result;
 }
 
 static napi_value napi_is_grapheme_length_in_range(napi_env env, napi_callback_info info) {
-	size_t argc = 3;
-	napi_value argv[3];
-	napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
+	NAPI_GET_ARGS(env, info, 3);
 
 	int32_t min_len, max_len;
-	napi_get_value_int32(env, argv[1], &min_len);
-	napi_get_value_int32(env, argv[2], &max_len);
-
 	char16_t stack_buf[STACK_BUF_MAX];
 	char16_t *buf = stack_buf;
 	size_t utf16_len;
-	napi_get_value_string_utf16(env, argv[0], stack_buf, STACK_BUF_MAX, &utf16_len);
+
+	NAPI_CALL_TYPE_ERROR_ON_STATUS(
+		env,
+		napi_get_value_string_utf16(env, argv[0], stack_buf, STACK_BUF_MAX, &utf16_len),
+		napi_string_expected,
+		ERR_INVALID_ARG,
+		"invalid 1st argument: expected string"
+	);
+
+	NAPI_CALL_TYPE_ERROR_ON_STATUS(
+		env,
+		napi_get_value_int32(env, argv[1], &min_len),
+		napi_number_expected,
+		ERR_INVALID_ARG,
+		"invalid 2nd argument: expected number"
+	);
+
+	NAPI_CALL_TYPE_ERROR_ON_STATUS(
+		env,
+		napi_get_value_int32(env, argv[2], &max_len),
+		napi_number_expected,
+		ERR_INVALID_ARG,
+		"invalid 3rd argument: expected number"
+	);
 
 	// a full buffer means the string may have been truncated; re-query its exact length to be sure
 	if (utf16_len == STACK_BUF_MAX - 1) {
 		size_t full_len;
-		napi_get_value_string_utf16(env, argv[0], NULL, 0, &full_len);
+		NAPI_CALL(env, napi_get_value_string_utf16(env, argv[0], NULL, 0, &full_len));
 		if (full_len >= STACK_BUF_MAX) {
 			// the string overflows the buffer. grapheme count only grows with length, so if the prefix
 			// already loaded exceeds max the whole string does too — reject without copying the rest.
@@ -476,12 +506,16 @@ static napi_value napi_is_grapheme_length_in_range(napi_env env, napi_callback_i
 			}
 			if (grapheme_count_impl(stack_buf, prefix_len, max_len) > max_len) {
 				napi_value r;
-				napi_get_boolean(env, false, &r);
+				NAPI_CALL(env, napi_get_boolean(env, false, &r));
 				return r;
 			}
 
-			buf = (char16_t *)__builtin_malloc((full_len + 1) * sizeof(char16_t));
-			napi_get_value_string_utf16(env, argv[0], buf, full_len + 1, &full_len);
+			buf = (char16_t *)malloc((full_len + 1) * sizeof(char16_t));
+			NAPI_CHECK_ALLOC(env, buf);
+
+			NAPI_CALL_CLEANUP(env, napi_get_value_string_utf16(env, argv[0], buf, full_len + 1, &full_len), {
+				free(buf);
+			});
 			utf16_len = full_len;
 		}
 	}
@@ -495,10 +529,10 @@ static napi_value napi_is_grapheme_length_in_range(napi_env env, napi_callback_i
 		in_range = grapheme_count_in_range(buf, (int)utf16_len, min_len, max_len);
 	}
 
-	if (buf != stack_buf) __builtin_free(buf);
+	if (buf != stack_buf) free(buf);
 
 	napi_value r;
-	napi_get_boolean(env, in_range, &r);
+	NAPI_CALL(env, napi_get_boolean(env, in_range, &r));
 	return r;
 }
 

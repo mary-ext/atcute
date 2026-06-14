@@ -2,10 +2,12 @@ import { execSync } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { findWorkspaceDir } from '@pnpm/workspace.root-finder';
 import { build } from 'zig-build';
 
 const nodeVersion = process.version.slice(1);
 const zigBuildDir = join(process.env.HOME || process.env.USERPROFILE, '.zig-build');
+const workspaceDir = await findWorkspaceDir(import.meta.dirname);
 
 // zig-build only downloads headers, but Windows linking requires node.lib
 const nodeLibDir = join(zigBuildDir, 'node', `v${nodeVersion}`, 'lib');
@@ -17,6 +19,7 @@ if (!existsSync(join(nodeLibDir, 'node.lib'))) {
 }
 
 const shared = {
+	include: [join(workspaceDir, 'native-shared')],
 	sources: ['src/base58.c'],
 	napiVersion: 1,
 	cflags: ['-Wall', '-Wextra'],

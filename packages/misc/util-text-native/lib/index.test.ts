@@ -80,6 +80,44 @@ describe.skipIf(!hasNative)('native', () => {
 		expect(isGraphemeLengthInRangeNode(splitBoundary, 4093, 4093)).toBe(true);
 		expect(isGraphemeLengthInRangeNode(splitBoundary, 0, 4092)).toBe(false);
 	});
+
+	it('getGraphemeLength safely fails on invalid input', () => {
+		const getGraphemeLengthNodeAny = getGraphemeLengthNode as any;
+
+		expect(() => getGraphemeLengthNodeAny(1337)).toThrow(TypeError);
+		expect(() => getGraphemeLengthNodeAny(new Uint8Array(10))).toThrow(TypeError);
+		expect(() => getGraphemeLengthNodeAny(null)).toThrow(TypeError);
+		expect(() => getGraphemeLengthNodeAny()).toThrow(TypeError);
+	});
+
+	it('isGraphemeLengthInRangeNode safely fails on invalid input', () => {
+		const isGraphemeLengthInRangeNodeAny = isGraphemeLengthInRangeNode as any;
+
+		const invalidArg1 = [1337, new Uint8Array(10), null];
+		const invalidArg2 = ['wow', new Uint8Array(10), null];
+		const invalidArg3 = ['wow', new Uint8Array(10), null];
+
+		for (const arg1 of invalidArg1) {
+			for (const arg2 of invalidArg2) {
+				for (const arg3 of invalidArg3) {
+					expect(() => isGraphemeLengthInRangeNodeAny('wow', 0, arg3)).toThrow(TypeError);
+					expect(() => isGraphemeLengthInRangeNodeAny('wow', arg2, arg3)).toThrow(TypeError);
+					expect(() => isGraphemeLengthInRangeNodeAny(arg1, 0, arg3)).toThrow(TypeError);
+					expect(() => isGraphemeLengthInRangeNodeAny(arg1, arg2, arg3)).toThrow(TypeError);
+				}
+
+				expect(() => isGraphemeLengthInRangeNodeAny(arg1, arg2, 4096)).toThrow(TypeError);
+				expect(() => isGraphemeLengthInRangeNodeAny(arg1, arg2)).toThrow(TypeError);
+			}
+
+			expect(() => isGraphemeLengthInRangeNodeAny(arg1, 0)).toThrow(TypeError);
+			expect(() => isGraphemeLengthInRangeNodeAny(arg1)).toThrow(TypeError);
+		}
+
+		expect(() => isGraphemeLengthInRangeNodeAny()).toThrow(TypeError);
+		expect(() => isGraphemeLengthInRangeNodeAny('wow')).toThrow(TypeError);
+		expect(() => isGraphemeLengthInRangeNodeAny('wow', 0)).toThrow(TypeError);
+	});
 });
 
 // #region Unicode conformance tests (GraphemeBreakTest.txt)

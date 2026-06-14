@@ -67,4 +67,22 @@ describe.skipIf(!hasNative)('native', () => {
 			expect(Uint8Array.from(fromBase58BtcNode(encoded))).toEqual(buffer);
 		}
 	});
+
+	it('encode safely fails on invalid input', () => {
+		const toBase58BtcNodeAny = toBase58BtcNode as any;
+		expect(() => toBase58BtcNodeAny('lmao')).toThrow(TypeError);
+		expect(() => toBase58BtcNodeAny(1337)).toThrow(TypeError);
+		expect(() => toBase58BtcNodeAny(null)).toThrow(TypeError);
+		expect(() => toBase58BtcNodeAny()).toThrow(TypeError);
+	});
+
+	it('decode safely fails on invalid input', () => {
+		const fromBase58BtcNodeAny = fromBase58BtcNode as any;
+		expect(() => fromBase58BtcNodeAny(new Uint8Array(15))).toThrow(TypeError);
+		expect(() => fromBase58BtcNodeAny(1337)).toThrow(TypeError);
+		expect(() => fromBase58BtcNodeAny(null)).toThrow(TypeError);
+		expect(() => fromBase58BtcNodeAny()).toThrow(TypeError);
+
+		expect(() => fromBase58BtcNodeAny('\u{1F407}\u{1F338}\u{1F338}\u{1F338}\u{1F338}')).toThrow();
+	});
 });

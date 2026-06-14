@@ -1,3 +1,4 @@
+#include "napi_utils.h"
 #include <node_api.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -26,25 +27,23 @@ static const uint8_t BASE58BTC_MAP[128] = {
 #define STACK_STR_MAX 128
 #define STACK_BUF_MAX 96
 
-static void finalize_external_bytes(napi_env env, void *data, void *hint) {
-	(void)env;
-	(void)hint;
-	free(data);
-}
-
 // encode: Uint8Array -> string
 static napi_value base58_encode(napi_env env, napi_callback_info info) {
-	size_t argc = 1;
-	napi_value argv[1];
-	napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
+	NAPI_GET_ARGS(env, info, 1);
 
 	uint8_t *source;
 	size_t source_len;
-	napi_get_typedarray_info(env, argv[0], NULL, &source_len, (void **)&source, NULL, NULL);
+	NAPI_CALL_TYPE_ERROR_ON_STATUS(
+		env,
+		napi_get_typedarray_info(env, argv[0], NULL, &source_len, (void **)&source, NULL, NULL),
+		napi_invalid_arg,
+		ERR_INVALID_ARG,
+		"invalid argument: expected typed array"
+	);
 
 	if (source_len == 0) {
 		napi_value result;
-		napi_create_string_utf8(env, "", 0, &result);
+		NAPI_CALL(env, napi_create_string_utf8(env, "", 0, &result));
 		return result;
 	}
 
@@ -62,18 +61,13 @@ static napi_value base58_encode(napi_env env, napi_callback_info info) {
 
 	uint8_t stack_bN[STACK_BUF_MAX];
 	uint8_t *bN;
-	int bN_heap = 0;
 
 	if (size <= STACK_BUF_MAX) {
 		bN = stack_bN;
 		memset(bN, 0, size);
 	} else {
 		bN = (uint8_t *)calloc(size, 1);
-		if (!bN) {
-			napi_throw_error(env, NULL, "allocation failed");
-			return NULL;
-		}
-		bN_heap = 1;
+		NAPI_CHECK_ALLOC(env, bN);
 	}
 
 	size_t length = 0;
@@ -126,18 +120,14 @@ static napi_value base58_encode(napi_env env, napi_callback_info info) {
 
 	char stack_out[STACK_STR_MAX];
 	char *out;
-	int out_heap = 0;
 
 	if (out_len < STACK_STR_MAX) {
 		out = stack_out;
 	} else {
 		out = (char *)malloc(out_len + 1);
-		if (!out) {
-			if (bN_heap) free(bN);
-			napi_throw_error(env, NULL, "allocation failed");
-			return NULL;
-		}
-		out_heap = 1;
+		NAPI_CHECK_ALLOC_CLEANUP(env, out, {
+			if (bN != stack_bN) free(bN);
+		});
 	}
 
 	memset(out, BASE58BTC_CHARSET[0], zeroes);
@@ -145,33 +135,38 @@ static napi_value base58_encode(napi_env env, napi_callback_info info) {
 		out[j] = BASE58BTC_CHARSET[bN[it]];
 	}
 
-	if (bN_heap) free(bN);
+	if (bN != stack_bN) free(bN);
 
 	napi_value result;
-	napi_create_string_utf8(env, out, out_len, &result);
+	NAPI_CALL_CLEANUP(env, napi_create_string_utf8(env, out, out_len, &result), {
+		if (out != stack_out) free(out);
+	});
 
-	if (out_heap) free(out);
+	if (out != stack_out) free(out);
 	return result;
 }
 
 // decode: string -> Uint8Array
 static napi_value base58_decode(napi_env env, napi_callback_info info) {
-	size_t argc = 1;
-	napi_value argv[1];
-	napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
+	NAPI_GET_ARGS(env, info, 1);
 
 	// single call: read string directly into a stack buffer if it fits
 	char stack_str[STACK_STR_MAX];
 	char *str;
-	int str_heap = 0;
 	size_t str_len;
 
-	napi_get_value_string_latin1(env, argv[0], NULL, 0, &str_len);
+	NAPI_CALL_TYPE_ERROR_ON_STATUS(
+		env,
+		napi_get_value_string_latin1(env, argv[0], NULL, 0, &str_len),
+		napi_string_expected,
+		ERR_INVALID_ARG,
+		"invalid argument: expected string"
+	);
 
 	if (str_len == 0) {
 		napi_value ab, result;
-		napi_create_arraybuffer(env, 0, NULL, &ab);
-		napi_create_typedarray(env, napi_uint8_array, 0, ab, 0, &result);
+		NAPI_CALL(env, napi_create_arraybuffer(env, 0, NULL, &ab));
+		NAPI_CALL(env, napi_create_typedarray(env, napi_uint8_array, 0, ab, 0, &result));
 		return result;
 	}
 
@@ -179,13 +174,9 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 		str = stack_str;
 	} else {
 		str = (char *)malloc(str_len + 1);
-		if (!str) {
-			napi_throw_error(env, NULL, "allocation failed");
-			return NULL;
-		}
-		str_heap = 1;
+		NAPI_CHECK_ALLOC(env, str);
 	}
-	napi_get_value_string_latin1(env, argv[0], str, str_len + 1, &str_len);
+	NAPI_CALL(env, napi_get_value_string_latin1(env, argv[0], str, str_len + 1, &str_len));
 
 	// count and skip leading '1's (leader character)
 	size_t psz = 0;
@@ -201,19 +192,15 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 
 	uint8_t stack_b256[STACK_BUF_MAX];
 	uint8_t *b256;
-	int b256_heap = 0;
 
 	if (size <= STACK_BUF_MAX) {
 		b256 = stack_b256;
 		memset(b256, 0, size);
 	} else {
 		b256 = (uint8_t *)calloc(size, 1);
-		if (!b256) {
-			if (str_heap) free(str);
-			napi_throw_error(env, NULL, "allocation failed");
-			return NULL;
-		}
-		b256_heap = 1;
+		NAPI_CHECK_ALLOC_CLEANUP(env, b256, {
+			if (str != stack_str) free(str);
+		});
 	}
 
 	size_t length = 0;
@@ -307,7 +294,7 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 		length = i;
 	}
 
-	if (str_heap) free(str);
+	if (str != stack_str) free(str);
 
 	{
 		// skip leading zeroes in b256
@@ -318,26 +305,23 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 
 		// build output
 		size_t out_len = zeroes + (size - it);
-		uint8_t *out = (uint8_t *)malloc(out_len);
-		if (!out) {
-			if (b256_heap) free(b256);
-			napi_throw_error(env, NULL, "allocation failed");
-			return NULL;
-		}
+		napi_value result;
+		uint8_t *out;
+
+		NAPI_CALL_CLEANUP(env, napi_create_buffer(env, out_len, (void **)&out, &result), {
+			if (b256 != stack_b256) free(b256);
+		});
 
 		memset(out, 0, zeroes);
 		memcpy(out + zeroes, b256 + it, size - it);
 
-		if (b256_heap) free(b256);
-
-		napi_value result;
-		napi_create_external_buffer(env, out_len, (char *)out, finalize_external_bytes, NULL, &result);
+		if (b256 != stack_b256) free(b256);
 		return result;
 	}
 
 invalid:
-	if (str_heap) free(str);
-	if (b256_heap) free(b256);
+	if (str != stack_str) free(str);
+	if (b256 != stack_b256) free(b256);
 	napi_throw_error(env, NULL, "invalid string");
 	return NULL;
 }
