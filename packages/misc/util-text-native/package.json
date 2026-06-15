@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/util-text-native",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "internal text utilities with native grapheme counting",
 	"license": "0BSD",
 	"repository": {

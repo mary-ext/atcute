@@ -1,5 +1,11 @@
 # @atcute/util-text-native
 
+## 1.0.2
+
+### Patch Changes
+
+- 831cc97: fix native prebuilds failing to compile
+
 ## 1.0.1
 
 ### Patch Changes
