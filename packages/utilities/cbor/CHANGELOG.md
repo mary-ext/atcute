@@ -1,5 +1,23 @@
 # @atcute/cbor
 
+## 2.3.4
+
+### Patch Changes
+
+- 5cbefa3: sort map keys by their utf-8 bytes so maps with non-ascii keys encode and decode in
+  canonical order, rather than by utf-16 code units
+- 09edf9d: reject decoding the negative integer one past the safe-integer range (-(2^53)), which the
+  encoder could not round-trip
+- ff1bb77: reject NaN and infinity floats when decoding, matching the encoder
+- 0c30865: reject truncated and out-of-bounds input when decoding, instead of silently returning
+  partial values or pre-allocating an array larger than the remaining input
+- Updated dependencies [5afc172]
+- Updated dependencies [ac4d22b]
+- Updated dependencies [ebcc548]
+- Updated dependencies [4842999]
+- Updated dependencies [40082d8]
+  - @atcute/multibase@1.2.2
+
 ## 2.3.3
 
 ### Patch Changes

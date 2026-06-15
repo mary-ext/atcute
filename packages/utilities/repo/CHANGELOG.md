@@ -1,5 +1,34 @@
 # @atcute/repo
 
+## 1.0.1
+
+### Patch Changes
+
+- f1a35e4: accept car archives that declare more than one root, reading the repository from the
+  first root as the spec allows
+- 144f9e3: bound mst traversal depth and node entry counts to reject hostile car archives that would
+  otherwise exhaust the stack or amplify processing cost
+- 836f44b: validate mst node key prefix lengths, prefix compaction, and sort order while reading,
+  rejecting malformed nodes instead of yielding corrupt keys
+- ff9eb3b: reject records whose repo path is not a valid `<collection>/<record-key>` pair instead of
+  splitting on the first slash
+- bf8f0ce: verify a record's inclusion by descending only the proof path to its key, instead of
+  walking and hashing the entire tree
+- Updated dependencies [53b7f47]
+- Updated dependencies [307f10d]
+- Updated dependencies [fb8b1e8]
+- Updated dependencies [07da59d]
+- Updated dependencies [2501e17]
+- Updated dependencies [ef3624b]
+- Updated dependencies [5cbefa3]
+- Updated dependencies [09edf9d]
+- Updated dependencies [ff1bb77]
+- Updated dependencies [0c30865]
+- Updated dependencies [c1cf758]
+  - @atcute/car@6.0.1
+  - @atcute/cbor@2.3.4
+  - @atcute/lexicons@2.0.1
+
 ## 1.0.0
 
 ### Patch Changes

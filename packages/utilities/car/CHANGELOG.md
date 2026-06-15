@@ -1,5 +1,21 @@
 # @atcute/car
 
+## 6.0.1
+
+### Patch Changes
+
+- 53b7f47: reject blocks whose declared length is smaller than a cid
+- 307f10d: skip zero-length chunks in the streaming reader instead of misreading them
+- fb8b1e8: allow the sync reader to be iterated more than once
+- 07da59d: reject overlong varints in the streaming reader
+- 2501e17: faster streaming reads by avoiding per-byte and per-block copies
+- ef3624b: faster writes by encoding the length prefix in place
+- Updated dependencies [5cbefa3]
+- Updated dependencies [09edf9d]
+- Updated dependencies [ff1bb77]
+- Updated dependencies [0c30865]
+  - @atcute/cbor@2.3.4
+
 ## 6.0.0
 
 ### Major Changes

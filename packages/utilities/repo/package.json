@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/repo",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "AT Protocol repository decoder for AT Protocol.",
 	"keywords": [
 		"atproto",

@@ -1,5 +1,15 @@
 # @atcute/multibase
 
+## 1.2.2
+
+### Patch Changes
+
+- 5afc172: reject non-ascii characters when decoding base32
+- ac4d22b: faster base58 decoding
+- ebcc548: faster base58 encoding
+- 4842999: faster base64 and base16 decoding
+- 40082d8: fix undefined behaviour and invalid pointer dereferences in native code
+
 ## 1.2.1
 
 ### Patch Changes

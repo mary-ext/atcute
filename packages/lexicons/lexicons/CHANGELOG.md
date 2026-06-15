@@ -1,5 +1,12 @@
 # @atcute/lexicons
 
+## 2.0.1
+
+### Patch Changes
+
+- c1cf758: fix forward references in constrained arrays so schemas with circular definitions (such
+  as `app.bsky.draft.defs`) no longer throw a "cannot access before initialization" error on import
+
 ## 2.0.0
 
 ### Major Changes

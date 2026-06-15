@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/lexicons",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "AT Protocol core lexicon types and schema validations",
 	"license": "0BSD",
 	"repository": {
