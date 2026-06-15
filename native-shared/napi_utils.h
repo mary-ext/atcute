@@ -98,3 +98,14 @@ static inline napi_value napi_bugcheck(napi_env env, const char* fallback_err) {
 			return NULL;				\
 		}								\
 	} while (0)
+
+// status-returning counterpart of NAPI_CHECK_ALLOC, for functions that return napi_status
+#define NAPI_CHECKED_ALLOC(env, buf) NAPI_CHECKED_ALLOC_CLEANUP(env, buf, ;)
+#define NAPI_CHECKED_ALLOC_CLEANUP(env, buf, cleanup) \
+	do {								\
+		if (buf == NULL) {				\
+			do { cleanup } while (0);	\
+			napi_throw_error(env, NULL, "allocation failed"); \
+			return napi_generic_failure;	\
+		}								\
+	} while (0)

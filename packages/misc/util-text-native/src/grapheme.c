@@ -420,7 +420,7 @@ static napi_status load_string_utf16(napi_env env, napi_value value, char16_t *s
 		NAPI_CHECKED(napi_get_value_string_utf16(env, value, NULL, 0, &full_len));
 		if (full_len >= STACK_BUF_MAX) {
 			char16_t *heap = (char16_t *)malloc((full_len + 1) * sizeof(char16_t));
-			NAPI_CHECK_ALLOC(env, heap);
+			NAPI_CHECKED_ALLOC(env, heap);
 
 			NAPI_CHECKED_CLEANUP(napi_get_value_string_utf16(env, value, heap, full_len + 1, &full_len), {
 				free(heap);
