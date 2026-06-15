@@ -181,9 +181,9 @@ static napi_value base58_decode(napi_env env, napi_callback_info info) {
 	}
 
 	// a full buffer means the string may have been truncated; re-query its exact length to be sure
-	if (str_len == STACK_BUF_MAX - 1) {
+	if (str_len == STACK_STR_MAX - 1) {
 		NAPI_CALL(env, napi_get_value_string_latin1(env, argv[0], NULL, 0, &str_len));
-		if (str_len >= STACK_BUF_MAX) {
+		if (str_len >= STACK_STR_MAX) {
 			str = (char *)malloc(str_len + 1);
 			NAPI_CHECK_ALLOC(env, str);
 			NAPI_CALL(env, napi_get_value_string_latin1(env, argv[0], str, str_len + 1, &str_len));

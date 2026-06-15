@@ -68,6 +68,15 @@ describe.skipIf(!hasNative)('native', () => {
 		}
 	});
 
+	it('roundtrips strings that overflow the stack buffer', () => {
+		// inputs long enough to exceed the 128-byte stack string buffer (~94+ bytes)
+		for (const size of [93, 94, 96, 128, 256]) {
+			const buffer = crypto.getRandomValues(new Uint8Array(size));
+			const encoded = toBase58BtcNode(buffer);
+			expect(Uint8Array.from(fromBase58BtcNode(encoded))).toEqual(buffer);
+		}
+	});
+
 	it('encode safely fails on invalid input', () => {
 		const toBase58BtcNodeAny = toBase58BtcNode as any;
 		expect(() => toBase58BtcNodeAny('lmao')).toThrow(TypeError);
