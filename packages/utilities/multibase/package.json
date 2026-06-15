@@ -10,8 +10,6 @@
 	"files": [
 		"dist/",
 		"lib/",
-		"prebuilds/**/*.node",
-		"src/",
 		"!lib/**/*.bench.ts",
 		"!lib/**/*.test.ts",
 		"!dist/**/*.{test,bench}.*"
@@ -29,10 +27,7 @@
 			"bun": "./dist/bases/base32-encode.bun.js",
 			"default": "./dist/bases/base32-encode.js"
 		},
-		"#bases/base58": {
-			"node": "./dist/bases/base58.node.js",
-			"default": "./dist/bases/base58.js"
-		},
+		"#bases/base58": "./dist/bases/base58.js",
 		"#bases/base64": {
 			"bun": "./dist/bases/base64-web.js",
 			"workerd": "./dist/bases/base64-web.js",
@@ -47,10 +42,9 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build:native": "node build.native.js",
 		"build": "tsgo",
 		"test": "vitest",
-		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
+		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
 		"@atcute/uint8array": "workspace:^"
@@ -58,7 +52,6 @@
 	"devDependencies": {
 		"@types/node": "^25.9.1",
 		"@vitest/coverage-v8": "^4.1.7",
-		"vitest": "^4.1.7",
-		"zig-build": "^0.3.0"
+		"vitest": "^4.1.7"
 	}
 }

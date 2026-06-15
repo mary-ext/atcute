@@ -1,10 +1,5 @@
-import { describe, expect, it, vi } from 'vitest';
+import { expect, it, vi } from 'vitest';
 
-import {
-	fromBase58Btc as fromBase58BtcNode,
-	hasNative,
-	toBase58Btc as toBase58BtcNode,
-} from './base58.node.ts';
 import { fromBase58Btc, toBase58Btc } from './base58.ts';
 
 vi.mock('@atcute/uint8array', async (importOriginal) => {
@@ -53,45 +48,4 @@ it('can decode', () => {
 	for (const { buffer, encoded } of inputs) {
 		expect(fromBase58Btc(encoded)).toEqual(buffer);
 	}
-});
-
-describe.skipIf(!hasNative)('native', () => {
-	it('encode matches', () => {
-		for (const { buffer, encoded } of inputs) {
-			expect(toBase58BtcNode(buffer)).toEqual(encoded);
-		}
-	});
-
-	it('decode matches', () => {
-		for (const { buffer, encoded } of inputs) {
-			expect(Uint8Array.from(fromBase58BtcNode(encoded))).toEqual(buffer);
-		}
-	});
-
-	it('roundtrips strings that overflow the stack buffer', () => {
-		// inputs long enough to exceed the 128-byte stack string buffer (~94+ bytes)
-		for (const size of [93, 94, 96, 128, 256]) {
-			const buffer = crypto.getRandomValues(new Uint8Array(size));
-			const encoded = toBase58BtcNode(buffer);
-			expect(Uint8Array.from(fromBase58BtcNode(encoded))).toEqual(buffer);
-		}
-	});
-
-	it('encode safely fails on invalid input', () => {
-		const toBase58BtcNodeAny = toBase58BtcNode as any;
-		expect(() => toBase58BtcNodeAny('lmao')).toThrow(TypeError);
-		expect(() => toBase58BtcNodeAny(1337)).toThrow(TypeError);
-		expect(() => toBase58BtcNodeAny(null)).toThrow(TypeError);
-		expect(() => toBase58BtcNodeAny()).toThrow(TypeError);
-	});
-
-	it('decode safely fails on invalid input', () => {
-		const fromBase58BtcNodeAny = fromBase58BtcNode as any;
-		expect(() => fromBase58BtcNodeAny(new Uint8Array(15))).toThrow(TypeError);
-		expect(() => fromBase58BtcNodeAny(1337)).toThrow(TypeError);
-		expect(() => fromBase58BtcNodeAny(null)).toThrow(TypeError);
-		expect(() => fromBase58BtcNodeAny()).toThrow(TypeError);
-
-		expect(() => fromBase58BtcNodeAny('\u{1F407}\u{1F338}\u{1F338}\u{1F338}\u{1F338}')).toThrow();
-	});
 });
