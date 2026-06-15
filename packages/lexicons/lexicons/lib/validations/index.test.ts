@@ -1059,6 +1059,34 @@ describe(`constraints`, () => {
 				]);
 			}
 		});
+
+		it(`does not eagerly resolve a lazy array item`, () => {
+			// regression: spreading the base schema used to invoke its lazy `item`
+			// getter, breaking forward references between generated schemas.
+			let resolved = false;
+
+			const schema = v.constrain(
+				v.array(() => {
+					resolved = true;
+					return v.string();
+				}),
+				[v.arrayLength(0, 2)],
+			);
+
+			expect(resolved).toBe(false);
+
+			expect(v.is(schema, ['alice'])).toBe(true);
+			expect(resolved).toBe(true);
+
+			expect(v.is(schema, ['alice', 'bob', 'mallory'])).toBe(false);
+		});
+
+		it(`enforces constraints through the standard schema interface`, () => {
+			const schema = v.constrain(v.array(v.string()), [v.arrayLength(0, 2)]);
+
+			expect(schema['~standard'].validate(['alice'])).toEqual({ value: ['alice'] });
+			expect(schema['~standard'].validate(['alice', 'bob', 'mallory'])).toHaveProperty('issues');
+		});
 	});
 });
 

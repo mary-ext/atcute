@@ -459,46 +459,50 @@ export const constrain = <
 ): SchemaWithConstraint<TItem, TConstraints> => {
 	const len = constraints.length;
 
-	return {
-		...base,
-		constraints: constraints,
-		'~run'(input, flags) {
-			let result = base['~run'](input, flags);
-			let current: any;
+	const run: Matcher = (input, flags) => {
+		let result = base['~run'](input, flags);
+		let current: any;
 
-			if (result === undefined) {
-				current = input;
-			} else if (result.ok) {
-				current = result.value;
-			} else {
-				return result;
-			}
+		if (result === undefined) {
+			current = input;
+		} else if (result.ok) {
+			current = result.value;
+		} else {
+			return result;
+		}
 
-			for (let idx = 0; idx < len; idx++) {
-				const r = constraints[idx]['~run'](current, flags);
+		for (let idx = 0; idx < len; idx++) {
+			const r = constraints[idx]['~run'](current, flags);
 
-				if (r !== undefined) {
-					if (r.ok) {
-						current = r.value;
+			if (r !== undefined) {
+				if (r.ok) {
+					current = r.value;
 
-						if (result === undefined || result.ok) {
-							result = r;
-						}
+					if (result === undefined || result.ok) {
+						result = r;
+					}
+				} else {
+					if (flags & FLAG_ABORT_EARLY) {
+						return r;
+					} else if (result === undefined || result.ok) {
+						result = r;
 					} else {
-						if (flags & FLAG_ABORT_EARLY) {
-							return r;
-						} else if (result === undefined || result.ok) {
-							result = r;
-						} else {
-							result = joinIssues(result, r);
-						}
+						result = joinIssues(result, r);
 					}
 				}
 			}
+		}
 
-			return result;
-		},
+		return result;
 	};
+
+	// inherit from `base` rather than spreading it; a spread would eagerly invoke
+	// base's lazy getters (e.g. an array's `item`), defeating forward references.
+	// define properties directly to bypass base's `~run` accessor (which has no setter).
+	return Object.defineProperties(Object.create(base), {
+		'~run': { enumerable: true, value: run },
+		constraints: { enumerable: true, value: constraints },
+	});
 };
 
 // #region Base metadata
