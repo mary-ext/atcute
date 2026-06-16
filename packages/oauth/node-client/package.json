@@ -7,6 +7,10 @@
 		"url": "https://github.com/mary-ext/atcute",
 		"directory": "packages/oauth/node-client"
 	},
+	"homepage": "https://github.com/mary-ext/atcute/tree/trunk/packages/oauth/node-client#readme",
+	"bugs": {
+		"url": "https://github.com/mary-ext/atcute/issues"
+	},
 	"files": [
 		"dist/",
 		"lib/",
