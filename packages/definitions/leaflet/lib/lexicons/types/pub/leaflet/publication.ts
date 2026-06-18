@@ -39,6 +39,8 @@ const _preferencesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.publication#preferences')),
 	/** @default true */
 	showComments: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+	/** @default false */
+	showFirstLast: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 	/** @default true */
 	showInDiscover: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 	/** @default true */

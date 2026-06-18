@@ -101,6 +101,10 @@
 					"type": "boolean",
 					"default": true
 				},
+				"showFirstLast": {
+					"type": "boolean",
+					"default": false
+				},
 				"showInDiscover": {
 					"type": "boolean",
 					"default": true
