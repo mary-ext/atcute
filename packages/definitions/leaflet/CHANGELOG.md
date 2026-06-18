@@ -1,5 +1,11 @@
 # @atcute/leaflet
 
+## 2.0.6
+
+### Patch Changes
+
+- 31c7a20: pull latest Leaflet lexicons
+
 ## 2.0.5
 
 ### Patch Changes

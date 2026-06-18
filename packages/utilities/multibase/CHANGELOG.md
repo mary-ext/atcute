@@ -1,5 +1,11 @@
 # @atcute/multibase
 
+## 1.2.3
+
+### Patch Changes
+
+- b868dba: drop the native base58 module in favor of the JS implementation
+
 ## 1.2.2
 
 ### Patch Changes
