@@ -409,6 +409,10 @@ const _messageInputSchema = /*#__PURE__*/ v.object({
 	get facets() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(AppBskyRichtextFacet.mainSchema));
 	},
+	/** If set, the message this message is replying to. The referenced message must be in the same convo. */
+	get replyTo() {
+		return /*#__PURE__*/ v.optional(replyRefSchema);
+	},
 	/**
 	 * @maxLength 10000
 	 * @maxGraphemes 1000
@@ -440,6 +444,14 @@ const _messageViewSchema = /*#__PURE__*/ v.object({
 	get reactions() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(reactionViewSchema));
 	},
+	/**
+	 * If set, the message this message is replying to. The full view of the referenced message is embedded so
+	 * the client can render it inline. Only a single level is embedded: the embedded message will not itself
+	 * have a populated 'replyTo' field even if it was also a reply.
+	 */
+	get replyTo() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([deletedMessageViewSchema, messageViewSchema]));
+	},
 	rev: /*#__PURE__*/ v.string(),
 	get sender() {
 		return messageViewSenderSchema;
@@ -469,6 +481,10 @@ const _reactionViewSchema = /*#__PURE__*/ v.object({
 const _reactionViewSenderSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#reactionViewSender')),
 	did: /*#__PURE__*/ v.didString(),
+});
+const _replyRefSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#replyRef')),
+	messageId: /*#__PURE__*/ v.string(),
 });
 const _systemMessageDataAddMemberSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#systemMessageDataAddMember')),
@@ -655,6 +671,7 @@ type messageView$schematype = typeof _messageViewSchema;
 type messageViewSender$schematype = typeof _messageViewSenderSchema;
 type reactionView$schematype = typeof _reactionViewSchema;
 type reactionViewSender$schematype = typeof _reactionViewSenderSchema;
+type replyRef$schematype = typeof _replyRefSchema;
 type systemMessageDataAddMember$schematype = typeof _systemMessageDataAddMemberSchema;
 type systemMessageDataCreateJoinLink$schematype = typeof _systemMessageDataCreateJoinLinkSchema;
 type systemMessageDataDisableJoinLink$schematype = typeof _systemMessageDataDisableJoinLinkSchema;
@@ -715,6 +732,7 @@ export interface messageViewSchema extends messageView$schematype {}
 export interface messageViewSenderSchema extends messageViewSender$schematype {}
 export interface reactionViewSchema extends reactionView$schematype {}
 export interface reactionViewSenderSchema extends reactionViewSender$schematype {}
+export interface replyRefSchema extends replyRef$schematype {}
 export interface systemMessageDataAddMemberSchema extends systemMessageDataAddMember$schematype {}
 export interface systemMessageDataCreateJoinLinkSchema extends systemMessageDataCreateJoinLink$schematype {}
 export interface systemMessageDataDisableJoinLinkSchema extends systemMessageDataDisableJoinLink$schematype {}
@@ -777,6 +795,7 @@ export const messageViewSchema = _messageViewSchema as messageViewSchema;
 export const messageViewSenderSchema = _messageViewSenderSchema as messageViewSenderSchema;
 export const reactionViewSchema = _reactionViewSchema as reactionViewSchema;
 export const reactionViewSenderSchema = _reactionViewSenderSchema as reactionViewSenderSchema;
+export const replyRefSchema = _replyRefSchema as replyRefSchema;
 export const systemMessageDataAddMemberSchema =
 	_systemMessageDataAddMemberSchema as systemMessageDataAddMemberSchema;
 export const systemMessageDataCreateJoinLinkSchema =
@@ -854,6 +873,7 @@ export interface MessageView extends v.InferInput<typeof messageViewSchema> {}
 export interface MessageViewSender extends v.InferInput<typeof messageViewSenderSchema> {}
 export interface ReactionView extends v.InferInput<typeof reactionViewSchema> {}
 export interface ReactionViewSender extends v.InferInput<typeof reactionViewSenderSchema> {}
+export interface ReplyRef extends v.InferInput<typeof replyRefSchema> {}
 export interface SystemMessageDataAddMember extends v.InferInput<typeof systemMessageDataAddMemberSchema> {}
 export interface SystemMessageDataCreateJoinLink extends v.InferInput<
 	typeof systemMessageDataCreateJoinLinkSchema

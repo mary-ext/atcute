@@ -14,6 +14,16 @@
 				}
 			}
 		},
+		"replyRef": {
+			"type": "object",
+			"required": ["messageId"],
+			"properties": {
+				"messageId": {
+					"type": "string"
+				}
+			},
+			"description": "A reference to another message within the same convo, used to indicate that a message is a reply to it."
+		},
 		"convoKind": {
 			"type": "string",
 			"knownValues": ["direct", "group"]
@@ -175,6 +185,11 @@
 					"type": "string",
 					"format": "datetime"
 				},
+				"replyTo": {
+					"refs": ["#deletedMessageView", "#messageView"],
+					"type": "union",
+					"description": "If set, the message this message is replying to. The full view of the referenced message is embedded so the client can render it inline. Only a single level is embedded: the embedded message will not itself have a populated 'replyTo' field even if it was also a reply."
+				},
 				"reactions": {
 					"type": "array",
 					"items": {
@@ -305,6 +320,11 @@
 						"type": "ref"
 					},
 					"description": "Annotations of text (mentions, URLs, hashtags, etc)"
+				},
+				"replyTo": {
+					"ref": "#replyRef",
+					"type": "ref",
+					"description": "If set, the message this message is replying to. The referenced message must be in the same convo."
 				}
 			}
 		},
