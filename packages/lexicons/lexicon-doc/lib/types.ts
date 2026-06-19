@@ -277,6 +277,11 @@ export interface LexXrpcSubscription {
 	parameters?: LexXrpcParameters;
 	/** schema for messages sent over the stream */
 	message?: LexXrpcSubscriptionMessage;
+	/**
+	 * default wire subprotocol token for the stream when a client does not negotiate one via
+	 * `Sec-WebSocket-Protocol` (e.g. `xrpc.v1.json`). when absent, the default is `xrpc.v0.cbor`.
+	 */
+	subprotocol?: string;
 	/** possible error codes that may be returned */
 	errors?: LexXrpcError[];
 }

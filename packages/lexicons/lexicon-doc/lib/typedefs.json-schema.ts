@@ -221,6 +221,7 @@ export const lexXrpcSubscription = v.object({
 	description: v.optional(v.string()),
 	parameters: v.optional(lexXrpcParameters),
 	message: v.optional(lexXrpcSubscriptionMessage),
+	subprotocol: v.optional(v.string()),
 	errors: v.optional(v.array(lexXrpcError)),
 });
 
