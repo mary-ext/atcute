@@ -24,7 +24,7 @@
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["mode", "name", "oid"],
+					"required": ["mode", "name", "oid", "size"],
 					"properties": {
 						"oid": {
 							"type": "string"
@@ -36,6 +36,10 @@
 						"name": {
 							"type": "string",
 							"description": "The file name"
+						},
+						"size": {
+							"type": "integer",
+							"description": "Blob size"
 						},
 						"submodule": {
 							"ref": "sh.tangled.git.temp.defs#submodule",

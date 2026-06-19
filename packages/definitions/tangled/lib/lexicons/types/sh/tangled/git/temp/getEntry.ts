@@ -27,6 +27,8 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.getEntry', {
 			/** The file name */
 			name: /*#__PURE__*/ v.string(),
 			oid: /*#__PURE__*/ v.string(),
+			/** Blob size */
+			size: /*#__PURE__*/ v.integer(),
 			/** Submodule information if path is a submodule */
 			get submodule() {
 				return /*#__PURE__*/ v.optional(ShTangledGitTempDefs.submoduleSchema);
