@@ -2,13 +2,13 @@ import type { WebSocketAdapter, WebSocketConnection } from '@atcute/xrpc-server'
 
 export const createCloudflareWebSocket = (): WebSocketAdapter => {
 	return {
-		async upgrade(_request, handler) {
+		async upgrade(_request, handler, options) {
 			const [client, server] = Object.values(new WebSocketPair());
 
 			const controller = new AbortController();
 			const connection: WebSocketConnection = {
 				signal: controller.signal,
-				send: (data: Uint8Array) => {
+				send: (data) => {
 					server.send(data);
 				},
 				drain: () => {
@@ -36,7 +36,11 @@ export const createCloudflareWebSocket = (): WebSocketAdapter => {
 				server.close(1011, `internal server error`);
 			});
 
-			return new Response(null, { status: 101, webSocket: client });
+			return new Response(null, {
+				status: 101,
+				webSocket: client,
+				headers: options?.protocol ? { 'sec-websocket-protocol': options.protocol } : undefined,
+			});
 		},
 	};
 };

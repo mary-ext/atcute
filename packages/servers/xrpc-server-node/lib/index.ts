@@ -35,6 +35,7 @@ export interface CreateNodeWebSocketOptions {
 
 interface WebSocketHandlerContext {
 	handler: ((ws: WebSocketConnection) => Promisable<void>) | null;
+	protocol?: string;
 }
 
 export const createNodeWebSocket = ({
@@ -42,7 +43,12 @@ export const createNodeWebSocket = ({
 	lowWaterMark = 50_000,
 }: CreateNodeWebSocketOptions = {}): NodeWebSocket => {
 	const context = new AsyncLocalStorage<WebSocketHandlerContext>();
-	const wss = new WebSocketServer({ noServer: true });
+	const wss = new WebSocketServer({
+		noServer: true,
+		// echo the subprotocol the router negotiated for this upgrade; `handleUpgrade` runs inside
+		// `context.run` below so the active context is visible here
+		handleProtocols: () => context.getStore()?.protocol ?? false,
+	});
 
 	const createUpgradeListener = (
 		router: XRPCRouter,
@@ -84,43 +90,45 @@ export const createNodeWebSocket = ({
 			if (ctx.handler) {
 				const handler = ctx.handler;
 
-				wss.handleUpgrade(request, socket, head, (ws) => {
-					wss.emit('connection', ws, request);
+				context.run(ctx, () => {
+					wss.handleUpgrade(request, socket, head, (ws) => {
+						wss.emit('connection', ws, request);
 
-					const controller = new AbortController();
-					const signal = controller.signal;
-					const connection: WebSocketConnection = {
-						signal: signal,
-						send(data) {
-							return new Promise((resolve, reject) => {
-								ws.send(data, (err) => {
-									if (err) {
-										reject(err);
-									} else {
-										resolve();
-									}
+						const controller = new AbortController();
+						const signal = controller.signal;
+						const connection: WebSocketConnection = {
+							signal: signal,
+							send(data) {
+								return new Promise((resolve, reject) => {
+									ws.send(data, (err) => {
+										if (err) {
+											reject(err);
+										} else {
+											resolve();
+										}
+									});
 								});
-							});
-						},
-						async drain() {
-							if (ws.bufferedAmount <= highWaterMark) {
-								return;
-							}
+							},
+							async drain() {
+								if (ws.bufferedAmount <= highWaterMark) {
+									return;
+								}
 
-							while (!signal.aborted && ws.readyState === 1 && ws.bufferedAmount > lowWaterMark) {
-								await sleep(10, signal);
-							}
-						},
-						close(code, reason) {
-							ws.close(code, reason);
-						},
-					};
+								while (!signal.aborted && ws.readyState === 1 && ws.bufferedAmount > lowWaterMark) {
+									await sleep(10, signal);
+								}
+							},
+							close(code, reason) {
+								ws.close(code, reason);
+							},
+						};
 
-					ws.onclose = (ev) => {
-						controller.abort(new Error(`WebSocket connection closed with code ${ev.code}`));
-					};
+						ws.onclose = (ev) => {
+							controller.abort(new Error(`WebSocket connection closed with code ${ev.code}`));
+						};
 
-					handler(connection);
+						handler(connection);
+					});
 				});
 			} else {
 				socket.end(
@@ -137,13 +145,14 @@ export const createNodeWebSocket = ({
 	return {
 		wss,
 		adapter: {
-			async upgrade(_request, handler) {
+			async upgrade(_request, handler, options) {
 				const ctx = context.getStore();
 				if (!ctx) {
 					return undefined;
 				}
 
 				ctx.handler = handler;
+				ctx.protocol = options?.protocol;
 				return new Response(null);
 			},
 		},

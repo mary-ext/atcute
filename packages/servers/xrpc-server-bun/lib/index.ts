@@ -30,7 +30,7 @@ export const createBunWebSocket = ({
 
 	return {
 		adapter: {
-			async upgrade(request, handler) {
+			async upgrade(request, handler, options) {
 				if (!server) {
 					throw new Error(`server not defined yet`);
 				}
@@ -40,7 +40,10 @@ export const createBunWebSocket = ({
 					handler: handler,
 				};
 
-				const upgraded = server.upgrade(request, { data: data });
+				const upgraded = server.upgrade(request, {
+					data: data,
+					headers: options?.protocol ? { 'sec-websocket-protocol': options.protocol } : undefined,
+				});
 
 				if (upgraded) {
 					return new Response(null);
@@ -63,7 +66,11 @@ export const createBunWebSocket = ({
 						const connection: WebSocketConnection = {
 							signal: signal,
 							send(data) {
-								ws.sendBinary(data);
+								if (typeof data === 'string') {
+									ws.send(data);
+								} else {
+									ws.sendBinary(data);
+								}
 							},
 							async drain() {
 								if (ws.getBufferedAmount() <= highWaterMark) {

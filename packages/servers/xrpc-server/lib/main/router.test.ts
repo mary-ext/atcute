@@ -1056,7 +1056,7 @@ describe('XRPCRouter', () => {
 			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
 				client.onMessage.subscribe((data) => {
-					frames.push(data);
+					frames.push(asBytes(data));
 				});
 
 				client.onClose.subscribe(() => {
@@ -1092,7 +1092,7 @@ describe('XRPCRouter', () => {
 			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
 				client.onMessage.subscribe((data) => {
-					frames.push(data);
+					frames.push(asBytes(data));
 				});
 
 				client.onClose.subscribe(() => {
@@ -1157,7 +1157,7 @@ describe('XRPCRouter', () => {
 			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
 				client.onMessage.subscribe((data) => {
-					frames.push(data);
+					frames.push(asBytes(data));
 				});
 
 				client.onClose.subscribe(() => {
@@ -1200,7 +1200,7 @@ describe('XRPCRouter', () => {
 			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
 				client.onMessage.subscribe((data) => {
-					frames.push(data);
+					frames.push(asBytes(data));
 
 					if (frames.length === 2) {
 						client.dispose();
@@ -1246,7 +1246,7 @@ describe('XRPCRouter', () => {
 			const frames: Uint8Array[] = [];
 			await new Promise<void>((resolve) => {
 				client.onMessage.subscribe((data) => {
-					frames.push(data);
+					frames.push(asBytes(data));
 				});
 
 				client.onClose.subscribe(() => {
@@ -1258,6 +1258,131 @@ describe('XRPCRouter', () => {
 				{ header: { op: 1 }, body: { seq: 1 } },
 				{ header: { op: -1 }, body: { error: 'FutureCursor', message: 'Cursor is in the future' } },
 			]);
+		});
+
+		it('serves xrpc.v1.json frames, keeping the full $type and emitting error envelopes', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.variant([v.object({ $type: v.literal('com.example.subscription#foo'), foo: v.string() })]),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
+
+			router.addSubscription(subscriptionSchema, {
+				subprotocol: 'xrpc.v1.json',
+				async *handler() {
+					yield { $type: 'com.example.subscription#foo', foo: 'foo' };
+
+					throw new XRPCSubscriptionError({ error: 'FutureCursor', message: 'in the future' });
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
+
+			const frames: string[] = [];
+			await new Promise<void>((resolve) => {
+				client.onMessage.subscribe((data) => frames.push(asText(data)));
+				client.onClose.subscribe(() => resolve());
+			});
+
+			// no negotiation took place, so nothing is echoed even though the server defaults to json
+			expect(client.protocol).toBeUndefined();
+			expect(frames.map((frame) => JSON.parse(frame))).toEqual([
+				{ $type: 'message', payload: { $type: 'com.example.subscription#foo', foo: 'foo' } },
+				{ $type: 'error', error: 'FutureCursor', message: 'in the future' },
+			]);
+		});
+
+		it('serves xrpc.v1.cbor frames as a single self-describing object', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.variant([v.object({ $type: v.literal('com.example.subscription#foo'), foo: v.string() })]),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
+
+			router.addSubscription(subscriptionSchema, {
+				subprotocol: 'xrpc.v1.cbor',
+				async *handler() {
+					yield { $type: 'com.example.subscription#foo', foo: 'foo' };
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`);
+
+			const frames: Uint8Array[] = [];
+			await new Promise<void>((resolve) => {
+				client.onMessage.subscribe((data) => frames.push(asBytes(data)));
+				client.onClose.subscribe(() => resolve());
+			});
+
+			expect(frames.map((frame) => decode(frame))).toEqual([
+				{ $type: 'message', payload: { $type: 'com.example.subscription#foo', foo: 'foo' } },
+			]);
+		});
+
+		it('negotiates a subprotocol from Sec-WebSocket-Protocol and echoes it', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.object({ seq: v.integer() }),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler() {
+					yield { seq: 1 };
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`, {
+				protocols: ['xrpc.v1.json', 'xrpc.v1.cbor'],
+			});
+
+			const frames: string[] = [];
+			await new Promise<void>((resolve) => {
+				client.onMessage.subscribe((data) => frames.push(asText(data)));
+				client.onClose.subscribe(() => resolve());
+			});
+
+			expect(client.protocol).toBe('xrpc.v1.json');
+			expect(frames.map((frame) => JSON.parse(frame))).toEqual([{ $type: 'message', payload: { seq: 1 } }]);
+		});
+
+		it('falls back to v0 without echoing when the offered subprotocol is unsupported', async () => {
+			const subscriptionSchema = v.subscription('com.example.subscription', {
+				params: null,
+				message: v.object({ seq: v.integer() }),
+			});
+
+			const adapter = new MockWebSocketAdapter();
+			const router = new XRPCRouter({ websocket: adapter });
+
+			router.addSubscription(subscriptionSchema, {
+				async *handler() {
+					yield { seq: 1 };
+				},
+			});
+
+			const mock = adapter.attach(router);
+			using client = await mock.subscribe(`/xrpc/com.example.subscription`, {
+				protocols: ['x.unknown'],
+			});
+
+			const frames: Uint8Array[] = [];
+			await new Promise<void>((resolve) => {
+				client.onMessage.subscribe((data) => frames.push(asBytes(data)));
+				client.onClose.subscribe(() => resolve());
+			});
+
+			expect(client.protocol).toBeUndefined();
+			expect(decodeFrames(frames)).toEqual([{ header: { op: 1 }, body: { seq: 1 } }]);
 		});
 
 		it('rejects non-WebSocket upgrade requests', async () => {
@@ -1348,6 +1473,22 @@ describe('XRPCRouter', () => {
 interface Frame {
 	header: unknown;
 	body: unknown;
+}
+
+function asBytes(data: string | Uint8Array): Uint8Array {
+	if (typeof data === 'string') {
+		throw new Error('expected a binary frame');
+	}
+
+	return data;
+}
+
+function asText(data: string | Uint8Array): string {
+	if (typeof data !== 'string') {
+		throw new Error('expected a text frame');
+	}
+
+	return data;
 }
 
 function decodeFrame(frame: Uint8Array): Frame {

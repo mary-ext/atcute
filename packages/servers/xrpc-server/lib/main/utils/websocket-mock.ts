@@ -4,10 +4,11 @@ import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 
 import type { Promisable } from '../../types/misc.ts';
 import type { XRPCRouter } from '../router.ts';
-import type { WebSocketAdapter, WebSocketConnection } from '../types/websocket.ts';
+import type { WebSocketAdapter, WebSocketConnection, WebSocketUpgradeOptions } from '../types/websocket.ts';
 
 interface WebSocketHandlerContext {
 	handler: ((ws: WebSocketConnection) => Promisable<void>) | null;
+	protocol?: string;
 }
 
 export interface CloseEvent {
@@ -17,13 +18,20 @@ export interface CloseEvent {
 }
 
 export interface SubscriptionClient extends Disposable {
-	onMessage: SimpleEventEmitter<[data: Uint8Array]>;
+	/** subprotocol the server echoed in the handshake, or undefined when none was negotiated */
+	protocol: string | undefined;
+	onMessage: SimpleEventEmitter<[data: string | Uint8Array]>;
 	onClose: SimpleEventEmitter<[event: CloseEvent]>;
 	dispose(): void;
 }
 
+export interface SubscribeOptions {
+	/** wire subprotocols to offer via `Sec-WebSocket-Protocol`, in preference order */
+	protocols?: string[];
+}
+
 export interface SubscriptionMock {
-	subscribe(url: string): Promise<SubscriptionClient>;
+	subscribe(url: string, options?: SubscribeOptions): Promise<SubscriptionClient>;
 }
 
 export class MockWebSocketAdapter implements WebSocketAdapter {
@@ -32,6 +40,7 @@ export class MockWebSocketAdapter implements WebSocketAdapter {
 	upgrade(
 		_request: Request,
 		handler: (ws: WebSocketConnection) => Promisable<void>,
+		options?: WebSocketUpgradeOptions,
 	): Promisable<Response | undefined> {
 		const ctx = this.#context.getStore();
 		if (!ctx) {
@@ -39,25 +48,30 @@ export class MockWebSocketAdapter implements WebSocketAdapter {
 		}
 
 		ctx.handler = handler;
+		ctx.protocol = options?.protocol;
 
 		return new Response(null);
 	}
 
 	attach(router: XRPCRouter): SubscriptionMock {
 		return {
-			subscribe: async (url) => {
+			subscribe: async (url, options) => {
 				const ctx: WebSocketHandlerContext = {
 					handler: null,
 				};
 
 				await this.#context.run(ctx, async () => {
 					const urlp = new URL(url, 'http://localhost');
-					const request = new Request(urlp, {
-						headers: {
-							upgrade: 'websocket',
-							connection: 'upgrade',
-						},
-					});
+					const headers: Record<string, string> = {
+						upgrade: 'websocket',
+						connection: 'upgrade',
+					};
+
+					if (options?.protocols !== undefined) {
+						headers['sec-websocket-protocol'] = options.protocols.join(', ');
+					}
+
+					const request = new Request(urlp, { headers: headers });
 
 					const response = await router.fetch(request);
 
@@ -68,7 +82,7 @@ export class MockWebSocketAdapter implements WebSocketAdapter {
 					throw new Error(`WebSocket upgrade succeeded but no handler was set`);
 				}
 
-				const onMessage = new SimpleEventEmitter<[data: Uint8Array]>();
+				const onMessage = new SimpleEventEmitter<[data: string | Uint8Array]>();
 				const onClose = new SimpleEventEmitter<[event: CloseEvent]>();
 
 				const controller = new AbortController();
@@ -98,6 +112,7 @@ export class MockWebSocketAdapter implements WebSocketAdapter {
 				}
 
 				const client: SubscriptionClient = {
+					protocol: ctx.protocol,
 					onMessage,
 					onClose,
 					dispose() {

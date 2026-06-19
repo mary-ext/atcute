@@ -417,6 +417,48 @@ describe('subscription', () => {
 		client.close();
 	});
 
+	it('negotiates and echoes the xrpc.v1.json subprotocol', async () => {
+		const ws = createNodeWebSocket();
+		const router = new XRPCRouter({ websocket: ws.adapter });
+
+		router.addSubscription(ComAtprotoLabelSubscribeLabels.mainSchema, {
+			async *handler() {
+				yield {
+					$type: 'com.atproto.label.subscribeLabels#labels',
+					labels: [],
+					seq: 1,
+				};
+			},
+		});
+
+		using server = await createHttpServer(router, ws);
+
+		const client = new WebSocket(`ws://localhost:${server.port}/xrpc/com.atproto.label.subscribeLabels`, [
+			'xrpc.v1.json',
+		]);
+
+		const messages: any[] = [];
+		await new Promise<void>((resolve, reject) => {
+			client.onmessage = (event) => {
+				messages.push(JSON.parse(event.data as string));
+				resolve();
+			};
+			client.onerror = () => {
+				reject(new Error('WebSocket error'));
+			};
+		});
+
+		expect(client.protocol).toBe('xrpc.v1.json');
+		expect(messages).toEqual([
+			{
+				$type: 'message',
+				payload: { $type: 'com.atproto.label.subscribeLabels#labels', labels: [], seq: 1 },
+			},
+		]);
+
+		client.close();
+	});
+
 	it('does not interfere with non-xrpc upgrade requests', async () => {
 		const ws = createNodeWebSocket();
 		const router = new XRPCRouter({ websocket: ws.adapter });

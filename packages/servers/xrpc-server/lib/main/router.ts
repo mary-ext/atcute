@@ -15,12 +15,13 @@ import type {
 	UnknownSubscriptionContext,
 } from './types/operation.ts';
 import type { WebSocketAdapter } from './types/websocket.ts';
-import { encodeErrorFrame, encodeMessageFrame, extractMessageType, omitMessageType } from './utils/frames.ts';
+import { getFrameEncoder } from './utils/frames.ts';
 import { type Middleware, createAsyncMiddlewareRunner } from './utils/middlewares.ts';
 import { type Namespaced, unwrapLxm } from './utils/namespaced.ts';
 import { constructMimeValidator, hasRequestBody } from './utils/request-input.ts';
 import { constructParamsHandler } from './utils/request-params.ts';
 import { invalidRequest, validationError } from './utils/response.ts';
+import { negotiateSubprotocol } from './utils/subprotocol.ts';
 import { XRPCError, XRPCSubscriptionError } from './xrpc-error.ts';
 
 type InternalRequestContext = {
@@ -350,6 +351,10 @@ export class XRPCRouter {
 		const handleParams = subscriptionSchema.params ? constructParamsHandler(subscriptionSchema.params) : null;
 		const handler = config.handler;
 
+		// the unnegotiated default: an explicit config override wins, else the lexicon's declared subprotocol,
+		// else legacy `xrpc.v0.cbor`
+		const defaultSubprotocol = config.subprotocol ?? subscriptionSchema.subprotocol ?? 'xrpc.v0.cbor';
+
 		this.#handlers[nsid] = {
 			method: 'GET',
 			handler: async ({ request, url }) => {
@@ -379,51 +384,58 @@ export class XRPCRouter {
 					params = {};
 				}
 
-				const upgrade = await websocket.upgrade(request, async (ws) => {
-					const signal = ws.signal;
+				const subprotocol = negotiateSubprotocol(
+					request.headers.get('sec-websocket-protocol'),
+					defaultSubprotocol,
+				);
+				const encoder = getFrameEncoder(subprotocol.encode, nsid);
 
-					const context: UnknownSubscriptionContext = {
-						request: request,
-						params: params,
-						signal: signal,
-					};
+				const upgrade = await websocket.upgrade(
+					request,
+					async (ws) => {
+						const signal = ws.signal;
 
-					try {
-						for await (const message of handler(context)) {
-							if (signal.aborted) {
-								break;
-							}
+						const context: UnknownSubscriptionContext = {
+							request: request,
+							params: params,
+							signal: signal,
+						};
 
-							const type = extractMessageType(message, nsid);
-							const body = omitMessageType(message);
+						try {
+							for await (const message of handler(context)) {
+								if (signal.aborted) {
+									break;
+								}
 
-							const frame = encodeMessageFrame(body, type);
-							await ws.send(frame);
-							const drained = ws.drain();
-							if (drained) {
-								await drained;
-							}
-						}
-
-						ws.close(1000);
-					} catch (err) {
-						if (err instanceof XRPCSubscriptionError) {
-							const frame = encodeErrorFrame(err.error, err.message || undefined);
-
-							try {
+								const frame = encoder.message(message);
 								await ws.send(frame);
-							} catch {
-								// best-effort, socket may already be closed
+								const drained = ws.drain();
+								if (drained) {
+									await drained;
+								}
 							}
 
-							ws.close(err.closeCode, err.error);
-							return;
-						}
+							ws.close(1000);
+						} catch (err) {
+							if (err instanceof XRPCSubscriptionError) {
+								const frame = encoder.error(err.error, err.message || undefined);
 
-						ws.close(1011, `internal server error`);
-						this.#observeSocketError(err, request);
-					}
-				});
+								try {
+									await ws.send(frame);
+								} catch {
+									// best-effort, socket may already be closed
+								}
+
+								ws.close(err.closeCode, err.error);
+								return;
+							}
+
+							ws.close(1011, `internal server error`);
+							this.#observeSocketError(err, request);
+						}
+					},
+					{ protocol: subprotocol.echo },
+				);
 
 				if (upgrade !== undefined) {
 					return upgrade;

@@ -128,4 +128,10 @@ export type SubscriptionHandler<TSubscription extends XRPCSubscriptionMetadata> 
 
 export type SubscriptionConfig<TSubscription extends XRPCSubscriptionMetadata = XRPCSubscriptionMetadata> = {
 	handler: SubscriptionHandler<TSubscription>;
+	/**
+	 * default wire subprotocol served when a client does not negotiate one via `Sec-WebSocket-Protocol`.
+	 * overrides any default declared by the subscription lexicon; when neither is set, defaults to
+	 * `xrpc.v0.cbor`.
+	 */
+	subprotocol?: string;
 };

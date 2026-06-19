@@ -12,15 +12,22 @@ export const createDenoWebSocket = ({
 	lowWaterMark = 50_000,
 }: CreateDenoWebSocketOptions = {}): WebSocketAdapter => {
 	return {
-		async upgrade(request, handler) {
-			const { response, socket } = Deno.upgradeWebSocket(request);
+		async upgrade(request, handler, options) {
+			const { response, socket } = Deno.upgradeWebSocket(
+				request,
+				options?.protocol ? { protocol: options.protocol } : undefined,
+			);
 
 			const controller = new AbortController();
 			const signal = controller.signal;
 			const connection: WebSocketConnection = {
 				signal: signal,
-				send(data: Uint8Array) {
-					socket.send(data as Uint8Array<ArrayBuffer>);
+				send(data) {
+					if (typeof data === 'string') {
+						socket.send(data);
+					} else {
+						socket.send(data as Uint8Array<ArrayBuffer>);
+					}
 				},
 				async drain() {
 					if (socket.bufferedAmount <= highWaterMark) {

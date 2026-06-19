@@ -2,7 +2,7 @@ import type { Promisable } from '../../types/misc.ts';
 
 export interface WebSocketConnection {
 	signal: AbortSignal;
-	send(data: Uint8Array): void | Promise<void>;
+	send(data: string | Uint8Array): void | Promise<void>;
 	/**
 	 * backpressure hook invoked by the router after every frame it sends. adapters that can observe the
 	 * outgoing send buffer (Node `ws`, Bun, Deno) should resolve only once the buffer has drained below a
@@ -13,9 +13,18 @@ export interface WebSocketConnection {
 	close(code?: number, reason?: string): void;
 }
 
+export interface WebSocketUpgradeOptions {
+	/**
+	 * negotiated subprotocol to echo in the `Sec-WebSocket-Protocol` response header. omitted when the client
+	 * offered nothing the server supports, in which case no subprotocol is echoed.
+	 */
+	protocol?: string;
+}
+
 export interface WebSocketAdapter {
 	upgrade(
 		request: Request,
 		handler: (ws: WebSocketConnection) => Promisable<void>,
+		options?: WebSocketUpgradeOptions,
 	): Promisable<Response | undefined>;
 }
