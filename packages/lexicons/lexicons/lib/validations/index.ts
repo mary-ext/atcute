@@ -2033,6 +2033,8 @@ export interface XRPCSubscriptionMetadata<
 	readonly nsid: TNsid;
 	readonly params: TParams;
 	readonly message: TMessage;
+	/** default wire subprotocol for the stream when a client does not negotiate one */
+	readonly subprotocol?: string;
 }
 
 // #__NO_SIDE_EFFECTS__
@@ -2045,6 +2047,7 @@ export const subscription = <
 	options: {
 		params: TParams;
 		readonly message: TMessage;
+		subprotocol?: string;
 	},
 ): XRPCSubscriptionMetadata<TParams, TMessage, TNsid> => {
 	// `message` can be a getter, and we'd have to resolve that getter.
@@ -2054,6 +2057,7 @@ export const subscription = <
 		type: 'xrpc_subscription',
 		nsid: nsid,
 		params: options.params,
+		subprotocol: options.subprotocol,
 		get message() {
 			return lazyProperty(this, 'message', options.message);
 		},

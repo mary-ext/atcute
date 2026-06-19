@@ -426,6 +426,10 @@ const generateXrpcSubscription = (
 
 	inner += `"params": ${params},`;
 
+	if (spec.subprotocol) {
+		inner += `"subprotocol": ${lit(spec.subprotocol)},`;
+	}
+
 	if (schema) {
 		const res = generateType(imports, path, schema);
 
