@@ -5,7 +5,7 @@ import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { ReadonlyDeep } from 'type-fest';
 
-import { addTypeToBody, decodeFrame } from './frame-decoder.ts';
+import { type FrameDecoder, getFrameDecoder } from './frame-decoder.ts';
 import type { FirehoseSubscriptionOptions, MessageOf, ParamsOf } from './types.ts';
 
 /**
@@ -45,6 +45,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 			service: wsUrls,
 			nsid,
 			params,
+			subprotocols,
 			ws: wsOptions,
 			validateEvents = true,
 			onConnectionClose,
@@ -81,25 +82,33 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 			return url.toString();
 		};
 
-		const ws = new ReconnectingWebSocket(getUrl, null, wsOptions);
+		const ws = new ReconnectingWebSocket(getUrl, subprotocols ?? null, wsOptions);
 		this.#ws = ws;
 
 		ws.binaryType = 'arraybuffer';
 
 		ws.onerror = onConnectionError ?? null;
 		ws.onclose = onConnectionClose ?? null;
-		ws.onopen = onConnectionOpen ?? null;
+
+		// the negotiated subprotocol is only known once the handshake completes, so the decoder is resolved
+		// on open (and re-resolved on every reconnect) rather than per message. `open` always precedes any
+		// `message`, so it is set by the time `onmessage` runs.
+		let decodeFrame: FrameDecoder | undefined;
+
+		ws.onopen = (ev) => {
+			decodeFrame = getFrameDecoder(ws.protocol, nsid.nsid);
+			onConnectionOpen?.(ev);
+		};
 
 		ws.onmessage = (ev) => {
-			const buffer = new Uint8Array(ev.data);
-			const frame = decodeFrame(buffer);
+			const frame = decodeFrame!(ev.data);
 
 			if (frame.type === 'error') {
 				onError?.(new FirehoseError(frame.error, frame.message));
 				return;
 			}
 
-			let body = addTypeToBody(frame.body, frame.discriminator, nsid.nsid);
+			let body = frame.body;
 
 			if (validateEvents && nsid.message !== null) {
 				const result = safeParse(nsid.message, body);

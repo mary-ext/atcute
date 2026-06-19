@@ -4,6 +4,9 @@ import type { BaseSchema, InferOutput, XRPCSubscriptionMetadata } from '@atcute/
 
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 
+/** wire subprotocol tokens the firehose client knows how to decode */
+export type Subprotocol = 'xrpc.v0.cbor' | 'xrpc.v1.cbor' | 'xrpc.v1.json';
+
 /** extracts the params type from an XRPC subscription schema */
 export type ParamsOf<T> =
 	T extends XRPCSubscriptionMetadata<infer TParams, any, any>
@@ -46,6 +49,15 @@ export interface FirehoseSubscriptionOptions<TSchema extends XRPCSubscriptionMet
 	 */
 	validateEvents?: boolean;
 
+	/**
+	 * wire subprotocols to offer during the WebSocket handshake, in preference order, sent via the
+	 * `Sec-WebSocket-Protocol` header. the server selects one it supports, and frames are decoded accordingly;
+	 * if the server selects none, frames are decoded as legacy `xrpc.v0.cbor`.
+	 *
+	 * when omitted, no subprotocol is offered, preserving legacy `xrpc.v0.cbor` behavior.
+	 */
+	subprotocols?: Subprotocol[];
+
 	onConnectionOpen?: (event: Event) => void;
 	onConnectionClose?: (event: CloseEvent) => void;
 	onConnectionError?: (event: ErrorEvent) => void;
@@ -79,7 +91,6 @@ export type DecodedFrame =
 	| {
 			type: 'message';
 			body: unknown;
-			discriminator?: string;
 	  }
 	| {
 			type: 'error';
