@@ -830,6 +830,34 @@ importers:
         specifier: ^5.1.11
         version: 5.1.11
 
+  packages/oauth/cab:
+    dependencies:
+      '@atcute/oauth-crypto':
+        specifier: workspace:^
+        version: link:../crypto
+      '@atcute/oauth-keyset':
+        specifier: workspace:^
+        version: link:../keyset
+      '@atcute/oauth-types':
+        specifier: workspace:^
+        version: link:../types
+      nanoid:
+        specifier: ^5.1.11
+        version: 5.1.11
+      valibot:
+        specifier: ^1.4.1
+        version: 1.4.1(typescript@6.0.3)
+    devDependencies:
+      '@atcute/multibase':
+        specifier: workspace:^
+        version: link:../../utilities/multibase
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../../misc/uint8array
+      vitest:
+        specifier: ^4.1.7
+        version: 4.1.7(@types/node@25.9.1)(@vitest/browser-playwright@4.1.7)(@vitest/coverage-v8@4.1.7)(vite@8.0.10(@types/node@25.9.1))
+
   packages/oauth/crypto:
     dependencies:
       '@atcute/multibase':

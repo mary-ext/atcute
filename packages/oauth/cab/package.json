@@ -1,0 +1,42 @@
+{
+	"name": "@atcute/oauth-cab",
+	"version": "0.1.0",
+	"description": "client assertion backend for AT Protocol OAuth",
+	"license": "0BSD",
+	"repository": {
+		"url": "https://github.com/mary-ext/atcute",
+		"directory": "packages/oauth/cab"
+	},
+	"files": [
+		"dist/",
+		"lib/",
+		"!lib/**/*.bench.ts",
+		"!lib/**/*.test.ts",
+		"!dist/**/*.{test,bench}.*"
+	],
+	"type": "module",
+	"sideEffects": false,
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsgo",
+		"test": "vitest",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/oauth-crypto": "workspace:^",
+		"@atcute/oauth-keyset": "workspace:^",
+		"@atcute/oauth-types": "workspace:^",
+		"nanoid": "^5.1.11",
+		"valibot": "^1.4.1"
+	},
+	"devDependencies": {
+		"@atcute/multibase": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
+		"vitest": "^4.1.7"
+	}
+}
