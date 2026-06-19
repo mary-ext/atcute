@@ -82,7 +82,10 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 			return url.toString();
 		};
 
-		const ws = new ReconnectingWebSocket(getUrl, subprotocols ?? null, wsOptions);
+		// an explicit offer wins; otherwise offer the stream's lexicon-declared subprotocol, if it has one
+		const offeredProtocols = subprotocols ?? (nsid.subprotocol !== undefined ? [nsid.subprotocol] : null);
+
+		const ws = new ReconnectingWebSocket(getUrl, offeredProtocols, wsOptions);
 		this.#ws = ws;
 
 		ws.binaryType = 'arraybuffer';
@@ -96,7 +99,9 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 		let decodeFrame: FrameDecoder | undefined;
 
 		ws.onopen = (ev) => {
-			decodeFrame = getFrameDecoder(ws.protocol, nsid.nsid);
+			// the server echoes the negotiated subprotocol; an unnegotiated connection falls back to the
+			// stream's lexicon-declared default, then to legacy xrpc.v0.cbor
+			decodeFrame = getFrameDecoder(ws.protocol || nsid.subprotocol || '', nsid.nsid);
 			onConnectionOpen?.(ev);
 		};
 

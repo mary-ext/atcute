@@ -51,10 +51,10 @@ export interface FirehoseSubscriptionOptions<TSchema extends XRPCSubscriptionMet
 
 	/**
 	 * wire subprotocols to offer during the WebSocket handshake, in preference order, sent via the
-	 * `Sec-WebSocket-Protocol` header. the server selects one it supports, and frames are decoded accordingly;
-	 * if the server selects none, frames are decoded as legacy `xrpc.v0.cbor`.
+	 * `Sec-WebSocket-Protocol` header. the server selects one it supports, and frames are decoded accordingly.
 	 *
-	 * when omitted, no subprotocol is offered, preserving legacy `xrpc.v0.cbor` behavior.
+	 * when omitted, the stream's lexicon-declared `subprotocol` is offered if it has one; an unnegotiated
+	 * connection then decodes using that declared default, falling back to legacy `xrpc.v0.cbor`.
 	 */
 	subprotocols?: Subprotocol[];
 
