@@ -376,6 +376,11 @@
 					"type": "unknown",
 					"description": "Extensible JSON payload for loose activity-specific metadata (e.g. assignmentId)."
 				},
+				"report": {
+					"ref": "#reportView",
+					"type": "ref",
+					"description": "Full view of the report this activity belongs to."
+				},
 				"activity": {
 					"refs": [
 						"#assignmentActivity",

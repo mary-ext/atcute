@@ -261,6 +261,10 @@ const _reportActivityViewSchema = /*#__PURE__*/ v.object({
 	},
 	/** Optional public note, potentially visible to the reporter. */
 	publicNote: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/** Full view of the report this activity belongs to. */
+	get report() {
+		return /*#__PURE__*/ v.optional(reportViewSchema);
+	},
 	/** ID of the report this activity belongs to */
 	reportId: /*#__PURE__*/ v.integer(),
 });
