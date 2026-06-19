@@ -13,6 +13,8 @@ import { fromStream, fromUint8Array, repoEntryTransform, verifyRecord } from './
 import type { Commit } from './types.ts';
 import { MAX_MST_DEPTH, MAX_NODE_ENTRIES } from './utils/mst.ts';
 
+const suffix = (str: string): TreeEntry['k'] => toBytes(encodeUtf8(str));
+
 /**
  * builds a minimal CAR file containing a commit, single MST node, and one record block. the MST node has two
  * entries (different keys) pointing to the same record CID.
@@ -405,7 +407,6 @@ const buildNodeCar = async (
 describe('malformed mst nodes', () => {
 	let value: CidLink;
 	let record: { cid: Uint8Array; data: Uint8Array };
-	const suffix = (str: string): TreeEntry['k'] => toBytes(encodeUtf8(str));
 
 	beforeAll(async () => {
 		const data = CBOR.encode({ $type: 'app.bsky.feed.post' });
@@ -536,7 +537,6 @@ describe('verifyRecord', () => {
 	let value: CidLink;
 	let recordData: Uint8Array;
 	let recordCid: Awaited<ReturnType<typeof CID.create>>;
-	const suffix = (str: string): TreeEntry['k'] => toBytes(encodeUtf8(str));
 
 	beforeAll(async () => {
 		recordData = CBOR.encode({ $type: 'app.bsky.feed.post', text: 'hi' });
