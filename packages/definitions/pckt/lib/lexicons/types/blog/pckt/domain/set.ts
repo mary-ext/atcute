@@ -21,6 +21,12 @@ const _mainSchema = /*#__PURE__*/ v.procedure('blog.pckt.domain.set', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Cloudflare ownership-verification token to install as a TXT record at _cf-custom-hostname.<domain>.
+			 * Required for apex domains not already proxied through Cloudflare; absent when Cloudflare validates
+			 * the hostname directly.
+			 */
+			cfHostnameVerificationToken: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			domain: /*#__PURE__*/ v.string(),
 			/** Token to install as a TXT record at _pckt-verify.<domain>. */
 			verificationToken: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

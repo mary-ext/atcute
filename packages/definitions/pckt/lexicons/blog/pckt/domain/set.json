@@ -42,6 +42,10 @@
 						"verificationToken": {
 							"type": "string",
 							"description": "Token to install as a TXT record at _pckt-verify.<domain>."
+						},
+						"cfHostnameVerificationToken": {
+							"type": "string",
+							"description": "Cloudflare ownership-verification token to install as a TXT record at _cf-custom-hostname.<domain>. Required for apex domains not already proxied through Cloudflare; absent when Cloudflare validates the hostname directly."
 						}
 					}
 				},
