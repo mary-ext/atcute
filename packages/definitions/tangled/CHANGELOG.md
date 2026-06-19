@@ -1,5 +1,11 @@
 # @atcute/tangled
 
+## 2.0.8
+
+### Patch Changes
+
+- c231d6b: pull latest Tangled lexicons
+
 ## 2.0.7
 
 ### Patch Changes

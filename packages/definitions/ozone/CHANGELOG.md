@@ -1,5 +1,11 @@
 # @atcute/ozone
 
+## 4.0.4
+
+### Patch Changes
+
+- f30af4b: pull latest Ozone lexicons
+
 ## 4.0.3
 
 ### Patch Changes
