@@ -13,6 +13,9 @@ const inputs = [
 	{ label: 'combining', text: 'e\u0301', expected: 1 },
 	{ label: 'CRLF', text: 'a\r\nb', expected: 3 },
 	{ label: 'hangul', text: '\uAC00\uB098\uB2E4', expected: 3 },
+	// precomposed latin-1 takes the non-ASCII exact path: each code unit is its own cluster
+	{ label: 'latin-1 precomposed', text: 'caf\u00E9 r\u00E9sum\u00E9', expected: 11 },
+	{ label: 'latin-1 high', text: '\u00FF\u00C0\u00E9', expected: 3 },
 ];
 
 it('getGraphemeLength', () => {
@@ -26,6 +29,10 @@ it('isGraphemeLengthInRange', () => {
 	expect(isGraphemeLengthInRange('hello', 0, 4)).toBe(false);
 	expect(isGraphemeLengthInRange('hello', 6, 10)).toBe(false);
 	expect(isGraphemeLengthInRange('\u{1F468}\u200D\u{1F469}\u200D\u{1F467}', 0, 1)).toBe(true);
+
+	// latin-1 exercises the non-ASCII exact path (no segmentation)
+	expect(isGraphemeLengthInRange('caf\u00E9', 4, 4)).toBe(true);
+	expect(isGraphemeLengthInRange('caf\u00E9 r\u00E9sum\u00E9', 0, 5)).toBe(false);
 });
 
 // #region Unicode conformance tests (GraphemeBreakTest.txt)

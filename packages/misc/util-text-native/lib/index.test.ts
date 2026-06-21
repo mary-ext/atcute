@@ -28,6 +28,10 @@ const inputs = [
 	{ label: 'hangul LVT + T jamo', text: '\uAC01\u11A8', expected: 1 },
 	{ label: 'hangul syllable + combining', text: '\uAC00\u0301', expected: 1 },
 	{ label: 'hangul split by ascii', text: '\uAC00a\uB098', expected: 3 },
+	// short precomposed latin-1 short-circuits in the wrapper; the long one (>24 units) forces the
+	// native path to also count latin-1 correctly
+	{ label: 'latin-1 short', text: 'caf\u00E9 r\u00E9sum\u00E9', expected: 11 },
+	{ label: 'latin-1 long (native)', text: 'caf\u00E9 '.repeat(10), expected: 50 },
 	{ label: 'stack boundary -1', text: '\u3042'.repeat(STACK_BUF_MAX - 1), expected: STACK_BUF_MAX - 1 },
 	{ label: 'stack boundary', text: '\u3042'.repeat(STACK_BUF_MAX), expected: STACK_BUF_MAX },
 	{ label: 'stack boundary +1', text: '\u3042'.repeat(STACK_BUF_MAX + 1), expected: STACK_BUF_MAX + 1 },

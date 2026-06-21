@@ -1,6 +1,6 @@
 import { countGraphemes } from 'unicode-segmenter/grapheme';
 
-import { isAsciiWithoutCr } from './utils.ts';
+import { isLatin1WithoutCr } from './utils.ts';
 
 /**
  * returns the grapheme length of a string
@@ -9,7 +9,7 @@ import { isAsciiWithoutCr } from './utils.ts';
  * @returns grapheme count
  */
 export const getGraphemeLength = (text: string): number => {
-	if (isAsciiWithoutCr(text)) {
+	if (isLatin1WithoutCr(text)) {
 		return text.length;
 	}
 
@@ -38,7 +38,7 @@ export const isGraphemeLengthInRange = (text: string, min: number, max: number):
 		return true;
 	}
 
-	if (isAsciiWithoutCr(text)) {
+	if (isLatin1WithoutCr(text)) {
 		return utf16Len <= max;
 	}
 

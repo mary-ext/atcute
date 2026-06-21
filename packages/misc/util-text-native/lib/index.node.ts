@@ -6,7 +6,7 @@ import {
 	getGraphemeLength as getGraphemeLengthJs,
 	isGraphemeLengthInRange as isGraphemeLengthInRangeJs,
 } from './index.ts';
-import { isAsciiWithoutCr } from './utils.ts';
+import { isLatin1WithoutCr } from './utils.ts';
 
 type GraphemeBinding = {
 	getGraphemeLength: (str: string) => number;
@@ -59,9 +59,9 @@ try {
 	const nativeIsGraphemeLengthInRange = binding.isGraphemeLengthInRange;
 
 	getGraphemeLength = (text) => {
-		// the JS ASCII scan only beats the native round-trip on short strings; past ~2 dozen units the
+		// the JS Latin-1 scan only beats the native round-trip on short strings; past ~2 dozen units the
 		// native copy-and-count is faster, so gate the shortcut by length rather than always scanning.
-		if (text.length <= 24 && isAsciiWithoutCr(text)) {
+		if (text.length <= 24 && isLatin1WithoutCr(text)) {
 			return text.length;
 		}
 		return nativeGetGraphemeLength(text);
