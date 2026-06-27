@@ -53,6 +53,7 @@
 		},
 		"globalScope": {
 			"type": "object",
+			"properties": {},
 			"description": "Account-wide default. The record at key 'self' should carry this scope."
 		},
 		"preferenceSet": {

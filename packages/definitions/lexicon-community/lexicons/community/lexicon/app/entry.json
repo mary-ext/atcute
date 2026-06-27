@@ -1,0 +1,110 @@
+{
+	"id": "community.lexicon.app.entry",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "links", "name"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"maxLength": 200,
+						"description": "The display name of the app.",
+						"maxGraphemes": 100
+					},
+					"tags": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxLength": 64,
+							"maxGraphemes": 32
+						},
+						"maxLength": 10,
+						"description": "Open discovery tags for filtering and search, preferably lowercase. Do not use tags for platforms, lexicon interoperability, or listing language."
+					},
+					"langs": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "language"
+						},
+						"maxLength": 3,
+						"description": "Human language of this entry's text. This describes the listing, not the languages supported by the app."
+					},
+					"links": {
+						"type": "array",
+						"items": {
+							"ref": "community.lexicon.app.defs#link",
+							"type": "ref"
+						},
+						"maxLength": 12,
+						"minLength": 1,
+						"description": "Relevant destinations for the app. The first link should be the primary destination."
+					},
+					"images": {
+						"type": "array",
+						"items": {
+							"ref": "community.lexicon.app.defs#image",
+							"type": "ref"
+						},
+						"maxLength": 24,
+						"description": "Visual assets for directories and stores, such as icons, hero images, screenshots, banners, and social cards."
+					},
+					"status": {
+						"ref": "community.lexicon.app.defs#status",
+						"type": "ref",
+						"description": "Current release or maintenance status of the app."
+					},
+					"lexicons": {
+						"ref": "community.lexicon.app.defs#lexiconInterop",
+						"type": "ref",
+						"description": "Self-declared AT Protocol lexicon interoperability signals."
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Client-declared timestamp when this entry was created."
+					},
+					"platforms": {
+						"type": "array",
+						"items": {
+							"ref": "community.lexicon.app.defs#platform",
+							"type": "ref"
+						},
+						"maxLength": 12,
+						"description": "Platforms where this app is available."
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Client-declared timestamp when this entry was last updated."
+					},
+					"profileDid": {
+						"type": "string",
+						"format": "did",
+						"description": "DID expected to publish the canonical app profile at community.lexicon.app.profile/self."
+					},
+					"description": {
+						"type": "string",
+						"maxLength": 3000,
+						"description": "A short description of what the app does.",
+						"maxGraphemes": 300
+					},
+					"accountIndicators": {
+						"type": "array",
+						"items": {
+							"ref": "community.lexicon.app.defs#accountIndicator",
+							"type": "ref"
+						},
+						"maxLength": 12,
+						"description": "Records whose presence in an account can indicate that the account probably uses this app."
+					}
+				}
+			},
+			"description": "A third-party or community listing for an app built on or for the AT Protocol."
+		}
+	},
+	"lexicon": 1
+}

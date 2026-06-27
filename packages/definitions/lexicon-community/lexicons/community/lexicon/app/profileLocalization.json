@@ -1,0 +1,74 @@
+{
+	"id": "community.lexicon.app.profileLocalization",
+	"defs": {
+		"main": {
+			"key": "any",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "locale"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"maxLength": 200,
+						"description": "Localized display name of the app.",
+						"maxGraphemes": 100
+					},
+					"tags": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxLength": 64,
+							"maxGraphemes": 32
+						},
+						"maxLength": 10,
+						"description": "Localized discovery tags for filtering and search."
+					},
+					"links": {
+						"type": "array",
+						"items": {
+							"ref": "community.lexicon.app.defs#link",
+							"type": "ref"
+						},
+						"maxLength": 12,
+						"minLength": 1,
+						"description": "Localized destinations for the app. The first link should be the primary destination for this locale."
+					},
+					"images": {
+						"type": "array",
+						"items": {
+							"ref": "community.lexicon.app.defs#image",
+							"type": "ref"
+						},
+						"maxLength": 24,
+						"description": "Localized visual assets for directories and stores, such as icons, hero images, screenshots, banners, and social cards."
+					},
+					"locale": {
+						"type": "string",
+						"format": "language",
+						"description": "BCP 47 language tag for this localized metadata."
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Client-declared timestamp when this localization was created."
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Client-declared timestamp when this localization was last updated."
+					},
+					"description": {
+						"type": "string",
+						"maxLength": 3000,
+						"description": "Localized description of what the app does.",
+						"maxGraphemes": 300
+					}
+				}
+			},
+			"description": "A locale-specific override for an app profile. This record should be published by the same DID as the canonical app profile."
+		}
+	},
+	"lexicon": 1,
+	"description": "Localized metadata for a community.lexicon.app.profile record."
+}

@@ -1,3 +1,7 @@
+export * as CommunityLexiconAppDefs from './types/community/lexicon/app/defs.ts';
+export * as CommunityLexiconAppEntry from './types/community/lexicon/app/entry.ts';
+export * as CommunityLexiconAppProfile from './types/community/lexicon/app/profile.ts';
+export * as CommunityLexiconAppProfileLocalization from './types/community/lexicon/app/profileLocalization.ts';
 export * as CommunityLexiconBookmarksBookmark from './types/community/lexicon/bookmarks/bookmark.ts';
 export * as CommunityLexiconBookmarksGetActorBookmarks from './types/community/lexicon/bookmarks/getActorBookmarks.ts';
 export * as CommunityLexiconCalendarEvent from './types/community/lexicon/calendar/event.ts';

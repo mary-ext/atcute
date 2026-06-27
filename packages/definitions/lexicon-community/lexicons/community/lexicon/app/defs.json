@@ -1,0 +1,295 @@
+{
+	"id": "community.lexicon.app.defs",
+	"defs": {
+		"link": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "uri",
+					"description": "Destination URI."
+				},
+				"role": {
+					"ref": "#linkRole",
+					"type": "ref",
+					"description": "Known role of this link, if any."
+				},
+				"label": {
+					"type": "string",
+					"maxLength": 100,
+					"description": "Human-readable label for the URI.",
+					"maxGraphemes": 50
+				}
+			},
+			"description": "A labeled URI associated with an app."
+		},
+		"image": {
+			"type": "object",
+			"required": ["alt"],
+			"properties": {
+				"alt": {
+					"type": "string",
+					"maxLength": 1000,
+					"description": "Alt text description of the image, for accessibility.",
+					"maxGraphemes": 300
+				},
+				"uri": {
+					"type": "string",
+					"format": "uri",
+					"description": "Remote image URI."
+				},
+				"image": {
+					"type": "blob",
+					"accept": ["image/*"],
+					"maxSize": 2000000,
+					"description": "The raw image file."
+				},
+				"purpose": {
+					"type": "string",
+					"description": "How directories and stores should use the image. Omit this field when no known purpose fits.",
+					"knownValues": [
+						"community.lexicon.app.defs#purposeAd",
+						"community.lexicon.app.defs#purposeAppStore",
+						"community.lexicon.app.defs#purposeBanner",
+						"community.lexicon.app.defs#purposeHero",
+						"community.lexicon.app.defs#purposeIcon",
+						"community.lexicon.app.defs#purposeLogo",
+						"community.lexicon.app.defs#purposeScreenshot",
+						"community.lexicon.app.defs#purposeSocialCard"
+					]
+				},
+				"aspectRatio": {
+					"ref": "#aspectRatio",
+					"type": "ref"
+				}
+			},
+			"description": "An image associated with an app, including accessibility and display metadata. Exactly one of `image` (ATProto blob) or `uri` (remote URL) MUST be present. Consumers SHOULD ignore image items that have neither or both."
+		},
+		"status": {
+			"type": "string",
+			"description": "Current release or maintenance status of an app.",
+			"knownValues": [
+				"community.lexicon.app.defs#discontinued",
+				"community.lexicon.app.defs#preview",
+				"community.lexicon.app.defs#released",
+				"community.lexicon.app.defs#unmaintained",
+				"community.lexicon.app.defs#unreleased"
+			]
+		},
+		"preview": {
+			"type": "token",
+			"description": "The app is available as an alpha, beta, early access, or preview release."
+		},
+		"linkRole": {
+			"type": "string",
+			"description": "Known role of a link associated with an app.",
+			"knownValues": [
+				"community.lexicon.app.defs#linkRoleAppStore",
+				"community.lexicon.app.defs#linkRoleChangelog",
+				"community.lexicon.app.defs#linkRoleDocs",
+				"community.lexicon.app.defs#linkRoleFDroid",
+				"community.lexicon.app.defs#linkRolePlayStore",
+				"community.lexicon.app.defs#linkRolePrivacyPolicy",
+				"community.lexicon.app.defs#linkRoleSourceCode",
+				"community.lexicon.app.defs#linkRoleStatus",
+				"community.lexicon.app.defs#linkRoleSupport",
+				"community.lexicon.app.defs#linkRoleTermsOfService",
+				"community.lexicon.app.defs#linkRoleWebManifest",
+				"community.lexicon.app.defs#linkRoleWebsite"
+			]
+		},
+		"platform": {
+			"type": "string",
+			"description": "Platform where an app is available.",
+			"knownValues": [
+				"community.lexicon.app.defs#platformAndroid",
+				"community.lexicon.app.defs#platformCLI",
+				"community.lexicon.app.defs#platformIOS",
+				"community.lexicon.app.defs#platformLinux",
+				"community.lexicon.app.defs#platformMacOS",
+				"community.lexicon.app.defs#platformWeb",
+				"community.lexicon.app.defs#platformWindows"
+			]
+		},
+		"released": {
+			"type": "token",
+			"description": "The app is generally available."
+		},
+		"purposeAd": {
+			"type": "token",
+			"description": "A promotional or advertising image."
+		},
+		"unreleased": {
+			"type": "token",
+			"description": "The app has been announced but is not yet available."
+		},
+		"aspectRatio": {
+			"type": "object",
+			"required": ["height", "width"],
+			"properties": {
+				"width": {
+					"type": "integer",
+					"minimum": 1
+				},
+				"height": {
+					"type": "integer",
+					"minimum": 1
+				}
+			},
+			"description": "width:height represents an aspect ratio. It may be approximate."
+		},
+		"platformCLI": {
+			"type": "token",
+			"description": "Command line interface."
+		},
+		"platformIOS": {
+			"type": "token",
+			"description": "iOS app."
+		},
+		"platformWeb": {
+			"type": "token",
+			"description": "Web app or website."
+		},
+		"purposeHero": {
+			"type": "token",
+			"description": "A large promotional or feature image, typically used at the top of a directory listing."
+		},
+		"purposeIcon": {
+			"type": "token",
+			"description": "A small square icon representing the app, typically used in launchers, lists, and tab bars."
+		},
+		"purposeLogo": {
+			"type": "token",
+			"description": "A logotype or wordmark for the app."
+		},
+		"discontinued": {
+			"type": "token",
+			"description": "The app is no longer available or supported."
+		},
+		"linkRoleDocs": {
+			"type": "token",
+			"description": "Documentation."
+		},
+		"unmaintained": {
+			"type": "token",
+			"description": "The app may still be available, but is no longer actively maintained."
+		},
+		"platformLinux": {
+			"type": "token",
+			"description": "Linux app."
+		},
+		"platformMacOS": {
+			"type": "token",
+			"description": "macOS app."
+		},
+		"purposeBanner": {
+			"type": "token",
+			"description": "A wide banner image, such as a header image for a profile or listing page."
+		},
+		"lexiconInterop": {
+			"type": "object",
+			"properties": {
+				"consumes": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"format": "nsid"
+					},
+					"description": "Lexicon collections this app reads, displays, imports, or otherwise consumes."
+				},
+				"produces": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"format": "nsid"
+					},
+					"description": "Lexicon collections this app creates or publishes records for."
+				}
+			},
+			"description": "Self-declared AT Protocol lexicon interoperability signals."
+		},
+		"linkRoleFDroid": {
+			"type": "token",
+			"description": "F-Droid listing."
+		},
+		"linkRoleStatus": {
+			"type": "token",
+			"description": "Service status page."
+		},
+		"linkRoleSupport": {
+			"type": "token",
+			"description": "Support, help, or contact page."
+		},
+		"linkRoleWebsite": {
+			"type": "token",
+			"description": "Primary website or landing page."
+		},
+		"platformAndroid": {
+			"type": "token",
+			"description": "Android app."
+		},
+		"platformWindows": {
+			"type": "token",
+			"description": "Windows app."
+		},
+		"purposeAppStore": {
+			"type": "token",
+			"description": "A promotional image formatted for a native app store listing."
+		},
+		"accountIndicator": {
+			"type": "object",
+			"required": ["collection"],
+			"properties": {
+				"rkey": {
+					"type": "string",
+					"format": "record-key",
+					"description": "Optional record key to look for within the collection."
+				},
+				"collection": {
+					"type": "string",
+					"format": "nsid",
+					"description": "Record collection to look for in an account repository."
+				}
+			},
+			"description": "A record whose presence in an account can indicate that the account probably uses this app."
+		},
+		"linkRoleAppStore": {
+			"type": "token",
+			"description": "Apple App Store listing."
+		},
+		"linkRoleChangelog": {
+			"type": "token",
+			"description": "Changelog or release notes."
+		},
+		"linkRolePlayStore": {
+			"type": "token",
+			"description": "Google Play Store listing."
+		},
+		"purposeScreenshot": {
+			"type": "token",
+			"description": "A screenshot of the app's UI, used in directory and store listings."
+		},
+		"purposeSocialCard": {
+			"type": "token",
+			"description": "An image sized and formatted for social media sharing previews (Open Graph, Twitter Card, etc.)."
+		},
+		"linkRoleSourceCode": {
+			"type": "token",
+			"description": "Source code repository or source distribution."
+		},
+		"linkRoleWebManifest": {
+			"type": "token",
+			"description": "Web App Manifest."
+		},
+		"linkRolePrivacyPolicy": {
+			"type": "token",
+			"description": "Privacy policy."
+		},
+		"linkRoleTermsOfService": {
+			"type": "token",
+			"description": "Terms of service."
+		}
+	},
+	"lexicon": 1
+}
