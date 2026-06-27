@@ -9,6 +9,11 @@
 					"type": "string",
 					"knownValues": ["medium", "small"]
 				},
+				"limit": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "Show at most this many posts."
+				},
 				"filterByTags": {
 					"type": "array",
 					"items": {
