@@ -1,5 +1,12 @@
 # @atcute/util-text-native
 
+## 1.0.3
+
+### Patch Changes
+
+- ae3438d: extend the exact-count fast path from ASCII to Latin-1, so grapheme length checks on
+  precomposed accented text skip segmentation
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/leaflet",
-	"version": "2.0.6",
+	"version": "2.0.7",
 	"description": "Leaflet (pub.leaflet.*) schema definitions",
 	"keywords": [
 		"atcute",
