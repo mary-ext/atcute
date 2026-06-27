@@ -36,17 +36,17 @@
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"nanoid": "^5.1.11",
+		"nanoid": "^5.1.16",
 		"valibot": "^1.4.1"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/xrpc-server": "file:",
-		"@mary-ext/simple-event-emitter": "^1.0.1",
-		"@types/node": "^25.9.1",
-		"@vitest/coverage-v8": "^4.1.7",
-		"vitest": "^4.1.7"
+		"@mary-ext/simple-event-emitter": "^1.0.2",
+		"@types/node": "^25.9.4",
+		"@vitest/coverage-v8": "^4.1.9",
+		"vitest": "^4.1.9"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

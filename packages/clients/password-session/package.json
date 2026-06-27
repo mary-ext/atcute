@@ -35,7 +35,7 @@
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/internal-dev-env": "workspace:^",
-		"vitest": "^4.1.7"
+		"vitest": "^4.1.9"
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^2.0.0",

@@ -10,11 +10,11 @@
 		"build": "tsgo"
 	},
 	"dependencies": {
-		"@atproto/crypto": "^0.5.0",
-		"@atproto/identity": "^0.5.0",
-		"@atproto/pds": "^0.5.1",
+		"@atproto/crypto": "^0.5.2",
+		"@atproto/identity": "^0.5.2",
+		"@atproto/pds": "^0.5.10",
 		"@did-plc/server": "^0.0.1",
-		"axios": "^1.16.1",
+		"axios": "^1.18.1",
 		"get-port": "^7.2.0",
 		"uint8arrays": "^6.1.1"
 	}

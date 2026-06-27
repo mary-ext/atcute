@@ -47,10 +47,10 @@
 	},
 	"devDependencies": {
 		"@ipld/dag-cbor": "^10.0.1",
-		"@types/node": "^25.9.1",
-		"@vitest/coverage-v8": "^4.1.7",
+		"@types/node": "^25.9.4",
+		"@vitest/coverage-v8": "^4.1.9",
 		"cbor-x": "^1.6.4",
-		"vitest": "^4.1.7"
+		"vitest": "^4.1.9"
 	},
 	"peerDependencies": {
 		"@atcute/cid": "^2.0.0"

@@ -40,10 +40,10 @@
 	},
 	"devDependencies": {
 		"@atcute/car": "workspace:^",
-		"@types/node": "^25.9.1",
-		"@vitest/coverage-v8": "^4.1.7",
+		"@types/node": "^25.9.4",
+		"@vitest/coverage-v8": "^4.1.9",
 		"valibot": "^1.4.1",
-		"vitest": "^4.1.7"
+		"vitest": "^4.1.9"
 	},
 	"peerDependencies": {
 		"@atcute/cbor": "^2.0.0",

@@ -41,7 +41,7 @@
 		"@atcute/time-ms": "workspace:^"
 	},
 	"devDependencies": {
-		"@types/node": "^25.9.1",
-		"vitest": "^4.1.7"
+		"@types/node": "^25.9.4",
+		"vitest": "^4.1.9"
 	}
 }

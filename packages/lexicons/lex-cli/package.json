@@ -34,15 +34,15 @@
 		"@atcute/lexicon-doc": "workspace:^",
 		"@atcute/lexicon-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
-		"@optique/core": "^1.0.2",
-		"@optique/run": "^1.0.2",
+		"@optique/core": "^1.1.0",
+		"@optique/run": "^1.1.0",
 		"picocolors": "^1.1.1",
-		"prettier": "^3.8.3",
+		"prettier": "^3.8.4",
 		"valibot": "^1.4.1"
 	},
 	"devDependencies": {
 		"@atcute/uint8array": "workspace:^",
-		"@types/node": "^25.9.1",
+		"@types/node": "^25.9.4",
 		"tschema": "^3.2.0"
 	}
 }

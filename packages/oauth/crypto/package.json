@@ -30,10 +30,10 @@
 	"dependencies": {
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"nanoid": "^5.1.11",
+		"nanoid": "^5.1.16",
 		"valibot": "^1.4.1"
 	},
 	"devDependencies": {
-		"vitest": "^4.1.7"
+		"vitest": "^4.1.9"
 	}
 }
