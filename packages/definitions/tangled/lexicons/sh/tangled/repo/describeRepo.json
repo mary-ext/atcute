@@ -20,6 +20,7 @@
 					"properties": {
 						"rkey": {
 							"type": "string",
+							"format": "record-key",
 							"description": "Current rkey of the sh.tangled.repo record tracked by this knot"
 						},
 						"repoDid": {

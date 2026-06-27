@@ -55,9 +55,12 @@
 		},
 		"cloneOpts": {
 			"type": "object",
-			"required": ["depth", "skip", "submodules"],
+			"required": ["depth", "skip", "submodules", "tags"],
 			"properties": {
 				"skip": {
+					"type": "boolean"
+				},
+				"tags": {
 					"type": "boolean"
 				},
 				"depth": {

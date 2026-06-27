@@ -7,6 +7,7 @@ const _cloneOptsSchema = /*#__PURE__*/ v.object({
 	depth: /*#__PURE__*/ v.integer(),
 	skip: /*#__PURE__*/ v.boolean(),
 	submodules: /*#__PURE__*/ v.boolean(),
+	tags: /*#__PURE__*/ v.boolean(),
 });
 const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),

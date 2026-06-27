@@ -14,7 +14,7 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.describeRepo', {
 			ownerDid: /*#__PURE__*/ v.didString(),
 			repoDid: /*#__PURE__*/ v.didString(),
 			/** Current rkey of the sh.tangled.repo record tracked by this knot */
-			rkey: /*#__PURE__*/ v.string(),
+			rkey: /*#__PURE__*/ v.recordKeyString(),
 		}),
 	},
 });

@@ -1,0 +1,95 @@
+{
+	"id": "sh.tangled.sync.listRepos",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["repos"],
+					"properties": {
+						"repos": {
+							"type": "array",
+							"items": {
+								"ref": "#repo",
+								"type": "ref"
+							},
+							"maxLength": 1000
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 1000,
+						"minimum": 1
+					},
+					"order": {
+						"type": "string",
+						"default": "desc",
+						"description": "Sort direction over the service's repo listing order.",
+						"knownValues": ["asc", "desc"]
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					}
+				}
+			},
+			"description": "List git repos hosted on this service."
+		},
+		"repo": {
+			"type": "object",
+			"required": ["repo", "status"],
+			"properties": {
+				"repo": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the git repo as minted by the knot"
+				},
+				"status": {
+					"type": "string",
+					"description": "Serving status of the repo according to the knot.",
+					"knownValues": ["active", "archived", "disabled"]
+				},
+				"defaultBranch": {
+					"ref": "#defaultBranch",
+					"type": "ref"
+				}
+			}
+		},
+		"defaultBranch": {
+			"type": "object",
+			"required": ["ref"],
+			"properties": {
+				"ref": {
+					"type": "string",
+					"maxLength": 2560,
+					"description": "Default branch ref name, eg. refs/heads/main.",
+					"maxGraphemes": 256
+				},
+				"head": {
+					"type": "string",
+					"maxLength": 128,
+					"minLength": 40,
+					"description": "Commit SHA at the tip of the default branch, for reconciling against a last-known state. Width depends on the repo's git object-format."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}
