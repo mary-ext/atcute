@@ -20,7 +20,7 @@
 					"description": "Who added this member. Only present if the member was added (instead of joining via link)."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. A current group convo member."
+			"description": "A current group convo member."
 		},
 		"profileViewBasic": {
 			"type": "object",
@@ -79,14 +79,13 @@
 		},
 		"directConvoMember": {
 			"type": "object",
-			"properties": {},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]."
+			"properties": {}
 		},
 		"pastGroupConvoMember": {
 			"type": "object",
 			"required": [],
 			"properties": {},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. A past group convo member."
+			"description": "A past group convo member."
 		}
 	},
 	"lexicon": 1

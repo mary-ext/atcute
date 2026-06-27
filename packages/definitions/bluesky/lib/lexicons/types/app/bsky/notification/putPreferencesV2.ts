@@ -9,6 +9,12 @@ const _mainSchema = /*#__PURE__*/ v.procedure('app.bsky.notification.putPreferen
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/**
+			 * Deprecated: use chat.bsky.notification preferences instead. Setting this won't stick and the default
+			 * values will be returned.
+			 *
+			 * @deprecated
+			 */
 			get chat() {
 				return /*#__PURE__*/ v.optional(AppBskyNotificationDefs.chatPreferenceSchema);
 			},

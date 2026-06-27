@@ -44,7 +44,7 @@
 				},
 				"encoding": "application/json"
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Removes members from a group. This deletes convo memberships, doesn't just set a status."
+			"description": "Removes members from a group. This deletes convo memberships, doesn't just set a status."
 		}
 	},
 	"lexicon": 1

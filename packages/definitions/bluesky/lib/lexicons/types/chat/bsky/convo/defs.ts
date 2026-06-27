@@ -88,12 +88,12 @@ const _groupConvoSchema = /*#__PURE__*/ v.object({
 	/**
 	 * The display name of the group conversation.
 	 *
-	 * @maxLength 1280
-	 * @maxGraphemes 128
+	 * @maxLength 500
+	 * @maxGraphemes 50
 	 */
 	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-		/*#__PURE__*/ v.stringLength(0, 1280),
-		/*#__PURE__*/ v.stringGraphemes(0, 128),
+		/*#__PURE__*/ v.stringLength(0, 500),
+		/*#__PURE__*/ v.stringGraphemes(0, 50),
 	]),
 	/** The number of unread join requests for the group conversation. Only present for the owner. */
 	unreadJoinRequestCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
@@ -398,6 +398,11 @@ const _messageAndReactionViewSchema = /*#__PURE__*/ v.object({
 		return reactionViewSchema;
 	},
 });
+const _messageBeforeUserJoinedGroupViewSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageBeforeUserJoinedGroupView'),
+	),
+});
 const _messageInputSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('chat.bsky.convo.defs#messageInput')),
 	get embed() {
@@ -450,7 +455,13 @@ const _messageViewSchema = /*#__PURE__*/ v.object({
 	 * have a populated 'replyTo' field even if it was also a reply.
 	 */
 	get replyTo() {
-		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([deletedMessageViewSchema, messageViewSchema]));
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.variant([
+				deletedMessageViewSchema,
+				messageBeforeUserJoinedGroupViewSchema,
+				messageViewSchema,
+			]),
+		);
 	},
 	rev: /*#__PURE__*/ v.string(),
 	get sender() {
@@ -665,6 +676,7 @@ type logUnmuteConvo$schematype = typeof _logUnmuteConvoSchema;
 type logWithdrawIncomingJoinRequest$schematype = typeof _logWithdrawIncomingJoinRequestSchema;
 type logWithdrawOutgoingJoinRequest$schematype = typeof _logWithdrawOutgoingJoinRequestSchema;
 type messageAndReactionView$schematype = typeof _messageAndReactionViewSchema;
+type messageBeforeUserJoinedGroupView$schematype = typeof _messageBeforeUserJoinedGroupViewSchema;
 type messageInput$schematype = typeof _messageInputSchema;
 type messageRef$schematype = typeof _messageRefSchema;
 type messageView$schematype = typeof _messageViewSchema;
@@ -726,6 +738,7 @@ export interface logUnmuteConvoSchema extends logUnmuteConvo$schematype {}
 export interface logWithdrawIncomingJoinRequestSchema extends logWithdrawIncomingJoinRequest$schematype {}
 export interface logWithdrawOutgoingJoinRequestSchema extends logWithdrawOutgoingJoinRequest$schematype {}
 export interface messageAndReactionViewSchema extends messageAndReactionView$schematype {}
+export interface messageBeforeUserJoinedGroupViewSchema extends messageBeforeUserJoinedGroupView$schematype {}
 export interface messageInputSchema extends messageInput$schematype {}
 export interface messageRefSchema extends messageRef$schematype {}
 export interface messageViewSchema extends messageView$schematype {}
@@ -789,6 +802,8 @@ export const logWithdrawIncomingJoinRequestSchema =
 export const logWithdrawOutgoingJoinRequestSchema =
 	_logWithdrawOutgoingJoinRequestSchema as logWithdrawOutgoingJoinRequestSchema;
 export const messageAndReactionViewSchema = _messageAndReactionViewSchema as messageAndReactionViewSchema;
+export const messageBeforeUserJoinedGroupViewSchema =
+	_messageBeforeUserJoinedGroupViewSchema as messageBeforeUserJoinedGroupViewSchema;
 export const messageInputSchema = _messageInputSchema as messageInputSchema;
 export const messageRefSchema = _messageRefSchema as messageRefSchema;
 export const messageViewSchema = _messageViewSchema as messageViewSchema;
@@ -867,6 +882,9 @@ export interface LogWithdrawOutgoingJoinRequest extends v.InferInput<
 	typeof logWithdrawOutgoingJoinRequestSchema
 > {}
 export interface MessageAndReactionView extends v.InferInput<typeof messageAndReactionViewSchema> {}
+export interface MessageBeforeUserJoinedGroupView extends v.InferInput<
+	typeof messageBeforeUserJoinedGroupViewSchema
+> {}
 export interface MessageInput extends v.InferInput<typeof messageInputSchema> {}
 export interface MessageRef extends v.InferInput<typeof messageRefSchema> {}
 export interface MessageView extends v.InferInput<typeof messageViewSchema> {}

@@ -47,7 +47,7 @@
 				},
 				"encoding": "application/json"
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Creates a join link for the group convo."
+			"description": "Creates a join link for the group convo."
 		}
 	},
 	"lexicon": 1

@@ -38,12 +38,12 @@ const _groupConvoSchema = /*#__PURE__*/ v.object({
 	/**
 	 * The display name of the group conversation.
 	 *
-	 * @maxLength 1280
-	 * @maxGraphemes 128
+	 * @maxLength 500
+	 * @maxGraphemes 50
 	 */
 	name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-		/*#__PURE__*/ v.stringLength(0, 1280),
-		/*#__PURE__*/ v.stringGraphemes(0, 128),
+		/*#__PURE__*/ v.stringLength(0, 500),
+		/*#__PURE__*/ v.stringGraphemes(0, 50),
 	]),
 });
 

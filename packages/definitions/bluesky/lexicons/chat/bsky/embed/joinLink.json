@@ -27,5 +27,5 @@
 		}
 	},
 	"lexicon": 1,
-	"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. A join link embedded in a chat message."
+	"description": "A join link embedded in a chat message."
 }

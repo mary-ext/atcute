@@ -9,7 +9,8 @@
 					"properties": {
 						"chat": {
 							"ref": "app.bsky.notification.defs#chatPreference",
-							"type": "ref"
+							"type": "ref",
+							"description": "Deprecated: use chat.bsky.notification preferences instead. Setting this won't stick and the default values will be returned."
 						},
 						"like": {
 							"ref": "app.bsky.notification.defs#filterablePreference",

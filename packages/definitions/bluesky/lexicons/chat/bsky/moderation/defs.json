@@ -17,7 +17,7 @@
 					"description": "Union field that has data specific to different kinds of convos."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. A view of a conversation for moderation purposes. Unlike chat.bsky.convo.defs#convoView, it does not include viewer-specific data (such as muted, unreadCount, status, lastMessage, lastReaction), since the requester is a moderator and not a member of the conversation. The member list is not included; use chat.bsky.moderation.getConvoMembers to list members."
+			"description": "A view of a conversation for moderation purposes. Unlike chat.bsky.convo.defs#convoView, it does not include viewer-specific data (such as muted, unreadCount, status, lastMessage, lastReaction), since the requester is a moderator and not a member of the conversation. The member list is not included; use chat.bsky.moderation.getConvoMembers to list members."
 		},
 		"groupConvo": {
 			"type": "object",
@@ -25,9 +25,9 @@
 			"properties": {
 				"name": {
 					"type": "string",
-					"maxLength": 1280,
+					"maxLength": 500,
 					"description": "The display name of the group conversation.",
-					"maxGraphemes": 128
+					"maxGraphemes": 50
 				},
 				"joinLink": {
 					"ref": "chat.bsky.group.defs#joinLinkView",
@@ -55,12 +55,12 @@
 					"description": "The total number of pending join requests for the group conversation. This information is only visible to the owner and to moderators. Capped at 21."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Data specific to a group conversation, for moderation purposes. Unlike chat.bsky.convo.defs#groupConvo, it does not include viewer-specific data (such as unreadJoinRequestCount), since the requester is a moderator and not a member of the conversation."
+			"description": "Data specific to a group conversation, for moderation purposes. Unlike chat.bsky.convo.defs#groupConvo, it does not include viewer-specific data (such as unreadJoinRequestCount), since the requester is a moderator and not a member of the conversation."
 		},
 		"directConvo": {
 			"type": "object",
 			"properties": {},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Data specific to a direct conversation, for moderation purposes."
+			"description": "Data specific to a direct conversation, for moderation purposes."
 		}
 	},
 	"lexicon": 1

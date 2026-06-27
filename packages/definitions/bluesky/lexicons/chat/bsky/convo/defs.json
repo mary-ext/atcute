@@ -85,9 +85,9 @@
 			"properties": {
 				"name": {
 					"type": "string",
-					"maxLength": 1280,
+					"maxLength": 500,
 					"description": "The display name of the group conversation.",
-					"maxGraphemes": 128
+					"maxGraphemes": 50
 				},
 				"joinLink": {
 					"ref": "chat.bsky.group.defs#joinLinkView",
@@ -122,8 +122,7 @@
 					"type": "boolean",
 					"description": "Whether the lock status is being forced by a moderation override (account inactivation or convo takedown) rather than the owner's own setting."
 				}
-			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]."
+			}
 		},
 		"messageRef": {
 			"type": "object",
@@ -147,8 +146,7 @@
 		},
 		"directConvo": {
 			"type": "object",
-			"properties": {},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]."
+			"properties": {}
 		},
 		"messageView": {
 			"type": "object",
@@ -186,7 +184,7 @@
 					"format": "datetime"
 				},
 				"replyTo": {
-					"refs": ["#deletedMessageView", "#messageView"],
+					"refs": ["#deletedMessageView", "#messageBeforeUserJoinedGroupView", "#messageView"],
 					"type": "union",
 					"description": "If set, the message this message is replying to. The full view of the referenced message is embedded so the client can render it inline. Only a single level is embedded: the embedded message will not itself have a populated 'replyTo' field even if it was also a reply."
 				},
@@ -224,7 +222,7 @@
 					"description": "Profiles referred in the system message."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member was added to a group convo. The member who was added gets a logBeginConvo (to create the convo) but also a logAddMember (to show the system message as the first message the user sees)."
+			"description": "Event indicating a member was added to a group convo. The member who was added gets a logBeginConvo (to create the convo) but also a logAddMember (to show the system message as the first message the user sees)."
 		},
 		"logEditGroup": {
 			"type": "object",
@@ -242,7 +240,7 @@
 					"description": "A system message with data of type #systemMessageDataEditGroup"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating info about group convo was edited."
+			"description": "Event indicating info about group convo was edited."
 		},
 		"logLockConvo": {
 			"type": "object",
@@ -268,7 +266,7 @@
 					"description": "Profiles referred in the system message."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a group convo was locked."
+			"description": "Event indicating a group convo was locked."
 		},
 		"logMuteConvo": {
 			"type": "object",
@@ -298,7 +296,7 @@
 					"type": "union"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a convo was read up to a certain message."
+			"description": "Event indicating a convo was read up to a certain message."
 		},
 		"messageInput": {
 			"type": "object",
@@ -395,7 +393,7 @@
 					"description": "Profiles referred in the system message."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member joined a group convo via join link. The member who was added gets a logBeginConvo (to create the convo) but also a logMemberJoin (to show the system message as the first message the user sees)."
+			"description": "Event indicating a member joined a group convo via join link. The member who was added gets a logBeginConvo (to create the convo) but also a logMemberJoin (to show the system message as the first message the user sees)."
 		},
 		"logAcceptConvo": {
 			"type": "object",
@@ -463,7 +461,7 @@
 					"description": "Profiles referred in the system message."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member voluntarily left a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logMemberLeave (because they already left, so can't see the system message)."
+			"description": "Event indicating a member voluntarily left a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logMemberLeave (because they already left, so can't see the system message)."
 		},
 		"logReadMessage": {
 			"type": "object",
@@ -506,7 +504,7 @@
 					"description": "Profiles referred in the system message."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a group convo was unlocked."
+			"description": "Event indicating a group convo was unlocked."
 		},
 		"logUnmuteConvo": {
 			"type": "object",
@@ -541,7 +539,7 @@
 					"description": "A system message with data of type #systemMessageDataEditJoinLink"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a settings about a join link for a group convo were edited."
+			"description": "Event indicating a settings about a join link for a group convo were edited."
 		},
 		"logRemoveMember": {
 			"type": "object",
@@ -567,7 +565,7 @@
 					"description": "Profiles referred in the system message."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a member was removed from a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logRemoveMember (because they already left, so can't see the system message)."
+			"description": "Event indicating a member was removed from a group convo. The member who was removed gets a logLeaveConvo (to leave the convo) but not a logRemoveMember (because they already left, so can't see the system message)."
 		},
 		"logCreateMessage": {
 			"type": "object",
@@ -627,7 +625,7 @@
 					"description": "A system message with data of type #systemMessageDataCreateJoinLink"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join link was created for a group convo."
+			"description": "Event indicating a join link was created for a group convo."
 		},
 		"logEnableJoinLink": {
 			"type": "object",
@@ -645,7 +643,7 @@
 					"description": "A system message with data of type #systemMessageDataEnableJoinLink"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join link was enabled for a group convo."
+			"description": "Event indicating a join link was enabled for a group convo."
 		},
 		"logRemoveReaction": {
 			"type": "object",
@@ -717,8 +715,7 @@
 					"type": "string",
 					"format": "datetime"
 				}
-			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]."
+			}
 		},
 		"deletedMessageView": {
 			"type": "object",
@@ -756,7 +753,7 @@
 					"description": "A system message with data of type #systemMessageDataDisableJoinLink"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join link was disabled for a group convo."
+			"description": "Event indicating a join link was disabled for a group convo."
 		},
 		"reactionViewSender": {
 			"type": "object",
@@ -779,7 +776,7 @@
 					"type": "string"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating the group owner marked join requests as read. Only the owner gets this."
+			"description": "Event indicating the group owner marked join requests as read. Only the owner gets this."
 		},
 		"logRejectJoinRequest": {
 			"type": "object",
@@ -797,7 +794,7 @@
 					"type": "string"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was rejected by the viewer. Only the owner gets this."
+			"description": "Event indicating a join request was rejected by the viewer. Only the owner gets this."
 		},
 		"logApproveJoinRequest": {
 			"type": "object",
@@ -815,7 +812,7 @@
 					"type": "string"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was approved by the viewer. Only the owner gets this. The approved member gets a logBeginConvo."
+			"description": "Event indicating a join request was approved by the viewer. Only the owner gets this. The approved member gets a logBeginConvo."
 		},
 		"logIncomingJoinRequest": {
 			"type": "object",
@@ -833,7 +830,7 @@
 					"type": "string"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was made to a group the viewer owns. Only the owner gets this."
+			"description": "Event indicating a join request was made to a group the viewer owns. Only the owner gets this."
 		},
 		"logOutgoingJoinRequest": {
 			"type": "object",
@@ -846,7 +843,7 @@
 					"type": "string"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a join request was made by the requester. Only requester actor gets this."
+			"description": "Event indicating a join request was made by the requester. Only requester actor gets this."
 		},
 		"messageAndReactionView": {
 			"type": "object",
@@ -886,7 +883,7 @@
 					"description": "Profiles referred in the system message."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a group convo was locked permanently."
+			"description": "Event indicating a group convo was locked permanently."
 		},
 		"systemMessageReferredUser": {
 			"type": "object",
@@ -917,7 +914,7 @@
 					"type": "ref"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating a user was added to the group convo."
+			"description": "System message indicating a user was added to the group convo."
 		},
 		"systemMessageDataEditGroup": {
 			"type": "object",
@@ -931,7 +928,7 @@
 					"description": "Group name that was replaced."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group info was edited."
+			"description": "System message indicating the group info was edited."
 		},
 		"systemMessageDataLockConvo": {
 			"type": "object",
@@ -943,7 +940,7 @@
 					"description": "Current view of the member who locked the group."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group convo was locked."
+			"description": "System message indicating the group convo was locked."
 		},
 		"systemMessageDataMemberJoin": {
 			"type": "object",
@@ -965,7 +962,7 @@
 					"description": "If join link was configured to require approval, this will be set to who approved the request. Undefined if approval was not required."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating a user joined the group convo via join link."
+			"description": "System message indicating a user joined the group convo via join link."
 		},
 		"systemMessageDataMemberLeave": {
 			"type": "object",
@@ -977,7 +974,7 @@
 					"description": "Current view of the member who left the group."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating a user voluntarily left the group convo."
+			"description": "System message indicating a user voluntarily left the group convo."
 		},
 		"systemMessageDataUnlockConvo": {
 			"type": "object",
@@ -989,12 +986,12 @@
 					"description": "Current view of the member who unlocked the group."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group convo was unlocked."
+			"description": "System message indicating the group convo was unlocked."
 		},
 		"systemMessageDataEditJoinLink": {
 			"type": "object",
 			"properties": {},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group join link was edited."
+			"description": "System message indicating the group join link was edited."
 		},
 		"systemMessageDataRemoveMember": {
 			"type": "object",
@@ -1010,7 +1007,7 @@
 					"type": "ref"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating a user was removed from the group convo."
+			"description": "System message indicating a user was removed from the group convo."
 		},
 		"logWithdrawIncomingJoinRequest": {
 			"type": "object",
@@ -1028,7 +1025,7 @@
 					"type": "string"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating a prospective member withdrew their join request. Only the owner gets this."
+			"description": "Event indicating a prospective member withdrew their join request. Only the owner gets this."
 		},
 		"logWithdrawOutgoingJoinRequest": {
 			"type": "object",
@@ -1041,22 +1038,27 @@
 					"type": "string"
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Event indicating the viewer withdrew their own join request. Only requester actor gets this."
+			"description": "Event indicating the viewer withdrew their own join request. Only requester actor gets this."
 		},
 		"systemMessageDataCreateJoinLink": {
 			"type": "object",
 			"properties": {},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group join link was created."
+			"description": "System message indicating the group join link was created."
 		},
 		"systemMessageDataEnableJoinLink": {
 			"type": "object",
 			"properties": {},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group join link was enabled."
+			"description": "System message indicating the group join link was enabled."
+		},
+		"messageBeforeUserJoinedGroupView": {
+			"type": "object",
+			"properties": {},
+			"description": "Placeholder embedded in place of a reply's parent message when that parent was sent before the viewer joined the group convo. The viewer has no access to that history, so no message data is carried."
 		},
 		"systemMessageDataDisableJoinLink": {
 			"type": "object",
 			"properties": {},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group join link was disabled."
+			"description": "System message indicating the group join link was disabled."
 		},
 		"systemMessageDataLockConvoPermanently": {
 			"type": "object",
@@ -1068,7 +1070,7 @@
 					"description": "Current view of the member who locked the group."
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. System message indicating the group convo was locked permanently."
+			"description": "System message indicating the group convo was locked permanently."
 		}
 	},
 	"lexicon": 1

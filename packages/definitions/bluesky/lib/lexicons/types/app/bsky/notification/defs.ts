@@ -24,6 +24,11 @@ const _preferenceSchema = /*#__PURE__*/ v.object({
 });
 const _preferencesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.notification.defs#preferences')),
+	/**
+	 * Deprecated: use chat.bsky.notification preferences instead. This will only return a default value.
+	 *
+	 * @deprecated
+	 */
 	get chat() {
 		return chatPreferenceSchema;
 	},

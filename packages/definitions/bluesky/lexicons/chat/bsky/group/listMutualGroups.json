@@ -41,7 +41,7 @@
 					}
 				}
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Returns a page of group conversations that both the requester and the specified actor are members of."
+			"description": "Returns a page of group conversations that both the requester and the specified actor are members of."
 		}
 	},
 	"lexicon": 1

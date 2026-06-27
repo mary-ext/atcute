@@ -160,6 +160,5 @@
 			"description": "Preview for a disabled join link. Carries only the code so clients can correlate with the input and render a disabled state."
 		}
 	},
-	"lexicon": 1,
-	"description": "[NOTE: This is under active development and should be considered unstable while this note is here]."
+	"lexicon": 1
 }

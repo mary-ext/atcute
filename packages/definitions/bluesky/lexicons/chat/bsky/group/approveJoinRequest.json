@@ -43,7 +43,7 @@
 				},
 				"encoding": "application/json"
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Approves a request to join a group (via join link) the user owns. Action taken by the group owner."
+			"description": "Approves a request to join a group (via join link) the user owns. Action taken by the group owner."
 		}
 	},
 	"lexicon": 1

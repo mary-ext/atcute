@@ -46,7 +46,7 @@
 				},
 				"encoding": "application/json"
 			},
-			"description": "[NOTE: This is under active development and should be considered unstable while this note is here]. Edits the existing join link settings for the group convo."
+			"description": "Edits the existing join link settings for the group convo."
 		}
 	},
 	"lexicon": 1

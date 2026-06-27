@@ -61,6 +61,7 @@ export * as AppBskyFeedPost from './types/app/bsky/feed/post.ts';
 export * as AppBskyFeedPostgate from './types/app/bsky/feed/postgate.ts';
 export * as AppBskyFeedRepost from './types/app/bsky/feed/repost.ts';
 export * as AppBskyFeedSearchPosts from './types/app/bsky/feed/searchPosts.ts';
+export * as AppBskyFeedSearchPostsV2 from './types/app/bsky/feed/searchPostsV2.ts';
 export * as AppBskyFeedSendInteractions from './types/app/bsky/feed/sendInteractions.ts';
 export * as AppBskyFeedThreadgate from './types/app/bsky/feed/threadgate.ts';
 export * as AppBskyGraphBlock from './types/app/bsky/graph/block.ts';
@@ -199,3 +200,6 @@ export * as ChatBskyModerationGetConvos from './types/chat/bsky/moderation/getCo
 export * as ChatBskyModerationGetMessageContext from './types/chat/bsky/moderation/getMessageContext.ts';
 export * as ChatBskyModerationSubscribeModEvents from './types/chat/bsky/moderation/subscribeModEvents.ts';
 export * as ChatBskyModerationUpdateActorAccess from './types/chat/bsky/moderation/updateActorAccess.ts';
+export * as ChatBskyNotificationDefs from './types/chat/bsky/notification/defs.ts';
+export * as ChatBskyNotificationGetPreferences from './types/chat/bsky/notification/getPreferences.ts';
+export * as ChatBskyNotificationPutPreferences from './types/chat/bsky/notification/putPreferences.ts';

@@ -2,30 +2,26 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as ChatBskyConvoDefs from '../convo/defs.ts';
+import * as ChatBskyNotificationDefs from './defs.ts';
 
-const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.group.editGroup', {
+const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.notification.putPreferences', {
 	params: null,
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			convoId: /*#__PURE__*/ v.string(),
-			/**
-			 * @minLength 1
-			 * @maxLength 500
-			 * @maxGraphemes 50
-			 */
-			name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-				/*#__PURE__*/ v.stringLength(1, 500),
-				/*#__PURE__*/ v.stringGraphemes(0, 50),
-			]),
+			get chat() {
+				return /*#__PURE__*/ v.optional(ChatBskyNotificationDefs.chatPreferenceSchema);
+			},
+			get chatRequest() {
+				return /*#__PURE__*/ v.optional(ChatBskyNotificationDefs.chatPreferenceSchema);
+			},
 		}),
 	},
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			get convo() {
-				return ChatBskyConvoDefs.convoViewSchema;
+			get preferences() {
+				return ChatBskyNotificationDefs.preferencesSchema;
 			},
 		}),
 	},
@@ -43,6 +39,6 @@ export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'chat.bsky.group.editGroup': mainSchema;
+		'chat.bsky.notification.putPreferences': mainSchema;
 	}
 }
