@@ -39,18 +39,24 @@ const isProbablyUrl = (input: string): boolean => {
 const escapeHtml = (input: string): string => {
 	return input.replace(/[&<>"']/g, (ch) => {
 		switch (ch) {
-			case '&':
+			case '&': {
 				return '&amp;';
-			case '<':
+			}
+			case '<': {
 				return '&lt;';
-			case '>':
+			}
+			case '>': {
 				return '&gt;';
-			case '"':
+			}
+			case '"': {
 				return '&quot;';
-			case "'":
+			}
+			case "'": {
 				return '&#39;';
-			default:
+			}
+			default: {
 				return ch;
+			}
 		}
 	});
 };

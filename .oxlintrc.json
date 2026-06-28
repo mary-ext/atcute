@@ -22,7 +22,7 @@
 		"prefer-rest-params": "warn",
 		"prefer-spread": "warn",
 		"sort-imports": ["warn", { "ignoreDeclarationSort": true }],
-		"import/no-duplicates": ["error", { "prefer-inline": true }],
+		"import/no-duplicates": ["error", { "preferInline": true }],
 		"import/no-empty-named-blocks": "off",
 		"import/no-unassigned-import": "off",
 		"typescript/consistent-type-imports": [
@@ -35,7 +35,8 @@
 		"typescript/no-require-imports": "error",
 		"typescript/require-await": "warn",
 		"typescript/restrict-plus-operands": "warn",
-		"unicorn/prefer-add-event-listener": "off"
+		"unicorn/prefer-add-event-listener": "off",
+		"unicorn/switch-case-braces": ["warn", "always"]
 	},
 	"overrides": [
 		{

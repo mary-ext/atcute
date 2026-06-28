@@ -82,11 +82,14 @@ export const getGenerateAlgorithm = (alg: SigningAlgorithm): EcKeyGenParams | Rs
 
 const getHashLength = (hash: 'SHA-256' | 'SHA-384' | 'SHA-512'): number => {
 	switch (hash) {
-		case 'SHA-256':
+		case 'SHA-256': {
 			return 32;
-		case 'SHA-384':
+		}
+		case 'SHA-384': {
 			return 48;
-		case 'SHA-512':
+		}
+		case 'SHA-512': {
 			return 64;
+		}
 	}
 };

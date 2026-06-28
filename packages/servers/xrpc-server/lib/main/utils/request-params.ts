@@ -29,10 +29,12 @@ const unwrapArray = (schema: BaseSchema): BaseSchema => {
 
 const coerceBoolean = (str: string): boolean | null => {
 	switch (str) {
-		case 'true':
+		case 'true': {
 			return true;
-		case 'false':
+		}
+		case 'false': {
 			return false;
+		}
 	}
 
 	return null;

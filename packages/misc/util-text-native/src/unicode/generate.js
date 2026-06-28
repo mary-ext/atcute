@@ -116,14 +116,18 @@ const resolveConflict = (cp, existing, incoming) => {
 	const pair = [a, b].toSorted().join('+');
 
 	switch (pair) {
-		case 'EXTEND+ICB_EXTEND':
+		case 'EXTEND+ICB_EXTEND': {
 			return PROP_INDEX['BOTH_EXTEND_ICB_EXTEND'];
-		case 'EXTEND+ICB_LINKER':
+		}
+		case 'EXTEND+ICB_LINKER': {
 			return PROP_INDEX['BOTH_EXTEND_ICB_LINKER'];
-		case 'ICB_EXTEND+ZWJ':
+		}
+		case 'ICB_EXTEND+ZWJ': {
 			return PROP_INDEX['BOTH_ZWJ_ICB_EXTEND'];
-		default:
+		}
+		default: {
 			throw new Error(`unhandled conflict at U+${cp.toString(16).padStart(4, '0')}: ${a} + ${b}`);
+		}
 	}
 };
 

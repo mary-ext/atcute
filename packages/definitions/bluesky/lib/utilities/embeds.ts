@@ -24,10 +24,12 @@ export type RawRecordEmbed = NonNullable<RawEmbeds['record']>;
  */
 export const unwrapRawMediaEmbed = (embed: AppBskyFeedPost.Main['embed']): RawEmbeds['media'] => {
 	switch (embed?.$type) {
-		case 'app.bsky.embed.recordWithMedia':
+		case 'app.bsky.embed.recordWithMedia': {
 			return embed.media;
-		case 'app.bsky.embed.record':
+		}
+		case 'app.bsky.embed.record': {
 			return;
+		}
 	}
 
 	return embed;
@@ -41,11 +43,13 @@ export const unwrapRawMediaEmbed = (embed: AppBskyFeedPost.Main['embed']): RawEm
  */
 export const unwrapRawRecordEmbed = (embed: AppBskyFeedPost.Main['embed']): RawEmbeds['record'] => {
 	switch (embed?.$type) {
-		case 'app.bsky.embed.recordWithMedia':
+		case 'app.bsky.embed.recordWithMedia': {
 			return embed.record;
+		}
 
-		case 'app.bsky.embed.record':
+		case 'app.bsky.embed.record': {
 			return embed;
+		}
 	}
 };
 
@@ -81,10 +85,12 @@ export type RecordEmbed = NonNullable<Embeds['record']>;
  */
 export const unwrapMediaEmbed = (embed: AppBskyFeedDefs.PostView['embed']): Embeds['media'] => {
 	switch (embed?.$type) {
-		case 'app.bsky.embed.recordWithMedia#view':
+		case 'app.bsky.embed.recordWithMedia#view': {
 			return embed.media;
-		case 'app.bsky.embed.record#view':
+		}
+		case 'app.bsky.embed.record#view': {
 			return;
+		}
 	}
 
 	return embed;
@@ -98,11 +104,13 @@ export const unwrapMediaEmbed = (embed: AppBskyFeedDefs.PostView['embed']): Embe
  */
 export const unwrapRecordEmbed = (embed: AppBskyFeedDefs.PostView['embed']): Embeds['record'] => {
 	switch (embed?.$type) {
-		case 'app.bsky.embed.recordWithMedia#view':
+		case 'app.bsky.embed.recordWithMedia#view': {
 			return embed.record.record;
+		}
 
-		case 'app.bsky.embed.record#view':
+		case 'app.bsky.embed.record#view': {
 			return embed.record;
+		}
 	}
 };
 

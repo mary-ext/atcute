@@ -32,8 +32,9 @@ export const verificationMethod = v.pipe(
 			switch (input.type) {
 				case 'Multikey':
 				case 'EcdsaSecp256k1VerificationKey2019':
-				case 'EcdsaSecp256r1VerificationKey2019':
+				case 'EcdsaSecp256r1VerificationKey2019': {
 					return input.publicKeyMultibase !== undefined;
+				}
 			}
 			return true;
 		}, `missing public key multibase`),

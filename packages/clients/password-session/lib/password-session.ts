@@ -509,16 +509,20 @@ const decodeJwt = (token: string): unknown => {
 
 	let b64 = part.replace(/-/g, '+').replace(/_/g, '/');
 	switch (b64.length % 4) {
-		case 0:
+		case 0: {
 			break;
-		case 2:
+		}
+		case 2: {
 			b64 += '==';
 			break;
-		case 3:
+		}
+		case 3: {
 			b64 += '=';
 			break;
-		default:
+		}
+		default: {
 			throw new Error(`invalid token: invalid base64 length`);
+		}
 	}
 
 	return JSON.parse(atob(b64));

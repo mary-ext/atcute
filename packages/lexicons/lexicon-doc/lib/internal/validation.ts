@@ -28,28 +28,39 @@ export const LITERAL_KEY_RE = /^literal:(?!\.{1,2}$)[a-zA-Z0-9_~.:-]{1,512}$/;
 
 export const validateStringFormat = (value: string, format: t.LexStringFormat): boolean => {
 	switch (format) {
-		case 'datetime':
+		case 'datetime': {
 			return isDatetime(value);
-		case 'uri':
+		}
+		case 'uri': {
 			return isGenericUri(value);
-		case 'at-uri':
+		}
+		case 'at-uri': {
 			return isResourceUri(value);
-		case 'did':
+		}
+		case 'did': {
 			return isDid(value);
-		case 'handle':
+		}
+		case 'handle': {
 			return isHandle(value);
-		case 'at-identifier':
+		}
+		case 'at-identifier': {
 			return isActorIdentifier(value);
-		case 'nsid':
+		}
+		case 'nsid': {
 			return isNsid(value);
-		case 'cid':
+		}
+		case 'cid': {
 			return isCid(value);
-		case 'language':
+		}
+		case 'language': {
 			return isLanguageCode(value);
-		case 'tid':
+		}
+		case 'tid': {
 			return isTid(value);
-		case 'record-key':
+		}
+		case 'record-key': {
 			return isRecordKey(value);
+		}
 	}
 };
 
