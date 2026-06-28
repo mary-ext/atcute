@@ -34,15 +34,24 @@
 		"@atcute/lexicon-doc": "workspace:^",
 		"@atcute/lexicon-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
+		"@oomfware/kempt": "^0.1.2",
 		"@optique/core": "^1.1.0",
 		"@optique/run": "^1.1.0",
 		"picocolors": "^1.1.1",
-		"prettier": "^3.8.4",
 		"valibot": "^1.4.1"
 	},
 	"devDependencies": {
 		"@atcute/uint8array": "workspace:^",
 		"@types/node": "^25.9.4",
+		"prettier": "^3.8.4",
 		"tschema": "^3.2.0"
+	},
+	"peerDependencies": {
+		"prettier": "^3.8.4"
+	},
+	"peerDependenciesMeta": {
+		"prettier": {
+			"optional": true
+		}
 	}
 }

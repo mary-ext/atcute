@@ -85,6 +85,25 @@ const createBaseFormatter = async (config: FormatterConfig, root: string): Promi
 				async dispose() {},
 			};
 		}
+		case 'kempt': {
+			const { format } = await import('@oomfware/kempt');
+			const options = {
+				indentWidth: config.indentWidth,
+				lineWidth: config.lineWidth,
+				useTabs: config.useTabs,
+			};
+
+			return {
+				async format(code, filepath) {
+					// kempt only understands JavaScript/TypeScript; pass other files (JSON, Markdown) through untouched
+					if (!/\.[cm]?[jt]sx?$/.test(filepath)) {
+						return code;
+					}
+					return format(code, options);
+				},
+				async dispose() {},
+			};
+		}
 		case 'command': {
 			// the template uses {filepath} as a placeholder, which is passed as a
 			// positional argument to sh to avoid shell injection via filenames
@@ -199,5 +218,7 @@ const withPasses = (base: Formatter, passes: 'auto' | number): Formatter => {
  */
 export const createFormatter = async (config: FormatterConfig, root: string): Promise<Formatter> => {
 	const base = await createBaseFormatter(config, root);
-	return withPasses(base, config.passes);
+	// kempt is idempotent, so it has no `passes` knob and always runs once
+	const passes = config.type === 'kempt' ? 1 : config.passes;
+	return withPasses(base, passes);
 };

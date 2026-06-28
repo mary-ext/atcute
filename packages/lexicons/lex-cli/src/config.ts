@@ -54,9 +54,10 @@ export interface ExportConfig {
 }
 
 export type FormatterConfig =
-	| { type: 'prettier'; passes: 'auto' | number }
 	| { type: 'command'; command: string; concurrency: number; passes: 'auto' | number }
-	| { type: 'lsp'; command: string; passes: 'auto' | number };
+	| { type: 'kempt'; indentWidth?: number; lineWidth?: number; useTabs?: boolean }
+	| { type: 'lsp'; command: string; passes: 'auto' | number }
+	| { type: 'prettier'; passes: 'auto' | number };
 
 export interface ModulesConfig {
 	importSuffix?: string;
@@ -84,6 +85,11 @@ export type NormalizedConfig = LexiconConfig & {
 };
 
 const nonEmptyString = v.pipe(v.string(), v.nonEmpty(`must not be empty`));
+
+const positiveInteger = v.pipe(
+	v.number(),
+	v.check((value) => Number.isInteger(value) && value > 0, `must be a positive integer`),
+);
 
 const gitSourceConfigSchema = v.looseObject({
 	type: v.literal('git'),
@@ -149,24 +155,24 @@ const formatterPassesSchema = v.optional(
 );
 
 const formatterConfigSchema = v.union([
-	v.looseObject({ type: v.literal('prettier'), passes: formatterPassesSchema }),
 	v.looseObject({
 		type: v.literal('command'),
 		command: nonEmptyString,
-		concurrency: v.optional(
-			v.pipe(
-				v.number(),
-				v.check((value) => Number.isInteger(value) && value > 0, `must be a positive integer`),
-			),
-			() => 1,
-		),
+		concurrency: v.optional(positiveInteger, () => 1),
 		passes: formatterPassesSchema,
+	}),
+	v.looseObject({
+		type: v.literal('kempt'),
+		indentWidth: v.optional(positiveInteger),
+		lineWidth: v.optional(positiveInteger),
+		useTabs: v.optional(v.boolean()),
 	}),
 	v.looseObject({
 		type: v.literal('lsp'),
 		command: nonEmptyString,
 		passes: formatterPassesSchema,
 	}),
+	v.looseObject({ type: v.literal('prettier'), passes: formatterPassesSchema }),
 ]);
 
 const mappingImports = v.pipe(
@@ -217,7 +223,7 @@ const generateConfigSchema = v.looseObject({
 });
 
 export const lexiconConfigSchema: v.GenericSchema<unknown, Omit<NormalizedConfig, 'root'>> = v.looseObject({
-	formatter: v.optional(formatterConfigSchema, (): FormatterConfig => ({ type: 'prettier', passes: 1 })),
+	formatter: v.optional(formatterConfigSchema, (): FormatterConfig => ({ type: 'kempt' })),
 	generate: v.optional(generateConfigSchema),
 	pull: v.optional(pullConfigSchema),
 	export: v.optional(exportConfigSchema),

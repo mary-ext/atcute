@@ -17,5 +17,8 @@ allowBuilds:
   esbuild: true
   sharp: true
 
+minimumReleaseAgeExclude:
+  - '@oomfware/*'
+
 patchedDependencies:
   '@atproto/pds@0.5.10': patches/@atproto__pds@0.5.10.patch
