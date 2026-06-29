@@ -19,9 +19,7 @@
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
 		"module": "NodeNext",
-		"sourceMap": true,
 		"declaration": true,
-		"declarationMap": true,
 		"stripInternal": true,
 		"paths": {
 			"#keypairs/secp256k1": ["./lib/keypairs/secp256k1-web.ts"]

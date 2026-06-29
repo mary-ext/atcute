@@ -9,10 +9,7 @@
 	},
 	"files": [
 		"dist/",
-		"lib/",
 		"schema/",
-		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts",
 		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",

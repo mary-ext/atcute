@@ -19,9 +19,7 @@
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
 		"module": "NodeNext",
-		"sourceMap": true,
 		"declaration": true,
-		"declarationMap": true,
 		"stripInternal": true,
 		"paths": {
 			"#bases/base16": ["./lib/bases/base16-web.ts"],

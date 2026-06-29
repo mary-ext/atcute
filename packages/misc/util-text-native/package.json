@@ -11,9 +11,6 @@
 		"dist/",
 		"!dist/**/*.bench.js",
 		"!dist/**/*.test.js",
-		"lib/",
-		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts",
 		"prebuilds/**/*.node",
 		"!dist/**/*.{test,bench}.*"
 	],

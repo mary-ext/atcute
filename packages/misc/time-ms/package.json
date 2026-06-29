@@ -9,11 +9,7 @@
 	},
 	"files": [
 		"dist/",
-		"lib/",
 		"prebuilds/**/*.node",
-		"src/",
-		"!lib/**/*.bench.ts",
-		"!lib/**/*.test.ts",
 		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",

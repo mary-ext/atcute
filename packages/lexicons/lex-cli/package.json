@@ -11,10 +11,7 @@
 	"files": [
 		"cli.mjs",
 		"dist/",
-		"schema/",
-		"src/",
-		"!src/**/*.bench.ts",
-		"!src/**/*.test.ts"
+		"schema/"
 	],
 	"type": "module",
 	"exports": {

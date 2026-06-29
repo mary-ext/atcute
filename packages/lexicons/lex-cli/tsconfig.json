@@ -19,9 +19,7 @@
 		"noUnusedParameters": true,
 		"noFallthroughCasesInSwitch": true,
 		"module": "NodeNext",
-		"sourceMap": true,
 		"declaration": true,
-		"declarationMap": true,
 		"erasableSyntaxOnly": true
 	},
 	"include": ["src"]

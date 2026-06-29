@@ -19,9 +19,7 @@
 		"useDefineForClassFields": false,
 		"noFallthroughCasesInSwitch": true,
 		"module": "NodeNext",
-		"sourceMap": true,
 		"declaration": true,
-		"declarationMap": true,
 		"erasableSyntaxOnly": true
 	},
 	"include": ["lib"]
