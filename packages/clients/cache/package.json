@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/cache",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "normalized cache store for AT Protocol clients",
 	"license": "0BSD",
 	"repository": {

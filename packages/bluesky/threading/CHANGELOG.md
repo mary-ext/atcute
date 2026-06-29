@@ -1,5 +1,19 @@
 # @atcute/bluesky-threading
 
+## 6.0.1
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+- Updated dependencies [31a3a0b]
+  - @atcute/atproto@4.0.3
+  - @atcute/bluesky@4.0.12
+  - @atcute/lexicons@2.0.2
+  - @atcute/client@5.1.1
+  - @atcute/cbor@2.3.5
+  - @atcute/cid@2.4.2
+  - @atcute/tid@1.1.3
+
 ## 6.0.0
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @atcute/bluesky-richtext-segmenter
 
+## 3.0.1
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+
 ## 3.0.0
 
 ### Major Changes

@@ -1,5 +1,19 @@
 # @atcute/repo
 
+## 1.0.2
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+- Updated dependencies [31a3a0b]
+  - @atcute/lexicons@2.0.2
+  - @atcute/crypto@2.4.2
+  - @atcute/uint8array@1.1.3
+  - @atcute/cbor@2.3.5
+  - @atcute/car@6.0.2
+  - @atcute/cid@2.4.2
+  - @atcute/mst@1.0.2
+
 ## 1.0.1
 
 ### Patch Changes

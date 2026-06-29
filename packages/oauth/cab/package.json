@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/oauth-cab",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "client assertion backend for AT Protocol OAuth",
 	"license": "0BSD",
 	"repository": {

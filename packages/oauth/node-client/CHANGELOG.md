@@ -1,5 +1,20 @@
 # @atcute/oauth-node-client
 
+## 2.0.1
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+- Updated dependencies [31a3a0b]
+  - @atcute/identity-resolver@2.0.1
+  - @atcute/identity@2.0.1
+  - @atcute/lexicons@2.0.2
+  - @atcute/util-fetch@2.0.1
+  - @atcute/client@5.1.1
+  - @atcute/oauth-crypto@1.0.1
+  - @atcute/oauth-keyset@0.1.2
+  - @atcute/oauth-types@1.0.1
+
 ## 2.0.0
 
 ### Patch Changes

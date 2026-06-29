@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/lexicon-doc",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "type definitions and schemas for atproto lexicon documents",
 	"license": "0BSD",
 	"repository": {

@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/did-plc",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "validations, type definitions and schemas for did:plc operations",
 	"keywords": [
 		"atproto",

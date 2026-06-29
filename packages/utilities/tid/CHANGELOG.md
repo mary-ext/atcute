@@ -1,5 +1,13 @@
 # @atcute/tid
 
+## 1.1.3
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+- Updated dependencies [31a3a0b]
+  - @atcute/time-ms@1.3.3
+
 ## 1.1.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/bluesky-richtext-builder",
-	"version": "4.0.0",
+	"version": "4.0.1",
 	"description": "builder pattern for Bluesky's rich text facets",
 	"license": "0BSD",
 	"repository": {

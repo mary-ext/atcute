@@ -1,5 +1,14 @@
 # @atcute/client
 
+## 5.1.1
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+- Updated dependencies [31a3a0b]
+  - @atcute/identity@2.0.1
+  - @atcute/lexicons@2.0.2
+
 ## 5.1.0
 
 ### Minor Changes

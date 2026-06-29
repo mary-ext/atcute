@@ -1,5 +1,20 @@
 # @atcute/did-plc
 
+## 1.0.1
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+- Updated dependencies [31a3a0b]
+  - @atcute/multibase@1.2.4
+  - @atcute/identity@2.0.1
+  - @atcute/lexicons@2.0.2
+  - @atcute/crypto@2.4.2
+  - @atcute/uint8array@1.1.3
+  - @atcute/util-fetch@2.0.1
+  - @atcute/cbor@2.3.5
+  - @atcute/cid@2.4.2
+
 ## 1.0.0
 
 ### Major Changes

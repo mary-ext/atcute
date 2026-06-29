@@ -1,5 +1,11 @@
 # @atcute/util-text-native
 
+## 1.0.4
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+
 ## 1.0.3
 
 ### Patch Changes

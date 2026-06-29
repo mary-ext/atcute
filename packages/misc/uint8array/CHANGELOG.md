@@ -1,5 +1,11 @@
 # @atcute/uint8array
 
+## 1.1.3
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+
 ## 1.1.2
 
 ### Patch Changes

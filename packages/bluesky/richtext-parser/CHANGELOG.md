@@ -1,5 +1,11 @@
 # @atcute/bluesky-richtext-parser
 
+## 2.1.2
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+
 ## 2.1.1
 
 ### Patch Changes

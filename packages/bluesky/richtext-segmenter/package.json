@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/bluesky-richtext-segmenter",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "segments Bluesky's rich text facets into tokens",
 	"license": "0BSD",
 	"repository": {

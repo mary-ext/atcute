@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/identity-resolver",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "atproto handle and DID document resolution",
 	"keywords": [
 		"atproto",

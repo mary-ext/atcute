@@ -1,5 +1,11 @@
 # @atcute/xrpc-server-deno
 
+## 2.0.1
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+
 ## 2.0.0
 
 ### Patch Changes

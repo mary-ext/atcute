@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/password-session",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "password-based session management for AT Protocol",
 	"license": "0BSD",
 	"repository": {

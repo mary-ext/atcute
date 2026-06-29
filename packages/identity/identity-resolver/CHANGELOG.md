@@ -1,5 +1,14 @@
 # @atcute/identity-resolver
 
+## 2.0.1
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+- Updated dependencies [31a3a0b]
+  - @atcute/lexicons@2.0.2
+  - @atcute/util-fetch@2.0.1
+
 ## 2.0.0
 
 ### Major Changes

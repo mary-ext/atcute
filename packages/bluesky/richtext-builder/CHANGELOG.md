@@ -1,5 +1,15 @@
 # @atcute/bluesky-richtext-builder
 
+## 4.0.1
+
+### Patch Changes
+
+- 31a3a0b: drop sourcemaps and raw source files from publish
+- Updated dependencies [31a3a0b]
+  - @atcute/bluesky@4.0.12
+  - @atcute/lexicons@2.0.2
+  - @atcute/uint8array@1.1.3
+
 ## 4.0.0
 
 ### Patch Changes
