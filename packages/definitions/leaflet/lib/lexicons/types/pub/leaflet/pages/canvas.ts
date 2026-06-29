@@ -9,6 +9,7 @@ import * as PubLeafletBlocksHeader from '../blocks/header.ts';
 import * as PubLeafletBlocksHorizontalRule from '../blocks/horizontalRule.ts';
 import * as PubLeafletBlocksIframe from '../blocks/iframe.ts';
 import * as PubLeafletBlocksImage from '../blocks/image.ts';
+import * as PubLeafletBlocksImageGallery from '../blocks/imageGallery.ts';
 import * as PubLeafletBlocksMath from '../blocks/math.ts';
 import * as PubLeafletBlocksOrderedList from '../blocks/orderedList.ts';
 import * as PubLeafletBlocksPage from '../blocks/page.ts';
@@ -32,6 +33,7 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksHorizontalRule.mainSchema,
 			PubLeafletBlocksIframe.mainSchema,
 			PubLeafletBlocksImage.mainSchema,
+			PubLeafletBlocksImageGallery.mainSchema,
 			PubLeafletBlocksMath.mainSchema,
 			PubLeafletBlocksOrderedList.mainSchema,
 			PubLeafletBlocksPage.mainSchema,

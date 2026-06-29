@@ -6,6 +6,7 @@ export * as PubLeafletBlocksHeader from './types/pub/leaflet/blocks/header.ts';
 export * as PubLeafletBlocksHorizontalRule from './types/pub/leaflet/blocks/horizontalRule.ts';
 export * as PubLeafletBlocksIframe from './types/pub/leaflet/blocks/iframe.ts';
 export * as PubLeafletBlocksImage from './types/pub/leaflet/blocks/image.ts';
+export * as PubLeafletBlocksImageGallery from './types/pub/leaflet/blocks/imageGallery.ts';
 export * as PubLeafletBlocksMath from './types/pub/leaflet/blocks/math.ts';
 export * as PubLeafletBlocksOrderedList from './types/pub/leaflet/blocks/orderedList.ts';
 export * as PubLeafletBlocksPage from './types/pub/leaflet/blocks/page.ts';

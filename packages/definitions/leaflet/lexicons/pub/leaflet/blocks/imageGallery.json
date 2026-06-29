@@ -1,0 +1,62 @@
+{
+	"id": "pub.leaflet.blocks.imageGallery",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["images"],
+			"properties": {
+				"gap": {
+					"type": "integer",
+					"description": "Gap between images in pixels."
+				},
+				"format": {
+					"type": "string",
+					"knownValues": ["carousel", "grid", "strip"]
+				},
+				"images": {
+					"type": "array",
+					"items": {
+						"ref": "#image",
+						"type": "ref"
+					}
+				},
+				"maxWidth": {
+					"type": "integer",
+					"description": "Max width per image in grid view (px); drives how many columns fit."
+				}
+			}
+		},
+		"image": {
+			"type": "object",
+			"required": ["aspectRatio", "image"],
+			"properties": {
+				"alt": {
+					"type": "string",
+					"description": "Alt text description of the image, for accessibility."
+				},
+				"image": {
+					"type": "blob",
+					"accept": ["image/*"],
+					"maxSize": 1000000
+				},
+				"aspectRatio": {
+					"ref": "#aspectRatio",
+					"type": "ref"
+				}
+			}
+		},
+		"aspectRatio": {
+			"type": "object",
+			"required": ["height", "width"],
+			"properties": {
+				"width": {
+					"type": "integer"
+				},
+				"height": {
+					"type": "integer"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -31,6 +31,7 @@
 						"pub.leaflet.blocks.horizontalRule",
 						"pub.leaflet.blocks.iframe",
 						"pub.leaflet.blocks.image",
+						"pub.leaflet.blocks.imageGallery",
 						"pub.leaflet.blocks.math",
 						"pub.leaflet.blocks.orderedList",
 						"pub.leaflet.blocks.page",
