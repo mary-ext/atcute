@@ -1,5 +1,26 @@
 # @atcute/lex-cli
 
+## 3.2.0
+
+### Minor Changes
+
+- b141b0b: use kempt as the default code formatter
+
+  kempt is a small code formatter that only formats whitespaces and leaves everything else exactly
+  as written. making it a good option for generated code, where the only concern is consistent and
+  auditable code.
+
+  if prettier is still preferred, use you can configure the `formatter` option to use Prettier. note
+  that you would need to install `prettier` as a dependency if you don't have it already.
+
+  ```ts
+  import { defineLexiconConfig } from '@atcute/lex-cli';
+
+  export default defineLexiconConfig({
+  	formatter: { type: 'prettier' },
+  });
+  ```
+
 ## 3.1.0
 
 ### Minor Changes
