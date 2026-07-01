@@ -6,6 +6,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.pull.status'),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		pull: /*#__PURE__*/ v.resourceUriString(),
 		/**
 		 * status of the pull request

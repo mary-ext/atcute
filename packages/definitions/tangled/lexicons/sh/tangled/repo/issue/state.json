@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["issue", "state"],
+				"required": ["createdAt", "issue", "state"],
 				"properties": {
 					"issue": {
 						"type": "string",
@@ -17,6 +17,10 @@
 						"default": "sh.tangled.repo.issue.state.open",
 						"description": "state of the issue",
 						"knownValues": ["sh.tangled.repo.issue.state.closed", "sh.tangled.repo.issue.state.open"]
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
 					}
 				}
 			}

@@ -6,7 +6,7 @@
 			"type": "record",
 			"record": {
 				"type": "object",
-				"required": ["pull", "status"],
+				"required": ["createdAt", "pull", "status"],
 				"properties": {
 					"pull": {
 						"type": "string",
@@ -21,6 +21,10 @@
 							"sh.tangled.repo.pull.status.merged",
 							"sh.tangled.repo.pull.status.open"
 						]
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
 					}
 				}
 			}

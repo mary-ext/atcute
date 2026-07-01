@@ -6,6 +6,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.issue.state'),
+		createdAt: /*#__PURE__*/ v.datetimeString(),
 		issue: /*#__PURE__*/ v.resourceUriString(),
 		/**
 		 * state of the issue
