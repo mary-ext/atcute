@@ -1,0 +1,69 @@
+{
+	"id": "sh.tangled.ci.queryPipelines",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["pipelines", "total"],
+					"properties": {
+						"total": {
+							"type": "integer",
+							"description": "Maximum number of pipelines"
+						},
+						"cursor": {
+							"type": "string"
+						},
+						"pipelines": {
+							"type": "array",
+							"items": {
+								"ref": "sh.tangled.ci.pipeline",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 250,
+						"minimum": 1,
+						"description": "Maximum number of pipelines to return"
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					},
+					"commits": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"description": "commit id (SHA-1 or SHA-265)"
+						},
+						"description": "Filter pipelines by commits. When provided, maximum one pipeline per commit id will be returned."
+					}
+				}
+			},
+			"description": "Query pipelines in git repository"
+		}
+	},
+	"lexicon": 1
+}

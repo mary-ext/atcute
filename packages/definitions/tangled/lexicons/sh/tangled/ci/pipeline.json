@@ -1,0 +1,86 @@
+{
+	"id": "sh.tangled.ci.pipeline",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["commit", "id", "trigger", "workflows"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Spindle-local pipeline id"
+				},
+				"repo": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID"
+				},
+				"commit": {
+					"type": "string",
+					"description": "Commit Id this pipeline is running on"
+				},
+				"trigger": {
+					"refs": [
+						"sh.tangled.ci.trigger#manual",
+						"sh.tangled.ci.trigger#pullRequest",
+						"sh.tangled.ci.trigger#push"
+					],
+					"type": "union",
+					"description": "Trigger event metadata"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"workflows": {
+					"type": "array",
+					"items": {
+						"ref": "#workflow",
+						"type": "ref"
+					},
+					"maxLength": 50,
+					"minLength": 1,
+					"description": "Triggered workflows"
+				},
+				"sourceRepo": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID that the commit was checked out from, if different from repo (e.g. a fork for a fork-based pull request)"
+				}
+			},
+			"description": "A CI pipeline. Record-like, but owned by the spindle rather than a PDS."
+		},
+		"workflow": {
+			"type": "object",
+			"required": ["id", "name", "status"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Spindle-local workflow id. Unique per pipeline, usually same as name."
+				},
+				"name": {
+					"type": "string",
+					"description": "Name of the workflow",
+					"maxGraphemes": 40,
+					"minGraphemes": 1
+				},
+				"error": {
+					"type": "string"
+				},
+				"status": {
+					"enum": ["cancelled", "failed", "pending", "running", "success", "timeout"],
+					"type": "string",
+					"description": "Workflow status"
+				},
+				"startedAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"finishedAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

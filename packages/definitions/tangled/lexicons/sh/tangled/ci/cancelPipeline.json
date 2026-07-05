@@ -1,0 +1,37 @@
+{
+	"id": "sh.tangled.ci.cancelPipeline",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["pipeline", "repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "git repository DID"
+						},
+						"pipeline": {
+							"type": "string",
+							"format": "tid",
+							"description": "pipeline TID"
+						},
+						"workflows": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"description": "workflow name"
+							},
+							"description": "Workflow names to filter. When not provided, entire pipeline will be canceled."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Cancel running pipeline or specific workflows"
+		}
+	},
+	"lexicon": 1
+}

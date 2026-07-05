@@ -1,0 +1,93 @@
+{
+	"id": "sh.tangled.ci.trigger",
+	"defs": {
+		"pair": {
+			"type": "object",
+			"required": ["key", "value"],
+			"properties": {
+				"key": {
+					"type": "string"
+				},
+				"value": {
+					"type": "string"
+				}
+			}
+		},
+		"push": {
+			"type": "object",
+			"required": ["newSha", "oldSha", "ref"],
+			"properties": {
+				"ref": {
+					"type": "string"
+				},
+				"newSha": {
+					"type": "string",
+					"maxLength": 40,
+					"minLength": 40
+				},
+				"oldSha": {
+					"type": "string",
+					"maxLength": 40,
+					"minLength": 40
+				}
+			}
+		},
+		"manual": {
+			"type": "object",
+			"required": ["sha"],
+			"properties": {
+				"ref": {
+					"type": "string",
+					"description": "optional ref the SHA was resolved from, for display and TANGLED_REF"
+				},
+				"sha": {
+					"type": "string",
+					"maxLength": 40,
+					"minLength": 40,
+					"description": "commit SHA the manual run targets"
+				},
+				"inputs": {
+					"type": "array",
+					"items": {
+						"ref": "#pair",
+						"type": "ref"
+					}
+				},
+				"sourceRepo": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID to check out code and workflow definitions from, if different from the target repo."
+				}
+			}
+		},
+		"pullRequest": {
+			"type": "object",
+			"required": ["sourceSha", "targetBranch"],
+			"properties": {
+				"pull": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "AT-URI of the sh.tangled.repo.pull record this run belongs to"
+				},
+				"sourceSha": {
+					"type": "string",
+					"maxLength": 40,
+					"minLength": 40
+				},
+				"sourceRepo": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID to check out code and workflow definitions from, if different from the target repo."
+				},
+				"sourceBranch": {
+					"type": "string"
+				},
+				"targetBranch": {
+					"type": "string"
+				}
+			},
+			"description": "TODO: reference PR record with strongRef instead of embedding raw values"
+		}
+	},
+	"lexicon": 1
+}

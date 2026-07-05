@@ -1,0 +1,37 @@
+{
+	"id": "sh.tangled.ci.getPipeline",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "PipelineNotFound",
+					"description": "Pipeline not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"ref": "sh.tangled.ci.pipeline",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["pipeline"],
+				"properties": {
+					"pipeline": {
+						"type": "string",
+						"format": "tid",
+						"description": "Spindle-local pipeline id"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

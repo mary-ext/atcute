@@ -26,6 +26,15 @@ const _manualTriggerDataSchema = /*#__PURE__*/ v.object({
 	get inputs() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(pairSchema));
 	},
+	/** optional ref the SHA was resolved from, for display and TANGLED_REF */
+	ref: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * commit SHA the manual run targets
+	 *
+	 * @minLength 40
+	 * @maxLength 40
+	 */
+	sha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
 });
 const _pairSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.pipeline#pair')),
@@ -34,7 +43,8 @@ const _pairSchema = /*#__PURE__*/ v.object({
 });
 const _pullRequestTriggerDataSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.pipeline#pullRequestTriggerData')),
-	action: /*#__PURE__*/ v.string(),
+	/** AT-URI of the sh.tangled.repo.pull record this run belongs to */
+	pull: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	sourceBranch: /*#__PURE__*/ v.string(),
 	/**
 	 * @minLength 40
@@ -72,6 +82,11 @@ const _triggerMetadataSchema = /*#__PURE__*/ v.object({
 	get repo() {
 		return triggerRepoSchema;
 	},
+	/**
+	 * Repository DID that code and workflow definitions are checked out from, when different from repo (e.g. a
+	 * fork's commit for a fork-based manual trigger). If absent, source uses repo itself.
+	 */
+	sourceRepo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 });
 const _triggerRepoSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.pipeline#triggerRepo')),

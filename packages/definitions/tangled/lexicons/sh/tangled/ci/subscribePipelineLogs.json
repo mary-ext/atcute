@@ -1,0 +1,105 @@
+{
+	"id": "sh.tangled.ci.subscribePipelineLogs",
+	"defs": {
+		"data": {
+			"type": "object",
+			"required": ["content", "step", "stream", "time", "workflow"],
+			"properties": {
+				"step": {
+					"type": "integer",
+					"description": "Step ID"
+				},
+				"time": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"stream": {
+					"enum": ["stderr", "stdout"],
+					"type": "string"
+				},
+				"content": {
+					"type": "string"
+				},
+				"workflow": {
+					"type": "string",
+					"description": "workflow name"
+				}
+			}
+		},
+		"main": {
+			"type": "subscription",
+			"errors": [
+				{
+					"name": "WorkflowNotFound",
+					"description": "Workflow not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"message": {
+				"schema": {
+					"refs": ["#control", "#data"],
+					"type": "union"
+				}
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["pipeline"],
+				"properties": {
+					"pipeline": {
+						"type": "string",
+						"format": "tid",
+						"description": "Pipeline ID"
+					},
+					"workflows": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"description": "Workflow name"
+						},
+						"description": "filter logs by specific workflows"
+					}
+				}
+			},
+			"description": "Pipeline logs stream"
+		},
+		"control": {
+			"type": "object",
+			"required": ["content", "step", "time", "workflow"],
+			"properties": {
+				"kind": {
+					"enum": ["system", "user"],
+					"type": "string",
+					"description": "Step kind"
+				},
+				"step": {
+					"type": "integer",
+					"description": "Step ID"
+				},
+				"time": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"status": {
+					"enum": ["end", "start"],
+					"type": "string",
+					"description": "Step status"
+				},
+				"command": {
+					"type": "string",
+					"description": "Step command"
+				},
+				"content": {
+					"type": "string"
+				},
+				"workflow": {
+					"type": "string",
+					"description": "workflow name"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

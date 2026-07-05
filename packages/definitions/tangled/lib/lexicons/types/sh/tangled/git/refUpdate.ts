@@ -30,6 +30,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.git.refUpdate'),
+		/** files changed between commits */
+		changedFiles: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		/** did of the user that pushed this ref */
 		committerDid: /*#__PURE__*/ v.didString(),
 		get meta() {
@@ -51,6 +53,22 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		oldSha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
 		/** did of the owner of the repo */
 		ownerDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+		/**
+		 * push options passed on git-push
+		 *
+		 * @maxLength 50
+		 */
+		pushOptions: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(
+				/*#__PURE__*/ v.array(
+					/*#__PURE__*/ v.constrain(
+						/*#__PURE__*/ v.string<'ci-skip' | 'ci-verbose' | 'skip-ci' | 'verbose-ci' | (string & {})>(),
+						[/*#__PURE__*/ v.stringLength(0, 1024)],
+					),
+				),
+				[/*#__PURE__*/ v.arrayLength(0, 50)],
+			),
+		),
 		/**
 		 * Ref being updated
 		 *

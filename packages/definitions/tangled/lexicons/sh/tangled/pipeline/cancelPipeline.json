@@ -26,7 +26,7 @@
 				},
 				"encoding": "application/json"
 			},
-			"description": "Cancel a running pipeline"
+			"description": "DEPRECATED: use sh.tangled.ci.cancelPipeline instead - Cancel a running pipeline"
 		}
 	},
 	"lexicon": 1

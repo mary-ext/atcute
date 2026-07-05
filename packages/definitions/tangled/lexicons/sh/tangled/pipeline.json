@@ -19,7 +19,8 @@
 						"ref": "#triggerMetadata",
 						"type": "ref"
 					}
-				}
+				},
+				"description": "DEPRECATED: use sh.tangled.ci.pipeline instead"
 			}
 		},
 		"pair": {
@@ -134,6 +135,11 @@
 					"ref": "#manualTriggerData",
 					"type": "ref"
 				},
+				"sourceRepo": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID that code and workflow definitions are checked out from, when different from repo (e.g. a fork's commit for a fork-based manual trigger). If absent, source uses repo itself."
+				},
 				"pullRequest": {
 					"ref": "#pullRequestTriggerData",
 					"type": "ref"
@@ -142,7 +148,18 @@
 		},
 		"manualTriggerData": {
 			"type": "object",
+			"required": ["sha"],
 			"properties": {
+				"ref": {
+					"type": "string",
+					"description": "optional ref the SHA was resolved from, for display and TANGLED_REF"
+				},
+				"sha": {
+					"type": "string",
+					"maxLength": 40,
+					"minLength": 40,
+					"description": "commit SHA the manual run targets"
+				},
 				"inputs": {
 					"type": "array",
 					"items": {
@@ -154,10 +171,12 @@
 		},
 		"pullRequestTriggerData": {
 			"type": "object",
-			"required": ["action", "sourceBranch", "sourceSha", "targetBranch"],
+			"required": ["sourceBranch", "sourceSha", "targetBranch"],
 			"properties": {
-				"action": {
-					"type": "string"
+				"pull": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "AT-URI of the sh.tangled.repo.pull record this run belongs to"
 				},
 				"sourceSha": {
 					"type": "string",

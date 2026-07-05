@@ -1,0 +1,57 @@
+{
+	"id": "sh.tangled.ci.triggerPipeline",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["repo", "trigger"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "Target repository DID. Auth is checked against this repo."
+						},
+						"trigger": {
+							"refs": ["sh.tangled.ci.trigger#manual", "sh.tangled.ci.trigger#pullRequest"],
+							"type": "union",
+							"description": "Trigger metadata for this dispatch."
+						},
+						"workflows": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"description": "workflow name"
+							},
+							"description": "Workflow names to run. When not provided, every dispatchable workflow is run."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["pipeline"],
+					"properties": {
+						"pipeline": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "AT-URI of the created pipeline"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Trigger a pipeline at an explicit commit. Runs the named workflows, or every workflow defined in the repo when none are named."
+		}
+	},
+	"lexicon": 1
+}

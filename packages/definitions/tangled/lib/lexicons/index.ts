@@ -1,4 +1,11 @@
 export * as ShTangledActorProfile from './types/sh/tangled/actor/profile.ts';
+export * as ShTangledCiCancelPipeline from './types/sh/tangled/ci/cancelPipeline.ts';
+export * as ShTangledCiGetPipeline from './types/sh/tangled/ci/getPipeline.ts';
+export * as ShTangledCiPipeline from './types/sh/tangled/ci/pipeline.ts';
+export * as ShTangledCiQueryPipelines from './types/sh/tangled/ci/queryPipelines.ts';
+export * as ShTangledCiSubscribePipelineLogs from './types/sh/tangled/ci/subscribePipelineLogs.ts';
+export * as ShTangledCiTrigger from './types/sh/tangled/ci/trigger.ts';
+export * as ShTangledCiTriggerPipeline from './types/sh/tangled/ci/triggerPipeline.ts';
 export * as ShTangledFeedComment from './types/sh/tangled/feed/comment.ts';
 export * as ShTangledFeedReaction from './types/sh/tangled/feed/reaction.ts';
 export * as ShTangledFeedStar from './types/sh/tangled/feed/star.ts';

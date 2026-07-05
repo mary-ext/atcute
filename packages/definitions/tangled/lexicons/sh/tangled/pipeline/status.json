@@ -36,7 +36,8 @@
 						"format": "datetime",
 						"description": "time of creation of this status update"
 					}
-				}
+				},
+				"description": "DEPRECATED: use sh.tangled.ci.pipeline instead"
 			}
 		}
 	},
