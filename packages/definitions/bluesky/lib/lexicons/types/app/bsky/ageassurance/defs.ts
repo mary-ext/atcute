@@ -11,6 +11,14 @@ const _configSchema = /*#__PURE__*/ v.object({
 });
 const _configRegionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.ageassurance.defs#configRegion')),
+	/**
+	 * Verification methods permitted in this region in addition to the third-party (KWS) flow, which is always
+	 * supported. `device` permits using the native on-device age APIs (e.g. Apple Declared Age Range, Google
+	 * Play Age Signals).
+	 */
+	additionalVerificationMethods: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.array(/*#__PURE__*/ v.string<'device' | (string & {})>()),
+	),
 	/** The ISO 3166-1 alpha-2 country code this configuration applies to. */
 	countryCode: /*#__PURE__*/ v.string(),
 	/** The minimum age (as a whole integer) required to use Bluesky in this region. */

@@ -131,6 +131,14 @@
 				"minAccessAge": {
 					"type": "integer",
 					"description": "The minimum age (as a whole integer) required to use Bluesky in this region."
+				},
+				"additionalVerificationMethods": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"knownValues": ["device"]
+					},
+					"description": "Verification methods permitted in this region in addition to the third-party (KWS) flow, which is always supported. `device` permits using the native on-device age APIs (e.g. Apple Declared Age Range, Google Play Age Signals)."
 				}
 			},
 			"description": "The Age Assurance configuration for a specific region."
