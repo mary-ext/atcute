@@ -4,12 +4,19 @@
 		"main": {
 			"type": "permission-set",
 			"title": "pckt.blog",
-			"detail": "Manage your publication, document, and gallery references.",
+			"detail": "Manage your publication, documents, galleries, and notes.",
 			"permissions": [
 				{
 					"type": "permission",
 					"resource": "repo",
-					"collection": ["blog.pckt.publication", "blog.pckt.document", "blog.pckt.gallery"]
+					"collection": [
+						"blog.pckt.publication",
+						"blog.pckt.document",
+						"blog.pckt.gallery",
+						"blog.pckt.mini.post",
+						"blog.pckt.mini.repost",
+						"blog.pckt.mini.follow"
+					]
 				}
 			]
 		}
