@@ -1,5 +1,8 @@
 const textEncoder = new TextEncoder();
-const textDecoder = new TextDecoder();
+// `ignoreBOM: true` keeps a leading U+FEFF as a regular character instead of
+// stripping it, matching the node/bun `utf8Slice` fallback (CBOR text strings
+// are arbitrary and a leading BOM is a legitimate character)
+const textDecoder = new TextDecoder('utf-8', { ignoreBOM: true });
 
 const subtle = crypto.subtle;
 
