@@ -1,0 +1,25 @@
+{
+	"id": "blog.pckt.mini.repost",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "subject"],
+				"properties": {
+					"subject": {
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}

@@ -1,0 +1,25 @@
+{
+	"id": "blog.pckt.mini.follow",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "subject"],
+				"properties": {
+					"subject": {
+						"type": "string",
+						"format": "did"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}

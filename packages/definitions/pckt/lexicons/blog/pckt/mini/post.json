@@ -1,0 +1,237 @@
+{
+	"id": "blog.pckt.mini.post",
+	"defs": {
+		"tag": {
+			"type": "object",
+			"required": ["tag"],
+			"properties": {
+				"tag": {
+					"type": "string",
+					"maxLength": 640,
+					"maxGraphemes": 64
+				}
+			}
+		},
+		"link": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "uri"
+				}
+			}
+		},
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "text"],
+				"properties": {
+					"tags": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxLength": 640,
+							"maxGraphemes": 64
+						},
+						"maxLength": 8
+					},
+					"text": {
+						"type": "string",
+						"maxLength": 3000,
+						"maxGraphemes": 300
+					},
+					"embed": {
+						"refs": ["#external", "#images", "#record", "#recordWithMedia"],
+						"type": "union"
+					},
+					"langs": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "language"
+						},
+						"maxLength": 3
+					},
+					"reply": {
+						"ref": "#replyRef",
+						"type": "ref"
+					},
+					"facets": {
+						"type": "array",
+						"items": {
+							"ref": "#facet",
+							"type": "ref"
+						}
+					},
+					"labels": {
+						"refs": ["com.atproto.label.defs#selfLabels"],
+						"type": "union"
+					},
+					"subject": {
+						"type": "string",
+						"format": "at-uri"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"publication": {
+						"type": "string",
+						"format": "at-uri"
+					}
+				}
+			}
+		},
+		"facet": {
+			"type": "object",
+			"required": ["features", "index"],
+			"properties": {
+				"index": {
+					"ref": "#byteSlice",
+					"type": "ref"
+				},
+				"features": {
+					"type": "array",
+					"items": {
+						"refs": ["#link", "#mention", "#tag"],
+						"type": "union"
+					}
+				}
+			}
+		},
+		"image": {
+			"type": "object",
+			"required": ["alt", "image"],
+			"properties": {
+				"alt": {
+					"type": "string"
+				},
+				"image": {
+					"type": "blob",
+					"accept": ["image/*"],
+					"maxSize": 1000000
+				},
+				"aspectRatio": {
+					"ref": "#aspectRatio",
+					"type": "ref"
+				}
+			}
+		},
+		"images": {
+			"type": "object",
+			"required": ["images"],
+			"properties": {
+				"images": {
+					"type": "array",
+					"items": {
+						"ref": "#image",
+						"type": "ref"
+					},
+					"maxLength": 4
+				}
+			}
+		},
+		"record": {
+			"type": "object",
+			"required": ["record"],
+			"properties": {
+				"record": {
+					"ref": "com.atproto.repo.strongRef",
+					"type": "ref"
+				}
+			}
+		},
+		"mention": {
+			"type": "object",
+			"required": ["did"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		},
+		"external": {
+			"type": "object",
+			"required": ["description", "title", "uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "uri"
+				},
+				"thumb": {
+					"type": "blob",
+					"accept": ["image/*"],
+					"maxSize": 1000000
+				},
+				"title": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				}
+			}
+		},
+		"replyRef": {
+			"type": "object",
+			"required": ["parent", "root"],
+			"properties": {
+				"root": {
+					"ref": "com.atproto.repo.strongRef",
+					"type": "ref"
+				},
+				"parent": {
+					"ref": "com.atproto.repo.strongRef",
+					"type": "ref"
+				}
+			}
+		},
+		"byteSlice": {
+			"type": "object",
+			"required": ["byteEnd", "byteStart"],
+			"properties": {
+				"byteEnd": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"byteStart": {
+					"type": "integer",
+					"minimum": 0
+				}
+			}
+		},
+		"aspectRatio": {
+			"type": "object",
+			"required": ["height", "width"],
+			"properties": {
+				"width": {
+					"type": "integer",
+					"minimum": 1
+				},
+				"height": {
+					"type": "integer",
+					"minimum": 1
+				}
+			}
+		},
+		"recordWithMedia": {
+			"type": "object",
+			"required": ["media", "record"],
+			"properties": {
+				"media": {
+					"refs": ["#external", "#images"],
+					"type": "union"
+				},
+				"record": {
+					"ref": "#record",
+					"type": "ref"
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}
