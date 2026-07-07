@@ -24,6 +24,8 @@ const _bskyAppStatePrefSchema = /*#__PURE__*/ v.object({
 	get activeProgressGuide() {
 		return /*#__PURE__*/ v.optional(bskyAppProgressGuideSchema);
 	},
+	/** Indicates if the user is participating in the beta features program. */
+	isBetaUser: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/**
 	 * Storage for NUXs the user has encountered.
 	 *

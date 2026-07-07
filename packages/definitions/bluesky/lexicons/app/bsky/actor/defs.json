@@ -456,6 +456,10 @@
 					"maxLength": 100,
 					"description": "Storage for NUXs the user has encountered."
 				},
+				"isBetaUser": {
+					"type": "boolean",
+					"description": "Indicates if the user is participating in the beta features program."
+				},
 				"queuedNudges": {
 					"type": "array",
 					"items": {
