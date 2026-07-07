@@ -1,5 +1,12 @@
 # @atcute/uint8array
 
+## 1.1.4
+
+### Patch Changes
+
+- f6f265b: tune the ASCII string decode fast-path per runtime
+- 2026293: preserve leading BOM in default text decoder
+
 ## 1.1.3
 
 ### Patch Changes
