@@ -49,3 +49,9 @@ it('can decode', () => {
 		expect(fromBase58Btc(encoded)).toEqual(buffer);
 	}
 });
+
+it('rejects invalid characters', () => {
+	for (const encoded of ['a!', 'Ā', 'aĀ', 'abĀ', 'a\u{1f600}']) {
+		expect(() => fromBase58Btc(encoded)).toThrow('invalid string');
+	}
+});

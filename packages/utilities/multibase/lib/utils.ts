@@ -222,8 +222,17 @@ export const createBtcBaseDecode = (alphabet: string) => {
 			const pairEnd = source.length - rem;
 
 			while (psz < pairEnd) {
-				const c0 = BASE_MAP[source.charCodeAt(psz)];
-				const c1 = BASE_MAP[source.charCodeAt(psz + 1)];
+				const k0 = source.charCodeAt(psz);
+				const k1 = source.charCodeAt(psz + 1);
+
+				// any char code >= 128 is outside the lookup table; reject it before indexing so it
+				// isn't read as undefined (which would poison the carry with NaN)
+				if ((k0 | k1) & ~0x7f) {
+					throw new Error(`invalid string`);
+				}
+
+				const c0 = BASE_MAP[k0];
+				const c1 = BASE_MAP[k1];
 
 				if (c0 === 255 || c1 === 255) {
 					throw new Error(`invalid string`);
@@ -247,7 +256,12 @@ export const createBtcBaseDecode = (alphabet: string) => {
 
 		// Process remaining character if odd count.
 		if (psz < source.length) {
-			let carry = BASE_MAP[source.charCodeAt(psz)];
+			const k0 = source.charCodeAt(psz);
+			if (k0 & ~0x7f) {
+				throw new Error(`invalid string`);
+			}
+
+			let carry = BASE_MAP[k0];
 
 			if (carry === 255) {
 				throw new Error(`invalid string`);
