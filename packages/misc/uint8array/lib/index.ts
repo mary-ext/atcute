@@ -272,6 +272,10 @@ export const decodeUtf8From = (
 	return textDecoder.decode(from.subarray(offset, offset + length));
 };
 
+const isLowSurrogate = (code: number): boolean => {
+	return code >= 0xdc00 && code <= 0xdfff;
+};
+
 /**
  * calculates the UTF-8 byte length of a string
  *
@@ -312,9 +316,13 @@ export const getUtf8Length = (str: string): number => {
 		} else if (code < 0xd800 || code > 0xdbff) {
 			u16pos += 1;
 			u8pos += 3;
-		} else {
+		} else if (isLowSurrogate(str.charCodeAt(u16pos + 1))) {
 			u16pos += 2;
 			u8pos += 4;
+		} else {
+			// unpaired, substituted with U+FFFD
+			u16pos += 1;
+			u8pos += 3;
 		}
 	}
 
@@ -358,9 +366,13 @@ export const isUtf8LengthInRange = (str: string, min: number, max: number): bool
 		} else if (code < 0xd800 || code > 0xdbff) {
 			u16pos += 1;
 			u8pos += 3;
-		} else {
+		} else if (isLowSurrogate(str.charCodeAt(u16pos + 1))) {
 			u16pos += 2;
 			u8pos += 4;
+		} else {
+			// unpaired, substituted with U+FFFD
+			u16pos += 1;
+			u8pos += 3;
 		}
 
 		// early exit once we exceed max
