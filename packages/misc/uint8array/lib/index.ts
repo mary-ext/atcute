@@ -2,7 +2,7 @@ const textEncoder = new TextEncoder();
 // `ignoreBOM: true` keeps a leading U+FEFF as a regular character instead of
 // stripping it, matching the node/bun `utf8Slice` fallback (CBOR text strings
 // are arbitrary and a leading BOM is a legitimate character)
-const textDecoder = new TextDecoder('utf-8', { ignoreBOM: true });
+const textDecoder = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true });
 
 const subtle = crypto.subtle;
 
@@ -254,6 +254,7 @@ const _shortString = (from: Uint8Array, p: number, length: number): string | nul
  * @param offset byte offset to start reading from
  * @param length number of bytes to read
  * @returns decoded string
+ * @throws {TypeError} if the byte range is not well-formed UTF-8
  */
 export const decodeUtf8From = (
 	from: Uint8Array,

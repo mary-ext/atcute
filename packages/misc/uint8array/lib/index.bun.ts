@@ -1,7 +1,7 @@
 // oxlint-disable no-underscore-dangle
 
 import { allocUnsafe as _allocUnsafe, concatArrayBuffers as _concat } from 'bun';
-import { Buffer as NodeBuffer } from 'node:buffer';
+import { Buffer as NodeBuffer, isUtf8 as _isUtf8 } from 'node:buffer';
 import { hash as _hash, timingSafeEqual as _timingSafeEqual } from 'node:crypto';
 
 const _byteLength = /*#__PURE__*/ (() => NodeBuffer.byteLength)();
@@ -65,6 +65,7 @@ export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, len
  * @param offset byte offset to start reading from
  * @param length number of bytes to read
  * @returns decoded string
+ * @throws {TypeError} if the byte range is not well-formed UTF-8
  */
 export const decodeUtf8From = (
 	from: Uint8Array,
@@ -81,7 +82,13 @@ export const decodeUtf8From = (
 		}
 	}
 
-	return _utf8Slice.call(from, offset, offset + length);
+	const string = _utf8Slice.call(from, offset, offset + length);
+
+	if (string.includes('\ufffd') && !_isUtf8(from.subarray(offset, offset + length))) {
+		throw new TypeError(`input is not valid utf-8`);
+	}
+
+	return string;
 };
 
 /**

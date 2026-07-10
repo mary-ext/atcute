@@ -382,6 +382,27 @@ describe('non-ascii map key ordering', () => {
 	});
 });
 
+describe('invalid utf-8 strings', () => {
+	it('throws on a malformed text string', () => {
+		// 61 97: one-byte text string holding a bare continuation byte
+		expect(() => decode(fromBase16('6197'))).toThrow(TypeError);
+	});
+
+	it('throws on malformed text nested in a map', () => {
+		expect(() => decode(fromBase16('a161616197'))).toThrow(TypeError);
+	});
+
+	// lossy decoding would collapse both keys onto U+FFFD, dropping the first value
+	it('throws on distinct malformed map keys', () => {
+		expect(() => decode(fromBase16('a2619701619802'))).toThrow(TypeError);
+	});
+
+	it('round-trips a genuine replacement character', () => {
+		expect(decode(encode({ '�': 1 }))).toEqual({ '�': 1 });
+		expect(toBase16(encode(decode(fromBase16('a163efbfbd01'))))).toBe('a163efbfbd01');
+	});
+});
+
 describe('string encoding', () => {
 	// U+0100 and the surrogates behind U+1F600 have bit 7 of their low byte clear, so the ASCII
 	// fast path must test the whole code unit to bail out on them.

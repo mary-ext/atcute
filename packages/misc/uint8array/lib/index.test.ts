@@ -1,6 +1,7 @@
-import { expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { getUtf8Length, isUtf8LengthInRange } from './index.ts';
+import { decodeUtf8From as decodeUtf8FromNode } from './index.node.ts';
+import { decodeUtf8From, getUtf8Length, isUtf8LengthInRange } from './index.ts';
 
 const encoder = new TextEncoder();
 
@@ -40,3 +41,59 @@ it('isUtf8LengthInRange', () => {
 		}
 	}
 });
+
+// the bun entrypoint can't be imported here; it shares node's `utf8Slice` fallback
+const entrypoints = [
+	{ label: 'node', decode: decodeUtf8FromNode },
+	{ label: 'portable', decode: decodeUtf8From },
+];
+
+const wellFormed = [
+	{ label: 'ascii', bytes: [0x68, 0x69], text: 'hi' },
+	{ label: 'empty', bytes: [], text: '' },
+	{ label: 'largest scalar value', bytes: [0xf4, 0x8f, 0xbf, 0xbf], text: '\u{10ffff}' },
+	// a stripped BOM would let two distinct byte sequences decode to the same string
+	{ label: 'leading byte order mark', bytes: [0xef, 0xbb, 0xbf, 0x61], text: '﻿a' },
+	{ label: 'replacement character', bytes: [0xef, 0xbf, 0xbd], text: '�' },
+	// long enough to fall past the unrolled ascii fast path on every entrypoint
+	{ label: 'run of ascii', bytes: Array(40).fill(0x61), text: 'a'.repeat(40) },
+];
+
+const malformed = [
+	{ label: 'bare continuation byte', bytes: [0x80] },
+	{ label: 'continuation byte out of place', bytes: [0xe4, 0xbd, 0x20] },
+	{ label: 'five-byte sequence', bytes: [0xf8, 0x88, 0x80, 0x80, 0x80] },
+	{ label: 'invalid byte after ascii', bytes: [0x61, 0xff] },
+	{ label: 'invalid byte past the ascii fast path', bytes: [...Array(40).fill(0x61), 0xff] },
+	{ label: 'lone high surrogate', bytes: [0xed, 0xa0, 0x80] },
+	{ label: 'lone low surrogate', bytes: [0xed, 0xb0, 0x80] },
+	{ label: 'overlong nul', bytes: [0xc0, 0x80] },
+	{ label: 'overlong solidus', bytes: [0xc0, 0xaf] },
+	{ label: 'past the largest scalar value', bytes: [0xf4, 0x90, 0x80, 0x80] },
+	{ label: 'truncated four-byte sequence', bytes: [0xf0, 0x9f, 0x98] },
+	{ label: 'truncated three-byte sequence', bytes: [0xe4, 0xbd] },
+	{ label: 'truncated two-byte sequence', bytes: [0xc3] },
+];
+
+for (const { label: runtime, decode } of entrypoints) {
+	describe(runtime, () => {
+		it('decodes well-formed input', () => {
+			for (const { label, bytes, text } of wellFormed) {
+				expect(decode(Uint8Array.from(bytes), 0, bytes.length), label).toBe(text);
+			}
+		});
+
+		it('rejects malformed input', () => {
+			for (const { label, bytes } of malformed) {
+				expect(() => decode(Uint8Array.from(bytes), 0, bytes.length), label).toThrow(TypeError);
+			}
+		});
+
+		it('decodes and validates only the requested range', () => {
+			const buffer = Uint8Array.from([0xff, 0x61, 0x62, 0xff]);
+
+			expect(decode(buffer, 1, 2)).toBe('ab');
+			expect(() => decode(buffer, 0, 3)).toThrow(TypeError);
+		});
+	});
+}
