@@ -8,6 +8,7 @@ export * as PubLeafletBlocksIframe from './types/pub/leaflet/blocks/iframe.ts';
 export * as PubLeafletBlocksImage from './types/pub/leaflet/blocks/image.ts';
 export * as PubLeafletBlocksImageGallery from './types/pub/leaflet/blocks/imageGallery.ts';
 export * as PubLeafletBlocksMath from './types/pub/leaflet/blocks/math.ts';
+export * as PubLeafletBlocksMembersOnlyDelimiter from './types/pub/leaflet/blocks/membersOnlyDelimiter.ts';
 export * as PubLeafletBlocksOrderedList from './types/pub/leaflet/blocks/orderedList.ts';
 export * as PubLeafletBlocksPage from './types/pub/leaflet/blocks/page.ts';
 export * as PubLeafletBlocksPoll from './types/pub/leaflet/blocks/poll.ts';

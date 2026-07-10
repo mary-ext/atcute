@@ -39,6 +39,7 @@
 						"pub.leaflet.blocks.image",
 						"pub.leaflet.blocks.imageGallery",
 						"pub.leaflet.blocks.math",
+						"pub.leaflet.blocks.membersOnlyDelimiter",
 						"pub.leaflet.blocks.orderedList",
 						"pub.leaflet.blocks.page",
 						"pub.leaflet.blocks.poll",

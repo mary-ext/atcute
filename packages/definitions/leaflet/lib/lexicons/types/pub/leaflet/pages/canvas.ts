@@ -11,6 +11,7 @@ import * as PubLeafletBlocksIframe from '../blocks/iframe.ts';
 import * as PubLeafletBlocksImage from '../blocks/image.ts';
 import * as PubLeafletBlocksImageGallery from '../blocks/imageGallery.ts';
 import * as PubLeafletBlocksMath from '../blocks/math.ts';
+import * as PubLeafletBlocksMembersOnlyDelimiter from '../blocks/membersOnlyDelimiter.ts';
 import * as PubLeafletBlocksOrderedList from '../blocks/orderedList.ts';
 import * as PubLeafletBlocksPage from '../blocks/page.ts';
 import * as PubLeafletBlocksPoll from '../blocks/poll.ts';
@@ -35,6 +36,7 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksImage.mainSchema,
 			PubLeafletBlocksImageGallery.mainSchema,
 			PubLeafletBlocksMath.mainSchema,
+			PubLeafletBlocksMembersOnlyDelimiter.mainSchema,
 			PubLeafletBlocksOrderedList.mainSchema,
 			PubLeafletBlocksPage.mainSchema,
 			PubLeafletBlocksPoll.mainSchema,
