@@ -43,6 +43,8 @@ const inputs = [
 	},
 ];
 
+const invalid = ['zzzz', '0z', 'a!', 'aĀ', '00zz00', 'abc', '0', '00000'];
+
 describe('polyfill', () => {
 	it('can encode', () => {
 		for (const { buffer, encoded } of inputs) {
@@ -53,6 +55,12 @@ describe('polyfill', () => {
 	it('can decode', () => {
 		for (const { buffer, encoded } of inputs) {
 			expect(fromBase16Polyfill(encoded)).toEqual(buffer);
+		}
+	});
+
+	it('rejects invalid strings', () => {
+		for (const encoded of invalid) {
+			expect(() => fromBase16Polyfill(encoded)).toThrow();
 		}
 	});
 });
@@ -69,6 +77,12 @@ describe('node', () => {
 			expect(fromBase16Node(encoded)).toEqual(buffer);
 		}
 	});
+
+	it('rejects invalid strings', () => {
+		for (const encoded of invalid) {
+			expect(() => fromBase16Node(encoded)).toThrow();
+		}
+	});
 });
 
 describe.skipIf(!hasNativeMethods)('native', () => {
@@ -81,6 +95,12 @@ describe.skipIf(!hasNativeMethods)('native', () => {
 	it('can decode', () => {
 		for (const { buffer, encoded } of inputs) {
 			expect(fromBase16Native(encoded)).toEqual(buffer);
+		}
+	});
+
+	it('rejects invalid strings', () => {
+		for (const encoded of invalid) {
+			expect(() => fromBase16Native(encoded)).toThrow();
 		}
 	});
 });

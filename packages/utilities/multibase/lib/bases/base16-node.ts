@@ -11,9 +11,17 @@ export const fromBase16 = (str: string): Uint8Array<ArrayBuffer> => {
 	if (UPPER_RE.test(str)) {
 		throw new SyntaxError(`unexpected uppercase characters in base16 string`);
 	}
+	if (str.length & 1) {
+		throw new SyntaxError(`unexpected end of base16 string`);
+	}
 
 	const bytes = allocUnsafe(str.length >>> 1);
-	_hexWrite.call(bytes, str);
+
+	// hexWrite stops at the first invalid pair rather than throwing, leaving the remainder of the
+	// buffer as uninitialized memory
+	if (_hexWrite.call(bytes, str) !== bytes.length) {
+		throw new SyntaxError(`invalid base16 string`);
+	}
 
 	return bytes;
 };
