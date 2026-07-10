@@ -111,8 +111,10 @@ export class MSTNode {
 		let prevKey = '';
 
 		for (const entry of node.e) {
+			// `p` indexes into `prevKey`, so anything but a whole number in range reinterprets the key:
+			// a negative length slices from the end, a fractional one truncates
 			const prefixLen = entry.p;
-			if (prefixLen > prevKey.length) {
+			if (!Number.isInteger(prefixLen) || prefixLen < 0 || prefixLen > prevKey.length) {
 				throw new TypeError(`malformed MST node; unexpected key prefix length`);
 			}
 
