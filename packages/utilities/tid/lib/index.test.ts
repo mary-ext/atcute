@@ -38,6 +38,42 @@ describe('now', () => {
 		const tid2 = TID.now();
 		expect(tid2).toMatch(/^3kztss2uifd/);
 	});
+
+	it('never reissues a timestamp when calls outpace the clock', () => {
+		vi.useFakeTimers();
+		vi.setSystemTime(new Date('2024-08-16T15:00:00.000Z'));
+
+		const seen = new Set<number>();
+
+		// a fake millisecond is 1000 microseconds, so this overruns the clock by 500
+		for (let idx = 0; idx < 1500; idx++) {
+			seen.add(TID.parse(TID.now()).timestamp);
+		}
+
+		// the clock now ticks into timestamps the burst already handed out
+		vi.advanceTimersByTime(1);
+
+		for (let idx = 0; idx < 1000; idx++) {
+			seen.add(TID.parse(TID.now()).timestamp);
+		}
+
+		expect(seen.size).toBe(2500);
+	});
+
+	it('follows the clock when it moves backwards', () => {
+		vi.useFakeTimers();
+		vi.setSystemTime(new Date('2024-08-16T16:00:00.000Z'));
+
+		const before = TID.parse(TID.now()).timestamp;
+
+		const corrected = new Date('2024-08-16T15:30:00.000Z');
+		vi.setSystemTime(corrected);
+
+		const after = TID.parse(TID.now()).timestamp;
+
+		expect(after).toBeLessThan(before);
+		expect(after).toBe(corrected.getTime() * 1000);
+	});
 });
 
 describe('parse', () => {

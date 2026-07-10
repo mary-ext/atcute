@@ -32,16 +32,17 @@ export const now = (): string => {
 	const currentTime = getNow();
 	let timestamp: number;
 
-	if (currentTime === lastCurrentTime) {
-		// same time; increment to avoid collision
-		timestamp = lastTimestamp + 1;
-	} else {
-		// time changed
+	// follow the clock backwards on correction, but never back into the overrun left by a burst that
+	// outpaced it; those timestamps were already handed out
+	if (currentTime > lastTimestamp || currentTime < lastCurrentTime) {
 		timestamp = currentTime;
-		lastCurrentTime = currentTime;
+	} else {
+		timestamp = lastTimestamp + 1;
 	}
 
+	lastCurrentTime = currentTime;
 	lastTimestamp = timestamp;
+
 	return createRaw(timestamp, random(1024));
 };
 
