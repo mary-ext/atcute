@@ -181,6 +181,42 @@ describe('.exportPublicKey()', () => {
 	});
 });
 
+describe('.exportPrivateKey()', () => {
+	it('exports keys imported without a public key', async () => {
+		const privateKeyBytes = fromBase64('b2vDXk9p9Kh7f9u0xti4Rjx4+tT28q4XYPmfI7pxzAc');
+		const keypair = await P256PrivateKeyExportable.importRaw(privateKeyBytes);
+
+		await expect(keypair.exportPrivateKey('raw')).resolves.toEqual(privateKeyBytes);
+	});
+
+	it('exports keys imported with a public key', async () => {
+		const privateKeyBytes = fromBase64('rh7915PGO1Nh8CNyx86LmZvh7ZOccv6b4kIm0uKu9zU');
+		const keypair = await P256PrivateKeyExportable.importRaw(
+			privateKeyBytes,
+			p256.getPublicKey(privateKeyBytes),
+		);
+
+		await expect(keypair.exportPrivateKey('raw')).resolves.toEqual(privateKeyBytes);
+	});
+
+	it('exports generated keys', async () => {
+		const keypair = await P256PrivateKeyExportable.createKeypair();
+		const privateKeyBytes = await keypair.exportPrivateKey('raw');
+
+		const reimported = await P256PrivateKeyExportable.importRaw(privateKeyBytes);
+		await expect(reimported.exportPrivateKey('raw')).resolves.toEqual(privateKeyBytes);
+	});
+
+	it('retains leading zeroes in the scalar', async () => {
+		const privateKeyBytes = new Uint8Array(32);
+		privateKeyBytes[31] = 1;
+
+		const keypair = await P256PrivateKeyExportable.importRaw(privateKeyBytes);
+
+		await expect(keypair.exportPrivateKey('raw')).resolves.toEqual(privateKeyBytes);
+	});
+});
+
 describe('interop tests', () => {
 	it('handles low-S signature', async () => {
 		const payload = {

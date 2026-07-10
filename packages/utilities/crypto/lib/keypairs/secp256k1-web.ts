@@ -175,7 +175,7 @@ export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey implement
 				return toMultikey(SECP256K1_PRIVATE_PREFIX, privateKeyBytes);
 			}
 			case 'raw': {
-				return privateKeyBytes;
+				return privateKeyBytes.slice();
 			}
 			case 'rawHex': {
 				return toBase16(privateKeyBytes);

@@ -141,6 +141,52 @@ describe('.exportPublicKey()', () => {
 	});
 });
 
+describe('.exportPrivateKey()', () => {
+	it('exports keys imported without a public key', async () => {
+		const privateKeyBytes = secp256k1.utils.randomSecretKey();
+		const keypair = await Secp256k1PrivateKeyExportable.importRaw(privateKeyBytes);
+
+		await expect(keypair.exportPrivateKey('raw')).resolves.toEqual(privateKeyBytes);
+	});
+
+	it('exports keys imported with a public key', async () => {
+		const privateKeyBytes = secp256k1.utils.randomSecretKey();
+		const keypair = await Secp256k1PrivateKeyExportable.importRaw(
+			privateKeyBytes,
+			secp256k1.getPublicKey(privateKeyBytes),
+		);
+
+		await expect(keypair.exportPrivateKey('raw')).resolves.toEqual(privateKeyBytes);
+	});
+
+	it('exports generated keys', async () => {
+		const keypair = await Secp256k1PrivateKeyExportable.createKeypair();
+		const privateKeyBytes = await keypair.exportPrivateKey('raw');
+
+		const reimported = await Secp256k1PrivateKeyExportable.importRaw(privateKeyBytes);
+		await expect(reimported.exportPrivateKey('raw')).resolves.toEqual(privateKeyBytes);
+	});
+
+	it('retains leading zeroes in the scalar', async () => {
+		const privateKeyBytes = new Uint8Array(32);
+		privateKeyBytes[31] = 1;
+
+		const keypair = await Secp256k1PrivateKeyExportable.importRaw(privateKeyBytes);
+
+		await expect(keypair.exportPrivateKey('raw')).resolves.toEqual(privateKeyBytes);
+	});
+
+	it('does not alias the signing key', async () => {
+		const keypair = await Secp256k1PrivateKeyExportable.createKeypair();
+
+		const exported = await keypair.exportPrivateKey('raw');
+		exported.fill(0);
+
+		await expect(keypair.exportPrivateKey('raw')).resolves.not.toEqual(exported);
+		await expect(keypair.sign(new Uint8Array([1, 2, 3]))).resolves.toBeInstanceOf(Uint8Array);
+	});
+});
+
 describe('interop tests', () => {
 	it('handles valid low-S signature', async () => {
 		const payload = {

@@ -17,6 +17,7 @@ import {
 	assertUnreachable,
 	checkKeypairRelationship,
 	compressPoint,
+	extractEcPrivateScalar,
 	isSignatureNormalized,
 	normalizeSignature,
 	toMultikey,
@@ -27,6 +28,12 @@ export const SECP256K1_PUBLIC_PREFIX = Uint8Array.from([0xe7, 0x01]);
 export const SECP256K1_PRIVATE_PREFIX = Uint8Array.from([0x81, 0x26]);
 
 const generateKeyPair = /*#__PURE__*/ promisify(generateKeyPairCb);
+
+// `Buffer` methods like `subarray` return `Buffer`, and reading `.buffer` alone would drop its offset
+// into the (possibly pooled) backing store.
+const toUint8Array = (buffer: Buffer<ArrayBuffer>): Uint8Array<ArrayBuffer> => {
+	return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+};
 
 // SEC 2, ver. 2.0, § 2.4.1 Recommended Parameters secp256k1
 const SECP256K1_CURVE_ORDER = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
@@ -216,8 +223,8 @@ class NodeSecp256k1PrivateKeyExportable extends NodeSecp256k1PrivateKey implemen
 			return privateKey.export({ format: 'jwk' });
 		}
 
-		const privateKeyPkcs8 = privateKey.export({ format: 'der', type: 'pkcs8' });
-		const privateKeyBytes = new Uint8Array(privateKeyPkcs8.buffer, PKCS8_PRIVATE_KEY_PREFIX.length + 1, 32);
+		const privateKeyPkcs8 = toUint8Array(privateKey.export({ format: 'der', type: 'pkcs8' }));
+		const privateKeyBytes = extractEcPrivateScalar(privateKeyPkcs8, 32);
 
 		switch (format) {
 			case 'multikey': {

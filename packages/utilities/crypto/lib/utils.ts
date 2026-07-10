@@ -131,6 +131,58 @@ export const deriveEcPublicKeyFromPrivateKey = async (
 	return publicKey;
 };
 
+const readDerHeader = (buf: Uint8Array, pos: number): [start: number, length: number] => {
+	let start = pos + 2;
+	let length = buf[pos + 1];
+
+	// Long form: the low 7 bits count the length octets that follow.
+	if (length > 0x7f) {
+		const end = start + length - 0x80;
+
+		length = 0;
+		while (start < end) {
+			length = (length << 8) | buf[start++];
+		}
+	}
+
+	return [start, length];
+};
+
+/**
+ * Extracts the private scalar out of a PKCS#8-wrapped EC private key.
+ *
+ * ```text
+ * PrivateKeyInfo ::= SEQUENCE { version INTEGER, algorithm AlgorithmIdentifier, privateKey OCTET STRING }
+ * ECPrivateKey   ::= SEQUENCE { version INTEGER, privateKey OCTET STRING, [0] parameters?, [1] publicKey? }
+ * ```
+ *
+ * Must not be pointed at untrusted bytes.
+ *
+ * @param pkcs8 DER-encoded PKCS#8 private key
+ * @param size Expected scalar length, in bytes
+ * @returns A view aliasing `pkcs8`, so that wiping it also wipes the scalar
+ * @throws {SyntaxError} If the scalar isn't `size` bytes long
+ */
+export const extractEcPrivateScalar = (
+	pkcs8: Uint8Array<ArrayBuffer>,
+	size: number,
+): Uint8Array<ArrayBuffer> => {
+	// The scalar sits at no fixed offset: ECPrivateKey's trailing optional fields are emitted or not
+	// depending on the runtime, widening the enclosing length prefixes when present.
+	// Both version values fit in one content octet, so DER pins either version TLV to three bytes.
+	let pos = readDerHeader(pkcs8, 0)[0] + 3; // enter PrivateKeyInfo, skip version
+
+	const [algorithmStart, algorithmLength] = readDerHeader(pkcs8, pos);
+	pos = readDerHeader(pkcs8, algorithmStart + algorithmLength)[0]; // skip algorithm, enter privateKey
+	pos = readDerHeader(pkcs8, pos)[0] + 3; // enter ECPrivateKey, skip version
+
+	const [start, length] = readDerHeader(pkcs8, pos); // privateKey
+	// The declared length rejects a scalar padded out by trailing fields; the bound, one running past the buffer.
+	assertSyntax(length === size && start + size <= pkcs8.length, `expected a ${size} byte scalar`);
+
+	return pkcs8.subarray(start, start + size);
+};
+
 const CHALLENGE = new Uint8Array([0x62, 0x6e, 0x75, 0x79, 0x20, 0x72, 0x20, 0x71, 0x74, 0x20, 0x3a, 0x33]);
 export const checkKeypairRelationship = async (keypair: PrivateKey): Promise<void> => {
 	try {

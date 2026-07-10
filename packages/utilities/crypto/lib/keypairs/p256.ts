@@ -12,6 +12,7 @@ import {
 	checkKeypairRelationship,
 	compressPoint,
 	deriveEcPublicKeyFromPrivateKey,
+	extractEcPrivateScalar,
 	isSignatureNormalized,
 	isUncompressedPoint,
 	normalizeSignature,
@@ -329,8 +330,8 @@ export class P256PrivateKeyExportable extends P256PrivateKey implements PrivateK
 			return await crypto.subtle.exportKey('jwk', this._privateKey);
 		}
 
-		const privateKeyPkcs8 = await crypto.subtle.exportKey('pkcs8', this._privateKey);
-		const privateKeyBytes = new Uint8Array(privateKeyPkcs8, PKCS8_PRIVATE_KEY_PREFIX.length + 1, 32);
+		const privateKeyPkcs8 = new Uint8Array(await crypto.subtle.exportKey('pkcs8', this._privateKey));
+		const privateKeyBytes = extractEcPrivateScalar(privateKeyPkcs8, 32);
 
 		switch (format) {
 			case 'multikey': {
