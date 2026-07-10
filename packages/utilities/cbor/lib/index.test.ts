@@ -382,6 +382,21 @@ describe('non-ascii map key ordering', () => {
 	});
 });
 
+describe('string encoding', () => {
+	// U+0100 and the surrogates behind U+1F600 have bit 7 of their low byte clear, so the ASCII
+	// fast path must test the whole code unit to bail out on them.
+	it('encodes code units whose low byte looks like ASCII', () => {
+		for (const val of ['hellooo\u{1f600}', 'abcdefgĀx', 'abĀĀĀĀĀz']) {
+			expect(decode(encode(val))).toBe(val);
+		}
+	});
+
+	it('encodes strings past the fast path length cutoff', () => {
+		const val = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa\u{1f600}';
+		expect(decode(encode(val))).toBe(val);
+	});
+});
+
 describe('float decoding', () => {
 	// DRISL forbids NaN and infinities; negative zero is the only special float allowed.
 	it('rejects NaN', () => {

@@ -185,7 +185,7 @@ const writeString = (state: State, val: string): void => {
 			const c = val.charCodeAt(i + 2);
 			const d = val.charCodeAt(i + 3);
 
-			if ((a | b | c | d) & 0x80) {
+			if ((a | b | c | d) & 0xff80) {
 				break ascii;
 			}
 
