@@ -135,7 +135,13 @@ export class JetstreamSubscription {
 		};
 
 		ws.onmessage = (ev) => {
-			const raw = JSON.parse(ev.data);
+			let raw: unknown;
+			try {
+				raw = JSON.parse(ev.data);
+			} catch (err) {
+				onError?.(new Error(`failed to parse jetstream message`, { cause: err }));
+				return;
+			}
 
 			let event: JetstreamEvent;
 			if (validateEvents) {
@@ -147,7 +153,7 @@ export class JetstreamSubscription {
 
 				event = result.output;
 			} else {
-				event = raw;
+				event = raw as JetstreamEvent;
 			}
 
 			if (event.time_us > this.#cursor) {
