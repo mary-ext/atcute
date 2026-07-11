@@ -15,7 +15,7 @@ const question = v.looseObject({
 
 const answer = v.looseObject({
 	name: v.string(),
-	type: v.literal(16), // TXT
+	type: uint32,
 	TTL: uint32,
 	data: v.pipe(
 		v.string(),
@@ -47,7 +47,13 @@ export const dohJsonTxtResult = v.looseObject({
 	/** requested records */
 	Question: v.tuple([question]),
 	/** answers */
-	Answer: v.optional(v.array(answer), () => []),
+	Answer: v.optional(
+		v.pipe(
+			v.array(answer),
+			v.transform((answers) => answers.filter((answer) => answer.type === 16 /* TXT */)),
+		),
+		() => [],
+	),
 	/** authority */
 	Authority: v.optional(v.array(authority)),
 	/** comment from the DNS server */
