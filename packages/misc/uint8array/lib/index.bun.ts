@@ -70,7 +70,7 @@ export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, len
 export const decodeUtf8From = (
 	from: Uint8Array,
 	offset: number = 0,
-	length: number = from.length,
+	length: number = from.length - offset,
 ): string => {
 	if (length <= 24) {
 		let acc = 0;

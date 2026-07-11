@@ -262,7 +262,7 @@ const _shortString = (from: Uint8Array, ptr: number, length: number): string | n
 export const decodeUtf8From = (
 	from: Uint8Array,
 	offset: number = 0,
-	length: number = from.length,
+	length: number = from.length - offset,
 ): string => {
 	if (length <= 24) {
 		const result = _shortString(from, offset, length);

@@ -95,5 +95,12 @@ for (const { label: runtime, decode } of entrypoints) {
 			expect(decode(buffer, 1, 2)).toBe('ab');
 			expect(() => decode(buffer, 0, 3)).toThrow(TypeError);
 		});
+
+		it('defaults length to the remainder after offset', () => {
+			const buffer = Uint8Array.from([0x61, 0x62, 0x63]);
+
+			expect(decode(buffer, 1)).toBe('bc');
+			expect(decode(buffer, 3)).toBe('');
+		});
 	});
 }
