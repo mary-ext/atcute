@@ -36,4 +36,35 @@ describe('firehose subscription', () => {
 		await new Promise<void>((resolve) => server.close(() => resolve()));
 		expect(errors).toBeGreaterThan(0);
 	});
+
+	it('serializes array params as repeated keys', async () => {
+		const server = new WebSocketServer({ port: 0 });
+		const address = server.address();
+		if (typeof address === 'string' || address === null) {
+			throw new Error(`unexpected ws address`);
+		}
+
+		let requestUrl: string | undefined;
+
+		server.on('connection', (socket: WebSocket, request) => {
+			requestUrl = request.url;
+			setTimeout(() => socket.close(), 25);
+		});
+
+		const subscription = new FirehoseSubscription({
+			service: `ws://127.0.0.1:${address.port}`,
+			nsid: ComAtprotoSyncSubscribeRepos.mainSchema,
+			// subscribeRepos has no array params; exercise serialization directly
+			params: { wantedCollections: ['app.bsky.feed.post', 'app.bsky.feed.like'] } as never,
+		});
+
+		const iterator = subscription[Symbol.asyncIterator]();
+		await new Promise((resolve) => setTimeout(resolve, 75));
+		await iterator.return?.();
+
+		await new Promise<void>((resolve) => server.close(() => resolve()));
+
+		const query = new URL(requestUrl!, 'ws://127.0.0.1').searchParams;
+		expect(query.getAll('wantedCollections')).toEqual(['app.bsky.feed.post', 'app.bsky.feed.like']);
+	});
 });

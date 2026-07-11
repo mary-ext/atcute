@@ -73,7 +73,13 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 				for (const key in paramObj) {
 					const value = paramObj[key];
 					if (value !== undefined && value !== null) {
-						url.searchParams.set(key, String(value));
+						if (Array.isArray(value)) {
+							for (let idx = 0, len = value.length; idx < len; idx++) {
+								url.searchParams.append(key, String(value[idx]));
+							}
+						} else {
+							url.searchParams.set(key, String(value));
+						}
 					}
 				}
 			}
