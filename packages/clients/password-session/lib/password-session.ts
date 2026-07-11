@@ -284,12 +284,19 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 		let failure: unknown = null;
 
 		this.#sessionPromise = this.#sessionPromise.then(async (sessionData) => {
-			const response = await this.#server.post('com.atproto.server.deleteSession', {
-				as: null,
-				headers: {
-					authorization: `Bearer ${sessionData.refreshJwt}`,
-				},
-			});
+			let response;
+			try {
+				response = await this.#server.post('com.atproto.server.deleteSession', {
+					as: null,
+					headers: {
+						authorization: `Bearer ${sessionData.refreshJwt}`,
+					},
+				});
+			} catch (err) {
+				failure = err;
+				await this.#onDeleteFailure?.(sessionData, err);
+				return sessionData;
+			}
 
 			if (!response.ok) {
 				const isExpected =

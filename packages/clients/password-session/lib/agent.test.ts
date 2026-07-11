@@ -390,6 +390,43 @@ describe('PasswordSession', () => {
 		expect(onDeleteFailure).toHaveBeenCalledOnce();
 	});
 
+	it('recovers after a network rejection during logout', async () => {
+		const originalFetch = globalThis.fetch;
+		const fetch = vi.fn(globalThis.fetch);
+		const onDelete = vi.fn();
+		const onDeleteFailure = vi.fn();
+
+		const session = await PasswordSession.login(
+			{ service: network.pds.url, identifier: 'user1.test', password: 'password' },
+			{ fetch, onDelete, onDeleteFailure },
+		);
+
+		// first attempt: deleteSession fetch rejects at the network level
+		await fetch.withImplementation(
+			(input, init) => {
+				const request = new Request(input, init);
+
+				if (request.url.includes('/xrpc/com.atproto.server.deleteSession')) {
+					return Promise.reject(new TypeError('network error'));
+				}
+
+				return originalFetch(request);
+			},
+			async () => {
+				await expect(session.logout()).rejects.toThrow();
+			},
+		);
+
+		expect(session.destroyed).toBe(false);
+		expect(onDelete).not.toHaveBeenCalled();
+		expect(onDeleteFailure).toHaveBeenCalledOnce();
+
+		// session must not be poisoned, a subsequent logout should succeed
+		await session.logout();
+		expect(session.destroyed).toBe(true);
+		expect(onDelete).toHaveBeenCalledOnce();
+	});
+
 	it('can delete session without resuming', async () => {
 		const session = await PasswordSession.login({
 			service: network.pds.url,
