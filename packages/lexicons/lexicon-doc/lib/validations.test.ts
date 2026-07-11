@@ -9,6 +9,7 @@ import {
 	cidLink,
 	document,
 	integer,
+	nullable,
 	object,
 	required,
 	string,
@@ -122,6 +123,22 @@ const docs: Record<string, t.LexiconDoc> = build({
 					record: object({
 						properties: {
 							ref: required(cidLink()),
+						},
+					}),
+				},
+			},
+		}),
+		document({
+			id: 'com.example.nullable',
+			defs: {
+				main: {
+					type: 'record',
+					key: 'literal:self',
+					record: object({
+						properties: {
+							label: required(nullable(string())),
+							note: nullable(string({ default: 'hi', maxLength: 10 })),
+							tag: nullable(string()),
 						},
 					}),
 				},
@@ -470,6 +487,68 @@ describe('RecordValidator', () => {
 							cid: 'bafyreihvzsz6wxhv5idsmsjfbx5jdmfrqx3h4oqw2vvxpwzcdpavqzkp4m',
 						},
 						createdAt: '2024-01-01T00:00:00.000Z',
+					},
+				}),
+			).toThrow();
+		});
+	});
+
+	describe('optional and nullable fields', () => {
+		test('accepts omitting an optional nullable field and applies its default', () => {
+			const validator = new RecordValidator(docs, 'com.example.nullable');
+
+			const result = validator.parse({
+				key: 'self',
+				object: {
+					$type: 'com.example.nullable',
+					label: null,
+				},
+			});
+
+			expect((result.object as any).note).toBe('hi');
+			expect(result.object as any).not.toHaveProperty('tag');
+		});
+
+		test('accepts null on an optional nullable field without applying the default', () => {
+			const validator = new RecordValidator(docs, 'com.example.nullable');
+
+			const result = validator.parse({
+				key: 'self',
+				object: {
+					$type: 'com.example.nullable',
+					label: 'x',
+					note: null,
+					tag: null,
+				},
+			});
+
+			expect((result.object as any).note).toBeNull();
+			expect((result.object as any).tag).toBeNull();
+		});
+
+		test('still validates the wrapped schema of an optional nullable field', () => {
+			const validator = new RecordValidator(docs, 'com.example.nullable');
+
+			expect(() =>
+				validator.parse({
+					key: 'self',
+					object: {
+						$type: 'com.example.nullable',
+						label: null,
+						note: 'waytoolongvalue',
+					},
+				}),
+			).toThrow();
+		});
+
+		test('rejects omitting a required nullable field', () => {
+			const validator = new RecordValidator(docs, 'com.example.nullable');
+
+			expect(() =>
+				validator.parse({
+					key: 'self',
+					object: {
+						$type: 'com.example.nullable',
 					},
 				}),
 			).toThrow();

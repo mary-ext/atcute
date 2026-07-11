@@ -707,6 +707,19 @@ const buildLexObject = (
 			const isNullable = nullable.includes(prop);
 
 			let c = cell;
+			if (isNullable) {
+				const orig = c;
+
+				c = lazy(() => {
+					const s = orig.value;
+					if (isOptionalSchema(s)) {
+						return v.optional(v.nullable(s.wrapped), s.default);
+					}
+
+					return v.nullable(s);
+				});
+			}
+
 			if (isOptional) {
 				const orig = c;
 				c = lazy(() => {
@@ -716,14 +729,6 @@ const buildLexObject = (
 					}
 
 					return v.optional(s);
-				});
-			}
-
-			if (isNullable) {
-				const orig = c;
-
-				c = lazy(() => {
-					return v.nullable(orig.value);
 				});
 			}
 
