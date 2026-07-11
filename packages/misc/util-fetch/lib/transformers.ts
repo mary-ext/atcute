@@ -76,7 +76,8 @@ const readResponse = async (response: Response, maxSize: number): Promise<string
 	if (rawSize !== null) {
 		const size = Number(rawSize);
 
-		if (!Number.isSafeInteger(size) || size <= 0) {
+		// content-length is `1*DIGIT` (RFC 9110 §8.6); `0` is valid (empty body)
+		if (!/^\d+$/.test(rawSize) || !Number.isSafeInteger(size)) {
 			response.body?.cancel();
 			throw new err.ImproperContentLengthError(maxSize, null, `invalid response content-length`);
 		}
@@ -87,9 +88,11 @@ const readResponse = async (response: Response, maxSize: number): Promise<string
 		}
 	}
 
-	const stream = response
-		.body!.pipeThrough(new SizeLimitStream(maxSize))
-		.pipeThrough(new TextDecoderStream());
+	if (response.body === null) {
+		return '';
+	}
+
+	const stream = response.body.pipeThrough(new SizeLimitStream(maxSize)).pipeThrough(new TextDecoderStream());
 
 	let text = '';
 	for await (const chunk of createStreamIterator(stream)) {
