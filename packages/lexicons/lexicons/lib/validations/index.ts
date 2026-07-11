@@ -644,7 +644,7 @@ const INTEGER_SCHEMA: IntegerSchema = {
 			return ISSUE_TYPE_INTEGER;
 		}
 
-		if (input < 0 || !Number.isSafeInteger(input)) {
+		if (!Number.isSafeInteger(input)) {
 			return ISSUE_TYPE_INTEGER;
 		}
 

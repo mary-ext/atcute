@@ -4,7 +4,8 @@ import * as v from 'valibot';
 
 import type * as t from './types.ts';
 
-const integer = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
+const int = v.pipe(v.number(), v.safeInteger());
+const uint = v.pipe(v.number(), v.safeInteger(), v.minValue(0));
 
 const nsid = v.custom<Nsid>(isNsid, `expected valid nsid`);
 
@@ -19,11 +20,11 @@ export const lexBoolean: v.GenericSchema<unknown, t.LexBoolean> = v.looseObject(
 export const lexInteger: v.GenericSchema<unknown, t.LexInteger> = v.looseObject({
 	type: v.literal('integer'),
 	description: v.optional(v.string()),
-	default: v.optional(integer),
-	minimum: v.optional(integer),
-	maximum: v.optional(integer),
-	enum: v.optional(v.array(integer)),
-	const: v.optional(integer),
+	default: v.optional(int),
+	minimum: v.optional(int),
+	maximum: v.optional(int),
+	enum: v.optional(v.array(int)),
+	const: v.optional(int),
 });
 
 export const lexStringFormat: v.GenericSchema<unknown, t.LexStringFormat> = v.picklist([
@@ -45,10 +46,10 @@ export const lexString: v.GenericSchema<unknown, t.LexString> = v.looseObject({
 	format: v.optional(lexStringFormat),
 	description: v.optional(v.string()),
 	default: v.optional(v.string()),
-	minLength: v.optional(integer),
-	maxLength: v.optional(integer),
-	minGraphemes: v.optional(integer),
-	maxGraphemes: v.optional(integer),
+	minLength: v.optional(uint),
+	maxLength: v.optional(uint),
+	minGraphemes: v.optional(uint),
+	maxGraphemes: v.optional(uint),
 	enum: v.optional(v.array(v.string())),
 	const: v.optional(v.string()),
 	knownValues: v.optional(v.array(v.string())),
@@ -57,8 +58,8 @@ export const lexString: v.GenericSchema<unknown, t.LexString> = v.looseObject({
 export const lexBytes: v.GenericSchema<unknown, t.LexBytes> = v.looseObject({
 	type: v.literal('bytes'),
 	description: v.optional(v.string()),
-	minLength: v.optional(integer),
-	maxLength: v.optional(integer),
+	minLength: v.optional(uint),
+	maxLength: v.optional(uint),
 });
 
 export const lexCidLink: v.GenericSchema<unknown, t.LexCidLink> = v.looseObject({
@@ -70,7 +71,7 @@ export const lexBlob: v.GenericSchema<unknown, t.LexBlob> = v.looseObject({
 	type: v.literal('blob'),
 	description: v.optional(v.string()),
 	accept: v.optional(v.array(v.string())),
-	maxSize: v.optional(integer),
+	maxSize: v.optional(uint),
 });
 
 export const lexPrimitive: v.GenericSchema<unknown, t.LexPrimitive> = v.union([
@@ -136,16 +137,16 @@ export const lexArray: v.GenericSchema<unknown, t.LexArray> = v.looseObject({
 	type: v.literal('array'),
 	description: v.optional(v.string()),
 	items: lexDefinableField,
-	minLength: v.optional(integer),
-	maxLength: v.optional(integer),
+	minLength: v.optional(uint),
+	maxLength: v.optional(uint),
 });
 
 export const lexPrimitiveArray: v.GenericSchema<unknown, t.LexPrimitiveArray> = v.looseObject({
 	type: v.literal('array'),
 	description: v.optional(v.string()),
 	items: lexPrimitive,
-	minLength: v.optional(integer),
-	maxLength: v.optional(integer),
+	minLength: v.optional(uint),
+	maxLength: v.optional(uint),
 });
 
 export const lexObject: v.GenericSchema<unknown, t.LexObject> = v.looseObject({
@@ -196,13 +197,7 @@ export const lexPermission: v.GenericSchema<unknown, t.LexPermission> = v.object
 		type: v.literal('permission'),
 		resource: v.string(),
 	},
-	v.union([
-		v.array(v.union([v.string(), integer, v.boolean()])),
-		v.string(),
-		integer,
-		v.boolean(),
-		v.undefined(),
-	]),
+	v.union([v.array(v.union([v.string(), int, v.boolean()])), v.string(), int, v.boolean(), v.undefined()]),
 );
 // #endregion
 
@@ -280,7 +275,7 @@ export const lexUserType: v.GenericSchema<unknown, t.LexUserType> = v.union([
 export const lexiconDoc: v.GenericSchema<unknown, t.LexiconDoc> = v.looseObject({
 	lexicon: v.literal(1),
 	id: nsid,
-	revision: v.optional(integer),
+	revision: v.optional(uint),
 	description: v.optional(v.string()),
 	defs: v.record(v.string(), lexUserType),
 });

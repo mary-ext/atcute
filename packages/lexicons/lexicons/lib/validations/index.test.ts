@@ -134,11 +134,13 @@ describe(`primitive types`, () => {
 
 		expect(v.is(schema, 0)).toBe(true);
 		expect(v.is(schema, 1)).toBe(true);
+		expect(v.is(schema, -2)).toBe(true);
 		expect(v.is(schema, Number.MAX_SAFE_INTEGER)).toBe(true);
+		expect(v.is(schema, Number.MIN_SAFE_INTEGER)).toBe(true);
 
-		expect(v.is(schema, -2)).toBe(false);
 		expect(v.is(schema, 1.23)).toBe(false);
 		expect(v.is(schema, Number.MAX_SAFE_INTEGER + 1)).toBe(false);
+		expect(v.is(schema, Number.MIN_SAFE_INTEGER - 1)).toBe(false);
 
 		expect(v.is(schema, false)).toBe(false);
 		expect(v.is(schema, true)).toBe(false);
@@ -146,7 +148,7 @@ describe(`primitive types`, () => {
 		expect(v.is(schema, 'hello')).toBe(false);
 
 		{
-			const result = v.safeParse(schema, -2);
+			const result = v.safeParse(schema, 1.23);
 
 			assert(!result.ok, `expected validation issue`);
 			expect(result.message).toBe('invalid_type at . (expected integer)');
