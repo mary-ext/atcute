@@ -30,5 +30,9 @@ export const isCidLink = (input: unknown): input is CidLink => {
 	// oxlint-disable-next-line typescript/no-explicit-any
 	const v = input as any;
 
-	return typeof v === 'object' && v !== null && (CID_LINK_SYMBOL in v || isCid(v.$link));
+	return (
+		typeof v === 'object' &&
+		v !== null &&
+		(CID_LINK_SYMBOL in v || (isCid(v.$link) && Object.keys(v).length === 1))
+	);
 };
