@@ -255,6 +255,60 @@ describe('PasswordSession', () => {
 		expect(onUpdateFailure).toHaveBeenCalledOnce();
 	});
 
+	it('recovers after a network rejection during refresh', async () => {
+		const originalFetch = globalThis.fetch;
+		const fetch = vi.fn(globalThis.fetch);
+		const onUpdate = vi.fn();
+		const onUpdateFailure = vi.fn();
+
+		const session = await PasswordSession.login(
+			{ service: network.pds.url, identifier: 'user1.test', password: 'password' },
+			{ fetch, onUpdate, onUpdateFailure },
+		);
+		const rpc = new Client({ handler: session });
+
+		onUpdate.mockClear();
+
+		const originalJwt = session.session.accessJwt;
+
+		await sleep(1_000);
+
+		// first attempt: refresh fetch rejects at the network level
+		await fetch.withImplementation(
+			(input, init) => {
+				const request = new Request(input, init);
+
+				if (request.headers.get('authorization') === `Bearer ${originalJwt}`) {
+					return Promise.resolve(
+						new Response(JSON.stringify({ error: 'ExpiredToken' }), {
+							status: 400,
+							headers: { 'content-type': 'application/json' },
+						}),
+					);
+				}
+
+				if (request.url.includes('/xrpc/com.atproto.server.refreshSession')) {
+					return Promise.reject(new TypeError('network error'));
+				}
+
+				return originalFetch(request);
+			},
+			async () => {
+				const response = await rpc.get('com.atproto.server.getSession');
+				expect(response.ok).toBe(false);
+			},
+		);
+
+		expect(session.destroyed).toBe(false);
+		expect(session.session.accessJwt).toBe(originalJwt);
+		expect(onUpdateFailure).toHaveBeenCalledOnce();
+		expect(onUpdate).not.toHaveBeenCalled();
+
+		// session must not be poisoned — a subsequent call should refresh successfully
+		await expect(ok(rpc.get('com.atproto.server.getSession'))).resolves.not.toBe(undefined);
+		expect(session.destroyed).toBe(false);
+	});
+
 	it('can resume sessions (quick path)', async () => {
 		let savedSession: PasswordSessionData;
 

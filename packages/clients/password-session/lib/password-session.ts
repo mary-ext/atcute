@@ -375,11 +375,18 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 
 	#refresh(): Promise<PasswordSessionData> {
 		this.#sessionPromise = this.#sessionPromise.then(async (sessionData) => {
-			const response = await this.#server.post('com.atproto.server.refreshSession', {
-				headers: {
-					authorization: `Bearer ${sessionData.refreshJwt}`,
-				},
-			});
+			let response;
+			try {
+				response = await this.#server.post('com.atproto.server.refreshSession', {
+					headers: {
+						authorization: `Bearer ${sessionData.refreshJwt}`,
+					},
+				});
+			} catch (err) {
+				// fetch-level rejection (network) — preserve session so it can recover
+				await this.#onUpdateFailure?.(sessionData, err);
+				return sessionData;
+			}
 
 			if (!response.ok) {
 				const isExpected =
