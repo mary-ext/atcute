@@ -1,6 +1,7 @@
 import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 import type {
 	AppBskyActorDefs,
+	AppBskyEmbedExternal,
 	AppBskyEmbedRecord,
 	AppBskyFeedDefs,
 	AppBskyFeedPost,
@@ -71,10 +72,12 @@ export const postView = ({
 export const embedRecordView = ({
 	record,
 	author,
+	embeds,
 	labels,
 }: {
 	record: AppBskyFeedPost.Main;
 	author: AppBskyActorDefs.ProfileViewBasic;
+	embeds?: AppBskyEmbedRecord.ViewRecord['embeds'];
 	labels?: ComAtprotoLabelDefs.Label[];
 }): $type.enforce<AppBskyEmbedRecord.View> => {
 	return {
@@ -85,8 +88,29 @@ export const embedRecordView = ({
 			cid: FAKE_CID,
 			author,
 			value: record,
+			embeds,
 			labels,
 			indexedAt: new Date().toISOString(),
+		},
+	};
+};
+
+export const externalEmbedView = ({
+	uri = 'https://example.com',
+	title,
+	description = '',
+}: {
+	uri?: string;
+	title: string;
+	description?: string;
+}): $type.enforce<AppBskyEmbedExternal.View> => {
+	return {
+		$type: 'app.bsky.embed.external#view',
+		external: {
+			$type: 'app.bsky.embed.external#viewExternal',
+			uri: uri as AppBskyEmbedExternal.ViewExternal['uri'],
+			title,
+			description,
 		},
 	};
 };

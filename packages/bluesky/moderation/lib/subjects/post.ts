@@ -263,7 +263,7 @@ const checkEmbedKeywordFilters = (
 				{
 					const embed = link.embeds?.[0];
 
-					if ((match = checkEmbedKeywordFilters(filters, embed, author))) {
+					if ((match = checkEmbedKeywordFilters(filters, embed, link.author))) {
 						return match;
 					}
 				}
