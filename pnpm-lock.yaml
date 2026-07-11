@@ -805,8 +805,8 @@ importers:
   packages/misc/util-text:
     dependencies:
       unicode-segmenter:
-        specifier: ^0.14.5
-        version: 0.14.5
+        specifier: ^0.17.0
+        version: 0.17.0
     devDependencies:
       '@types/node':
         specifier: ^25.9.4
@@ -818,8 +818,8 @@ importers:
   packages/misc/util-text-native:
     dependencies:
       unicode-segmenter:
-        specifier: ^0.14.5
-        version: 0.14.5
+        specifier: ^0.17.0
+        version: 0.17.0
     devDependencies:
       '@types/node':
         specifier: ^25.9.4
@@ -4083,6 +4083,9 @@ packages:
   unicode-segmenter@0.14.5:
     resolution: {integrity: sha512-jHGmj2LUuqDcX3hqY12Ql+uhUTn8huuxNZGq7GvtF6bSybzH3aFgedYu/KTzQStEgt1Ra2F3HxadNXsNjb3m3g==}
 
+  unicode-segmenter@0.17.0:
+    resolution: {integrity: sha512-rN+u/LmZx2SISURhq2vy+JeQmmf+9lFVsdVgvFJHa6wL42h3ojnYaS/UK4Fgsjku9C2P23WB/JK5sQWeBaZt+A==}
+
   universalify@0.1.2:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
@@ -7305,6 +7308,8 @@ snapshots:
   undici@8.5.0: {}
 
   unicode-segmenter@0.14.5: {}
+
+  unicode-segmenter@0.17.0: {}
 
   universalify@0.1.2: {}
 

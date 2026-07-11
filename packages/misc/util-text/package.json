@@ -30,7 +30,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"unicode-segmenter": "^0.14.5"
+		"unicode-segmenter": "^0.17.0"
 	},
 	"devDependencies": {
 		"@types/node": "^25.9.4",
