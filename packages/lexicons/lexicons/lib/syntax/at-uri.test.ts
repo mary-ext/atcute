@@ -157,6 +157,9 @@ describe('canonicalResourceUri validation', () => {
 			'at://user.bsky.social/com.atproto.feed.post/record', // handle instead of DID
 			'at://did:plc:asdf123/com.atproto.feed.post', // missing rkey
 			'at://did:plc:asdf123', // missing collection and rkey
+			'at://did:plc:asdf123/com.atproto.feed.post/record#', // fragments are not canonical
+			'at://did:plc:asdf123/com.atproto.feed.post/record#/frag',
+			'at://did:plc:asdf123/com.atproto.feed.post/record#bad',
 		];
 		for (const str of invalidCases) {
 			expect(isCanonicalResourceUri(str), str).toBe(false);
@@ -174,7 +177,6 @@ describe('canonicalResourceUri validation', () => {
 			repo: 'did:plc:asdf123',
 			collection: 'com.atproto.feed.post',
 			rkey: 'record',
-			fragment: undefined,
 		});
 	});
 

@@ -185,7 +185,6 @@ export type ParsedCanonicalResourceUri = {
 	repo: Did;
 	collection: Nsid;
 	rkey: RecordKey;
-	fragment: string | undefined;
 };
 
 // #__NO_SIDE_EFFECTS__
@@ -220,12 +219,10 @@ export const isCanonicalResourceUri = (input: unknown): input is CanonicalResour
 		return false;
 	}
 
-	// check for fragment
-	const hashPos = input.indexOf('#', secondSlash + 1);
-
 	const repo = input.substring(5, firstSlash);
 	const collection = input.substring(firstSlash + 1, secondSlash);
-	const rkey = hashPos === -1 ? input.substring(secondSlash + 1) : input.substring(secondSlash + 1, hashPos);
+	// a canonical uri has no fragment; any '#' falls into the rkey and is rejected by isRecordKey
+	const rkey = input.substring(secondSlash + 1);
 
 	return isDid(repo) && isNsid(collection) && isRecordKey(rkey);
 };
@@ -256,5 +253,10 @@ export const parseCanonicalResourceUri = (input: string): ParsedCanonicalResourc
 		throw new SyntaxError(`invalid rkey in canonical-at-uri: ${k}`);
 	}
 
-	return { repo: r, collection: c, rkey: k, fragment: f };
+	// a canonical uri has no fragment
+	if (f !== undefined) {
+		throw new SyntaxError(`unexpected fragment in canonical-at-uri: ${input}`);
+	}
+
+	return { repo: r, collection: c, rkey: k };
 };
