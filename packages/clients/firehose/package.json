@@ -20,6 +20,7 @@
 	},
 	"scripts": {
 		"build": "tsgo",
+		"test": "vitest run",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
@@ -32,7 +33,10 @@
 		"type-fest": "^4.41.0"
 	},
 	"devDependencies": {
-		"@atcute/atproto": "workspace:^"
+		"@atcute/atproto": "workspace:^",
+		"@types/ws": "^8.18.1",
+		"vitest": "^4.1.9",
+		"ws": "^8.21.0"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

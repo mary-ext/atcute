@@ -92,7 +92,14 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 
 		ws.onmessage = (ev) => {
 			const buffer = new Uint8Array(ev.data);
-			const frame = decodeFrame(buffer);
+
+			let frame;
+			try {
+				frame = decodeFrame(buffer);
+			} catch (err) {
+				onError?.(new Error(`failed to decode frame`, { cause: err }));
+				return;
+			}
 
 			if (frame.type === 'error') {
 				onError?.(new FirehoseError(frame.error, frame.message));
