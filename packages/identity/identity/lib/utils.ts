@@ -43,9 +43,9 @@ export const getVerificationMaterial = (
 	const expectedId = `${doc.id}${id}`;
 
 	for (let idx = 0, len = verificationMethods.length; idx < len; idx++) {
-		const { id, type, publicKeyMultibase } = verificationMethods[idx];
+		const { id: methodId, type, publicKeyMultibase } = verificationMethods[idx];
 
-		if (id !== expectedId) {
+		if (methodId !== id && methodId !== expectedId) {
 			continue;
 		}
 

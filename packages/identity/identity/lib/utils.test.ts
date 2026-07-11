@@ -69,4 +69,23 @@ describe('getVerificationMaterial', () => {
 			publicKeyMultibase: 'zQ3shQo2ZK9ZwNRxkEM1sSkpJKfx1NN6WWcvtMTDyJeCwPB7o',
 		});
 	});
+
+	it('grabs signing keys from relative fragment ids', () => {
+		const doc = v.parse(didDocument, {
+			id: 'did:web:example.com',
+			verificationMethod: [
+				{
+					id: '#atproto',
+					type: 'Multikey',
+					controller: 'did:web:example.com',
+					publicKeyMultibase: 'zQ3sho8kubdqeS5wbxPDpNBBqg2tvJTKF1jovJKzQzhu4S8fH',
+				},
+			],
+		});
+
+		expect(getAtprotoVerificationMaterial(doc)).toEqual({
+			type: 'Multikey',
+			publicKeyMultibase: 'zQ3sho8kubdqeS5wbxPDpNBBqg2tvJTKF1jovJKzQzhu4S8fH',
+		});
+	});
 });
