@@ -353,7 +353,7 @@ export class NormalizedCache {
 
 		return () => {
 			subs!.delete(callback as EntitySubscriber<unknown>);
-			if (subs!.size === 0) {
+			if (subs!.size === 0 && store.subscribers.get(key) === subs) {
 				store.subscribers.delete(key);
 			}
 		};

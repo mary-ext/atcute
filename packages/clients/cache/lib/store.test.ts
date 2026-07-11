@@ -471,6 +471,29 @@ describe('NormalizedCache', () => {
 			expect(callback).not.toHaveBeenCalled();
 		});
 
+		it('keeps newer subscribers when an old unsubscribe is called twice', () => {
+			const cache = new NormalizedCache();
+			cache.define({
+				schema: AppBskyFeedDefs.postViewSchema,
+				key: (post) => post.uri,
+			});
+
+			const post = sampleFeedResponse.feed[0].post;
+			const oldCallback = vi.fn();
+			const newCallback = vi.fn();
+
+			const unsubscribeOld = cache.subscribe(AppBskyFeedDefs.postViewSchema, post.uri, oldCallback);
+			unsubscribeOld();
+
+			cache.subscribe(AppBskyFeedDefs.postViewSchema, post.uri, newCallback);
+			unsubscribeOld();
+
+			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
+
+			expect(oldCallback).not.toHaveBeenCalled();
+			expect(newCallback).toHaveBeenCalledTimes(1);
+		});
+
 		it('notifies type subscribers on any entity change', () => {
 			const cache = new NormalizedCache();
 			cache.define({
