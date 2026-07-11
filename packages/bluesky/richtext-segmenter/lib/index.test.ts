@@ -64,6 +64,50 @@ it('does not allow end<start', () => {
 	]);
 });
 
+it('does not emit a segment for zero-length facets', () => {
+	expect(
+		segmentize('hello', [
+			{
+				index: { byteEnd: 2, byteStart: 2 },
+				features: [{ $type: 'app.bsky.richtext.facet#tag', tag: '' }],
+			},
+		]),
+	).toEqual([
+		{
+			text: 'he',
+			features: undefined,
+		},
+		{
+			text: 'llo',
+			features: undefined,
+		},
+	]);
+});
+
+it('does not let overlapping facets steal characters past their end', () => {
+	expect(
+		segmentize('hello', [
+			{
+				index: { byteEnd: 4, byteStart: 0 },
+				features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'a' }],
+			},
+			{
+				index: { byteEnd: 4, byteStart: 2 },
+				features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'b' }],
+			},
+		]),
+	).toEqual([
+		{
+			text: 'hell',
+			features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'a' }],
+		},
+		{
+			text: 'o',
+			features: undefined,
+		},
+	]);
+});
+
 type BlueskyFeature = AppBskyRichtextFacet.Main['features'][number];
 
 it('infers feature type from facets', () => {

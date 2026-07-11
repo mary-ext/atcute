@@ -26,7 +26,7 @@ export const segmentize = <F>(text: string, facets: Facet<F>[] | undefined): Ric
 		let curs = startUtf16;
 
 		// Fast-path for entirely ASCII text
-		const isLikelyAsciiText = text.charCodeAt(curs) < 0x80;
+		const isLikelyAsciiText = utf8Cursor < endUtf8 && text.charCodeAt(curs) < 0x80;
 		if (isLikelyAsciiText) {
 			curs += 1;
 			utf8Cursor += 1;
