@@ -534,7 +534,7 @@ const buildLexRefUnion = (ctx: BuildContext, path: LexPath, spec: t.LexRefUnion)
 	return lazy(() => {
 		const members = lazyMembers.map((cell) => cell.value);
 
-		const schema: v.BaseSchema = v.variant(members as any);
+		const schema: v.BaseSchema = v.variant(members as any, spec.closed ?? false);
 
 		return schema;
 	});
@@ -733,7 +733,7 @@ const buildLexObject = (
 			}
 
 			if (isRef) {
-				Object.defineProperty(obj, prop, { get: () => c.value });
+				Object.defineProperty(obj, prop, { enumerable: true, get: () => c.value });
 			} else {
 				if (prop === '__proto__') {
 					Object.defineProperty(obj, prop, { enumerable: true, configurable: true, writable: true });

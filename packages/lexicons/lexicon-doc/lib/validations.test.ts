@@ -11,8 +11,10 @@ import {
 	integer,
 	nullable,
 	object,
+	ref,
 	required,
 	string,
+	union,
 } from './builder.ts';
 import type * as t from './types.ts';
 import { RecordValidator } from './validations.ts';
@@ -126,6 +128,42 @@ const docs: Record<string, t.LexiconDoc> = build({
 						},
 					}),
 				},
+			},
+		}),
+		document({
+			id: 'com.example.closed-union',
+			defs: {
+				main: {
+					type: 'record',
+					record: object({
+						properties: {
+							entry: required(union({ closed: true, refs: [ref({ ref: '#itemA' })] })),
+						},
+					}),
+				},
+				itemA: object({
+					properties: {
+						value: required(string()),
+					},
+				}),
+			},
+		}),
+		document({
+			id: 'com.example.open-union',
+			defs: {
+				main: {
+					type: 'record',
+					record: object({
+						properties: {
+							entry: required(union({ refs: [ref({ ref: '#itemA' })] })),
+						},
+					}),
+				},
+				itemA: object({
+					properties: {
+						value: required(string()),
+					},
+				}),
 			},
 		}),
 		document({
@@ -552,6 +590,81 @@ describe('RecordValidator', () => {
 					},
 				}),
 			).toThrow();
+		});
+	});
+
+	describe('ref fields', () => {
+		test('rejects a record missing a required ref field', () => {
+			const validator = new RecordValidator(docs, 'com.example.like');
+
+			expect(() =>
+				validator.parse({
+					key: '3m6bkzurm4c7w',
+					object: {
+						$type: 'com.example.like',
+						createdAt: '2024-01-01T00:00:00.000Z',
+					},
+				}),
+			).toThrow();
+		});
+
+		test('validates the target schema of a ref field', () => {
+			const validator = new RecordValidator(docs, 'com.example.like');
+
+			expect(() =>
+				validator.parse({
+					key: '3m6bkzurm4c7w',
+					object: {
+						$type: 'com.example.like',
+						subject: { uri: 'not-an-at-uri', cid: 'not-a-cid' },
+						createdAt: '2024-01-01T00:00:00.000Z',
+					},
+				}),
+			).toThrow();
+		});
+	});
+
+	describe('unions', () => {
+		test('closed union rejects an unknown member $type', () => {
+			const validator = new RecordValidator(docs, 'com.example.closed-union');
+
+			expect(() =>
+				validator.parse({
+					key: '3m6bkzurm4c7w',
+					object: {
+						$type: 'com.example.closed-union',
+						entry: { $type: 'com.example.closed-union#itemB', value: 'x' },
+					},
+				}),
+			).toThrow();
+		});
+
+		test('closed union accepts a declared member $type', () => {
+			const validator = new RecordValidator(docs, 'com.example.closed-union');
+
+			const result = validator.parse({
+				key: '3m6bkzurm4c7w',
+				object: {
+					$type: 'com.example.closed-union',
+					entry: { $type: 'com.example.closed-union#itemA', value: 'x' },
+				},
+			});
+
+			expect((result.object as any).entry.value).toBe('x');
+		});
+
+		test('open union accepts an unknown member $type', () => {
+			const validator = new RecordValidator(docs, 'com.example.open-union');
+
+			const result = validator.parse({
+				key: '3m6bkzurm4c7w',
+				object: {
+					$type: 'com.example.open-union',
+					entry: { $type: 'com.example.open-union#itemB', value: 'x' },
+				},
+			});
+
+			expect((result.object as any).entry.$type).toBe('com.example.open-union#itemB');
 		});
 	});
 
