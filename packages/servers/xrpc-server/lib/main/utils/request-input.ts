@@ -53,7 +53,7 @@ export const constructMimeValidator = (param: XRPCLexBodyParam | XRPCBlobBodyPar
 		return null;
 	}
 
-	const pattern = new RegExp(`^\\s*(?:${mimes.map(escapeRegexp).join('|')})\\s*(?:$|;)`);
+	const pattern = new RegExp(`^\\s*(?:${mimes.map(mimeToRegexp).join('|')})\\s*(?:$|;)`);
 
 	return (request: Request): Result<void, string> => {
 		const type = request.headers.get('content-type');
@@ -81,6 +81,19 @@ const separatedList = (list: string[], sep: 'or' | 'and'): string => {
 			return `${list.slice(0, -1).join(', ')} ${sep} ${list[list.length - 1]}`;
 		}
 	}
+};
+
+// mirrors `blobAccept`: `*/*` accepts any media type, `type/*` prefix-matches a type.
+const mimeToRegexp = (mime: string): string => {
+	if (mime === '*/*') {
+		return `[^\\s;]+`;
+	}
+
+	if (mime.endsWith('/*')) {
+		return `${escapeRegexp(mime.slice(0, -1))}[^\\s;]+`;
+	}
+
+	return escapeRegexp(mime);
 };
 
 const escapeRegexp = (input: string): string => {
