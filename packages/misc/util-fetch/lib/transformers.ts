@@ -51,7 +51,8 @@ export const validateJsonWith =
 	};
 
 const assertContentType = async (response: Response, typeRegex: RegExp): Promise<void> => {
-	const type = response.headers.get('content-type')?.split(';', 1)[0].trim();
+	// media types are case-insensitive (RFC 9110 §8.3.1)
+	const type = response.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase();
 
 	if (type === undefined) {
 		if (response.body) {
