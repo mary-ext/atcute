@@ -25,6 +25,7 @@ describe('datetime validation', () => {
 			'0985-04-12T23:20:50.123-07:00',
 			'1985-04-12T23:20:50.123-07:00',
 			'0123-01-01T00:00:00.000Z',
+			'0001-01-01T00:00:00.000Z',
 
 			// various precisions, up through at least 12 digits
 			'1985-04-12T23:20:50.1Z',
@@ -73,6 +74,10 @@ describe('datetime validation', () => {
 			'1985-04-12T3:20:50.123Z',
 			'1985-04-12T23:0:50.123Z',
 			'1985-04-12T23:20:5.123Z',
+
+			// year 0000 (normalizes to a negative year for some offsets)
+			'0000-01-01T00:00:00.000Z',
+			'0000-01-01T00:00:00+01:00',
 
 			// too much zero padding
 			'01985-04-12T23:20:50.123Z',
