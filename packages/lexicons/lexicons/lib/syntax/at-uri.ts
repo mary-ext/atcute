@@ -22,11 +22,15 @@ export type ParsedResourceUri =
 
 // minimum valid non-canonical at-uri is `at://a.a` (8 chars)
 const AT_URI_MIN_LENGTH = 8;
+// a general at-uri is bounded by the spec's overall 8 KB limit; the JSON-pointer fragment is otherwise
+// unbounded structurally
+const AT_URI_MAX_LENGTH = 8 * 1024;
+
 // minimum canonical at-uri is `at://did:m:v/a.b.c/x` (20 chars)
 const CANONICAL_AT_URI_MIN_LENGTH = 5 + 7 + 1 + 5 + 1 + 1;
-// maximum structural length:
+// a canonical at-uri carries no fragment, so its length is bounded by the structural maximum:
 // `at://` + DID (2048) + `/` + NSID (317) + `/` + rkey (512)
-const AT_URI_MAX_LENGTH = 5 + 2048 + 1 + 317 + 1 + 512;
+const CANONICAL_AT_URI_MAX_LENGTH = 5 + 2048 + 1 + 317 + 1 + 512;
 
 // repo: [a-zA-Z0-9._:%-]
 // collection: [a-zA-Z0-9.-]
@@ -194,7 +198,7 @@ export const isCanonicalResourceUri = (input: unknown): input is CanonicalResour
 	}
 
 	const len = input.length;
-	if (len < CANONICAL_AT_URI_MIN_LENGTH || len > AT_URI_MAX_LENGTH) {
+	if (len < CANONICAL_AT_URI_MIN_LENGTH || len > CANONICAL_AT_URI_MAX_LENGTH) {
 		return false;
 	}
 
@@ -230,7 +234,7 @@ export const isCanonicalResourceUri = (input: unknown): input is CanonicalResour
 // #__NO_SIDE_EFFECTS__
 export const parseCanonicalResourceUri = (input: string): ParsedCanonicalResourceUri => {
 	const len = input.length;
-	if (len < CANONICAL_AT_URI_MIN_LENGTH || len > AT_URI_MAX_LENGTH) {
+	if (len < CANONICAL_AT_URI_MIN_LENGTH || len > CANONICAL_AT_URI_MAX_LENGTH) {
 		throw new SyntaxError(`invalid canonical-at-uri: ${input}`);
 	}
 

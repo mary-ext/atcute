@@ -19,6 +19,9 @@ describe('resourceUri validation', () => {
 			// very long: 'at://did:plc:asdf123/com.atproto.feed.post/' + 'o'.repeat(512)
 			'at://did:plc:asdf123/com.atproto.feed.post/' + 'o'.repeat(512),
 
+			// long fragment: the structural part is bounded, but the fragment may run up to the 8 KB overall limit
+			'at://did:plc:asdf123/com.atproto.feed.post/record#/' + 'o'.repeat(4000),
+
 			// enforces no trailing slashes
 			'at://did:plc:asdf123',
 			'at://user.bsky.social',
@@ -91,6 +94,8 @@ describe('resourceUri validation', () => {
 			'at://frag',
 			// too long: 'at://did:plc:asdf123/com.atproto.feed.post/' + 'o'.repeat(8200)
 			'at://did:plc:asdf123/com.atproto.feed.post/' + 'o'.repeat(8200),
+			// too long: fragment pushes the uri past the 8 KB overall limit
+			'at://did:plc:asdf123/com.atproto.feed.post/record#/' + 'o'.repeat(8200),
 			// enforces no trailing slashes
 			'at://did:plc:asdf123/',
 			'at://user.bsky.social/',
