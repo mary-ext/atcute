@@ -108,6 +108,28 @@ it('does not let overlapping facets steal characters past their end', () => {
 	]);
 });
 
+it('does not overshoot the byte cursor on a lone high surrogate', () => {
+	// a lone high surrogate is encoded as U+FFFD (3 bytes), not a 4-byte pair;
+	// the facet covers the 'X' at byte offset 3
+	expect(
+		segmentize('\ud800X', [
+			{
+				index: { byteStart: 3, byteEnd: 4 },
+				features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'x' }],
+			},
+		]),
+	).toEqual([
+		{
+			text: '\ud800',
+			features: undefined,
+		},
+		{
+			text: 'X',
+			features: [{ $type: 'app.bsky.richtext.facet#tag', tag: 'x' }],
+		},
+	]);
+});
+
 type BlueskyFeature = AppBskyRichtextFacet.Main['features'][number];
 
 it('infers feature type from facets', () => {

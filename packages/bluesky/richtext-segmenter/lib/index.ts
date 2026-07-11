@@ -66,8 +66,15 @@ export const segmentize = <F>(text: string, facets: Facet<F>[] | undefined): Ric
 				curs += 1;
 				utf8Cursor += 3;
 			} else {
-				curs += 2;
-				utf8Cursor += 4;
+				// lone high surrogate encodes as U+FFFD (3 bytes), not a 4-byte pair
+				const next = text.charCodeAt(curs + 1);
+				if (next >= 0xdc00 && next <= 0xdfff) {
+					curs += 2;
+					utf8Cursor += 4;
+				} else {
+					curs += 1;
+					utf8Cursor += 3;
+				}
 			}
 		}
 
