@@ -24,6 +24,16 @@ describe('encode', () => {
 	it('throws on very large numbers', () => {
 		expect(() => encode(2 ** 54 - 1, new Uint8Array(10))).toThrow();
 	});
+
+	it('throws on non-integers', () => {
+		expect(() => encode(1.9, new Uint8Array(10))).toThrow();
+		expect(() => encode(NaN, new Uint8Array(10))).toThrow();
+		expect(() => encode(Infinity, new Uint8Array(10))).toThrow();
+	});
+
+	it('throws on negative numbers', () => {
+		expect(() => encode(-5, new Uint8Array(10))).toThrow();
+	});
 });
 
 describe('decode', () => {
@@ -43,6 +53,20 @@ describe('decode', () => {
 
 		expect(() => decode(encoded.subarray(0, 2), 0)).toThrow();
 		expect(decode(encoded, 0, 3)).toEqual({ value: 16384, nextOffset: 3 });
+	});
+
+	it('round-trips the maximum safe integer', () => {
+		const encoded = new Uint8Array(10);
+		const written = encode(Number.MAX_SAFE_INTEGER, encoded);
+
+		expect(decode(encoded)).toEqual({ value: Number.MAX_SAFE_INTEGER, nextOffset: written });
+	});
+
+	it('throws on values past the maximum safe integer', () => {
+		// a 9-byte varint encoding a value beyond 2^53
+		const encoded = new Uint8Array([0x81, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x10]);
+
+		expect(() => decode(encoded)).toThrow();
 	});
 });
 

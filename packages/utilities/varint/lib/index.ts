@@ -33,7 +33,7 @@ export interface DecodeResult {
  * @returns The amount of bytes written
  */
 export const encode = (num: number, buf: Uint8Array, offset = 0): number => {
-	if (num > MAX_SAFE_INTEGER) {
+	if (!Number.isSafeInteger(num) || num < 0) {
 		throw new RangeError('could not encode varint');
 	}
 
@@ -158,6 +158,11 @@ export const decode = (buf: Uint8Array, offset = 0, length = buf.length): Decode
 
 		b = buf[counter++];
 		res += (b & REST) * 2 ** shift;
+
+		if (res > MAX_SAFE_INTEGER) {
+			throw new RangeError('could not decode varint');
+		}
+
 		shift += 7;
 	} while (b >= MSB);
 
