@@ -419,7 +419,7 @@ function getEmbedLabels(embed: PostEmbed | undefined): string[] | undefined {
 	if (media !== undefined) {
 		const type = media.type;
 
-		if (type === 'image' || type === 'external') {
+		if (type === 'external' || type === 'image' || type === 'video') {
 			return media.labels;
 		}
 	}
