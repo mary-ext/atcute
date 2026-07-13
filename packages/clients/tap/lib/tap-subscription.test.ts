@@ -1,8 +1,10 @@
+import type { IncomingMessage } from 'node:http';
+
 import { decodeUtf8From } from '@atcute/uint8array';
 
 import * as v from 'valibot';
 import { describe, expect, it } from 'vitest';
-import { type RawData, type WebSocket, WebSocketServer } from 'ws';
+import { type RawData, WebSocket, WebSocketServer } from 'ws';
 
 import { TapSubscription } from './tap-subscription.ts';
 import { flattenTapEvent, tapEventWireSchema, type tapRecordEventWireSchema } from './typedefs.ts';
@@ -89,6 +91,37 @@ describe('tap subscription', () => {
 
 		await new Promise<void>((resolve) => server.close(() => resolve()));
 		expect(receivedAcks).toEqual([42]);
+	});
+
+	it.each([
+		['the default websocket', undefined],
+		['a user-supplied websocket', WebSocket],
+	])('sends the admin auth header on the upgrade request with %s', async (_label, ctor) => {
+		const server = new WebSocketServer({ port: 0 });
+		const address = server.address();
+		if (typeof address === 'string' || address === null) {
+			throw new Error(`unexpected ws address`);
+		}
+
+		const { promise, resolve } = Promise.withResolvers<string | undefined>();
+		server.on('connection', (_socket: WebSocket, request: IncomingMessage) => {
+			resolve(request.headers.authorization);
+		});
+
+		const subscription = new TapSubscription({
+			url: `ws://127.0.0.1:${address.port}/channel`,
+			adminPassword: 'hunter2',
+			ws: ctor !== undefined ? { WebSocket: ctor } : undefined,
+		});
+
+		const iterator = subscription[Symbol.asyncIterator]();
+		const authorization = await promise;
+
+		await iterator.return?.();
+		await new Promise<void>((resolve) => server.close(() => resolve()));
+
+		// `admin:hunter2`, base64
+		expect(authorization).toBe('Basic YWRtaW46aHVudGVyMg==');
 	});
 
 	it('drops malformed messages', async () => {

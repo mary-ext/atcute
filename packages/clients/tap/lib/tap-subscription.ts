@@ -114,11 +114,15 @@ export class TapSubscription {
 
 		const authHeader = adminPassword ? formatAdminAuthHeader(adminPassword) : undefined;
 
+		// resolve the constructor the same way partysocket does, so that a user-supplied `WebSocket`
+		// gets the auth header too instead of silently dropping it.
+		const baseWebSocket = wsOptions?.WebSocket ?? globalThis.WebSocket;
+
 		const mergedWsOptions =
-			authHeader !== undefined && wsOptions?.WebSocket === undefined
+			authHeader !== undefined && baseWebSocket !== undefined
 				? {
 						...wsOptions,
-						WebSocket: createAuthedWebSocket(authHeader),
+						WebSocket: createAuthedWebSocket(baseWebSocket, authHeader),
 					}
 				: wsOptions;
 
@@ -250,23 +254,26 @@ const toMessageText = (data: unknown): string => {
 	return String(data);
 };
 
-const createAuthedWebSocket = (authorization: string) => {
-	const WebSocketCtor = WebSocket as unknown as {
-		new (
-			url: string | URL,
-			protocols?: string | string[],
-			options?: { headers?: Record<string, string> },
-		): WebSocket;
-	};
+type Headers = Record<string, string>;
 
-	return class AuthedWebSocket extends WebSocketCtor {
+type WebSocketConstructor = new (
+	url: string | URL,
+	protocols?: string | string[] | { headers?: Headers; protocols?: string[] },
+	options?: { headers?: Headers },
+) => WebSocket;
+
+const createAuthedWebSocket = (base: WebSocketConstructor, authorization: string) => {
+	const headers: Headers = { Authorization: authorization };
+
+	// node (undici) and bun read upgrade headers from an options object in the second argument, the
+	// `ws` package from the third; supplying both covers every implementation that can set them.
+	return class AuthedWebSocket extends base {
 		constructor(url: string | URL, protocols?: string | string[]) {
-			// oxlint-disable-next-line typescript/no-explicit-any
-			super(url, protocols as any, {
-				headers: {
-					Authorization: authorization,
-				},
-			});
+			super(
+				url,
+				{ headers, protocols: typeof protocols === 'string' ? [protocols] : protocols },
+				{ headers },
+			);
 		}
 	};
 };

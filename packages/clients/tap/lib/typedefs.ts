@@ -139,7 +139,15 @@ export type TapEvent = TapRecordEvent | TapIdentityEvent;
 
 export interface TapClientOptions {
 	url: string | URL;
+
+	/**
+	 * admin password for tap's basic auth.
+	 *
+	 * subscriptions send this as a websocket upgrade header, which browsers and deno cannot set; they need a
+	 * header-capable implementation via {@link TapSubscribeOptions.ws}.
+	 */
 	adminPassword?: string;
+
 	fetch?: typeof globalThis.fetch;
 }
 
