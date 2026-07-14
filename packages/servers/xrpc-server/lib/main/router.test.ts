@@ -518,10 +518,8 @@ describe('XRPCRouter', () => {
 
 				expect(await response.json()).toEqual({
 					error: 'InvalidRequest',
-					message: 'invalid params: invalid_array_length at .dids (expected an array at least 1 item(s))',
-					'net.kelinci.atcute.issues': [
-						{ code: 'invalid_array_length', maxLength: null, minLength: 1, path: ['dids'] },
-					],
+					message: 'invalid params: missing_value at .dids (missing value)',
+					'net.kelinci.atcute.issues': [{ code: 'missing_value', path: ['dids'] }],
 				});
 			}
 

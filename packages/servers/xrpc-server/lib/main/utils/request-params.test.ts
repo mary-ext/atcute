@@ -55,6 +55,24 @@ describe('constructParamsHandler', () => {
 		expect(parseErr('repo=a&limit=99999999999999999999')).toEqual(['invalid_type']);
 	});
 
+	it('treats an empty value as an absent parameter', () => {
+		expect(parseOk('repo=a&limit=')).toEqual({ repo: 'a', limit: 50 });
+		expect(parseOk('repo=a&reverse=')).toEqual({ repo: 'a', limit: 50 });
+		expect(parseErr('repo=')).toEqual(['missing_value']);
+	});
+
+	it('drops empty values out of repeated parameters', () => {
+		expect(parseOk('repo=a&tags=&tags=x')).toMatchObject({ tags: ['x'] });
+	});
+
+	it('leaves an absent array parameter unset', () => {
+		expect(parseOk('repo=a')).toEqual({ repo: 'a', limit: 50 });
+		expect(parseOk('repo=a&tags=')).toEqual({ repo: 'a', limit: 50 });
+
+		const required = constructParamsHandler(v.object({ tags: v.array(v.string()) }));
+		expect(required(new URLSearchParams('')).ok).toBe(false);
+	});
+
 	it('still rejects malformed booleans', () => {
 		expect(parseErr('repo=a&reverse=1')).toEqual(['invalid_type']);
 	});

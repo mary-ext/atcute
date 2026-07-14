@@ -50,6 +50,10 @@ const coerceInteger = (str: string): number | null => {
 	return Number(str);
 };
 
+const isNonEmpty = (str: string): boolean => {
+	return str !== '';
+};
+
 export const constructParamsHandler = <TSchema extends ObjectSchema>(schema: TSchema) => {
 	const entries = Object.entries(schema.shape).map(([key, schema]) => {
 		const nonnullable = unwrapOptional(schema);
@@ -85,18 +89,18 @@ export const constructParamsHandler = <TSchema extends ObjectSchema>(schema: TSc
 			const key = entry.key;
 			const coerce = entry.coerce;
 
-			const raw = searchParams.getAll(key);
+			const raw = searchParams.getAll(key).filter(isNonEmpty);
 			const count = raw.length;
+
+			if (count === 0) {
+				continue;
+			}
 
 			let value: MaybeArray<Literal | null>;
 
 			if (entry.multiple || count > 1) {
 				value = coerce !== undefined ? raw.map(coerce) : raw;
 			} else {
-				if (count === 0) {
-					continue;
-				}
-
 				value = coerce !== undefined ? coerce(raw[0]) : raw[0];
 			}
 
