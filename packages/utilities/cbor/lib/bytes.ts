@@ -1,4 +1,4 @@
-import { fromBase64, toBase64 } from '@atcute/multibase';
+import { fromBase64, fromBase64Pad, toBase64 } from '@atcute/multibase';
 
 export interface Bytes {
 	$bytes: string;
@@ -43,5 +43,8 @@ export const fromBytes = (bytes: Bytes): Uint8Array => {
 		return bytes.buf;
 	}
 
-	return fromBase64(bytes.$bytes);
+	// atproto emits unpadded base64 but the data-model permits optional padding on `$bytes`; accept
+	// both while keeping the generic codecs strict.
+	const $bytes = bytes.$bytes;
+	return $bytes.charCodeAt($bytes.length - 1) === 0x3d ? fromBase64Pad($bytes) : fromBase64($bytes);
 };
