@@ -37,7 +37,24 @@ const trimBase64Padding = (str: string): string => {
 	return str.slice(0, end - 1);
 };
 
-export const fromBase64 = (str: string): Uint8Array<ArrayBuffer> => {
+// node's `base64Write` never validates — it stops at invalid pairs, strips whitespace, and aliases
+// non-alphabet characters, fabricating bytes. re-encoding and comparing rejects all of that without
+// a separate alphabet scan.
+const roundtrip = (
+	decode: (str: string) => Uint8Array<ArrayBuffer>,
+	encode: (bytes: Uint8Array) => string,
+): ((str: string) => Uint8Array<ArrayBuffer>) => {
+	return (str: string): Uint8Array<ArrayBuffer> => {
+		const bytes = decode(str);
+		if (encode(bytes) !== str) {
+			throw new SyntaxError(`invalid base64 string`);
+		}
+
+		return bytes;
+	};
+};
+
+const rawFromBase64 = (str: string): Uint8Array<ArrayBuffer> => {
 	const length = getBase64ByteLength(str, false);
 	const bytes = allocUnsafe(length);
 	const written = _base64Write.call(bytes, str);
@@ -45,44 +62,60 @@ export const fromBase64 = (str: string): Uint8Array<ArrayBuffer> => {
 	return length > written ? bytes.subarray(0, written) : bytes;
 };
 
+const rawFromBase64Pad = (str: string): Uint8Array<ArrayBuffer> => {
+	const length = getBase64ByteLength(str, true);
+	const bytes = allocUnsafe(length);
+	const written = _base64Write.call(bytes, str);
+
+	return length > written ? bytes.subarray(0, written) : bytes;
+};
+
+const rawFromBase64Url = (str: string): Uint8Array<ArrayBuffer> => {
+	const length = getBase64ByteLength(str, false);
+	const bytes = allocUnsafe(length);
+	const written = _base64UrlWrite.call(bytes, str);
+
+	return length > written ? bytes.subarray(0, written) : bytes;
+};
+
+const rawFromBase64UrlPad = (str: string): Uint8Array<ArrayBuffer> => {
+	const length = getBase64ByteLength(str, true);
+	const bytes = allocUnsafe(length);
+	const written = _base64UrlWrite.call(bytes, str);
+
+	return length > written ? bytes.subarray(0, written) : bytes;
+};
+
+// #region base64
 export const toBase64 = (bytes: Uint8Array): string => {
 	return trimBase64Padding(_base64Slice.call(bytes));
 };
 
-export const fromBase64Pad = (str: string): Uint8Array<ArrayBuffer> => {
-	const length = getBase64ByteLength(str, true);
-	const bytes = allocUnsafe(length);
-	const written = _base64Write.call(bytes, str);
+export const fromBase64 = /*#__PURE__*/ roundtrip(rawFromBase64, toBase64);
+// #endregion
 
-	return length > written ? bytes.subarray(0, written) : bytes;
-};
-
+// #region base64pad
 export const toBase64Pad = (bytes: Uint8Array): string => {
 	return _base64Slice.call(bytes);
 };
 
-export const fromBase64Url = (str: string): Uint8Array<ArrayBuffer> => {
-	const length = getBase64ByteLength(str, false);
-	const bytes = allocUnsafe(length);
-	const written = _base64UrlWrite.call(bytes, str);
+export const fromBase64Pad = /*#__PURE__*/ roundtrip(rawFromBase64Pad, toBase64Pad);
+// #endregion
 
-	return length > written ? bytes.subarray(0, written) : bytes;
-};
-
+// #region base64url
 export const toBase64Url = (bytes: Uint8Array): string => {
 	return _base64UrlSlice.call(bytes);
 };
 
-export const fromBase64UrlPad = (str: string): Uint8Array<ArrayBuffer> => {
-	const length = getBase64ByteLength(str, true);
-	const bytes = allocUnsafe(length);
-	const written = _base64UrlWrite.call(bytes, str);
+export const fromBase64Url = /*#__PURE__*/ roundtrip(rawFromBase64Url, toBase64Url);
+// #endregion
 
-	return length > written ? bytes.subarray(0, written) : bytes;
-};
-
+// #region base64urlpad
 const PADDING = ['', '===', '==', '='];
 export const toBase64UrlPad = (bytes: Uint8Array): string => {
 	const str = _base64UrlSlice.call(bytes);
 	return str + PADDING[str.length % 4];
 };
+
+export const fromBase64UrlPad = /*#__PURE__*/ roundtrip(rawFromBase64UrlPad, toBase64UrlPad);
+// #endregion

@@ -42,12 +42,32 @@ export const createRfc4648Decode = (alphabet: string, bitsPerChar: number, pad: 
 		codes[alphabet.charCodeAt(i)] = i;
 	}
 
+	// characters in a fully-padded group (4 for base64, 8 for base32)
+	let gcd = bitsPerChar;
+	let rem = 8;
+	while (rem !== 0) {
+		const next = gcd % rem;
+		gcd = rem;
+		rem = next;
+	}
+	const charsPerGroup = 8 / gcd;
+
 	return (str: string): Uint8Array<ArrayBuffer> => {
-		// Count the padding bytes:
+		// a group-aligned length with fewer than `charsPerGroup` padding characters rejects malformed
+		// padding that would otherwise be stripped; interior `=` is caught by the parse loop below.
 		let end = str.length;
-		// oxlint-disable-next-line no-unmodified-loop-condition
-		while (pad && str[end - 1] === '=') {
-			--end;
+		if (pad && end !== 0) {
+			if (end % charsPerGroup !== 0) {
+				throw new SyntaxError(`unexpected end of data`);
+			}
+
+			let padding = 0;
+			while (str.charCodeAt(end - 1) === 0x3d) {
+				--end;
+				if (++padding >= charsPerGroup) {
+					throw new SyntaxError(`invalid base string`);
+				}
+			}
 		}
 
 		// Allocate the output:
