@@ -17,19 +17,19 @@ export const alloc = (size: number): Uint8Array<ArrayBuffer> => {
  */
 export const allocUnsafe = alloc;
 
-/** compares two Uint8Array buffers */
+/**
+ * compares two Uint8Array buffers bytewise
+ *
+ * @param a first buffer
+ * @param b second buffer
+ * @returns -1 if `a` sorts before `b`, 1 if it sorts after, 0 if they hold the same bytes
+ */
 export const compare = (a: Uint8Array, b: Uint8Array): number => {
 	const alen = a.length;
 	const blen = b.length;
+	const len = alen < blen ? alen : blen;
 
-	if (alen > blen) {
-		return 1;
-	}
-	if (alen < blen) {
-		return -1;
-	}
-
-	for (let i = 0; i < alen; i++) {
+	for (let i = 0; i < len; i++) {
 		const ax = a[i];
 		const bx = b[i];
 
@@ -40,6 +40,14 @@ export const compare = (a: Uint8Array, b: Uint8Array): number => {
 		if (ax > bx) {
 			return 1;
 		}
+	}
+
+	if (alen < blen) {
+		return -1;
+	}
+
+	if (alen > blen) {
+		return 1;
 	}
 
 	return 0;
@@ -63,7 +71,13 @@ export const equals = (a: Uint8Array, b: Uint8Array): boolean => {
 	return len === -1;
 };
 
-/** checks if the two Uint8Array buffers are equal, timing-safe version */
+/**
+ * checks if the two Uint8Array buffers are equal, timing-safe version
+ *
+ * @param a first buffer
+ * @param b second buffer
+ * @returns whether the buffers hold the same bytes; false if their lengths differ
+ */
 export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
 	let len: number;
 	let out = 0;
@@ -76,7 +90,14 @@ export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
 	return len === -1 && out === 0;
 };
 
-/** concatenates multiple Uint8Array buffers into one */
+/**
+ * concatenates multiple Uint8Array buffers into one
+ *
+ * @param arrays buffers to concatenate
+ * @param size exact byte length of the result, defaulting to the combined length of `arrays`. contents
+ *   overflowing it are truncated, and any remainder past them is left zeroed
+ * @returns buffer holding the concatenated contents
+ */
 export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuffer> => {
 	let written = 0;
 
@@ -94,6 +115,12 @@ export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuf
 
 	for (idx = 0; idx < len; idx++) {
 		const chunk = arrays[idx];
+		const remaining = size - written;
+
+		if (chunk.length > remaining) {
+			buffer.set(chunk.subarray(0, remaining), written);
+			break;
+		}
 
 		buffer.set(chunk, written);
 		written += chunk.length;

@@ -31,6 +31,13 @@ export const allocUnsafe = (size: number): Uint8Array<ArrayBuffer> => {
 	return toUint8Array(_allocUnsafe(size)) as Uint8Array<ArrayBuffer>;
 };
 
+/**
+ * compares two Uint8Array buffers bytewise
+ *
+ * @param a first buffer
+ * @param b second buffer
+ * @returns -1 if `a` sorts before `b`, 1 if it sorts after, 0 if they hold the same bytes
+ */
 export const compare = (a: Uint8Array, b: Uint8Array): number => {
 	return _compare.call(a, b);
 };
@@ -39,11 +46,32 @@ export const equals = (a: Uint8Array, b: Uint8Array): boolean => {
 	return _equals.call(a, b);
 };
 
+/**
+ * checks if the two Uint8Array buffers are equal, timing-safe version
+ *
+ * @param a first buffer
+ * @param b second buffer
+ * @returns whether the buffers hold the same bytes; false if their lengths differ
+ */
 export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
-	return _timingSafeEqual(a, b);
+	// `timingSafeEqual` throws on a length mismatch, but the length is not what we're guarding here
+	return a.length === b.length && _timingSafeEqual(a, b);
 };
 
+/**
+ * concatenates multiple Uint8Array buffers into one
+ *
+ * @param arrays buffers to concatenate
+ * @param size exact byte length of the result, defaulting to the combined length of `arrays`. contents
+ *   overflowing it are truncated, and any remainder past them is left zeroed
+ * @returns buffer holding the concatenated contents
+ */
 export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuffer> => {
+	// `Buffer.concat` short-circuits an empty list to a zero-length buffer, ignoring `size`
+	if (size !== undefined && arrays.length === 0) {
+		return alloc(size);
+	}
+
 	return toUint8Array(_concat(arrays, size)) as Uint8Array<ArrayBuffer>;
 };
 

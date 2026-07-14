@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
+import * as node from './index.node.ts';
 import { decodeUtf8From as decodeUtf8FromNode } from './index.node.ts';
+import * as portable from './index.ts';
 import { decodeUtf8From, getUtf8Length, isUtf8LengthInRange } from './index.ts';
 
 const encoder = new TextEncoder();
@@ -101,6 +103,67 @@ for (const { label: runtime, decode } of entrypoints) {
 
 			expect(decode(buffer, 1)).toBe('bc');
 			expect(decode(buffer, 3)).toBe('');
+		});
+	});
+}
+
+// these three used to disagree across entrypoints; the bun build is checked separately, it shares
+// node's `Buffer` primitives for `compare`/`timingSafeEquals`
+const impls = [
+	{ label: 'node', impl: node },
+	{ label: 'portable', impl: portable },
+];
+
+const bytes = (...values: number[]) => Uint8Array.from(values);
+
+for (const { label: runtime, impl } of impls) {
+	describe(runtime, () => {
+		it('compares bytewise, not by length first', () => {
+			// the byte at index 0 decides it, even though `a` is the shorter buffer
+			expect(impl.compare(bytes(2), bytes(1, 255))).toBe(1);
+			expect(impl.compare(bytes(1, 255), bytes(2))).toBe(-1);
+
+			// a prefix sorts before the buffer extending it
+			expect(impl.compare(bytes(1), bytes(1, 0))).toBe(-1);
+			expect(impl.compare(bytes(1, 0), bytes(1))).toBe(1);
+
+			expect(impl.compare(bytes(), bytes(0))).toBe(-1);
+			expect(impl.compare(bytes(1, 2), bytes(1, 2))).toBe(0);
+			expect(impl.compare(bytes(), bytes())).toBe(0);
+		});
+
+		it('sorts bytewise as a comparator', () => {
+			const sorted = [bytes(2), bytes(1, 255), bytes(1), bytes()].toSorted(impl.compare);
+
+			expect(sorted).toEqual([bytes(), bytes(1), bytes(1, 255), bytes(2)]);
+		});
+
+		it('compares timing-safely, returning false on a length mismatch', () => {
+			expect(impl.timingSafeEquals(bytes(1), bytes(1, 2))).toBe(false);
+			expect(impl.timingSafeEquals(bytes(1, 2), bytes(1))).toBe(false);
+			expect(impl.timingSafeEquals(bytes(), bytes(1))).toBe(false);
+
+			expect(impl.timingSafeEquals(bytes(1, 2), bytes(1, 3))).toBe(false);
+			expect(impl.timingSafeEquals(bytes(1, 2), bytes(1, 2))).toBe(true);
+			expect(impl.timingSafeEquals(bytes(), bytes())).toBe(true);
+		});
+
+		it('concatenates to the combined length by default', () => {
+			expect(impl.concat([bytes(1, 2), bytes(3, 4)])).toEqual(bytes(1, 2, 3, 4));
+			expect(impl.concat([])).toEqual(bytes());
+		});
+
+		it('concatenates to exactly the requested size', () => {
+			expect(impl.concat([bytes(1, 2), bytes(3, 4)], 4)).toEqual(bytes(1, 2, 3, 4));
+
+			// overflowing contents are truncated, mid-chunk if need be
+			expect(impl.concat([bytes(1, 2), bytes(3, 4)], 3)).toEqual(bytes(1, 2, 3));
+			expect(impl.concat([bytes(1, 2), bytes(3, 4)], 2)).toEqual(bytes(1, 2));
+			expect(impl.concat([bytes(1, 2), bytes(3, 4)], 0)).toEqual(bytes());
+
+			// an underfilled result is zeroed out to the requested size
+			expect(impl.concat([bytes(1, 2)], 4)).toEqual(bytes(1, 2, 0, 0));
+			expect(impl.concat([], 2)).toEqual(bytes(0, 0));
 		});
 	});
 }

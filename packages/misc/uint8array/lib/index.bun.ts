@@ -23,6 +23,13 @@ export const alloc = (size: number): Uint8Array<ArrayBuffer> => {
 
 export const allocUnsafe: (size: number) => Uint8Array<ArrayBuffer> = _allocUnsafe;
 
+/**
+ * compares two Uint8Array buffers bytewise
+ *
+ * @param a first buffer
+ * @param b second buffer
+ * @returns -1 if `a` sorts before `b`, 1 if it sorts after, 0 if they hold the same bytes
+ */
 export const compare = (a: Uint8Array, b: Uint8Array): number => {
 	return _compare.call(a, b);
 };
@@ -31,13 +38,39 @@ export const equals = (a: Uint8Array, b: Uint8Array): boolean => {
 	return _equals.call(a, b);
 };
 
+/**
+ * checks if the two Uint8Array buffers are equal, timing-safe version
+ *
+ * @param a first buffer
+ * @param b second buffer
+ * @returns whether the buffers hold the same bytes; false if their lengths differ
+ */
 export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
-	return _timingSafeEqual(a, b);
+	// `timingSafeEqual` throws on a length mismatch, but the length is not what we're guarding here
+	return a.length === b.length && _timingSafeEqual(a, b);
 };
 
+/**
+ * concatenates multiple Uint8Array buffers into one
+ *
+ * @param arrays buffers to concatenate
+ * @param size exact byte length of the result, defaulting to the combined length of `arrays`. contents
+ *   overflowing it are truncated, and any remainder past them is left zeroed
+ * @returns buffer holding the concatenated contents
+ */
 export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuffer> => {
 	// Bun's typings is slightly wrong, *you can* pass `size: undefined` with `asUint8Array: true`
-	return _concat(arrays, size as number, true);
+	const buffer = _concat(arrays, size as number, true);
+
+	// `concatArrayBuffers` treats `size` as a cap and stops at the last chunk, so an underfilled
+	// result comes back short instead of zero-padded out to `size`
+	if (size !== undefined && buffer.length < size) {
+		const padded = new Uint8Array(size);
+		padded.set(buffer);
+		return padded;
+	}
+
+	return buffer;
 };
 
 export const encodeUtf8: (str: string) => Uint8Array<ArrayBuffer> = textEncoder.encode.bind(textEncoder);
