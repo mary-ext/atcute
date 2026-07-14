@@ -40,7 +40,13 @@ const coerceBoolean = (str: string): boolean | null => {
 	return null;
 };
 
-const coerceInteger = (str: string): number => {
+const INTEGER_RE = /^-?\d+$/;
+
+const coerceInteger = (str: string): number | null => {
+	if (!INTEGER_RE.test(str)) {
+		return null;
+	}
+
 	return Number(str);
 };
 
