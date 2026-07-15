@@ -32,7 +32,7 @@ then act:
    not → commit, no changeset. Nothing in the published API surface moved, so there's no version to
    bump.
 3. Docs and code — both the lexicon sources and the generated code under `lib/` changed → add a
-   changeset, then commit.
+   changeset (unless one already exists — see below), then commit.
 
 Each package gets its own commit. The regenerated `lexicons/README.md` rides along in cases 2 and 3
 (only case 1 discards it).
@@ -62,6 +62,11 @@ pull latest <Service> lexicons
 
 Always `patch`. Lexicon refreshes don't follow semver here — even an upstream breaking change is a
 patch bump (see [[definitions_versioning]]).
+
+If `.changeset/<pkg>-pull-lexicons.md` already exists from an earlier unreleased pull, leave it and
+commit the code alone — the rewrite would be byte-identical, and the existing changeset already
+covers this bump. This keys on that exact file: a different pending changeset that happens to bump
+`@atcute/<pkg>` doesn't count, so still write yours.
 
 ## Stop for highly-breaking changes
 
