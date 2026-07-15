@@ -27,7 +27,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsgo",
+		"build": "tsc",
 		"pull": "lex-cli pull",
 		"generate": "lex-cli generate",
 		"prepublish": "rm -rf dist; pnpm run build"

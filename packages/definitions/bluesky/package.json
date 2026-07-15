@@ -28,7 +28,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsgo",
+		"build": "tsc",
 		"pull": "lex-cli pull",
 		"test": "vitest",
 		"generate": "pnpm run generate:lexicons; pnpm run generate:limits",

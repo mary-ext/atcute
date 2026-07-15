@@ -24,7 +24,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsgo",
+		"build": "tsc",
 		"test": "vitest run --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

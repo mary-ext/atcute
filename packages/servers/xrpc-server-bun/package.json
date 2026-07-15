@@ -19,7 +19,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsgo",
+		"build": "tsc",
 		"test": "bun test",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},

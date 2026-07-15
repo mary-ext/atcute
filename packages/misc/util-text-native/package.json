@@ -28,7 +28,7 @@
 	},
 	"scripts": {
 		"build:native": "node build.native.js",
-		"build": "tsgo",
+		"build": "tsc",
 		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
 	},

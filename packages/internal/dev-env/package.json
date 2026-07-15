@@ -7,7 +7,7 @@
 		".": "./dist/index.js"
 	},
 	"scripts": {
-		"build": "tsgo"
+		"build": "tsc"
 	},
 	"dependencies": {
 		"@atproto/crypto": "^0.5.2",

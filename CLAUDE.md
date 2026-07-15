@@ -31,7 +31,7 @@ the packages are organized into categories under `packages/`:
 
 run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm run ...`
 
-- build via `pnpm run build` (tsgo, includes typechecking)
+- build via `pnpm run build` (tsc)
 - test via `pnpm run test` (vitest)
 
 ### code writing

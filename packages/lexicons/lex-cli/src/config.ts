@@ -13,7 +13,7 @@ import { printValibotIssues } from './utils/issues.ts';
 import { isValidLexiconPattern } from './utils/nsid-pattern.ts';
 
 // `lexiconConfigSchema` is wide and deep enough that valibot's inferred output bottoms out at
-// `{}` for its nested fields. annotating it against an explicit interface forces tsgo to use the
+// `{}` for its nested fields. annotating it against an explicit interface forces tsc to use the
 // declared shape; inner schemas infer cleanly without help. the interfaces also strip the
 // `{ [key: string]: unknown }` index signature that `looseObject` would otherwise expose.
 

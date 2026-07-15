@@ -19,7 +19,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsgo",
+		"build": "tsc",
 		"postbuild": "node ./scripts/ensure-files.js",
 		"test": "vitest run --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
