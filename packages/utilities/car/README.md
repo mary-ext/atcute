@@ -18,9 +18,7 @@ repository data.
 ```ts
 import { fromStream } from '@atcute/car';
 
-const stream = new ReadableStream({
-	/* ... */
-});
+const stream = new ReadableStream({/* ... */});
 
 await using car = fromStream(stream);
 
@@ -50,9 +48,7 @@ try {
 ### sync usage
 
 ```ts
-const buffer = Uint8Array.from([
-	/* ... */
-]);
+const buffer = Uint8Array.from([/* ... */]);
 
 // read generic CAR archives
 const car = fromUint8Array(buffer);

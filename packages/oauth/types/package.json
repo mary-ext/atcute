@@ -28,9 +28,9 @@
 		"@atcute/identity": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/oauth-keyset": "workspace:^",
-		"valibot": "^1.4.1"
+		"valibot": "^1.4.2"
 	},
 	"devDependencies": {
-		"vitest": "^4.1.9"
+		"vitest": "^4.1.10"
 	}
 }

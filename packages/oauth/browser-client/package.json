@@ -30,7 +30,7 @@
 		"@atcute/multibase": "workspace:^",
 		"@atcute/oauth-crypto": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
-		"nanoid": "^5.1.16"
+		"nanoid": "^6.0.0"
 	},
 	"peerDependencies": {
 		"@atcute/identity-resolver": "^2.0.0",

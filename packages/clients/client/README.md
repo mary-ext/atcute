@@ -412,9 +412,7 @@ returning `null` when they're absent or malformed:
 ```ts
 import { parseRateLimitHeaders } from '@atcute/client';
 
-const response = await rpc.post('com.atproto.repo.createRecord', {
-	/* ... */
-});
+const response = await rpc.post('com.atproto.repo.createRecord', {/* ... */});
 
 const info = parseRateLimitHeaders(response.headers);
 if (info) {

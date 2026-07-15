@@ -31,9 +31,9 @@
 		"@mary-ext/simple-event-emitter": "^1.0.2"
 	},
 	"devDependencies": {
-		"@types/node": "^25.9.4",
-		"@vitest/coverage-v8": "^4.1.9",
-		"vitest": "^4.1.9"
+		"@types/node": "^26.1.1",
+		"@vitest/coverage-v8": "^4.1.10",
+		"vitest": "^4.1.10"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

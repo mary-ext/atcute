@@ -33,13 +33,13 @@
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
 		"@atcute/util-text": "workspace:^",
-		"valibot": "^1.4.1"
+		"valibot": "^1.4.2"
 	},
 	"devDependencies": {
 		"@valibot/to-json-schema": "^1.7.1",
-		"@vitest/coverage-v8": "^4.1.9",
+		"@vitest/coverage-v8": "^4.1.10",
 		"tschema": "^3.2.0",
-		"vitest": "^4.1.9"
+		"vitest": "^4.1.10"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

@@ -29,9 +29,7 @@ exports) and iterates over the records.
 ```ts
 import { fromStream } from '@atcute/repo';
 
-const stream = new ReadableStream({
-	/* ... */
-});
+const stream = new ReadableStream({/* ... */});
 
 await using repo = fromStream(stream);
 
@@ -62,9 +60,7 @@ try {
 ### sync usage
 
 ```ts
-const buffer = Uint8Array.from([
-	/* ... */
-]);
+const buffer = Uint8Array.from([/* ... */]);
 
 const repo = fromUint8Array(buffer);
 

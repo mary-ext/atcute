@@ -27,12 +27,7 @@
   const result = dohJsonTxtResult.try(input);
 
   // after
-  const data = await validateJsonWith(
-  	response,
-  	v.looseObject({
-  		/* ... */
-  	}),
-  );
+  const data = await validateJsonWith(response, v.looseObject({/* ... */}));
   const result = v.safeParse(dohJsonTxtResult, input);
   ```
 
