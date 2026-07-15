@@ -392,7 +392,7 @@ static int grapheme_count(const char16_t *str, int len) {
 }
 
 static bool grapheme_count_in_range(const char16_t *str, int len, int min_len, int max_len) {
-	if (len == 0) return min_len == 0;
+	if (len == 0) return min_len <= 0 && max_len >= 0;
 	int count = grapheme_count_impl(str, len, max_len);
 	if (count > max_len) {
 		return false;
