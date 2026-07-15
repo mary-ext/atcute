@@ -54,26 +54,15 @@ const _queueViewSchema = /*#__PURE__*/ v.object({
 	id: /*#__PURE__*/ v.integer(),
 	/** Display name of the queue */
 	name: /*#__PURE__*/ v.string(),
-	/**
-	 * Report reason types this queue accepts (fully qualified NSIDs)
-	 *
-	 * @minLength 1
-	 */
-	reportTypes: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
-		/*#__PURE__*/ v.arrayLength(1),
-	]),
+	/** Report reason types this queue accepts (fully qualified NSIDs) */
+	reportTypes: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 	/** Statistics about this queue */
 	get stats() {
 		return queueStatsSchema;
 	},
-	/**
-	 * Subject types this queue accepts.
-	 *
-	 * @minLength 1
-	 */
-	subjectTypes: /*#__PURE__*/ v.constrain(
+	/** Subject types this queue accepts. */
+	subjectTypes: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.array(/*#__PURE__*/ v.string<'account' | 'message' | 'record' | (string & {})>()),
-		[/*#__PURE__*/ v.arrayLength(1)],
 	),
 	updatedAt: /*#__PURE__*/ v.datetimeString(),
 });

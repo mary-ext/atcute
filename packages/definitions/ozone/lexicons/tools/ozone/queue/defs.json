@@ -3,17 +3,7 @@
 	"defs": {
 		"queueView": {
 			"type": "object",
-			"required": [
-				"createdAt",
-				"createdBy",
-				"enabled",
-				"id",
-				"name",
-				"reportTypes",
-				"stats",
-				"subjectTypes",
-				"updatedAt"
-			],
+			"required": ["createdAt", "createdBy", "enabled", "id", "name", "stats", "updatedAt"],
 			"properties": {
 				"id": {
 					"type": "integer",
@@ -64,7 +54,6 @@
 					"items": {
 						"type": "string"
 					},
-					"minLength": 1,
 					"description": "Report reason types this queue accepts (fully qualified NSIDs)"
 				},
 				"subjectTypes": {
@@ -73,7 +62,6 @@
 						"type": "string",
 						"knownValues": ["account", "message", "record"]
 					},
-					"minLength": 1,
 					"description": "Subject types this queue accepts."
 				}
 			}

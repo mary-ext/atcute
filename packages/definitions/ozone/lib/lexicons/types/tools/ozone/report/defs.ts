@@ -302,6 +302,12 @@ const _reportViewSchema = /*#__PURE__*/ v.object({
 	/** Report ID */
 	id: /*#__PURE__*/ v.integer(),
 	/**
+	 * Whether this report was emitted by automated tooling.
+	 *
+	 * @default false
+	 */
+	isAutomated: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+	/**
 	 * Whether this report is muted. A report is muted if the reporter was muted or the subject was muted at the
 	 * time the report was created.
 	 */

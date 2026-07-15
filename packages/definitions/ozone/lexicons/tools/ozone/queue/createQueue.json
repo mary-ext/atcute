@@ -6,7 +6,7 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["name", "reportTypes", "subjectTypes"],
+					"required": ["name"],
 					"properties": {
 						"name": {
 							"type": "string",
@@ -27,7 +27,6 @@
 								"type": "string"
 							},
 							"maxLength": 25,
-							"minLength": 1,
 							"description": "Report reason types (fully qualified NSIDs)"
 						},
 						"subjectTypes": {
@@ -36,7 +35,6 @@
 								"type": "string",
 								"knownValues": ["account", "message", "record"]
 							},
-							"minLength": 1,
 							"description": "Subject types this queue accepts"
 						}
 					}
@@ -62,7 +60,7 @@
 				},
 				"encoding": "application/json"
 			},
-			"description": "Create a new moderation queue. Will fail if the queue configuration conflicts with an existing queue."
+			"description": "Create a new moderation queue. A queue can have optional matching criteria that ozone's queue router will use to match reports. A queue with no criteria must have reports assigned to it manually via (1) `modTool.meta.queueId` in `tools.ozone.moderation.emitEvent` or (2) `tools.ozone.report.reassignQueue`."
 		}
 	},
 	"lexicon": 1

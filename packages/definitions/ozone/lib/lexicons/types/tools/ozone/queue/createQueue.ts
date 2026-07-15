@@ -18,20 +18,16 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.queue.createQueue', {
 			/**
 			 * Report reason types (fully qualified NSIDs)
 			 *
-			 * @minLength 1
 			 * @maxLength 25
 			 */
-			reportTypes: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
-				/*#__PURE__*/ v.arrayLength(1, 25),
-			]),
-			/**
-			 * Subject types this queue accepts
-			 *
-			 * @minLength 1
-			 */
-			subjectTypes: /*#__PURE__*/ v.constrain(
+			reportTypes: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
+					/*#__PURE__*/ v.arrayLength(0, 25),
+				]),
+			),
+			/** Subject types this queue accepts */
+			subjectTypes: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.array(/*#__PURE__*/ v.string<'account' | 'message' | 'record' | (string & {})>()),
-				[/*#__PURE__*/ v.arrayLength(1)],
 			),
 		}),
 	},

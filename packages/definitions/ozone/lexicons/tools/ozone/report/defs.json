@@ -163,6 +163,11 @@
 					"format": "did",
 					"description": "DID of the user who made the report"
 				},
+				"isAutomated": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether this report was emitted by automated tooling."
+				},
 				"subjectStatus": {
 					"ref": "tools.ozone.moderation.defs#subjectStatusView",
 					"type": "ref",
