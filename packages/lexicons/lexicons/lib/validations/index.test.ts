@@ -1,5 +1,5 @@
 import { toBytes } from '@atcute/cbor';
-import { fromBase64 } from '@atcute/multibase';
+import { fromBase64, fromBase64Pad } from '@atcute/multibase';
 
 import { assert, describe, expect, it, vi } from 'vitest';
 
@@ -1000,7 +1000,9 @@ describe(`constraints`, () => {
 				const exact = v.constrain(v.bytes(), [v.bytesSize(expectedSize, expectedSize)]);
 
 				const json = { $bytes: base64 };
-				const lex = toBytes(fromBase64(base64));
+				const lex = toBytes(
+					base64.charCodeAt(base64.length - 1) === 0x3d ? fromBase64Pad(base64) : fromBase64(base64),
+				);
 
 				expect(v.is(exact, json), `${base64} == ${expectedSize}`).toBe(true);
 				expect(v.is(exact, lex), `${base64} == ${expectedSize}`).toBe(true);
