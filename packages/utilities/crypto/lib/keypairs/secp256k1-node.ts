@@ -35,6 +35,10 @@ const toUint8Array = (buffer: Buffer<ArrayBuffer>): Uint8Array<ArrayBuffer> => {
 	return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 };
 
+// @types/node@26 dropped `KeyObject` from `createPublicKey`'s accepted inputs, but passing a private
+// key to derive its public counterpart is still supported at runtime.
+const derivePublicKey = createPublicKey as unknown as (privateKey: KeyObject) => KeyObject;
+
 // SEC 2, ver. 2.0, § 2.4.1 Recommended Parameters secp256k1
 const SECP256K1_CURVE_ORDER = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n;
 
@@ -159,7 +163,7 @@ class NodeSecp256k1PrivateKey extends NodeSecp256k1PublicKey implements PrivateK
 					format: 'der',
 					type: 'spki',
 				})
-			: createPublicKey(privateKey);
+			: derivePublicKey(privateKey);
 
 		const keypair = new NodeSecp256k1PrivateKey(privateKey, publicKey);
 
@@ -199,7 +203,7 @@ class NodeSecp256k1PrivateKeyExportable extends NodeSecp256k1PrivateKey implemen
 					format: 'der',
 					type: 'spki',
 				})
-			: createPublicKey(privateKey);
+			: derivePublicKey(privateKey);
 
 		const keypair = new NodeSecp256k1PrivateKeyExportable(privateKey, publicKey);
 
