@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/tap",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "an atproto Tap client",
 	"license": "0BSD",
 	"repository": {

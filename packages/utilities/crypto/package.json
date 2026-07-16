@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/crypto",
-	"version": "2.4.2",
+	"version": "2.4.3",
 	"description": "lightweight atproto cryptographic library",
 	"keywords": [
 		"atproto",

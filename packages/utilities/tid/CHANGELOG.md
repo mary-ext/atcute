@@ -1,5 +1,11 @@
 # @atcute/tid
 
+## 1.1.4
+
+### Patch Changes
+
+- 02a2cdf: fix `now()` reissuing already-used timestamps when calls outpace the system clock
+
 ## 1.1.3
 
 ### Patch Changes

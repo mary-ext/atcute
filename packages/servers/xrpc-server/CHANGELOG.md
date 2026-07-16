@@ -1,5 +1,45 @@
 # @atcute/xrpc-server
 
+## 2.0.2
+
+### Patch Changes
+
+- 1d2baae: query parameters carrying no value are now treated as absent, falling back to the
+  declared default.
+
+  previously, `?limit=` coerced to `0`, and an omitted array parameter arrived as `[]`.
+
+- 8ef3cff: integer query parameters must now be decimal notation, and are rejected otherwise.
+
+  previously, `?limit=0x10` coerced to `16` and `?limit=1e2` to `100`.
+
+- 529b718: `encoding` MIME wildcards like `image/*` and `*/*` now match instead of rejecting every
+  request.
+- Updated dependencies [9882a31]
+- Updated dependencies [72fe990]
+- Updated dependencies [cb01440]
+- Updated dependencies [e988009]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [8482323]
+- Updated dependencies [7bcf27c]
+- Updated dependencies [87f3666]
+- Updated dependencies [89f5536]
+- Updated dependencies [d18b465]
+- Updated dependencies [06d2f55]
+- Updated dependencies [9738798]
+- Updated dependencies [ffea168]
+- Updated dependencies [0e039ef]
+- Updated dependencies [c0fde37]
+- Updated dependencies [b72c247]
+- Updated dependencies [ea64aa0]
+  - @atcute/lexicons@2.0.3
+  - @atcute/uint8array@1.1.5
+  - @atcute/cbor@2.3.6
+  - @atcute/identity@2.0.2
+  - @atcute/multibase@1.2.5
+  - @atcute/crypto@2.4.3
+
 ## 2.0.1
 
 ### Patch Changes

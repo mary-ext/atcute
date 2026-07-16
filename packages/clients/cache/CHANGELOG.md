@@ -1,5 +1,17 @@
 # @atcute/cache
 
+## 1.0.2
+
+### Patch Changes
+
+- 52bccf1: fix a repeated entity unsubscribe evicting a newer subscriber for the same key.
+- Updated dependencies [9882a31]
+- Updated dependencies [cb01440]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [0e039ef]
+  - @atcute/lexicons@2.0.3
+
 ## 1.0.1
 
 ### Patch Changes

@@ -1,5 +1,23 @@
 # @atcute/lexicons
 
+## 2.0.3
+
+### Patch Changes
+
+- 9882a31: `isResourceUri` and `parseResourceUri` now accept fragment-bearing at-uris up to the 8 KB
+  length limit.
+- cb01440: `isCanonicalResourceUri` and `parseCanonicalResourceUri` no longer accepts fragments.
+- 96c679b: `isCidLink` now rejects objects carrying keys other than `$link`.
+- f31de6d: `isDatetime` now accepts years 0001 through 0009.
+- 0e039ef: integer validation now accepts negative values.
+- Updated dependencies [72fe990]
+- Updated dependencies [89f5536]
+- Updated dependencies [ffea168]
+- Updated dependencies [ea64aa0]
+- Updated dependencies [67f733e]
+  - @atcute/uint8array@1.1.5
+  - @atcute/util-text@1.3.4
+
 ## 2.0.2
 
 ### Patch Changes

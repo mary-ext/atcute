@@ -1,5 +1,26 @@
 # @atcute/firehose
 
+## 1.0.2
+
+### Patch Changes
+
+- 0ac9a3e: fix array subscription params being sent comma-joined instead of as repeated keys.
+- 41b39e4: route malformed frames to `onError` instead of throwing.
+- Updated dependencies [9882a31]
+- Updated dependencies [72fe990]
+- Updated dependencies [cb01440]
+- Updated dependencies [e988009]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [89f5536]
+- Updated dependencies [ffea168]
+- Updated dependencies [0e039ef]
+- Updated dependencies [b72c247]
+- Updated dependencies [ea64aa0]
+  - @atcute/lexicons@2.0.3
+  - @atcute/uint8array@1.1.5
+  - @atcute/cbor@2.3.6
+
 ## 1.0.1
 
 ### Patch Changes

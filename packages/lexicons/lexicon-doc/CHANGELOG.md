@@ -1,5 +1,29 @@
 # @atcute/lexicon-doc
 
+## 3.0.2
+
+### Patch Changes
+
+- 9adfd19: fix optional nullable fields being treated as required.
+- 7c206f5: ref and union fields in records are now validated instead of skipped.
+- 0e039ef: integer validation now accepts negative values.
+- Updated dependencies [9882a31]
+- Updated dependencies [72fe990]
+- Updated dependencies [cb01440]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [8482323]
+- Updated dependencies [7bcf27c]
+- Updated dependencies [89f5536]
+- Updated dependencies [ffea168]
+- Updated dependencies [0e039ef]
+- Updated dependencies [ea64aa0]
+- Updated dependencies [67f733e]
+  - @atcute/lexicons@2.0.3
+  - @atcute/uint8array@1.1.5
+  - @atcute/identity@2.0.2
+  - @atcute/util-text@1.3.4
+
 ## 3.0.1
 
 ### Patch Changes

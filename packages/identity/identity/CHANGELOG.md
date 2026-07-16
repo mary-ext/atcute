@@ -1,5 +1,20 @@
 # @atcute/identity
 
+## 2.0.2
+
+### Patch Changes
+
+- 8482323: fix `normalizeWebDid` corrupting did:web path segments that contain a percent-encoded
+  colon.
+- 7bcf27c: fix verification material lookup ignoring relative fragment ids, so did documents with
+  `#atproto`-style verification method ids resolve their signing keys.
+- Updated dependencies [9882a31]
+- Updated dependencies [cb01440]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [0e039ef]
+  - @atcute/lexicons@2.0.3
+
 ## 2.0.1
 
 ### Patch Changes

@@ -1,5 +1,30 @@
 # @atcute/tap
 
+## 1.0.2
+
+### Patch Changes
+
+- bdffc84: fix `adminPassword` not being sent on the subscription websocket upgrade.
+- Updated dependencies [9882a31]
+- Updated dependencies [72fe990]
+- Updated dependencies [cb01440]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [8482323]
+- Updated dependencies [7bcf27c]
+- Updated dependencies [87f3666]
+- Updated dependencies [89f5536]
+- Updated dependencies [d18b465]
+- Updated dependencies [06d2f55]
+- Updated dependencies [9738798]
+- Updated dependencies [ffea168]
+- Updated dependencies [0e039ef]
+- Updated dependencies [ea64aa0]
+  - @atcute/lexicons@2.0.3
+  - @atcute/uint8array@1.1.5
+  - @atcute/identity@2.0.2
+  - @atcute/multibase@1.2.5
+
 ## 1.0.1
 
 ### Patch Changes

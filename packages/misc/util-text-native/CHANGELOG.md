@@ -1,5 +1,12 @@
 # @atcute/util-text-native
 
+## 1.0.5
+
+### Patch Changes
+
+- 80818bb: fix `isGraphemeLengthInRange` ignoring the maximum bound for empty strings.
+- 67f733e: update unicode-segmenter to 0.17.0.
+
 ## 1.0.4
 
 ### Patch Changes

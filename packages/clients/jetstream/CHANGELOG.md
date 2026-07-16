@@ -1,5 +1,17 @@
 # @atcute/jetstream
 
+## 2.0.2
+
+### Patch Changes
+
+- 687f266: route malformed messages to `onError` instead of throwing.
+- Updated dependencies [9882a31]
+- Updated dependencies [cb01440]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [0e039ef]
+  - @atcute/lexicons@2.0.3
+
 ## 2.0.1
 
 ### Patch Changes

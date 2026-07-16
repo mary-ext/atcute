@@ -1,5 +1,23 @@
 # @atcute/cbor
 
+## 2.3.6
+
+### Patch Changes
+
+- 72fe990: `decodeUtf8From` now throws on malformed UTF-8 instead of substituting U+FFFD.
+- e988009: `fromBytes` now accepts padded `$bytes` values.
+- b72c247: fix string encoding corrupting emojis and some other non-ASCII characters
+- Updated dependencies [72fe990]
+- Updated dependencies [87f3666]
+- Updated dependencies [89f5536]
+- Updated dependencies [d18b465]
+- Updated dependencies [06d2f55]
+- Updated dependencies [9738798]
+- Updated dependencies [ffea168]
+- Updated dependencies [ea64aa0]
+  - @atcute/uint8array@1.1.5
+  - @atcute/multibase@1.2.5
+
 ## 2.3.5
 
 ### Patch Changes

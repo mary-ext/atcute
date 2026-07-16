@@ -1,5 +1,17 @@
 # @atcute/ozone
 
+## 4.0.6
+
+### Patch Changes
+
+- 04b675b: pull latest Ozone lexicons
+- Updated dependencies [9882a31]
+- Updated dependencies [cb01440]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [0e039ef]
+  - @atcute/lexicons@2.0.3
+
 ## 4.0.5
 
 ### Patch Changes

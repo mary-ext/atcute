@@ -1,5 +1,20 @@
 # @atcute/multibase
 
+## 1.2.5
+
+### Patch Changes
+
+- 87f3666: fix `fromBase16` returning uninitialized memory on invalid or odd-length input instead of
+  throwing, on Node.js
+- d18b465: fix `fromBase58Btc` silently returning wrong bytes on non-ASCII input instead of throwing
+- 06d2f55: `fromBase16` now rejects uppercase consistently across runtimes.
+- 9738798: base64 decoding now rejects non-canonical input consistently across runtimes.
+- Updated dependencies [72fe990]
+- Updated dependencies [89f5536]
+- Updated dependencies [ffea168]
+- Updated dependencies [ea64aa0]
+  - @atcute/uint8array@1.1.5
+
 ## 1.2.4
 
 ### Patch Changes

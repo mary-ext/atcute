@@ -1,5 +1,13 @@
 # @atcute/util-fetch
 
+## 2.0.2
+
+### Patch Changes
+
+- 5a96785: fix DoH resolution failing on CNAME'd names.
+- 09790f0: match response content-types case-insensitively.
+- 241e65d: accept empty response bodies.
+
 ## 2.0.1
 
 ### Patch Changes

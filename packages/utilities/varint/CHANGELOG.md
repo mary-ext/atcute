@@ -1,5 +1,11 @@
 # @atcute/varint
 
+## 2.0.2
+
+### Patch Changes
+
+- 606877d: `encode` and `decode` now reject invalid and out-of-range values.
+
 ## 2.0.1
 
 ### Patch Changes

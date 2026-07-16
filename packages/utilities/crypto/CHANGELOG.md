@@ -1,5 +1,22 @@
 # @atcute/crypto
 
+## 2.4.3
+
+### Patch Changes
+
+- c0fde37: fix `exportPrivateKey()` throwing a `RangeError` for keys created via `importRaw()`,
+  affecting p256 everywhere and secp256k1 on Node.js
+- Updated dependencies [72fe990]
+- Updated dependencies [87f3666]
+- Updated dependencies [89f5536]
+- Updated dependencies [d18b465]
+- Updated dependencies [06d2f55]
+- Updated dependencies [9738798]
+- Updated dependencies [ffea168]
+- Updated dependencies [ea64aa0]
+  - @atcute/uint8array@1.1.5
+  - @atcute/multibase@1.2.5
+
 ## 2.4.2
 
 ### Patch Changes

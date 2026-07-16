@@ -1,5 +1,15 @@
 # @atcute/uint8array
 
+## 1.1.5
+
+### Patch Changes
+
+- 72fe990: `decodeUtf8From` now throws on malformed UTF-8 instead of substituting U+FFFD.
+- 89f5536: fix `decodeUtf8From(buf, offset)` reading past the end.
+- ffea168: fix `getUtf8Length` and `isUtf8LengthInRange` miscounting unpaired surrogates, on
+  runtimes other than Node.js and Bun
+- ea64aa0: `compare`, `concat` and `timingSafeEquals` now behave consistently across runtimes.
+
 ## 1.1.4
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @atcute/bluesky-richtext-segmenter
 
+## 3.0.2
+
+### Patch Changes
+
+- 5a2f055: fix zero-length and overlapping facets stealing the following character.
+- 303d1c1: fix a lone high surrogate dropping the facet that follows it.
+
 ## 3.0.1
 
 ### Patch Changes

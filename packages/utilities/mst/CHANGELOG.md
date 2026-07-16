@@ -1,5 +1,20 @@
 # @atcute/mst
 
+## 1.0.3
+
+### Patch Changes
+
+- 3985a4f: fix `MSTNode.deserialize` accepting negative or fractional key prefix lengths, which
+  decoded a node into keys that re-serialize to a different CID
+- Updated dependencies [72fe990]
+- Updated dependencies [e988009]
+- Updated dependencies [89f5536]
+- Updated dependencies [ffea168]
+- Updated dependencies [b72c247]
+- Updated dependencies [ea64aa0]
+  - @atcute/uint8array@1.1.5
+  - @atcute/cbor@2.3.6
+
 ## 1.0.2
 
 ### Patch Changes

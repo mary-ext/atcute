@@ -1,5 +1,23 @@
 # @atcute/password-session
 
+## 1.0.2
+
+### Patch Changes
+
+- b0e6b46: network failures during logout are now treated as transient, preserving the session for
+  retry.
+- beacbe1: network failures during token refresh are now treated as transient, preserving the
+  session for retry.
+- Updated dependencies [9882a31]
+- Updated dependencies [cb01440]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [8482323]
+- Updated dependencies [7bcf27c]
+- Updated dependencies [0e039ef]
+  - @atcute/lexicons@2.0.3
+  - @atcute/identity@2.0.2
+
 ## 1.0.1
 
 ### Patch Changes

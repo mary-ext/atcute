@@ -1,5 +1,11 @@
 # @atcute/util-text
 
+## 1.3.4
+
+### Patch Changes
+
+- 67f733e: update unicode-segmenter to 0.17.0.
+
 ## 1.3.3
 
 ### Patch Changes

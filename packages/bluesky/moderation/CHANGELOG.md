@@ -1,5 +1,18 @@
 # @atcute/bluesky-moderation
 
+## 4.2.2
+
+### Patch Changes
+
+- 9b6b0de: fix `exclude-following` keyword muting checking a quoted post's embed against the wrong
+  author.
+- Updated dependencies [9882a31]
+- Updated dependencies [cb01440]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [0e039ef]
+  - @atcute/lexicons@2.0.3
+
 ## 4.2.1
 
 ### Patch Changes

@@ -1,5 +1,24 @@
 # @atcute/bluesky-threading
 
+## 6.0.2
+
+### Patch Changes
+
+- 0589f9a: fix video embed self-labels being silently dropped
+- 2a0e7a2: fix post rkeys encoding milliseconds into TIDs.
+- Updated dependencies [9882a31]
+- Updated dependencies [72fe990]
+- Updated dependencies [cb01440]
+- Updated dependencies [e988009]
+- Updated dependencies [96c679b]
+- Updated dependencies [f31de6d]
+- Updated dependencies [02a2cdf]
+- Updated dependencies [0e039ef]
+- Updated dependencies [b72c247]
+  - @atcute/lexicons@2.0.3
+  - @atcute/cbor@2.3.6
+  - @atcute/tid@1.1.4
+
 ## 6.0.1
 
 ### Patch Changes
