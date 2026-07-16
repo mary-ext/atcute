@@ -1,5 +1,11 @@
 # @atcute/crypto
 
+## 2.4.4
+
+### Patch Changes
+
+- 81875d8: fix type error when deriving a public key from a private `KeyObject`
+
 ## 2.4.3
 
 ### Patch Changes
