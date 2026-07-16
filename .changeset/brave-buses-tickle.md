@@ -1,5 +1,5 @@
 ---
-'@atcute/uint8array': major
+'@atcute/uint8array': patch
 '@atcute/cbor': patch
 ---
 
