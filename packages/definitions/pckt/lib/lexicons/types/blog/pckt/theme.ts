@@ -12,6 +12,16 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	backgroundTileSize: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(5, 100)]),
 	),
+	/**
+	 * Corner style for UI elements and images: rounded or square (optional)
+	 *
+	 * @maxLength 16
+	 */
+	corners: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string<'round' | 'square' | (string & {})>(), [
+			/*#__PURE__*/ v.stringLength(0, 16),
+		]),
+	),
 	/** Dark mode color palette */
 	get dark() {
 		return paletteSchema;

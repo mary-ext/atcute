@@ -1,0 +1,19 @@
+{
+	"id": "blog.pckt.block.noteEmbed",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["noteRef"],
+			"properties": {
+				"noteRef": {
+					"ref": "com.atproto.repo.strongRef",
+					"type": "ref",
+					"description": "Strong reference to the note record"
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Embedded pckt note (mini post). References the note via strongRef."
+}

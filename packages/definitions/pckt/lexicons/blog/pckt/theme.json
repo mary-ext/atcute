@@ -20,6 +20,12 @@
 					"type": "ref",
 					"description": "Light mode color palette"
 				},
+				"corners": {
+					"type": "string",
+					"maxLength": 16,
+					"description": "Corner style for UI elements and images: rounded or square (optional)",
+					"knownValues": ["round", "square"]
+				},
 				"transparency": {
 					"type": "integer",
 					"maximum": 100,

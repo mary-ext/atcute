@@ -10,6 +10,7 @@ export * as BlogPcktBlockIframe from './types/blog/pckt/block/iframe.ts';
 export * as BlogPcktBlockImage from './types/blog/pckt/block/image.ts';
 export * as BlogPcktBlockListItem from './types/blog/pckt/block/listItem.ts';
 export * as BlogPcktBlockMention from './types/blog/pckt/block/mention.ts';
+export * as BlogPcktBlockNoteEmbed from './types/blog/pckt/block/noteEmbed.ts';
 export * as BlogPcktBlockOrderedList from './types/blog/pckt/block/orderedList.ts';
 export * as BlogPcktBlockTable from './types/blog/pckt/block/table.ts';
 export * as BlogPcktBlockTableCell from './types/blog/pckt/block/tableCell.ts';
