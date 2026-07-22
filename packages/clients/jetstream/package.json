@@ -34,7 +34,7 @@
 	"devDependencies": {
 		"@types/ws": "^8.18.1",
 		"vitest": "^4.1.10",
-		"ws": "^8.21.0"
+		"ws": "^8.21.1"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"
