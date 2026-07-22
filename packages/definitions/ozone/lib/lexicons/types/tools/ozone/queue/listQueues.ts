@@ -30,7 +30,7 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.queue.listQueues', {
 				/*#__PURE__*/ v.arrayLength(0, 10),
 			]),
 		),
-		/** Filter queues that handle this subject type ('account' or 'record'). */
+		/** Filter queues that handle this subject type ('account', 'record', 'message', or 'conversation'). */
 		subjectType: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	}),
 	output: {

@@ -27,7 +27,9 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.queue.createQueue', {
 			),
 			/** Subject types this queue accepts */
 			subjectTypes: /*#__PURE__*/ v.optional(
-				/*#__PURE__*/ v.array(/*#__PURE__*/ v.string<'account' | 'message' | 'record' | (string & {})>()),
+				/*#__PURE__*/ v.array(
+					/*#__PURE__*/ v.string<'account' | 'conversation' | 'message' | 'record' | (string & {})>(),
+				),
 			),
 		}),
 	},

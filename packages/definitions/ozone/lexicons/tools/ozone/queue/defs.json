@@ -60,7 +60,7 @@
 					"type": "array",
 					"items": {
 						"type": "string",
-						"knownValues": ["account", "message", "record"]
+						"knownValues": ["account", "conversation", "message", "record"]
 					},
 					"description": "Subject types this queue accepts."
 				}

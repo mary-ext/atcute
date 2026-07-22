@@ -62,7 +62,9 @@ const _queueViewSchema = /*#__PURE__*/ v.object({
 	},
 	/** Subject types this queue accepts. */
 	subjectTypes: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.array(/*#__PURE__*/ v.string<'account' | 'message' | 'record' | (string & {})>()),
+		/*#__PURE__*/ v.array(
+			/*#__PURE__*/ v.string<'account' | 'conversation' | 'message' | 'record' | (string & {})>(),
+		),
 	),
 	updatedAt: /*#__PURE__*/ v.datetimeString(),
 });

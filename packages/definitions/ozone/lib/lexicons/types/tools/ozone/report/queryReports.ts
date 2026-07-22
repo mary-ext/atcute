@@ -61,8 +61,10 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.report.queryReports', {
 		status: /*#__PURE__*/ v.string<'assigned' | 'closed' | 'escalated' | 'open' | 'queued' | (string & {})>(),
 		/** Filter by subject DID or AT-URI. */
 		subject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
-		/** If specified, reports of the given type (account or record) will be returned. */
-		subjectType: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'account' | 'record' | (string & {})>()),
+		/** If specified, reports of the given subject type will be returned. */
+		subjectType: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.string<'account' | 'conversation' | 'message' | 'record' | (string & {})>(),
+		),
 	}),
 	output: {
 		type: 'lex',
