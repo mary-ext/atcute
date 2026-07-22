@@ -23,6 +23,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.merge', {
 			name: /*#__PURE__*/ v.string(),
 			/** Patch content to merge */
 			patch: /*#__PURE__*/ v.string(),
+			/** DID of the repository */
+			repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		}),
 	},
 	output: null,

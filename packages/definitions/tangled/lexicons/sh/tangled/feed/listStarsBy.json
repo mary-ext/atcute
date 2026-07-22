@@ -1,0 +1,55 @@
+{
+	"id": "sh.tangled.feed.listStarsBy",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["items"],
+					"properties": {
+						"items": {
+							"type": "array",
+							"items": {
+								"ref": "sh.tangled.feed.listStars#listItem",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subject"],
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 1000,
+						"minimum": 1
+					},
+					"order": {
+						"type": "string",
+						"default": "desc",
+						"description": "Sort direction by createdAt.",
+						"knownValues": ["asc", "desc"]
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					},
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "Actor DID whose star authorings to list."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

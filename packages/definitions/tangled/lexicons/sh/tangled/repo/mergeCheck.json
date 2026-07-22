@@ -17,6 +17,11 @@
 							"type": "string",
 							"description": "Name of the repository"
 						},
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository"
+						},
 						"patch": {
 							"type": "string",
 							"description": "Patch or pull request to check for merge conflicts"

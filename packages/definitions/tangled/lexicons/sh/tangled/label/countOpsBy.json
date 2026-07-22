@@ -1,0 +1,39 @@
+{
+	"id": "sh.tangled.label.countOpsBy",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["count", "distinctAuthors"],
+					"properties": {
+						"count": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Total number of matching records."
+						},
+						"distinctAuthors": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Number of distinct authors among the matching records."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subject"],
+				"properties": {
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "Actor DID whose label-op authorings to list."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

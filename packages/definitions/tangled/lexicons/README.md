@@ -3,4 +3,4 @@
 this directory contains lexicon documents pulled from the following sources:
 
 - https://tangled.org/tangled.org/core.git
-  - commit: bce1d7901aa43296018772151b1352db981c3811
+  - commit: de0f127cd74a5931c377aa2a84c59d6ec9daeda6

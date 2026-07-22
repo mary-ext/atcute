@@ -13,6 +13,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.forkSync', {
 			did: /*#__PURE__*/ v.didString(),
 			/** Name of the forked repository */
 			name: /*#__PURE__*/ v.string(),
+			/** DID of the repository */
+			repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 			/** AT-URI of the source repository */
 			source: /*#__PURE__*/ v.resourceUriString(),
 		}),

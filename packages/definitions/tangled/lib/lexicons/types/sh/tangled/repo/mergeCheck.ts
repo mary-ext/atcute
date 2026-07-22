@@ -22,6 +22,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.mergeCheck', {
 			name: /*#__PURE__*/ v.string(),
 			/** Patch or pull request to check for merge conflicts */
 			patch: /*#__PURE__*/ v.string(),
+			/** DID of the repository */
+			repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		}),
 	},
 	output: {

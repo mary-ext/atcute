@@ -1,0 +1,41 @@
+{
+	"id": "sh.tangled.repo.getPull",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["uri", "value"],
+					"properties": {
+						"cid": {
+							"type": "string",
+							"format": "cid"
+						},
+						"uri": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"value": {
+							"type": "unknown",
+							"description": "Embedded sh.tangled.repo.pull record."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["pull"],
+				"properties": {
+					"pull": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the sh.tangled.repo.pull record to fetch."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -11,6 +11,13 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.ci.queryPipelines', {
 		/** Pagination cursor */
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
+		 * Filter pipelines by trigger kind. When provided, pipelines matching any listed kind are returned; when
+		 * omitted, every kind is returned.
+		 */
+		kinds: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.array(/*#__PURE__*/ v.literalEnum(['manual', 'pull_request', 'push'])),
+		),
+		/**
 		 * Maximum number of pipelines to return
 		 *
 		 * @default 50

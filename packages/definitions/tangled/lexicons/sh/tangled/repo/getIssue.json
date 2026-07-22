@@ -1,0 +1,41 @@
+{
+	"id": "sh.tangled.repo.getIssue",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["uri", "value"],
+					"properties": {
+						"cid": {
+							"type": "string",
+							"format": "cid"
+						},
+						"uri": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"value": {
+							"type": "unknown",
+							"description": "Embedded sh.tangled.repo.issue record."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["issue"],
+				"properties": {
+					"issue": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the sh.tangled.repo.issue record to fetch."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

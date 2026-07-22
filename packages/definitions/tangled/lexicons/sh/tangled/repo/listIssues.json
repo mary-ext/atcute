@@ -1,0 +1,98 @@
+{
+	"id": "sh.tangled.repo.listIssues",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["items"],
+					"properties": {
+						"items": {
+							"type": "array",
+							"items": {
+								"ref": "#issueListItem",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subject"],
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 1000,
+						"minimum": 1
+					},
+					"order": {
+						"type": "string",
+						"default": "desc",
+						"description": "Sort direction by createdAt.",
+						"knownValues": ["asc", "desc"]
+					},
+					"state": {
+						"type": "string",
+						"description": "Restrict to issues whose latest derived state matches.",
+						"knownValues": ["closed", "open"]
+					},
+					"author": {
+						"type": "string",
+						"format": "did",
+						"description": "Restrict to issues authored by this user DID."
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					},
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "Repo DID to list issues for"
+					}
+				}
+			}
+		},
+		"issueListItem": {
+			"type": "object",
+			"required": ["commentCount", "state", "uri", "value"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"state": {
+					"type": "string",
+					"description": "Latest derived state.",
+					"knownValues": ["closed", "open"]
+				},
+				"value": {
+					"type": "unknown",
+					"description": "Embedded sh.tangled.repo.issue record"
+				},
+				"commentCount": {
+					"type": "integer",
+					"minimum": 0,
+					"description": "Count of sh.tangled.repo.issue.comment records targeting this issue."
+				},
+				"stateUpdatedAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "TID-derived timestamp of the latest state record."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,101 @@
+{
+	"id": "sh.tangled.search.query",
+	"defs": {
+		"hit": {
+			"type": "object",
+			"required": ["nsid", "score", "uri", "value"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"nsid": {
+					"type": "string",
+					"format": "nsid",
+					"description": "Collection of the matched record."
+				},
+				"score": {
+					"type": "unknown",
+					"description": "Relevance score of the hit, a floating-point number where higher ranks first."
+				},
+				"value": {
+					"type": "unknown",
+					"description": "Embedded matched record."
+				}
+			}
+		},
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["hits"],
+					"properties": {
+						"hits": {
+							"type": "array",
+							"items": {
+								"ref": "#hit",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["q"],
+				"properties": {
+					"q": {
+						"type": "string",
+						"minLength": 1,
+						"description": "Full-text search query."
+					},
+					"nsid": {
+						"type": "string",
+						"format": "nsid",
+						"description": "Restrict to records of this collection."
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "Restrict to records under this repo DID."
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 1000,
+						"minimum": 1
+					},
+					"since": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Restrict to records created at or after this time."
+					},
+					"until": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Restrict to records created at or before this time."
+					},
+					"author": {
+						"type": "string",
+						"format": "did",
+						"description": "Restrict to records authored by this DID."
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

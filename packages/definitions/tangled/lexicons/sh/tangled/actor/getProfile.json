@@ -1,0 +1,41 @@
+{
+	"id": "sh.tangled.actor.getProfile",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["uri", "value"],
+					"properties": {
+						"cid": {
+							"type": "string",
+							"format": "cid"
+						},
+						"uri": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"value": {
+							"type": "unknown",
+							"description": "Embedded sh.tangled.actor.profile record."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["actor"],
+				"properties": {
+					"actor": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the sh.tangled.actor.profile record to fetch."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}
