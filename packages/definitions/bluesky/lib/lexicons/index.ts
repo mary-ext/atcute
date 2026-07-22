@@ -90,6 +90,7 @@ export * as AppBskyGraphMuteActor from './types/app/bsky/graph/muteActor.ts';
 export * as AppBskyGraphMuteActorList from './types/app/bsky/graph/muteActorList.ts';
 export * as AppBskyGraphMuteThread from './types/app/bsky/graph/muteThread.ts';
 export * as AppBskyGraphSearchStarterPacks from './types/app/bsky/graph/searchStarterPacks.ts';
+export * as AppBskyGraphSearchStarterPacksV2 from './types/app/bsky/graph/searchStarterPacksV2.ts';
 export * as AppBskyGraphStarterpack from './types/app/bsky/graph/starterpack.ts';
 export * as AppBskyGraphUnmuteActor from './types/app/bsky/graph/unmuteActor.ts';
 export * as AppBskyGraphUnmuteActorList from './types/app/bsky/graph/unmuteActorList.ts';

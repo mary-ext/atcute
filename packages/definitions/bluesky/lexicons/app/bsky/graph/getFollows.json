@@ -30,6 +30,10 @@
 				"type": "params",
 				"required": ["actor"],
 				"properties": {
+					"sort": {
+						"type": "string",
+						"knownValues": ["latest", "top"]
+					},
 					"actor": {
 						"type": "string",
 						"format": "at-identifier"

@@ -1,24 +1,24 @@
 {
-	"id": "app.bsky.graph.getFollowers",
+	"id": "app.bsky.graph.searchStarterPacksV2",
 	"defs": {
 		"main": {
 			"type": "query",
 			"output": {
 				"schema": {
 					"type": "object",
-					"required": ["followers", "subject"],
+					"required": ["starterPacks"],
 					"properties": {
 						"cursor": {
 							"type": "string"
 						},
-						"subject": {
-							"ref": "app.bsky.actor.defs#profileView",
-							"type": "ref"
+						"hitsTotal": {
+							"type": "integer",
+							"description": "Estimated total number of matching hits. May be rounded or truncated."
 						},
-						"followers": {
+						"starterPacks": {
 							"type": "array",
 							"items": {
-								"ref": "app.bsky.actor.defs#profileView",
+								"ref": "app.bsky.graph.defs#starterPackView",
 								"type": "ref"
 							}
 						}
@@ -28,19 +28,15 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["actor"],
+				"required": ["q"],
 				"properties": {
-					"sort": {
+					"q": {
 						"type": "string",
-						"knownValues": ["latest", "top"]
-					},
-					"actor": {
-						"type": "string",
-						"format": "at-identifier"
+						"description": "Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended."
 					},
 					"limit": {
 						"type": "integer",
-						"default": 50,
+						"default": 25,
 						"maximum": 100,
 						"minimum": 1
 					},
@@ -49,7 +45,7 @@
 					}
 				}
 			},
-			"description": "Enumerates accounts which follow a specified account (actor)."
+			"description": "Find starter packs matching search criteria. Does not require auth."
 		}
 	},
 	"lexicon": 1

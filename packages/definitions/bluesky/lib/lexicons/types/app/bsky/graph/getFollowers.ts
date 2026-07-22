@@ -17,6 +17,7 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getFollowers', {
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
+		sort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'latest' | 'top' | (string & {})>()),
 	}),
 	output: {
 		type: 'lex',

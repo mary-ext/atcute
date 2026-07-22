@@ -32,6 +32,9 @@
 					"type": "string",
 					"format": "datetime"
 				},
+				"description": {
+					"type": "string"
+				},
 				"displayName": {
 					"type": "string"
 				}
@@ -67,6 +70,9 @@
 				"startedAt": {
 					"type": "string",
 					"format": "datetime"
+				},
+				"description": {
+					"type": "string"
 				},
 				"displayName": {
 					"type": "string"

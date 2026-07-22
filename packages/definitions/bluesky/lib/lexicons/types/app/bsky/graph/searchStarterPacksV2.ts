@@ -2,32 +2,34 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-import * as AppBskyActorDefs from '../actor/defs.ts';
+import * as AppBskyGraphDefs from './defs.ts';
 
-const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.getFollows', {
+const _mainSchema = /*#__PURE__*/ v.query('app.bsky.graph.searchStarterPacksV2', {
 	params: /*#__PURE__*/ v.object({
-		actor: /*#__PURE__*/ v.actorIdentifierString(),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
-		 * @default 50
+		 * @default 25
 		 * @minimum 1
 		 * @maximum 100
 		 */
 		limit: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
-			50,
+			25,
 		),
-		sort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'latest' | 'top' | (string & {})>()),
+		/**
+		 * Search query string. Syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is
+		 * recommended.
+		 */
+		q: /*#__PURE__*/ v.string(),
 	}),
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			get follows() {
-				return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewSchema);
-			},
-			get subject() {
-				return AppBskyActorDefs.profileViewSchema;
+			/** Estimated total number of matching hits. May be rounded or truncated. */
+			hitsTotal: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+			get starterPacks() {
+				return /*#__PURE__*/ v.array(AppBskyGraphDefs.starterPackViewSchema);
 			},
 		}),
 	},
@@ -44,6 +46,6 @@ export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'app.bsky.graph.getFollows': mainSchema;
+		'app.bsky.graph.searchStarterPacksV2': mainSchema;
 	}
 }

@@ -47,6 +47,7 @@ const _skeletonSearchStarterPackSchema = /*#__PURE__*/ v.object({
 const _skeletonTrendSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.unspecced.defs#skeletonTrend')),
 	category: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	description: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	dids: /*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()),
 	displayName: /*#__PURE__*/ v.string(),
 	link: /*#__PURE__*/ v.string(),
@@ -103,6 +104,7 @@ const _trendViewSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.array(AppBskyActorDefs.profileViewBasicSchema);
 	},
 	category: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	description: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	displayName: /*#__PURE__*/ v.string(),
 	link: /*#__PURE__*/ v.string(),
 	postCount: /*#__PURE__*/ v.integer(),

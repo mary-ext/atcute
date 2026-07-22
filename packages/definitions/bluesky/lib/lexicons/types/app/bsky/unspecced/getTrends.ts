@@ -19,6 +19,8 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getTrends', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
+			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			get trends() {
 				return /*#__PURE__*/ v.array(AppBskyUnspeccedDefs.trendViewSchema);
 			},
