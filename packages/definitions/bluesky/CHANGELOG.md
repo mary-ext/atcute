@@ -1,5 +1,11 @@
 # @atcute/bluesky
 
+## 4.0.15
+
+### Patch Changes
+
+- d67ddd1: pull latest Bluesky lexicons
+
 ## 4.0.14
 
 ### Patch Changes
