@@ -29,6 +29,7 @@
 						"pub.leaflet.blocks.code",
 						"pub.leaflet.blocks.header",
 						"pub.leaflet.blocks.horizontalRule",
+						"pub.leaflet.blocks.html",
 						"pub.leaflet.blocks.iframe",
 						"pub.leaflet.blocks.image",
 						"pub.leaflet.blocks.imageGallery",

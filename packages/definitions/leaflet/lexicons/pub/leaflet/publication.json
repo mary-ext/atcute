@@ -112,6 +112,11 @@
 				"showRecommends": {
 					"type": "boolean",
 					"default": true
+				},
+				"prevNextDirection": {
+					"type": "string",
+					"default": "rtl",
+					"knownValues": ["ltr", "rtl"]
 				}
 			}
 		}

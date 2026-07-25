@@ -2,12 +2,12 @@ import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
 const _aspectRatioSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.iframe#aspectRatio')),
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.html#aspectRatio')),
 	height: /*#__PURE__*/ v.integer(),
 	width: /*#__PURE__*/ v.integer(),
 });
 const _mainSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.iframe')),
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.html')),
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(aspectRatioSchema);
 	},
@@ -18,12 +18,8 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	height: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(16, 1600)]),
 	),
-	/**
-	 * DEPRECATED — use pub.leaflet.blocks.html instead. Inline HTML rendered via the iframe's srcdoc attribute.
-	 * Takes precedence over url.
-	 */
-	html: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	url: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	/** Inline HTML rendered via a sandboxed iframe's srcdoc attribute. */
+	html: /*#__PURE__*/ v.string(),
 });
 
 type aspectRatio$schematype = typeof _aspectRatioSchema;

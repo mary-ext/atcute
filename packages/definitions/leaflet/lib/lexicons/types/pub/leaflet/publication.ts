@@ -37,6 +37,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 );
 const _preferencesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.publication#preferences')),
+	/** @default 'rtl' */
+	prevNextDirection: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'ltr' | 'rtl' | (string & {})>(), 'rtl'),
 	/** @default true */
 	showComments: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 	/** @default false */

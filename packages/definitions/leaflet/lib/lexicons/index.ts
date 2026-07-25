@@ -4,6 +4,7 @@ export * as PubLeafletBlocksButton from './types/pub/leaflet/blocks/button.ts';
 export * as PubLeafletBlocksCode from './types/pub/leaflet/blocks/code.ts';
 export * as PubLeafletBlocksHeader from './types/pub/leaflet/blocks/header.ts';
 export * as PubLeafletBlocksHorizontalRule from './types/pub/leaflet/blocks/horizontalRule.ts';
+export * as PubLeafletBlocksHtml from './types/pub/leaflet/blocks/html.ts';
 export * as PubLeafletBlocksIframe from './types/pub/leaflet/blocks/iframe.ts';
 export * as PubLeafletBlocksImage from './types/pub/leaflet/blocks/image.ts';
 export * as PubLeafletBlocksImageGallery from './types/pub/leaflet/blocks/imageGallery.ts';
