@@ -4,6 +4,7 @@ import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
 import * as AppBskyActorDefs from '../actor/defs.ts';
+import * as AppBskyGraphDefs from '../graph/defs.ts';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.listNotifications', {
 	params: /*#__PURE__*/ v.object({
@@ -69,6 +70,13 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 	>(),
 	reasonSubject: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	record: /*#__PURE__*/ v.unknown(),
+	/**
+	 * The starter pack associated with this notification. Present when the notification is for a follow
+	 * originating from a starter pack.
+	 */
+	get starterPack() {
+		return /*#__PURE__*/ v.optional(AppBskyGraphDefs.starterPackViewBasicSchema);
+	},
 	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 

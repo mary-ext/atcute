@@ -23,6 +23,10 @@ const _configRegionSchema = /*#__PURE__*/ v.object({
 	countryCode: /*#__PURE__*/ v.string(),
 	/** The minimum age (as a whole integer) required to use Bluesky in this region. */
 	minAccessAge: /*#__PURE__*/ v.integer(),
+	/** The platforms this configuration applies to. If omitted, the configuration applies to all platforms. */
+	platforms: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.array(/*#__PURE__*/ v.string<'android' | 'ios' | 'web' | (string & {})>()),
+	),
 	/**
 	 * The ISO 3166-2 region code this configuration applies to. If omitted, the configuration applies to the
 	 * entire country.
