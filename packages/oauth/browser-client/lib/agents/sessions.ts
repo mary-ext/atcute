@@ -1,27 +1,41 @@
 import type { Did } from '@atcute/lexicons';
 
-import { database } from '../environment.ts';
+import { database, onPersistError } from '../environment.ts';
 import { OAuthResponseError, TokenRefreshError } from '../errors.ts';
 import type { RawSession, Session } from '../types/token.ts';
 import { isLegacyDpopKey, migrateLegacyDpopKey } from '../utils/dpop-key.ts';
-import { locks } from '../utils/runtime.ts';
+import { getLockManager } from '../utils/runtime.ts';
 
 import { OAuthServerAgent } from './server-agent.ts';
 
 export interface SessionGetOptions {
-	signal?: AbortSignal;
-	noCache?: boolean;
 	allowStale?: boolean;
+	noCache?: boolean;
+	signal?: AbortSignal;
+	/**
+	 * refresh only while the stored session still carries this access token, so that callers reacting to the
+	 * same rejected token converge on a single refresh.
+	 */
+	staleAccessToken?: string;
 }
 
 type PendingItem<V> = { value: V; isFresh: boolean };
 const pending = new Map<Did, Promise<PendingItem<Session>>>();
 
+/**
+ * sessions that were obtained but could not be persisted. the refresh token they carry is the only remaining
+ * copy, since the one it replaced is already spent, so they are held for the lifetime of the document rather
+ * than discarded.
+ */
+const volatileSessions = new Map<Did, Session>();
+
 export const getSession = async (sub: Did, options?: SessionGetOptions): Promise<Session> => {
 	options?.signal?.throwIfAborted();
 
+	const staleAccessToken = options?.staleAccessToken;
+
 	let allowStored = isTokenUsable;
-	if (options?.noCache) {
+	if (options?.noCache || staleAccessToken !== undefined) {
 		allowStored = returnFalse;
 	} else if (options?.allowStale) {
 		allowStored = returnTrue;
@@ -50,7 +64,16 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 	}
 
 	const run = async (): Promise<PendingItem<Session>> => {
-		const storedSession = await migrateSessionIfNeeded(sub, database.sessions.get(sub));
+		const storedSession = await readSession(sub);
+
+		if (
+			storedSession !== undefined &&
+			staleAccessToken !== undefined &&
+			storedSession.token.access !== staleAccessToken
+		) {
+			// already rotated past the token the caller was told to discard
+			return { isFresh: true, value: storedSession };
+		}
 
 		if (storedSession && allowStored(storedSession)) {
 			// Use the stored value as return value for the current execution
@@ -62,18 +85,12 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 
 		const newSession = await refreshToken(sub, storedSession);
 
-		await storeSession(sub, newSession);
+		storeSession(sub, newSession);
 		return { isFresh: true, value: newSession };
 	};
 
-	let promise: Promise<PendingItem<Session>>;
-
-	if (locks) {
-		// oxlint-disable-next-line typescript/no-explicit-any
-		promise = locks.request<PendingItem<Session>>(`atcute-oauth:${sub}`, run as any);
-	} else {
-		promise = run();
-	}
+	// oxlint-disable-next-line typescript/no-explicit-any
+	let promise = getLockManager().request<PendingItem<Session>>(`atcute-oauth:${sub}`, run as any);
 
 	promise = promise.finally(() => pending.delete(sub));
 
@@ -91,25 +108,51 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 	return value;
 };
 
-export const storeSession = async (sub: Did, newSession: Session): Promise<void> => {
+export const storeSession = (sub: Did, newSession: Session): void => {
 	try {
 		database.sessions.set(sub, newSession);
+		volatileSessions.delete(sub);
 	} catch (err) {
-		await onRefreshError(newSession);
-		throw err;
+		// the token this one replaces is already spent, so discarding it would lose
+		// the session outright. hold it in memory so the session dies with the
+		// document instead of immediately.
+		volatileSessions.set(sub, newSession);
+
+		onPersistError?.(sub, err);
 	}
 };
 
 export const deleteStoredSession = (sub: Did): void => {
+	volatileSessions.delete(sub);
 	database.sessions.delete(sub);
 };
 
 export const listStoredSessions = (): Did[] => {
-	return database.sessions.keys();
+	const keys = database.sessions.keys();
+
+	for (const sub of volatileSessions.keys()) {
+		if (!keys.includes(sub)) {
+			keys.push(sub);
+		}
+	}
+
+	return keys;
 };
 
 const returnTrue = () => true;
 const returnFalse = () => false;
+
+const readSession = async (sub: Did): Promise<Session | undefined> => {
+	// only populated after a failed write, so storage necessarily holds something
+	// older. reconciling this against a concurrent write from another tab needs
+	// record revisions, which this store does not carry yet.
+	const unpersisted = volatileSessions.get(sub);
+	if (unpersisted !== undefined) {
+		return unpersisted;
+	}
+
+	return await migrateSessionIfNeeded(sub, database.sessions.get(sub));
+};
 
 const refreshToken = async (sub: Did, storedSession: Session | undefined): Promise<Session> => {
 	if (storedSession === undefined) {
@@ -130,12 +173,6 @@ const refreshToken = async (sub: Did, storedSession: Session | undefined): Promi
 
 		throw cause;
 	}
-};
-
-const onRefreshError = async ({ dpopKey, info, token }: Session) => {
-	// If the token data cannot be stored, let's revoke it
-	const server = new OAuthServerAgent(info.server, dpopKey);
-	await server.revoke(token.refresh ?? token.access);
 };
 
 const isTokenUsable = ({ token }: Session): boolean => {

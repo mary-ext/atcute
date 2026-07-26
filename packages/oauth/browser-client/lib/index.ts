@@ -16,4 +16,5 @@ export type {
 	ClientAssertionFetcher,
 	FetchClientAssertionParams,
 } from './types/client-assertion.ts';
+export type { PersistErrorHandler } from './types/store.ts';
 export type { TokenInfo, ExchangeInfo, Session } from './types/token.ts';

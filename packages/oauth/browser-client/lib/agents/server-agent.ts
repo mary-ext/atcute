@@ -90,12 +90,40 @@ export class OAuthServerAgent {
 			code_verifier: verifier,
 		});
 
+		let token: TokenInfo;
 		try {
-			return await this.#processExchangeResponse(response);
+			// a malformed response leaves an unusable grant, hand it back
+			token = this.#processTokenResponse(response);
 		} catch (err) {
 			await this.revoke(response.access_token);
 			throw err;
 		}
+
+		// kept out of the revoking path above, a transient network failure here must
+		// not throw away an otherwise valid grant
+		const sub = response.sub;
+		const resolved = await resolveFromIdentifier(sub);
+
+		if (resolved.metadata.issuer !== this.#metadata.issuer) {
+			await this.revoke(token.access);
+			throw new TypeError(`issuer mismatch; got ${resolved.metadata.issuer}`);
+		}
+
+		return {
+			token: token,
+			info: {
+				sub: sub,
+				aud: resolved.identity.pds,
+				server: pick(resolved.metadata, [
+					'issuer',
+					'authorization_endpoint',
+					'introspection_endpoint',
+					'pushed_authorization_request_endpoint',
+					'revocation_endpoint',
+					'token_endpoint',
+				]),
+			},
+		};
 	}
 
 	async refresh({ sub, token }: { sub: Did; token: TokenInfo }): Promise<TokenInfo> {
@@ -108,20 +136,16 @@ export class OAuthServerAgent {
 			refresh_token: token.refresh,
 		});
 
-		try {
-			if (sub !== response.sub) {
-				throw new TokenRefreshError(sub, `sub mismatch in token response; got ${response.sub}`);
-			}
-
-			return this.#processTokenResponse(response);
-		} catch (err) {
-			await this.revoke(response.access_token);
-
-			throw err;
+		if (sub !== response.sub) {
+			throw new TokenRefreshError(sub, `sub mismatch in token response; got ${response.sub}`);
 		}
+
+		// not revoked on failure, the refresh token we sent is already spent and the
+		// grant may still be recoverable
+		return this.#processTokenResponse(response, token);
 	}
 
-	#processTokenResponse(res: AtprotoOAuthTokenResponse): TokenInfo {
+	#processTokenResponse(res: AtprotoOAuthTokenResponse, previous?: TokenInfo): TokenInfo {
 		if (!res.sub) {
 			throw new TypeError(`missing sub field in token response`);
 		}
@@ -134,42 +158,11 @@ export class OAuthServerAgent {
 
 		return {
 			scope: res.scope,
-			refresh: res.refresh_token,
+			// RFC 6749 §6, the refresh token is only replaced when a new one is issued
+			refresh: res.refresh_token ?? previous?.refresh,
 			access: res.access_token,
 			type: res.token_type,
 			expires_at: typeof res.expires_in === 'number' ? Date.now() + res.expires_in * 1_000 : undefined,
-		};
-	}
-
-	async #processExchangeResponse(
-		res: AtprotoOAuthTokenResponse,
-	): Promise<{ info: ExchangeInfo; token: TokenInfo }> {
-		const sub = res.sub;
-		if (!sub) {
-			throw new TypeError(`missing sub field in token response`);
-		}
-
-		const token = this.#processTokenResponse(res);
-		const resolved = await resolveFromIdentifier(sub as Did);
-
-		if (resolved.metadata.issuer !== this.#metadata.issuer) {
-			throw new TypeError(`issuer mismatch; got ${resolved.metadata.issuer}`);
-		}
-
-		return {
-			token: token,
-			info: {
-				sub: sub as Did,
-				aud: resolved.identity.pds,
-				server: pick(resolved.metadata, [
-					'issuer',
-					'authorization_endpoint',
-					'introspection_endpoint',
-					'pushed_authorization_request_endpoint',
-					'revocation_endpoint',
-					'token_endpoint',
-				]),
-			},
 		};
 	}
 }

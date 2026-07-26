@@ -139,7 +139,7 @@ export const finalizeAuthorization = async (params: URLSearchParams) => {
 	const sub = info.sub;
 	const session: Session = { dpopKey, info, token };
 
-	await storeSession(sub, session);
+	storeSession(sub, session);
 
 	return { session, state };
 };

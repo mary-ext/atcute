@@ -28,12 +28,15 @@ export class OAuthUserAgent implements FetchHandlerObject {
 		promise
 			.then(
 				(session) => {
-					this.session = session;
+					this.#adoptSession(session);
 				},
 				() => {},
 			)
 			.finally(() => {
-				this.#getSessionPromise = undefined;
+				// a later call may already own the field by now
+				if (this.#getSessionPromise === promise) {
+					this.#getSessionPromise = undefined;
+				}
 			});
 
 		return (this.#getSessionPromise = promise);
@@ -67,11 +70,15 @@ export class OAuthUserAgent implements FetchHandlerObject {
 			return response;
 		}
 
+		const rejected = session.token.access;
+
 		try {
-			if (this.#getSessionPromise) {
-				session = await this.#getSessionPromise;
-			} else {
-				session = await this.getSession();
+			const inflight = this.#getSessionPromise;
+			session = inflight ? await inflight : await this.getSession({ staleAccessToken: rejected });
+
+			if (session.token.access === rejected) {
+				// the in-flight call had no way of knowing this token went stale early
+				session = await this.getSession({ staleAccessToken: rejected });
 			}
 		} catch {
 			return response;
@@ -86,6 +93,16 @@ export class OAuthUserAgent implements FetchHandlerObject {
 		headers.set('authorization', `${session.token.type} ${session.token.access}`);
 
 		return await this.#fetch(url.href, { ...init, headers });
+	}
+
+	#adoptSession(session: Session): void {
+		// a reauthorization elsewhere mints a new DPoP key, the old signer would bind
+		// requests to a key the new token is not bound to
+		if (session.dpopKey.d !== this.session.dpopKey.d) {
+			this.#fetch = createDPoPFetch(session.dpopKey, false);
+		}
+
+		this.session = session;
 	}
 }
 

@@ -4,7 +4,7 @@ import type { OAuthAuthorizationServerMetadata } from '@atcute/oauth-types';
 
 import type { SimpleStore } from '../types/store.ts';
 import type { RawSession } from '../types/token.ts';
-import { locks } from '../utils/runtime.ts';
+import { getLockManager } from '../utils/runtime.ts';
 
 export interface OAuthDatabaseOptions {
 	name: string;
@@ -87,7 +87,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 		}
 
 		{
-			const cleanup = async (lock: Lock | true | null) => {
+			const cleanup = async (lock: Lock | null) => {
 				if (!lock || signal.aborted) {
 					return;
 				}
@@ -117,11 +117,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 				}
 			};
 
-			if (locks) {
-				locks.request(`${storageKey}:cleanup`, { ifAvailable: true }, cleanup);
-			} else {
-				cleanup(true);
-			}
+			getLockManager().request(`${storageKey}:cleanup`, { ifAvailable: true }, cleanup);
 		}
 
 		return {
