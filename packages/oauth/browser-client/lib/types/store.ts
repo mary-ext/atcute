@@ -1,11 +1,21 @@
 import type { Did } from '@atcute/lexicons';
 
+/** a stored value together with the revision it was written at */
+export interface StoredRecord<V> {
+	value: V;
+	revision: number;
+}
+
 export interface SimpleStore<K extends string | number, V extends {} | null> {
 	get: (key: K) => undefined | V;
+	getRecord: (key: K) => undefined | StoredRecord<V>;
 	getWithLapsed: (key: K) => [undefined | V, number];
-	set: (key: K, value: V) => void;
+	/** writes the value and returns the revision it was written at */
+	set: (key: K, value: V) => number;
 	delete: (key: K) => void;
 	keys: () => K[];
+	/** observes local and remote updates, returns an unsubscribe function */
+	watch: (listener: (key: K) => void) => () => void;
 }
 
 /**
