@@ -46,5 +46,8 @@ export const configureOAuth = (options: ConfigureOAuthOptions) => {
 	({ identityResolver, fetchClientAssertion, onPersistError } = options);
 	({ client_id: CLIENT_ID, redirect_uri: REDIRECT_URI } = options.metadata);
 
+	// otherwise the previous database's listeners and broadcast channel stay attached
+	database?.dispose();
+
 	database = createOAuthDatabase({ name: options.storageName ?? 'atcute-oauth' });
 };
