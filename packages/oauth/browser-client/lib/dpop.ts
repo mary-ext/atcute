@@ -3,6 +3,27 @@ import { type DpopPrivateJwk, createDpopProofSigner, sha256Base64Url } from '@at
 import { database } from './environment.ts';
 import { extractContentType } from './utils/response.ts';
 
+/** nonces older than this are assumed stale, matching the reference PDS lifetime */
+const NONCE_FRESHNESS = 3 * 60 * 1_000;
+
+/** cap on waiting for another request's nonce, one hung request must not block the origin */
+const NONCE_GATE_TIMEOUT = 5_000;
+
+const raceTimeout = async (promise: Promise<void>, ms: number): Promise<void> => {
+	let timer: ReturnType<typeof setTimeout> | undefined;
+
+	try {
+		await Promise.race([
+			promise,
+			new Promise<void>((resolve) => {
+				timer = setTimeout(resolve, ms);
+			}),
+		]);
+	} finally {
+		clearTimeout(timer);
+	}
+};
+
 export const createDPoPFetch = (dpopKey: DpopPrivateJwk, isAuthServer?: boolean): typeof fetch => {
 	const nonces = database.dpopNonces;
 	const pending = database.inflightDpop;
@@ -10,6 +31,12 @@ export const createDPoPFetch = (dpopKey: DpopPrivateJwk, isAuthServer?: boolean)
 	const sign = createDpopProofSigner(dpopKey);
 
 	return async (input, init) => {
+		// the construction below consumes a streamed body, leaving nothing to replay
+		// on the nonce retry
+		const hasUnrepeatableBody =
+			init?.body instanceof ReadableStream ||
+			(input instanceof Request && init?.body == null && input.body !== null);
+
 		const request = new Request(input, init);
 
 		const authorizationHeader = request.headers.get('authorization');
@@ -22,10 +49,11 @@ export const createDPoPFetch = (dpopKey: DpopPrivateJwk, isAuthServer?: boolean)
 
 		const htu = origin + pathname;
 
-		let deferred = pending.get(origin);
-		if (deferred) {
-			await deferred.promise;
-			deferred = undefined;
+		{
+			const inflight = pending.get(origin);
+			if (inflight) {
+				await raceTimeout(inflight.promise, NONCE_GATE_TIMEOUT);
+			}
 		}
 
 		let initNonce: string | undefined;
@@ -34,13 +62,14 @@ export const createDPoPFetch = (dpopKey: DpopPrivateJwk, isAuthServer?: boolean)
 			const [nonce, lapsed] = nonces.getWithLapsed(origin);
 
 			initNonce = nonce;
-			expiredOrMissing = lapsed > 3 * 60 * 1_000;
+			expiredOrMissing = lapsed > NONCE_FRESHNESS;
 		} catch {
 			// ignore read errors
 		}
 
+		let gate: PromiseWithResolvers<void> | undefined;
 		if (expiredOrMissing) {
-			pending.set(origin, (deferred = Promise.withResolvers()));
+			pending.set(origin, (gate = Promise.withResolvers()));
 		}
 
 		let nextNonce: string | null;
@@ -51,14 +80,19 @@ export const createDPoPFetch = (dpopKey: DpopPrivateJwk, isAuthServer?: boolean)
 			const initResponse = await fetch(request);
 
 			nextNonce = initResponse.headers.get('dpop-nonce');
-			if (nextNonce === null || nextNonce === initNonce) {
-				return initResponse;
+
+			// re-stamp an unchanged nonce we had written off as stale, otherwise a
+			// long-lived one ages out of the freshness window and gates forever
+			if (nextNonce !== null && (nextNonce !== initNonce || expiredOrMissing)) {
+				try {
+					nonces.set(origin, nextNonce);
+				} catch {
+					// ignore write errors
+				}
 			}
 
-			try {
-				nonces.set(origin, nextNonce);
-			} catch {
-				// ignore write errors
+			if (nextNonce === null || nextNonce === initNonce) {
+				return initResponse;
 			}
 
 			const shouldRetry = await isUseDpopNonceError(initResponse, isAuthServer);
@@ -66,13 +100,17 @@ export const createDPoPFetch = (dpopKey: DpopPrivateJwk, isAuthServer?: boolean)
 				return initResponse;
 			}
 
-			if (input === request || init?.body instanceof ReadableStream) {
+			if (hasUnrepeatableBody) {
 				return initResponse;
 			}
 		} finally {
-			if (deferred) {
-				pending.delete(origin);
-				deferred.resolve();
+			if (gate) {
+				// a later request may have installed its own gate after ours timed out
+				if (pending.get(origin) === gate) {
+					pending.delete(origin);
+				}
+
+				gate.resolve();
 			}
 		}
 
