@@ -3,7 +3,7 @@ import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 import type { OAuthAuthorizationServerMetadata } from '@atcute/oauth-types';
 
 import type { SimpleStore } from '../types/store.ts';
-import type { RawSession } from '../types/token.ts';
+import type { Session } from '../types/token.ts';
 import { getLockManager } from '../utils/runtime.ts';
 
 export interface OAuthDatabaseOptions {
@@ -35,7 +35,7 @@ interface BroadcastMessage {
 interface Schema {
 	sessions: {
 		key: Did;
-		value: RawSession;
+		value: Session;
 		indexes: {
 			expiresAt: number;
 		};

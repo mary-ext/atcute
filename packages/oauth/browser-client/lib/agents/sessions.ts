@@ -4,7 +4,6 @@ import { database, onPersistError } from '../environment.ts';
 import { OAuthResponseError, TokenRefreshError } from '../errors.ts';
 import type { StoredRecord } from '../types/store.ts';
 import type { Session } from '../types/token.ts';
-import { isLegacyDpopKey, migrateLegacyDpopKey } from '../utils/dpop-key.ts';
 import { getLockManager } from '../utils/runtime.ts';
 
 import { OAuthServerAgent } from './server-agent.ts';
@@ -61,7 +60,7 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 	}
 
 	const run = async (): Promise<PendingItem<Session>> => {
-		const record = await readSessionRecord(sub);
+		const record = database.sessions.getRecord(sub);
 
 		if (record === undefined) {
 			throw new TokenRefreshError(sub, `session deleted by another tab`);
@@ -128,28 +127,6 @@ export const listStoredSessions = (): Did[] => {
 const returnTrue = () => true;
 const returnFalse = () => false;
 
-const readSessionRecord = async (sub: Did): Promise<StoredRecord<Session> | undefined> => {
-	const record = database.sessions.getRecord(sub);
-	if (record === undefined) {
-		return;
-	}
-
-	const session = record.value;
-	if (!isLegacyDpopKey(session.dpopKey)) {
-		return record as StoredRecord<Session>;
-	}
-
-	const dpopKey = await migrateLegacyDpopKey(session.dpopKey);
-
-	try {
-		database.sessions.set(sub, { ...session, dpopKey });
-	} catch {
-		// ignore persistence errors, the store retains it either way
-	}
-
-	return database.sessions.getRecord(sub) as StoredRecord<Session> | undefined;
-};
-
 /** waits up to {@link RECONCILE_TIMEOUT} for the stored session to move off `revision` */
 const waitForNewerRevision = async (sub: Did, revision: number): Promise<boolean> => {
 	const changed = () => database.sessions.getRecord(sub)?.revision !== revision;
@@ -194,7 +171,7 @@ const refreshToken = async (
 			// another document spent it or the server revoked the session; wait for
 			// their rotation before giving up
 			if (await waitForNewerRevision(sub, record.revision)) {
-				const reconciled = await readSessionRecord(sub);
+				const reconciled = database.sessions.getRecord(sub);
 				if (reconciled !== undefined) {
 					return { rotated: false, session: reconciled.value };
 				}

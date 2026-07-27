@@ -27,7 +27,6 @@
 		"@atcute/client": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
-		"@atcute/multibase": "workspace:^",
 		"@atcute/oauth-crypto": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
 		"nanoid": "^6.0.0"

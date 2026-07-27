@@ -839,9 +839,6 @@ importers:
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons
-      '@atcute/multibase':
-        specifier: workspace:^
-        version: link:../../utilities/multibase
       '@atcute/oauth-crypto':
         specifier: workspace:^
         version: link:../crypto
