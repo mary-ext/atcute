@@ -2,19 +2,14 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.delete', {
+const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.notification.updateSeen', {
 	params: null,
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/** DID of the repository owner */
-			did: /*#__PURE__*/ v.didString(),
-			/** Admin-only. Delete even though the repository record still exists on the owner's PDS. */
-			force: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			/** Name of the repository to delete */
-			name: /*#__PURE__*/ v.string(),
-			/** Rkey of the repository record */
-			rkey: /*#__PURE__*/ v.recordKeyString(),
+			/** ID of the notification to update. */
+			id: /*#__PURE__*/ v.integer(),
+			read: /*#__PURE__*/ v.boolean(),
 		}),
 	},
 	output: null,
@@ -31,6 +26,6 @@ export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'sh.tangled.repo.delete': mainSchema;
+		'org.tangled.temp.notification.updateSeen': mainSchema;
 	}
 }

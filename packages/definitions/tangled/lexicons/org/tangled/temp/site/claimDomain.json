@@ -1,0 +1,41 @@
+{
+	"id": "org.tangled.temp.site.claimDomain",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["subdomain"],
+					"properties": {
+						"subdomain": {
+							"type": "string",
+							"description": "Desired subdomain label (lowercase letters, digits, and hyphens; 4–63 characters)."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "DomainTaken",
+					"description": "That subdomain is already claimed by another user."
+				},
+				{
+					"name": "DomainCooldown",
+					"description": "That subdomain was recently released and is in a cooldown period."
+				},
+				{
+					"name": "AlreadyClaimed",
+					"description": "You already have a domain claimed. Release it before claiming a new one."
+				},
+				{
+					"name": "InvalidSubdomain",
+					"description": "The subdomain label is invalid."
+				}
+			],
+			"description": "Claim a subdomain under the sites domain (e.g. 'alice' → alice.sites.tangled.sh) for the authenticated user."
+		}
+	},
+	"lexicon": 1
+}

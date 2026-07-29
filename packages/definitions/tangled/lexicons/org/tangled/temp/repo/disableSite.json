@@ -1,0 +1,30 @@
+{
+	"id": "org.tangled.temp.repo.disableSite",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["repoDid"],
+					"properties": {
+						"repoDid": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository as minted by the knot."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "SiteNotFound",
+					"description": "No site configuration exists for this repository."
+				}
+			],
+			"description": "Remove the site configuration for a repository, deleting its deployed files."
+		}
+	},
+	"lexicon": 1
+}

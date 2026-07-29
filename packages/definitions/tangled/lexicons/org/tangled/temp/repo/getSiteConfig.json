@@ -1,0 +1,52 @@
+{
+	"id": "org.tangled.temp.repo.getSiteConfig",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"properties": {
+						"config": {
+							"ref": "#siteConfig",
+							"type": "ref",
+							"description": "Site config for the repository. Absent if no site is configured."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repoDid"],
+				"properties": {
+					"repoDid": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository as minted by the knot."
+					}
+				}
+			},
+			"description": "Get the site configuration for a repository, if one exists."
+		},
+		"siteConfig": {
+			"type": "object",
+			"required": ["branch", "dir", "isIndex"],
+			"properties": {
+				"dir": {
+					"type": "string",
+					"description": "Directory within the repository to deploy (e.g. '/' or '/docs')."
+				},
+				"branch": {
+					"type": "string",
+					"description": "Branch to deploy from."
+				},
+				"isIndex": {
+					"type": "boolean",
+					"description": "Whether this repo serves as the index (root) for the domain."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

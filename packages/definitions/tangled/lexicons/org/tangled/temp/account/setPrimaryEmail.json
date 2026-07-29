@@ -1,0 +1,33 @@
+{
+	"id": "org.tangled.temp.account.setPrimaryEmail",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["email"],
+					"properties": {
+						"email": {
+							"type": "string",
+							"description": "Email address to promote to primary."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "EmailNotVerified",
+					"description": "The email address must be verified before it can be made primary."
+				},
+				{
+					"name": "EmailNotFound",
+					"description": "The email address is not associated with this account."
+				}
+			],
+			"description": "Set an email address as the primary address for the authenticated account. The address must already be verified."
+		}
+	},
+	"lexicon": 1
+}

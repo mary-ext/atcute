@@ -1,0 +1,43 @@
+{
+	"id": "org.tangled.temp.focus.beginSession",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"errors": [
+				{
+					"name": "NoFocusItems",
+					"description": "There are no unread work notifications to focus on."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"properties": {
+						"pullAt": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "AT-URI of the pull to navigate to, if the item is a pull."
+						},
+						"issueAt": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "AT-URI of the issue to navigate to, if the item is an issue."
+						},
+						"repoDid": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository the item belongs to. Absent if the queue is empty."
+						},
+						"notificationId": {
+							"type": "integer",
+							"description": "ID of the first notification to address. Absent if the queue is empty."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Activate focus mode. Returns the oldest unread work notification so the client can navigate to it."
+		}
+	},
+	"lexicon": 1
+}

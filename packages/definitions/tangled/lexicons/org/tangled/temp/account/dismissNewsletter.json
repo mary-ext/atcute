@@ -1,0 +1,10 @@
+{
+	"id": "org.tangled.temp.account.dismissNewsletter",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Dismiss the newsletter sign-up prompt without subscribing."
+		}
+	},
+	"lexicon": 1
+}

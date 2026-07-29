@@ -1,0 +1,67 @@
+{
+	"id": "org.tangled.temp.account.completeSignup",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["code", "password", "username"],
+					"properties": {
+						"code": {
+							"type": "string",
+							"description": "Verification code from the signup email."
+						},
+						"password": {
+							"type": "string",
+							"description": "Password for the new account."
+						},
+						"username": {
+							"type": "string",
+							"description": "Desired username; the assigned handle is <username>.<pds domain>."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "SignupDisabled",
+					"description": "Signup is not currently enabled on this service."
+				},
+				{
+					"name": "InvalidUsername",
+					"description": "Username must be 4-63 characters, lowercase letters, digits, or hyphens, and cannot start or end with a hyphen."
+				},
+				{
+					"name": "UsernameUnavailable",
+					"description": "This username is reserved or already taken."
+				},
+				{
+					"name": "InvalidCode",
+					"description": "The verification code is invalid or has expired."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["did", "handle"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the newly provisioned account."
+						},
+						"handle": {
+							"type": "string",
+							"description": "The assigned handle, <username>.<pds domain>."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Complete signup: provision the PDS account for the chosen username using the verification code from the signup email."
+		}
+	},
+	"lexicon": 1
+}

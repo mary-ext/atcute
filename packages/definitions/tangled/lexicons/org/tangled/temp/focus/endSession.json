@@ -1,0 +1,10 @@
+{
+	"id": "org.tangled.temp.focus.endSession",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Deactivate focus mode."
+		}
+	},
+	"lexicon": 1
+}

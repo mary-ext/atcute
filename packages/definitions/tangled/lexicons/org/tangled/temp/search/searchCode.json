@@ -1,0 +1,118 @@
+{
+	"id": "org.tangled.temp.search.searchCode",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["results"],
+					"properties": {
+						"cursor": {
+							"type": "string"
+						},
+						"results": {
+							"type": "array",
+							"items": {
+								"ref": "#fileResult",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["q"],
+				"properties": {
+					"q": {
+						"type": "string",
+						"description": "Search query string."
+					},
+					"lang": {
+						"type": "string",
+						"description": "Restrict search to a specific programming language (e.g. 'go', 'rust')."
+					},
+					"limit": {
+						"type": "integer",
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"repoDid": {
+						"type": "string",
+						"format": "did",
+						"description": "Restrict search to a specific repository, by its DID."
+					}
+				}
+			},
+			"description": "Full-text code search across indexed repositories, backed by Zoekt."
+		},
+		"chunk": {
+			"type": "object",
+			"required": ["content", "lineStart"],
+			"properties": {
+				"content": {
+					"type": "string",
+					"description": "Source lines for this match chunk."
+				},
+				"lineStart": {
+					"type": "integer",
+					"description": "1-based line number of the first line in content."
+				},
+				"highlights": {
+					"type": "array",
+					"items": {
+						"ref": "#highlight",
+						"type": "ref"
+					},
+					"description": "Byte-offset ranges within content that match the query."
+				}
+			}
+		},
+		"highlight": {
+			"type": "object",
+			"required": ["end", "start"],
+			"properties": {
+				"end": {
+					"type": "integer",
+					"description": "End byte offset (exclusive) within the chunk content string."
+				},
+				"start": {
+					"type": "integer",
+					"description": "Start byte offset within the chunk content string."
+				}
+			}
+		},
+		"fileResult": {
+			"type": "object",
+			"required": ["chunks", "path", "repoDid"],
+			"properties": {
+				"path": {
+					"type": "string",
+					"description": "File path relative to repository root."
+				},
+				"chunks": {
+					"type": "array",
+					"items": {
+						"ref": "#chunk",
+						"type": "ref"
+					}
+				},
+				"repoDid": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the repository as minted by the knot."
+				},
+				"language": {
+					"type": "string",
+					"description": "Detected programming language."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

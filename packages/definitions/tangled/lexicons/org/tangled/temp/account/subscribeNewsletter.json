@@ -1,0 +1,10 @@
+{
+	"id": "org.tangled.temp.account.subscribeNewsletter",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Opt the authenticated account into newsletter / announcement emails."
+		}
+	},
+	"lexicon": 1
+}

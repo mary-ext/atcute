@@ -11,6 +11,14 @@
 					"body": {
 						"type": "string"
 					},
+					"blobs": {
+						"type": "array",
+						"items": {
+							"type": "blob",
+							"accept": ["image/*"],
+							"maxSize": 1000000
+						}
+					},
 					"title": {
 						"type": "string"
 					},

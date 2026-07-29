@@ -1,0 +1,29 @@
+{
+	"id": "org.tangled.temp.site.releaseDomain",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["domain"],
+					"properties": {
+						"domain": {
+							"type": "string",
+							"description": "Full domain to release (must match the user's active claim)."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "DomainNotFound",
+					"description": "No active claim found for the given domain under this account."
+				}
+			],
+			"description": "Release the authenticated user's active domain claim, removing all associated site data."
+		}
+	},
+	"lexicon": 1
+}

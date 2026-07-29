@@ -1,0 +1,45 @@
+{
+	"id": "org.tangled.temp.account.beginSignup",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["email", "turnstileToken"],
+					"properties": {
+						"email": {
+							"type": "string",
+							"description": "Email address for the new account."
+						},
+						"turnstileToken": {
+							"type": "string",
+							"description": "Cloudflare Turnstile challenge response token."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "SignupDisabled",
+					"description": "Signup is not currently enabled on this service."
+				},
+				{
+					"name": "InvalidTurnstileToken",
+					"description": "The Turnstile captcha response could not be verified."
+				},
+				{
+					"name": "InvalidEmail",
+					"description": "The email address is not valid."
+				},
+				{
+					"name": "EmailAlreadyRegistered",
+					"description": "An account already exists for this email address."
+				}
+			],
+			"description": "Begin signup: validate the Turnstile token and email a verification code to the address."
+		}
+	},
+	"lexicon": 1
+}

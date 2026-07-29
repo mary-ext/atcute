@@ -6,6 +6,14 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('sh.tangled.repo.pull'),
+		blobs: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.array(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+					/*#__PURE__*/ v.blobSize(1000000),
+					/*#__PURE__*/ v.blobAccept(['image/*']),
+				]),
+			),
+		),
 		body: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		dependentOn: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),

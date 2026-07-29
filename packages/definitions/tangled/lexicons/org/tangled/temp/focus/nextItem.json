@@ -1,0 +1,50 @@
+{
+	"id": "org.tangled.temp.focus.nextItem",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["currentId"],
+					"properties": {
+						"currentId": {
+							"type": "integer",
+							"description": "ID of the notification just addressed, to be marked read."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"output": {
+				"schema": {
+					"type": "object",
+					"properties": {
+						"pullAt": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "AT-URI of the pull to navigate to, if the item is a pull."
+						},
+						"issueAt": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "AT-URI of the issue to navigate to, if the item is an issue."
+						},
+						"repoDid": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository the next item belongs to. Absent when focus mode has ended."
+						},
+						"notificationId": {
+							"type": "integer",
+							"description": "ID of the next notification to address. Absent when focus mode has ended."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Mark the current focus notification as read and return the next one. Ends focus mode and returns no item when the queue is exhausted."
+		}
+	},
+	"lexicon": 1
+}

@@ -19,7 +19,12 @@
 						},
 						"rkey": {
 							"type": "string",
+							"format": "record-key",
 							"description": "Rkey of the repository record"
+						},
+						"force": {
+							"type": "boolean",
+							"description": "Admin-only. Delete even though the repository record still exists on the owner's PDS."
 						}
 					}
 				},

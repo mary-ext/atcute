@@ -14,7 +14,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.create', {
 			/** Optional user-provided did:web to use as the repo identity instead of minting a did:plc. */
 			repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 			/** Rkey of the repository record */
-			rkey: /*#__PURE__*/ v.string(),
+			rkey: /*#__PURE__*/ v.recordKeyString(),
 			/** A source URL to clone from, populate this when forking or importing a repository. */
 			source: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
@@ -22,6 +22,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.create', {
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/** Multibase-encoded public signing key the knot holds for this repository */
+			key: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 		}),
 	},

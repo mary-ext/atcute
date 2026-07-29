@@ -1,0 +1,26 @@
+{
+	"id": "org.tangled.temp.notification.updateSeen",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["id", "read"],
+					"properties": {
+						"id": {
+							"type": "integer",
+							"description": "ID of the notification to update."
+						},
+						"read": {
+							"type": "boolean"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Mark a single notification as read or unread."
+		}
+	},
+	"lexicon": 1
+}

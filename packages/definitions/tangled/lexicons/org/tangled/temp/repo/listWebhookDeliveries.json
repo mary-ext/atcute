@@ -1,0 +1,83 @@
+{
+	"id": "org.tangled.temp.repo.listWebhookDeliveries",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["deliveries"],
+					"properties": {
+						"deliveries": {
+							"type": "array",
+							"items": {
+								"ref": "#delivery",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["id", "repoDid"],
+				"properties": {
+					"id": {
+						"type": "integer",
+						"description": "Webhook ID."
+					},
+					"limit": {
+						"type": "integer",
+						"maximum": 100,
+						"minimum": 1
+					},
+					"repoDid": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository as minted by the knot."
+					}
+				}
+			},
+			"description": "List recent delivery attempts for a webhook."
+		},
+		"delivery": {
+			"type": "object",
+			"required": ["createdAt", "deliveryId", "event", "id", "success", "url"],
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"url": {
+					"type": "string",
+					"format": "uri"
+				},
+				"event": {
+					"type": "string",
+					"description": "Event type that triggered the delivery."
+				},
+				"success": {
+					"type": "boolean"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"deliveryId": {
+					"type": "string",
+					"description": "UUID for tracking this delivery attempt."
+				},
+				"requestBody": {
+					"type": "string"
+				},
+				"responseBody": {
+					"type": "string"
+				},
+				"responseCode": {
+					"type": "integer"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

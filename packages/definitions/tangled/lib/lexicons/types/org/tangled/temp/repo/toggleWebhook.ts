@@ -2,22 +2,24 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.delete', {
+const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.repo.toggleWebhook', {
 	params: null,
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/** DID of the repository owner */
-			did: /*#__PURE__*/ v.didString(),
-			/** Admin-only. Delete even though the repository record still exists on the owner's PDS. */
-			force: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			/** Name of the repository to delete */
-			name: /*#__PURE__*/ v.string(),
-			/** Rkey of the repository record */
-			rkey: /*#__PURE__*/ v.recordKeyString(),
+			/** Webhook ID to toggle. */
+			id: /*#__PURE__*/ v.integer(),
+			/** DID of the repository as minted by the knot. */
+			repoDid: /*#__PURE__*/ v.didString(),
 		}),
 	},
-	output: null,
+	output: {
+		type: 'lex',
+		schema: /*#__PURE__*/ v.object({
+			/** New active state of the webhook. */
+			active: /*#__PURE__*/ v.boolean(),
+		}),
+	},
 });
 
 type main$schematype = typeof _mainSchema;
@@ -28,9 +30,10 @@ export const mainSchema = _mainSchema as mainSchema;
 
 export interface $params {}
 export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'sh.tangled.repo.delete': mainSchema;
+		'org.tangled.temp.repo.toggleWebhook': mainSchema;
 	}
 }

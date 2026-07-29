@@ -1,0 +1,10 @@
+{
+	"id": "org.tangled.temp.notification.markAllRead",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"description": "Mark all of the authenticated user's notifications as read."
+		}
+	},
+	"lexicon": 1
+}

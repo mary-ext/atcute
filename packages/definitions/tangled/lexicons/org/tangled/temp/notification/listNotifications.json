@@ -1,0 +1,102 @@
+{
+	"id": "org.tangled.temp.notification.listNotifications",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["notifications", "socialUnreadCount", "workUnreadCount"],
+					"properties": {
+						"cursor": {
+							"type": "string"
+						},
+						"notifications": {
+							"type": "array",
+							"items": {
+								"ref": "#notification",
+								"type": "ref"
+							}
+						},
+						"workUnreadCount": {
+							"type": "integer"
+						},
+						"socialUnreadCount": {
+							"type": "integer"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"read": {
+						"type": "string",
+						"description": "Filter by read state: 'all' or 'unread'."
+					},
+					"limit": {
+						"type": "integer",
+						"maximum": 100,
+						"minimum": 1,
+						"description": "Max notifications per category to return."
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"category": {
+						"type": "string",
+						"description": "Filter by category: 'all', 'social', or 'work'."
+					}
+				}
+			},
+			"description": "List notifications for the authenticated user, split by category."
+		},
+		"notification": {
+			"type": "object",
+			"required": ["actorDid", "category", "createdAt", "id", "read", "type"],
+			"properties": {
+				"id": {
+					"type": "integer",
+					"description": "Stable numeric ID for this notification."
+				},
+				"read": {
+					"type": "boolean"
+				},
+				"type": {
+					"type": "string",
+					"description": "Notification type: repo_starred, issue_created, issue_commented, issue_closed, issue_reopen, issue_assigned, issue_unassigned, pull_created, pull_commented, pull_merged, pull_closed, pull_reopen, pull_assigned, pull_unassigned, followed, user_mentioned."
+				},
+				"pullAt": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "AT-URI of the related org.tangled.pulls.pull record, if applicable."
+				},
+				"issueAt": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "AT-URI of the related org.tangled.issue.issue record, if applicable."
+				},
+				"repoDid": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the related repository, if applicable."
+				},
+				"actorDid": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the user who triggered this notification."
+				},
+				"category": {
+					"type": "string",
+					"description": "Broad category: 'social' or 'work'."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}
