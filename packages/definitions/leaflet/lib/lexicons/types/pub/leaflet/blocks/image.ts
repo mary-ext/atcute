@@ -23,6 +23,8 @@ const _mainSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.blobSize(1000000),
 		/*#__PURE__*/ v.blobAccept(['image/*']),
 	]),
+	/** Display width of the image in pixels, capped at the page width. */
+	width: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 
 type aspectRatio$schematype = typeof _aspectRatioSchema;

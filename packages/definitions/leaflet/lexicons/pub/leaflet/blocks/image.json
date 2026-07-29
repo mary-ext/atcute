@@ -14,6 +14,10 @@
 					"accept": ["image/*"],
 					"maxSize": 1000000
 				},
+				"width": {
+					"type": "integer",
+					"description": "Display width of the image in pixels, capped at the page width."
+				},
 				"fullBleed": {
 					"type": "boolean",
 					"description": "Whether the image should extend to the full width of the container, ignoring padding."
