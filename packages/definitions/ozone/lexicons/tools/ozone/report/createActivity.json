@@ -6,8 +6,12 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["activity", "reportId"],
+					"required": ["activity"],
 					"properties": {
+						"eventId": {
+							"type": "integer",
+							"description": "ID of the report moderation event. Resolves to the report created from that event. Exactly one of reportId or eventId must be provided."
+						},
 						"activity": {
 							"refs": [
 								"tools.ozone.report.defs#assignmentActivity",
@@ -22,7 +26,7 @@
 						},
 						"reportId": {
 							"type": "integer",
-							"description": "ID of the report to record activity on"
+							"description": "ID of the report to record activity on. Exactly one of reportId or eventId must be provided."
 						},
 						"publicNote": {
 							"type": "string",
@@ -44,7 +48,7 @@
 			"errors": [
 				{
 					"name": "ReportNotFound",
-					"description": "No report exists with the given reportId"
+					"description": "No report exists with the given reportId or eventId"
 				},
 				{
 					"name": "InvalidStateTransition",

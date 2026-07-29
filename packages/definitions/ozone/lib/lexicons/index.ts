@@ -30,6 +30,7 @@ export * as ToolsOzoneQueueRouteReports from './types/tools/ozone/queue/routeRep
 export * as ToolsOzoneQueueUnassignModerator from './types/tools/ozone/queue/unassignModerator.ts';
 export * as ToolsOzoneQueueUpdateQueue from './types/tools/ozone/queue/updateQueue.ts';
 export * as ToolsOzoneReportAssignModerator from './types/tools/ozone/report/assignModerator.ts';
+export * as ToolsOzoneReportCloseReports from './types/tools/ozone/report/closeReports.ts';
 export * as ToolsOzoneReportCreateActivity from './types/tools/ozone/report/createActivity.ts';
 export * as ToolsOzoneReportDefs from './types/tools/ozone/report/defs.ts';
 export * as ToolsOzoneReportGetAssignments from './types/tools/ozone/report/getAssignments.ts';

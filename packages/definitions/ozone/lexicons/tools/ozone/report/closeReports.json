@@ -1,0 +1,60 @@
+{
+	"id": "tools.ozone.report.closeReports",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["subject"],
+					"properties": {
+						"subject": {
+							"type": "string",
+							"format": "uri",
+							"description": "Subject DID (account-level reports) or AT-URI (record-level reports) whose reports should be closed."
+						},
+						"isAutomated": {
+							"type": "boolean",
+							"default": false,
+							"description": "Set true when this action is triggered by an automated process. Defaults to false."
+						},
+						"reportTypes": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "If specified, only reports of the given report types (fully qualified reason NSIDs) are closed. When omitted, all non-closed reports on the subject are targeted."
+						},
+						"internalNote": {
+							"type": "string",
+							"description": "Optional moderator-only note recorded on each close activity. Not visible to reporters."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["closedCount", "reportIds"],
+					"properties": {
+						"reportIds": {
+							"type": "array",
+							"items": {
+								"type": "integer"
+							},
+							"description": "IDs of the reports that were closed."
+						},
+						"closedCount": {
+							"type": "integer",
+							"description": "Number of reports that were transitioned to closed."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Close all reports on a subject matching the given criteria. Reports whose current status does not permit a transition to closed are skipped silently. Intended for automated flows that resolve reports without taking action on the subject."
+		}
+	},
+	"lexicon": 1
+}

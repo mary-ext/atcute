@@ -20,6 +20,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.report.createActivity
 					ToolsOzoneReportDefs.reopenActivitySchema,
 				]);
 			},
+			/**
+			 * ID of the report moderation event. Resolves to the report created from that event. Exactly one of
+			 * reportId or eventId must be provided.
+			 */
+			eventId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 			/** Optional moderator-only note. Not visible to reporters. */
 			internalNote: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/**
@@ -30,8 +35,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.report.createActivity
 			isAutomated: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
 			/** Optional public-facing note, potentially visible to the reporter. */
 			publicNote: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/** ID of the report to record activity on */
-			reportId: /*#__PURE__*/ v.integer(),
+			/** ID of the report to record activity on. Exactly one of reportId or eventId must be provided. */
+			reportId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		}),
 	},
 	output: {
