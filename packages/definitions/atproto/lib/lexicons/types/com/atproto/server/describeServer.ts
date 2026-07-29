@@ -18,6 +18,8 @@ const _mainSchema = /*#__PURE__*/ v.query('com.atproto.server.describeServer', {
 		schema: /*#__PURE__*/ v.object({
 			/** List of domain suffixes that can be used in account handles. */
 			availableUserDomains: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
+			/** Maximum size of a blob that can be uploaded via com.atproto.repo.uploadBlob, in bytes. */
+			blobUploadLimit: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 			/** Contact information */
 			get contact() {
 				return /*#__PURE__*/ v.optional(contactSchema);
