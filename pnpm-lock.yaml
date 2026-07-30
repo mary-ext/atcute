@@ -606,13 +606,13 @@ importers:
         version: 0.5.6
       '@atproto/pds':
         specifier: ^0.5.21
-        version: 0.5.21(patch_hash=f48f8f1c5bfbaa1947cdfc7a3bab0649f1ee2de50b57b20bc35f957be75b0190)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+        version: 0.5.21(patch_hash=f48f8f1c5bfbaa1947cdfc7a3bab0649f1ee2de50b57b20bc35f957be75b0190)
       '@did-plc/server':
         specifier: ^0.0.1
-        version: 0.0.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+        version: 0.0.1
       axios:
         specifier: ^1.18.1
-        version: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+        version: 1.18.1
       get-port:
         specifier: ^7.2.0
         version: 7.2.0
@@ -901,6 +901,10 @@ importers:
       '@atcute/oauth-crypto':
         specifier: workspace:^
         version: link:../crypto
+    devDependencies:
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@8.0.10(@types/node@26.1.1))
 
   packages/oauth/node-client:
     dependencies:
@@ -4373,17 +4377,17 @@ snapshots:
       '@atproto-labs/simple-store': 0.4.4
       lru-cache: 10.4.3
 
-  '@atproto-labs/simple-store-redis@0.1.4(ioredis@5.11.1(supports-color@7.2.0))':
+  '@atproto-labs/simple-store-redis@0.1.4(ioredis@5.11.1)':
     dependencies:
       '@atproto-labs/simple-store': 0.4.4
-      ioredis: 5.11.1(supports-color@7.2.0)
+      ioredis: 5.11.1
 
   '@atproto-labs/simple-store@0.4.4': {}
 
-  '@atproto-labs/xrpc-utils@0.1.10(supports-color@7.2.0)':
+  '@atproto-labs/xrpc-utils@0.1.10':
     dependencies:
       '@atproto/xrpc': 0.8.6
-      '@atproto/xrpc-server': 0.11.11(supports-color@7.2.0)
+      '@atproto/xrpc-server': 0.11.11
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -4573,7 +4577,7 @@ snapshots:
     dependencies:
       '@atproto/oauth-provider-api': 0.7.6
 
-  '@atproto/oauth-provider@0.20.2(supports-color@7.2.0)':
+  '@atproto/oauth-provider@0.20.2':
     dependencies:
       '@atproto-labs/fetch-node': 0.3.5
       '@atproto-labs/pipe': 0.2.4
@@ -4598,7 +4602,7 @@ snapshots:
       disposable-email-domains-js: 1.25.0
       forwarded: 0.2.0
       http-errors: 2.0.1
-      ioredis: 5.11.1(supports-color@7.2.0)
+      ioredis: 5.11.1
       jose: 5.10.0
       zod: 3.25.76
     transitivePeerDependencies:
@@ -4615,13 +4619,13 @@ snapshots:
       '@atproto/jwk': 0.7.4
       zod: 3.25.76
 
-  '@atproto/pds@0.5.21(patch_hash=f48f8f1c5bfbaa1947cdfc7a3bab0649f1ee2de50b57b20bc35f957be75b0190)(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+  '@atproto/pds@0.5.21(patch_hash=f48f8f1c5bfbaa1947cdfc7a3bab0649f1ee2de50b57b20bc35f957be75b0190)':
     dependencies:
       '@atproto-labs/fetch-node': 0.3.5
       '@atproto-labs/simple-store': 0.4.4
       '@atproto-labs/simple-store-memory': 0.2.4
-      '@atproto-labs/simple-store-redis': 0.1.4(ioredis@5.11.1(supports-color@7.2.0))
-      '@atproto-labs/xrpc-utils': 0.1.10(supports-color@7.2.0)
+      '@atproto-labs/simple-store-redis': 0.1.4(ioredis@5.11.1)
+      '@atproto-labs/xrpc-utils': 0.1.10
       '@atproto/aws': 0.3.8
       '@atproto/common': 0.7.2
       '@atproto/crypto': 0.5.4
@@ -4631,24 +4635,24 @@ snapshots:
       '@atproto/lex-cbor': 0.1.4
       '@atproto/lex-data': 0.1.5
       '@atproto/lex-json': 0.1.4
-      '@atproto/oauth-provider': 0.20.2(supports-color@7.2.0)
+      '@atproto/oauth-provider': 0.20.2
       '@atproto/oauth-scopes': 0.5.6
       '@atproto/repo': 0.10.6
       '@atproto/syntax': 0.7.2
       '@atproto/xrpc': 0.8.6
-      '@atproto/xrpc-server': 0.11.11(supports-color@7.2.0)
-      '@did-plc/lib': 0.0.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@atproto/xrpc-server': 0.11.11
+      '@did-plc/lib': 0.0.4
       '@hapi/address': 5.1.1
-      compression: 1.8.1(supports-color@7.2.0)
+      compression: 1.8.1
       cors: 2.8.6
       disposable-email-domains-js: 1.25.0
-      express: 4.22.2(supports-color@7.2.0)
-      express-async-errors: 3.1.1(express@4.22.2(supports-color@7.2.0))
+      express: 4.22.2
+      express-async-errors: 3.1.1(express@4.22.2)
       file-type: 16.5.4
       glob: 10.5.0
       handlebars: 4.7.9
       http-terminator: 3.2.0
-      ioredis: 5.11.1(supports-color@7.2.0)
+      ioredis: 5.11.1
       jose: 5.10.0
       key-encoder: 2.0.3
       kysely: 0.29.3
@@ -4691,7 +4695,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@atproto/xrpc-server@0.11.11(supports-color@7.2.0)':
+  '@atproto/xrpc-server@0.11.11':
     dependencies:
       '@atproto/common': 0.7.2
       '@atproto/crypto': 0.5.4
@@ -4703,7 +4707,7 @@ snapshots:
       '@atproto/lexicon': 0.7.7
       '@atproto/ws-client': 0.1.7
       '@atproto/xrpc': 0.8.6
-      express: 4.22.2(supports-color@7.2.0)
+      express: 4.22.2
       http-errors: 2.0.1
       mime-types: 2.1.35
       rate-limiter-flexible: 2.4.2
@@ -5097,12 +5101,12 @@ snapshots:
 
   '@cloudflare/workers-types@5.20260721.1': {}
 
-  '@did-plc/lib@0.0.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+  '@did-plc/lib@0.0.4':
     dependencies:
       '@atproto/common': 0.1.1
       '@atproto/crypto': 0.1.0
       '@ipld/dag-cbor': 7.0.3
-      axios: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      axios: 1.18.1
       multiformats: 9.9.0
       uint8arrays: 3.0.0
       zod: 3.25.76
@@ -5110,15 +5114,15 @@ snapshots:
       - debug
       - supports-color
 
-  '@did-plc/server@0.0.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+  '@did-plc/server@0.0.1':
     dependencies:
       '@atproto/common': 0.1.0
       '@atproto/crypto': 0.1.0
-      '@did-plc/lib': 0.0.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-      axios: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@did-plc/lib': 0.0.4
+      axios: 1.18.1
       cors: 2.8.6
-      express: 4.22.2(supports-color@7.2.0)
-      express-async-errors: 3.1.1(express@4.22.2(supports-color@7.2.0))
+      express: 4.22.2
+      express-async-errors: 3.1.1(express@4.22.2)
       http-terminator: 3.2.0
       kysely: 0.23.5
       multiformats: 9.9.0
@@ -5724,9 +5728,9 @@ snapshots:
       mime-types: 2.1.35
       negotiator: 0.6.3
 
-  agent-base@6.0.2(supports-color@7.2.0):
+  agent-base@6.0.2:
     dependencies:
-      debug: 4.4.3(supports-color@7.2.0)
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -5773,11 +5777,11 @@ snapshots:
 
   await-lock@3.0.0: {}
 
-  axios@1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
+  axios@1.18.1:
     dependencies:
-      follow-redirects: 1.16.0(debug@4.4.3(supports-color@7.2.0))
+      follow-redirects: 1.16.0
       form-data: 4.0.6
-      https-proxy-agent: 5.0.1(supports-color@7.2.0)
+      https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
       - debug
@@ -5797,11 +5801,11 @@ snapshots:
 
   bn.js@4.12.5: {}
 
-  body-parser@1.20.6(supports-color@7.2.0):
+  body-parser@1.20.6:
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
-      debug: 2.6.9(supports-color@7.2.0)
+      debug: 2.6.9
       depd: 2.0.0
       destroy: 1.2.0
       http-errors: 2.0.1
@@ -5911,11 +5915,11 @@ snapshots:
     dependencies:
       mime-db: 1.54.0
 
-  compression@1.8.1(supports-color@7.2.0):
+  compression@1.8.1:
     dependencies:
       bytes: 3.1.2
       compressible: 2.0.18
-      debug: 2.6.9(supports-color@7.2.0)
+      debug: 2.6.9
       negotiator: 0.6.4
       on-headers: 1.1.0
       safe-buffer: 5.2.1
@@ -5948,17 +5952,13 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  debug@2.6.9(supports-color@7.2.0):
+  debug@2.6.9:
     dependencies:
       ms: 2.0.0
-    optionalDependencies:
-      supports-color: 7.2.0
 
-  debug@4.4.3(supports-color@7.2.0):
+  debug@4.4.3:
     dependencies:
       ms: 2.1.3
-    optionalDependencies:
-      supports-color: 7.2.0
 
   deepmerge@4.3.1: {}
 
@@ -6078,25 +6078,25 @@ snapshots:
 
   expect-type@1.4.0: {}
 
-  express-async-errors@3.1.1(express@4.22.2(supports-color@7.2.0)):
+  express-async-errors@3.1.1(express@4.22.2):
     dependencies:
-      express: 4.22.2(supports-color@7.2.0)
+      express: 4.22.2
 
-  express@4.22.2(supports-color@7.2.0):
+  express@4.22.2:
     dependencies:
       accepts: 1.3.8
       array-flatten: 1.1.1
-      body-parser: 1.20.6(supports-color@7.2.0)
+      body-parser: 1.20.6
       content-disposition: 0.5.4
       content-type: 1.0.5
       cookie: 0.7.2
       cookie-signature: 1.0.7
-      debug: 2.6.9(supports-color@7.2.0)
+      debug: 2.6.9
       depd: 2.0.0
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
-      finalhandler: 1.3.2(supports-color@7.2.0)
+      finalhandler: 1.3.2
       fresh: 0.5.2
       http-errors: 2.0.1
       merge-descriptors: 1.0.3
@@ -6108,8 +6108,8 @@ snapshots:
       qs: 6.15.3
       range-parser: 1.2.1
       safe-buffer: 5.2.1
-      send: 0.19.2(supports-color@7.2.0)
-      serve-static: 1.16.3(supports-color@7.2.0)
+      send: 0.19.2
+      serve-static: 1.16.3
       setprototypeof: 1.2.0
       statuses: 2.0.2
       type-is: 1.6.18
@@ -6154,9 +6154,9 @@ snapshots:
     dependencies:
       to-regex-range: 5.0.1
 
-  finalhandler@1.3.2(supports-color@7.2.0):
+  finalhandler@1.3.2:
     dependencies:
-      debug: 2.6.9(supports-color@7.2.0)
+      debug: 2.6.9
       encodeurl: 2.0.0
       escape-html: 1.0.3
       on-finished: 2.4.1
@@ -6171,9 +6171,7 @@ snapshots:
       locate-path: 5.0.0
       path-exists: 4.0.0
 
-  follow-redirects@1.16.0(debug@4.4.3(supports-color@7.2.0)):
-    optionalDependencies:
-      debug: 4.4.3(supports-color@7.2.0)
+  follow-redirects@1.16.0: {}
 
   foreground-child@3.3.1:
     dependencies:
@@ -6329,10 +6327,10 @@ snapshots:
       roarr: 7.21.6
       type-fest: 2.19.0
 
-  https-proxy-agent@5.0.1(supports-color@7.2.0):
+  https-proxy-agent@5.0.1:
     dependencies:
-      agent-base: 6.0.2(supports-color@7.2.0)
-      debug: 4.4.3(supports-color@7.2.0)
+      agent-base: 6.0.2
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -6352,11 +6350,11 @@ snapshots:
 
   inherits@2.0.4: {}
 
-  ioredis@5.11.1(supports-color@7.2.0):
+  ioredis@5.11.1:
     dependencies:
       '@ioredis/commands': 1.10.0
       cluster-key-slot: 1.1.1
-      debug: 4.4.3(supports-color@7.2.0)
+      debug: 4.4.3
       denque: 2.1.0
       redis-errors: 1.2.0
       redis-parser: 3.0.0
@@ -6972,9 +6970,9 @@ snapshots:
 
   semver@7.8.5: {}
 
-  send@0.19.2(supports-color@7.2.0):
+  send@0.19.2:
     dependencies:
-      debug: 2.6.9(supports-color@7.2.0)
+      debug: 2.6.9
       depd: 2.0.0
       destroy: 1.2.0
       encodeurl: 2.0.0
@@ -6990,12 +6988,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  serve-static@1.16.3(supports-color@7.2.0):
+  serve-static@1.16.3:
     dependencies:
       encodeurl: 2.0.0
       escape-html: 1.0.3
       parseurl: 1.3.3
-      send: 0.19.2(supports-color@7.2.0)
+      send: 0.19.2
     transitivePeerDependencies:
       - supports-color
 

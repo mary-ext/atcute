@@ -96,7 +96,11 @@ export class Keyset {
 		const sorted = this.keys.toSorted((a, b) => {
 			const aIdx = PREFERRED_ALGORITHMS.indexOf(a.alg as (typeof PREFERRED_ALGORITHMS)[number]);
 			const bIdx = PREFERRED_ALGORITHMS.indexOf(b.alg as (typeof PREFERRED_ALGORITHMS)[number]);
-			return aIdx - bIdx;
+			
+			const aVal = aIdx === -1 ? PREFERRED_ALGORITHMS.length : aIdx;
+			const bVal = bIdx === -1 ? PREFERRED_ALGORITHMS.length : bIdx;
+			
+			return aVal - bVal;
 		});
 
 		for (const key of sorted) {

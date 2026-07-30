@@ -21,9 +21,13 @@
 	},
 	"scripts": {
 		"build": "tsc",
+		"test": "vitest run",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
 		"@atcute/oauth-crypto": "workspace:^"
+	},
+	"devDependencies": {
+		"vitest": "^4.1.10"
 	}
 }
