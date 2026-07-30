@@ -92,11 +92,15 @@ export class Keyset {
 		const { kid, alg } = options ?? {};
 		const algSet = alg == null ? null : new Set(Array.isArray(alg) ? alg : [alg]);
 
-		// sort keys by algorithm preference
+		// sort keys by algorithm preference, unrecognized algorithms sort last
 		const sorted = this.keys.toSorted((a, b) => {
 			const aIdx = PREFERRED_ALGORITHMS.indexOf(a.alg as (typeof PREFERRED_ALGORITHMS)[number]);
 			const bIdx = PREFERRED_ALGORITHMS.indexOf(b.alg as (typeof PREFERRED_ALGORITHMS)[number]);
-			return aIdx - bIdx;
+
+			const aRank = aIdx !== -1 ? aIdx : PREFERRED_ALGORITHMS.length;
+			const bRank = bIdx !== -1 ? bIdx : PREFERRED_ALGORITHMS.length;
+
+			return aRank - bRank;
 		});
 
 		for (const key of sorted) {
