@@ -32,7 +32,7 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.languages', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			get languages() {
-				return /*#__PURE__*/ v.array(languageSchema);
+				return /*#__PURE__*/ v.nullable(/*#__PURE__*/ v.array(languageSchema));
 			},
 			/** The git reference used */
 			ref: /*#__PURE__*/ v.string(),
