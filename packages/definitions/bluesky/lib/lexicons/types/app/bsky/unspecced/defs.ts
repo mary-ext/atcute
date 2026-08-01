@@ -90,10 +90,20 @@ const _threadItemPostSchema = /*#__PURE__*/ v.object({
 	/** This is by an account muted by the viewer requesting it. */
 	mutedByViewer: /*#__PURE__*/ v.boolean(),
 	/**
-	 * This post is part of a contiguous thread by the OP from the thread root. Many different OP threads can
-	 * happen in the same thread.
+	 * This post is part of a contiguous thread by the OP from the thread root. Sub-threads by OP deeper in the
+	 * tree are not considered an OP thread.
 	 */
 	opThread: /*#__PURE__*/ v.boolean(),
+	/**
+	 * The total number of posts in the contiguous OP thread that this post belongs to. Only present when this
+	 * post is part of the OP thread (see `opThread`).
+	 */
+	opThreadPostCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * The 1-indexed position of this post within the contiguous OP thread. Only present when this post is part
+	 * of the OP thread (see `opThread`).
+	 */
+	opThreadPostIndex: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get post() {
 		return AppBskyFeedDefs.postViewSchema;
 	},

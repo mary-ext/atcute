@@ -6,6 +6,17 @@ const _jobStatusSchema = /*#__PURE__*/ v.object({
 	blob: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.blob()),
 	did: /*#__PURE__*/ v.didString(),
 	error: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/** A machine-readable code for why the video processing job failed. */
+	failureCode: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<
+			| 'encoding_failure'
+			| 'generic_failure'
+			| 'pds_upload_failure'
+			| 'pds_upload_unsupported_blob_size'
+			| 'validation_failure'
+			| (string & {})
+		>(),
+	),
 	jobId: /*#__PURE__*/ v.string(),
 	message: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**

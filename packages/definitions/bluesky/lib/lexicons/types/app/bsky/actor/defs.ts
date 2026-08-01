@@ -543,10 +543,24 @@ const _viewerStateSchema = /*#__PURE__*/ v.object({
 	get knownFollowers() {
 		return /*#__PURE__*/ v.optional(knownFollowersSchema);
 	},
+	/**
+	 * Whether the account is fully muted, directly or via a mutelist. False when the mute is scoped to specific
+	 * kinds; see mutedOnlyReposts and mutedOnlyQuoteposts.
+	 */
 	muted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	get mutedByList() {
 		return /*#__PURE__*/ v.optional(AppBskyGraphDefs.listViewBasicSchema);
 	},
+	/**
+	 * Whether the account's quote posts are muted. Scoped mutes are exclusive with muted: this can be true
+	 * while muted is false. If muted is true, this will be false.
+	 */
+	mutedOnlyQuoteposts: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Whether the account's reposts are muted. Scoped mutes are exclusive with muted: this can be true while
+	 * muted is false. If muted is true, this will be false.
+	 */
+	mutedOnlyReposts: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 
 type adultContentPref$schematype = typeof _adultContentPrefSchema;
