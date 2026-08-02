@@ -1,5 +1,11 @@
 # @atcute/oauth-keyset
 
+## 0.1.3
+
+### Patch Changes
+
+- 5474d2d: sort keys with an unrecognized `alg` last instead of first when listing a keyset.
+
 ## 0.1.2
 
 ### Patch Changes

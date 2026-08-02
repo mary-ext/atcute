@@ -1,5 +1,15 @@
 # @atcute/ozone
 
+## 4.0.8
+
+### Patch Changes
+
+- 8394bcc: pull latest Ozone lexicons
+- Updated dependencies [4fc7223]
+- Updated dependencies [cace8d9]
+  - @atcute/atproto@4.0.4
+  - @atcute/bluesky@4.0.17
+
 ## 4.0.7
 
 ### Patch Changes

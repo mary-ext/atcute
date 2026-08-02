@@ -1,5 +1,39 @@
 # @atcute/oauth-browser-client
 
+## 5.0.0
+
+### Major Changes
+
+- 8eb8602: drop the automatic migration of pre-3.0.0 DPoP keys
+
+  sessions still holding the legacy key format now fail on use, and their users have to sign in
+  again.
+
+- a2148c6: require the Web Locks API in `configureOAuth` and throw an error when unavailable.
+
+### Minor Changes
+
+- a2148c6: add `onPersistError` option to `configureOAuth`, invoked when updated session data fails
+  to write to storage.
+- a2148c6: add `staleAccessToken` option to `SessionGetOptions`, ensuring 401 `invalid_token`
+  retries perform a token refresh when the cached access token matches the rejected token.
+
+### Patch Changes
+
+- b3a9740: cap the wait on the per-origin DPoP nonce gate.
+- b3a9740: a `Request` input carrying a body now skips the DPoP nonce retry instead of replaying.
+- a2148c6: authorization code exchange now revokes the token grant only on definitive validation
+  failures.
+- a2148c6: preserve the existing refresh token when a refresh response omits `refresh_token`, in
+  compliance with RFC 6749 §6.
+- c2b00a9: `configureOAuth` now disposes the previously initialized database when reconfigured.
+- 1608535: handle `invalid_grant` errors during token refresh by checking if another document
+  rotated the token concurrently.
+- dd59f86: store session records under distinct localStorage keys instead of a single object.
+- a2148c6: fixes `OAuthUserAgent` to rebuild its DPoP key signer when adopting a session with an
+  updated DPoP key.
+- a2148c6: `OAuthUserAgent#getSession` now clears only its own pending refresh promise.
+
 ## 4.0.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @atcute/bluesky
 
+## 4.0.17
+
+### Patch Changes
+
+- cace8d9: pull latest Bluesky lexicons
+- Updated dependencies [4fc7223]
+  - @atcute/atproto@4.0.4
+
 ## 4.0.16
 
 ### Patch Changes

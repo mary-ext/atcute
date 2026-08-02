@@ -1,5 +1,11 @@
 # @atcute/atproto
 
+## 4.0.4
+
+### Patch Changes
+
+- 4fc7223: pull latest atproto lexicons
+
 ## 4.0.3
 
 ### Patch Changes

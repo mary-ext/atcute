@@ -1,5 +1,13 @@
 # @atcute/tangled
 
+## 2.0.14
+
+### Patch Changes
+
+- a73ff84: pull latest Tangled lexicons
+- Updated dependencies [4fc7223]
+  - @atcute/atproto@4.0.4
+
 ## 2.0.13
 
 ### Patch Changes
