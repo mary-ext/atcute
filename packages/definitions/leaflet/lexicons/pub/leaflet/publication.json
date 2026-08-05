@@ -31,6 +31,15 @@
 					"preferences": {
 						"ref": "#preferences",
 						"type": "ref"
+					},
+					"recommendations": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"maxLength": 3,
+						"description": "Publications this publication recommends"
 					}
 				}
 			},
