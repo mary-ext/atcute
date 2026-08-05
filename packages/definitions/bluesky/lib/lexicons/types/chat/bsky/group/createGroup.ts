@@ -9,9 +9,16 @@ const _mainSchema = /*#__PURE__*/ v.procedure('chat.bsky.group.createGroup', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/** @maxLength 49 */
+			/**
+			 * The members to add to the group. The owner is automatically added. Implementations may enforce a
+			 * lower maximum than the 10,000-item schema limit; Bluesky currently supports up to 100 total members.
+			 * If the owner is included in this list, the list may contain up to the implementation's total member
+			 * limit. Otherwise, it may contain one fewer.
+			 *
+			 * @maxLength 10000
+			 */
 			members: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
-				/*#__PURE__*/ v.arrayLength(0, 49),
+				/*#__PURE__*/ v.arrayLength(0, 10000),
 			]),
 			/**
 			 * @minLength 1
