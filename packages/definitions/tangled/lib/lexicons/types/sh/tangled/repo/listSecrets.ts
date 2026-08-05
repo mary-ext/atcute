@@ -10,7 +10,7 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.repo.listSecrets', {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			get secrets() {
-				return /*#__PURE__*/ v.array(secretSchema);
+				return /*#__PURE__*/ v.nullable(/*#__PURE__*/ v.array(secretSchema));
 			},
 		}),
 	},
