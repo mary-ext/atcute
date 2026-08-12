@@ -36,12 +36,23 @@
 								"knownValues": ["account", "conversation", "message", "record"]
 							},
 							"description": "Subject types this queue accepts"
+						},
+						"recommendedPolicies": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Policy keys to recommend when actioning reports in this queue"
 						}
 					}
 				},
 				"encoding": "application/json"
 			},
 			"errors": [
+				{
+					"name": "InvalidRecommendedPolicies",
+					"description": "One or more recommended policy keys do not exist in the configured policy list"
+				},
 				{
 					"name": "ConflictingQueue",
 					"description": "The queue configuration conflicts with an existing queue"

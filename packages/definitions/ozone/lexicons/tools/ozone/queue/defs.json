@@ -63,6 +63,13 @@
 						"knownValues": ["account", "conversation", "message", "record"]
 					},
 					"description": "Subject types this queue accepts."
+				},
+				"recommendedPolicies": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Policy keys recommended when actioning reports in this queue"
 				}
 			}
 		},

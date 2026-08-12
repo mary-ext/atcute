@@ -15,6 +15,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.queue.createQueue', {
 			description: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/** Display name for the queue (must be unique) */
 			name: /*#__PURE__*/ v.string(),
+			/** Policy keys to recommend when actioning reports in this queue */
+			recommendedPolicies: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			/**
 			 * Report reason types (fully qualified NSIDs)
 			 *

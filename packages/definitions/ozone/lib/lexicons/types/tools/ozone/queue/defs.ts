@@ -54,6 +54,8 @@ const _queueViewSchema = /*#__PURE__*/ v.object({
 	id: /*#__PURE__*/ v.integer(),
 	/** Display name of the queue */
 	name: /*#__PURE__*/ v.string(),
+	/** Policy keys recommended when actioning reports in this queue */
+	recommendedPolicies: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 	/** Report reason types this queue accepts (fully qualified NSIDs) */
 	reportTypes: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 	/** Statistics about this queue */
