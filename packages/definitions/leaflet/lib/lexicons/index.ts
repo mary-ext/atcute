@@ -23,6 +23,7 @@ export * as PubLeafletBlocksWebsite from './types/pub/leaflet/blocks/website.ts'
 export * as PubLeafletComment from './types/pub/leaflet/comment.ts';
 export * as PubLeafletContent from './types/pub/leaflet/content.ts';
 export * as PubLeafletDocument from './types/pub/leaflet/document.ts';
+export * as PubLeafletGraphRecommendations from './types/pub/leaflet/graph/recommendations.ts';
 export * as PubLeafletGraphSubscription from './types/pub/leaflet/graph/subscription.ts';
 export * as PubLeafletInteractionsRecommend from './types/pub/leaflet/interactions/recommend.ts';
 export * as PubLeafletPagesCanvas from './types/pub/leaflet/pages/canvas.ts';

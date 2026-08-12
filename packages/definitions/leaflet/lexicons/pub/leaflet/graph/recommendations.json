@@ -1,0 +1,31 @@
+{
+	"id": "pub.leaflet.graph.recommendations",
+	"defs": {
+		"main": {
+			"key": "any",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["publication", "recommendations"],
+				"properties": {
+					"publication": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "The publication making the recommendations; must live in the same repo as this record"
+					},
+					"recommendations": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"maxLength": 3,
+						"description": "Publications this publication recommends"
+					}
+				}
+			},
+			"description": "Record declaring the publications a publication recommends"
+		}
+	},
+	"lexicon": 1
+}

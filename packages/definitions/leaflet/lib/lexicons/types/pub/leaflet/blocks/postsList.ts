@@ -13,7 +13,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	limit: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1)]),
 	),
-	view: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'medium' | 'small' | (string & {})>()),
+	view: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'chapter' | 'medium' | 'small' | (string & {})>()),
 });
 
 type main$schematype = typeof _mainSchema;

@@ -7,7 +7,7 @@
 			"properties": {
 				"view": {
 					"type": "string",
-					"knownValues": ["medium", "small"]
+					"knownValues": ["chapter", "medium", "small"]
 				},
 				"limit": {
 					"type": "integer",
