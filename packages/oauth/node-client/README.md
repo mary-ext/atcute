@@ -1,6 +1,7 @@
 # @atcute/oauth-node-client
 
-atproto OAuth client for Node.js (plus Deno, Bun, and other server runtimes).
+atproto OAuth client for Node.js (plus Deno, Bun, and other server runtimes) and
+[WebExtensions](#webextensions).
 
 supports both:
 
@@ -151,9 +152,9 @@ const oauth = new OAuthClient({
 
 	stores: {
 		// sessions are keyed by DID - should be durable across restarts.
+		sessions: new MemoryStore(),
 		// states are keyed by OAuth state value - should have ~10 minute TTL.
 		// MemoryStore works for development; use Redis or similar in production.
-		sessions: new MemoryStore(),
 		states: new MemoryStore(),
 	},
 	// optional: custom lock for coordinating token refresh across processes.
@@ -367,3 +368,122 @@ const stores: OAuthClientStores = {
 	},
 };
 ```
+
+## WebExtensions
+
+browser extensions requires acting as a [discoverable public client](#discoverable-public-clients)
+and thus requires a public HTTPS origin to host the client metadata and callback page.
+
+```json
+{
+	"client_id": "https://example.com/oauth-client-metadata.json",
+	"client_name": "My App",
+	"client_uri": "https://example.com",
+	"redirect_uris": ["https://example.com/oauth/callback"],
+	"scope": "atproto",
+	"grant_types": ["authorization_code", "refresh_token"],
+	"response_types": ["code"],
+	"token_endpoint_auth_method": "none",
+	"application_type": "web",
+	"dpop_bound_access_tokens": true
+}
+```
+
+```ts
+import {
+	CompositeDidDocumentResolver,
+	CompositeHandleResolver,
+	DohJsonHandleResolver,
+	LocalActorResolver,
+	PlcDidDocumentResolver,
+	WebDidDocumentResolver,
+	WellKnownHandleResolver,
+} from '@atcute/identity-resolver';
+
+const oauth = new OAuthClient({
+	metadata: {
+		client_id: 'https://example.com/oauth-client-metadata.json',
+		redirect_uris: ['https://example.com/callback'],
+		scope: 'atproto',
+	},
+
+	stores: {/* ... */},
+
+	requestLock(name, fn) {
+		return navigator.locks.request(name, fn);
+	},
+
+	actorResolver: new LocalActorResolver({
+		handleResolver: new CompositeHandleResolver({
+			methods: {
+				dns: new DohJsonHandleResolver(),
+				http: new WellKnownHandleResolver(),
+			},
+		}),
+		didDocumentResolver: new CompositeDidDocumentResolver({
+			methods: {
+				plc: new PlcDidDocumentResolver(),
+				web: new WebDidDocumentResolver(),
+			},
+		}),
+	}),
+});
+```
+
+### redirect URIs
+
+#### bounce page
+
+serve a page at your `redirect_uri` that forwards the query string to the extension:
+
+```html
+<script>
+	// allowlist your own extension IDs, do not read the target from the URL.
+	// firefox uses a different host, see `browser.identity.getRedirectURL()`.
+	location.replace('https://<extension-id>.chromiumapp.org/' + location.search);
+</script>
+```
+
+`launchWebAuthFlow` resolves once the flow reaches that URL:
+
+```ts
+const { url } = await oauth.authorize({
+	target: { type: 'account', identifier: 'mary.my.id' },
+});
+
+const redirect = await chrome.identity.launchWebAuthFlow({
+	url: url.toString(),
+	interactive: true,
+});
+
+const { session } = await oauth.callback(new URL(redirect).searchParams);
+```
+
+this needs the `identity` permission.
+
+#### content script
+
+if you cannot add a bounce page, open the authorization URL in a tab and read the result with a
+content script matched against your `redirect_uri`:
+
+```ts
+// content script
+chrome.runtime.sendMessage({ type: 'oauth-callback', search: location.search });
+
+// service worker
+chrome.runtime.onMessage.addListener(({ type, search }) => {
+	if (type === 'oauth-callback') {
+		oauth.callback(new URLSearchParams(search)).then(
+			({ session }) => {
+				// ...
+			},
+			(err) => {
+				// surface the failure, the tab is already gone
+			},
+		);
+	}
+});
+```
+
+this needs a host permission for the callback origin, and the content script must be declared in the
+manifest.

@@ -6,6 +6,8 @@ minimal OAuth browser client for AT Protocol.
 npm install @atcute/oauth-browser-client
 ```
 
+for WebExtensions, use [`@atcute/oauth-node-client`](../node-client#webextensions) instead.
+
 ## client metadata
 
 your app needs an OAuth client metadata document hosted at a public URL. this tells authorization
