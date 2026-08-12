@@ -41,13 +41,13 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	/** A hint to the client about how to present the video. */
 	presentation: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'default' | 'gif' | (string & {})>()),
 	/**
-	 * The mp4 video file. May be up to 100mb, formerly limited to 50mb.
+	 * The mp4 video file. May be up to 300mb, formerly limited to 100mb.
 	 *
 	 * @accept video/mp4
-	 * @maxSize 100000000
+	 * @maxSize 300000000
 	 */
 	video: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
-		/*#__PURE__*/ v.blobSize(100000000),
+		/*#__PURE__*/ v.blobSize(300000000),
 		/*#__PURE__*/ v.blobAccept(['video/mp4']),
 	]),
 });
