@@ -6,21 +6,26 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["did", "name", "rkey"],
+					"required": ["repo"],
 					"properties": {
 						"did": {
 							"type": "string",
 							"format": "did",
-							"description": "DID of the repository owner"
+							"description": "DID of the repository owner. A knot without the repo-did-input capability reads this and name in place of repo."
 						},
 						"name": {
 							"type": "string",
-							"description": "Name of the repository to delete"
+							"description": "Name of the repository to delete. A knot without the repo-did-input capability reads this and DID in place of repo."
+						},
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository to delete"
 						},
 						"rkey": {
 							"type": "string",
 							"format": "record-key",
-							"description": "Rkey of the repository record"
+							"description": "Rkey of the repository record. A knot without the repo-did-input capability checks this against the owner's PDS."
 						},
 						"force": {
 							"type": "boolean",

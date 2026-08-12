@@ -33,6 +33,7 @@ export * as ShTangledActorGetProfile from './types/sh/tangled/actor/getProfile.t
 export * as ShTangledActorGetProfiles from './types/sh/tangled/actor/getProfiles.ts';
 export * as ShTangledActorProfile from './types/sh/tangled/actor/profile.ts';
 export * as ShTangledCiCancelPipeline from './types/sh/tangled/ci/cancelPipeline.ts';
+export * as ShTangledCiDescribeWorkflowDefinition from './types/sh/tangled/ci/describeWorkflowDefinition.ts';
 export * as ShTangledCiGetPipeline from './types/sh/tangled/ci/getPipeline.ts';
 export * as ShTangledCiPipeline from './types/sh/tangled/ci/pipeline.ts';
 export * as ShTangledCiQueryPipelines from './types/sh/tangled/ci/queryPipelines.ts';
@@ -146,7 +147,6 @@ export * as ShTangledRepoDelete from './types/sh/tangled/repo/delete.ts';
 export * as ShTangledRepoDeleteBranch from './types/sh/tangled/repo/deleteBranch.ts';
 export * as ShTangledRepoDescribeRepo from './types/sh/tangled/repo/describeRepo.ts';
 export * as ShTangledRepoDiff from './types/sh/tangled/repo/diff.ts';
-export * as ShTangledRepoForkStatus from './types/sh/tangled/repo/forkStatus.ts';
 export * as ShTangledRepoForkSync from './types/sh/tangled/repo/forkSync.ts';
 export * as ShTangledRepoGetDefaultBranch from './types/sh/tangled/repo/getDefaultBranch.ts';
 export * as ShTangledRepoGetIssue from './types/sh/tangled/repo/getIssue.ts';

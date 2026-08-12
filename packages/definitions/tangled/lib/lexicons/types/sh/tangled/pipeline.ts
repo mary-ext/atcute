@@ -43,6 +43,10 @@ const _pairSchema = /*#__PURE__*/ v.object({
 });
 const _pullRequestTriggerDataSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.pipeline#pullRequestTriggerData')),
+	/** the pull request lifecycle action that produced this trigger */
+	action: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literalEnum(['closed', 'merged', 'opened', 'reopened', 'synchronize']),
+	),
 	/** AT-URI of the sh.tangled.repo.pull record this run belongs to */
 	pull: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	sourceBranch: /*#__PURE__*/ v.string(),
@@ -105,6 +109,7 @@ const _workflowSchema = /*#__PURE__*/ v.object({
 	engine: /*#__PURE__*/ v.string(),
 	name: /*#__PURE__*/ v.string(),
 	raw: /*#__PURE__*/ v.string(),
+	runsOn: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 });
 
 type cloneOpts$schematype = typeof _cloneOptsSchema;

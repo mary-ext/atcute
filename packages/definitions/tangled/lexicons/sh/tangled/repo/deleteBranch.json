@@ -10,7 +10,8 @@
 					"properties": {
 						"repo": {
 							"type": "string",
-							"format": "at-uri"
+							"format": "did",
+							"description": "DID of the repository"
 						},
 						"branch": {
 							"type": "string"

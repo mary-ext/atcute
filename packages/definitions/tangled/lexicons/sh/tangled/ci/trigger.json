@@ -69,6 +69,11 @@
 					"format": "at-uri",
 					"description": "AT-URI of the sh.tangled.repo.pull record this run belongs to"
 				},
+				"action": {
+					"enum": ["closed", "merged", "opened", "reopened", "synchronize"],
+					"type": "string",
+					"description": "the pull request lifecycle action that produced this trigger"
+				},
 				"sourceSha": {
 					"type": "string",
 					"maxLength": 40,

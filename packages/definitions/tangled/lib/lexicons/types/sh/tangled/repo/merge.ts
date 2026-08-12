@@ -17,14 +17,20 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.merge', {
 			commitBody: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/** Merge commit message */
 			commitMessage: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			/** DID of the repository owner */
-			did: /*#__PURE__*/ v.didString(),
-			/** Name of the repository */
-			name: /*#__PURE__*/ v.string(),
+			/**
+			 * DID of the repository owner. A knot without the repo-did-input capability reads this and name in
+			 * place of repo.
+			 */
+			did: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+			/**
+			 * Name of the repository. A knot without the repo-did-input capability reads this and DID in place of
+			 * repo.
+			 */
+			name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/** Patch content to merge */
 			patch: /*#__PURE__*/ v.string(),
 			/** DID of the repository */
-			repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+			repo: /*#__PURE__*/ v.didString(),
 		}),
 	},
 	output: null,

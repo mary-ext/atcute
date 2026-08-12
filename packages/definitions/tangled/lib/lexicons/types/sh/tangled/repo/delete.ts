@@ -7,14 +7,25 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.delete', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/** DID of the repository owner */
-			did: /*#__PURE__*/ v.didString(),
+			/**
+			 * DID of the repository owner. A knot without the repo-did-input capability reads this and name in
+			 * place of repo.
+			 */
+			did: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 			/** Admin-only. Delete even though the repository record still exists on the owner's PDS. */
 			force: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			/** Name of the repository to delete */
-			name: /*#__PURE__*/ v.string(),
-			/** Rkey of the repository record */
-			rkey: /*#__PURE__*/ v.recordKeyString(),
+			/**
+			 * Name of the repository to delete. A knot without the repo-did-input capability reads this and DID in
+			 * place of repo.
+			 */
+			name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+			/** DID of the repository to delete */
+			repo: /*#__PURE__*/ v.didString(),
+			/**
+			 * Rkey of the repository record. A knot without the repo-did-input capability checks this against the
+			 * owner's PDS.
+			 */
+			rkey: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.recordKeyString()),
 		}),
 	},
 	output: null,

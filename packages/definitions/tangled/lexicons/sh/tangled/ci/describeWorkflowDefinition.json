@@ -1,0 +1,62 @@
+{
+	"id": "sh.tangled.ci.describeWorkflowDefinition",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["derived"],
+					"properties": {
+						"hash": {
+							"type": "string",
+							"description": "Fingerprint of the workflow definition as resolved by the spindle. Absent when derived is false."
+						},
+						"derived": {
+							"type": "boolean",
+							"description": "Whether the workflow definition is derived from this repository at all. When false, no commit-to-commit comparison is meaningful (e.g. definitions managed externally), and callers should not surface change warnings."
+						},
+						"workflows": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Names or paths of the effective workflow files that produced the hash."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "sha"],
+				"properties": {
+					"sha": {
+						"type": "string",
+						"maxLength": 40,
+						"minLength": 40,
+						"description": "Commit SHA to resolve the workflow definition at"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "Target repository DID the workflow definition belongs to."
+					},
+					"sourceRepo": {
+						"type": "string",
+						"format": "did",
+						"description": "Repository DID to resolve workflow definitions from, if different from the target repo"
+					}
+				}
+			},
+			"description": "Resolve the workflow definition a pipeline would use at a given commit and return a fingerprint of it."
+		}
+	},
+	"lexicon": 1
+}

@@ -25,6 +25,10 @@ const _pairSchema = /*#__PURE__*/ v.object({
 });
 const _pullRequestSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.ci.trigger#pullRequest')),
+	/** the pull request lifecycle action that produced this trigger */
+	action: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literalEnum(['closed', 'merged', 'opened', 'reopened', 'synchronize']),
+	),
 	/** AT-URI of the sh.tangled.repo.pull record this run belongs to */
 	pull: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	sourceBranch: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

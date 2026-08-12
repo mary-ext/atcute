@@ -10,8 +10,8 @@
 					"properties": {
 						"repo": {
 							"type": "string",
-							"format": "at-uri",
-							"description": "AT-URI of the repository"
+							"format": "did",
+							"description": "DID of the fork that the hidden ref belongs to"
 						},
 						"forkRef": {
 							"type": "string",

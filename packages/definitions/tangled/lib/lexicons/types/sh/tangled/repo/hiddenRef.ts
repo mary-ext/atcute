@@ -11,8 +11,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.hiddenRef', {
 			forkRef: /*#__PURE__*/ v.string(),
 			/** Remote reference name */
 			remoteRef: /*#__PURE__*/ v.string(),
-			/** AT-URI of the repository */
-			repo: /*#__PURE__*/ v.resourceUriString(),
+			/** DID of the fork that the hidden ref belongs to */
+			repo: /*#__PURE__*/ v.didString(),
 		}),
 	},
 	output: {

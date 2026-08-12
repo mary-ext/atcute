@@ -8,7 +8,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('sh.tangled.repo.setDefaultBranch'
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			defaultBranch: /*#__PURE__*/ v.string(),
-			repo: /*#__PURE__*/ v.resourceUriString(),
+			/** DID of the repository */
+			repo: /*#__PURE__*/ v.didString(),
 		}),
 	},
 	output: null,

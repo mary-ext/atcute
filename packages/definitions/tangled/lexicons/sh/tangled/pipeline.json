@@ -51,6 +51,12 @@
 				},
 				"engine": {
 					"type": "string"
+				},
+				"runsOn": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
 				}
 			}
 		},
@@ -177,6 +183,11 @@
 					"type": "string",
 					"format": "at-uri",
 					"description": "AT-URI of the sh.tangled.repo.pull record this run belongs to"
+				},
+				"action": {
+					"enum": ["closed", "merged", "opened", "reopened", "synchronize"],
+					"type": "string",
+					"description": "the pull request lifecycle action that produced this trigger"
 				},
 				"sourceSha": {
 					"type": "string",
