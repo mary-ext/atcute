@@ -124,9 +124,29 @@ const _mentionSchema = /*#__PURE__*/ v.object({
 });
 const _recordSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.mini.post#record')),
+	/**
+	 * Character offset one past the end of the quoted passage.
+	 *
+	 * @minimum 0
+	 */
+	end: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * sha256 of the quoted passage's text, with whitespace collapsed.
+	 *
+	 * @maxLength 64
+	 */
+	hash: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 64)]),
+	),
 	get record() {
 		return ComAtprotoRepoStrongRef.mainSchema;
 	},
+	/**
+	 * Character offset of the quoted passage in the quoted record's plain text.
+	 *
+	 * @minimum 0
+	 */
+	start: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _recordWithMediaSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('blog.pckt.mini.post#recordWithMedia')),

@@ -138,11 +138,27 @@
 			"type": "object",
 			"required": ["record"],
 			"properties": {
+				"end": {
+					"type": "integer",
+					"minimum": 0,
+					"description": "Character offset one past the end of the quoted passage."
+				},
+				"hash": {
+					"type": "string",
+					"maxLength": 64,
+					"description": "sha256 of the quoted passage's text, with whitespace collapsed."
+				},
+				"start": {
+					"type": "integer",
+					"minimum": 0,
+					"description": "Character offset of the quoted passage in the quoted record's plain text."
+				},
 				"record": {
 					"ref": "com.atproto.repo.strongRef",
 					"type": "ref"
 				}
-			}
+			},
+			"description": "A quoted record, optionally narrowed to a passage of it."
 		},
 		"mention": {
 			"type": "object",
