@@ -1,6 +1,11 @@
 // oxlint-disable typescript/no-explicit-any
 
-import type { BaseSchema, InferOutput, XRPCSubscriptionMetadata } from '@atcute/lexicons/validations';
+import type {
+	BaseSchema,
+	InferOutput,
+	XRPCSubprotocol,
+	XRPCSubscriptionMetadata,
+} from '@atcute/lexicons/validations';
 
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
 
@@ -38,6 +43,9 @@ export interface FirehoseSubscriptionOptions<TSchema extends XRPCSubscriptionMet
 	 * management.
 	 */
 	params?: ParamsOf<TSchema> | (() => ParamsOf<TSchema>);
+
+	/** subprotocol to request; defaults to the schema value or `xrpc.v0.cbor` */
+	subprotocol?: XRPCSubprotocol;
 
 	/**
 	 * whether to validate incoming events against the schema
@@ -79,7 +87,6 @@ export type DecodedFrame =
 	| {
 			type: 'message';
 			body: unknown;
-			discriminator?: string;
 	  }
 	| {
 			type: 'error';

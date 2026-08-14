@@ -7,8 +7,8 @@ npm install @atcute/firehose
 ```
 
 this package provides a generic client for XRPC subscriptions - the WebSocket-based streaming
-protocol used by AT Protocol. it handles CBOR frame decoding, automatic reconnection, and optional
-schema validation.
+protocol used by AT Protocol. it handles frame decoding, automatic reconnection, and optional schema
+validation.
 
 for consuming the Bluesky network firehose specifically, consider using `@atcute/jetstream` instead,
 which provides a simpler JSON-based interface.
@@ -134,8 +134,8 @@ XRPC subscriptions can send error frames. handle them with the `onError` callbac
 const subscription = new FirehoseSubscription({
 	service: 'wss://bsky.network',
 	nsid: ComAtprotoSyncSubscribeRepos.mainSchema,
-	onError(error, message) {
-		console.error('firehose error:', error, message);
+	onError(err) {
+		console.error('firehose error:', err);
 		// common errors:
 		// - "FutureCursor": cursor is ahead of the server
 		// - "ConsumerTooSlow": client is not consuming messages fast enough
@@ -188,7 +188,7 @@ trust the server:
 const subscription = new FirehoseSubscription({
 	service: 'wss://bsky.network',
 	nsid: ComAtprotoSyncSubscribeRepos.mainSchema,
-	validateMessages: false,
+	validateEvents: false,
 });
 ```
 

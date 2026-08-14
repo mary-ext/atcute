@@ -39,6 +39,6 @@
 		"ws": "^8.21.1"
 	},
 	"peerDependencies": {
-		"@atcute/lexicons": "^2.0.0"
+		"@atcute/lexicons": "^2.1.0"
 	}
 }

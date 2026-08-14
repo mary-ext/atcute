@@ -5,7 +5,7 @@ import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { ReadonlyDeep } from 'type-fest';
 
-import { addTypeToBody, decodeFrame } from './frame-decoder.ts';
+import { createFrameDecoder } from './frame-decoder.ts';
 import type { FirehoseSubscriptionOptions, MessageOf, ParamsOf } from './types.ts';
 
 /**
@@ -45,6 +45,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 			service: wsUrls,
 			nsid,
 			params,
+			subprotocol: configuredSubprotocol,
 			ws: wsOptions,
 			validateEvents = true,
 			onConnectionClose,
@@ -54,6 +55,12 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 		} = this.#options;
 
 		const emitter = this.#emitter;
+
+		const subprotocol = configuredSubprotocol ?? nsid.subprotocol;
+		const decodeFrame = createFrameDecoder({
+			nsid: nsid.nsid,
+			subprotocol: subprotocol ?? 'xrpc.v0.cbor',
+		});
 
 		const getUrl = () => {
 			let selectedUrl: string;
@@ -87,7 +94,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 			return url.toString();
 		};
 
-		const ws = new ReconnectingWebSocket(getUrl, null, wsOptions);
+		const ws = new ReconnectingWebSocket(getUrl, subprotocol ?? null, wsOptions);
 		this.#ws = ws;
 
 		ws.binaryType = 'arraybuffer';
@@ -97,11 +104,9 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 		ws.onopen = onConnectionOpen ?? null;
 
 		ws.onmessage = (ev) => {
-			const buffer = new Uint8Array(ev.data);
-
 			let frame;
 			try {
-				frame = decodeFrame(buffer);
+				frame = decodeFrame(ev.data);
 			} catch (err) {
 				onError?.(new Error(`failed to decode frame`, { cause: err }));
 				return;
@@ -112,7 +117,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 				return;
 			}
 
-			let body = addTypeToBody(frame.body, frame.discriminator, nsid.nsid);
+			let body = frame.body;
 
 			if (validateEvents && nsid.message !== null) {
 				const result = safeParse(nsid.message, body);
