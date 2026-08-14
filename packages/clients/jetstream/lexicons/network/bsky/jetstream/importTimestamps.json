@@ -1,0 +1,50 @@
+{
+	"id": "network.bsky.jetstream.importTimestamps",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["path"],
+					"properties": {
+						"path": {
+							"type": "string",
+							"description": "Server-local path to the plain (uncompressed) import CSV, resolved within the configured import directory. May be relative to that directory or an absolute path inside it."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "ImportInProgress",
+					"description": "Another import job is already running; only one runs at a time."
+				},
+				{
+					"name": "ImportNotReady",
+					"description": "Timestamp import requires the server to be in steady state with the live writer running."
+				},
+				{
+					"name": "InvalidPath",
+					"description": "The path is empty, escapes the import directory, does not exist, or is not a regular file."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["job"],
+					"properties": {
+						"job": {
+							"type": "string",
+							"description": "Opaque job id. Poll getImportStatus with this id to observe progress and the terminal result."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Submit a timestamp-import job. The referenced CSV is staged server-local out-of-band and named by a path confined to the server's configured import directory (paths escaping it via .. or a symlink are rejected). The job runs asynchronously and shares the segment-rewrite lock with delete-compaction, so only one import runs at a time; a concurrent submit is rejected. Bearer-token gated: without a configured token the endpoint always returns 401."
+		}
+	},
+	"lexicon": 1
+}

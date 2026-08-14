@@ -1,0 +1,115 @@
+{
+	"id": "network.bsky.jetstream.getImportStatus",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "JobNotFound",
+					"description": "No import job matches the supplied id, or no job has ever run when the id is omitted."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["job", "state"],
+					"properties": {
+						"job": {
+							"type": "string",
+							"description": "Job id."
+						},
+						"error": {
+							"type": "string",
+							"description": "Failure detail; present only when state is failed."
+						},
+						"phase": {
+							"type": "string",
+							"description": "Current phase: parse_bucket (Phase A+B) or apply (Phase C).",
+							"knownValues": ["apply", "parse_bucket"]
+						},
+						"state": {
+							"type": "string",
+							"description": "Lifecycle state.",
+							"knownValues": ["complete", "failed", "running"]
+						},
+						"bucketed": {
+							"type": "boolean",
+							"description": "Whether Phase A+B completed (the offset files are durable)."
+						},
+						"rowsTotal": {
+							"type": "integer",
+							"minimum": 0
+						},
+						"rowsValid": {
+							"type": "integer",
+							"minimum": 0
+						},
+						"finishedAt": {
+							"type": "string",
+							"format": "datetime",
+							"description": "Present only for a terminal job."
+						},
+						"rowsMutated": {
+							"type": "integer",
+							"minimum": 0
+						},
+						"submittedAt": {
+							"type": "string",
+							"format": "datetime"
+						},
+						"rowsRejected": {
+							"type": "integer",
+							"minimum": 0
+						},
+						"segmentsApplied": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Segments processed so far in Phase C."
+						},
+						"segmentsPatched": {
+							"type": "integer",
+							"minimum": 0
+						},
+						"segmentsToApply": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Segments Phase C will process (after resume-skips)."
+						},
+						"segmentsExamined": {
+							"type": "integer",
+							"minimum": 0
+						},
+						"rowsCorruptOffset": {
+							"type": "integer",
+							"minimum": 0
+						},
+						"rowsMatchedSpecific": {
+							"type": "integer",
+							"minimum": 0
+						},
+						"specificCidsUnmatched": {
+							"type": "integer",
+							"minimum": 0
+						},
+						"rowsMatchedAllVersions": {
+							"type": "integer",
+							"minimum": 0
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"job": {
+						"type": "string",
+						"description": "Job id returned by importTimestamps. When omitted, the current or most recent job is reported."
+					}
+				}
+			},
+			"description": "Report the status of a timestamp-import job: lifecycle state, current phase, per-phase progress, and (on completion) the parse/mutation totals. With no job parameter, reports the current or most recent job. Bearer-token gated: without a configured token the endpoint always returns 401."
+		}
+	},
+	"lexicon": 1
+}

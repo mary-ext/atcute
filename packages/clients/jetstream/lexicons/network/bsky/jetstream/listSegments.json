@@ -1,0 +1,95 @@
+{
+	"id": "network.bsky.jetstream.listSegments",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["segments"],
+					"properties": {
+						"cursor": {
+							"type": "string"
+						},
+						"segments": {
+							"type": "array",
+							"items": {
+								"ref": "#segment",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 100,
+						"maximum": 1000,
+						"minimum": 1,
+						"description": "Maximum number of segment file names to return."
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Opaque pagination cursor from a previous response."
+					}
+				}
+			},
+			"description": "Enumerate sealed segment files available for download, in ascending index order."
+		},
+		"segment": {
+			"type": "object",
+			"required": [
+				"checksum",
+				"eventCount",
+				"index",
+				"maxSeq",
+				"maxWitnessedAt",
+				"minSeq",
+				"minWitnessedAt",
+				"name",
+				"sizeBytes"
+			],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Segment filename; pass to getSegment."
+				},
+				"index": {
+					"type": "integer",
+					"description": "Zero-based segment index."
+				},
+				"maxSeq": {
+					"type": "integer"
+				},
+				"minSeq": {
+					"type": "integer"
+				},
+				"checksum": {
+					"type": "string",
+					"description": "Segment-format xxh3 metadata checksum as 16-char hex; equals the getSegment ETag."
+				},
+				"sizeBytes": {
+					"type": "integer",
+					"description": "File size in bytes."
+				},
+				"eventCount": {
+					"type": "integer",
+					"description": "Number of events in the segment."
+				},
+				"maxWitnessedAt": {
+					"type": "integer",
+					"description": "Latest witnessed-at, unix microseconds."
+				},
+				"minWitnessedAt": {
+					"type": "integer",
+					"description": "Earliest witnessed-at, unix microseconds."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

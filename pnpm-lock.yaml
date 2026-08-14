@@ -206,6 +206,9 @@ importers:
 
   packages/clients/jetstream:
     dependencies:
+      '@atcute/atproto':
+        specifier: workspace:^
+        version: link:../../definitions/atproto
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons
@@ -225,6 +228,9 @@ importers:
         specifier: ^1.4.2
         version: 1.4.2(typescript@7.0.2)
     devDependencies:
+      '@atcute/lex-cli':
+        specifier: workspace:^
+        version: link:../../lexicons/lex-cli
       '@types/ws':
         specifier: ^8.18.1
         version: 8.18.1

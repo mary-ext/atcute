@@ -1,6 +1,6 @@
 {
 	"$schema": "https://unpkg.com/oxlint/configuration_schema.json",
-	"ignorePatterns": ["packages/definitions/**/lib/lexicons/**"],
+	"ignorePatterns": ["packages/*/*/lib/lexicons/**"],
 	"plugins": ["eslint", "typescript", "unicorn", "oxc", "import"],
 	"categories": {
 		"correctness": "error",

@@ -13,17 +13,21 @@
 	],
 	"type": "module",
 	"exports": {
-		".": "./dist/index.js"
+		".": "./dist/index.js",
+		"./types/*": "./dist/lexicons/types/network/bsky/jetstream/*.js"
 	},
 	"publishConfig": {
 		"access": "public"
 	},
 	"scripts": {
 		"build": "tsc",
+		"generate": "lex-cli generate",
+		"pull": "lex-cli pull",
 		"test": "vitest run",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
+		"@atcute/atproto": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@mary-ext/event-iterator": "^1.0.0",
 		"@mary-ext/simple-event-emitter": "^1.0.2",
@@ -32,11 +36,20 @@
 		"valibot": "^1.4.2"
 	},
 	"devDependencies": {
+		"@atcute/lex-cli": "workspace:^",
 		"@types/ws": "^8.18.1",
 		"vitest": "^4.1.10",
 		"ws": "^8.21.1"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"
+	},
+	"atcute:lexicons": {
+		"mappings": {
+			"network.bsky.jetstream.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid_remainder}}"
+			}
+		}
 	}
 }
