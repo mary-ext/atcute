@@ -419,6 +419,7 @@ const generateXrpcSubscription = (
 	spec: LexXrpcSubscription,
 ): string => {
 	const schema = spec.message?.schema;
+	const subprotocol = spec.subprotocol;
 
 	const params = generateXrpcParameters(imports, path, spec.parameters);
 
@@ -432,6 +433,10 @@ const generateXrpcSubscription = (
 		inner += `get "message" () { return ${res} },`;
 	} else {
 		inner += `"message": null,`;
+	}
+
+	if (subprotocol !== undefined) {
+		inner += `"subprotocol": ${lit(subprotocol)},`;
 	}
 
 	return `${PURE} v.subscription(${lit(formatLexiconRef(path))}, {\n${inner}})`;

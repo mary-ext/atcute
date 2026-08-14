@@ -7,6 +7,7 @@ import {
 	KEY_RE,
 	MIME_TYPE_RE,
 	REF_RE,
+	SUBPROTOCOL_RE,
 	validateRecordKey,
 	validateStringFormat,
 } from './internal/validation.ts';
@@ -907,8 +908,15 @@ export const refineLexXrpcProcedure = (spec: t.LexXrpcProcedure, deep: boolean =
  * @returns validation issues found
  */
 export const refineLexXrpcSubscription = (spec: t.LexXrpcSubscription, deep: boolean): RefineIssue[] => {
-	const { parameters, message } = spec;
+	const { parameters, message, subprotocol } = spec;
 	const issues: RefineIssue[] = [];
+
+	if (subprotocol !== undefined && !SUBPROTOCOL_RE.test(subprotocol)) {
+		issues.push({
+			message: `value must be a valid websocket subprotocol name`,
+			path: ['subprotocol'],
+		});
+	}
 
 	if (deep) {
 		if (parameters !== undefined) {

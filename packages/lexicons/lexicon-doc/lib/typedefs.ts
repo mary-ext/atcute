@@ -242,6 +242,7 @@ export const lexXrpcSubscription: v.GenericSchema<unknown, t.LexXrpcSubscription
 	parameters: v.optional(lexXrpcParameters),
 	message: v.optional(lexXrpcSubscriptionMessage),
 	errors: v.optional(v.array(lexXrpcError)),
+	subprotocol: v.optional(v.string()),
 });
 
 export const lexPermissionSet: v.GenericSchema<unknown, t.LexPermissionSet> = v.looseObject({

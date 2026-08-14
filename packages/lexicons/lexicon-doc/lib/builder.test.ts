@@ -859,6 +859,45 @@ describe('builder', () => {
 
 	describe('subscription', () => {
 		test('can be defined', () => {});
+
+		test('builds with a subprotocol', () => {
+			const docs = build({
+				documents: [
+					document({
+						id: 'com.example.subscribePosts',
+						defs: {
+							main: subscription({ subprotocol: 'xrpc.v1.json' }),
+						},
+					}),
+				],
+			});
+
+			expect(docs['com.example.subscribePosts'].defs.main).toEqual({
+				type: 'subscription',
+				subprotocol: 'xrpc.v1.json',
+			});
+		});
+
+		test('omits the subprotocol when unspecified', () => {
+			const docs = build({
+				documents: [
+					document({
+						id: 'com.example.subscribePosts',
+						defs: {
+							main: subscription(),
+						},
+					}),
+				],
+			});
+
+			expect(docs['com.example.subscribePosts'].defs.main).toEqual({ type: 'subscription' });
+		});
+
+		test('throws on a subprotocol that is not a websocket token', () => {
+			expect(() => subscription({ subprotocol: 'xrpc v1 json' })).toThrow(
+				'subscription/subprotocol: value must be a valid websocket subprotocol name',
+			);
+		});
 	});
 
 	describe('document', () => {

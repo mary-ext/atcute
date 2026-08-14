@@ -2021,6 +2021,9 @@ export const query = <
 
 // #region XRPC subscription metadata
 
+/** websocket subprotocol for subscription message framing */
+export type XRPCSubprotocol = 'xrpc.v0.cbor' | 'xrpc.v1.cbor' | 'xrpc.v1.json' | (string & {});
+
 export interface XRPCSubscriptionMetadata<
 	TParams extends ObjectSchema | null = ObjectSchema | null,
 	TMessage extends ObjectSchema<any> | VariantSchema<any, any> | null =
@@ -2033,6 +2036,8 @@ export interface XRPCSubscriptionMetadata<
 	readonly nsid: TNsid;
 	readonly params: TParams;
 	readonly message: TMessage;
+	/** declared subprotocol; absence selects `xrpc.v0.cbor` */
+	readonly subprotocol: XRPCSubprotocol | undefined;
 }
 
 // #__NO_SIDE_EFFECTS__
@@ -2045,6 +2050,7 @@ export const subscription = <
 	options: {
 		params: TParams;
 		readonly message: TMessage;
+		subprotocol?: XRPCSubprotocol;
 	},
 ): XRPCSubscriptionMetadata<TParams, TMessage, TNsid> => {
 	// `message` can be a getter, and we'd have to resolve that getter.
@@ -2054,6 +2060,7 @@ export const subscription = <
 		type: 'xrpc_subscription',
 		nsid: nsid,
 		params: options.params,
+		subprotocol: options.subprotocol,
 		get message() {
 			return lazyProperty(this, 'message', options.message);
 		},

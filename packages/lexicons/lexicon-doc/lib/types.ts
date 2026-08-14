@@ -279,6 +279,8 @@ export interface LexXrpcSubscription {
 	message?: LexXrpcSubscriptionMessage;
 	/** possible error codes that may be returned */
 	errors?: LexXrpcError[];
+	/** websocket subprotocol for message framing; defaults to `xrpc.v0.cbor` */
+	subprotocol?: string;
 }
 
 /** definition for a set of permissions that can be requested */

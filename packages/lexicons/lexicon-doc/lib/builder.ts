@@ -2,7 +2,13 @@ import { type Nsid } from '@atcute/lexicons/syntax';
 import { getUtf8Length, isUtf8LengthInRange } from '@atcute/uint8array';
 import { getGraphemeLength, isGraphemeLengthInRange } from '@atcute/util-text';
 
-import { DELIMITED_MIME_TYPE_RE, KEY_RE, MIME_TYPE_RE, validateStringFormat } from './internal/validation.ts';
+import {
+	DELIMITED_MIME_TYPE_RE,
+	KEY_RE,
+	MIME_TYPE_RE,
+	SUBPROTOCOL_RE,
+	validateStringFormat,
+} from './internal/validation.ts';
 import type * as t from './types.ts';
 import { type ParsedLexiconRef, formatLexiconRef } from './utils/refs.ts';
 
@@ -1365,6 +1371,8 @@ export interface LexXrpcSubscriptionBuilder extends Annotations {
 	message?: XrpcSubscriptionMessage;
 	/** possible errors */
 	errors?: XrpcError[];
+	/** websocket subprotocol for message framing */
+	subprotocol?: string;
 }
 
 /**
@@ -1372,8 +1380,15 @@ export interface LexXrpcSubscriptionBuilder extends Annotations {
  *
  * @param def optional subscription definition options
  * @returns subscription builder definition
+ * @throws if `subprotocol` is not a valid websocket subprotocol name
  */
 export const subscription = (def?: Omit<LexXrpcSubscriptionBuilder, 'type'>): LexXrpcSubscriptionBuilder => {
+	const subprotocol = def?.subprotocol;
+
+	if (subprotocol !== undefined && !SUBPROTOCOL_RE.test(subprotocol)) {
+		throw new Error(`subscription/subprotocol: value must be a valid websocket subprotocol name`);
+	}
+
 	return { ...def, type: 'subscription' };
 };
 
@@ -1388,6 +1403,7 @@ const buildSubscriptionSchema = (
 		parameters: def.parameters
 			? buildXrpcParametersSchema(delve(ctx, 'parameters'), def.parameters)
 			: undefined,
+		subprotocol: def.subprotocol,
 		type: 'subscription',
 	};
 };

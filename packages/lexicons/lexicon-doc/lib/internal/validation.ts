@@ -26,6 +26,8 @@ export const MIME_TYPE_RE = /^[a-z]+\/(?:\*|[a-zA-Z][a-zA-Z0-9-+.]*)$/;
 
 export const LITERAL_KEY_RE = /^literal:(?!\.{1,2}$)[a-zA-Z0-9_~.:-]{1,512}$/;
 
+export const SUBPROTOCOL_RE = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+
 export const validateStringFormat = (value: string, format: t.LexStringFormat): boolean => {
 	switch (format) {
 		case 'datetime': {
