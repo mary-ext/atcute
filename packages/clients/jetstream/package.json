@@ -12,6 +12,7 @@
 		"!dist/**/*.{test,bench}.*"
 	],
 	"type": "module",
+	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js",
 		"./types/*": "./dist/lexicons/types/network/bsky/jetstream/*.js"
