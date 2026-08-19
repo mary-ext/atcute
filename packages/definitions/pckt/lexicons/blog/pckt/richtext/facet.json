@@ -46,6 +46,7 @@
 							"#bold",
 							"#code",
 							"#didMention",
+							"#footnote",
 							"#highlight",
 							"#id",
 							"#italic",
@@ -62,6 +63,26 @@
 			"type": "object",
 			"properties": {},
 			"description": "Facet feature for italic text"
+		},
+		"footnote": {
+			"type": "object",
+			"required": ["contentPlaintext", "footnoteId"],
+			"properties": {
+				"footnoteId": {
+					"type": "string"
+				},
+				"contentFacets": {
+					"type": "array",
+					"items": {
+						"ref": "#main",
+						"type": "ref"
+					}
+				},
+				"contentPlaintext": {
+					"type": "string"
+				}
+			},
+			"description": "Facet feature for a footnote reference"
 		},
 		"atMention": {
 			"type": "object",

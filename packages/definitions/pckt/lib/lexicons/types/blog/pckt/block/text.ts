@@ -11,6 +11,8 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	},
 	/** The plain text content */
 	plaintext: /*#__PURE__*/ v.string(),
+	/** Horizontal alignment of the block's text. Defaults to left when omitted. */
+	textAlign: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'center' | 'left' | 'right' | (string & {})>()),
 });
 
 type main$schematype = typeof _mainSchema;
