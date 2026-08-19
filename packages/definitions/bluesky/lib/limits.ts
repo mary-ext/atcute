@@ -83,7 +83,6 @@ export const embedImages = {
 
 /** limits for `app.bsky.embed.video` */
 export const embedVideo = {
-	alt: { maxGraphemes: 1_000, maxLength: 10_000 },
 	video: { maxSize: 300_000_000 },
 	captions: { maxItems: 20 },
 	caption: {

@@ -1,3 +1,4 @@
+export * as AppBskyActorContentVisibilityDeclaration from './types/app/bsky/actor/contentVisibilityDeclaration.ts';
 export * as AppBskyActorDefs from './types/app/bsky/actor/defs.ts';
 export * as AppBskyActorGetPreferences from './types/app/bsky/actor/getPreferences.ts';
 export * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile.ts';
@@ -143,9 +144,14 @@ export * as AppBskyUnspeccedInitAgeAssurance from './types/app/bsky/unspecced/in
 export * as AppBskyUnspeccedSearchActorsSkeleton from './types/app/bsky/unspecced/searchActorsSkeleton.ts';
 export * as AppBskyUnspeccedSearchPostsSkeleton from './types/app/bsky/unspecced/searchPostsSkeleton.ts';
 export * as AppBskyUnspeccedSearchStarterPacksSkeleton from './types/app/bsky/unspecced/searchStarterPacksSkeleton.ts';
+export * as AppBskyVideoAbortUpload from './types/app/bsky/video/abortUpload.ts';
 export * as AppBskyVideoDefs from './types/app/bsky/video/defs.ts';
+export * as AppBskyVideoFinishUpload from './types/app/bsky/video/finishUpload.ts';
 export * as AppBskyVideoGetJobStatus from './types/app/bsky/video/getJobStatus.ts';
 export * as AppBskyVideoGetUploadLimits from './types/app/bsky/video/getUploadLimits.ts';
+export * as AppBskyVideoGetUploadStatus from './types/app/bsky/video/getUploadStatus.ts';
+export * as AppBskyVideoStartUpload from './types/app/bsky/video/startUpload.ts';
+export * as AppBskyVideoUploadPart from './types/app/bsky/video/uploadPart.ts';
 export * as AppBskyVideoUploadVideo from './types/app/bsky/video/uploadVideo.ts';
 export * as ChatBskyActorDeclaration from './types/chat/bsky/actor/declaration.ts';
 export * as ChatBskyActorDefs from './types/chat/bsky/actor/defs.ts';

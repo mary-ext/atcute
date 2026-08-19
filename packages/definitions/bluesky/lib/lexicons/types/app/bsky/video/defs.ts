@@ -32,7 +32,18 @@ const _jobStatusSchema = /*#__PURE__*/ v.object({
 	 * The state of the video processing job. All values not listed as a known value indicate that the job is in
 	 * process.
 	 */
-	state: /*#__PURE__*/ v.string<'JOB_STATE_COMPLETED' | 'JOB_STATE_FAILED' | (string & {})>(),
+	state: /*#__PURE__*/ v.string<
+		| 'JOB_STATE_COMPLETED'
+		| 'JOB_STATE_CREATED'
+		| 'JOB_STATE_ENCODED'
+		| 'JOB_STATE_ENCODING'
+		| 'JOB_STATE_FAILED'
+		| 'JOB_STATE_SCANNED'
+		| 'JOB_STATE_SCANNING'
+		| 'JOB_STATE_UPLOADED'
+		| 'JOB_STATE_UPLOADING'
+		| (string & {})
+	>(),
 });
 
 type jobStatus$schematype = typeof _jobStatusSchema;

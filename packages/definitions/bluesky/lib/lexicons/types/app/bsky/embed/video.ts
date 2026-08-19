@@ -17,18 +17,8 @@ const _captionSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.video')),
-	/**
-	 * Alt text description of the video, for accessibility.
-	 *
-	 * @maxLength 10000
-	 * @maxGraphemes 1000
-	 */
-	alt: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-			/*#__PURE__*/ v.stringLength(0, 10000),
-			/*#__PURE__*/ v.stringGraphemes(0, 1000),
-		]),
-	),
+	/** Alt text description of the video, for accessibility. */
+	alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
@@ -53,16 +43,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 });
 const _viewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.embed.video#view')),
-	/**
-	 * @maxLength 10000
-	 * @maxGraphemes 1000
-	 */
-	alt: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
-			/*#__PURE__*/ v.stringLength(0, 10000),
-			/*#__PURE__*/ v.stringGraphemes(0, 1000),
-		]),
-	),
+	alt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	get aspectRatio() {
 		return /*#__PURE__*/ v.optional(AppBskyEmbedDefs.aspectRatioSchema);
 	},
