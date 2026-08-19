@@ -1,5 +1,13 @@
 # @atcute/pckt
 
+## 1.0.9
+
+### Patch Changes
+
+- dc6af68: pull latest Pckt lexicons
+- Updated dependencies [a73fa3b]
+  - @atcute/lexicons@2.1.0
+
 ## 1.0.8
 
 ### Patch Changes

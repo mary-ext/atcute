@@ -1,5 +1,13 @@
 # @atcute/bluesky
 
+## 4.0.19
+
+### Patch Changes
+
+- 0c9d00e: pull latest Bluesky lexicons
+- Updated dependencies [a73fa3b]
+  - @atcute/lexicons@2.1.0
+
 ## 4.0.18
 
 ### Patch Changes

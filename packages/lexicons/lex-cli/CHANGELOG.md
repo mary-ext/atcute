@@ -1,5 +1,17 @@
 # @atcute/lex-cli
 
+## 3.3.0
+
+### Minor Changes
+
+- a73fa3b: add support for declaring a WebSocket subprotocol on XRPC subscriptions.
+
+### Patch Changes
+
+- Updated dependencies [a73fa3b]
+  - @atcute/lexicon-doc@3.1.0
+  - @atcute/lexicons@2.1.0
+
 ## 3.2.1
 
 ### Patch Changes

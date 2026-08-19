@@ -1,5 +1,16 @@
 # @atcute/firehose
 
+## 1.1.0
+
+### Minor Changes
+
+- 2502a1d: add support for `xrpc.v1.json` and `xrpc.v1.cbor` subscription frames.
+
+### Patch Changes
+
+- Updated dependencies [a73fa3b]
+  - @atcute/lexicons@2.1.0
+
 ## 1.0.2
 
 ### Patch Changes

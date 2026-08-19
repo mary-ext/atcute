@@ -1,5 +1,11 @@
 # @atcute/lexicons
 
+## 2.1.0
+
+### Minor Changes
+
+- a73fa3b: add support for declaring a WebSocket subprotocol on XRPC subscriptions.
+
 ## 2.0.3
 
 ### Patch Changes

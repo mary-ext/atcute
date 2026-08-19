@@ -1,5 +1,16 @@
 # @atcute/jetstream
 
+## 2.1.0
+
+### Minor Changes
+
+- c8d076e: add `network.bsky.jetstream.*` lexicon definitions.
+
+### Patch Changes
+
+- Updated dependencies [a73fa3b]
+  - @atcute/lexicons@2.1.0
+
 ## 2.0.2
 
 ### Patch Changes
