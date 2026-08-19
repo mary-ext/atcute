@@ -29,7 +29,7 @@
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/oauth-crypto": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
-		"nanoid": "^6.0.0"
+		"nanoid": "^6.0.1"
 	},
 	"peerDependencies": {
 		"@atcute/identity-resolver": "^2.0.0",

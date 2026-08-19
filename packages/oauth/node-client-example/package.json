@@ -13,8 +13,8 @@
 		"@atcute/identity-resolver-node": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/oauth-node-client": "workspace:^",
-		"hono": "^4.12.31",
-		"nanoid": "^6.0.0"
+		"hono": "^4.13.2",
+		"nanoid": "^6.0.1"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"

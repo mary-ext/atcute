@@ -1430,13 +1430,13 @@ type InferObjectInput<TShape extends ObjectShape> = Flatten<
 
 type InferObjectOutput<TShape extends ObjectShape> = Flatten<
 	{
-		-readonly [Key in keyof TShape as Key extends OptionalObjectOutputKeys<TShape>
-			? never
-			: Key]: InferOutput<TShape[Key]>;
+		-readonly [
+			Key in keyof TShape as Key extends OptionalObjectOutputKeys<TShape> ? never : Key
+		]: InferOutput<TShape[Key]>;
 	} & {
-		-readonly [Key in keyof TShape as Key extends OptionalObjectOutputKeys<TShape>
-			? Key
-			: never]?: InferOutput<TShape[Key]>;
+		-readonly [
+			Key in keyof TShape as Key extends OptionalObjectOutputKeys<TShape> ? Key : never
+		]?: InferOutput<TShape[Key]>;
 	}
 >;
 

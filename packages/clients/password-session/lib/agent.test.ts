@@ -27,6 +27,7 @@ it('can connect to a PDS', async () => {
 	expect(data).toEqual({
 		did: 'did:web:localhost',
 		availableUserDomains: ['.test', '.example'],
+		blobUploadLimit: 5 * 1024 * 1024,
 		inviteCodeRequired: false,
 		links: {
 			privacyPolicy: 'https://bsky.social/about/support/privacy-policy',

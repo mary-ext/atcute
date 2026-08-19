@@ -6,13 +6,13 @@
 		"lint": "oxlint"
 	},
 	"devDependencies": {
-		"@changesets/cli": "^2.31.1",
+		"@changesets/cli": "^3.0.0",
 		"@mary/tar": "jsr:^0.3.2",
 		"@mitata/counters": "^0.0.8",
-		"@pnpm/workspace.root-finder": "^1100.0.3",
+		"@pnpm/workspace.root-finder": "^1100.0.6",
 		"mitata": "^1.0.34",
-		"oxfmt": "^0.60.0",
-		"oxlint": "^1.75.0",
+		"oxfmt": "^0.63.0",
+		"oxlint": "^1.78.0",
 		"oxlint-tsgolint": "^7.0.2001",
 		"typescript": "~7.0.2",
 		"zig-build": "^0.3.0"

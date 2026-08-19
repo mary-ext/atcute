@@ -15,10 +15,11 @@ allowBuilds:
   cbor-extract: true
   core-js: false
   esbuild: true
+  protobufjs: false
   sharp: true
 
 minimumReleaseAgeExclude:
   - '@oomfware/*'
 
 patchedDependencies:
-  '@atproto/pds@0.5.21': patches/@atproto__pds@0.5.21.patch
+  '@atproto/pds@0.5.29': patches/@atproto__pds@0.5.29.patch

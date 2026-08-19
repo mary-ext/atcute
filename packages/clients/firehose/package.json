@@ -36,7 +36,7 @@
 		"@atcute/atproto": "workspace:^",
 		"@types/ws": "^8.18.1",
 		"vitest": "^4.1.10",
-		"ws": "^8.21.1"
+		"ws": "^8.21.3"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.1.0"

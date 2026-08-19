@@ -27,7 +27,7 @@
 	"dependencies": {
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"nanoid": "^6.0.0",
+		"nanoid": "^6.0.1",
 		"valibot": "^1.4.2"
 	},
 	"devDependencies": {

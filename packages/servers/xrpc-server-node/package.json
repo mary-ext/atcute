@@ -24,15 +24,15 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"ws": "^8.21.1"
+		"ws": "^8.21.3"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/cbor": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/xrpc-server": "workspace:^",
-		"@remix-run/node-fetch-server": "^0.14.0",
-		"@types/node": "^26.1.1",
+		"@remix-run/node-fetch-server": "^0.14.1",
+		"@types/node": "^26.2.0",
 		"@types/ws": "^8.18.1",
 		"vitest": "^4.1.10"
 	},

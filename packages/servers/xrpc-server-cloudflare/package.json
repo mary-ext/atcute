@@ -24,7 +24,7 @@
 	},
 	"devDependencies": {
 		"@atcute/xrpc-server": "workspace:^",
-		"@cloudflare/workers-types": "^5.20260721.1"
+		"@cloudflare/workers-types": "^5.20260818.1"
 	},
 	"peerDependencies": {
 		"@atcute/xrpc-server": "workspace:^"

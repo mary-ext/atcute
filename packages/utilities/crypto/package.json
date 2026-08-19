@@ -46,11 +46,11 @@
 		"@noble/secp256k1": "^3.1.0"
 	},
 	"devDependencies": {
-		"@noble/curves": "^2.2.0",
-		"@types/node": "^26.1.1",
+		"@noble/curves": "^2.3.0",
+		"@types/node": "^26.2.0",
 		"@vitest/browser-playwright": "^4.1.10",
 		"@vitest/coverage-v8": "^4.1.10",
-		"playwright": "^1.61.1",
+		"playwright": "^1.62.1",
 		"vitest": "^4.1.10"
 	}
 }

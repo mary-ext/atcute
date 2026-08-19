@@ -33,10 +33,10 @@
 		"prepublish": "rm -rf dist; pnpm run build:native; pnpm run build"
 	},
 	"dependencies": {
-		"unicode-segmenter": "^0.17.0"
+		"unicode-segmenter": "^0.17.3"
 	},
 	"devDependencies": {
-		"@types/node": "^26.1.1",
+		"@types/node": "^26.2.0",
 		"vitest": "^4.1.10",
 		"zig-build": "^0.3.0"
 	}

@@ -65,7 +65,6 @@ export class TestPdsServer {
 			disableSsrfProtection: true,
 			serviceName: 'Development PDS',
 			primaryColor: '#f0828d',
-			primaryColorContrast: '#fff', // Bad contrast for a11y (WCAG AA)
 			errorColor: 'rgb(238, 0, 78)', // rgb() notation should work too
 			logoUrl:
 				// Using a "data:" instead of a real URL to avoid making CORS requests in dev.
