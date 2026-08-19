@@ -12,6 +12,22 @@
 				},
 				"width": {
 					"type": "integer"
+				},
+				"aspectRatio": {
+					"ref": "#aspectRatio",
+					"type": "ref"
+				}
+			}
+		},
+		"aspectRatio": {
+			"type": "object",
+			"required": ["height", "width"],
+			"properties": {
+				"width": {
+					"type": "integer"
+				},
+				"height": {
+					"type": "integer"
 				}
 			}
 		}
