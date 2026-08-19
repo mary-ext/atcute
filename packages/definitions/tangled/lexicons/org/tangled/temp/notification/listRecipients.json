@@ -1,0 +1,41 @@
+{
+	"id": "org.tangled.temp.notification.listRecipients",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["dids"],
+					"properties": {
+						"dids": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"format": "did"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subject"],
+				"properties": {
+					"subject": {
+						"type": "string",
+						"description": "at-uri of the entity (for entity-level subscribers) or a repo DID (for repo-level subscribers)."
+					},
+					"collection": {
+						"type": "string",
+						"format": "nsid",
+						"description": "Optional collection NSID to filter subscribers by subscription scope. Only subscribers with no collection filter or a filter containing this NSID are returned."
+					}
+				}
+			},
+			"description": "Service-internal. Hosted by bobbin. Given an entity at-uri or repo DID, returns the dids subscribed to it. deliberi calls this while ingesting the firehose to fan a notification out to subscribers."
+		}
+	},
+	"lexicon": 1
+}

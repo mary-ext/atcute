@@ -1,0 +1,24 @@
+{
+	"id": "sh.tangled.repo.collaboratorAcceptance",
+	"defs": {
+		"main": {
+			"key": "any",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt"],
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Invite acceptance timestamp"
+					}
+				}
+			},
+			"description": "Acceptance of a repo's collaboration offer, w/ repo-DID as rkey"
+		}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
+}

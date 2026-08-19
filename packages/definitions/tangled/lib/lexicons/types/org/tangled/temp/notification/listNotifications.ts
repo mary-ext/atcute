@@ -40,8 +40,6 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 	/** Broad category: 'social' or 'work'. */
 	category: /*#__PURE__*/ v.string(),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
-	/** Stable numeric ID for this notification. */
-	id: /*#__PURE__*/ v.integer(),
 	/** AT-URI of the related org.tangled.issue.issue record, if applicable. */
 	issueAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	/** AT-URI of the related org.tangled.pulls.pull record, if applicable. */
@@ -55,6 +53,8 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 	 * pull_assigned, pull_unassigned, followed, user_mentioned.
 	 */
 	type: /*#__PURE__*/ v.string(),
+	/** at-uri of this notification; the stable key for read/unread state. */
+	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 
 type main$schematype = typeof _mainSchema;

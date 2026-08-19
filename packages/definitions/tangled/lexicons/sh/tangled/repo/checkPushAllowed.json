@@ -1,0 +1,53 @@
+{
+	"id": "sh.tangled.repo.checkPushAllowed",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "The repo could not be resolved on this knot."
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Missing or malformed parameters."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["allowed"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID the key resolved to, if a match was found."
+						},
+						"allowed": {
+							"type": "boolean",
+							"description": "Whether the key's owner may push to the repo."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["key", "repo"],
+				"properties": {
+					"key": {
+						"type": "string",
+						"maxLength": 4096,
+						"description": "Public key in OpenSSH authorized_keys format."
+					},
+					"repo": {
+						"type": "string",
+						"description": "A repo DID."
+					}
+				}
+			},
+			"description": "Check whether the holder of a public key is allowed to push to a repo."
+		}
+	},
+	"lexicon": 1
+}

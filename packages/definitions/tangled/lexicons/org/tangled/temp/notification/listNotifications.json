@@ -54,11 +54,12 @@
 		},
 		"notification": {
 			"type": "object",
-			"required": ["actorDid", "category", "createdAt", "id", "read", "type"],
+			"required": ["actorDid", "category", "createdAt", "read", "type", "uri"],
 			"properties": {
-				"id": {
-					"type": "integer",
-					"description": "Stable numeric ID for this notification."
+				"uri": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "at-uri of this notification; the stable key for read/unread state."
 				},
 				"read": {
 					"type": "boolean"

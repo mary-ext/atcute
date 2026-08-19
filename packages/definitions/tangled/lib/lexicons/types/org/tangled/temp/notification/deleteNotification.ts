@@ -7,8 +7,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.notification.del
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/** ID of the notification to delete. */
-			id: /*#__PURE__*/ v.integer(),
+			/** at-uri of the notification to delete. */
+			uri: /*#__PURE__*/ v.resourceUriString(),
 		}),
 	},
 	output: null,

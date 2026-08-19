@@ -6,11 +6,12 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["id", "read"],
+					"required": ["read", "uri"],
 					"properties": {
-						"id": {
-							"type": "integer",
-							"description": "ID of the notification to update."
+						"uri": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "at-uri of the notification to update."
 						},
 						"read": {
 							"type": "boolean"
