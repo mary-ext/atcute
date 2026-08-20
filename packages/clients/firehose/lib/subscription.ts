@@ -3,9 +3,9 @@ import { type XRPCSubscriptionMetadata, safeParse } from '@atcute/lexicons/valid
 import { EventIterator } from '@mary-ext/event-iterator';
 import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
-import type { ReadonlyDeep } from 'type-fest';
 
 import { createFrameDecoder } from './frame-decoder.ts';
+import type { ReadonlyDeep } from './misc.ts';
 import type { FirehoseSubscriptionOptions, MessageOf, ParamsOf } from './types.ts';
 
 /**

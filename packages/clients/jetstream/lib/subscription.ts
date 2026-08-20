@@ -4,9 +4,9 @@ import { EventIterator } from '@mary-ext/event-iterator';
 import { SimpleEventEmitter } from '@mary-ext/simple-event-emitter';
 import { WebSocket as ReconnectingWebSocket } from 'partysocket';
 import type { CloseEvent, ErrorEvent, Options } from 'partysocket/ws';
-import type { ReadonlyDeep } from 'type-fest';
 import * as v from 'valibot';
 
+import type { ReadonlyDeep } from './misc.ts';
 import { type JetstreamEvent, type JetstreamProcedure, jetstreamEventSchema } from './typedefs.ts';
 
 export interface JetstreamSubscriptionOptions {
