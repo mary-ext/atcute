@@ -147,6 +147,19 @@ const _interactionReplySchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#inte
 const _interactionRepostSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionRepost');
 const _interactionSeenSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionSeen');
 const _interactionShareSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionShare');
+const _knownLikersSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#knownLikers')),
+	/**
+	 * @minLength 0
+	 * @maxLength 5
+	 */
+	get actors() {
+		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(AppBskyActorDefs.profileViewBasicSchema), [
+			/*#__PURE__*/ v.arrayLength(0, 5),
+		]);
+	},
+	count: /*#__PURE__*/ v.integer(),
+});
 const _notFoundPostSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#notFoundPost')),
 	notFound: /*#__PURE__*/ v.literal(true),
@@ -280,6 +293,10 @@ const _viewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#viewerState')),
 	bookmarked: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	embeddingDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/** This property is present only in selected cases, as an optimization. */
+	get knownLikers() {
+		return /*#__PURE__*/ v.optional(knownLikersSchema);
+	},
 	like: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	pinned: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	replyDisabled: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
@@ -305,6 +322,7 @@ type interactionReply$schematype = typeof _interactionReplySchema;
 type interactionRepost$schematype = typeof _interactionRepostSchema;
 type interactionSeen$schematype = typeof _interactionSeenSchema;
 type interactionShare$schematype = typeof _interactionShareSchema;
+type knownLikers$schematype = typeof _knownLikersSchema;
 type notFoundPost$schematype = typeof _notFoundPostSchema;
 type postView$schematype = typeof _postViewSchema;
 type reasonPin$schematype = typeof _reasonPinSchema;
@@ -338,6 +356,7 @@ export interface interactionReplySchema extends interactionReply$schematype {}
 export interface interactionRepostSchema extends interactionRepost$schematype {}
 export interface interactionSeenSchema extends interactionSeen$schematype {}
 export interface interactionShareSchema extends interactionShare$schematype {}
+export interface knownLikersSchema extends knownLikers$schematype {}
 export interface notFoundPostSchema extends notFoundPost$schematype {}
 export interface postViewSchema extends postView$schematype {}
 export interface reasonPinSchema extends reasonPin$schematype {}
@@ -371,6 +390,7 @@ export const interactionReplySchema = _interactionReplySchema as interactionRepl
 export const interactionRepostSchema = _interactionRepostSchema as interactionRepostSchema;
 export const interactionSeenSchema = _interactionSeenSchema as interactionSeenSchema;
 export const interactionShareSchema = _interactionShareSchema as interactionShareSchema;
+export const knownLikersSchema = _knownLikersSchema as knownLikersSchema;
 export const notFoundPostSchema = _notFoundPostSchema as notFoundPostSchema;
 export const postViewSchema = _postViewSchema as postViewSchema;
 export const reasonPinSchema = _reasonPinSchema as reasonPinSchema;
@@ -404,6 +424,7 @@ export type InteractionReply = v.InferInput<typeof interactionReplySchema>;
 export type InteractionRepost = v.InferInput<typeof interactionRepostSchema>;
 export type InteractionSeen = v.InferInput<typeof interactionSeenSchema>;
 export type InteractionShare = v.InferInput<typeof interactionShareSchema>;
+export interface KnownLikers extends v.InferInput<typeof knownLikersSchema> {}
 export interface NotFoundPost extends v.InferInput<typeof notFoundPostSchema> {}
 export interface PostView extends v.InferInput<typeof postViewSchema> {}
 export interface ReasonPin extends v.InferInput<typeof reasonPinSchema> {}
