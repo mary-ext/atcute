@@ -3,8 +3,10 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.membersOnlyDelimiter')),
-	/** Ids of the membership tiers whose members can read past the delimiter. Absent means every paid tier. */
-	tiers: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+	/** Whether access is available to all subscribers, all paid members, or selected paid tiers. */
+	audience: /*#__PURE__*/ v.string<'paid' | 'subscribers' | 'tiers' | (string & {})>(),
+	/** Paid tier ids that grant access when audience is tiers. An empty selection grants no membership access. */
+	tierIds: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 });
 
 type main$schematype = typeof _mainSchema;
