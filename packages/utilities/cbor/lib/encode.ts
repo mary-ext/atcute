@@ -7,6 +7,7 @@ import { type Bytes, BytesWrapper, fromBytes } from './bytes.ts';
 
 const MAX_TYPE_ARG_LEN = 9;
 const CHUNK_SIZE = 1024;
+const NATIVE_SORT_THRESHOLD = 32;
 
 interface State {
 	c: Uint8Array<ArrayBuffer>[];
@@ -29,8 +30,10 @@ const resizeIfNeeded = (state: State, needed: number): void => {
 	const pos = state.p;
 
 	if (buf.byteLength < pos + needed) {
-		state.c.push(buf.subarray(0, pos));
-		state.l += pos;
+		if (pos > 0) {
+			state.c.push(buf.subarray(0, pos));
+			state.l += pos;
+		}
 
 		state.b = allocUnsafe(_max(CHUNK_SIZE, needed));
 		state.v = null;
@@ -162,6 +165,17 @@ const writeString = (state: State, val: string): void => {
 		return;
 	}
 
+	// another pass is cheaper than retaining the worst-case allocation for a large string.
+	if (strLength >= CHUNK_SIZE) {
+		const len = getUtf8Length(val);
+
+		resizeIfNeeded(state, len + getTypeInfoLength(len));
+		writeTypeAndArgument(state, 3, len);
+		encodeUtf8Into(state.b, val, state.p, len);
+		state.p += len;
+		return;
+	}
+
 	// JS strings are UTF-16 (ECMA spec)
 	// Therefore, worst case length of UTF-8 is length * 3. (plus 9 bytes of CBOR header)
 	// Greatly overshoots in practice, but doesn't matter. (alloc is O(1)+ anyway)
@@ -236,7 +250,7 @@ const writeBytes = (state: State, val: Bytes): void => {
 	const buf = fromBytes(val);
 	const len = buf.byteLength;
 
-	resizeIfNeeded(state, len + MAX_TYPE_ARG_LEN);
+	resizeIfNeeded(state, len + getTypeInfoLength(len));
 
 	writeTypeAndArgument(state, 2, len);
 	state.b.set(buf, state.p);
@@ -387,6 +401,25 @@ export const encode = (value: unknown): Uint8Array<ArrayBuffer> => {
 // once, and the bytewise tiebreak only materializes bytes for equal-length keys.
 const sortUtf8Keys = (keys: string[]): void => {
 	const len = keys.length;
+	if (len > NATIVE_SORT_THRESHOLD) {
+		const info = new Map<string, { bytes?: Uint8Array; length: number }>();
+		for (let i = 0; i < len; i++) {
+			const key = keys[i];
+			info.set(key, { length: getUtf8Length(key) });
+		}
+
+		// oxlint-disable-next-line unicorn/no-array-sort -- keys is a fresh array owned by this function
+		keys.sort((keyA, keyB) => {
+			const infoA = info.get(keyA)!;
+			const infoB = info.get(keyB)!;
+			return (
+				infoA.length - infoB.length ||
+				compare((infoA.bytes ??= encodeUtf8(keyA)), (infoB.bytes ??= encodeUtf8(keyB)))
+			);
+		});
+		return;
+	}
+
 	// oxlint-disable-next-line no-new-array
 	const lengths: number[] = new Array(len);
 	// oxlint-disable-next-line no-new-array
@@ -431,6 +464,7 @@ export const getOrderedObjectKeys = (obj: Record<string, unknown>): string[] => 
 	const keys = Object.keys(obj);
 	let len = 0;
 	let ascii = true;
+	const useNativeSort = keys.length > NATIVE_SORT_THRESHOLD;
 
 	for (let i = 0; i < keys.length; i++) {
 		const valA = keys[i];
@@ -448,6 +482,11 @@ export const getOrderedObjectKeys = (obj: Record<string, unknown>): string[] => 
 					break;
 				}
 			}
+		}
+
+		if (useNativeSort) {
+			keys[len++] = valA;
+			continue;
 		}
 
 		const lenA = valA.length;
@@ -469,7 +508,10 @@ export const getOrderedObjectKeys = (obj: Record<string, unknown>): string[] => 
 
 	keys.length = len;
 
-	if (!ascii) {
+	if (ascii && useNativeSort) {
+		// oxlint-disable-next-line unicorn/no-array-sort -- keys is a fresh array owned by this function
+		keys.sort((keyA, keyB) => keyA.length - keyB.length || (keyA < keyB ? -1 : 1));
+	} else if (!ascii) {
 		sortUtf8Keys(keys);
 	}
 

@@ -4,7 +4,7 @@ import { fromBase16, fromBase64, toBase16 } from '@atcute/multibase';
 import { describe, expect, it } from 'vitest';
 
 import { getOrderedObjectKeys } from './encode.ts';
-import { decode, decodeFirst, encode, toBytes, toCidLink } from './index.ts';
+import { decode, decodeFirst, encode, fromBytes, toBytes, toCidLink } from './index.ts';
 
 const utf8e = new TextEncoder();
 // const utf8d = new TextDecoder();
@@ -14,7 +14,21 @@ const referenceKeySorter = (obj: Record<string, unknown>): string[] => {
 		Object.keys(obj)
 			.filter((key) => obj[key] !== undefined)
 			// oxlint-disable-next-line unicorn/no-array-sort -- filter already clones
-			.sort((a, b) => a.length - b.length || (a < b ? -1 : 1))
+			.sort((a, b) => {
+				const bytesA = utf8e.encode(a);
+				const bytesB = utf8e.encode(b);
+				if (bytesA.length !== bytesB.length) {
+					return bytesA.length - bytesB.length;
+				}
+
+				for (let i = 0; i < bytesA.length; i++) {
+					if (bytesA[i] !== bytesB[i]) {
+						return bytesA[i] - bytesB[i];
+					}
+				}
+
+				return 0;
+			})
 	);
 };
 
@@ -60,6 +74,18 @@ describe('key sorting', () => {
 		const expected = referenceKeySorter(object);
 		const actual = getOrderedObjectKeys(object);
 		expect(actual).toEqual(expected);
+	});
+
+	it('sorts wide maps canonically', () => {
+		const entries: [string, number | undefined][] = [];
+		for (let i = 127; i >= 0; i--) {
+			const prefix = i % 16 === 0 ? 'é' : 'key';
+			entries.push([`${prefix}-${i.toString().padStart(3, '0')}`, i]);
+		}
+		entries.push(['ignored', undefined]);
+
+		const object = Object.fromEntries(entries);
+		expect(getOrderedObjectKeys(object)).toEqual(referenceKeySorter(object));
 	});
 });
 
@@ -126,6 +152,41 @@ it('encodes and decodes into the same value', () => {
 	expect(decoded).toEqual(object);
 	expect(decoded.link.$link).toEqual('bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee');
 	expect('empty' in decoded).toBe(false);
+});
+
+it('does not retain large input buffers for small byte strings or cid links', () => {
+	const encoded = encode({
+		bytes: toBytes(new Uint8Array([1, 2, 3])),
+		link: toCidLink(CID.fromString('bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee')),
+	});
+	const backing = new Uint8Array(8_192);
+	backing.set(encoded, 1_024);
+
+	const input = backing.subarray(1_024, 1_024 + encoded.length);
+	const decoded = decode(input);
+	const bytes = fromBytes(decoded.bytes);
+	const cid = CID.fromCidLink(decoded.link);
+
+	expect(bytes).toEqual(new Uint8Array([1, 2, 3]));
+	expect(bytes.buffer).not.toBe(backing.buffer);
+	expect(bytes.buffer.byteLength).toBe(3);
+	expect(cid.bytes.buffer).not.toBe(backing.buffer);
+	expect(cid.bytes.buffer.byteLength).toBeLessThanOrEqual(37);
+});
+
+it('keeps large byte strings zero-copy', () => {
+	const encoded = new Uint8Array(encode(toBytes(new Uint8Array(4_096))));
+	const bytes = fromBytes(decode(encoded));
+
+	expect(bytes.buffer).toBe(encoded.buffer);
+});
+
+it('sizes large string output exactly', () => {
+	const value = '🙂'.repeat(32_768);
+	const encoded = encode(value);
+
+	expect(encoded.buffer.byteLength).toBe(encoded.byteLength);
+	expect(decode(encoded)).toBe(value);
 });
 
 it('encodes atproto post records', async () => {

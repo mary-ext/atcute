@@ -5,6 +5,9 @@ import { decodeUtf8From } from '@atcute/uint8array';
 
 import { type Bytes, toBytes } from './bytes.ts';
 
+// copy a byte string when zero-copy would retain at least eight times its own size.
+const MAX_RETAINED_BUFFER_RATIO = 8;
+
 interface State {
 	b: Uint8Array;
 	v: DataView | null;
@@ -131,13 +134,16 @@ const readBytes = (state: State, length: number): Bytes => {
 
 	const slice = state.b.subarray(state.p, (state.p += length));
 
-	return toBytes(slice);
+	return toBytes(
+		length * MAX_RETAINED_BUFFER_RATIO <= slice.buffer.byteLength ? new Uint8Array(slice) : slice,
+	);
 };
 
 const readCid = (state: State, length: number): CidLink => {
 	requireBytes(state, length);
 
-	const cid = fromBinary(state.b.subarray(state.p, (state.p += length)));
+	// CIDs are fixed-size and commonly outlive the decoded input, so always detach their bytes.
+	const cid = fromBinary(new Uint8Array(state.b.subarray(state.p, (state.p += length))));
 
 	return new CidLinkWrapper(cid.bytes);
 };

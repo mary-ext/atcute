@@ -23,6 +23,15 @@ const getObject = () => ({
 	text: "introducing atcute, a collection of lightweight TypeScript packages for AT Protocol\n\nAPI client, OAuth client, utility packages for various data formats, Bluesky-specific utility packages for rich text and posting\n\nthey're all covered!",
 });
 
+const getWideObject = (size: number): Record<string, number> => {
+	const entries: [string, number][] = [];
+	for (let i = size - 1; i >= 0; i--) {
+		entries.push([`key-${i.toString().padStart(5, '0')}`, i]);
+	}
+
+	return Object.fromEntries(entries);
+};
+
 function getKeysNaive(obj: Record<string, unknown>): string[] {
 	return (
 		Object.keys(obj)
@@ -44,7 +53,7 @@ summary(() => {
 		};
 	});
 
-	bench('insertion sort + embedded key filtering', function* () {
+	bench('canonical key ordering', function* () {
 		yield {
 			[0]() {
 				return getObject();
@@ -55,5 +64,19 @@ summary(() => {
 		};
 	});
 });
+
+for (const size of [128, 2_048]) {
+	const object = getWideObject(size);
+
+	summary(() => {
+		bench(`native key filter+sort (${size} keys)`, () => {
+			return do_not_optimize(getKeysNaive(object));
+		});
+
+		bench(`canonical key ordering (${size} keys)`, () => {
+			return do_not_optimize(getOrderedObjectKeys(object));
+		});
+	});
+}
 
 await run();
