@@ -398,7 +398,10 @@ export class XRPCRouter {
 							const body = omitMessageType(message);
 
 							const frame = encodeMessageFrame(body, type);
-							await ws.send(frame);
+							const sent = ws.send(frame);
+							if (sent) {
+								await sent;
+							}
 							const drained = ws.drain();
 							if (drained) {
 								await drained;
