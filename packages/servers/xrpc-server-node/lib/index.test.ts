@@ -417,6 +417,45 @@ describe('subscription', () => {
 		client.close();
 	});
 
+	it('flushes synchronous subscription output before closing', async () => {
+		const messageCount = 512;
+		const ws = createNodeWebSocket();
+		const router = new XRPCRouter({ websocket: ws.adapter });
+
+		router.addSubscription(ComAtprotoLabelSubscribeLabels.mainSchema, {
+			async *handler() {
+				for (let seq = 0; seq < messageCount; seq++) {
+					yield {
+						$type: 'com.atproto.label.subscribeLabels#labels',
+						labels: [],
+						seq: seq,
+					};
+				}
+			},
+		});
+
+		using server = await createHttpServer(router, ws);
+
+		const client = new WebSocket(`ws://localhost:${server.port}/xrpc/com.atproto.label.subscribeLabels`);
+		client.binaryType = 'arraybuffer';
+
+		const sequences: number[] = [];
+		await new Promise<void>((resolve, reject) => {
+			client.onclose = () => {
+				resolve();
+			};
+			client.onerror = () => {
+				reject(new Error('WebSocket error'));
+			};
+			client.onmessage = (event) => {
+				const { body } = decodeFrame(new Uint8Array(event.data));
+				sequences.push(body.seq);
+			};
+		});
+
+		expect(sequences).toEqual(Array.from({ length: messageCount }, (_, index) => index));
+	});
+
 	it('does not interfere with non-xrpc upgrade requests', async () => {
 		const ws = createNodeWebSocket();
 		const router = new XRPCRouter({ websocket: ws.adapter });

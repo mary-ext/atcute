@@ -89,27 +89,22 @@ export const createNodeWebSocket = ({
 
 					const controller = new AbortController();
 					const signal = controller.signal;
+					const waitForDrain = async (): Promise<void> => {
+						while (!signal.aborted && ws.readyState === 1 && ws.bufferedAmount > lowWaterMark) {
+							await sleep(10, signal);
+						}
+					};
 					const connection: WebSocketConnection = {
 						signal: signal,
 						send(data) {
-							return new Promise((resolve, reject) => {
-								ws.send(data, (err) => {
-									if (err) {
-										reject(err);
-									} else {
-										resolve();
-									}
-								});
-							});
+							ws.send(data);
 						},
-						async drain() {
+						drain() {
 							if (ws.bufferedAmount <= highWaterMark) {
 								return;
 							}
 
-							while (!signal.aborted && ws.readyState === 1 && ws.bufferedAmount > lowWaterMark) {
-								await sleep(10, signal);
-							}
+							return waitForDrain();
 						},
 						close(code, reason) {
 							ws.close(code, reason);
@@ -118,6 +113,9 @@ export const createNodeWebSocket = ({
 
 					ws.onclose = (ev) => {
 						controller.abort(new Error(`WebSocket connection closed with code ${ev.code}`));
+					};
+					ws.onerror = (ev) => {
+						controller.abort(ev.error);
 					};
 
 					handler(connection);
