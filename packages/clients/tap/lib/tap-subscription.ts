@@ -74,23 +74,32 @@ export class TapSubscription {
 	}
 
 	#flushBufferedAcks() {
-		while (this.#bufferedAcks.length > 0) {
-			const ack = this.#bufferedAcks[0];
+		const acks = this.#bufferedAcks;
+		let index = 0;
+
+		while (index < acks.length) {
+			const ack = acks[index];
 			if (ack === undefined) {
-				return;
+				break;
 			}
 
 			try {
 				if (!this.#sendAck(ack.id)) {
-					return;
+					break;
 				}
 
 				ack.resolve(undefined);
-				this.#bufferedAcks = this.#bufferedAcks.slice(1);
+				index++;
 			} catch (err) {
 				this.#options.onError?.(err);
-				return;
+				break;
 			}
+		}
+
+		if (index === acks.length) {
+			this.#bufferedAcks = [];
+		} else if (index > 0) {
+			this.#bufferedAcks = acks.slice(index);
 		}
 	}
 

@@ -93,6 +93,76 @@ describe('tap subscription', () => {
 		expect(receivedAcks).toEqual([42]);
 	});
 
+	it('flushes buffered acks after reconnecting', async () => {
+		const messageCount = 64;
+		const server = new WebSocketServer({ port: 0 });
+		const address = server.address();
+		if (typeof address === 'string' || address === null) {
+			throw new Error(`unexpected ws address`);
+		}
+
+		const { promise: disconnected, resolve: resolveDisconnected } = Promise.withResolvers<void>();
+		const { promise: flushed, resolve: resolveFlushed } = Promise.withResolvers<void>();
+		const receivedAcks: number[] = [];
+		let connectionCount = 0;
+
+		server.on('connection', (socket: WebSocket) => {
+			connectionCount++;
+
+			if (connectionCount === 1) {
+				for (let id = 0; id < messageCount; id++) {
+					socket.send(JSON.stringify(createRecordEvent(id)), () => {
+						if (id === messageCount - 1) {
+							socket.close();
+						}
+					});
+				}
+				return;
+			}
+
+			socket.on('message', (data: RawData) => {
+				const msg = JSON.parse(typeof data === 'string' ? data : decodeUtf8From(data as Uint8Array));
+				if (msg.type === 'ack') {
+					receivedAcks.push(msg.id);
+					if (receivedAcks.length === messageCount) {
+						resolveFlushed();
+					}
+				}
+			});
+		});
+
+		const subscription = new TapSubscription({
+			onConnectionClose: () => {
+				resolveDisconnected();
+			},
+			url: `ws://127.0.0.1:${address.port}/channel`,
+			ws: {
+				maxReconnectionDelay: 50,
+				minReconnectionDelay: 50,
+				reconnectionDelayGrowFactor: 1,
+			},
+		});
+
+		const iterator = subscription[Symbol.asyncIterator]();
+		const messages = [];
+		for (let i = 0; i < messageCount; i++) {
+			const next = await iterator.next();
+			if (next.done) {
+				throw new Error(`expected message`);
+			}
+			messages.push(next.value);
+		}
+
+		await disconnected;
+		const acknowledgements = messages.map((message) => message.ack());
+		await Promise.all([flushed, ...acknowledgements]);
+
+		await iterator.return?.();
+		await new Promise<void>((resolve) => server.close(() => resolve()));
+
+		expect(receivedAcks).toEqual(Array.from({ length: messageCount }, (_, index) => index));
+	});
+
 	it.each([
 		['the default websocket', undefined],
 		['a user-supplied websocket', WebSocket],
