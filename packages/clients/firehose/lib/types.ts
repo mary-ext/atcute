@@ -65,6 +65,9 @@ export interface FirehoseSubscriptionOptions<TSchema extends XRPCSubscriptionMet
 
 	/** WebSocket connection options */
 	ws?: Options;
+
+	/** signal that closes the connection and rejects iteration with its abort reason */
+	signal?: AbortSignal;
 }
 
 /** decoded CBOR frame header */

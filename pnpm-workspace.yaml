@@ -19,6 +19,7 @@ allowBuilds:
   sharp: true
 
 minimumReleaseAgeExclude:
+  - '@mary-ext/*'
   - '@oomfware/*'
 
 patchedDependencies:

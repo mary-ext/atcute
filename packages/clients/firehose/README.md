@@ -34,6 +34,22 @@ for await (const message of subscription) {
 the connection opens when you start iterating and closes when you break out of the loop. the
 underlying WebSocket automatically reconnects on disconnection.
 
+### cancelling the subscription
+
+pass an `AbortSignal` to close the connection and reject iteration:
+
+```ts
+const subscription = new FirehoseSubscription({
+	service: 'wss://bsky.network',
+	nsid: ComAtprotoSyncSubscribeRepos.mainSchema,
+	signal: AbortSignal.timeout(10_000),
+});
+
+for await (const message of subscription) {
+	console.log(message.$type);
+}
+```
+
 ### handling message types
 
 messages include a `$type` field indicating their type:

@@ -211,4 +211,61 @@ describe('firehose subscription', () => {
 		const query = new URL(requestUrl!, 'ws://127.0.0.1').searchParams;
 		expect(query.getAll('wantedCollections')).toEqual(['app.bsky.feed.post', 'app.bsky.feed.like']);
 	});
+
+	it('rejects iteration and disconnects when the signal aborts', async () => {
+		const { server, url, close } = startServer();
+
+		const disconnected = new Promise<void>((resolve) => {
+			server.on('connection', (socket: WebSocket) => {
+				socket.on('close', () => resolve());
+			});
+		});
+
+		const controller = new AbortController();
+		const reason = new Error(`stop`);
+
+		const subscriptionClient = new FirehoseSubscription({
+			service: url,
+			nsid: ComAtprotoSyncSubscribeRepos.mainSchema,
+			signal: controller.signal,
+		});
+
+		const iterator = subscriptionClient[Symbol.asyncIterator]();
+		const next = iterator.next();
+
+		await new Promise((resolve) => setTimeout(resolve, 75));
+		controller.abort(reason);
+
+		await expect(next).rejects.toBe(reason);
+		await disconnected;
+
+		await close();
+	});
+
+	it('never connects when the signal is already aborted', async () => {
+		const { server, url, close } = startServer();
+
+		let connections = 0;
+		server.on('connection', () => {
+			connections++;
+		});
+
+		const controller = new AbortController();
+		const reason = new Error(`stop`);
+		controller.abort(reason);
+
+		const subscriptionClient = new FirehoseSubscription({
+			service: url,
+			nsid: ComAtprotoSyncSubscribeRepos.mainSchema,
+			signal: controller.signal,
+		});
+
+		const iterator = subscriptionClient[Symbol.asyncIterator]();
+		await expect(iterator.next()).rejects.toBe(reason);
+
+		await new Promise((resolve) => setTimeout(resolve, 75));
+		await close();
+
+		expect(connections).toBe(0);
+	});
 });

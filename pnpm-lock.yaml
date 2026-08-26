@@ -179,8 +179,8 @@ importers:
         specifier: workspace:^
         version: link:../../misc/uint8array
       '@mary-ext/event-iterator':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.1.0
+        version: 1.1.0
       '@mary-ext/simple-event-emitter':
         specifier: ^1.0.2
         version: 1.0.2
@@ -211,7 +211,7 @@ importers:
         version: link:../../lexicons/lexicons
       '@mary-ext/event-iterator':
         specifier: ^1.0.0
-        version: 1.0.0
+        version: 1.1.0
       '@mary-ext/simple-event-emitter':
         specifier: ^1.0.2
         version: 1.0.2
@@ -276,7 +276,7 @@ importers:
         version: link:../../misc/uint8array
       '@mary-ext/event-iterator':
         specifier: ^1.0.0
-        version: 1.0.0
+        version: 1.1.0
       '@mary-ext/simple-event-emitter':
         specifier: ^1.0.2
         version: 1.0.2
@@ -1886,8 +1886,8 @@ packages:
     resolution: {integrity: sha512-6QEf6yqFbETdwGITKq57aYoPfX/3K8XFNwsAlx0C1M7o8cb79sv1M3w+tWuWvIcSbNqrLF7OD7YpZMVVz335hQ==}
     engines: {node: '>=20.0.0'}
 
-  '@mary-ext/event-iterator@1.0.0':
-    resolution: {integrity: sha512-l6gCPsWJ8aRCe/s7/oCmero70kDHgIK5m4uJvYgwEYTqVxoBOIXbKr5tnkLqUHEg6mNduB4IWvms3h70Hp9ADQ==}
+  '@mary-ext/event-iterator@1.1.0':
+    resolution: {integrity: sha512-uL6XFBsfAq+h6wnmioLTDMKzgbuKKQTo/2k512W1w1M5SgVroS6+D4MOD+j1K0loEYUJD9rIKV0Fo5ETZlgafw==}
 
   '@mary-ext/simple-event-emitter@1.0.2':
     resolution: {integrity: sha512-A644JdOf+KfTGyX/EYf8AI1Y18mM7369KrhtOVkdEwRa2QIC0Botv7XWnK6/XU7HuQfvtFpCufmHJC3hi4YMuw==}
@@ -5780,7 +5780,7 @@ snapshots:
       tinyglobby: 0.2.17
       yaml: 2.9.0
 
-  '@mary-ext/event-iterator@1.0.0':
+  '@mary-ext/event-iterator@1.1.0':
     dependencies:
       yocto-queue: 1.2.2
 

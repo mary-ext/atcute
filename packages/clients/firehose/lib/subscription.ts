@@ -149,24 +149,27 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 		this.#ws = undefined;
 	}
 
-	[Symbol.asyncIterator]() {
-		return new EventIterator<MessageOf<TSchema>>((emit) => {
-			if (this.#listening === 0) {
-				this.#create();
-			}
-
-			this.#listening++;
-			this.#emitter.subscribe(emit);
-
-			return () => {
-				if (this.#listening === 1) {
-					this.#destroy();
+	[Symbol.asyncIterator](): EventIterator<MessageOf<TSchema>> {
+		return new EventIterator<MessageOf<TSchema>>(
+			(emit) => {
+				if (this.#listening === 0) {
+					this.#create();
 				}
 
-				this.#listening--;
-				this.#emitter.unsubscribe(emit);
-			};
-		});
+				this.#listening++;
+				this.#emitter.subscribe(emit);
+
+				return () => {
+					if (this.#listening === 1) {
+						this.#destroy();
+					}
+
+					this.#listening--;
+					this.#emitter.unsubscribe(emit);
+				};
+			},
+			{ signal: this.#options.signal },
+		);
 	}
 
 	/** get current subscription options */
