@@ -2,6 +2,7 @@
 
 import type {
 	BaseSchema,
+	InferInput,
 	InferOutput,
 	XRPCSubprotocol,
 	XRPCSubscriptionMetadata,
@@ -15,7 +16,7 @@ export type ParamsOf<T> =
 		? TParams extends null
 			? undefined
 			: TParams extends BaseSchema
-				? InferOutput<TParams>
+				? InferInput<TParams>
 				: never
 		: never;
 
