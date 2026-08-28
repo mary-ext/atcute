@@ -43,7 +43,7 @@ export interface FirehoseSubscriptionOptions<TSchema extends XRPCSubscriptionMet
 	 * called on each connection attempt, allowing for dynamic cursor tracking and reconnection state
 	 * management.
 	 */
-	params?: ParamsOf<TSchema> | (() => ParamsOf<TSchema>);
+	params?: ParamsOf<TSchema> | (() => ParamsOf<TSchema> | PromiseLike<ParamsOf<TSchema>>);
 
 	/** subprotocol to request; defaults to the schema value or `xrpc.v0.cbor` */
 	subprotocol?: XRPCSubprotocol;

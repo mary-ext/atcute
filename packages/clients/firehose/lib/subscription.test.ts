@@ -212,13 +212,79 @@ describe('firehose subscription', () => {
 		expect(query.getAll('wantedCollections')).toEqual(['app.bsky.feed.post', 'app.bsky.feed.like']);
 	});
 
+	it('awaits an async params function on each connection attempt', async () => {
+		const { server, url, close } = startServer();
+
+		const requestUrls: string[] = [];
+
+		server.on('connection', (socket: WebSocket, request) => {
+			requestUrls.push(request.url!);
+			setTimeout(() => socket.close(), 25);
+		});
+
+		let cursor = 1;
+
+		const subscriptionClient = new FirehoseSubscription({
+			service: url,
+			nsid: ComAtprotoSyncSubscribeRepos.mainSchema,
+			params: async () => {
+				await Promise.resolve();
+				return { cursor: cursor++ };
+			},
+			ws: { minReconnectionDelay: 10, maxReconnectionDelay: 20, minUptime: 10 },
+		});
+
+		const iterator = subscriptionClient[Symbol.asyncIterator]();
+		await new Promise((resolve) => setTimeout(resolve, 150));
+		await iterator.return?.();
+
+		await close();
+
+		const cursors = requestUrls.map((requestUrl) => {
+			return new URL(requestUrl, 'ws://127.0.0.1').searchParams.get('cursor');
+		});
+
+		expect(cursors.length).toBeGreaterThan(1);
+		expect(cursors).toEqual(Array.from({ length: cursors.length }, (_v, index) => String(index + 1)));
+	});
+
+	it('reports a rejected params function as a connection error', async () => {
+		const { server, url, close } = startServer();
+
+		let connections = 0;
+		server.on('connection', () => {
+			connections++;
+		});
+
+		const failure = new Error(`no cursor`);
+		let errors = 0;
+
+		const subscriptionClient = new FirehoseSubscription({
+			service: url,
+			nsid: ComAtprotoSyncSubscribeRepos.mainSchema,
+			params: () => Promise.reject(failure),
+			onConnectionError: () => void errors++,
+			ws: { minReconnectionDelay: 10, maxReconnectionDelay: 20 },
+		});
+
+		const iterator = subscriptionClient[Symbol.asyncIterator]();
+		await new Promise((resolve) => setTimeout(resolve, 75));
+		await iterator.return?.();
+
+		await close();
+		expect(connections).toBe(0);
+		expect(errors).toBeGreaterThan(0);
+	});
+
 	it('rejects iteration and disconnects when the signal aborts', async () => {
 		const { server, url, close } = startServer();
 
-		const disconnected = new Promise<void>((resolve) => {
-			server.on('connection', (socket: WebSocket) => {
-				socket.on('close', () => resolve());
-			});
+		const connected = Promise.withResolvers<void>();
+		const disconnected = Promise.withResolvers<void>();
+
+		server.on('connection', (socket: WebSocket) => {
+			connected.resolve();
+			socket.on('close', () => disconnected.resolve());
 		});
 
 		const controller = new AbortController();
@@ -233,11 +299,12 @@ describe('firehose subscription', () => {
 		const iterator = subscriptionClient[Symbol.asyncIterator]();
 		const next = iterator.next();
 
-		await new Promise((resolve) => setTimeout(resolve, 75));
+		// aborting before the socket opens would leave no close event to observe
+		await connected.promise;
 		controller.abort(reason);
 
 		await expect(next).rejects.toBe(reason);
-		await disconnected;
+		await disconnected.promise;
 
 		await close();
 	});

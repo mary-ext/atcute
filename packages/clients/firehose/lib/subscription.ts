@@ -62,7 +62,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 			subprotocol: subprotocol ?? 'xrpc.v0.cbor',
 		});
 
-		const getUrl = () => {
+		const getUrl = async (): Promise<string> => {
 			let selectedUrl: string;
 
 			if (typeof wsUrls === 'string') {
@@ -73,7 +73,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 
 			const url = new URL('/xrpc/' + nsid.nsid, selectedUrl);
 
-			const currentParams: ParamsOf<TSchema> = typeof params === 'function' ? params() : params;
+			const currentParams: ParamsOf<TSchema> = typeof params === 'function' ? await params() : params;
 
 			if (currentParams !== undefined && currentParams !== null) {
 				const paramObj = currentParams as Record<string, unknown>;
