@@ -206,6 +206,9 @@ importers:
       '@atcute/atproto':
         specifier: workspace:^
         version: link:../../definitions/atproto
+      '@atcute/firehose':
+        specifier: workspace:^
+        version: link:../firehose
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons

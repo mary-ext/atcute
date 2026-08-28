@@ -7,237 +7,186 @@ npm install @atcute/jetstream
 ```
 
 [Jetstream](https://docs.bsky.app/blog/jetstream) is a streaming service that delivers a filtered
-firehose of events from the AT Protocol network over WebSocket. this package provides a simple
-client to subscribe to these events.
+firehose of AT Protocol events as JSON over WebSocket. this package provides a client to subscribe
+to those events.
 
 ## usage
 
 ### subscribing to events
 
-create a subscription and iterate over events with `for await`:
-
 ```ts
-import { JetstreamSubscription } from '@atcute/jetstream';
+import { subscribeEvents } from '@atcute/jetstream';
 
-const subscription = new JetstreamSubscription({
-	url: 'wss://jetstream2.us-east.bsky.network',
+const events = subscribeEvents({
+	service: 'wss://jetstream.us-east.bsky.network',
 });
 
-for await (const event of subscription) {
-	console.log(event.kind, event.did);
+for await (const message of events) {
+	console.log(message.$type, message.seq, message.did);
 }
 ```
 
-the connection opens when you start iterating and closes when you break out of the loop. the
-underlying WebSocket automatically reconnects on disconnection.
+the connection opens when iteration starts, reconnects automatically, and closes when iteration
+ends. `service` accepts one host because v2 sequence cursors are specific to a Jetstream instance.
 
-### filtering by collection
+### filtering
 
-use `wantedCollections` to receive only events for specific record types:
-
-```ts
-const subscription = new JetstreamSubscription({
-	url: 'wss://jetstream2.us-east.bsky.network',
-	wantedCollections: ['app.bsky.feed.post', 'app.bsky.feed.like'],
-});
-
-for await (const event of subscription) {
-	if (event.kind === 'commit') {
-		console.log(event.commit.collection, event.commit.operation);
-		// -> "app.bsky.feed.post" "create"
-	}
-}
-```
-
-### filtering by account
-
-use `wantedDids` to receive only events from specific accounts:
+filters are combined and match everything when omitted or empty:
 
 ```ts
-const subscription = new JetstreamSubscription({
-	url: 'wss://jetstream2.us-east.bsky.network',
-	wantedDids: ['did:plc:z72i7hdynmk6r22z27h6tvur'], // @bsky.app
+const postEvents = subscribeEvents({
+	service: 'wss://jetstream.us-east.bsky.network',
+	collections: ['app.bsky.feed.post', 'app.bsky.graph.*'],
+	dids: ['did:plc:z72i7hdynmk6r22z27h6tvur'],
+	kinds: ['commit'],
 });
 ```
+
+`collections` only filters commit events. combine it with `kinds: ['commit']` to exclude identity,
+account, and sync events.
 
 ### handling event types
 
-jetstream delivers three kinds of events:
+use `$type` to narrow an event before accessing its fields:
 
 ```ts
-for await (const event of subscription) {
-	switch (event.kind) {
-		case 'commit': {
-			// record was created, updated, or deleted
-			const { collection, operation, rkey, rev } = event.commit;
-
-			if (operation === 'create' || operation === 'update') {
-				// record and cid are available on create/update
-				console.log(event.commit.record);
-			}
-
+for await (const message of events) {
+	switch (message.$type) {
+		case 'network.bsky.jetstream.subscribeEvents#commit': {
+			console.log(message.operation, message.collection, message.rkey, message.record);
 			break;
 		}
 
-		case 'identity': {
-			// handle or DID document changed
-			const { did, handle, seq, time } = event.identity;
+		case 'network.bsky.jetstream.subscribeEvents#identity': {
+			console.log(message.identity.handle);
 			break;
 		}
 
-		case 'account': {
-			// account status changed (activated, deactivated, etc.)
-			const { did, active, seq, time } = event.account;
+		case 'network.bsky.jetstream.subscribeEvents#account': {
+			console.log(message.account.active, message.account.status);
+			break;
+		}
+
+		case 'network.bsky.jetstream.subscribeEvents#sync': {
+			console.log(message.sync.rev);
 			break;
 		}
 	}
 }
 ```
+
+commit fields are placed directly on the message. identity, account, and sync messages wrap the
+corresponding upstream relay event. event types unknown to this version of the package are skipped
+without advancing the cursor.
 
 ### validating records
 
-jetstream events include the raw record data. use `is()` from `@atcute/lexicons` to validate and
-narrow the type:
+event envelopes are validated by default, but commit `record` values remain unvalidated JSON. narrow
+them with `is()` from `@atcute/lexicons`:
 
 ```ts
-import { JetstreamSubscription } from '@atcute/jetstream';
+import { AppBskyFeedPost } from '@atcute/bluesky';
 import { is } from '@atcute/lexicons';
 
-import { AppBskyFeedPost } from '@atcute/bluesky';
-
-const subscription = new JetstreamSubscription({
-	url: 'wss://jetstream2.us-east.bsky.network',
-	wantedCollections: ['app.bsky.feed.post'],
-});
-
-for await (const event of subscription) {
-	if (event.kind !== 'commit') {
+for await (const message of events) {
+	if (message.$type !== 'network.bsky.jetstream.subscribeEvents#commit') {
 		continue;
 	}
 
-	const commit = event.commit;
-	if (commit.operation !== 'create') {
-		continue;
+	if (is(AppBskyFeedPost.mainSchema, message.record)) {
+		console.log(`@${message.did}: ${message.record.text}`);
 	}
-
-	// validate the record against the schema
-	if (!is(AppBskyFeedPost.mainSchema, commit.record)) {
-		console.warn('invalid record', commit.record);
-		continue;
-	}
-
-	// commit.record is now typed as AppBskyFeedPost.$record
-	console.log(`@${event.did}: ${commit.record.text}`);
 }
 ```
 
+set `validateEvents: false` to skip envelope validation. records must still be validated separately.
+
 ### resuming from a cursor
 
-jetstream supports cursors for resuming from a specific point. the cursor is a timestamp in
-microseconds:
+pass a sequence number to start from, or a `CursorStore` to load and save the position:
 
 ```ts
-const subscription = new JetstreamSubscription({
-	url: 'wss://jetstream2.us-east.bsky.network',
-	// resume from a saved cursor
-	cursor: 1699900000000000,
-});
+import { readFile, writeFile } from 'node:fs/promises';
 
-// save the cursor periodically to resume later
-setInterval(() => {
-	localStorage.setItem('jetstream-cursor', String(subscription.cursor));
-}, 5_000);
-```
-
-when switching between jetstream instances (e.g., when using multiple URLs for failover), the client
-automatically rolls back the cursor by 10 seconds to avoid missing events due to clock differences.
-
-### using multiple servers
-
-pass an array of URLs for automatic failover. the client randomly selects one on each connection:
-
-```ts
-const subscription = new JetstreamSubscription({
-	url: [
-		'wss://jetstream1.us-east.bsky.network',
-		'wss://jetstream2.us-east.bsky.network',
-		'wss://jetstream1.us-west.bsky.network',
-		'wss://jetstream2.us-west.bsky.network',
-	],
-});
-```
-
-### updating options at runtime
-
-change filters without reconnecting using `updateOptions()`:
-
-```ts
-// start with all collections
-const subscription = new JetstreamSubscription({
-	url: 'wss://jetstream2.us-east.bsky.network',
-});
-
-// later, filter to only posts
-subscription.updateOptions({
-	wantedCollections: ['app.bsky.feed.post'],
-});
-
-// add accounts to filter
-subscription.updateOptions({
-	wantedDids: ['did:plc:...'],
-});
-```
-
-changes to `wantedCollections` and `wantedDids` are sent to the server without reconnecting. other
-option changes trigger a reconnection.
-
-### connection lifecycle callbacks
-
-handle connection events for logging or UI updates:
-
-```ts
-const subscription = new JetstreamSubscription({
-	url: 'wss://jetstream2.us-east.bsky.network',
-	onConnectionOpen(event) {
-		console.log('connected to jetstream');
-	},
-	onConnectionClose(event) {
-		console.log('disconnected from jetstream', event.code, event.reason);
-	},
-	onConnectionError(event) {
-		console.error('jetstream error', event.error);
+const events = subscribeEvents({
+	service: 'wss://jetstream.us-east.bsky.network',
+	cursor: {
+		async load() {
+			const saved = await readFile('cursor', 'utf8').catch(() => undefined);
+			return saved !== undefined ? Number(saved) : undefined;
+		},
+		async save(seq) {
+			await writeFile('cursor', String(seq));
+		},
 	},
 });
 ```
 
-### disabling event validation
+`load` decides where the subscription starts, and it is consulted again on every reconnection rather
+than only on the first connection, so a store written elsewhere takes effect on the next connection
+attempt. returning `undefined` starts from the live tip. a sequence number is treated as a store
+that only lasts for the subscription.
 
-by default, jetstream events are validated. disable this for slightly better performance if you
-trust the server:
+the stored cursor advances when the consumer asks for the next event. writes are limited by
+`cursorSaveInterval`, which defaults to 5 seconds; a pending write is flushed before reconnecting
+and when iteration ends. set the interval to `0` to save every event.
+
+a store failure while connecting is reported to `onConnectionError` and the connection attempt is
+retried. a `save` failure during iteration is thrown, except for the final flush, which goes to
+`onError` so it does not mask why iteration ended.
+
+delivery is at least once. reconnect duplicates are removed while the same iterator is running, but
+a new iterator may replay its saved cursor event. event handlers should therefore be idempotent.
+
+### cancelling the subscription
+
+an `AbortSignal` stops the stream. iteration rejects with `signal.reason` after flushing any pending
+cursor:
 
 ```ts
-const subscription = new JetstreamSubscription({
-	url: 'wss://jetstream2.us-east.bsky.network',
-	validateEvents: false,
+const events = subscribeEvents({
+	service: 'wss://jetstream.us-east.bsky.network',
+	signal: AbortSignal.timeout(10_000),
 });
 ```
 
-note: this only disables validation of the event envelope. you should still validate records using
-`is()` from `@atcute/lexicons`.
+### handling errors
 
-### WebSocket options
-
-pass options to the underlying
-[partysocket](https://github.com/partykit/partykit/tree/main/packages/partysocket) WebSocket for
-custom reconnection behavior:
+`onError` receives malformed frames, validation failures, and server error frames. server errors use
+`FirehoseError`:
 
 ```ts
-const subscription = new JetstreamSubscription({
-	url: 'wss://jetstream2.us-east.bsky.network',
+import { FirehoseError, subscribeEvents } from '@atcute/jetstream';
+
+const events = subscribeEvents({
+	service: 'wss://jetstream.us-east.bsky.network',
+	onError: (err) => {
+		if (err instanceof FirehoseError) {
+			console.error('jetstream sent', err.error);
+		} else {
+			console.error('jetstream error:', err);
+		}
+	},
+});
+```
+
+errors returned before the WebSocket upgrade, including `CursorTooOld` and `InvalidRequest`, are not
+visible to WebSocket clients and look like connection failures. they are retried by default; use
+`ws.maxRetries` to set a limit. reaching the limit stops reconnection but leaves the iterator open.
+
+### connection options
+
+`onConnectionOpen`, `onConnectionClose`, and `onConnectionError` report the socket lifecycle, and
+`ws` passes options to the underlying
+[partysocket](https://github.com/partykit/partykit/tree/main/packages/partysocket) WebSocket:
+
+```ts
+const events = subscribeEvents({
+	service: 'wss://jetstream.us-east.bsky.network',
+	onConnectionClose: (event) => console.log('disconnected', event.code, event.reason),
 	ws: {
-		maxRetries: 10,
-		minReconnectionDelay: 1000,
-		maxReconnectionDelay: 30000,
+		minReconnectionDelay: 1_000,
+		maxReconnectionDelay: 30_000,
 	},
 });
 ```
