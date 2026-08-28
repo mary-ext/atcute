@@ -1,0 +1,51 @@
+{
+	"id": "org.tangled.temp.spindle.quota.defs",
+	"defs": {
+		"limit": {
+			"type": "object",
+			"required": ["did", "limit", "resource"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did",
+					"description": "DID whose quota is overridden, either a repository or an account owner"
+				},
+				"limit": {
+					"type": "integer",
+					"description": "maximum amount in the resource's native units; -1 means unlimited"
+				},
+				"resource": {
+					"type": "string",
+					"description": "quota resource name"
+				}
+			},
+			"description": "a per-subject override for one quota resource"
+		},
+		"usage": {
+			"type": "object",
+			"required": ["did", "resource", "scope", "used"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did",
+					"description": "DID for the user or repository scope"
+				},
+				"used": {
+					"type": "integer",
+					"description": "amount currently allocated or reserved in native resource units"
+				},
+				"scope": {
+					"type": "string",
+					"description": "aggregation axis for this row: user or repo",
+					"knownValues": ["repo", "user"]
+				},
+				"resource": {
+					"type": "string",
+					"description": "quota resource name"
+				}
+			},
+			"description": "current usage aggregated for one subject and resource"
+		}
+	},
+	"lexicon": 1
+}

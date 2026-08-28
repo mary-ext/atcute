@@ -1,0 +1,27 @@
+{
+	"id": "org.tangled.temp.spindle.mod.listBans",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["bans"],
+					"properties": {
+						"bans": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.temp.spindle.mod.defs#ban",
+								"type": "ref"
+							},
+							"description": "active bans ordered by subject DID"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "list all active repository and account-owner bans"
+		}
+	},
+	"lexicon": 1
+}

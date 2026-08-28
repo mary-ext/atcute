@@ -1,0 +1,36 @@
+{
+	"id": "org.tangled.temp.spindle.quota.set",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["did", "resource"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository or account owner"
+						},
+						"limit": {
+							"type": "integer",
+							"description": "positive maximum in the resource's native units; cannot be combined with unlimited"
+						},
+						"resource": {
+							"type": "string",
+							"description": "quota resource name, such as workflows, vcpus, memory_mib, disk_mib, or cache_storage_bytes"
+						},
+						"unlimited": {
+							"type": "boolean",
+							"description": "store an unlimited override; cannot be combined with limit"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "set a quota override for a repository or account owner; values use the resource's native units"
+		}
+	},
+	"lexicon": 1
+}

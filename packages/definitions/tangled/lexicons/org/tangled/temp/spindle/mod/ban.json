@@ -1,0 +1,29 @@
+{
+	"id": "org.tangled.temp.spindle.mod.ban",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["did"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository or account owner to ban"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidDid"
+				}
+			],
+			"description": "ban a repository or account owner and immediately wipe matching spindle state"
+		}
+	},
+	"lexicon": 1
+}

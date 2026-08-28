@@ -30,6 +30,17 @@ export * as OrgTangledTempSearchSearchCode from './types/org/tangled/temp/search
 export * as OrgTangledTempSiteClaimDomain from './types/org/tangled/temp/site/claimDomain.ts';
 export * as OrgTangledTempSiteGetDomainClaim from './types/org/tangled/temp/site/getDomainClaim.ts';
 export * as OrgTangledTempSiteReleaseDomain from './types/org/tangled/temp/site/releaseDomain.ts';
+export * as OrgTangledTempSpindleModBan from './types/org/tangled/temp/spindle/mod/ban.ts';
+export * as OrgTangledTempSpindleModDefs from './types/org/tangled/temp/spindle/mod/defs.ts';
+export * as OrgTangledTempSpindleModGetBan from './types/org/tangled/temp/spindle/mod/getBan.ts';
+export * as OrgTangledTempSpindleModListBans from './types/org/tangled/temp/spindle/mod/listBans.ts';
+export * as OrgTangledTempSpindleModUnban from './types/org/tangled/temp/spindle/mod/unban.ts';
+export * as OrgTangledTempSpindleQuotaDefs from './types/org/tangled/temp/spindle/quota/defs.ts';
+export * as OrgTangledTempSpindleQuotaGet from './types/org/tangled/temp/spindle/quota/get.ts';
+export * as OrgTangledTempSpindleQuotaList from './types/org/tangled/temp/spindle/quota/list.ts';
+export * as OrgTangledTempSpindleQuotaSet from './types/org/tangled/temp/spindle/quota/set.ts';
+export * as OrgTangledTempSpindleQuotaUnset from './types/org/tangled/temp/spindle/quota/unset.ts';
+export * as OrgTangledTempSpindleQuotaUsage from './types/org/tangled/temp/spindle/quota/usage.ts';
 export * as ShTangledActorGetProfile from './types/sh/tangled/actor/getProfile.ts';
 export * as ShTangledActorGetProfiles from './types/sh/tangled/actor/getProfiles.ts';
 export * as ShTangledActorProfile from './types/sh/tangled/actor/profile.ts';

@@ -1,0 +1,28 @@
+{
+	"id": "org.tangled.temp.spindle.quota.unset",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["did", "resource"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository or account owner"
+						},
+						"resource": {
+							"type": "string",
+							"description": "quota resource whose override to remove"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "remove the quota override for a repository or account owner and resource"
+		}
+	},
+	"lexicon": 1
+}

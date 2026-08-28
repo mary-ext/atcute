@@ -1,0 +1,32 @@
+{
+	"id": "org.tangled.temp.spindle.mod.unban",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["did"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository or account owner to unban"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidDid"
+				},
+				{
+					"name": "BanNotFound"
+				}
+			],
+			"description": "remove an existing ban for a repository or account owner"
+		}
+	},
+	"lexicon": 1
+}
