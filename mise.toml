@@ -4,7 +4,7 @@ experimental = true
 [tools]
 bun = "latest"
 node = "24"
-pnpm = "11"
+pnpm = "12"
 python = "3.11"
 uv = "latest"
 
