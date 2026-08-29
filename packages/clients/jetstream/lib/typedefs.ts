@@ -59,6 +59,7 @@ export const commitOperationSchema = v.variant('operation', [
 ]);
 
 const baseEventEntries = {
+	cursor: v.optional(integer),
 	did: didString,
 	time_us: integer,
 };
