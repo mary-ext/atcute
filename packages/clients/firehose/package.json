@@ -35,7 +35,7 @@
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@types/ws": "^8.18.1",
-		"vitest": "^4.1.10",
+		"vitest": "^4.1.11",
 		"ws": "^8.21.3"
 	},
 	"peerDependencies": {

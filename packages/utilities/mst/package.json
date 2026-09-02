@@ -37,10 +37,10 @@
 	},
 	"devDependencies": {
 		"@atcute/car": "workspace:^",
-		"@types/node": "^26.2.0",
-		"@vitest/coverage-v8": "^4.1.10",
+		"@types/node": "^26.4.0",
+		"@vitest/coverage-v8": "^4.1.11",
 		"valibot": "^1.4.2",
-		"vitest": "^4.1.10"
+		"vitest": "^4.1.11"
 	},
 	"peerDependencies": {
 		"@atcute/cbor": "^2.0.0",

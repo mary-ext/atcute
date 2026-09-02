@@ -32,14 +32,14 @@
 		"@atcute/lexicon-resolver": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@oomfware/kempt": "^0.1.4",
-		"@optique/core": "^1.2.1",
-		"@optique/run": "^1.2.1",
+		"@optique/core": "^1.2.4",
+		"@optique/run": "^1.2.4",
 		"picocolors": "^1.1.1",
 		"valibot": "^1.4.2"
 	},
 	"devDependencies": {
 		"@atcute/uint8array": "workspace:^",
-		"@types/node": "^26.2.0",
+		"@types/node": "^26.4.0",
 		"prettier": "^3.9.6",
 		"tschema": "^3.2.0"
 	},

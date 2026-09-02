@@ -23,4 +23,4 @@ minimumReleaseAgeExclude:
   - '@oomfware/*'
 
 patchedDependencies:
-  '@atproto/pds@0.5.29': patches/@atproto__pds@0.5.29.patch
+  '@atproto/pds@0.5.31': patches/@atproto__pds@0.5.31.patch

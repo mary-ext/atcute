@@ -43,14 +43,14 @@
 	"dependencies": {
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"@noble/secp256k1": "^3.1.0"
+		"@noble/secp256k1": "^3.2.0"
 	},
 	"devDependencies": {
-		"@noble/curves": "^2.3.0",
-		"@types/node": "^26.2.0",
-		"@vitest/browser-playwright": "^4.1.10",
-		"@vitest/coverage-v8": "^4.1.10",
+		"@noble/curves": "^2.4.0",
+		"@types/node": "^26.4.0",
+		"@vitest/browser-playwright": "^4.1.11",
+		"@vitest/coverage-v8": "^4.1.11",
 		"playwright": "^1.62.1",
-		"vitest": "^4.1.10"
+		"vitest": "^4.1.11"
 	}
 }
