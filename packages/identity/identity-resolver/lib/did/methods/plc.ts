@@ -38,7 +38,7 @@ export class PlcDidDocumentResolver implements DidDocumentResolver<'plc'> {
 				signal: options?.signal,
 				cache: options?.noCache ? 'no-cache' : undefined,
 				redirect: 'manual',
-				headers: { accept: 'application/did+ld+json,application/json' },
+				headers: { accept: 'application/did+ld+json,application/did+json,application/json' },
 			});
 
 			if (response.status >= 300 && response.status < 400) {

@@ -59,7 +59,7 @@ const assertResponseOk = async (response: Response): Promise<Response> => {
 
 const handleDocument = pipe(
 	assertResponseOk,
-	parseResponseAsJson(/^application\/(did\+ld\+)?json$/, MAX_RESPONSE_SIZE),
+	parseResponseAsJson(/^application\/(did\+(ld\+)?)?json$/, MAX_RESPONSE_SIZE),
 	validateJsonWith(identityDefs.didDocument),
 );
 
@@ -120,7 +120,7 @@ export class PlcClient {
 
 		const response = await (0, this.#fetch)(url, {
 			signal: options?.signal,
-			headers: { accept: 'application/did+ld+json,application/json' },
+			headers: { accept: 'application/did+ld+json,application/did+json,application/json' },
 		});
 
 		const { json } = await handleDocument(response);
