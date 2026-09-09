@@ -24,15 +24,18 @@ export class OAuthServerAgent {
 
 	async request(
 		endpoint: 'pushed_authorization_request',
-		payload: Record<string, unknown>,
+		payload: Record<string, string | undefined>,
 	): Promise<OAuthParResponse>;
-	async request(endpoint: 'token', payload: Record<string, unknown>): Promise<AtprotoOAuthTokenResponse>;
+	async request(
+		endpoint: 'token',
+		payload: Record<string, string | undefined>,
+	): Promise<AtprotoOAuthTokenResponse>;
 	// oxlint-disable-next-line typescript/no-explicit-any
-	async request(endpoint: 'revocation', payload: Record<string, unknown>): Promise<any>;
+	async request(endpoint: 'revocation', payload: Record<string, string | undefined>): Promise<any>;
 	// oxlint-disable-next-line typescript/no-explicit-any
-	async request(endpoint: 'introspection', payload: Record<string, unknown>): Promise<any>;
+	async request(endpoint: 'introspection', payload: Record<string, string | undefined>): Promise<any>;
 	// oxlint-disable-next-line typescript/no-explicit-any
-	async request(endpoint: string, payload: Record<string, unknown>): Promise<any> {
+	async request(endpoint: string, payload: Record<string, string | undefined>): Promise<any> {
 		// oxlint-disable-next-line typescript/no-explicit-any
 		const url: string | undefined = (this.#metadata as any)[`${endpoint}_endpoint`];
 		if (!url) {
@@ -55,10 +58,20 @@ export class OAuthServerAgent {
 			payload = { ...payload, ...assertion };
 		}
 
+		// RFC 9126 §2.1 and RFC 6749 §3.2, authorization server endpoints take form-encoded bodies
+		const body = new URLSearchParams();
+		for (const [key, value] of Object.entries(payload)) {
+			if (value !== undefined) {
+				body.set(key, value);
+			}
+		}
+
+		body.set('client_id', CLIENT_ID);
+
 		const response = await this.#fetch(url, {
 			method: 'post',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ ...payload, client_id: CLIENT_ID }),
+			headers: { 'content-type': 'application/x-www-form-urlencoded' },
+			body: body.toString(),
 		});
 
 		if (extractContentType(response.headers) !== 'application/json') {
