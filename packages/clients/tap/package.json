@@ -32,11 +32,11 @@
 		"@mary-ext/event-iterator": "^1.1.0",
 		"@mary-ext/simple-event-emitter": "^1.0.2",
 		"partysocket": "^1.3.0",
-		"valibot": "^1.4.2"
+		"valibot": "^1.5.0"
 	},
 	"devDependencies": {
 		"@types/ws": "^8.18.1",
-		"vitest": "^4.1.11",
+		"vitest": "^5.0.0",
 		"ws": "^8.21.3"
 	},
 	"peerDependencies": {

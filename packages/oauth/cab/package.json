@@ -29,11 +29,11 @@
 		"@atcute/oauth-keyset": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
 		"nanoid": "^6.0.1",
-		"valibot": "^1.4.2"
+		"valibot": "^1.5.0"
 	},
 	"devDependencies": {
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"vitest": "^4.1.11"
+		"vitest": "^5.0.0"
 	}
 }

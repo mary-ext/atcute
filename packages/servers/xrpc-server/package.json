@@ -34,16 +34,16 @@
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
 		"nanoid": "^6.0.1",
-		"valibot": "^1.4.2"
+		"valibot": "^1.5.0"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/xrpc-server": "file:",
 		"@mary-ext/simple-event-emitter": "^1.0.2",
-		"@types/node": "^26.4.0",
-		"@vitest/coverage-v8": "^4.1.11",
-		"vitest": "^4.1.11"
+		"@types/node": "^26.5.0",
+		"@vitest/coverage-v8": "^5.0.0",
+		"vitest": "^5.0.0"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

@@ -38,12 +38,12 @@
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
-		"valibot": "^1.4.2"
+		"valibot": "^1.5.0"
 	},
 	"devDependencies": {
 		"@atcute/internal-dev-env": "workspace:^",
-		"@vitest/coverage-v8": "^4.1.11",
-		"vitest": "^4.1.11"
+		"@vitest/coverage-v8": "^5.0.0",
+		"vitest": "^5.0.0"
 	},
 	"peerDependencies": {
 		"@atcute/cbor": "^2.0.0",

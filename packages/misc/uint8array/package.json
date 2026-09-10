@@ -29,7 +29,7 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@types/bun": "^1.4.0",
-		"vitest": "^4.1.11"
+		"@types/bun": "^1.4.2",
+		"vitest": "^5.0.0"
 	}
 }

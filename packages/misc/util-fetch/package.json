@@ -28,6 +28,6 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"valibot": "^1.4.2"
+		"valibot": "^1.5.0"
 	}
 }

@@ -23,10 +23,6 @@
 			{
 				"groupName": "atcute",
 				"elementNamePattern": ["@atcute/**"]
-			},
-			{
-				"groupName": "internal",
-				"elementNamePattern": ["#**"]
 			}
 		]
 	},
