@@ -30,11 +30,11 @@ export * as OrgTangledTempSearchSearchCode from './types/org/tangled/temp/search
 export * as OrgTangledTempSiteClaimDomain from './types/org/tangled/temp/site/claimDomain.ts';
 export * as OrgTangledTempSiteGetDomainClaim from './types/org/tangled/temp/site/getDomainClaim.ts';
 export * as OrgTangledTempSiteReleaseDomain from './types/org/tangled/temp/site/releaseDomain.ts';
-export * as OrgTangledTempSpindleModBan from './types/org/tangled/temp/spindle/mod/ban.ts';
-export * as OrgTangledTempSpindleModDefs from './types/org/tangled/temp/spindle/mod/defs.ts';
-export * as OrgTangledTempSpindleModGetBan from './types/org/tangled/temp/spindle/mod/getBan.ts';
-export * as OrgTangledTempSpindleModListBans from './types/org/tangled/temp/spindle/mod/listBans.ts';
-export * as OrgTangledTempSpindleModUnban from './types/org/tangled/temp/spindle/mod/unban.ts';
+export * as OrgTangledTempSpindleModerationBan from './types/org/tangled/temp/spindle/moderation/ban.ts';
+export * as OrgTangledTempSpindleModerationDefs from './types/org/tangled/temp/spindle/moderation/defs.ts';
+export * as OrgTangledTempSpindleModerationGetBan from './types/org/tangled/temp/spindle/moderation/getBan.ts';
+export * as OrgTangledTempSpindleModerationListBans from './types/org/tangled/temp/spindle/moderation/listBans.ts';
+export * as OrgTangledTempSpindleModerationUnban from './types/org/tangled/temp/spindle/moderation/unban.ts';
 export * as OrgTangledTempSpindleQuotaDefs from './types/org/tangled/temp/spindle/quota/defs.ts';
 export * as OrgTangledTempSpindleQuotaGet from './types/org/tangled/temp/spindle/quota/get.ts';
 export * as OrgTangledTempSpindleQuotaList from './types/org/tangled/temp/spindle/quota/list.ts';

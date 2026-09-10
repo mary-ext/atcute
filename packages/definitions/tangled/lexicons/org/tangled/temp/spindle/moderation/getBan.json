@@ -1,5 +1,5 @@
 {
-	"id": "org.tangled.temp.spindle.mod.getBan",
+	"id": "org.tangled.temp.spindle.moderation.getBan",
 	"defs": {
 		"main": {
 			"type": "query",
@@ -9,7 +9,7 @@
 					"required": ["ban"],
 					"properties": {
 						"ban": {
-							"ref": "org.tangled.temp.spindle.mod.defs#ban",
+							"ref": "org.tangled.temp.spindle.moderation.defs#ban",
 							"type": "ref",
 							"description": "active ban matching the requested DID"
 						}

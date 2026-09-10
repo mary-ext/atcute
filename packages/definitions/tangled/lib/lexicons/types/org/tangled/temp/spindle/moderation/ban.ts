@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.spindle.mod.ban', {
+const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.spindle.moderation.ban', {
 	params: null,
 	input: {
 		type: 'lex',
@@ -25,6 +25,6 @@ export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'org.tangled.temp.spindle.mod.ban': mainSchema;
+		'org.tangled.temp.spindle.moderation.ban': mainSchema;
 	}
 }

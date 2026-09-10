@@ -1,5 +1,5 @@
 {
-	"id": "org.tangled.temp.spindle.mod.unban",
+	"id": "org.tangled.temp.spindle.moderation.unban",
 	"defs": {
 		"main": {
 			"type": "procedure",
