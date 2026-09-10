@@ -1,0 +1,33 @@
+{
+	"id": "tools.ozone.moderation.getAccountPreferences",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["preferences"],
+					"properties": {
+						"preferences": {
+							"ref": "app.bsky.actor.defs#preferences",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["did"],
+				"properties": {
+					"did": {
+						"type": "string",
+						"format": "did"
+					}
+				}
+			},
+			"description": "Get private preferences for an account. Requires moderator or admin auth."
+		}
+	},
+	"lexicon": 1
+}

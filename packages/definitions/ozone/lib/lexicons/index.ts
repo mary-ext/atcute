@@ -7,6 +7,7 @@ export * as ToolsOzoneHostingGetAccountHistory from './types/tools/ozone/hosting
 export * as ToolsOzoneModerationCancelScheduledActions from './types/tools/ozone/moderation/cancelScheduledActions.ts';
 export * as ToolsOzoneModerationDefs from './types/tools/ozone/moderation/defs.ts';
 export * as ToolsOzoneModerationEmitEvent from './types/tools/ozone/moderation/emitEvent.ts';
+export * as ToolsOzoneModerationGetAccountPreferences from './types/tools/ozone/moderation/getAccountPreferences.ts';
 export * as ToolsOzoneModerationGetAccountTimeline from './types/tools/ozone/moderation/getAccountTimeline.ts';
 export * as ToolsOzoneModerationGetEvent from './types/tools/ozone/moderation/getEvent.ts';
 export * as ToolsOzoneModerationGetRecord from './types/tools/ozone/moderation/getRecord.ts';
