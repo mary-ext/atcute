@@ -16,9 +16,6 @@ export interface RateLimitInfo {
 /**
  * parses the IETF draft `RateLimit-*` header fields off a response.
  *
- * note that these headers are only readable where the server exposes them via CORS; the Bluesky PDS does not,
- * so this returns `null` for cross-origin browser requests even when the server enforces a limit.
- *
  * @param headers the response headers to read from
  * @returns the parsed rate-limit information, or `null` if the headers are absent or malformed
  */
@@ -62,8 +59,7 @@ export interface RetryFetchHandlerOptions {
 	maxDelay?: number;
 	/**
 	 * base delay, in milliseconds, used for exponential backoff when the response carries no timing signal
-	 * (`Retry-After` or `RateLimit-Reset`) — the usual case for cross-origin browser requests, since those
-	 * headers are hidden by CORS.
+	 * (`Retry-After` or `RateLimit-Reset`).
 	 *
 	 * set to `null` to skip retrying when there is no timing signal, returning the response as-is; useful
 	 * because atproto rate-limit windows span minutes, so a blind backoff often expires its attempts long
@@ -99,9 +95,7 @@ const _retryOn429 = (response: Response): boolean => response.status === 429;
  * wraps a fetch handler so that rate-limited responses are retried automatically.
  *
  * the retry delay is derived, in order of preference, from the `Retry-After` header, the `RateLimit-Reset`
- * header, then exponential backoff with full jitter (see {@link RetryFetchHandlerOptions.fallbackDelay}). it
- * works across origins because it keys off the status code rather than the (often CORS-hidden) `RateLimit-*`
- * headers.
+ * header, then exponential backoff with full jitter (see {@link RetryFetchHandlerOptions.fallbackDelay}).
  *
  * requests with a {@link ReadableStream} body are never retried, since the body cannot be replayed.
  *

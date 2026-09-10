@@ -389,8 +389,7 @@ const rpc = new Client({ handler: new MyHandler() });
 ### rate limiting
 
 `retryFetchHandler` wraps another handler to retry rate-limited (HTTP 429) responses. the delay
-comes from the `Retry-After` or `RateLimit-Reset` header when present, otherwise exponential backoff
-— usually the only option in browsers, where CORS hides the `RateLimit-*` headers.
+comes from the `Retry-After` or `RateLimit-Reset` header when present, otherwise exponential backoff.
 
 ```ts
 import { Client, retryFetchHandler, simpleFetchHandler } from '@atcute/client';
