@@ -1,5 +1,18 @@
 # @atcute/firehose
 
+## 1.2.0
+
+### Minor Changes
+
+- 08ea59a: add support for cancelling subscriptions with an AbortSignal.
+- 91856f2: allow the subscription `params` function to return a promise.
+
+### Patch Changes
+
+- 9fabffc: use schema input types for subscription params, preserving optional defaulted fields.
+- Updated dependencies [083f557]
+  - @atcute/cbor@2.3.7
+
 ## 1.1.0
 
 ### Minor Changes

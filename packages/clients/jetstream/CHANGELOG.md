@@ -1,5 +1,19 @@
 # @atcute/jetstream
 
+## 2.2.0
+
+### Minor Changes
+
+- 1b8343c: expose Jetstream v2 sequence cursors on legacy v1 events.
+- 9f62ada: add `subscribeEvents` for subscribing to Jetstream v2.
+
+### Patch Changes
+
+- Updated dependencies [08ea59a]
+- Updated dependencies [91856f2]
+- Updated dependencies [9fabffc]
+  - @atcute/firehose@1.2.0
+
 ## 2.1.0
 
 ### Minor Changes

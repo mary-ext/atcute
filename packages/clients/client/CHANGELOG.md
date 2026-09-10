@@ -1,5 +1,11 @@
 # @atcute/client
 
+## 5.1.2
+
+### Patch Changes
+
+- fd1b049: drop misleading CORS caveats from `retryFetchHandler` documentation
+
 ## 5.1.1
 
 ### Patch Changes

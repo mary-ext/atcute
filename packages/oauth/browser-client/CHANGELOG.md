@@ -1,5 +1,13 @@
 # @atcute/oauth-browser-client
 
+## 5.0.1
+
+### Patch Changes
+
+- 523178e: send authorization server requests as `application/x-www-form-urlencoded` instead of JSON
+- Updated dependencies [fd1b049]
+  - @atcute/client@5.1.2
+
 ## 5.0.0
 
 ### Major Changes

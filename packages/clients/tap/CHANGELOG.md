@@ -1,5 +1,12 @@
 # @atcute/tap
 
+## 1.0.3
+
+### Patch Changes
+
+- f97062d: flush buffered acknowledgements in linear time after reconnecting instead of copying the
+  remaining queue for every acknowledgement.
+
 ## 1.0.2
 
 ### Patch Changes

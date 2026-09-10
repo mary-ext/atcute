@@ -1,5 +1,13 @@
 # @atcute/xrpc-server
 
+## 2.0.3
+
+### Patch Changes
+
+- 8ec71bf: avoid per-frame microtask suspension when a WebSocket adapter sends synchronously.
+- Updated dependencies [083f557]
+  - @atcute/cbor@2.3.7
+
 ## 2.0.2
 
 ### Patch Changes

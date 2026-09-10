@@ -1,5 +1,12 @@
 # @atcute/xrpc-server-node
 
+## 2.1.2
+
+### Patch Changes
+
+- f05b92f: avoid per-frame Promise allocation by sending synchronously and only waiting when
+  WebSocket backpressure is actually observed.
+
 ## 2.1.1
 
 ### Patch Changes
