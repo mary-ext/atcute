@@ -12,6 +12,11 @@ const _listItemViewSchema = /*#__PURE__*/ v.object({
 	get subject() {
 		return AppBskyActorDefs.profileViewSchema;
 	},
+	/**
+	 * Set to true when the subject has opted out of appearing in the reference list. Only set when the viewer
+	 * owns the list.
+	 */
+	subjectOptedOut: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal(true)),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 });
 const _listPurposeSchema = /*#__PURE__*/ v.string<
@@ -86,6 +91,11 @@ const _listViewerStateSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.graph.defs#listViewerState')),
 	blocked: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	muted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * The authenticated viewer's app.bsky.graph.referencelistoptout record URI for this reference list. Only
+	 * set for reference lists. A client can delete this record to undo the opt-out.
+	 */
+	referenceListOptOut: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 });
 const _modlistSchema = /*#__PURE__*/ v.literal('app.bsky.graph.defs#modlist');
 const _notFoundActorSchema = /*#__PURE__*/ v.object({

@@ -107,6 +107,8 @@ const _interestsPrefSchema = /*#__PURE__*/ v.object({
 		),
 		[/*#__PURE__*/ v.arrayLength(0, 100)],
 	),
+	/** The timestamp when the account owner last updated their interests. */
+	updatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _knownFollowersSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#knownFollowers')),
