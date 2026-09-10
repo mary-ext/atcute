@@ -27,7 +27,7 @@
 	"scripts": {
 		"generate-tests": "cd mst-test-suite && mise exec -- uv run python scripts/generate_exhaustive_cars.py",
 		"build": "tsc",
-		"test": "vitest run",
+		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {

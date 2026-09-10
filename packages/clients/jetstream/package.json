@@ -24,7 +24,7 @@
 		"build": "tsc",
 		"generate": "lex-cli generate",
 		"pull": "lex-cli pull",
-		"test": "vitest run",
+		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {

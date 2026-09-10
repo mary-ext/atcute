@@ -20,7 +20,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"test": "vitest run",
+		"test": "vitest",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {

@@ -3,7 +3,8 @@
 	"type": "module",
 	"scripts": {
 		"fmt": "oxfmt",
-		"lint": "oxlint"
+		"lint": "oxlint",
+		"test": "pnpm -r run test --run"
 	},
 	"devDependencies": {
 		"@changesets/cli": "^3.0.1",

@@ -22,7 +22,7 @@
 	"scripts": {
 		"build": "tsc",
 		"postbuild": "node ./scripts/ensure-files.js",
-		"test": "vitest run --coverage",
+		"test": "vitest --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
