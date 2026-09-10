@@ -7,6 +7,10 @@
 			"properties": {
 				"id": {
 					"type": "string"
+				},
+				"display": {
+					"type": "string",
+					"knownValues": ["compact", "full"]
 				}
 			}
 		}
