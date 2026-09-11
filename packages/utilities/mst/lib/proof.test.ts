@@ -3,6 +3,8 @@ import { encodeUtf8 } from '@atcute/uint8array';
 
 import { describe, expect, it } from 'vitest';
 
+import { BlockMismatchError } from './errors.ts';
+import { MSTNode } from './node.ts';
 import { NodeStore } from './node-store.ts';
 import { NodeWrangler } from './node-wrangler.ts';
 import {
@@ -21,6 +23,33 @@ const createCid = async (data: string) => {
 };
 
 describe('Proof', () => {
+	it('should refuse a proof whose node bytes do not hash to their cid', async () => {
+		const store = new NodeStore(new MemoryBlockStore());
+		const wrangler = new NodeWrangler(store);
+
+		// build a tree with some records
+		let rootCid: string | null = null;
+		for (const key of ['a/1', 'b/2', 'c/3']) {
+			rootCid = await wrangler.putRecord(rootCid, key, await createCid(`value-${key}`));
+		}
+
+		// build inclusion proof for 'b/2'
+		const proof = await buildInclusionProof(store, rootCid!, 'b/2');
+
+		// create a new store with the proof blocks, but a different well-formed node under the root's CID
+		const forged = new MemoryBlockStore();
+		for (const cid of proof) {
+			const bytes = await store.store.get(cid);
+			if (bytes !== null) await forged.put(cid, bytes);
+		}
+		await forged.put(rootCid!, await MSTNode.empty().serialize());
+
+		// the swapped root must be refused as a mismatch
+		await expect(verifyInclusion(new NodeStore(forged), rootCid!, 'b/2')).rejects.toBeInstanceOf(
+			BlockMismatchError,
+		);
+	});
+
 	it('should build and verify inclusion proof', async () => {
 		const store = new NodeStore(new MemoryBlockStore());
 		const wrangler = new NodeWrangler(store);
