@@ -1,4 +1,6 @@
-import { MissingBlockError } from './errors.ts';
+import * as CID from '@atcute/cid';
+
+import { BlockMismatchError, MissingBlockError } from './errors.ts';
 import { MSTNode } from './node.ts';
 import type { BlockStore } from './stores.ts';
 import LRUCache from './utils/lru.ts';
@@ -20,6 +22,7 @@ export class NodeStore {
 	 * @param cid the CID of the node to retrieve, or null for empty node
 	 * @returns the MST node
 	 * @throws {MissingBlockError} if the node cannot be found in the store
+	 * @throws {BlockMismatchError} if the stored bytes do not hash to `cid`
 	 */
 	async get(cid: string | null): Promise<MSTNode> {
 		let node = this.cache.get(cid);
@@ -33,8 +36,15 @@ export class NodeStore {
 					throw new MissingBlockError(cid, 'MST node');
 				}
 
+				// check before decoding so CID mismatches take precedence over malformed nodes
+				const actual = CID.toCidLink(await CID.create(0x71, bytes));
+				if (actual.$link !== cid) {
+					throw new BlockMismatchError(cid, actual.$link);
+				}
+
 				node = await MSTNode.deserialize(bytes);
 				node._bytes = bytes;
+				node._cid = actual;
 			}
 
 			this.cache.put(cid, node);

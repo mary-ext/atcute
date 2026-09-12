@@ -19,3 +19,15 @@ export class MissingBlockError extends Error {
 		this.def = def;
 	}
 }
+
+/** thrown when a block's bytes do not hash to the CID it was fetched under */
+export class BlockMismatchError extends Error {
+	cid: string;
+	actual: string;
+
+	constructor(cid: string, actual: string) {
+		super(`block does not match its cid; expected=${cid}; actual=${actual}`);
+		this.cid = cid;
+		this.actual = actual;
+	}
+}

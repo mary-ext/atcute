@@ -1,7 +1,11 @@
 import { type BlockMap } from './blockmap.ts';
 import { deleteMany, setMany } from './utils/blockmap.ts';
 
-/** a read-only interface for retrieving blocks by their CID */
+/**
+ * a read-only interface for retrieving blocks by their CID
+ *
+ * returned buffers may be shared and retained. neither stores nor callers may mutate them.
+ */
 export interface ReadonlyBlockStore {
 	/**
 	 * retrieves a single block by its CID

@@ -1,13 +1,13 @@
 import type { CidLink } from '@atcute/cid';
 
-import { MissingBlockError } from './errors.ts';
+import { BlockMismatchError, MissingBlockError } from './errors.ts';
 import type { NodeStore } from './node-store.ts';
 import { NodeWalker } from './node-walker.ts';
 
 /** Error thrown when validating a proof fails */
 export class InvalidProofError extends Error {
-	constructor(message: string) {
-		super(message);
+	constructor(message: string, options?: ErrorOptions) {
+		super(message, options);
 		this.name = 'InvalidProofError';
 	}
 }
@@ -86,48 +86,58 @@ export const buildInclusionProof = async (
 	return proof;
 };
 
-/**
- * Verifies an inclusion proof - that a record exists in the MST
- *
- * @param ns the node store (should only contain blocks from the proof)
- * @param rootCid the MST root CID
- * @param rpath the record path
- * @throws {InvalidProofError} if the proof is invalid or the record doesn't exist
- */
-export const verifyInclusion = async (ns: NodeStore, rootCid: string, rpath: string): Promise<void> => {
+/** looks up a record path, wrapping missing blocks and CID mismatches as proof errors */
+const findRpathForVerification = async (
+	ns: NodeStore,
+	rootCid: string,
+	rpath: string,
+): Promise<CidLink | null> => {
 	try {
 		const walker = await NodeWalker.create(ns, rootCid);
-		const value = await walker.findRpath(rpath);
-		if (value === null) {
-			throw new InvalidProofError('rpath not present in MST');
-		}
+		return await walker.findRpath(rpath);
 	} catch (err) {
 		if (err instanceof MissingBlockError) {
-			throw new InvalidProofError('missing MST blocks');
+			throw new InvalidProofError('missing MST blocks', { cause: err });
 		}
+
+		if (err instanceof BlockMismatchError) {
+			throw new InvalidProofError('MST block does not match its cid', { cause: err });
+		}
+
 		throw err;
 	}
 };
 
 /**
- * Verifies an exclusion proof - that a record does not exist in the MST
+ * verifies that a record path exists in the MST
  *
- * @param ns the node store (should only contain blocks from the proof)
+ * checks node CIDs, but not record contents or root authenticity. the store may contain extra blocks.
+ *
+ * @param ns the node store
+ * @param rootCid the MST root CID
+ * @param rpath the record path
+ * @throws {InvalidProofError} if the proof is invalid or the record doesn't exist
+ */
+export const verifyInclusion = async (ns: NodeStore, rootCid: string, rpath: string): Promise<void> => {
+	const value = await findRpathForVerification(ns, rootCid, rpath);
+	if (value === null) {
+		throw new InvalidProofError('rpath not present in MST');
+	}
+};
+
+/**
+ * verifies that a record path does not exist in the MST
+ *
+ * checks node CIDs, but not root authenticity. the store may contain extra blocks.
+ *
+ * @param ns the node store
  * @param rootCid the MST root CID
  * @param rpath the record path
  * @throws {InvalidProofError} if the proof is invalid or the record exists
  */
 export const verifyExclusion = async (ns: NodeStore, rootCid: string, rpath: string): Promise<void> => {
-	try {
-		const walker = await NodeWalker.create(ns, rootCid);
-		const value = await walker.findRpath(rpath);
-		if (value !== null) {
-			throw new InvalidProofError('rpath *is* present in MST');
-		}
-	} catch (err) {
-		if (err instanceof MissingBlockError) {
-			throw new InvalidProofError('missing MST blocks');
-		}
-		throw err;
+	const value = await findRpathForVerification(ns, rootCid, rpath);
+	if (value !== null) {
+		throw new InvalidProofError('rpath *is* present in MST');
 	}
 };

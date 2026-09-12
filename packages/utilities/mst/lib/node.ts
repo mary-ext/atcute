@@ -79,7 +79,14 @@ export class MSTNode {
 			}
 		}
 
-		return new MSTNode(keys, values, subtrees);
+		const node = new MSTNode(keys, values, subtrees);
+
+		// reuse the validated height to avoid hashing the first key again
+		if (expectedHeight !== undefined) {
+			node._height = expectedHeight;
+		}
+
+		return node;
 	}
 
 	/**

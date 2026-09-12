@@ -3,8 +3,10 @@ import { encodeUtf8 } from '@atcute/uint8array';
 
 import { describe, expect, it } from 'vitest';
 
+import { BlockMismatchError } from './errors.ts';
 import { NodeStore } from './node-store.ts';
 import { NodeWrangler } from './node-wrangler.ts';
+import { MSTNode } from './node.ts';
 import {
 	InvalidProofError,
 	ProofError,
@@ -18,6 +20,16 @@ import { MemoryBlockStore } from './stores.ts';
 const createCid = async (data: string) => {
 	const bytes = encodeUtf8(data);
 	return CID.toCidLink(await CID.create(0x55, bytes));
+};
+
+const expectMismatch = async (promise: Promise<void>) => {
+	const err = await promise.then(
+		() => null,
+		(err: unknown) => err,
+	);
+
+	expect(err).toBeInstanceOf(InvalidProofError);
+	expect((err as InvalidProofError).cause).toBeInstanceOf(BlockMismatchError);
 };
 
 describe('Proof', () => {
@@ -194,5 +206,74 @@ describe('Proof', () => {
 
 		// inclusion proof should fail on empty tree
 		await expect(buildInclusionProof(store, emptyCid, 'a/1')).rejects.toThrow(ProofError);
+	});
+
+	describe('tampered blocks', () => {
+		const TARGET = 'app.bsky.feed.post/0000000000042';
+
+		const buildTree = async (count: number, flavor: string) => {
+			const blocks = new MemoryBlockStore();
+			const store = new NodeStore(blocks);
+			const wrangler = new NodeWrangler(store);
+
+			let rootCid: string | null = null;
+			for (let i = 0; i < count; i++) {
+				const rpath = `app.bsky.feed.post/${String(i).padStart(13, '0')}`;
+				rootCid = await wrangler.putRecord(rootCid, rpath, await createCid(`${flavor}-${rpath}`));
+			}
+
+			return { blocks, store, rootCid: rootCid! };
+		};
+
+		it('should refuse a whole tree served under an honest root cid', async () => {
+			const honest = await buildTree(256, 'real');
+			const forged = await buildTree(256, 'forged');
+
+			// both trees contain the target path, but with different values
+			expect(forged.rootCid).not.toBe(honest.rootCid);
+
+			const served = new MemoryBlockStore(forged.blocks.blocks);
+			await served.put(honest.rootCid, (await forged.blocks.get(forged.rootCid))!);
+
+			await expectMismatch(verifyInclusion(new NodeStore(served), honest.rootCid, TARGET));
+		});
+
+		it('should refuse a substituted node below the root', async () => {
+			const honest = await buildTree(256, 'real');
+
+			// proof CIDs are ordered deepest-first
+			const [deepest] = await buildInclusionProof(honest.store, honest.rootCid, TARGET);
+			expect(deepest).not.toBe(honest.rootCid);
+
+			const served = new MemoryBlockStore(honest.blocks.blocks);
+			await served.put(deepest, (await honest.blocks.get(honest.rootCid))!);
+
+			await expectMismatch(verifyInclusion(new NodeStore(served), honest.rootCid, TARGET));
+		});
+
+		it('should refuse a tampered exclusion proof', async () => {
+			const honest = await buildTree(256, 'real');
+
+			// an empty root would otherwise prove the absence of every key
+			const served = new MemoryBlockStore(honest.blocks.blocks);
+			await served.put(honest.rootCid, await MSTNode.empty().serialize());
+
+			await expectMismatch(verifyExclusion(new NodeStore(served), honest.rootCid, TARGET));
+		});
+
+		it('should not cache a node that failed verification', async () => {
+			const honest = await buildTree(16, 'real');
+
+			const served = new MemoryBlockStore(honest.blocks.blocks);
+			await served.put(honest.rootCid, await MSTNode.empty().serialize());
+
+			const ns = new NodeStore(served);
+			await expect(ns.get(honest.rootCid)).rejects.toThrow(BlockMismatchError);
+
+			await served.put(honest.rootCid, (await honest.blocks.get(honest.rootCid))!);
+
+			const node = await ns.get(honest.rootCid);
+			expect((await node.cid()).$link).toBe(honest.rootCid);
+		});
 	});
 });
