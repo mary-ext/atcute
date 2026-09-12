@@ -136,25 +136,13 @@ expect.extend({
 });
 
 declare module 'vitest' {
-	// oxlint-disable-next-line no-unused-vars -- required for module augmentation
-	// oxlint-disable-next-line typescript/no-explicit-any
-	interface Assertion<T = any> {
+	interface Matchers<R, T> {
 		toBeModerationResult(
 			expected?: ModerationTestSuiteResultFlag[],
 			context?: string,
 			stringifiedResult?: string,
 			ignoreCause?: boolean,
-		): void;
-	}
-
-	interface AsymmetricMatchers {
-		toBeModerationResult(
-			expected?: ModerationTestSuiteResultFlag[],
-			context?: string,
-			stringifiedResult?: string,
-			ignoreCause?: boolean,
-			// oxlint-disable-next-line typescript/no-explicit-any
-		): any;
+		): R;
 	}
 }
 
