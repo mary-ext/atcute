@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/mst",
-	"version": "1.0.3",
+	"version": "1.1.0",
 	"description": "atproto MST manipulation utilities",
 	"keywords": [
 		"atproto",

@@ -1,5 +1,13 @@
 # @atcute/oauth-browser-client
 
+## 5.0.2
+
+### Patch Changes
+
+- 3aa397e: reword the session deleted error message.
+- Updated dependencies [60d1a1d]
+  - @atcute/identity-resolver@2.0.2
+
 ## 5.0.1
 
 ### Patch Changes

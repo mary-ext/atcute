@@ -1,5 +1,11 @@
 # @atcute/identity-resolver
 
+## 2.0.2
+
+### Patch Changes
+
+- 60d1a1d: accept `application/did+json` DID document responses.
+
 ## 2.0.1
 
 ### Patch Changes

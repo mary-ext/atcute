@@ -1,5 +1,11 @@
 # @atcute/mst
 
+## 1.1.0
+
+### Minor Changes
+
+- a76b77b: verify node bytes against the requested CID before decoding.
+
 ## 1.0.3
 
 ### Patch Changes
