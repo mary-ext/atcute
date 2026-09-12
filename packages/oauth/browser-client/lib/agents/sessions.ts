@@ -63,7 +63,7 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 		const record = database.sessions.getRecord(sub);
 
 		if (record === undefined) {
-			throw new TokenRefreshError(sub, `session deleted by another tab`);
+			throw new TokenRefreshError(sub, `session deleted`);
 		}
 
 		if (staleAccessToken !== undefined && record.value.token.access !== staleAccessToken) {
