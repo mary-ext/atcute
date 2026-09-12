@@ -1,5 +1,6 @@
 import { Secp256k1PrivateKeyExportable } from '@atcute/crypto';
 import { TestPlcServer } from '@atcute/internal-dev-env';
+import { ImproperContentTypeError } from '@atcute/util-fetch';
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
@@ -192,5 +193,70 @@ describe('PlcClient', () => {
 				expect(plcError.body?.message).toBeDefined();
 			}
 		});
+	});
+});
+
+describe('PlcClient document media types', () => {
+	const DID = 'did:plc:ia76kvnndjutgedggx2ibrem' as t.DidPlcString;
+
+	const EXAMPLE_DOCUMENT = {
+		id: DID,
+		alsoKnownAs: ['at://mary.my.id'],
+		verificationMethod: [
+			{
+				id: `${DID}#atproto`,
+				type: 'Multikey',
+				controller: DID,
+				publicKeyMultibase: 'zQ3shuqiNQXNGKBBbNvPhcaZy8DjP3BF3yhmSeAjFXQjgPJrG',
+			},
+		],
+		service: [
+			{
+				id: `${DID}#atproto_pds`,
+				type: 'AtprotoPersonalDataServer',
+				serviceEndpoint: 'https://porcini.us-east.host.bsky.network',
+			},
+		],
+	};
+
+	const createClient = (contentType: string): PlcClient => {
+		return new PlcClient({
+			async fetch() {
+				return Response.json(EXAMPLE_DOCUMENT, { headers: { 'content-type': contentType } });
+			},
+		});
+	};
+
+	it.each([
+		'application/did+json',
+		'application/did+ld+json',
+		'application/json',
+		// media types are case-insensitive and may carry parameters
+		'Application/DID+JSON; charset=utf-8',
+	])('accepts %s', async (contentType) => {
+		const client = createClient(contentType);
+
+		const document = await client.getDocument(DID);
+		expect(document.id).toBe(DID);
+	});
+
+	it.each(['application/problem+json', 'text/html'])('rejects %s', async (contentType) => {
+		const client = createClient(contentType);
+
+		await expect(client.getDocument(DID)).rejects.toThrow(ImproperContentTypeError);
+	});
+
+	it('advertises the did document media types', async () => {
+		let accept: string | null = null;
+
+		const client = new PlcClient({
+			async fetch(input, init) {
+				accept = new Request(input, init).headers.get('accept');
+				return Response.json(EXAMPLE_DOCUMENT);
+			},
+		});
+
+		await client.getDocument(DID);
+		expect(accept).toBe('application/did+ld+json,application/did+json,application/json');
 	});
 });

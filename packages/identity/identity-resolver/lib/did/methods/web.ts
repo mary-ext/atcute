@@ -32,7 +32,7 @@ export class WebDidDocumentResolver implements DidDocumentResolver<'web'> {
 				signal: options?.signal,
 				cache: options?.noCache ? 'no-cache' : undefined,
 				redirect: 'manual',
-				headers: { accept: 'application/did+ld+json,application/json' },
+				headers: { accept: 'application/did+ld+json,application/did+json,application/json' },
 			});
 
 			if (response.status >= 300 && response.status < 400) {
@@ -81,7 +81,7 @@ export class AtprotoWebDidDocumentResolver implements DidDocumentResolver<'web'>
 				signal: options?.signal,
 				cache: options?.noCache ? 'no-cache' : undefined,
 				redirect: 'manual',
-				headers: { accept: 'application/did+ld+json,application/json' },
+				headers: { accept: 'application/did+ld+json,application/did+json,application/json' },
 			});
 
 			if (response.status >= 300 && response.status < 400) {
