@@ -18,7 +18,8 @@
 		"./ambient": "./dist/ambient.js",
 		"./interfaces": "./dist/interfaces/index.js",
 		"./syntax": "./dist/syntax/index.js",
-		"./validations": "./dist/validations/index.js"
+		"./validations": "./dist/validations/index.js",
+		"./validations/compile": "./dist/validations/compile.js"
 	},
 	"publishConfig": {
 		"access": "public"

@@ -12,7 +12,7 @@ import * as syntax from '../syntax/index.ts';
 import type { $type } from '../types/brand.ts';
 import { assert } from '../utils.ts';
 
-import { codegen, isArray, isObject, lazy, lazyProperty } from './utils.ts';
+import { codegen, compiler, isArray, isObject, lazy, lazyProperty } from './utils.ts';
 
 /**
  * flag indicating whether xrpc schema generation helpers are used. set to true when query() or procedure() is
@@ -137,8 +137,17 @@ export const FLAG_ABORT_EARLY = 1 << 0;
 // Enable strict blob validation (size, MIME type constraints, reject legacy blobs)
 export const FLAG_STRICT = 1 << 1;
 
+/** bypass compiled matchers during interpreter fallback */
+export const FLAG_INTERPRET = 1 << 2;
+/** allow imprecise issues when only the validation outcome is needed */
+export const FLAG_DISCARD_ISSUES = 1 << 3;
+
 type MatcherResult = undefined | Ok<unknown> | IssueTree;
 type Matcher = (input: unknown, flags: number) => MatcherResult;
+
+const withCompiler = (schema: BaseSchema, matcher: Matcher): Matcher => {
+	return compiler !== undefined ? compiler(schema, matcher) : matcher;
+};
 
 type LexStandardSchemaResult<T extends BaseSchema> = StandardSchemaV1.Result<InferOutput<T>>;
 
@@ -333,7 +342,7 @@ export const is = <const TSchema extends BaseSchema>(
 	input: unknown,
 	options?: ValidationOptions,
 ): input is InferInput<TSchema> => {
-	let flags = FLAG_ABORT_EARLY;
+	let flags = FLAG_ABORT_EARLY | FLAG_DISCARD_ISSUES;
 	if (options?.strict) {
 		flags |= FLAG_STRICT;
 	}
@@ -1337,7 +1346,7 @@ export const array = <TItem extends BaseSchema>(item: TItem | (() => TItem)): Ar
 				return undefined;
 			};
 
-			return lazyProperty(this, '~run', matcher);
+			return lazyProperty(this, '~run', withCompiler(this, matcher));
 		},
 		get '~standard'() {
 			return lazyProperty(this, '~standard', toStandardSchema(this));
@@ -1514,7 +1523,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 			const obj: any = {};
 
 			for (const entry of resolved) {
-				obj[entry.key] = entry.schema;
+				/*#__INLINE__*/ set(obj, entry.key, entry.schema);
 			}
 
 			return lazyProperty(this, 'shape', obj as TShape);
@@ -1580,7 +1589,8 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 				return body.eval() as Matcher;
 			};
 
-			const x = codegen.value;
+			// compiled validation already provides a fast path; its fallback only handles failures.
+			const x = compiler === undefined ? codegen.value : undefined;
 
 			if (x !== undefined) {
 				const fastpass = generateFastpass(x);
@@ -1593,7 +1603,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 					return fastpass(input, flags);
 				};
 
-				return lazyProperty(this, '~run', matcher);
+				return lazyProperty(this, '~run', withCompiler(this, matcher));
 			}
 
 			const matcher: Matcher = (input, flags) => {
@@ -1650,7 +1660,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 				return undefined;
 			};
 
-			return lazyProperty(this, '~run', matcher);
+			return lazyProperty(this, '~run', withCompiler(this, matcher));
 		},
 		get '~standard'() {
 			return lazyProperty(this, '~standard', toStandardSchema(this));
@@ -1816,7 +1826,7 @@ export const variant: {
 				return undefined;
 			};
 
-			return lazyProperty(this, '~run', matcher);
+			return lazyProperty(this, '~run', withCompiler(this, matcher));
 		},
 		get '~standard'() {
 			return lazyProperty(this, '~standard', toStandardSchema(this));
