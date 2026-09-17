@@ -1,5 +1,11 @@
 # @atcute/bluesky-search-parser
 
+## 0.2.0
+
+### Minor Changes
+
+- d5dcdd7: emit a `negation` token for leading `-` in search terms
+
 ## 0.1.3
 
 ### Patch Changes
