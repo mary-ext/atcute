@@ -48,6 +48,8 @@ const _preferencesSchema = /*#__PURE__*/ v.object({
 	/** @default true */
 	showMentions: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 	/** @default true */
+	showOtherPublicationsInTags: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
+	/** @default true */
 	showPrevNext: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 	/** @default true */
 	showRecommends: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),

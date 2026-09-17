@@ -19,7 +19,6 @@
 							"type": "string",
 							"format": "at-uri"
 						},
-						"maxLength": 3,
 						"description": "Publications this publication recommends"
 					}
 				}

@@ -8,14 +8,8 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		$type: /*#__PURE__*/ v.literal('pub.leaflet.graph.recommendations'),
 		/** The publication making the recommendations; must live in the same repo as this record */
 		publication: /*#__PURE__*/ v.resourceUriString(),
-		/**
-		 * Publications this publication recommends
-		 *
-		 * @maxLength 3
-		 */
-		recommendations: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()), [
-			/*#__PURE__*/ v.arrayLength(0, 3),
-		]),
+		/** Publications this publication recommends */
+		recommendations: /*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()),
 	}),
 );
 

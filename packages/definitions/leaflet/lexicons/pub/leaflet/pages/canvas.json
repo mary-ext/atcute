@@ -45,6 +45,7 @@
 						"pub.leaflet.blocks.page",
 						"pub.leaflet.blocks.poll",
 						"pub.leaflet.blocks.postsList",
+						"pub.leaflet.blocks.recommendedPubs",
 						"pub.leaflet.blocks.signup",
 						"pub.leaflet.blocks.standardSitePost",
 						"pub.leaflet.blocks.standardSitePublication",
@@ -63,6 +64,10 @@
 				"rotation": {
 					"type": "integer",
 					"description": "The rotation of the block in degrees"
+				},
+				"stackOrder": {
+					"type": "string",
+					"description": "Fractional index ordering this block against its siblings on the z axis. Blocks without one stack below every block with one, ordered by position."
 				}
 			}
 		},

@@ -17,6 +17,7 @@ import * as PubLeafletBlocksOrderedList from '../blocks/orderedList.ts';
 import * as PubLeafletBlocksPage from '../blocks/page.ts';
 import * as PubLeafletBlocksPoll from '../blocks/poll.ts';
 import * as PubLeafletBlocksPostsList from '../blocks/postsList.ts';
+import * as PubLeafletBlocksRecommendedPubs from '../blocks/recommendedPubs.ts';
 import * as PubLeafletBlocksSignup from '../blocks/signup.ts';
 import * as PubLeafletBlocksStandardSitePost from '../blocks/standardSitePost.ts';
 import * as PubLeafletBlocksStandardSitePublication from '../blocks/standardSitePublication.ts';
@@ -49,6 +50,7 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksPage.mainSchema,
 			PubLeafletBlocksPoll.mainSchema,
 			PubLeafletBlocksPostsList.mainSchema,
+			PubLeafletBlocksRecommendedPubs.mainSchema,
 			PubLeafletBlocksSignup.mainSchema,
 			PubLeafletBlocksStandardSitePost.mainSchema,
 			PubLeafletBlocksStandardSitePublication.mainSchema,

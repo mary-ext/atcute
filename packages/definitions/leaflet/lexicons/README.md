@@ -3,4 +3,4 @@
 this directory contains lexicon documents pulled from the following sources:
 
 - https://github.com/hyperlink-academy/leaflet.git
-  - commit: 59d4116d3d02dc430fa5f97f8306e86e384456b0
+  - commit: fd4bce57c56cba829e7181a7fd742ebc2f09c45a

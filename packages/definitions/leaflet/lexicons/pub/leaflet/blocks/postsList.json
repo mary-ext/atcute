@@ -14,11 +14,24 @@
 					"minimum": 1,
 					"description": "Show at most this many posts."
 				},
+				"readerSort": {
+					"type": "boolean"
+				},
 				"filterByTags": {
 					"type": "array",
 					"items": {
 						"type": "string"
 					}
+				},
+				"readerSearch": {
+					"type": "boolean"
+				},
+				"readerControls": {
+					"type": "boolean",
+					"description": "Show reader-facing controls above the list. The readerSearch / readerTagFilter / readerSort flags pick which ones; each defaults to true when this is set."
+				},
+				"readerTagFilter": {
+					"type": "boolean"
 				},
 				"highlightFirstPost": {
 					"type": "boolean"
