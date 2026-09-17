@@ -1,5 +1,5 @@
 {
-	"id": "org.tangled.temp.repo.deleteWebhook",
+	"id": "org.tangled.temp.webhook.updateWebhook",
 	"defs": {
 		"main": {
 			"type": "procedure",
@@ -10,7 +10,23 @@
 					"properties": {
 						"id": {
 							"type": "integer",
-							"description": "Webhook ID to delete."
+							"description": "Webhook ID to update."
+						},
+						"url": {
+							"type": "string",
+							"format": "uri"
+						},
+						"active": {
+							"type": "boolean"
+						},
+						"events": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						},
+						"secret": {
+							"type": "string"
 						},
 						"repoDid": {
 							"type": "string",
@@ -24,9 +40,12 @@
 			"errors": [
 				{
 					"name": "WebhookNotFound"
+				},
+				{
+					"name": "InvalidEvent"
 				}
 			],
-			"description": "Delete a webhook from a repository."
+			"description": "Update an existing webhook. Only supplied fields are changed."
 		}
 	},
 	"lexicon": 1

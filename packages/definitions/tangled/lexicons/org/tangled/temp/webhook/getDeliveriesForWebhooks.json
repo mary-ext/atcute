@@ -1,5 +1,5 @@
 {
-	"id": "org.tangled.temp.repo.listWebhookDeliveries",
+	"id": "org.tangled.temp.webhook.getDeliveriesForWebhooks",
 	"defs": {
 		"main": {
 			"type": "query",
@@ -21,14 +21,19 @@
 			},
 			"parameters": {
 				"type": "params",
-				"required": ["id", "repoDid"],
+				"required": ["ids", "repoDid"],
 				"properties": {
-					"id": {
-						"type": "integer",
-						"description": "Webhook ID."
+					"ids": {
+						"type": "array",
+						"items": {
+							"type": "integer",
+							"description": "Webhook ID."
+						},
+						"maxLength": 50
 					},
 					"limit": {
 						"type": "integer",
+						"default": 5,
 						"maximum": 100,
 						"minimum": 1
 					},
@@ -39,11 +44,11 @@
 					}
 				}
 			},
-			"description": "List recent delivery attempts for a webhook."
+			"description": "List recent delivery attempts for the given webhooks."
 		},
 		"delivery": {
 			"type": "object",
-			"required": ["createdAt", "deliveryId", "event", "id", "success", "url"],
+			"required": ["createdAt", "deliveryId", "event", "id", "success", "url", "webhookId"],
 			"properties": {
 				"id": {
 					"type": "integer"
@@ -62,6 +67,9 @@
 				"createdAt": {
 					"type": "string",
 					"format": "datetime"
+				},
+				"webhookId": {
+					"type": "integer"
 				},
 				"deliveryId": {
 					"type": "string",

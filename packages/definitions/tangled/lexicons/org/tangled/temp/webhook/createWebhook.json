@@ -1,5 +1,5 @@
 {
-	"id": "org.tangled.temp.repo.createWebhook",
+	"id": "org.tangled.temp.webhook.createWebhook",
 	"defs": {
 		"main": {
 			"type": "procedure",
@@ -41,6 +41,12 @@
 				{
 					"name": "NoEventsSelected",
 					"description": "At least one event type must be specified."
+				},
+				{
+					"name": "InvalidEvent"
+				},
+				{
+					"name": "WebhookLimitExceeded"
 				}
 			],
 			"output": {

@@ -1,5 +1,5 @@
 {
-	"id": "org.tangled.temp.repo.listWebhooks",
+	"id": "org.tangled.temp.webhook.listWebhooks",
 	"defs": {
 		"main": {
 			"type": "query",

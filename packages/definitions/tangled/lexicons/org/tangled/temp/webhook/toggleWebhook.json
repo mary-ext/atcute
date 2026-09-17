@@ -1,5 +1,5 @@
 {
-	"id": "org.tangled.temp.repo.updateWebhook",
+	"id": "org.tangled.temp.webhook.toggleWebhook",
 	"defs": {
 		"main": {
 			"type": "procedure",
@@ -10,23 +10,7 @@
 					"properties": {
 						"id": {
 							"type": "integer",
-							"description": "Webhook ID to update."
-						},
-						"url": {
-							"type": "string",
-							"format": "uri"
-						},
-						"active": {
-							"type": "boolean"
-						},
-						"events": {
-							"type": "array",
-							"items": {
-								"type": "string"
-							}
-						},
-						"secret": {
-							"type": "string"
+							"description": "Webhook ID to toggle."
 						},
 						"repoDid": {
 							"type": "string",
@@ -42,7 +26,20 @@
 					"name": "WebhookNotFound"
 				}
 			],
-			"description": "Update an existing webhook. Only supplied fields are changed."
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["active"],
+					"properties": {
+						"active": {
+							"type": "boolean",
+							"description": "New active state of the webhook."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Toggle the active state of a webhook."
 		}
 	},
 	"lexicon": 1

@@ -2,7 +2,7 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-const _mainSchema = /*#__PURE__*/ v.query('org.tangled.temp.repo.listWebhooks', {
+const _mainSchema = /*#__PURE__*/ v.query('org.tangled.temp.webhook.listWebhooks', {
 	params: /*#__PURE__*/ v.object({
 		/** DID of the repository as minted by the knot. */
 		repoDid: /*#__PURE__*/ v.didString(),
@@ -17,7 +17,7 @@ const _mainSchema = /*#__PURE__*/ v.query('org.tangled.temp.repo.listWebhooks', 
 	},
 });
 const _webhookSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('org.tangled.temp.repo.listWebhooks#webhook')),
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('org.tangled.temp.webhook.listWebhooks#webhook')),
 	/** Whether the webhook is currently enabled. */
 	active: /*#__PURE__*/ v.boolean(),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
@@ -46,6 +46,6 @@ export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCQueries {
-		'org.tangled.temp.repo.listWebhooks': mainSchema;
+		'org.tangled.temp.webhook.listWebhooks': mainSchema;
 	}
 }

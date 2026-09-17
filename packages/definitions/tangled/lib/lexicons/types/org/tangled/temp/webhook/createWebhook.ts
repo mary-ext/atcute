@@ -2,22 +2,30 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
-const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.repo.updateWebhook', {
+const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.webhook.createWebhook', {
 	params: null,
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/** Whether the webhook should be active immediately. Defaults to true. */
 			active: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
-			events: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
-			/** Webhook ID to update. */
-			id: /*#__PURE__*/ v.integer(),
+			/** Event types to subscribe to (e.g. 'push', 'repository:renamed'). */
+			events: /*#__PURE__*/ v.array(/*#__PURE__*/ v.string()),
 			/** DID of the repository as minted by the knot. */
 			repoDid: /*#__PURE__*/ v.didString(),
+			/** Optional HMAC secret used to sign payloads. If omitted, payloads are not signed. */
 			secret: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-			url: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+			/** Endpoint URL that will receive webhook payloads. */
+			url: /*#__PURE__*/ v.genericUriString(),
 		}),
 	},
-	output: null,
+	output: {
+		type: 'lex',
+		schema: /*#__PURE__*/ v.object({
+			/** ID of the newly created webhook. */
+			id: /*#__PURE__*/ v.integer(),
+		}),
+	},
 });
 
 type main$schematype = typeof _mainSchema;
@@ -28,9 +36,10 @@ export const mainSchema = _mainSchema as mainSchema;
 
 export interface $params {}
 export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}
+export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}
 
 declare module '@atcute/lexicons/ambient' {
 	interface XRPCProcedures {
-		'org.tangled.temp.repo.updateWebhook': mainSchema;
+		'org.tangled.temp.webhook.createWebhook': mainSchema;
 	}
 }

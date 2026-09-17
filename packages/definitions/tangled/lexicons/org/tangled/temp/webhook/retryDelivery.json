@@ -1,5 +1,5 @@
 {
-	"id": "org.tangled.temp.repo.retryWebhookDelivery",
+	"id": "org.tangled.temp.webhook.retryDelivery",
 	"defs": {
 		"main": {
 			"type": "procedure",

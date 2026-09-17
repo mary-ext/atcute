@@ -1,5 +1,5 @@
 {
-	"id": "org.tangled.temp.repo.toggleWebhook",
+	"id": "org.tangled.temp.webhook.deleteWebhook",
 	"defs": {
 		"main": {
 			"type": "procedure",
@@ -10,7 +10,7 @@
 					"properties": {
 						"id": {
 							"type": "integer",
-							"description": "Webhook ID to toggle."
+							"description": "Webhook ID to delete."
 						},
 						"repoDid": {
 							"type": "string",
@@ -26,20 +26,7 @@
 					"name": "WebhookNotFound"
 				}
 			],
-			"output": {
-				"schema": {
-					"type": "object",
-					"required": ["active"],
-					"properties": {
-						"active": {
-							"type": "boolean",
-							"description": "New active state of the webhook."
-						}
-					}
-				},
-				"encoding": "application/json"
-			},
-			"description": "Toggle the active state of a webhook."
+			"description": "Delete a webhook from a repository."
 		}
 	},
 	"lexicon": 1
