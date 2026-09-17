@@ -12,12 +12,15 @@ highlighting operators or extracting filter values.
 ```ts
 import { tokenize, type Token } from '@atcute/bluesky-search-parser';
 
-const tokens: Token[] = tokenize(`from:me hello "foo bar"`);
+const tokens: Token[] = tokenize(`from:me hello "foo bar" -baz`);
 // [
 //   { type: 'word', value: 'from:me' },
 //   { type: 'whitespace', value: ' ' },
 //   { type: 'word', value: 'hello' },
 //   { type: 'whitespace', value: ' ' },
 //   { type: 'quoted', value: '"foo bar"' },
+//   { type: 'whitespace', value: ' ' },
+//   { type: 'negation', value: '-' },
+//   { type: 'word', value: 'baz' },
 // ]
 ```

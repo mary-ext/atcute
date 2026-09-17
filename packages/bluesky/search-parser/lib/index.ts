@@ -13,7 +13,12 @@ interface QuotedToken {
 	value: string;
 }
 
-export type Token = WordToken | WhitespaceToken | QuotedToken;
+interface NegationToken {
+	type: 'negation';
+	value: '-';
+}
+
+export type Token = NegationToken | QuotedToken | WhitespaceToken | WordToken;
 
 export const tokenize = (query: string): Token[] => {
 	const tokens: Token[] = [];
@@ -35,6 +40,14 @@ export const tokenize = (query: string): Token[] => {
 
 			tokens.push({ type: 'whitespace', value: query.slice(start, i) });
 			continue;
+		}
+
+		// a leading `-` negates the rest of the term, but only when there's a term
+		// to negate; a lone `-` stays a regular word
+		if (code === 45 && i + 1 < len && query.charCodeAt(i + 1) !== 32) {
+			tokens.push({ type: 'negation', value: '-' });
+			i++;
+			code = query.charCodeAt(i);
 		}
 
 		const start = i;

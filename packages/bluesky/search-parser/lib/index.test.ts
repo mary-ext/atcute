@@ -81,6 +81,46 @@ it('tokenizes search queries', () => {
 	expect(tokenize(`foo"      ""  qwe`)).toEqual([{ type: 'word', value: 'foo"      ""  qwe' }]);
 });
 
+it('tokenizes negations', () => {
+	expect(tokenize(`foo -bar`)).toEqual([
+		{ type: 'word', value: 'foo' },
+		{ type: 'whitespace', value: ' ' },
+		{ type: 'negation', value: '-' },
+		{ type: 'word', value: 'bar' },
+	]);
+
+	expect(tokenize(`-"foo bar" baz`)).toEqual([
+		{ type: 'negation', value: '-' },
+		{ type: 'quoted', value: '"foo bar"' },
+		{ type: 'whitespace', value: ' ' },
+		{ type: 'word', value: 'baz' },
+	]);
+
+	expect(tokenize(`-from:me`)).toEqual([
+		{ type: 'negation', value: '-' },
+		{ type: 'word', value: 'from:me' },
+	]);
+
+	expect(tokenize(`--foo`)).toEqual([
+		{ type: 'negation', value: '-' },
+		{ type: 'word', value: '-foo' },
+	]);
+
+	expect(tokenize(`foo-bar`)).toEqual([{ type: 'word', value: 'foo-bar' }]);
+
+	expect(tokenize(`foo - bar -`)).toEqual([
+		{ type: 'word', value: 'foo' },
+		{ type: 'whitespace', value: ' ' },
+		{ type: 'word', value: '-' },
+		{ type: 'whitespace', value: ' ' },
+		{ type: 'word', value: 'bar' },
+		{ type: 'whitespace', value: ' ' },
+		{ type: 'word', value: '-' },
+	]);
+
+	expect(tokenize(`"foo -bar"`)).toEqual([{ type: 'quoted', value: '"foo -bar"' }]);
+});
+
 it('should match fieldsfunc implementation', () => {
 	// oxlint-disable-next-line unicorn/consistent-function-scoping -- test helper
 	const fieldsfunc = (str: string, fn: (rune: number) => boolean): string[] => {
@@ -119,23 +159,30 @@ it('should match fieldsfunc implementation', () => {
 			return rune === 32 && !quoted;
 		});
 
-		return slices.map((str): Token => {
-			const code = str.charCodeAt(0);
-
-			if (code === 34) {
-				return { type: 'quoted', value: str };
+		return slices.flatMap((str): Token[] => {
+			if (str.charCodeAt(0) === 32) {
+				return [{ type: 'whitespace', value: str }];
 			}
 
-			if (code === 32) {
-				return { type: 'whitespace', value: str };
+			const tokens: Token[] = [];
+
+			if (str.length > 1 && str.charCodeAt(0) === 45) {
+				tokens.push({ type: 'negation', value: '-' });
+				str = str.slice(1);
 			}
 
-			return { type: 'word', value: str };
+			if (str.charCodeAt(0) === 34) {
+				tokens.push({ type: 'quoted', value: str });
+			} else {
+				tokens.push({ type: 'word', value: str });
+			}
+
+			return tokens;
 		});
 	};
 
 	fc.assert(
-		fc.property(fc.string({ unit: fc.constantFrom('"', 'a', ' ') }), (str) => {
+		fc.property(fc.string({ unit: fc.constantFrom('"', '-', 'a', ' ') }), (str) => {
 			expect(tokenize(str)).toEqual(fieldsfunc_tokenize(str));
 		}),
 	);
