@@ -31,6 +31,7 @@
 	"dependencies": {
 		"@atcute/uint8array": "workspace:^",
 		"@atcute/util-text": "workspace:^",
+		"@oomfware/eval": "^0.1.0",
 		"@standard-schema/spec": "^1.1.0",
 		"esm-env": "^1.2.2"
 	},

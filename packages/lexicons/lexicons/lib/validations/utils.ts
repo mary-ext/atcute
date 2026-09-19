@@ -1,3 +1,5 @@
+import { type CodeTag, type CreateOptions, create } from '@oomfware/eval';
+
 // #__NO_SIDE_EFFECTS__
 export const lazyProperty = <T>(obj: object, prop: string | number | symbol, value: T): T => {
 	Object.defineProperty(obj, prop, { value });
@@ -21,17 +23,22 @@ export const isObject = (input: unknown): input is Record<string, unknown> => {
 	return typeof input === 'object' && input !== null && !isArray(input);
 };
 
-export const allowsEval = /*#__PURE__*/ lazy((): boolean => {
+const probeCodegen = (options?: CreateOptions): CodeTag | undefined => {
+	try {
+		const x = create(options);
+		x.empty.eval();
+		return x;
+	} catch {
+		return undefined;
+	}
+};
+
+/** matcher codegen, or `undefined` if eval is unavailable */
+export const codegen = /*#__PURE__*/ lazy((): CodeTag | undefined => {
 	if (typeof navigator !== 'undefined' && navigator?.userAgent?.includes('Cloudflare')) {
-		return false;
+		return undefined;
 	}
 
-	try {
-		const F = Function;
-		// oxlint-disable-next-line no-new -- intentional check for Function constructor availability
-		new F('');
-		return true;
-	} catch {
-		return false;
-	}
+	// CSP may block the policy name but allow eval without Trusted Types.
+	return probeCodegen({ policyName: 'atcute-lexicons' }) ?? probeCodegen();
 });

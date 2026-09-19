@@ -1,10 +1,11 @@
 import { toBytes } from '@atcute/cbor';
 import { fromBase64, fromBase64Pad } from '@atcute/multibase';
 
+import { create } from '@oomfware/eval';
 import { assert, describe, expect, it, vi } from 'vitest';
 
 import * as v from './index.ts';
-import { allowsEval } from './utils.ts';
+import { codegen } from './utils.ts';
 
 describe(`validation errors`, () => {
 	it(`throws ValidationError`, () => {
@@ -497,7 +498,7 @@ describe(`complex types`, () => {
 
 	describe(`validates object type`, () => {
 		it(`with eval`, () => {
-			using _mock = vi.spyOn(allowsEval, 'value', 'get').mockReturnValue(true);
+			using _mock = vi.spyOn(codegen, 'value', 'get').mockReturnValue(create());
 
 			{
 				const schema = v.object({
@@ -612,7 +613,7 @@ describe(`complex types`, () => {
 		});
 
 		it(`without eval`, () => {
-			using _mock = vi.spyOn(allowsEval, 'value', 'get').mockReturnValue(false);
+			using _mock = vi.spyOn(codegen, 'value', 'get').mockReturnValue(undefined);
 
 			{
 				const schema = v.object({
@@ -679,7 +680,7 @@ describe(`complex types`, () => {
 
 	describe(`validates record type`, () => {
 		it(`with eval`, () => {
-			using _mock = vi.spyOn(allowsEval, 'value', 'get').mockReturnValue(true);
+			using _mock = vi.spyOn(codegen, 'value', 'get').mockReturnValue(create());
 
 			const schema = v.record(
 				v.tidString(),
@@ -693,7 +694,7 @@ describe(`complex types`, () => {
 		});
 
 		it(`without eval`, () => {
-			using _mock = vi.spyOn(allowsEval, 'value', 'get').mockReturnValue(false);
+			using _mock = vi.spyOn(codegen, 'value', 'get').mockReturnValue(undefined);
 
 			const schema = v.record(
 				v.tidString(),

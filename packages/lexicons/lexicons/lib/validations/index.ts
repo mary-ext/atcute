@@ -3,6 +3,7 @@
 import { isUtf8LengthInRange } from '@atcute/uint8array';
 import { isGraphemeLengthInRange } from '@atcute/util-text';
 
+import type { CodeFragment, CodeTag } from '@oomfware/eval';
 import type { StandardSchemaV1 } from '@standard-schema/spec';
 
 import { _isBytesWrapper } from '../interfaces/bytes.ts';
@@ -11,7 +12,7 @@ import * as syntax from '../syntax/index.ts';
 import type { $type } from '../types/brand.ts';
 import { assert } from '../utils.ts';
 
-import { allowsEval, isArray, isObject, lazy, lazyProperty } from './utils.ts';
+import { codegen, isArray, isObject, lazy, lazyProperty } from './utils.ts';
 
 /**
  * flag indicating whether xrpc schema generation helpers are used. set to true when query() or procedure() is
@@ -1522,72 +1523,67 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 			const shape = resolvedEntries.value;
 			const len = shape.length;
 
-			const generateFastpass = (): Matcher => {
-				const fields: [string, any][] = [
-					['$ok', ok],
-					['$joinIssues', joinIssues],
-					['$prependPath', prependPath],
-				];
+			const generateFastpass = (x: CodeTag): Matcher => {
+				const input = x.local();
+				const flags = x.local();
+				const issues = x.local();
+				const output = x.local();
 
-				let doc = `let $iss,$out;`;
+				const assign = (key: string, val: CodeFragment): CodeFragment => {
+					if (key === '__proto__') {
+						return x`Object.defineProperty(${output}??={...${input}},${key},{value:${val}})`;
+					}
+
+					return x`(${output}??={...${input}})[${key}]=${val}`;
+				};
+
+				const report = (issue: CodeFragment): CodeFragment => {
+					return x`if(((${issues}=${joinIssues}(${issues},${issue})),${flags}&${FLAG_ABORT_EARLY}))return ${issues};`;
+				};
+
+				let body = x.empty;
 
 				for (let idx = 0; idx < len; idx++) {
 					const entry = shape[idx];
-
 					const key = entry.key;
-					const esckey = JSON.stringify(key);
 
-					const id = `_${idx}`;
+					const value = x.local();
+					const result = x.local();
 
-					doc += `{const $val=$in[${esckey}];`;
-
-					if (entry.optional) {
-						doc += `if($val!==undefined){`;
-					} else {
-						doc += `if($val!==undefined||${esckey} in $in){`;
-					}
-
-					doc += `const $res=${id}$schema["~run"]($val,$flags);if($res!==undefined)if($res.ok)${key !== '__proto__' ? `($out??={...$in})[${esckey}]=$res.value` : `Object.defineProperty($out??={...$in},${esckey},{value:$res.value})`};else if((($iss=$joinIssues($iss,$prependPath(${esckey},$res))),$flags&${FLAG_ABORT_EARLY}))return $iss;}`;
+					let guard: CodeFragment;
+					let schema: BaseSchema;
+					let fallback = x.empty;
 
 					if (entry.optional) {
-						const schema = entry.schema as OptionalSchema;
-						const innerSchema = schema.wrapped;
-						const defaultValue = schema.default;
+						const optional = entry.schema as OptionalSchema;
+						const defaultValue = optional.default;
 
-						fields.push([`${id}$schema`, innerSchema]);
+						guard = x`${value}!==undefined`;
+						schema = optional.wrapped;
 
 						if (defaultValue !== undefined) {
-							const calls = typeof defaultValue === 'function' ? `${id}$default()` : `${id}$default`;
+							const val = typeof defaultValue === 'function' ? x`${defaultValue}()` : x`${defaultValue}`;
 
-							fields.push([`${id}$default`, defaultValue]);
-
-							doc +=
-								key !== '__proto__'
-									? `else($out??={...$in})[${esckey}]=${calls};`
-									: `else Object.defineProperty($out??={...$in},${esckey},{value:${calls}});`;
+							fallback = x`else ${assign(key, val)};`;
 						}
 					} else {
-						fields.push([`${id}$schema`, entry.schema]);
-						fields.push([`${id}$missing`, entry.missing]);
-
-						doc += `else if((($iss=$joinIssues($iss,${id}$missing)),$flags&${FLAG_ABORT_EARLY}))return $iss;`;
+						guard = x`${value}!==undefined||${key} in ${input}`;
+						schema = entry.schema;
+						fallback = x`else ${report(x`${entry.missing}`)}`;
 					}
 
-					doc += `}`;
+					body = x`${body}const ${value}=${input}[${key}];if(${guard}){const ${result}=${schema}["~run"](${value},${flags});if(${result}!==undefined)if(${result}.ok)${assign(key, x`${result}.value`)};else ${report(x`${prependPath}(${key},${result})`)}}${fallback}`;
 				}
 
-				doc += `if($iss!==undefined)return $iss;if($out!==undefined)return $ok($out);`;
+				body = x`return function matcher(${input},${flags}){let ${issues},${output};${body}if(${issues}!==undefined)return ${issues};if(${output}!==undefined)return ${ok}(${output});}`;
 
-				const fn = new Function(
-					`[${fields.map(([id]) => id).join(',')}]`,
-					`return function matcher($in,$flags){${doc}}`,
-				);
-
-				return fn(fields.map(([, field]) => field));
+				return body.eval() as Matcher;
 			};
 
-			if (allowsEval.value) {
-				const fastpass = generateFastpass();
+			const x = codegen.value;
+
+			if (x !== undefined) {
+				const fastpass = generateFastpass(x);
 
 				const matcher: Matcher = (input, flags) => {
 					if (!isObject(input)) {
