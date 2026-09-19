@@ -6,6 +6,21 @@ export class LoginError extends Error {
 
 export class AuthorizationError extends Error {
 	override name = 'AuthorizationError';
+
+	/** OAuth error code, e.g. `access_denied` */
+	readonly error: string;
+	/** server-provided `error_description`, if present */
+	readonly description: string | undefined;
+
+	/**
+	 * @param error OAuth error code
+	 * @param description server-provided error description
+	 */
+	constructor(error: string, description?: string) {
+		super(description || error);
+		this.error = error;
+		this.description = description;
+	}
 }
 
 export class ResolverError extends Error {

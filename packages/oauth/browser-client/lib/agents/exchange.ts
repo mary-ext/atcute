@@ -115,7 +115,7 @@ export const finalizeAuthorization = async (params: URLSearchParams) => {
 	}
 
 	if (error) {
-		throw new AuthorizationError(params.get('error_description') || error);
+		throw new AuthorizationError(error, params.get('error_description') ?? undefined);
 	}
 	if (!code) {
 		throw new LoginError(`missing code parameter`);
