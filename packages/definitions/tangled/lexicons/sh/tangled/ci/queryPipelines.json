@@ -44,7 +44,7 @@
 					"kinds": {
 						"type": "array",
 						"items": {
-							"enum": ["manual", "pull_request", "push"],
+							"enum": ["manual", "pull_request", "push", "schedule"],
 							"type": "string"
 						},
 						"description": "Filter pipelines by trigger kind. When provided, pipelines matching any listed kind are returned; when omitted, every kind is returned."

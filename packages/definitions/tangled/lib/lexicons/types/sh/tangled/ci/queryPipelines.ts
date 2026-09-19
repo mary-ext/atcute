@@ -15,7 +15,7 @@ const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.ci.queryPipelines', {
 		 * omitted, every kind is returned.
 		 */
 		kinds: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.array(/*#__PURE__*/ v.literalEnum(['manual', 'pull_request', 'push'])),
+			/*#__PURE__*/ v.array(/*#__PURE__*/ v.literalEnum(['manual', 'pull_request', 'push', 'schedule'])),
 		),
 		/**
 		 * Maximum number of pipelines to return

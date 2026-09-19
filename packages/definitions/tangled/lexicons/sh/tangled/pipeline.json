@@ -126,7 +126,7 @@
 			"required": ["kind", "repo"],
 			"properties": {
 				"kind": {
-					"enum": ["manual", "pull_request", "push"],
+					"enum": ["manual", "pull_request", "push", "schedule"],
 					"type": "string"
 				},
 				"push": {
@@ -139,6 +139,10 @@
 				},
 				"manual": {
 					"ref": "#manualTriggerData",
+					"type": "ref"
+				},
+				"schedule": {
+					"ref": "#scheduleTriggerData",
 					"type": "ref"
 				},
 				"sourceRepo": {
@@ -172,6 +176,27 @@
 						"ref": "#pair",
 						"type": "ref"
 					}
+				}
+			}
+		},
+		"scheduleTriggerData": {
+			"type": "object",
+			"required": ["ref", "scheduledAt", "sha"],
+			"properties": {
+				"ref": {
+					"type": "string",
+					"description": "default branch ref resolved for the scheduled run"
+				},
+				"sha": {
+					"type": "string",
+					"maxLength": 40,
+					"minLength": 40,
+					"description": "commit SHA the scheduled run targets"
+				},
+				"scheduledAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "UTC minute selected by the cron schedule"
 				}
 			}
 		},

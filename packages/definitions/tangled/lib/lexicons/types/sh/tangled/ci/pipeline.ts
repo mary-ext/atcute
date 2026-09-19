@@ -23,6 +23,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 			ShTangledCiTrigger.manualSchema,
 			ShTangledCiTrigger.pullRequestSchema,
 			ShTangledCiTrigger.pushSchema,
+			ShTangledCiTrigger.scheduleSchema,
 		]);
 	},
 	/**

@@ -71,9 +71,23 @@ const _pushTriggerDataSchema = /*#__PURE__*/ v.object({
 	oldSha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
 	ref: /*#__PURE__*/ v.string(),
 });
+const _scheduleTriggerDataSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.pipeline#scheduleTriggerData')),
+	/** default branch ref resolved for the scheduled run */
+	ref: /*#__PURE__*/ v.string(),
+	/** UTC minute selected by the cron schedule */
+	scheduledAt: /*#__PURE__*/ v.datetimeString(),
+	/**
+	 * commit SHA the scheduled run targets
+	 *
+	 * @minLength 40
+	 * @maxLength 40
+	 */
+	sha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
+});
 const _triggerMetadataSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.pipeline#triggerMetadata')),
-	kind: /*#__PURE__*/ v.literalEnum(['manual', 'pull_request', 'push']),
+	kind: /*#__PURE__*/ v.literalEnum(['manual', 'pull_request', 'push', 'schedule']),
 	get manual() {
 		return /*#__PURE__*/ v.optional(manualTriggerDataSchema);
 	},
@@ -85,6 +99,9 @@ const _triggerMetadataSchema = /*#__PURE__*/ v.object({
 	},
 	get repo() {
 		return triggerRepoSchema;
+	},
+	get schedule() {
+		return /*#__PURE__*/ v.optional(scheduleTriggerDataSchema);
 	},
 	/**
 	 * Repository DID that code and workflow definitions are checked out from, when different from repo (e.g. a
@@ -118,6 +135,7 @@ type manualTriggerData$schematype = typeof _manualTriggerDataSchema;
 type pair$schematype = typeof _pairSchema;
 type pullRequestTriggerData$schematype = typeof _pullRequestTriggerDataSchema;
 type pushTriggerData$schematype = typeof _pushTriggerDataSchema;
+type scheduleTriggerData$schematype = typeof _scheduleTriggerDataSchema;
 type triggerMetadata$schematype = typeof _triggerMetadataSchema;
 type triggerRepo$schematype = typeof _triggerRepoSchema;
 type workflow$schematype = typeof _workflowSchema;
@@ -128,6 +146,7 @@ export interface manualTriggerDataSchema extends manualTriggerData$schematype {}
 export interface pairSchema extends pair$schematype {}
 export interface pullRequestTriggerDataSchema extends pullRequestTriggerData$schematype {}
 export interface pushTriggerDataSchema extends pushTriggerData$schematype {}
+export interface scheduleTriggerDataSchema extends scheduleTriggerData$schematype {}
 export interface triggerMetadataSchema extends triggerMetadata$schematype {}
 export interface triggerRepoSchema extends triggerRepo$schematype {}
 export interface workflowSchema extends workflow$schematype {}
@@ -138,6 +157,7 @@ export const manualTriggerDataSchema = _manualTriggerDataSchema as manualTrigger
 export const pairSchema = _pairSchema as pairSchema;
 export const pullRequestTriggerDataSchema = _pullRequestTriggerDataSchema as pullRequestTriggerDataSchema;
 export const pushTriggerDataSchema = _pushTriggerDataSchema as pushTriggerDataSchema;
+export const scheduleTriggerDataSchema = _scheduleTriggerDataSchema as scheduleTriggerDataSchema;
 export const triggerMetadataSchema = _triggerMetadataSchema as triggerMetadataSchema;
 export const triggerRepoSchema = _triggerRepoSchema as triggerRepoSchema;
 export const workflowSchema = _workflowSchema as workflowSchema;
@@ -148,6 +168,7 @@ export interface ManualTriggerData extends v.InferInput<typeof manualTriggerData
 export interface Pair extends v.InferInput<typeof pairSchema> {}
 export interface PullRequestTriggerData extends v.InferInput<typeof pullRequestTriggerDataSchema> {}
 export interface PushTriggerData extends v.InferInput<typeof pushTriggerDataSchema> {}
+export interface ScheduleTriggerData extends v.InferInput<typeof scheduleTriggerDataSchema> {}
 export interface TriggerMetadata extends v.InferInput<typeof triggerMetadataSchema> {}
 export interface TriggerRepo extends v.InferInput<typeof triggerRepoSchema> {}
 export interface Workflow extends v.InferInput<typeof workflowSchema> {}

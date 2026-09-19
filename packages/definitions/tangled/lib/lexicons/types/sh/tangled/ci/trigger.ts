@@ -55,23 +55,41 @@ const _pushSchema = /*#__PURE__*/ v.object({
 	oldSha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
 	ref: /*#__PURE__*/ v.string(),
 });
+const _scheduleSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('sh.tangled.ci.trigger#schedule')),
+	/** default branch ref resolved for the scheduled run */
+	ref: /*#__PURE__*/ v.string(),
+	/** UTC minute selected by the cron schedule */
+	scheduledAt: /*#__PURE__*/ v.datetimeString(),
+	/**
+	 * commit SHA the scheduled run targets
+	 *
+	 * @minLength 40
+	 * @maxLength 40
+	 */
+	sha: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(40, 40)]),
+});
 
 type manual$schematype = typeof _manualSchema;
 type pair$schematype = typeof _pairSchema;
 type pullRequest$schematype = typeof _pullRequestSchema;
 type push$schematype = typeof _pushSchema;
+type schedule$schematype = typeof _scheduleSchema;
 
 export interface manualSchema extends manual$schematype {}
 export interface pairSchema extends pair$schematype {}
 export interface pullRequestSchema extends pullRequest$schematype {}
 export interface pushSchema extends push$schematype {}
+export interface scheduleSchema extends schedule$schematype {}
 
 export const manualSchema = _manualSchema as manualSchema;
 export const pairSchema = _pairSchema as pairSchema;
 export const pullRequestSchema = _pullRequestSchema as pullRequestSchema;
 export const pushSchema = _pushSchema as pushSchema;
+export const scheduleSchema = _scheduleSchema as scheduleSchema;
 
 export interface Manual extends v.InferInput<typeof manualSchema> {}
 export interface Pair extends v.InferInput<typeof pairSchema> {}
 export interface PullRequest extends v.InferInput<typeof pullRequestSchema> {}
 export interface Push extends v.InferInput<typeof pushSchema> {}
+export interface Schedule extends v.InferInput<typeof scheduleSchema> {}
