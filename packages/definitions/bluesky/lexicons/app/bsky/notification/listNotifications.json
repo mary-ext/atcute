@@ -15,9 +15,6 @@
 							"type": "string",
 							"format": "datetime"
 						},
-						"priority": {
-							"type": "boolean"
-						},
 						"notifications": {
 							"type": "array",
 							"items": {
@@ -52,9 +49,6 @@
 							"description": "A reason that matches the reason property of #notification."
 						},
 						"description": "Notification reasons to include in response."
-					},
-					"priority": {
-						"type": "boolean"
 					}
 				}
 			},

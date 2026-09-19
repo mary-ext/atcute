@@ -21,9 +21,6 @@
 					"seenAt": {
 						"type": "string",
 						"format": "datetime"
-					},
-					"priority": {
-						"type": "boolean"
 					}
 				}
 			},

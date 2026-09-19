@@ -18,7 +18,6 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.listNotificatio
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
-		priority: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		/** Notification reasons to include in response. */
 		reasons: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		seenAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
@@ -30,7 +29,6 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.listNotificatio
 			get notifications() {
 				return /*#__PURE__*/ v.array(notificationSchema);
 			},
-			priority: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			seenAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		}),
 	},
