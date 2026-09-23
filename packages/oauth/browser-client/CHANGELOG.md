@@ -1,5 +1,18 @@
 # @atcute/oauth-browser-client
 
+## 5.1.0
+
+### Minor Changes
+
+- 452b070: expose `error` and `description` on `AuthorizationError` to distinguish OAuth errors such
+  as `access_denied`.
+
+### Patch Changes
+
+- Updated dependencies [0e68928]
+- Updated dependencies [0e68928]
+  - @atcute/lexicons@2.1.1
+
 ## 5.0.2
 
 ### Patch Changes

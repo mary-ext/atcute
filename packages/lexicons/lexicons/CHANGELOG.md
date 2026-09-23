@@ -1,5 +1,13 @@
 # @atcute/lexicons
 
+## 2.1.1
+
+### Patch Changes
+
+- 0e68928: use `@oomfware/eval` for object validator codegen.
+- 0e68928: support Trusted Types for object validator codegen. when enforcing Trusted Types, allow
+  `atcute-lexicons` in your `trusted-types` CSP directive to use eval-based validators.
+
 ## 2.1.0
 
 ### Minor Changes
