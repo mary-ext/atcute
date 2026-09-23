@@ -4,6 +4,12 @@ import * as v from '@atcute/lexicons/validations';
 
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.getUnreadCount', {
 	params: /*#__PURE__*/ v.object({
+		/**
+		 * Deprecated: this parameter is ignored.
+		 *
+		 * @deprecated
+		 */
+		priority: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		seenAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	}),
 	output: {

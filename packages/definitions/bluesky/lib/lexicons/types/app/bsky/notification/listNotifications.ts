@@ -18,8 +18,19 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.listNotificatio
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
+		/**
+		 * Deprecated: this parameter is ignored.
+		 *
+		 * @deprecated
+		 */
+		priority: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		/** Notification reasons to include in response. */
 		reasons: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+		/**
+		 * Deprecated: this parameter is unsupported and will cause an error.
+		 *
+		 * @deprecated
+		 */
 		seenAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	}),
 	output: {
@@ -29,6 +40,12 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.listNotificatio
 			get notifications() {
 				return /*#__PURE__*/ v.array(notificationSchema);
 			},
+			/**
+			 * Deprecated: this field is no longer populated.
+			 *
+			 * @deprecated
+			 */
+			priority: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			seenAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		}),
 	},

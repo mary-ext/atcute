@@ -21,6 +21,10 @@
 					"seenAt": {
 						"type": "string",
 						"format": "datetime"
+					},
+					"priority": {
+						"type": "boolean",
+						"description": "Deprecated: this parameter is ignored."
 					}
 				}
 			},
