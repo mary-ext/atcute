@@ -44,6 +44,7 @@
 						"pub.leaflet.blocks.orderedList",
 						"pub.leaflet.blocks.page",
 						"pub.leaflet.blocks.poll",
+						"pub.leaflet.blocks.postHeader",
 						"pub.leaflet.blocks.postsList",
 						"pub.leaflet.blocks.recommendedPubs",
 						"pub.leaflet.blocks.signup",
