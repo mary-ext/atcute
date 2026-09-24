@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import * as CID from '@atcute/cid';
+import { toSha256Sync } from '@atcute/uint8array';
 
 import { bench, do_not_optimize, run, summary } from 'mitata';
 
@@ -74,16 +75,12 @@ const makeSynthetic = (entries: number, payloadSize: number): Uint8Array => {
 	const blocks: CarBlock[] = [];
 
 	for (let i = 0; i < entries; i++) {
-		const digest = new Uint8Array(32);
-		for (let j = 0; j < 32; j++) {
-			digest[j] = (rand() + i + j * 13) & 0xff;
-		}
-
-		const cid = CID.fromDigest(CID.CODEC_DCBOR, digest);
 		const payload = new Uint8Array(payloadSize + (i & 31));
 		for (let j = 0; j < payload.length; j++) {
 			payload[j] = (rand() + i + j) & 0xff;
 		}
+
+		const cid = CID.fromDigest(CID.CODEC_DCBOR, toSha256Sync(payload));
 
 		blocks.push({ cid: cid.bytes, data: payload });
 	}

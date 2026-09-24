@@ -5,4 +5,7 @@ export * from './streamed-reader.ts';
 
 export * from './writer.ts';
 
+export * from './errors.ts';
+export * from './verify.ts';
+
 export * from './types.ts';

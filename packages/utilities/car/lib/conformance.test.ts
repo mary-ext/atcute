@@ -1,8 +1,9 @@
 import * as CID from '@atcute/cid';
-import { concat, encodeUtf8 } from '@atcute/uint8array';
+import { concat, encodeUtf8, toSha256Sync } from '@atcute/uint8array';
 
 import { describe, expect, it } from 'vitest';
 
+import { CarBlockMismatchError } from './errors.ts';
 import { fromUint8Array } from './reader.ts';
 import { fromStream } from './streamed-reader.ts';
 import { serializeCarEntry, serializeCarHeader } from './writer.ts';
@@ -12,10 +13,16 @@ const validHeader = (): Uint8Array => {
 	return serializeCarHeader([root]);
 };
 
+const rawEntry = (data: Uint8Array): Uint8Array => {
+	const cid = CID.fromDigest(CID.CODEC_RAW, toSha256Sync(data));
+	return serializeCarEntry(cid.bytes, data);
+};
+
 const validCar = (): Uint8Array<ArrayBuffer> => {
-	const cid = CID.fromDigest(CID.CODEC_RAW, new Uint8Array(32).fill(7));
+	const data = encodeUtf8('hello');
+	const cid = CID.fromDigest(CID.CODEC_RAW, toSha256Sync(data));
 	const root = CID.toCidLink(cid);
-	return concat([serializeCarHeader([root]), serializeCarEntry(cid.bytes, encodeUtf8('hello'))]);
+	return concat([serializeCarHeader([root]), serializeCarEntry(cid.bytes, data)]);
 };
 
 const streamOf = (buffer: Uint8Array<ArrayBuffer>): ReadableStream<Uint8Array> => new Blob([buffer]).stream();
@@ -65,8 +72,7 @@ describe('empty chunks', () => {
 
 	it('are skipped between and after blocks', async () => {
 		const header = validHeader();
-		const cid = CID.fromDigest(CID.CODEC_RAW, new Uint8Array(32).fill(7));
-		const entry = serializeCarEntry(cid.bytes, encodeUtf8('hello'));
+		const entry = rawEntry(encodeUtf8('hello'));
 
 		const stream = streamOfChunks([header, new Uint8Array(0), entry, new Uint8Array(0)]);
 		const entries = await Array.fromAsync(fromStream(stream));
@@ -92,8 +98,7 @@ describe('chunk boundaries', () => {
 		const header = validHeader();
 		const entries: Uint8Array[] = [];
 		for (let i = 0; i < 3; i++) {
-			const cid = CID.fromDigest(CID.CODEC_RAW, new Uint8Array(32).fill(i + 1));
-			entries.push(serializeCarEntry(cid.bytes, encodeUtf8(`block ${i}`)));
+			entries.push(rawEntry(encodeUtf8(`block ${i}`)));
 		}
 
 		const car = concat([header, ...entries]);
@@ -117,5 +122,65 @@ describe('sync reader iteration', () => {
 
 		expect(first).toHaveLength(1);
 		expect(second).toEqual(first);
+	});
+});
+
+describe('block verification', () => {
+	const data = encodeUtf8('hello');
+	const forged = CID.fromDigest(CID.CODEC_DCBOR, new Uint8Array(32).fill(7));
+	const buffer = concat([validHeader(), rawEntry(encodeUtf8('fine')), serializeCarEntry(forged.bytes, data)]);
+
+	it('rejects mismatched blocks in the sync reader', () => {
+		const entries: unknown[] = [];
+
+		const err = (() => {
+			try {
+				for (const entry of fromUint8Array(buffer)) {
+					entries.push(entry);
+				}
+			} catch (err) {
+				return err;
+			}
+		})();
+
+		expect(entries).toHaveLength(1);
+
+		expect(err).toBeInstanceOf(CarBlockMismatchError);
+		expect(err).toMatchObject({
+			cid: CID.toString(forged),
+			actual: CID.toString(CID.fromDigest(CID.CODEC_DCBOR, toSha256Sync(data))),
+		});
+	});
+
+	it('rejects mismatched blocks in the streaming reader', async () => {
+		await expect(Array.fromAsync(fromStream(streamOf(buffer)))).rejects.toThrowError(CarBlockMismatchError);
+	});
+
+	it('rejects blocks whose contents were altered', () => {
+		const car = validCar();
+		car[car.length - 1] ^= 1;
+
+		expect(() => Array.from(fromUint8Array(car))).toThrowError(CarBlockMismatchError);
+	});
+
+	it('accepts both raw and dag-cbor blocks', () => {
+		const cbor = Uint8Array.of(0xa0);
+		const car = concat([
+			validHeader(),
+			rawEntry(encodeUtf8('raw')),
+			serializeCarEntry(CID.fromDigest(CID.CODEC_DCBOR, toSha256Sync(cbor)).bytes, cbor),
+		]);
+
+		expect(Array.from(fromUint8Array(car))).toHaveLength(2);
+	});
+
+	it('can be disabled in the sync reader', () => {
+		expect(Array.from(fromUint8Array(buffer, { verifyBlocks: false }))).toHaveLength(2);
+	});
+
+	it('can be disabled in the streaming reader', async () => {
+		await expect(
+			Array.fromAsync(fromStream(streamOf(buffer), { verifyBlocks: false })),
+		).resolves.toHaveLength(2);
 	});
 });

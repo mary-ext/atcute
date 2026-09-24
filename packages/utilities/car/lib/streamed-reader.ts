@@ -2,7 +2,8 @@ import * as CBOR from '@atcute/cbor';
 import type { Cid, CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 
-import { type CarEntry, type CarHeader, isCarV1Header } from './types.ts';
+import { type CarEntry, type CarHeader, type CarReaderOptions, isCarV1Header } from './types.ts';
+import { verifyBlock } from './verify.ts';
 
 export interface StreamedCarReader {
 	header(): Promise<CarHeader>;
@@ -14,14 +15,20 @@ export interface StreamedCarReader {
 	[Symbol.asyncIterator](): AsyncIterator<CarEntry>;
 }
 
-export const carEntryTransform = (): ReadableWritablePair<CarEntry, Uint8Array> => {
+/**
+ * creates a transform stream from CAR bytes to block entries
+ *
+ * @param options reader options
+ * @returns a stream pair; read and verification errors propagate to the readable stream
+ */
+export const carEntryTransform = (options?: CarReaderOptions): ReadableWritablePair<CarEntry, Uint8Array> => {
 	const transform = new TransformStream<Uint8Array, Uint8Array>();
 	let car: StreamedCarReader | undefined;
 
 	return {
 		readable: new ReadableStream({
 			async start(controller) {
-				car = fromStream(transform.readable);
+				car = fromStream(transform.readable, options);
 
 				try {
 					for await (const entry of car) {
@@ -45,7 +52,23 @@ export const carEntryTransform = (): ReadableWritablePair<CarEntry, Uint8Array> 
 	};
 };
 
-export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReader => {
+/**
+ * reads a CAR archive from a stream
+ *
+ * verifies each block against its CID during iteration unless `verifyBlocks` is false.
+ *
+ * @param stream the CAR archive byte stream
+ * @param options reader options
+ * @returns a reader for the header and blocks
+ * @throws during reads or iteration if the archive is malformed or a block does not match its CID
+ *   (`CarBlockMismatchError`)
+ */
+export const fromStream = (
+	stream: ReadableStream<Uint8Array>,
+	options?: CarReaderOptions,
+): StreamedCarReader => {
+	const verifyBlocks = options?.verifyBlocks ?? true;
+
 	let chunk: Uint8Array = new Uint8Array(0);
 	let chunkPos = 0;
 	let offset = 0;
@@ -230,6 +253,10 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedCarReade
 				const bytesStart = offset;
 				const bytesSize = entrySize - 36;
 				const bytes = await readExact(bytesSize);
+
+				if (verifyBlocks) {
+					verifyBlock(cid, bytes);
+				}
 
 				const cidEnd = bytesStart;
 				const bytesEnd = offset;

@@ -3,7 +3,8 @@ import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import * as varint from '@atcute/varint';
 
-import { type CarEntry, type CarHeader, isCarV1Header } from './types.ts';
+import { type CarEntry, type CarHeader, type CarReaderOptions, isCarV1Header } from './types.ts';
+import { verifyBlock } from './verify.ts';
 
 export interface SyncCarReader {
 	readonly header: CarHeader;
@@ -12,7 +13,19 @@ export interface SyncCarReader {
 	[Symbol.iterator](): IterableIterator<CarEntry>;
 }
 
-export const fromUint8Array = (buffer: Uint8Array): SyncCarReader => {
+/**
+ * reads a CAR archive from a buffer
+ *
+ * verifies each block against its CID during iteration unless `verifyBlocks` is false.
+ *
+ * @param buffer the CAR archive bytes
+ * @param options reader options
+ * @returns the archive header and an iterable of blocks
+ * @throws if the header is malformed
+ * @throws during iteration if a block is malformed or does not match its CID (`CarBlockMismatchError`)
+ */
+export const fromUint8Array = (buffer: Uint8Array, options?: CarReaderOptions): SyncCarReader => {
+	const verifyBlocks = options?.verifyBlocks ?? true;
 	const { header, nextOffset: headerOffset } = readHeader(buffer, 0);
 
 	return {
@@ -52,6 +65,10 @@ export const fromUint8Array = (buffer: Uint8Array): SyncCarReader => {
 					const bytesEnd = bytesStart + bytesSize;
 					const bytes = buffer.subarray(bytesStart, bytesEnd);
 					pos = bytesEnd;
+
+					if (verifyBlocks) {
+						verifyBlock(cid, bytes);
+					}
 
 					const cidEnd = bytesStart;
 					const entryEnd = bytesEnd;

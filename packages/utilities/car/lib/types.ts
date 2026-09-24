@@ -36,6 +36,16 @@ export interface CarEntry {
 	bytesEnd: number;
 }
 
+/** options for reading a CAR archive */
+export interface CarReaderOptions {
+	/**
+	 * verifies each block against its CID; disable for trusted or separately verified archives
+	 *
+	 * @default true
+	 */
+	verifyBlocks?: boolean;
+}
+
 /** represents a block to be written to a CAR file */
 export interface CarBlock {
 	/** the CID of the block (as bytes) */
