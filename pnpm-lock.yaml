@@ -1282,6 +1282,9 @@ importers:
       '@atcute/car':
         specifier: workspace:^
         version: link:../car
+      '@atcute/tid':
+        specifier: workspace:^
+        version: link:../tid
       '@types/bun':
         specifier: ^1.4.2
         version: 1.4.2
