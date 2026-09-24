@@ -1,6 +1,14 @@
 // oxlint-disable typescript/no-explicit-any
 
-import { type CidLink, CidLinkWrapper, fromBinary } from '@atcute/cid';
+import {
+	CID_VERSION,
+	CODEC_DCBOR,
+	CODEC_RAW,
+	type CidLink,
+	CidLinkWrapper,
+	HASH_SHA256,
+	fromBinary,
+} from '@atcute/cid';
 import { decodeUtf8From } from '@atcute/uint8array';
 
 import { type Bytes, toBytes } from './bytes.ts';
@@ -142,10 +150,31 @@ const readBytes = (state: State, length: number): Bytes => {
 const readCid = (state: State, length: number): CidLink => {
 	requireBytes(state, length);
 
-	// CIDs are fixed-size and commonly outlive the decoded input, so always detach their bytes.
-	const cid = fromBinary(new Uint8Array(state.b.subarray(state.p, (state.p += length))));
+	const buf = state.b;
+	const pos = state.p;
 
-	return new CidLinkWrapper(cid.bytes);
+	// fast path: 0x00 multibase prefix followed by a 36-byte SHA-256 CIDv1
+	if (
+		length !== 37 ||
+		buf[pos] !== 0 ||
+		buf[pos + 1] !== CID_VERSION ||
+		(buf[pos + 2] !== CODEC_DCBOR && buf[pos + 2] !== CODEC_RAW) ||
+		buf[pos + 3] !== HASH_SHA256 ||
+		buf[pos + 4] !== 32
+	) {
+		// use the CID decoder for validation errors
+		const cid = fromBinary(new Uint8Array(buf.subarray(pos, (state.p += length))));
+		return new CidLinkWrapper(cid.bytes);
+	}
+
+	// detach CID bytes so links don't retain the input buffer; copy without an intermediate subarray view
+	const bytes = new Uint8Array(36);
+	for (let i = 0; i < 36; i++) {
+		bytes[i] = buf[pos + 1 + i];
+	}
+
+	state.p = pos + length;
+	return new CidLinkWrapper(bytes);
 };
 
 const decodeStringKey = (state: State): string => {

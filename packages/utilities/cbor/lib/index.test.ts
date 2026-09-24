@@ -398,6 +398,37 @@ it('throws on unexpected cid-link and bytes values', () => {
 	expect(() => encode({ $bytes: 123 })).toThrow();
 });
 
+// tag 42 wrapping a byte string
+const tagged = (bytes: number[]): Uint8Array => {
+	return new Uint8Array([0xd8, 0x2a, 0x58, bytes.length, ...bytes]);
+};
+
+it('rejects malformed cid links', () => {
+	const link = CID.fromString('bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee').bytes;
+
+	const valid = [0x00, ...link];
+	expect(CID.toString(CID.fromCidLink(decode(tagged(valid)) as CID.CidLink))).toBe(
+		'bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee',
+	);
+
+	// missing multibase prefix
+	expect(() => decode(tagged([...link]))).toThrow();
+	// wrong multibase prefix
+	expect(() => decode(tagged([0x01, ...link]))).toThrow();
+	// truncated digest
+	expect(() => decode(tagged(valid.slice(0, -1)))).toThrow();
+	// trailing bytes
+	expect(() => decode(tagged([...valid, 0x00]))).toThrow();
+	// cid version 0
+	expect(() => decode(tagged([0x00, 0x00, ...link.subarray(1)]))).toThrow(/cid version/);
+	// unsupported codec
+	expect(() => decode(tagged([0x00, 0x01, 0x70, ...link.subarray(2)]))).toThrow(/cid codec/);
+	// unsupported hash
+	expect(() => decode(tagged([0x00, 0x01, 0x71, 0x13, ...link.subarray(3)]))).toThrow(/digest codec/);
+	// wrong digest size
+	expect(() => decode(tagged([0x00, 0x01, 0x71, 0x12, 0x20 - 1, ...link.subarray(4)]))).toThrow();
+});
+
 it('throws on non-plain objects', () => {
 	expect(() => encode(new Map([[1, 2]]))).toThrow();
 });
