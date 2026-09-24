@@ -44,7 +44,7 @@
 	},
 	"peerDependencies": {
 		"@atcute/cbor": "^2.0.0",
-		"@atcute/cid": "^2.0.0",
+		"@atcute/cid": "^2.5.0",
 		"@atcute/lexicons": "^2.0.0"
 	}
 }

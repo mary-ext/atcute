@@ -7,7 +7,7 @@ import { isNodeData } from '@atcute/mst';
 
 import { RepoEntry, type RepoReaderOptions, isCommit } from './types.ts';
 import { assert } from './utils.ts';
-import { CidMap, linkBytes } from './utils/cid-map.ts';
+import { CidMap } from './utils/cid-map.ts';
 import { MAX_NODE_ENTRIES, decodeMstKey, parseMstKey } from './utils/mst.ts';
 import Queue from './utils/queue.ts';
 
@@ -120,7 +120,7 @@ export const fromStream = (
 				const queue = new Queue<Task>();
 
 				const request = (link: CidLink, meta: EntryMeta): void => {
-					const cid = linkBytes(link);
+					const cid = CID.toLinkBytes(link);
 					const entry = strays.get(cid);
 
 					if (entry !== undefined) {

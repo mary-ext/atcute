@@ -1,12 +1,12 @@
 import type { CarEntry } from '@atcute/car';
 import * as CAR from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
-import type { CidLink } from '@atcute/cid';
+import { type CidLink, toLinkBytes } from '@atcute/cid';
 import { isNodeData } from '@atcute/mst';
 
 import { RepoEntry, type RepoReaderOptions, isCommit } from './types.ts';
 import { assert } from './utils.ts';
-import { CidMap, linkBytes } from './utils/cid-map.ts';
+import { CidMap } from './utils/cid-map.ts';
 import { MAX_MST_DEPTH, MAX_NODE_ENTRIES, decodeMstKey, parseMstKey } from './utils/mst.ts';
 
 /** @internal */
@@ -48,7 +48,7 @@ export function* fromUint8Array(buf: Uint8Array, options?: RepoReaderOptions): G
 	for (const { key, cid } of walkMstEntries(map, commit.data)) {
 		const { collection, rkey } = parseMstKey(key);
 
-		const carEntry = map.get(linkBytes(cid));
+		const carEntry = map.get(toLinkBytes(cid));
 		if (carEntry === undefined) {
 			throw new Error(`cid not found in blockmap; cid=${cid.$link}`);
 		}
@@ -68,7 +68,7 @@ export function* fromUint8Array(buf: Uint8Array, options?: RepoReaderOptions): G
  */
 export const readEntry = <T>(map: EntryMap, link: CidLink, validate: (value: unknown) => value is T): T => {
 	// defer CID string encoding until an error occurs
-	const entry = map.get(linkBytes(link));
+	const entry = map.get(toLinkBytes(link));
 	if (entry === undefined) {
 		throw new Error(`cid not found in blockmap; cid=${link.$link}`);
 	}

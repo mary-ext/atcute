@@ -68,21 +68,6 @@ export class CidMap<V> {
 	}
 }
 
-/**
- * returns the raw bytes of a CID link
- *
- * @param link the CID link
- * @returns raw CID bytes
- * @internal
- */
-export const linkBytes = (link: CID.CidLink): Uint8Array => {
-	if (link instanceof CID.CidLinkWrapper) {
-		return link.bytes;
-	}
-
-	return CID.fromString(link.$link).bytes;
-};
-
 const keyOf = (cid: Uint8Array): number => {
 	// 30 bits from the start of the digest, keeping the key a small integer
 	return cid[4] | (cid[5] << 8) | (cid[6] << 16) | ((cid[7] & 0x3f) << 24);

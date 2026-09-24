@@ -2,7 +2,7 @@ import * as CID from '@atcute/cid';
 
 import { describe, expect, it } from 'vitest';
 
-import { CidMap, linkBytes } from './cid-map.ts';
+import { CidMap } from './cid-map.ts';
 
 // matching heads produce colliding map keys
 const cidOf = (head: number, tail: number, codec: 0x55 | 0x71 = CID.CODEC_DCBOR): CID.Cid => {
@@ -114,14 +114,5 @@ describe('CidMap', () => {
 				[CID.toString(c), 'c'],
 			]),
 		);
-	});
-});
-
-describe('linkBytes', () => {
-	it('reads bytes from wrapped and plain CID links', () => {
-		const cid = cidOf(1, 1);
-
-		expect(linkBytes(CID.toCidLink(cid))).toEqual(cid.bytes);
-		expect(linkBytes({ $link: CID.toString(cid) })).toEqual(cid.bytes);
 	});
 });

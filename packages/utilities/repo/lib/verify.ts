@@ -1,14 +1,14 @@
 import type { CarEntry } from '@atcute/car';
 import * as CAR from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
-import type { CidLink } from '@atcute/cid';
+import { type CidLink, toLinkBytes } from '@atcute/cid';
 import type { PublicKey } from '@atcute/crypto';
 import type { AtprotoDid } from '@atcute/lexicons/syntax';
 import { isNodeData } from '@atcute/mst';
 
 import { isCommit } from './types.ts';
 import { assert } from './utils.ts';
-import { CidMap, linkBytes } from './utils/cid-map.ts';
+import { CidMap } from './utils/cid-map.ts';
 import { MAX_MST_DEPTH, MAX_NODE_ENTRIES, decodeMstKey } from './utils/mst.ts';
 
 type BlockMap = CidMap<CarEntry>;
@@ -107,7 +107,7 @@ export const verifyRecord = async ({
  * @internal
  */
 const loadVerified = (blockmap: BlockMap, link: CidLink): CarEntry | undefined => {
-	const entry = blockmap.get(linkBytes(link));
+	const entry = blockmap.get(toLinkBytes(link));
 	if (entry !== undefined) {
 		CAR.verifyBlock(entry.cid, entry.bytes);
 	}
