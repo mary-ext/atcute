@@ -82,11 +82,31 @@ export class MSTNode {
 			}
 		}
 
+		// reuse the validated height to avoid hashing the first key again
+		return MSTNode._trusted(keys, values, subtrees, expectedHeight ?? null);
+	}
+
+	/**
+	 * creates an MST node without validation
+	 *
+	 * @param keys sorted array of keys, all at `height`
+	 * @param values array of value CIDs corresponding to keys
+	 * @param subtrees array of subtree CIDs (length must be keys.length + 1)
+	 * @param height shared key height, required for nonempty keys and ignored otherwise
+	 * @returns a new unvalidated MST node
+	 * @internal
+	 */
+	static _trusted(
+		keys: readonly string[],
+		values: readonly CidLink[],
+		subtrees: readonly (CidLink | null)[],
+		height: number | null,
+	): MSTNode {
 		const node = new MSTNode(keys, values, subtrees);
 
-		// reuse the validated height to avoid hashing the first key again
-		if (expectedHeight !== undefined) {
-			node._height = expectedHeight;
+		// height() distinguishes empty trees (0) from keyless intermediate nodes (null)
+		if (keys.length > 0) {
+			node._height = height;
 		}
 
 		return node;

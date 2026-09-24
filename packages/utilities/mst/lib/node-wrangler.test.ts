@@ -8,10 +8,21 @@ import { NodeWalker } from './node-walker.ts';
 import { NodeWrangler } from './node-wrangler.ts';
 import { MSTNode } from './node.ts';
 import { MemoryBlockStore } from './stores.ts';
+import { computeKeyHeight } from './utils/key-height.ts';
 
 const createCid = async (data: string) => {
 	const bytes = encodeUtf8(data);
 	return CID.toCidLink(await CID.create(0x55, bytes));
+};
+
+/** finds the first key at `height` that sorts after `after` */
+const findKey = (height: number, after = ''): string => {
+	for (let i = 0; ; i++) {
+		const key = `coll/${i.toString().padStart(4, '0')}`;
+		if (key > after && computeKeyHeight(key) === height) {
+			return key;
+		}
+	}
 };
 
 describe('NodeWrangler', () => {
@@ -295,5 +306,47 @@ describe('NodeWrangler', () => {
 
 		// should be no-op
 		expect(newRootCid).toBe(emptyCid);
+	});
+
+	describe('malformed trees', () => {
+		it('rejects inserting into a subtree at the wrong height', async () => {
+			const store = new NodeStore(new MemoryBlockStore());
+			const wrangler = new NodeWrangler(store);
+			const value = await createCid('value');
+
+			// `lo` sits below `hi` but carries a height-1 key, where height 0 is expected
+			const lo = findKey(1);
+			const hi = findKey(1, lo);
+			const inserted = findKey(0);
+			expect(inserted < hi).toBe(true);
+
+			const child = await store.put(await MSTNode.create([lo], [value], [null, null]));
+			const root = await store.put(await MSTNode.create([hi], [value], [await child.cid(), null]));
+
+			await expect(wrangler.putRecord((await root.cid()).$link, inserted, value)).rejects.toThrow(
+				`inconsistent key heights`,
+			);
+		});
+
+		it('rejects merging sibling subtrees at different heights', async () => {
+			const store = new NodeStore(new MemoryBlockStore());
+			const wrangler = new NodeWrangler(store);
+			const value = await createCid('value');
+
+			// deleting `mid` merges a height-0 left subtree with a height-1 right subtree
+			const left = findKey(0);
+			const mid = findKey(1, left);
+			const right = findKey(1, mid);
+
+			const leftNode = await store.put(await MSTNode.create([left], [value], [null, null]));
+			const rightNode = await store.put(await MSTNode.create([right], [value], [null, null]));
+			const root = await store.put(
+				await MSTNode.create([mid], [value], [await leftNode.cid(), await rightNode.cid()]),
+			);
+
+			await expect(wrangler.deleteRecord((await root.cid()).$link, mid)).rejects.toThrow(
+				`inconsistent key heights`,
+			);
+		});
 	});
 });

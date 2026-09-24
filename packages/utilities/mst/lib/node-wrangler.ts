@@ -50,20 +50,15 @@ export class NodeWrangler {
 	async putRecord(rootCid: string | null, key: string, val: CidLink): Promise<string> {
 		assertMstKey(key);
 		const root = await this.ns.get(rootCid);
+		const keyHeight = computeKeyHeight(key);
 
 		if (root.isEmpty) {
 			// special case for empty tree
-			const newNode = await this._putHere(root, key, val);
+			const newNode = await this._putHere(root, key, val, keyHeight);
 			return (await newNode.cid()).$link;
 		}
 
-		const newNode = await this._putRecursive(
-			root,
-			key,
-			val,
-			computeKeyHeight(key),
-			await root.requireHeight(),
-		);
+		const newNode = await this._putRecursive(root, key, val, keyHeight, await root.requireHeight());
 		return (await newNode.cid()).$link;
 	}
 
@@ -98,9 +93,10 @@ export class NodeWrangler {
 	 * @param node the node to insert into
 	 * @param key the key to insert
 	 * @param val the value to insert
+	 * @param keyHeight the height of the key (based on hash)
 	 * @returns the updated node
 	 */
-	private async _putHere(node: MSTNode, key: string, val: CidLink): Promise<MSTNode> {
+	private async _putHere(node: MSTNode, key: string, val: CidLink, keyHeight: number): Promise<MSTNode> {
 		const idx = node.lowerBound(key);
 
 		// the key is already present!
@@ -110,20 +106,24 @@ export class NodeWrangler {
 			}
 
 			return await this.ns.put(
-				await MSTNode.create(node.keys, replaceAt(node.values, idx, val), node.subtrees),
+				MSTNode._trusted(node.keys, replaceAt(node.values, idx, val), node.subtrees, keyHeight),
 			);
+		}
+
+		if (node.keys.length > 0 && (await node.height()) !== keyHeight) {
+			throw new TypeError(`malformed MST node; inconsistent key heights`);
 		}
 
 		// split the subtree at the insertion point
 		const [lsub, rsub] = await this._splitOnKey(node.subtrees[idx], key);
 
 		return await this.ns.put(
-			await MSTNode.create(insertAt(node.keys, idx, key), insertAt(node.values, idx, val), [
-				...node.subtrees.slice(0, idx),
-				lsub,
-				rsub,
-				...node.subtrees.slice(idx + 1),
-			]),
+			MSTNode._trusted(
+				insertAt(node.keys, idx, key),
+				insertAt(node.values, idx, val),
+				[...node.subtrees.slice(0, idx), lsub, rsub, ...node.subtrees.slice(idx + 1)],
+				keyHeight,
+			),
 		);
 	}
 
@@ -147,7 +147,7 @@ export class NodeWrangler {
 		if (keyHeight > treeHeight) {
 			// we need to grow the tree
 			return await this._putRecursive(
-				await this.ns.put(await MSTNode.create([], [], [await node.cid()])),
+				await this.ns.put(MSTNode._trusted([], [], [await node.cid()], null)),
 				key,
 				val,
 				keyHeight,
@@ -159,7 +159,7 @@ export class NodeWrangler {
 			// we need to look below
 			const idx = node.lowerBound(key);
 			return await this.ns.put(
-				await MSTNode.create(
+				MSTNode._trusted(
 					node.keys,
 					node.values,
 					replaceAt(
@@ -175,12 +175,13 @@ export class NodeWrangler {
 							)
 						).cid(),
 					),
+					await node.height(),
 				),
 			);
 		}
 
 		// we can insert here
-		return await this._putHere(node, key, val);
+		return await this._putHere(node, key, val, keyHeight);
 	}
 
 	/**
@@ -196,21 +197,26 @@ export class NodeWrangler {
 		}
 
 		const node = await this.ns.get(nodeCid.$link);
+		const height = await node.height();
 		const idx = node.lowerBound(key);
 		const [lsub, rsub] = await this._splitOnKey(node.subtrees[idx], key);
 
 		const leftNode = await this.ns.put(
-			await MSTNode.create(node.keys.slice(0, idx), node.values.slice(0, idx), [
-				...node.subtrees.slice(0, idx),
-				lsub,
-			]),
+			MSTNode._trusted(
+				node.keys.slice(0, idx),
+				node.values.slice(0, idx),
+				[...node.subtrees.slice(0, idx), lsub],
+				height,
+			),
 		);
 
 		const rightNode = await this.ns.put(
-			await MSTNode.create(node.keys.slice(idx), node.values.slice(idx), [
-				rsub,
-				...node.subtrees.slice(idx + 1),
-			]),
+			MSTNode._trusted(
+				node.keys.slice(idx),
+				node.values.slice(idx),
+				[rsub, ...node.subtrees.slice(idx + 1)],
+				height,
+			),
 		);
 
 		return [await leftNode._toNullable(), await rightNode._toNullable()];
@@ -265,7 +271,7 @@ export class NodeWrangler {
 			}
 
 			const updated = await this.ns.put(
-				await MSTNode.create(
+				MSTNode._trusted(
 					node.keys,
 					node.values,
 					replaceAt(
@@ -278,6 +284,7 @@ export class NodeWrangler {
 							treeHeight - 1,
 						),
 					),
+					await node.height(),
 				),
 			);
 
@@ -292,11 +299,12 @@ export class NodeWrangler {
 		const merged = await this._merge(node.subtrees[idx], node.subtrees[idx + 1]);
 
 		const updated = await this.ns.put(
-			await MSTNode.create(removeAt(node.keys, idx), removeAt(node.values, idx), [
-				...node.subtrees.slice(0, idx),
-				merged,
-				...node.subtrees.slice(idx + 2),
-			]),
+			MSTNode._trusted(
+				removeAt(node.keys, idx),
+				removeAt(node.values, idx),
+				[...node.subtrees.slice(0, idx), merged, ...node.subtrees.slice(idx + 2)],
+				keyHeight,
+			),
 		);
 
 		return await updated._toNullable();
@@ -320,14 +328,22 @@ export class NodeWrangler {
 		const left = await this.ns.get(leftCid.$link);
 		const right = await this.ns.get(rightCid.$link);
 
+		const leftHeight = await left.height();
+		const rightHeight = await right.height();
+
+		if (left.keys.length > 0 && right.keys.length > 0 && leftHeight !== rightHeight) {
+			throw new TypeError(`malformed MST node; inconsistent key heights`);
+		}
+
 		// recursively merge the adjacent subtrees at the boundary
 		const mergedBoundary = await this._merge(left.subtrees[left.subtrees.length - 1], right.subtrees[0]);
 
 		const merged = await this.ns.put(
-			await MSTNode.create(
+			MSTNode._trusted(
 				[...left.keys, ...right.keys],
 				[...left.values, ...right.values],
 				[...left.subtrees.slice(0, -1), mergedBoundary, ...right.subtrees.slice(1)],
+				left.keys.length > 0 ? leftHeight : rightHeight,
 			),
 		);
 
