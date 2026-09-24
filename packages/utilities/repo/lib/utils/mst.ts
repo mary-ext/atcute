@@ -42,10 +42,9 @@ export const parseMstKey = (key: string): { collection: string; rkey: string } =
  */
 export const decodeMstKey = (prevKey: string, entry: TreeEntry): string => {
 	const prefixLen = entry.p;
-	assert(
-		Number.isInteger(prefixLen) && prefixLen >= 0 && prefixLen <= prevKey.length,
-		`invalid mst node; key prefix length out of range; p=${prefixLen}`,
-	);
+	if (!(Number.isInteger(prefixLen) && prefixLen >= 0 && prefixLen <= prevKey.length)) {
+		throw new Error(`invalid mst node; key prefix length out of range; p=${prefixLen}`);
+	}
 
 	// the spec counts the shared prefix and sorts keys by raw bytes, and valid repo paths are ASCII. decode the
 	// suffix bytes 1:1 into code units (as the atproto reference does) so `p` (a byte count) is a valid string
@@ -59,7 +58,10 @@ export const decodeMstKey = (prevKey: string, entry: TreeEntry): string => {
 	assert(prevKey[prefixLen] !== suffix[0], `invalid mst node; suboptimal key prefix length`);
 
 	const key = prevKey.slice(0, prefixLen) + suffix;
-	assert(isMstKey(key), `invalid repo path; key=${key}`);
+	if (!isMstKey(key)) {
+		throw new Error(`invalid repo path; key=${key}`);
+	}
+
 	assert(key > prevKey, `invalid mst node; keys are out of order`);
 
 	return key;

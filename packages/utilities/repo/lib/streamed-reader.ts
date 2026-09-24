@@ -1,18 +1,19 @@
 import type { CarEntry } from '@atcute/car';
 import * as CAR from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
+import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import { isNodeData } from '@atcute/mst';
 
-import { RepoEntry, isCommit } from './types.ts';
+import { RepoEntry, type RepoReaderOptions, isCommit } from './types.ts';
 import { assert } from './utils.ts';
+import { CidMap, linkBytes } from './utils/cid-map.ts';
 import { MAX_NODE_ENTRIES, decodeMstKey, parseMstKey } from './utils/mst.ts';
 import Queue from './utils/queue.ts';
 
 type EntryMeta = { t: 0 } | { t: 1 } | { t: 2; k: string };
 
 type Task = {
-	c: string;
 	e: CarEntry;
 	m: EntryMeta;
 };
@@ -42,14 +43,22 @@ export interface StreamedRepoReader {
 	[Symbol.asyncIterator](): AsyncIterator<RepoEntry>;
 }
 
-export const repoEntryTransform = (): ReadableWritablePair<RepoEntry, Uint8Array> => {
+/**
+ * creates a transform stream from repository CAR bytes to records
+ *
+ * @param options reader options
+ * @returns a stream pair; read and verification errors propagate to the readable stream
+ */
+export const repoEntryTransform = (
+	options?: RepoReaderOptions,
+): ReadableWritablePair<RepoEntry, Uint8Array> => {
 	const transform = new TransformStream<Uint8Array, Uint8Array>();
 	let repo: StreamedRepoReader | undefined;
 
 	return {
 		readable: new ReadableStream({
 			async start(controller) {
-				repo = fromStream(transform.readable);
+				repo = fromStream(transform.readable, options);
 
 				try {
 					for await (const entry of repo) {
@@ -73,7 +82,19 @@ export const repoEntryTransform = (): ReadableWritablePair<RepoEntry, Uint8Array
 	};
 };
 
-export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoReader => {
+/**
+ * reads the records of a repository CAR from a stream
+ *
+ * @param stream the CAR archive byte stream
+ * @param options reader options
+ * @returns an async iterable of records reachable from the root commit
+ * @throws during iteration if the archive or repository structure is malformed, or
+ *   {@link CAR.CarBlockMismatchError} if a block's bytes do not match its CID
+ */
+export const fromStream = (
+	stream: ReadableStream<Uint8Array>,
+	options?: RepoReaderOptions,
+): StreamedRepoReader => {
 	let missingBlocks: MissingBlockEntry[] = [];
 
 	return {
@@ -90,20 +111,21 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 		},
 		async *[Symbol.asyncIterator]() {
 			// await using car = CarReader.fromStream(stream);
-			const car = CAR.fromStream(stream);
+			const car = CAR.fromStream(stream, options);
 
 			try {
-				const pending = new Map<string, EntryMeta[]>();
-				const strays = new Map<string, CarEntry>();
+				const pending = new CidMap<EntryMeta[]>();
+				const strays = new CidMap<CarEntry>();
 
 				const queue = new Queue<Task>();
 
-				const request = (cid: string, meta: EntryMeta): void => {
+				const request = (link: CidLink, meta: EntryMeta): void => {
+					const cid = linkBytes(link);
 					const entry = strays.get(cid);
 
 					if (entry !== undefined) {
 						strays.delete(cid);
-						queue.enqueue({ c: cid, e: entry, m: meta });
+						queue.enqueue({ e: entry, m: meta });
 					} else {
 						const metas = pending.get(cid);
 
@@ -119,21 +141,19 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 					const roots = await car.roots();
 					assert(roots.length >= 1, `expected at least 1 root in the car archive; got=${roots.length}`);
 
-					const rootCid = roots[0].$link;
-					request(rootCid, { t: 0 });
+					request(roots[0], { t: 0 });
 				}
 
 				for await (const entry of car) {
-					const cid = CID.toString(entry.cid);
-
 					{
+						const cid = entry.cid.bytes;
 						const metas = pending.get(cid);
 
 						if (metas !== undefined) {
 							pending.delete(cid);
 
 							for (let i = 0, il = metas.length; i < il; i++) {
-								queue.enqueue({ c: cid, e: entry, m: metas[i] });
+								queue.enqueue({ e: entry, m: metas[i] });
 							}
 						} else {
 							strays.set(cid, entry);
@@ -142,32 +162,35 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 
 					let task: Task | undefined;
 					while ((task = queue.dequeue())) {
-						const { c: cid, e: entry, m: meta } = task;
+						const { e: entry, m: meta } = task;
 
 						switch (meta.t) {
 							case 0: {
 								const commit = CBOR.decode(entry.bytes);
-								assert(isCommit(commit), `expected commit block; cid=${cid}`);
+								if (!isCommit(commit)) {
+									throw new Error(`expected commit block; cid=${CID.toString(entry.cid)}`);
+								}
 
-								request(commit.data.$link, { t: 1 });
+								request(commit.data, { t: 1 });
 								break;
 							}
 							case 1: {
 								const node = CBOR.decode(entry.bytes);
-								assert(isNodeData(node), `expected mst node block; cid=${cid}`);
+								if (!isNodeData(node)) {
+									throw new Error(`expected mst node block; cid=${CID.toString(entry.cid)}`);
+								}
 
 								const entries = node.e;
 								const left = node.l;
 
-								assert(
-									entries.length <= MAX_NODE_ENTRIES,
-									`mst node has too many entries; count=${entries.length}`,
-								);
+								if (entries.length > MAX_NODE_ENTRIES) {
+									throw new Error(`mst node has too many entries; count=${entries.length}`);
+								}
 
 								let lastKey = '';
 
 								if (left !== null) {
-									request(left.$link, meta);
+									request(left, meta);
 								}
 
 								for (let i = 0, il = entries.length; i < il; i++) {
@@ -177,10 +200,10 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 									const key = decodeMstKey(lastKey, entry);
 									lastKey = key;
 
-									request(entry.v.$link, { t: 2, k: key });
+									request(entry.v, { t: 2, k: key });
 
 									if (next !== null) {
-										request(next.$link, { t: 1 });
+										request(next, { t: 1 });
 									}
 								}
 
@@ -199,7 +222,7 @@ export const fromStream = (stream: ReadableStream<Uint8Array>): StreamedRepoRead
 				{
 					const missing: MissingBlockEntry[] = [];
 
-					for (const [cid, metas] of pending) {
+					for (const [cid, metas] of pending.entries()) {
 						for (let i = 0, il = metas.length; i < il; i++) {
 							const meta = metas[i];
 

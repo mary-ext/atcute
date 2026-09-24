@@ -2,16 +2,16 @@ import type { CarEntry } from '@atcute/car';
 import * as CAR from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
 import type { CidLink } from '@atcute/cid';
-import * as CID from '@atcute/cid';
 import type { PublicKey } from '@atcute/crypto';
 import type { AtprotoDid } from '@atcute/lexicons/syntax';
 import { isNodeData } from '@atcute/mst';
 
 import { isCommit } from './types.ts';
 import { assert } from './utils.ts';
+import { CidMap, linkBytes } from './utils/cid-map.ts';
 import { MAX_MST_DEPTH, MAX_NODE_ENTRIES, decodeMstKey } from './utils/mst.ts';
 
-type BlockMap = Map<string, CarEntry>;
+type BlockMap = CidMap<CarEntry>;
 
 export interface VerifiedRecord {
 	/** CID of the record */
@@ -43,8 +43,8 @@ export interface VerifyRecordOptions {
  * @param options.publicKey signing key to verify the commit signature against; skipped if omitted
  * @param options.carBytes the CAR archive bytes
  * @returns the target record's CID and decoded data
- * @throws if the CAR is malformed, a block does not match its CID, the DID or signature is invalid, or the
- *   record cannot be found
+ * @throws if the CAR is malformed, the DID or signature is invalid, or the record cannot be found
+ * @throws {CAR.CarBlockMismatchError} if a block on the record's path does not match its CID
  */
 export const verifyRecord = async ({
 	did,
@@ -53,20 +53,23 @@ export const verifyRecord = async ({
 	publicKey,
 	carBytes,
 }: VerifyRecordOptions): Promise<VerifiedRecord> => {
-	const reader = CAR.fromUint8Array(carBytes);
+	// index blocks without hashing them; the descent verifies each block it actually reads, so an unrelated
+	// bad block never costs work and partial proofs (with unlinked blocks omitted) are fine
+	const reader = CAR.fromUint8Array(carBytes, { verifyBlocks: false });
 	assert(reader.header.data.roots.length >= 1, `car must have at least one root`);
 
-	// index blocks by CID without hashing them yet; the descent verifies each block it actually reads, so an
-	// unrelated bad block never costs work and partial proofs (with unlinked blocks omitted) are fine
-	const blockmap: BlockMap = new Map();
+	const blockmap: BlockMap = new CidMap();
+	let count = 0;
 	for (const entry of reader) {
-		blockmap.set(CID.toString(entry.cid), entry);
+		blockmap.set(entry.cid.bytes, entry);
+		count++;
 	}
 
-	assert(blockmap.size >= 1, `car must have at least one block`);
+	assert(count >= 1, `car must have at least one block`);
 
-	const commitEntry = await loadVerified(blockmap, reader.header.data.roots[0].$link);
-	assert(commitEntry !== undefined, `cid not found in blockmap; cid=${reader.header.data.roots[0].$link}`);
+	const root = reader.header.data.roots[0];
+	const commitEntry = loadVerified(blockmap, root);
+	assert(commitEntry !== undefined, `cid not found in blockmap; cid=${root.$link}`);
 
 	const commit = CBOR.decode(commitEntry.bytes);
 	assert(isCommit(commit), `expected commit block`);
@@ -88,29 +91,26 @@ export const verifyRecord = async ({
 	}
 
 	const targetKey = `${collection}/${rkey}`;
-	const found = await descend(blockmap, commit.data, targetKey);
+	const found = descend(blockmap, commit.data, targetKey);
 	assert(found !== null, `could not find record in car`);
 
 	return found;
 };
 
 /**
- * looks up a block and verifies that its bytes hash to the CID it is keyed by
+ * looks up a block and verifies that its bytes hash to its CID
  *
- * @param blockmap a mapping of CID string -> car entry
- * @param cid the CID to read
+ * @param blockmap CAR entries keyed by CID
+ * @param link the CID link to read
  * @returns the verified entry, or undefined if the block is absent
- * @throws if the block's bytes do not match its CID
+ * @throws {CAR.CarBlockMismatchError} if the block's bytes do not match its CID
  * @internal
  */
-const loadVerified = async (blockmap: BlockMap, cid: string): Promise<CarEntry | undefined> => {
-	const entry = blockmap.get(cid);
-	if (entry === undefined) {
-		return undefined;
+const loadVerified = (blockmap: BlockMap, link: CidLink): CarEntry | undefined => {
+	const entry = blockmap.get(linkBytes(link));
+	if (entry !== undefined) {
+		CAR.verifyBlock(entry.cid, entry.bytes);
 	}
-
-	const expected = CID.toString(await CID.create(entry.cid.codec as 85 | 113, entry.bytes));
-	assert(cid === expected, `cid does not match bytes; cid=${cid}`);
 
 	return entry;
 };
@@ -118,22 +118,22 @@ const loadVerified = async (blockmap: BlockMap, cid: string): Promise<CarEntry |
 /**
  * descends an MST toward a target key, following only the sub-tree whose key range can contain it
  *
- * @param blockmap a mapping of CID string -> car entry
+ * @param blockmap CAR entries keyed by CID
  * @param pointer a CID link to the current MST node
  * @param targetKey the full repo path being located
  * @param depth current traversal depth, used to bound recursion
  * @returns the record if found, or null if it is not present on the descended path
  * @internal
  */
-const descend = async (
+const descend = (
 	blockmap: BlockMap,
 	pointer: CidLink,
 	targetKey: string,
 	depth: number = 0,
-): Promise<VerifiedRecord | null> => {
+): VerifiedRecord | null => {
 	assert(depth <= MAX_MST_DEPTH, `mst is too deep; depth=${depth}`);
 
-	const block = await loadVerified(blockmap, pointer.$link);
+	const block = loadVerified(blockmap, pointer);
 	if (block === undefined) {
 		// a node on the path is absent (e.g. a proof that does not cover this key)
 		return null;
@@ -156,7 +156,7 @@ const descend = async (
 		lastKey = key;
 
 		if (key === targetKey) {
-			return await loadRecord(blockmap, entry.v);
+			return loadRecord(blockmap, entry.v);
 		}
 
 		if (key > targetKey) {
@@ -172,18 +172,16 @@ const descend = async (
 /**
  * reads and verifies a record block
  *
- * @param blockmap a mapping of CID string -> car entry
+ * @param blockmap CAR entries keyed by CID
  * @param pointer a CID link to the record block
  * @returns the record if present, or null if its block is absent
  * @internal
  */
-const loadRecord = async (blockmap: BlockMap, pointer: CidLink): Promise<VerifiedRecord | null> => {
-	const cid = pointer.$link;
-
-	const block = await loadVerified(blockmap, cid);
+const loadRecord = (blockmap: BlockMap, pointer: CidLink): VerifiedRecord | null => {
+	const block = loadVerified(blockmap, pointer);
 	if (block === undefined) {
 		return null;
 	}
 
-	return { cid, record: CBOR.decode(block.bytes) };
+	return { cid: pointer.$link, record: CBOR.decode(block.bytes) };
 };

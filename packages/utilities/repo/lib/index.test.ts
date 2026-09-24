@@ -1,4 +1,4 @@
-import { writeCarStream } from '@atcute/car';
+import { CarBlockMismatchError, writeCarStream } from '@atcute/car';
 import * as CBOR from '@atcute/cbor';
 import { toBytes } from '@atcute/cbor';
 import * as CID from '@atcute/cid';
@@ -338,6 +338,47 @@ describe('duplicate CID handling', () => {
 	});
 });
 
+// replaces the final record's bytes without updating its CID
+const tamper = (car: Uint8Array<ArrayBuffer>, record: unknown): Uint8Array<ArrayBuffer> => {
+	const original = CBOR.encode(record);
+	const forged = CBOR.encode({ ...(record as object), text: 'hellp' });
+
+	// same length, so every offset in the archive stays valid
+	expect(forged.length).toBe(original.length);
+
+	const tampered = car.slice();
+	tampered.set(forged, car.length - original.length);
+	return tampered;
+};
+
+describe('block verification', () => {
+	it('fromUint8Array rejects a record that does not match its cid', async () => {
+		const { car, record } = await buildDuplicateCidCar();
+
+		expect(() => Array.from(fromUint8Array(tamper(car, record)))).toThrow(CarBlockMismatchError);
+	});
+
+	it('fromStream rejects a record that does not match its cid', async () => {
+		const { car, record } = await buildDuplicateCidCar();
+
+		await using repo = fromStream(new Blob([tamper(car, record)]).stream());
+		await expect(Array.fromAsync(repo)).rejects.toThrow(CarBlockMismatchError);
+	});
+
+	it('fromUint8Array can skip verification', async () => {
+		const { car, record } = await buildDuplicateCidCar();
+
+		expect(Array.from(fromUint8Array(tamper(car, record), { verifyBlocks: false }))).toHaveLength(2);
+	});
+
+	it('fromStream can skip verification', async () => {
+		const { car, record } = await buildDuplicateCidCar();
+
+		await using repo = fromStream(new Blob([tamper(car, record)]).stream(), { verifyBlocks: false });
+		await expect(Array.fromAsync(repo)).resolves.toHaveLength(2);
+	});
+});
+
 describe('multiple roots', () => {
 	it('fromUint8Array reads a car with more than one root', async () => {
 		const { car } = await buildDuplicateCidCar({ extraRoot: true });
@@ -585,7 +626,21 @@ describe('verifyRecord', () => {
 
 		await expect(
 			verifyRecord({ carBytes: car, collection: 'app.bsky.feed.post', rkey: 'aaaa' }),
-		).rejects.toThrow(/cid does not match bytes/);
+		).rejects.toThrow(CarBlockMismatchError);
+	});
+
+	it('ignores mismatched blocks off the descended path', async () => {
+		const forged = CID.fromDigest(CID.CODEC_DCBOR, new Uint8Array(32).fill(7));
+		const car = await buildNodeCar(
+			[{ p: 0, k: suffix('app.bsky.feed.post/aaaa'), v: value, t: null }],
+			[
+				{ cid: recordCid.bytes, data: recordData },
+				{ cid: forged.bytes, data: recordData },
+			],
+		);
+
+		const result = await verifyRecord({ carBytes: car, collection: 'app.bsky.feed.post', rkey: 'aaaa' });
+		expect(result.cid).toBe(CID.toString(recordCid));
 	});
 
 	it('throws when the commit did does not match', async () => {

@@ -32,6 +32,16 @@ export class RepoEntry {
 	}
 }
 
+/** options for reading a repository */
+export interface RepoReaderOptions {
+	/**
+	 * verifies each block against its CID; disable for trusted or separately verified archives
+	 *
+	 * @default true
+	 */
+	verifyBlocks?: boolean;
+}
+
 /** commit object */
 export interface Commit {
 	version: 3;
