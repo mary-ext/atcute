@@ -1,22 +1,6 @@
-import * as CBOR from '@atcute/cbor';
-import * as CID from '@atcute/cid';
-
 import type { BlockMap } from '../blockmap.ts';
 
 type BlockEntry = [cid: string, bytes: Uint8Array<ArrayBuffer>];
-
-/**
- * encodes data as CBOR, computes its CID, and adds it to the map
- *
- * @param map the block map to add to
- * @param data the data to encode and add
- */
-export const add = async (map: BlockMap, data: unknown): Promise<void> => {
-	const encoded = CBOR.encode(data);
-	const cid = await CID.create(0x71, encoded);
-
-	map.set(CID.toString(cid), encoded);
-};
 
 /**
  * copies multiple blocks from an iterable into the map

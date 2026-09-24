@@ -37,7 +37,7 @@ export class NodeStore {
 				}
 
 				// check before decoding so CID mismatches take precedence over malformed nodes
-				const actual = CID.toCidLink(await CID.create(0x71, bytes));
+				const actual = CID.toCidLink(CID.createSync(0x71, bytes));
 				if (actual.$link !== cid) {
 					throw new BlockMismatchError(cid, actual.$link);
 				}

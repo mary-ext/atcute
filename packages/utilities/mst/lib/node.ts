@@ -223,7 +223,7 @@ export class MSTNode {
 	async cid(): Promise<CidLink> {
 		let cid = this._cid;
 		if (cid === undefined) {
-			this._cid = cid = CID.toCidLink(await CID.create(0x71, await this.serialize()));
+			this._cid = cid = CID.toCidLink(CID.createSync(0x71, await this.serialize()));
 		}
 
 		return cid;
