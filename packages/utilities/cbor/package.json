@@ -50,6 +50,6 @@
 		"vitest": "^5.0.0"
 	},
 	"peerDependencies": {
-		"@atcute/cid": "^2.0.0"
+		"@atcute/cid": "^2.5.0"
 	}
 }

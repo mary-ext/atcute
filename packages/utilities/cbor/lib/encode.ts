@@ -1,4 +1,4 @@
-import { type CidLink, CidLinkWrapper, fromString } from '@atcute/cid';
+import { type CidLink, CidLinkWrapper, toLinkBytes } from '@atcute/cid';
 import { allocUnsafe, compare, concat, encodeUtf8, encodeUtf8Into, getUtf8Length } from '@atcute/uint8array';
 
 import { IS_NODE_RUNTIME } from '#runtime';
@@ -260,7 +260,7 @@ const writeBytes = (state: State, val: Bytes): void => {
 const writeCid = (state: State, val: CidLink): void => {
 	// CID bytes are prefixed with 0x00 for historical reasons, apparently.
 
-	const buf = val instanceof CidLinkWrapper ? val.bytes : fromString(val.$link).bytes;
+	const buf = toLinkBytes(val);
 	const len = buf.byteLength + 1;
 
 	resizeIfNeeded(state, len + 2 * MAX_TYPE_ARG_LEN);
