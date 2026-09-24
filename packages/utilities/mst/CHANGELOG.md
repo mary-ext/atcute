@@ -1,5 +1,23 @@
 # @atcute/mst
 
+## 1.1.1
+
+### Patch Changes
+
+- 269a06c: compute node CIDs with synchronous SHA-256
+- 778254e: compute key heights synchronously with Bun's native SHA-256 or a JavaScript
+  implementation in other runtimes
+- 9cdce4b: skip rehashing every key when `NodeWrangler` rebuilds a node from keys it has already
+  validated
+- d99ee7a: compute key heights with synchronous SHA-256
+- Updated dependencies [e29181b]
+- Updated dependencies [c91a5f3]
+- Updated dependencies [98b5e57]
+- Updated dependencies [1a816ca]
+  - @atcute/cbor@2.3.8
+  - @atcute/cid@2.5.0
+  - @atcute/uint8array@1.2.0
+
 ## 1.1.0
 
 ### Minor Changes

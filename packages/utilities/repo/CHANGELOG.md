@@ -1,5 +1,31 @@
 # @atcute/repo
 
+## 1.1.0
+
+### Minor Changes
+
+- a7a2054: accept skipping block verification in readers.
+
+### Patch Changes
+
+- a7a2054: index blocks by their digest instead of CID strings, speeding up repository reads
+- d36360e: require `@atcute/cid` 2.5.0 or later
+- a7a2054: reject blocks whose contents do not match their CID
+- Updated dependencies [a9e0daf]
+- Updated dependencies [e29181b]
+- Updated dependencies [c91a5f3]
+- Updated dependencies [98b5e57]
+- Updated dependencies [269a06c]
+- Updated dependencies [778254e]
+- Updated dependencies [9cdce4b]
+- Updated dependencies [d99ee7a]
+- Updated dependencies [1a816ca]
+  - @atcute/car@6.1.0
+  - @atcute/cbor@2.3.8
+  - @atcute/cid@2.5.0
+  - @atcute/mst@1.1.1
+  - @atcute/uint8array@1.2.0
+
 ## 1.0.2
 
 ### Patch Changes

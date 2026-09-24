@@ -1,5 +1,16 @@
 # @atcute/cbor
 
+## 2.3.8
+
+### Patch Changes
+
+- e29181b: decode CID links with a single allocation
+- c91a5f3: require `@atcute/cid` 2.5.0 or later
+- Updated dependencies [98b5e57]
+- Updated dependencies [1a816ca]
+  - @atcute/cid@2.5.0
+  - @atcute/uint8array@1.2.0
+
 ## 2.3.7
 
 ### Patch Changes

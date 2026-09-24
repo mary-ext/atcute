@@ -1,5 +1,17 @@
 # @atcute/cid
 
+## 2.5.0
+
+### Minor Changes
+
+- 98b5e57: add `createSync` for synchronous CID creation, and `toLinkBytes` for reading the raw
+  bytes of a CID link
+
+### Patch Changes
+
+- Updated dependencies [1a816ca]
+  - @atcute/uint8array@1.2.0
+
 ## 2.4.2
 
 ### Patch Changes

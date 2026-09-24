@@ -1,5 +1,11 @@
 # @atcute/uint8array
 
+## 1.2.0
+
+### Minor Changes
+
+- 1a816ca: add synchronous SHA-256 digest implementation.
+
 ## 1.1.5
 
 ### Patch Changes

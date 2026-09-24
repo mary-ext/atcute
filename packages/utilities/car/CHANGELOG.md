@@ -1,5 +1,25 @@
 # @atcute/car
 
+## 6.1.0
+
+### Minor Changes
+
+- a9e0daf: verify blocks against their CIDs when reading, throwing `CarBlockMismatchError` on a
+  mismatch.
+
+  pass `{ verifyBlocks: false }` to skip verification; use `verifyBlock()` to check individual
+  blocks
+
+### Patch Changes
+
+- Updated dependencies [e29181b]
+- Updated dependencies [c91a5f3]
+- Updated dependencies [98b5e57]
+- Updated dependencies [1a816ca]
+  - @atcute/cbor@2.3.8
+  - @atcute/cid@2.5.0
+  - @atcute/uint8array@1.2.0
+
 ## 6.0.2
 
 ### Patch Changes
