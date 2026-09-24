@@ -1,8 +1,10 @@
 import type { CidLink } from '@atcute/cid';
 
+import { computeKeyHeight } from '#utils/key-height';
+
 import { assertMstKey } from './key.ts';
 import { type NodeStore } from './node-store.ts';
-import { MSTNode, getKeyHeight } from './node.ts';
+import { MSTNode } from './node.ts';
 
 /** replaces element at index with a new value */
 const replaceAt = <T>(arr: readonly T[], index: number, value: T): readonly T[] => {
@@ -59,7 +61,7 @@ export class NodeWrangler {
 			root,
 			key,
 			val,
-			await getKeyHeight(key),
+			computeKeyHeight(key),
 			await root.requireHeight(),
 		);
 		return (await newNode.cid()).$link;
@@ -81,7 +83,7 @@ export class NodeWrangler {
 		const resultCid = await this._deleteRecursive(
 			root,
 			key,
-			await getKeyHeight(key),
+			computeKeyHeight(key),
 			await root.requireHeight(),
 		);
 		const squashed = await this._squashTop(resultCid?.$link ?? null);

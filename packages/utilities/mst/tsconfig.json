@@ -21,6 +21,9 @@
 		"module": "NodeNext",
 		"declaration": true,
 		"stripInternal": true,
+		"paths": {
+			"#utils/key-height": ["./lib/utils/key-height.ts"]
+		},
 		"erasableSyntaxOnly": true
 	},
 	"include": ["lib"]

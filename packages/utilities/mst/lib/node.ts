@@ -1,10 +1,13 @@
 import * as CBOR from '@atcute/cbor';
 import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
-import { decodeUtf8From, encodeUtf8, toSha256 } from '@atcute/uint8array';
+import { decodeUtf8From } from '@atcute/uint8array';
+
+import { computeKeyHeight } from '#utils/key-height';
 
 import { assertMstKey } from './key.ts';
 import { type NodeData, type TreeEntry, isNodeData } from './types.ts';
+import { encodeKey } from './utils/keys.ts';
 
 /**
  * represents a node in a Merkle Search Tree (MST) stores sorted keys, their associated values (CIDs), and
@@ -71,7 +74,7 @@ export class MSTNode {
 
 		let expectedHeight: number | undefined;
 		for (const key of keys) {
-			const height = await getKeyHeight(key);
+			const height = computeKeyHeight(key);
 			expectedHeight ??= height;
 
 			if (height !== expectedHeight) {
@@ -168,7 +171,7 @@ export class MSTNode {
 				const suffix = key.slice(prefixLen);
 
 				e.push({
-					k: CBOR.toBytes(encodeUtf8(suffix)),
+					k: CBOR.toBytes(encodeKey(suffix)),
 					p: prefixLen,
 					t: subtrees[idx + 1],
 					v: values[idx],
@@ -220,7 +223,7 @@ export class MSTNode {
 			if (this.isEmpty) {
 				height = 0;
 			} else if (keys.length > 0) {
-				height = await getKeyHeight(keys[0]);
+				height = computeKeyHeight(keys[0]);
 			} else {
 				height = null;
 			}
@@ -286,30 +289,7 @@ export class MSTNode {
  * @returns the height (number of leading zero bits in 2-bit chunks)
  */
 export const getKeyHeight = async (key: string): Promise<number> => {
-	const hash = await toSha256(encodeUtf8(key));
-
-	let lz = 0;
-	for (let idx = 0, len = hash.length; idx < len; idx++) {
-		const byte = hash[idx];
-
-		if (byte < 64) {
-			lz++;
-		}
-		if (byte < 16) {
-			lz++;
-		}
-		if (byte < 4) {
-			lz++;
-		}
-
-		if (byte === 0) {
-			lz++;
-		} else {
-			break;
-		}
-	}
-
-	return lz;
+	return computeKeyHeight(key);
 };
 
 /**

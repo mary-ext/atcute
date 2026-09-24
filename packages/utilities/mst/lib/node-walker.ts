@@ -1,7 +1,9 @@
 import type { CidLink } from '@atcute/cid';
 
+import { computeKeyHeight } from '#utils/key-height';
+
 import { type NodeStore } from './node-store.ts';
-import { type MSTNode, getKeyHeight } from './node.ts';
+import { type MSTNode } from './node.ts';
 import Stack from './utils/stack.ts';
 
 /**
@@ -317,7 +319,7 @@ export class NodeWalker {
 	 * @returns value CID if found, null otherwise
 	 */
 	async findRpath(rpath: string): Promise<CidLink | null> {
-		const rpathHeight = await getKeyHeight(rpath);
+		const rpathHeight = computeKeyHeight(rpath);
 		while (true) {
 			// if the rpath we're looking for is higher than the current cursor,
 			// we're never going to find it (i.e. we early-exit)
