@@ -1,3 +1,5 @@
+import { toSha256Sync } from './sha256.ts';
+
 const textEncoder = new TextEncoder();
 // `ignoreBOM: true` keeps a leading U+FEFF as a regular character instead of
 // stripping it, matching the node/bun `utf8Slice` fallback (CBOR text strings
@@ -416,6 +418,8 @@ export const isUtf8LengthInRange = (str: string, min: number, max: number): bool
 export const toSha256 = async (buffer: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> => {
 	return new Uint8Array(await subtle.digest('SHA-256', buffer));
 };
+
+export { toSha256Sync };
 
 /**
  * generates cryptographically secure random bytes

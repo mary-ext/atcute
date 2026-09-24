@@ -7,6 +7,8 @@ import {
 	timingSafeEqual as _timingSafeEqual,
 } from 'node:crypto';
 
+import { toSha256Sync as _toSha256SyncJs } from './sha256.ts';
+
 const _alloc = /*#__PURE__*/ (() => NodeBuffer.alloc)();
 const _allocUnsafe = /*#__PURE__*/ (() => NodeBuffer.allocUnsafe)();
 const _concat = /*#__PURE__*/ (() => NodeBuffer.concat)();
@@ -344,6 +346,23 @@ export const isUtf8LengthInRange = (str: string, min: number, max: number): bool
 };
 
 export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuffer>> => {
+	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
+};
+
+// JavaScript avoids native call overhead for small inputs
+const NATIVE_SHA256_THRESHOLD = 192;
+
+/**
+ * computes the SHA-256 digest of a buffer synchronously
+ *
+ * @param buffer message bytes
+ * @returns the 32-byte digest
+ */
+export const toSha256Sync = (buffer: Uint8Array): Uint8Array<ArrayBuffer> => {
+	if (buffer.length < NATIVE_SHA256_THRESHOLD) {
+		return _toSha256SyncJs(buffer);
+	}
+
 	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
 };
 

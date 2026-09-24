@@ -1,6 +1,6 @@
 // oxlint-disable no-underscore-dangle
 
-import { allocUnsafe as _allocUnsafe, concatArrayBuffers as _concat } from 'bun';
+import { SHA256 as _SHA256, allocUnsafe as _allocUnsafe, concatArrayBuffers as _concat } from 'bun';
 import { Buffer as NodeBuffer, isUtf8 as _isUtf8 } from 'node:buffer';
 import { hash as _hash, timingSafeEqual as _timingSafeEqual } from 'node:crypto';
 
@@ -161,6 +161,16 @@ export const isUtf8LengthInRange = (str: string, min: number, max: number): bool
 
 export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuffer>> => {
 	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
+};
+
+/**
+ * computes the SHA-256 digest of a buffer synchronously
+ *
+ * @param buffer message bytes
+ * @returns the 32-byte digest
+ */
+export const toSha256Sync = (buffer: Uint8Array): Uint8Array<ArrayBuffer> => {
+	return _SHA256.hash(buffer) as Uint8Array<ArrayBuffer>;
 };
 
 /**
