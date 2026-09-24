@@ -3,10 +3,9 @@ import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import { decodeUtf8From } from '@atcute/uint8array';
 
-import { computeKeyHeight } from '#utils/key-height';
-
 import { assertMstKey } from './key.ts';
 import { type NodeData, type TreeEntry, isNodeData } from './types.ts';
+import { computeKeyHeight } from './utils/key-height.ts';
 import { encodeKey } from './utils/keys.ts';
 
 /**

@@ -1285,9 +1285,6 @@ importers:
       '@atcute/tid':
         specifier: workspace:^
         version: link:../tid
-      '@types/bun':
-        specifier: ^1.4.2
-        version: 1.4.2
       '@types/node':
         specifier: ^26.5.0
         version: 26.5.0

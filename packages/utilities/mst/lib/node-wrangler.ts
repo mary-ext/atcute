@@ -1,10 +1,9 @@
 import type { CidLink } from '@atcute/cid';
 
-import { computeKeyHeight } from '#utils/key-height';
-
 import { assertMstKey } from './key.ts';
 import { type NodeStore } from './node-store.ts';
 import { MSTNode } from './node.ts';
+import { computeKeyHeight } from './utils/key-height.ts';
 
 /** replaces element at index with a new value */
 const replaceAt = <T>(arr: readonly T[], index: number, value: T): readonly T[] => {
