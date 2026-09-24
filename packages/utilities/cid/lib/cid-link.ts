@@ -54,3 +54,19 @@ export const fromCidLink = (link: CidLink): Cid => {
 
 	return fromString(link.$link);
 };
+
+/**
+ * returns a CID link's raw bytes; wrapped links return their existing buffer without validation
+ *
+ * @param link the CID link
+ * @returns raw CID bytes
+ * @throws {SyntaxError} if an unwrapped link has an invalid CID string
+ * @throws {RangeError} if an unwrapped link decodes to invalid CID bytes
+ */
+export const toLinkBytes = (link: CidLink): Uint8Array => {
+	if (link instanceof CidLinkWrapper) {
+		return link.bytes;
+	}
+
+	return fromString(link.$link).bytes;
+};

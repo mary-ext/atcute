@@ -1,5 +1,5 @@
 import { fromBase32, toBase32 } from '@atcute/multibase';
-import { allocUnsafe, equals as isBufferEqual, toSha256 } from '@atcute/uint8array';
+import { allocUnsafe, equals as isBufferEqual, toSha256, toSha256Sync } from '@atcute/uint8array';
 
 /** CID version, always `1` for CIDv1 */
 export const CID_VERSION = 1;
@@ -75,6 +75,21 @@ export const fromDigest = (codec: 0x55 | 0x71, digest: Uint8Array): Cid => {
  */
 export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid> => {
 	const digest = await toSha256(data);
+	return fromDigest(codec, digest);
+};
+
+/**
+ * creates a CID by synchronously hashing data with SHA-256
+ *
+ * avoids WebCrypto overhead for small inputs such as records and MST nodes.
+ * prefer {@link create} for large inputs when WebCrypto is available.
+ *
+ * @param codec multicodec type for the data
+ * @param data raw data to hash
+ * @returns CID object
+ */
+export const createSync = (codec: 0x55 | 0x71, data: Uint8Array): Cid => {
+	const digest = toSha256Sync(data);
 	return fromDigest(codec, digest);
 };
 

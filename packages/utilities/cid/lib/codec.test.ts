@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { create, decode, fromString, toString } from './codec.ts';
+import { create, createSync, decode, fromString, toString } from './codec.ts';
 
 describe('fromString', () => {
 	it('parses a CIDv1 string', () => {
@@ -72,5 +72,15 @@ describe('create', () => {
 		const cid = await create(113, contents);
 
 		expect(toString(cid)).toBe('bafyreif2pall7dybz7vecqka3zo24irdwabwdi4wc55jznaq75q7eaavvu');
+	});
+});
+
+describe('createSync', () => {
+	it('creates the same CID as create', async () => {
+		const contents = new TextEncoder().encode('abc');
+		const cid = createSync(113, contents);
+
+		expect(toString(cid)).toBe('bafyreif2pall7dybz7vecqka3zo24irdwabwdi4wc55jznaq75q7eaavvu');
+		expect(cid).toEqual(await create(113, contents));
 	});
 });
