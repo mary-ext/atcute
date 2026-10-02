@@ -17,6 +17,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.queue.updateQueue', {
 			name: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/** ID of the queue to update */
 			queueId: /*#__PURE__*/ v.integer(),
+			/** Labels to recommend for this queue and use as fallback appeal routing mappings */
+			recommendedLabels: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			/** Policy keys to recommend when actioning reports in this queue */
 			recommendedPolicies: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		}),

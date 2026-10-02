@@ -37,6 +37,13 @@
 							},
 							"description": "Subject types this queue accepts"
 						},
+						"recommendedLabels": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "Labels to recommend for this queue and use as fallback appeal routing mappings"
+						},
 						"recommendedPolicies": {
 							"type": "array",
 							"items": {

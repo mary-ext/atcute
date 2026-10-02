@@ -6,7 +6,11 @@
 			"properties": {
 				"actionRate": {
 					"type": "integer",
-					"description": "Percentage of reports actioned (actionedCount / inboundCount * 100), rounded to nearest integer."
+					"description": "Percentage of closures actioned (actionedCount / closedCount * 100), rounded to nearest integer."
+				},
+				"closedCount": {
+					"type": "integer",
+					"description": "Number of close transitions."
 				},
 				"lastUpdated": {
 					"type": "string",
@@ -15,7 +19,7 @@
 				},
 				"inboundCount": {
 					"type": "integer",
-					"description": "Reports received today."
+					"description": "Reports received."
 				},
 				"pendingCount": {
 					"type": "integer",
@@ -23,15 +27,51 @@
 				},
 				"actionedCount": {
 					"type": "integer",
-					"description": "Number of reports closed today."
+					"description": "Number of closures whose last report action is label, tag, or takedown."
+				},
+				"ahtDurationSec": {
+					"type": "integer",
+					"description": "Sum of report assignment-to-close seconds."
+				},
+				"ahtSampleCount": {
+					"type": "integer",
+					"description": "Number of assigned closed-report samples in ahtDurationSec."
 				},
 				"escalatedCount": {
 					"type": "integer",
-					"description": "Number of reports escalated today."
+					"description": "Number of reports escalated."
+				},
+				"tagActionCount": {
+					"type": "integer",
+					"description": "Closures whose last report action is a tag event."
+				},
+				"labelActionCount": {
+					"type": "integer",
+					"description": "Closures whose last report action is a label event."
+				},
+				"acknowledgedCount": {
+					"type": "integer",
+					"description": "Number of closures whose last report action is not label, tag, or takedown."
 				},
 				"avgHandlingTimeSec": {
 					"type": "integer",
-					"description": "Average time in seconds from report creation (or moderator assignment) to close."
+					"description": "Average handling time in seconds from report assignment to close."
+				},
+				"takedownActionCount": {
+					"type": "integer",
+					"description": "Closures whose last report action is a takedown event."
+				},
+				"avgResolutionTimeSec": {
+					"type": "integer",
+					"description": "Average resolution time in seconds from report creation to close."
+				},
+				"resolutionDurationSec": {
+					"type": "integer",
+					"description": "Sum of report creation-to-close seconds."
+				},
+				"resolutionSampleCount": {
+					"type": "integer",
+					"description": "Number of closed-report samples in resolutionDurationSec."
 				}
 			},
 			"description": "Live statistics for reports for the current calendar day, filterable by queue, moderator, or report type."
@@ -178,7 +218,7 @@
 					"items": {
 						"type": "integer"
 					},
-					"description": "Array of moderation event IDs representing actions taken on this report (sorted DESC, most recent first)"
+					"description": "Array of moderation event IDs representing actions taken on this report, in append order (most recently linked event last)"
 				},
 				"relatedReportCount": {
 					"type": "integer",
@@ -275,12 +315,16 @@
 				},
 				"actionRate": {
 					"type": "integer",
-					"description": "Percentage of reports actioned (actionedCount / inboundCount * 100), rounded to nearest integer."
+					"description": "Percentage of closures actioned (actionedCount / closedCount * 100), rounded to nearest integer."
 				},
 				"computedAt": {
 					"type": "string",
 					"format": "datetime",
 					"description": "When this snapshot was last computed."
+				},
+				"closedCount": {
+					"type": "integer",
+					"description": "Number of close transitions during this day."
 				},
 				"inboundCount": {
 					"type": "integer",
@@ -292,15 +336,51 @@
 				},
 				"actionedCount": {
 					"type": "integer",
-					"description": "Number of reports closed during this day."
+					"description": "Number of closures whose last report action is label, tag, or takedown during this day."
+				},
+				"ahtDurationSec": {
+					"type": "integer",
+					"description": "Sum of report assignment-to-close seconds for this day's samples."
+				},
+				"ahtSampleCount": {
+					"type": "integer",
+					"description": "Number of assigned closed-report samples in ahtDurationSec."
 				},
 				"escalatedCount": {
 					"type": "integer",
 					"description": "Number of reports escalated during this day."
 				},
+				"tagActionCount": {
+					"type": "integer",
+					"description": "Closures whose last report action is a tag event during this day."
+				},
+				"labelActionCount": {
+					"type": "integer",
+					"description": "Closures whose last report action is a label event during this day."
+				},
+				"acknowledgedCount": {
+					"type": "integer",
+					"description": "Number of closures whose last report action is not label, tag, or takedown during this day."
+				},
 				"avgHandlingTimeSec": {
 					"type": "integer",
-					"description": "Average time in seconds from report creation (or moderator assignment) to close."
+					"description": "Average handling time in seconds from report assignment to close."
+				},
+				"takedownActionCount": {
+					"type": "integer",
+					"description": "Closures whose last report action is a takedown event during this day."
+				},
+				"avgResolutionTimeSec": {
+					"type": "integer",
+					"description": "Average resolution time in seconds from report creation to close."
+				},
+				"resolutionDurationSec": {
+					"type": "integer",
+					"description": "Sum of report creation-to-close seconds for this day's samples."
+				},
+				"resolutionSampleCount": {
+					"type": "integer",
+					"description": "Number of closed-report samples in resolutionDurationSec."
 				}
 			},
 			"description": "A single daily snapshot of report statistics for a calendar date."

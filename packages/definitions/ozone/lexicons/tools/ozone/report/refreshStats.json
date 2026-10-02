@@ -34,7 +34,7 @@
 				},
 				"encoding": "application/json"
 			},
-			"description": "Recompute report statistics for a date range. Useful for backfilling after failures or data corrections."
+			"description": "Recompute report statistics for a date range."
 		}
 	},
 	"lexicon": 1

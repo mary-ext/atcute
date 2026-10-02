@@ -53,12 +53,22 @@ const _escalationActivitySchema = /*#__PURE__*/ v.object({
 });
 const _historicalStatsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.report.defs#historicalStats')),
-	/** Percentage of reports actioned (actionedCount / inboundCount * 100), rounded to nearest integer. */
+	/** Number of closures whose last report action is not label, tag, or takedown during this day. */
+	acknowledgedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Percentage of closures actioned (actionedCount / closedCount * 100), rounded to nearest integer. */
 	actionRate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of reports closed during this day. */
+	/** Number of closures whose last report action is label, tag, or takedown during this day. */
 	actionedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Average time in seconds from report creation (or moderator assignment) to close. */
+	/** Sum of report assignment-to-close seconds for this day's samples. */
+	ahtDurationSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Number of assigned closed-report samples in ahtDurationSec. */
+	ahtSampleCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Average handling time in seconds from report assignment to close. */
 	avgHandlingTimeSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Average resolution time in seconds from report creation to close. */
+	avgResolutionTimeSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Number of close transitions during this day. */
+	closedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** When this snapshot was last computed. */
 	computedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	/** The calendar date this snapshot covers (YYYY-MM-DD). */
@@ -67,25 +77,55 @@ const _historicalStatsSchema = /*#__PURE__*/ v.object({
 	escalatedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Reports received during this day. */
 	inboundCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Closures whose last report action is a label event during this day. */
+	labelActionCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Number of reports not closed at time of computation. */
 	pendingCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Sum of report creation-to-close seconds for this day's samples. */
+	resolutionDurationSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Number of closed-report samples in resolutionDurationSec. */
+	resolutionSampleCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Closures whose last report action is a tag event during this day. */
+	tagActionCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Closures whose last report action is a takedown event during this day. */
+	takedownActionCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _liveStatsSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.report.defs#liveStats')),
-	/** Percentage of reports actioned (actionedCount / inboundCount * 100), rounded to nearest integer. */
+	/** Number of closures whose last report action is not label, tag, or takedown. */
+	acknowledgedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Percentage of closures actioned (actionedCount / closedCount * 100), rounded to nearest integer. */
 	actionRate: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of reports closed today. */
+	/** Number of closures whose last report action is label, tag, or takedown. */
 	actionedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Average time in seconds from report creation (or moderator assignment) to close. */
+	/** Sum of report assignment-to-close seconds. */
+	ahtDurationSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Number of assigned closed-report samples in ahtDurationSec. */
+	ahtSampleCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Average handling time in seconds from report assignment to close. */
 	avgHandlingTimeSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of reports escalated today. */
+	/** Average resolution time in seconds from report creation to close. */
+	avgResolutionTimeSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Number of close transitions. */
+	closedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Number of reports escalated. */
 	escalatedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Reports received today. */
+	/** Reports received. */
 	inboundCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Closures whose last report action is a label event. */
+	labelActionCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** When these statistics were last computed. */
 	lastUpdated: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	/** Number of reports currently not closed. */
 	pendingCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Sum of report creation-to-close seconds. */
+	resolutionDurationSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Number of closed-report samples in resolutionDurationSec. */
+	resolutionSampleCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Closures whose last report action is a tag event. */
+	tagActionCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Closures whose last report action is a takedown event. */
+	takedownActionCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _noteActivitySchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.report.defs#noteActivity')),
@@ -281,7 +321,10 @@ const _reportAssignmentSchema = /*#__PURE__*/ v.object({
 });
 const _reportViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.report.defs#reportView')),
-	/** Array of moderation event IDs representing actions taken on this report (sorted DESC, most recent first) */
+	/**
+	 * Array of moderation event IDs representing actions taken on this report, in append order (most recently
+	 * linked event last)
+	 */
 	actionEventIds: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.integer())),
 	/** Note sent to reporter when report was actioned */
 	actionNote: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),

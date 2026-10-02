@@ -4,6 +4,8 @@ export * as ToolsOzoneCommunicationDeleteTemplate from './types/tools/ozone/comm
 export * as ToolsOzoneCommunicationListTemplates from './types/tools/ozone/communication/listTemplates.ts';
 export * as ToolsOzoneCommunicationUpdateTemplate from './types/tools/ozone/communication/updateTemplate.ts';
 export * as ToolsOzoneHostingGetAccountHistory from './types/tools/ozone/hosting/getAccountHistory.ts';
+export * as ToolsOzoneInboxAppealActionedSubject from './types/tools/ozone/inbox/appealActionedSubject.ts';
+export * as ToolsOzoneInboxDefs from './types/tools/ozone/inbox/defs.ts';
 export * as ToolsOzoneModerationCancelScheduledActions from './types/tools/ozone/moderation/cancelScheduledActions.ts';
 export * as ToolsOzoneModerationDefs from './types/tools/ozone/moderation/defs.ts';
 export * as ToolsOzoneModerationEmitEvent from './types/tools/ozone/moderation/emitEvent.ts';

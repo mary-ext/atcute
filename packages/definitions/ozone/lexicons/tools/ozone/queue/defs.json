@@ -64,6 +64,13 @@
 					},
 					"description": "Subject types this queue accepts."
 				},
+				"recommendedLabels": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Labels recommended for this queue and used as a fallback when routing label appeals"
+				},
 				"recommendedPolicies": {
 					"type": "array",
 					"items": {
