@@ -5,6 +5,8 @@ import * as PubLeafletBlocksBlockquote from '../blocks/blockquote.ts';
 import * as PubLeafletBlocksBskyPost from '../blocks/bskyPost.ts';
 import * as PubLeafletBlocksButton from '../blocks/button.ts';
 import * as PubLeafletBlocksCode from '../blocks/code.ts';
+import * as PubLeafletBlocksDrawing from '../blocks/drawing.ts';
+import * as PubLeafletBlocksEmbeddedCanvas from '../blocks/embeddedCanvas.ts';
 import * as PubLeafletBlocksHeader from '../blocks/header.ts';
 import * as PubLeafletBlocksHorizontalRule from '../blocks/horizontalRule.ts';
 import * as PubLeafletBlocksHtml from '../blocks/html.ts';
@@ -39,6 +41,8 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksBskyPost.mainSchema,
 			PubLeafletBlocksButton.mainSchema,
 			PubLeafletBlocksCode.mainSchema,
+			PubLeafletBlocksDrawing.mainSchema,
+			PubLeafletBlocksEmbeddedCanvas.mainSchema,
 			PubLeafletBlocksHeader.mainSchema,
 			PubLeafletBlocksHorizontalRule.mainSchema,
 			PubLeafletBlocksHtml.mainSchema,

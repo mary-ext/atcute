@@ -21,6 +21,12 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	readerSearch: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	readerSort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	readerTagFilter: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * In the chapter view, show the number of pages under each chapter.
+	 *
+	 * @default true
+	 */
+	showPageCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), true),
 	view: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'chapter' | 'medium' | 'small' | (string & {})>()),
 });
 

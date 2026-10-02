@@ -27,6 +27,8 @@
 						"pub.leaflet.blocks.bskyPost",
 						"pub.leaflet.blocks.button",
 						"pub.leaflet.blocks.code",
+						"pub.leaflet.blocks.drawing",
+						"pub.leaflet.blocks.embeddedCanvas",
 						"pub.leaflet.blocks.header",
 						"pub.leaflet.blocks.horizontalRule",
 						"pub.leaflet.blocks.html",

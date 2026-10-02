@@ -26,6 +26,11 @@
 				"readerSearch": {
 					"type": "boolean"
 				},
+				"showPageCount": {
+					"type": "boolean",
+					"default": true,
+					"description": "In the chapter view, show the number of pages under each chapter."
+				},
 				"readerControls": {
 					"type": "boolean",
 					"description": "Show reader-facing controls above the list. The readerSearch / readerTagFilter / readerSort flags pick which ones; each defaults to true when this is set."

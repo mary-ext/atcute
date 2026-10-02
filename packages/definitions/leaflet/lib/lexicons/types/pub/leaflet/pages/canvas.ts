@@ -5,6 +5,8 @@ import * as PubLeafletBlocksBlockquote from '../blocks/blockquote.ts';
 import * as PubLeafletBlocksBskyPost from '../blocks/bskyPost.ts';
 import * as PubLeafletBlocksButton from '../blocks/button.ts';
 import * as PubLeafletBlocksCode from '../blocks/code.ts';
+import * as PubLeafletBlocksDrawing from '../blocks/drawing.ts';
+import * as PubLeafletBlocksEmbeddedCanvas from '../blocks/embeddedCanvas.ts';
 import * as PubLeafletBlocksHeader from '../blocks/header.ts';
 import * as PubLeafletBlocksHorizontalRule from '../blocks/horizontalRule.ts';
 import * as PubLeafletBlocksHtml from '../blocks/html.ts';
@@ -26,14 +28,32 @@ import * as PubLeafletBlocksText from '../blocks/text.ts';
 import * as PubLeafletBlocksUnorderedList from '../blocks/unorderedList.ts';
 import * as PubLeafletBlocksWebsite from '../blocks/website.ts';
 
+import * as PubLeafletPagesLinearDocument from './linearDocument.ts';
+
 const _blockSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.canvas#block')),
+	/** Alignment of a single block's content. A linear document's blocks carry their own. */
+	alignment: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<
+			| 'lex:pub.leaflet.pages.linearDocument#textAlignCenter'
+			| 'lex:pub.leaflet.pages.linearDocument#textAlignJustify'
+			| 'lex:pub.leaflet.pages.linearDocument#textAlignLeft'
+			| 'lex:pub.leaflet.pages.linearDocument#textAlignRight'
+			| (string & {})
+		>(),
+	),
+	/**
+	 * A single block, or a linear document: blocks grouped in reading order that are positioned, sized and
+	 * rotated on the canvas as one.
+	 */
 	get block() {
 		return /*#__PURE__*/ v.variant([
 			PubLeafletBlocksBlockquote.mainSchema,
 			PubLeafletBlocksBskyPost.mainSchema,
 			PubLeafletBlocksButton.mainSchema,
 			PubLeafletBlocksCode.mainSchema,
+			PubLeafletBlocksDrawing.mainSchema,
+			PubLeafletBlocksEmbeddedCanvas.mainSchema,
 			PubLeafletBlocksHeader.mainSchema,
 			PubLeafletBlocksHorizontalRule.mainSchema,
 			PubLeafletBlocksHtml.mainSchema,
@@ -54,6 +74,7 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksText.mainSchema,
 			PubLeafletBlocksUnorderedList.mainSchema,
 			PubLeafletBlocksWebsite.mainSchema,
+			PubLeafletPagesLinearDocument.mainSchema,
 		]);
 	},
 	height: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
@@ -73,7 +94,28 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	get blocks() {
 		return /*#__PURE__*/ v.array(blockSchema);
 	},
+	/** Fixed canvas height in canvas px; see width. */
+	height: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	id: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Viewers cannot zoom the canvas or scroll it sideways: no wheel, pinch, double-tap or zoom controls, and
+	 * the initial framing (see mobileView) stays. Vertical scrolling is unaffected.
+	 */
+	lockViewerZoom: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * How a narrow viewport frames the canvas: the whole canvas scaled to fit the width (unconstrained, the
+	 * default), or a phone-width area anchored to the canvas's left edge or centered on it, shown at up to
+	 * 1:1.
+	 */
+	mobileView: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<'center' | 'left' | 'unconstrained' | (string & {})>(),
+	),
+	/**
+	 * Fixed canvas width in canvas px. With height, bounds the canvas: blocks are clipped to the area. Absent,
+	 * the canvas grows with its content and is 1272px wide, or as wide as the inside of the publication's page
+	 * (its theme's pageWidth) when it is one of a publication's pages.
+	 */
+	width: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _positionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.canvas#position')),

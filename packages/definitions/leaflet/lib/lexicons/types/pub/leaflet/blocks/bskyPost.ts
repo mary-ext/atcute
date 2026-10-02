@@ -8,6 +8,7 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	get postRef() {
 		return ComAtprotoRepoStrongRef.mainSchema;
 	},
+	view: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'full' | 'media' | (string & {})>()),
 });
 
 type main$schematype = typeof _mainSchema;

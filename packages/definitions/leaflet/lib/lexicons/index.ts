@@ -2,6 +2,8 @@ export * as PubLeafletBlocksBlockquote from './types/pub/leaflet/blocks/blockquo
 export * as PubLeafletBlocksBskyPost from './types/pub/leaflet/blocks/bskyPost.ts';
 export * as PubLeafletBlocksButton from './types/pub/leaflet/blocks/button.ts';
 export * as PubLeafletBlocksCode from './types/pub/leaflet/blocks/code.ts';
+export * as PubLeafletBlocksDrawing from './types/pub/leaflet/blocks/drawing.ts';
+export * as PubLeafletBlocksEmbeddedCanvas from './types/pub/leaflet/blocks/embeddedCanvas.ts';
 export * as PubLeafletBlocksHeader from './types/pub/leaflet/blocks/header.ts';
 export * as PubLeafletBlocksHorizontalRule from './types/pub/leaflet/blocks/horizontalRule.ts';
 export * as PubLeafletBlocksHtml from './types/pub/leaflet/blocks/html.ts';
