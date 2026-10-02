@@ -103,6 +103,7 @@ export * as AppBskyLabelerGetServices from './types/app/bsky/labeler/getServices
 export * as AppBskyLabelerService from './types/app/bsky/labeler/service.ts';
 export * as AppBskyNotificationDeclaration from './types/app/bsky/notification/declaration.ts';
 export * as AppBskyNotificationDefs from './types/app/bsky/notification/defs.ts';
+export * as AppBskyNotificationGetGroupedNotifications from './types/app/bsky/notification/getGroupedNotifications.ts';
 export * as AppBskyNotificationGetPreferences from './types/app/bsky/notification/getPreferences.ts';
 export * as AppBskyNotificationGetUnreadCount from './types/app/bsky/notification/getUnreadCount.ts';
 export * as AppBskyNotificationListActivitySubscriptions from './types/app/bsky/notification/listActivitySubscriptions.ts';

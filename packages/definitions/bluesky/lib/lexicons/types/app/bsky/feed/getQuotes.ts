@@ -18,6 +18,11 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getQuotes', {
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
+		/**
+		 * Ordering of results. 'latest' (default when unset) is newest first; 'top' orders quotes by their like
+		 * count.
+		 */
+		sort: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'latest' | 'top' | (string & {})>()),
 		/** Reference (AT-URI) of post record */
 		uri: /*#__PURE__*/ v.resourceUriString(),
 	}),

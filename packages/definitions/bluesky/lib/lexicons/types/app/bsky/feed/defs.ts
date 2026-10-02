@@ -43,6 +43,16 @@ const _feedViewPostSchema = /*#__PURE__*/ v.object({
 	feedContext: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 	),
+	/**
+	 * The total number of posts in the contiguous OP thread that this post belongs to. Only present when this
+	 * post is part of the OP thread.
+	 */
+	opThreadPostCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * The 1-indexed position of this post within the contiguous OP thread. Only present when this post is part
+	 * of the OP thread.
+	 */
+	opThreadPostIndex: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get post() {
 		return postViewSchema;
 	},
