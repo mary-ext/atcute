@@ -1,5 +1,13 @@
 # @atcute/ozone
 
+## 4.0.11
+
+### Patch Changes
+
+- bbda49a: pull latest Ozone lexicons
+- Updated dependencies [2d47001]
+  - @atcute/bluesky@4.0.23
+
 ## 4.0.10
 
 ### Patch Changes
