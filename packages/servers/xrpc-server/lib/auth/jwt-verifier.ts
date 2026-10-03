@@ -50,6 +50,11 @@ export interface ServiceJwtVerifierOptions {
 	/** clock-skew leeway in seconds applied to `exp` and `nbf` comparisons. defaults to 5 seconds. */
 	clockLeeway?: number;
 	/**
+	 * issuer DID resolution timeout in milliseconds. defaults to 5000; `null` disables the timeout. the
+	 * caller's abort signal still applies.
+	 */
+	didResolveTimeout?: number | null;
+	/**
 	 * optional replay-protection store. when provided, tokens must carry a `jti` claim and the verifier rejects
 	 * any `(iss, jti)` the store reports as previously seen.
 	 */
@@ -75,6 +80,8 @@ export class ServiceJwtVerifier {
 	acceptAudiences: (Did | AtprotoAudience)[] | null;
 	maxAge: number;
 	clockLeeway: number;
+	/** issuer DID resolution timeout in milliseconds, or `null` to disable. */
+	didResolveTimeout: number | null;
 	replayStore?: ReplayStore;
 
 	constructor(options: ServiceJwtVerifierOptions) {
@@ -82,6 +89,7 @@ export class ServiceJwtVerifier {
 		this.acceptAudiences = options.acceptAudiences;
 		this.maxAge = options.maxAge ?? 5 * 60;
 		this.clockLeeway = options.clockLeeway ?? 5;
+		this.didResolveTimeout = options.didResolveTimeout !== undefined ? options.didResolveTimeout : 5_000;
 		this.replayStore = options.replayStore;
 	}
 
@@ -129,8 +137,14 @@ export class ServiceJwtVerifier {
 		let didDocument: DidDocument;
 		let key: FoundPublicKey;
 
+		// issuer resolution precedes signature verification, so unverified tokens can trigger it.
+		const resolveSignal =
+			this.didResolveTimeout !== null
+				? AbortSignal.any([signal, AbortSignal.timeout(this.didResolveTimeout)])
+				: signal;
+
 		try {
-			didDocument = await this.didDocResolver.resolve(issuer, { noCache, signal });
+			didDocument = await this.didDocResolver.resolve(issuer, { noCache, signal: resolveSignal });
 		} catch {
 			return {
 				ok: false,

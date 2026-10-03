@@ -306,9 +306,10 @@ additional options tune verification:
 const jwtVerifier = new ServiceJwtVerifier({
 	acceptAudiences: [...],
 	resolver: ...,
-	maxAge: 300,       // max token lifetime window in seconds (default 300)
-	clockLeeway: 5,    // leeway applied to nbf/exp comparisons (default 5)
-	replayStore: {     // optional replay protection; requires jti in tokens
+	maxAge: 300, // max token lifetime window in seconds (default 300)
+	clockLeeway: 5, // leeway applied to nbf/exp comparisons (default 5)
+	didResolveTimeout: 5000, // issuer resolution timeout in ms (default 5000; null to disable)
+	replayStore: { // optional replay protection; requires jti in tokens
 		async check({ iss, jti }, ttlSeconds) {
 			const key = `${iss}:${jti}`;
 			const isNew = await redis.setnx(key, '1');
@@ -318,6 +319,12 @@ const jwtVerifier = new ServiceJwtVerifier({
 	},
 });
 ```
+
+issuer DID resolution precedes signature verification, so forged tokens can trigger requests to the
+`did:web` host in `iss`. `didResolveTimeout` limits each resolution's duration; it does not restrict
+destinations. configure the resolver's `fetch` to reject non-public addresses (see
+[server-side resolution and SSRF](../../identity/identity-resolver/README.md#server-side-resolution-and-ssrf)).
+caching can reduce repeated lookups, though signature failures trigger an uncached retry.
 
 creating outgoing JWTs:
 
