@@ -48,86 +48,96 @@ export const createNodeWebSocket = ({
 		router: XRPCRouter,
 	): ((request: IncomingMessage, socket: Duplex, head: Buffer) => Promise<void>) => {
 		return async (request, socket, head) => {
-			// Node's 'upgrade' event is shared across all listeners; bail before touching the socket
-			// when the request isn't ours, so other listeners (Vite HMR, in-app WebSocket routes,
-			// etc.) can handle it.
+			// Node removes its socket error handler before emitting 'upgrade'. handle errors even
+			// for non-XRPC paths, since an unhandled socket error would crash the process.
+			socket.on('error', () => {
+				socket.destroy();
+			});
+
+			// leave non-XRPC upgrades to other listeners on the server.
 			if (!request.url?.startsWith('/xrpc/')) {
 				return;
 			}
 
-			const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
-			const headers = new Headers();
+			try {
+				const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
+				const headers = new Headers();
 
-			for (const [key, value] of Object.entries(request.headers)) {
-				if (value !== undefined) {
-					if (Array.isArray(value)) {
-						for (const v of value) {
-							headers.append(key, v);
+				for (const [key, value] of Object.entries(request.headers)) {
+					if (value !== undefined) {
+						if (Array.isArray(value)) {
+							for (const v of value) {
+								headers.append(key, v);
+							}
+						} else {
+							headers.set(key, value);
 						}
-					} else {
-						headers.set(key, value);
 					}
 				}
-			}
 
-			const ctx: WebSocketHandlerContext = {
-				handler: null,
-			};
+				const ctx: WebSocketHandlerContext = {
+					handler: null,
+				};
 
-			const response = await context.run(ctx, async (): Promise<Response> => {
-				const webRequest = new Request(url, { method: request.method, headers });
-				const response = await router.fetch(webRequest);
+				const response = await context.run(ctx, async (): Promise<Response> => {
+					const webRequest = new Request(url, { method: request.method, headers });
+					const response = await router.fetch(webRequest);
 
-				return response;
-			});
-
-			if (ctx.handler) {
-				const handler = ctx.handler;
-
-				wss.handleUpgrade(request, socket, head, (ws) => {
-					wss.emit('connection', ws, request);
-
-					const controller = new AbortController();
-					const signal = controller.signal;
-					const waitForDrain = async (): Promise<void> => {
-						while (!signal.aborted && ws.readyState === 1 && ws.bufferedAmount > lowWaterMark) {
-							await sleep(10, signal);
-						}
-					};
-					const connection: WebSocketConnection = {
-						signal: signal,
-						send(data) {
-							ws.send(data);
-						},
-						drain() {
-							if (ws.bufferedAmount <= highWaterMark) {
-								return;
-							}
-
-							return waitForDrain();
-						},
-						close(code, reason) {
-							ws.close(code, reason);
-						},
-					};
-
-					ws.onclose = (ev) => {
-						controller.abort(new Error(`WebSocket connection closed with code ${ev.code}`));
-					};
-					ws.onerror = (ev) => {
-						controller.abort(ev.error);
-					};
-
-					handler(connection);
+					return response;
 				});
-			} else {
-				socket.end(
-					`HTTP/1.1 ${response.status} ${response.statusText}\r\n` +
-						Array.from(response.headers.entries())
-							.map(([k, v]) => `${k}: ${v}`)
-							.join('\r\n') +
-						'\r\n\r\n',
-				);
+
+				if (ctx.handler) {
+					const handler = ctx.handler;
+
+					wss.handleUpgrade(request, socket, head, (ws) => {
+						wss.emit('connection', ws, request);
+
+						const controller = new AbortController();
+						const signal = controller.signal;
+						const waitForDrain = async (): Promise<void> => {
+							while (!signal.aborted && ws.readyState === 1 && ws.bufferedAmount > lowWaterMark) {
+								await sleep(10, signal);
+							}
+						};
+						const connection: WebSocketConnection = {
+							signal: signal,
+							send(data) {
+								ws.send(data);
+							},
+							drain() {
+								if (ws.bufferedAmount <= highWaterMark) {
+									return;
+								}
+
+								return waitForDrain();
+							},
+							close(code, reason) {
+								ws.close(code, reason);
+							},
+						};
+
+						ws.onclose = (ev) => {
+							controller.abort(new Error(`WebSocket connection closed with code ${ev.code}`));
+						};
+						ws.onerror = (ev) => {
+							controller.abort(ev.error);
+						};
+
+						handler(connection);
+					});
+				} else {
+					socket.end(
+						`HTTP/1.1 ${response.status} ${response.statusText}\r\n` +
+							Array.from(response.headers.entries())
+								.map(([k, v]) => `${k}: ${v}`)
+								.join('\r\n') +
+							'\r\n\r\n',
+					);
+				}
+			} catch {
+				// event emitters do not await async listeners; keep parsing and routing failures
+				// from becoming unhandled rejections.
+				socket.destroy();
 			}
 		};
 	};

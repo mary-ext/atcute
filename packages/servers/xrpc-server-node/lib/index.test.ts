@@ -1,4 +1,5 @@
 import * as http from 'node:http';
+import * as net from 'node:net';
 
 import { type ComAtprotoLabelDefs, ComAtprotoLabelSubscribeLabels } from '@atcute/atproto';
 import { decode, decodeFirst } from '@atcute/cbor';
@@ -601,3 +602,95 @@ describe('subscription', () => {
 		client.close();
 	});
 });
+
+// #region upgrade errors
+
+// unhandled errors fail the test worker; a follow-up query checks that the server still responds.
+
+const UPGRADE = 'Connection: Upgrade\r\nUpgrade: websocket\r\n\r\n';
+
+const sendRaw = (port: number, raw: string, { reset = false }: { reset?: boolean } = {}): Promise<void> => {
+	return new Promise((resolve) => {
+		const socket = net.connect(port, '127.0.0.1');
+
+		socket.on('connect', () => {
+			socket.write(raw);
+			// allow the upgrade listener to run before closing or resetting the connection.
+			setTimeout(() => {
+				if (reset) {
+					socket.resetAndDestroy();
+				} else {
+					socket.destroy();
+				}
+				resolve();
+			}, 100);
+		});
+		socket.on('error', () => resolve());
+	});
+};
+
+const createHostileTarget = (): Promise<Server> => {
+	const ws = createNodeWebSocket();
+	const router = new XRPCRouter({ websocket: ws.adapter });
+
+	router.addQuery(queryNoParams, {
+		async handler() {},
+	});
+	router.addSubscription(ComAtprotoLabelSubscribeLabels.mainSchema, {
+		async *handler() {},
+	});
+
+	return createHttpServer(router, ws);
+};
+
+describe('upgrade listener (hostile input)', () => {
+	it('survives a malformed Host header', async () => {
+		using server = await createHostileTarget();
+
+		await sendRaw(server.port, `GET /xrpc/x.y.z HTTP/1.1\r\nHost: [\r\n${UPGRADE}`);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.ping`);
+		expect(response.status).toBe(200);
+	});
+
+	it('survives an out-of-range Host port', async () => {
+		using server = await createHostileTarget();
+
+		await sendRaw(server.port, `GET /xrpc/x.y.z HTTP/1.1\r\nHost: localhost:99999999\r\n${UPGRADE}`);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.ping`);
+		expect(response.status).toBe(200);
+	});
+
+	it('survives a forbidden request method', async () => {
+		using server = await createHostileTarget();
+
+		await sendRaw(server.port, `TRACE /xrpc/x.y.z HTTP/1.1\r\nHost: localhost\r\n${UPGRADE}`);
+
+		const response = await fetch(`${server.url}/xrpc/com.example.ping`);
+		expect(response.status).toBe(200);
+	});
+
+	it('survives a peer reset on the response-only branch', async () => {
+		using server = await createHostileTarget();
+
+		// an unknown NSID takes the HTTP response path instead of upgrading to WebSocket.
+		await sendRaw(server.port, `GET /xrpc/x.y.z HTTP/1.1\r\nHost: localhost\r\n${UPGRADE}`, { reset: true });
+
+		const response = await fetch(`${server.url}/xrpc/com.example.ping`);
+		expect(response.status).toBe(200);
+	});
+
+	it('survives a peer reset on the non-xrpc early-return branch', async () => {
+		using server = await createHostileTarget();
+
+		await sendRaw(server.port, `GET /some/other/path HTTP/1.1\r\nHost: localhost\r\n${UPGRADE}`, {
+			reset: true,
+		});
+
+		const response = await fetch(`${server.url}/xrpc/com.example.ping`);
+		expect(response.status).toBe(200);
+	});
+});
+
+// #endregion
