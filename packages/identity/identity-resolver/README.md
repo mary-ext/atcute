@@ -202,6 +202,28 @@ const plcResolver = new PlcDidDocumentResolver({
 });
 ```
 
+### server-side resolution and SSRF
+
+resolving untrusted identities on a server can expose internal services to server-side request
+forgery (SSRF). for example, `did:web:localhost%3a6379` targets a loopback address over HTTP, and
+`did:web:169.254.169.254` targets a link-local address.
+
+the resolvers do not restrict destination IPs. pass a custom `fetch` that rejects non-public
+addresses at connection time. checking the hostname alone is insufficient: DNS can resolve a public
+hostname to a private IP.
+
+```ts
+const didResolver = new CompositeDidDocumentResolver({
+	methods: {
+		plc: new PlcDidDocumentResolver({ fetch: safeFetch }),
+		web: new WebDidDocumentResolver({ fetch: safeFetch }),
+	},
+});
+```
+
+on Cloudflare Workers, enable `global_fetch_strictly_public` in the Wrangler configuration. on
+Node.js, use a fetch dispatcher that checks destination IPs at connection time.
+
 ### custom PLC directory
 
 by default, did:plc resolution uses `https://plc.directory`. you can specify a different directory:
