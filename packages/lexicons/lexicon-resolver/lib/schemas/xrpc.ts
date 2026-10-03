@@ -9,13 +9,16 @@ import type { DidDocumentResolver } from '@atcute/identity-resolver';
 import { type LexiconDoc, lexiconDoc } from '@atcute/lexicon-doc';
 import type { AtprotoDid, Nsid } from '@atcute/lexicons/syntax';
 import { type VerifiedRecord, verifyRecord } from '@atcute/repo';
-import { FailedResponseError } from '@atcute/util-fetch';
+import { FailedResponseError, readResponseAsBytes } from '@atcute/util-fetch';
 
 import * as v from 'valibot';
 
 import { LEXICON_SCHEMA_COLLECTION } from '../constants.ts';
 import * as err from '../errors.ts';
 import type { ResolveLexiconRecordOptions, ResolvedSchema } from '../types.ts';
+
+// allow 1 MiB for the record and 64 KiB for the signed commit, MST proof, and CAR framing.
+const MAX_CAR_RESPONSE_SIZE = 1024 * 1024 + 64 * 1024;
 
 export interface LexiconSchemaResolverOptions {
 	didDocumentResolver: DidDocumentResolver;
@@ -68,7 +71,7 @@ export class LexiconSchemaResolver {
 				throw new FailedResponseError(response);
 			}
 
-			carBytes = await response.bytes();
+			carBytes = (await readResponseAsBytes(MAX_CAR_RESPONSE_SIZE)(response)).bytes;
 		} catch (cause) {
 			throw new err.FailedLexiconResolutionError(nsid, { cause });
 		}
