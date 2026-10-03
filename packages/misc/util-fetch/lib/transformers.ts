@@ -3,6 +3,11 @@ import * as v from 'valibot';
 import * as err from './errors.ts';
 import { SizeLimitStream } from './streams/size-limit.ts';
 
+export type BytesResponse = {
+	response: Response;
+	bytes: Uint8Array;
+};
+
 export type TextResponse = {
 	response: Response;
 	text: string;
@@ -20,6 +25,20 @@ export const isResponseOk = async (response: Response): Promise<Response> => {
 
 	throw new err.FailedResponseError(response);
 };
+
+/**
+ * create a size-limited response body reader.
+ *
+ * @param maxSize maximum body size in bytes
+ * @returns a reader yielding the original response and its body as a `Uint8Array`
+ * @throws {err.ImproperContentLengthError} if content-length is invalid or the body exceeds `maxSize`
+ */
+export const readResponseAsBytes =
+	(maxSize: number) =>
+	async (response: Response): Promise<BytesResponse> => {
+		const bytes = await readResponseBytes(response, maxSize);
+		return { response, bytes };
+	};
 
 export const readResponseAsText =
 	(maxSize: number) =>
@@ -71,7 +90,7 @@ const assertContentType = async (response: Response, typeRegex: RegExp): Promise
 	}
 };
 
-const readResponse = async (response: Response, maxSize: number): Promise<string> => {
+const assertContentLength = (response: Response, maxSize: number): void => {
 	const rawSize = response.headers.get('content-length');
 	if (rawSize !== null) {
 		const size = Number(rawSize);
@@ -87,6 +106,36 @@ const readResponse = async (response: Response, maxSize: number): Promise<string
 			throw new err.ImproperContentLengthError(maxSize, size, `response content-length too large`);
 		}
 	}
+};
+
+const readResponseBytes = async (response: Response, maxSize: number): Promise<Uint8Array> => {
+	assertContentLength(response, maxSize);
+
+	if (response.body === null) {
+		return new Uint8Array(0);
+	}
+
+	const stream = response.body.pipeThrough(new SizeLimitStream(maxSize));
+
+	const chunks: Uint8Array[] = [];
+	let size = 0;
+	for await (const chunk of createStreamIterator(stream)) {
+		chunks.push(chunk);
+		size += chunk.length;
+	}
+
+	const bytes = new Uint8Array(size);
+	let offset = 0;
+	for (const chunk of chunks) {
+		bytes.set(chunk, offset);
+		offset += chunk.length;
+	}
+
+	return bytes;
+};
+
+const readResponse = async (response: Response, maxSize: number): Promise<string> => {
+	assertContentLength(response, maxSize);
 
 	if (response.body === null) {
 		return '';
