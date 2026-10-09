@@ -16,9 +16,6 @@ importers:
       '@changesets/cli':
         specifier: ^3.0.2
         version: 3.0.2
-      '@mary/tar':
-        specifier: jsr:^0.3.2
-        version: '@jsr/mary__tar@0.3.2'
       '@mitata/counters':
         specifier: ^0.0.8
         version: 0.0.8
@@ -1870,9 +1867,6 @@ packages:
 
   '@js-sdsl/ordered-map@4.4.2':
     resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
-
-  '@jsr/mary__tar@0.3.2':
-    resolution: {integrity: sha512-tGVmuWdOvAmUEWH76m3C+rnXp1VSvZw9WXpNpaJnHabVGpqLAzg9pcRCsN7OBJwZylACEyUiUNQjiHeEu7SD8w==, tarball: https://npm.jsr.io/~/11/@jsr/mary__tar/0.3.2.tgz}
 
   '@manypkg/find-root@3.1.0':
     resolution: {integrity: sha512-BcSqCyKhBVZ5YkSzOiheMCV41kqAFptW6xGqYSTjkVTl9XQpr+pqHhwgGCOHQtjDCv7Is6EFyA14Sm5GVbVABA==}
@@ -5739,8 +5733,6 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.6.0
 
   '@js-sdsl/ordered-map@4.4.2': {}
-
-  '@jsr/mary__tar@0.3.2': {}
 
   '@manypkg/find-root@3.1.0':
     dependencies:
