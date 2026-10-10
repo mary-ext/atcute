@@ -171,13 +171,53 @@ export const getDisplayRestrictions = (
 
 	return {
 		noOverride,
-		filters: filters.sort(sortByPriority), // oxlint-disable-line unicorn/no-array-sort -- local array
-		blurs: blurs.sort(sortByPriority), // oxlint-disable-line unicorn/no-array-sort -- local array
-		alerts: alerts.sort(sortByPriority), // oxlint-disable-line unicorn/no-array-sort -- local array
-		informs: informs.sort(sortByPriority), // oxlint-disable-line unicorn/no-array-sort -- local array
+		filters: sortCauses(filters),
+		blurs: sortCauses(blurs),
+		alerts: sortCauses(alerts),
+		informs: sortCauses(informs),
 	};
 };
 
-const sortByPriority = (a: ModerationCause, b: ModerationCause) => {
-	return a.priority - b.priority;
+/**
+ * combines display restrictions, sorting causes by priority.
+ *
+ * @param sources restrictions to merge; false, null, and undefined are skipped
+ * @returns merged restrictions with `noOverride` set if any source requires it
+ */
+export const mergeDisplayRestrictions = (
+	...sources: (DisplayRestrictions | false | null | undefined)[]
+): DisplayRestrictions => {
+	const filters: ModerationCause[] = [];
+	const blurs: ModerationCause[] = [];
+	const alerts: ModerationCause[] = [];
+	const informs: ModerationCause[] = [];
+
+	let noOverride: boolean = false;
+
+	for (const source of sources) {
+		if (!source) {
+			continue;
+		}
+
+		noOverride ||= source.noOverride;
+
+		filters.push(...source.filters);
+		blurs.push(...source.blurs);
+		alerts.push(...source.alerts);
+		informs.push(...source.informs);
+	}
+
+	return {
+		noOverride,
+		filters: sortCauses(filters),
+		blurs: sortCauses(blurs),
+		alerts: sortCauses(alerts),
+		informs: sortCauses(informs),
+	};
+};
+
+/** sorts causes by priority in place */
+const sortCauses = (causes: ModerationCause[]): ModerationCause[] => {
+	// oxlint-disable-next-line unicorn/no-array-sort -- owned by the caller
+	return causes.sort((a, b) => a.priority - b.priority);
 };

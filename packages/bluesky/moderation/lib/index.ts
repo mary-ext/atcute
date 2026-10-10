@@ -53,7 +53,7 @@ export {
 	type ProfileSubject,
 } from './types.ts';
 
-export { getDisplayRestrictions, type DisplayRestrictions } from './ui.ts';
+export { getDisplayRestrictions, mergeDisplayRestrictions, type DisplayRestrictions } from './ui.ts';
 
 export { moderateFeedGenerator } from './subjects/feed-generator.ts';
 export { moderateList } from './subjects/list.ts';
