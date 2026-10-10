@@ -18,7 +18,7 @@ import {
 	type ClientCredentialsFactory,
 	createClientAssertionFactory,
 } from './oauth-client-auth.ts';
-import { type OAuthResolver } from './resolvers/index.ts';
+import type { OAuthResolver } from './resolvers/index.ts';
 import type { TokenSet } from './types/token-set.ts';
 
 const processTokenResponse = pipe(

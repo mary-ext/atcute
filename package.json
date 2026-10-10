@@ -8,6 +8,7 @@
 	},
 	"devDependencies": {
 		"@changesets/cli": "^3.0.2",
+		"@mary-ext/oxlint-rules": "^0.1.1",
 		"@mitata/counters": "^0.0.8",
 		"@pnpm/workspace.root-finder": "^1100.0.8",
 		"mitata": "^1.0.34",

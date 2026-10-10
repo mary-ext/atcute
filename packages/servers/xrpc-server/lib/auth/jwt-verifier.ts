@@ -1,6 +1,6 @@
 import { type FoundPublicKey, getPublicKeyFromDidController, verifySig } from '@atcute/crypto';
 import { type DidDocument, getVerificationMaterial } from '@atcute/identity';
-import { type DidDocumentResolver } from '@atcute/identity-resolver';
+import type { DidDocumentResolver } from '@atcute/identity-resolver';
 import type { Did, Nsid } from '@atcute/lexicons';
 import type { AtprotoAudience } from '@atcute/lexicons/syntax';
 import * as uint8arrays from '@atcute/uint8array';

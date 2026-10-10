@@ -2,6 +2,7 @@
 	"$schema": "https://unpkg.com/oxlint/configuration_schema.json",
 	"ignorePatterns": ["packages/*/*/lib/lexicons/**"],
 	"plugins": ["eslint", "typescript", "unicorn", "oxc", "import"],
+	"jsPlugins": ["@mary-ext/oxlint-rules"],
 	"categories": {
 		"correctness": "error",
 		"suspicious": "warn",
@@ -25,6 +26,7 @@
 		"import/no-duplicates": ["error", { "preferInline": true }],
 		"import/no-empty-named-blocks": "off",
 		"import/no-unassigned-import": "off",
+		"mary-ext/consistent-imports": "warn",
 		"typescript/consistent-type-imports": [
 			"warn",
 			{ "prefer": "type-imports", "fixStyle": "inline-type-imports", "disallowTypeAnnotations": false }

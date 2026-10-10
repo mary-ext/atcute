@@ -2,7 +2,7 @@ import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 
 import { expect } from 'vitest';
 
-import { type DisplayRestrictions, type LabelPreference, type ModerationOptions } from '../index.ts';
+import type { DisplayRestrictions, LabelPreference, ModerationOptions } from '../index.ts';
 
 import * as m from './mock.ts';
 

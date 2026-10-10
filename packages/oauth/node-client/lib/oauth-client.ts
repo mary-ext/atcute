@@ -22,7 +22,7 @@ import {
 import { nanoid } from 'nanoid';
 
 import { OAuthCallbackError, TokenRevokedError } from './errors.ts';
-import { type OAuthServerAgent } from './oauth-server-agent.ts';
+import type { OAuthServerAgent } from './oauth-server-agent.ts';
 import { OAuthServerFactory } from './oauth-server-factory.ts';
 import { OAuthSession } from './oauth-session.ts';
 import {

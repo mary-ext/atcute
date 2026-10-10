@@ -1,4 +1,4 @@
-import { type BlockMap } from './blockmap.ts';
+import type { BlockMap } from './blockmap.ts';
 import { deleteMany, setMany } from './utils/blockmap.ts';
 
 /**

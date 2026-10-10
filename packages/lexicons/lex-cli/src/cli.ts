@@ -1,7 +1,7 @@
 import { merge, object, or } from '@optique/core/constructs';
 import { message } from '@optique/core/message';
 import { optional } from '@optique/core/modifiers';
-import { type InferValue } from '@optique/core/parser';
+import type { InferValue } from '@optique/core/parser';
 import { command, constant, option } from '@optique/core/primitives';
 import { run } from '@optique/run';
 import { path as pathParser } from '@optique/run/valueparser';

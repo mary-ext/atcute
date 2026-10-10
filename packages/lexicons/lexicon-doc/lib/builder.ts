@@ -1,4 +1,4 @@
-import { type Nsid } from '@atcute/lexicons/syntax';
+import type { Nsid } from '@atcute/lexicons/syntax';
 import { getUtf8Length, isUtf8LengthInRange } from '@atcute/uint8array';
 import { getGraphemeLength, isGraphemeLengthInRange } from '@atcute/util-text';
 
