@@ -231,6 +231,12 @@ const _modEventPriorityScoreSchema = /*#__PURE__*/ v.object({
 });
 const _modEventReportSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventReport')),
+	appealActionId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** Action reference type recorded when this appeal was submitted. */
+	appealActionType: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	appealLabel: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/** Moderator who submitted this appeal on behalf of the affected account. Returned by moderator event APIs. */
+	appealSubmittedBy: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	comment: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/**
 	 * Set to true if the reporter was muted from reporting at the time of the event. These reports won't impact

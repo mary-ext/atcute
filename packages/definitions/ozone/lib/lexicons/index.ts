@@ -6,6 +6,16 @@ export * as ToolsOzoneCommunicationUpdateTemplate from './types/tools/ozone/comm
 export * as ToolsOzoneHostingGetAccountHistory from './types/tools/ozone/hosting/getAccountHistory.ts';
 export * as ToolsOzoneInboxAppealActionedSubject from './types/tools/ozone/inbox/appealActionedSubject.ts';
 export * as ToolsOzoneInboxDefs from './types/tools/ozone/inbox/defs.ts';
+export * as ToolsOzoneInboxGetAccountStatus from './types/tools/ozone/inbox/getAccountStatus.ts';
+export * as ToolsOzoneInboxGetActionedSubject from './types/tools/ozone/inbox/getActionedSubject.ts';
+export * as ToolsOzoneInboxGetNotificationPreferences from './types/tools/ozone/inbox/getNotificationPreferences.ts';
+export * as ToolsOzoneInboxGetReport from './types/tools/ozone/inbox/getReport.ts';
+export * as ToolsOzoneInboxGetUnreadCount from './types/tools/ozone/inbox/getUnreadCount.ts';
+export * as ToolsOzoneInboxListActionedSubjects from './types/tools/ozone/inbox/listActionedSubjects.ts';
+export * as ToolsOzoneInboxListNotifications from './types/tools/ozone/inbox/listNotifications.ts';
+export * as ToolsOzoneInboxListReports from './types/tools/ozone/inbox/listReports.ts';
+export * as ToolsOzoneInboxPutNotificationPreferences from './types/tools/ozone/inbox/putNotificationPreferences.ts';
+export * as ToolsOzoneInboxUpdateSeen from './types/tools/ozone/inbox/updateSeen.ts';
 export * as ToolsOzoneModerationCancelScheduledActions from './types/tools/ozone/moderation/cancelScheduledActions.ts';
 export * as ToolsOzoneModerationDefs from './types/tools/ozone/moderation/defs.ts';
 export * as ToolsOzoneModerationEmitEvent from './types/tools/ozone/moderation/emitEvent.ts';
@@ -53,6 +63,7 @@ export * as ToolsOzoneSafelinkQueryEvents from './types/tools/ozone/safelink/que
 export * as ToolsOzoneSafelinkQueryRules from './types/tools/ozone/safelink/queryRules.ts';
 export * as ToolsOzoneSafelinkRemoveRule from './types/tools/ozone/safelink/removeRule.ts';
 export * as ToolsOzoneSafelinkUpdateRule from './types/tools/ozone/safelink/updateRule.ts';
+export * as ToolsOzoneServerGetCapabilities from './types/tools/ozone/server/getCapabilities.ts';
 export * as ToolsOzoneServerGetConfig from './types/tools/ozone/server/getConfig.ts';
 export * as ToolsOzoneSetAddValues from './types/tools/ozone/set/addValues.ts';
 export * as ToolsOzoneSetDefs from './types/tools/ozone/set/defs.ts';

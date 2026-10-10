@@ -28,13 +28,40 @@ const _queueStatsSchema = /*#__PURE__*/ v.object({
 	actionedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Average time in seconds from report creation to close, for reports closed in this period. */
 	avgHandlingTimeSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Reports whose closure meets their closure target.
+	 *
+	 * @minimum 0
+	 */
+	closureTargetMetCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Percent of reports meeting their closure target.
+	 *
+	 * @minimum 0
+	 * @maximum 100
+	 */
+	closureTargetMetRate: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
+	),
+	/**
+	 * Reports whose closure exceeds their closure target.
+	 *
+	 * @minimum 0
+	 */
+	closureTargetMissedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Unmuted pending reports past their closure target.
+	 *
+	 * @minimum 0
+	 */
+	closureTargetOverdueCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Number of reports in 'escalated' status */
 	escalatedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Reports received in this queue in the last 24 hours. */
 	inboundCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** When these statistics were last computed */
 	lastUpdated: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	/** Number of reports in 'open' status */
+	/** Number of unmuted reports currently not closed. */
 	pendingCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 const _queueViewSchema = /*#__PURE__*/ v.object({

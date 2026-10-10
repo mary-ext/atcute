@@ -69,6 +69,33 @@ const _historicalStatsSchema = /*#__PURE__*/ v.object({
 	avgResolutionTimeSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Number of close transitions during this day. */
 	closedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Reports whose closure meets their closure target.
+	 *
+	 * @minimum 0
+	 */
+	closureTargetMetCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Percent of reports meeting their closure target.
+	 *
+	 * @minimum 0
+	 * @maximum 100
+	 */
+	closureTargetMetRate: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
+	),
+	/**
+	 * Reports whose closure exceeds their closure target.
+	 *
+	 * @minimum 0
+	 */
+	closureTargetMissedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Unmuted pending reports past their closure target at the snapshot time.
+	 *
+	 * @minimum 0
+	 */
+	closureTargetOverdueCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** When this snapshot was last computed. */
 	computedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	/** The calendar date this snapshot covers (YYYY-MM-DD). */
@@ -79,7 +106,10 @@ const _historicalStatsSchema = /*#__PURE__*/ v.object({
 	inboundCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Closures whose last report action is a label event during this day. */
 	labelActionCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of reports not closed at time of computation. */
+	/**
+	 * Number of unmuted reports not closed at the end of this UTC day, or at computation time for the current
+	 * day.
+	 */
 	pendingCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Sum of report creation-to-close seconds for this day's samples. */
 	resolutionDurationSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
@@ -108,6 +138,33 @@ const _liveStatsSchema = /*#__PURE__*/ v.object({
 	avgResolutionTimeSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Number of close transitions. */
 	closedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Reports whose closure meets their closure target.
+	 *
+	 * @minimum 0
+	 */
+	closureTargetMetCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Percent of reports meeting their closure target.
+	 *
+	 * @minimum 0
+	 * @maximum 100
+	 */
+	closureTargetMetRate: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
+	),
+	/**
+	 * Reports whose closure exceeds their closure target.
+	 *
+	 * @minimum 0
+	 */
+	closureTargetMissedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * Unmuted pending reports past their closure target.
+	 *
+	 * @minimum 0
+	 */
+	closureTargetOverdueCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Number of reports escalated. */
 	escalatedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Reports received. */
@@ -116,7 +173,7 @@ const _liveStatsSchema = /*#__PURE__*/ v.object({
 	labelActionCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** When these statistics were last computed. */
 	lastUpdated: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
-	/** Number of reports currently not closed. */
+	/** Number of unmuted reports currently not closed. */
 	pendingCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Sum of report creation-to-close seconds. */
 	resolutionDurationSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
@@ -278,6 +335,7 @@ const _reportActivityViewSchema = /*#__PURE__*/ v.object({
 			noteActivitySchema,
 			queueActivitySchema,
 			reopenActivitySchema,
+			unassignmentActivitySchema,
 		]);
 	},
 	/** When this activity was created */
@@ -355,6 +413,28 @@ const _reportViewSchema = /*#__PURE__*/ v.object({
 	 * time the report was created.
 	 */
 	isMuted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/** Priority level assigned to the report. */
+	priorityLevel: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Report priority score. Higher scores have higher priority.
+	 *
+	 * @minimum 0
+	 * @maximum 100
+	 */
+	priorityScore: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
+	),
+	/** Whether the current closure occurred within the report's snapshotted target. */
+	priorityTargetMet: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Target resolution duration in minutes.
+	 *
+	 * @minimum 1
+	 * @maximum 2147483647
+	 */
+	priorityTargetMinutes: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 2147483647)]),
+	),
 	/** The queue this report is assigned to (if any) */
 	get queue() {
 		return /*#__PURE__*/ v.optional(ToolsOzoneQueueDefs.queueViewSchema);
@@ -373,6 +453,12 @@ const _reportViewSchema = /*#__PURE__*/ v.object({
 	get reporter() {
 		return ToolsOzoneModerationDefs.subjectViewSchema;
 	},
+	/**
+	 * Time from report creation to its last closure.
+	 *
+	 * @minimum 0
+	 */
+	resolutionTimeSec: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	/** Current status of the report */
 	status: /*#__PURE__*/ v.string<'assigned' | 'closed' | 'escalated' | 'open' | 'queued' | (string & {})>(),
 	/** The subject that was reported with full details */
@@ -385,6 +471,20 @@ const _reportViewSchema = /*#__PURE__*/ v.object({
 	},
 	/** When the report was last updated */
 	updatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+});
+const _unassignmentActivitySchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.report.defs#unassignmentActivity')),
+	/**
+	 * The report's status immediately after the moderator was unassigned. May equal previousStatus if
+	 * unassignment did not change the report's status, or be absent on older activities.
+	 */
+	nextStatus: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<'assigned' | 'closed' | 'escalated' | 'open' | 'queued' | (string & {})>(),
+	),
+	/** The report's status immediately before the moderator was unassigned. May be absent on older activities. */
+	previousStatus: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<'assigned' | 'closed' | 'escalated' | 'open' | 'queued' | (string & {})>(),
+	),
 });
 
 type assignmentActivity$schematype = typeof _assignmentActivitySchema;
@@ -440,6 +540,7 @@ type reopenActivity$schematype = typeof _reopenActivitySchema;
 type reportActivityView$schematype = typeof _reportActivityViewSchema;
 type reportAssignment$schematype = typeof _reportAssignmentSchema;
 type reportView$schematype = typeof _reportViewSchema;
+type unassignmentActivity$schematype = typeof _unassignmentActivitySchema;
 
 export interface assignmentActivitySchema extends assignmentActivity$schematype {}
 export interface assignmentViewSchema extends assignmentView$schematype {}
@@ -494,6 +595,7 @@ export interface reopenActivitySchema extends reopenActivity$schematype {}
 export interface reportActivityViewSchema extends reportActivityView$schematype {}
 export interface reportAssignmentSchema extends reportAssignment$schematype {}
 export interface reportViewSchema extends reportView$schematype {}
+export interface unassignmentActivitySchema extends unassignmentActivity$schematype {}
 
 export const assignmentActivitySchema = _assignmentActivitySchema as assignmentActivitySchema;
 export const assignmentViewSchema = _assignmentViewSchema as assignmentViewSchema;
@@ -561,6 +663,7 @@ export const reopenActivitySchema = _reopenActivitySchema as reopenActivitySchem
 export const reportActivityViewSchema = _reportActivityViewSchema as reportActivityViewSchema;
 export const reportAssignmentSchema = _reportAssignmentSchema as reportAssignmentSchema;
 export const reportViewSchema = _reportViewSchema as reportViewSchema;
+export const unassignmentActivitySchema = _unassignmentActivitySchema as unassignmentActivitySchema;
 
 export interface AssignmentActivity extends v.InferInput<typeof assignmentActivitySchema> {}
 export interface AssignmentView extends v.InferInput<typeof assignmentViewSchema> {}
@@ -615,3 +718,4 @@ export interface ReopenActivity extends v.InferInput<typeof reopenActivitySchema
 export interface ReportActivityView extends v.InferInput<typeof reportActivityViewSchema> {}
 export interface ReportAssignment extends v.InferInput<typeof reportAssignmentSchema> {}
 export interface ReportView extends v.InferInput<typeof reportViewSchema> {}
+export interface UnassignmentActivity extends v.InferInput<typeof unassignmentActivitySchema> {}

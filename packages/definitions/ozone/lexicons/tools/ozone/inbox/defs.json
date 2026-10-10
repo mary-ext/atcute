@@ -1,6 +1,24 @@
 {
 	"id": "tools.ozone.inbox.defs",
 	"defs": {
+		"reportRef": {
+			"type": "object",
+			"required": ["reportId"],
+			"properties": {
+				"status": {
+					"type": "string",
+					"knownValues": ["pending", "resolved"]
+				},
+				"subject": {
+					"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"],
+					"type": "union"
+				},
+				"reportId": {
+					"type": "integer"
+				}
+			},
+			"description": "Reference to a report by its report table ID, as used by getReport and Ozone's report detail page."
+		},
 		"actionView": {
 			"type": "object",
 			"required": ["createdAt", "id", "type"],
@@ -27,9 +45,10 @@
 				"policies": {
 					"type": "array",
 					"items": {
-						"type": "string"
+						"ref": "#policyView",
+						"type": "ref"
 					},
-					"description": "Policies that were applied in this action."
+					"description": "Policies applied by a takedown action."
 				},
 				"createdAt": {
 					"type": "string",
@@ -50,10 +69,6 @@
 			"type": "object",
 			"required": ["state"],
 			"properties": {
-				"note": {
-					"type": "string",
-					"description": "Moderator explanation, from the publicNote on the closing activity. Absent if none was written."
-				},
 				"state": {
 					"type": "string",
 					"knownValues": ["expired", "none", "pending", "resolved", "superseded"]
@@ -74,9 +89,55 @@
 			},
 			"description": "The state of the viewer's appeal against the actions on a subject."
 		},
+		"policyView": {
+			"type": "object",
+			"required": ["displayName", "key", "link"],
+			"properties": {
+				"key": {
+					"type": "string"
+				},
+				"link": {
+					"type": "string",
+					"format": "uri"
+				},
+				"displayName": {
+					"type": "string"
+				}
+			}
+		},
+		"subjectRef": {
+			"type": "object",
+			"required": ["subject"],
+			"properties": {
+				"subject": {
+					"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"],
+					"type": "union"
+				},
+				"actionId": {
+					"type": "integer"
+				},
+				"actionType": {
+					"type": "string"
+				}
+			}
+		},
+		"standingRef": {
+			"type": "object",
+			"required": ["standing"],
+			"properties": {
+				"standing": {
+					"type": "string",
+					"knownValues": ["atRisk", "good", "warning"]
+				},
+				"previousStanding": {
+					"type": "string",
+					"knownValues": ["atRisk", "good", "warning"]
+				}
+			}
+		},
 		"subjectView": {
 			"type": "object",
-			"required": ["createdAt", "enforcement", "src", "subject", "updatedAt"],
+			"required": ["createdAt", "enforcement", "isRead", "src", "subject", "updatedAt"],
 			"properties": {
 				"src": {
 					"type": "string",
@@ -86,6 +147,9 @@
 				"appeal": {
 					"ref": "#appealView",
 					"type": "ref"
+				},
+				"isRead": {
+					"type": "boolean"
 				},
 				"subject": {
 					"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"],
@@ -120,6 +184,61 @@
 			},
 			"description": "A subject belonging to the viewer that has moderation actions against it."
 		},
+		"notification": {
+			"type": "object",
+			"required": ["createdAt", "id", "isRead", "reason", "target"],
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"isRead": {
+					"type": "boolean"
+				},
+				"reason": {
+					"type": "string",
+					"knownValues": [
+						"actionReversed",
+						"actionTaken",
+						"appealResolved",
+						"reportReopened",
+						"reportResolved",
+						"standingChanged"
+					]
+				},
+				"target": {
+					"refs": ["#reportRef", "#standingRef", "#subjectRef"],
+					"type": "union"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		},
+		"reportsSummary": {
+			"type": "object",
+			"required": ["firstReportedOn", "lastReportedOn", "reasonTypes"],
+			"properties": {
+				"reasonTypes": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Distinct reason types reported, deduplicated and unordered. Excludes reasonAppeal."
+				},
+				"lastReportedOn": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Day of the most recent report, truncated to midnight UTC. Render as a date; the time component is not meaningful."
+				},
+				"firstReportedOn": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Day of the earliest report, truncated to midnight UTC. Render as a date; the time component is not meaningful."
+				}
+			},
+			"description": "Aggregate view of reports filed against this subject. Deliberately carries no report IDs, no count, and no reporter identities."
+		},
 		"enforcementView": {
 			"type": "object",
 			"required": ["state"],
@@ -145,6 +264,78 @@
 				}
 			},
 			"description": "The current enforcement state of a subject."
+		},
+		"subjectViewDetail": {
+			"type": "object",
+			"required": ["actions", "createdAt", "enforcement", "isRead", "src", "subject", "updatedAt"],
+			"properties": {
+				"src": {
+					"type": "string",
+					"format": "did"
+				},
+				"appeal": {
+					"ref": "#appealView",
+					"type": "ref"
+				},
+				"cursor": {
+					"type": "string",
+					"description": "Cursor for the next page of action history. Omitted when no older actions remain."
+				},
+				"isRead": {
+					"type": "boolean"
+				},
+				"record": {
+					"type": "unknown",
+					"description": "Raw record JSON for the subject, when the subject is a record and the record is available."
+				},
+				"actions": {
+					"type": "array",
+					"items": {
+						"ref": "#actionView",
+						"type": "ref"
+					},
+					"maxLength": 100,
+					"description": "A page of action history, most recent first. Reversal timestamps include changes outside this page."
+				},
+				"reports": {
+					"ref": "#reportsSummary",
+					"type": "ref",
+					"description": "Omitted when the subject has never been reported, e.g. proactive enforcement."
+				},
+				"subject": {
+					"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"],
+					"type": "union"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"updatedAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"enforcement": {
+					"ref": "#enforcementView",
+					"type": "ref"
+				},
+				"availableActions": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"knownValues": ["appeal"]
+					}
+				}
+			},
+			"description": "A subject with a page of its action history and an aggregate report summary. Follow cursor to retrieve older actions; enforcement and appeal describe the current subject state on every page."
+		},
+		"notificationPreferences": {
+			"type": "object",
+			"required": ["push"],
+			"properties": {
+				"push": {
+					"type": "boolean"
+				}
+			}
 		}
 	},
 	"lexicon": 1
