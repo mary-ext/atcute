@@ -8,6 +8,10 @@
 				"id": {
 					"type": "string"
 				},
+				"theme": {
+					"ref": "pub.leaflet.theme.page",
+					"type": "ref"
+				},
 				"blocks": {
 					"type": "array",
 					"items": {
@@ -42,7 +46,9 @@
 						"pub.leaflet.blocks.poll",
 						"pub.leaflet.blocks.postHeader",
 						"pub.leaflet.blocks.postsList",
+						"pub.leaflet.blocks.questions",
 						"pub.leaflet.blocks.recommendedPubs",
+						"pub.leaflet.blocks.reply",
 						"pub.leaflet.blocks.signup",
 						"pub.leaflet.blocks.standardSitePost",
 						"pub.leaflet.blocks.standardSitePublication",

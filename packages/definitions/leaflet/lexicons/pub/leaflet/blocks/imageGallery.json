@@ -11,7 +11,7 @@
 				},
 				"format": {
 					"type": "string",
-					"knownValues": ["carousel", "grid", "strip"]
+					"knownValues": ["carousel", "grid", "masonry", "strip"]
 				},
 				"images": {
 					"type": "array",
@@ -22,7 +22,7 @@
 				},
 				"maxWidth": {
 					"type": "integer",
-					"description": "Max width per image in grid view (px); drives how many columns fit."
+					"description": "Max width per image in grid and masonry views (px); drives how many columns fit."
 				}
 			}
 		},

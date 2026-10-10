@@ -20,16 +20,41 @@ import * as PubLeafletBlocksPage from '../blocks/page.ts';
 import * as PubLeafletBlocksPoll from '../blocks/poll.ts';
 import * as PubLeafletBlocksPostHeader from '../blocks/postHeader.ts';
 import * as PubLeafletBlocksPostsList from '../blocks/postsList.ts';
+import * as PubLeafletBlocksQuestions from '../blocks/questions.ts';
 import * as PubLeafletBlocksRecommendedPubs from '../blocks/recommendedPubs.ts';
+import * as PubLeafletBlocksReply from '../blocks/reply.ts';
 import * as PubLeafletBlocksSignup from '../blocks/signup.ts';
 import * as PubLeafletBlocksStandardSitePost from '../blocks/standardSitePost.ts';
 import * as PubLeafletBlocksStandardSitePublication from '../blocks/standardSitePublication.ts';
 import * as PubLeafletBlocksText from '../blocks/text.ts';
 import * as PubLeafletBlocksUnorderedList from '../blocks/unorderedList.ts';
 import * as PubLeafletBlocksWebsite from '../blocks/website.ts';
+import * as PubLeafletThemePage from '../theme/page.ts';
 
 import * as PubLeafletPagesLinearDocument from './linearDocument.ts';
 
+const _backgroundSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.canvas#background')),
+	/**
+	 * @accept image/*
+	 * @maxSize 1000000
+	 */
+	image: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
+		/*#__PURE__*/ v.blobSize(1000000),
+		/*#__PURE__*/ v.blobAccept(['image/*']),
+	]),
+	/**
+	 * Opacity of the image as a percentage. Defaults to 100.
+	 *
+	 * @minimum 0
+	 * @maximum 100
+	 */
+	opacity: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
+	),
+	/** Width of each tile in canvas px. Defaults to 500. */
+	width: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+});
 const _blockSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.canvas#block')),
 	/** Alignment of a single block's content. A linear document's blocks carry their own. */
@@ -67,7 +92,9 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksPoll.mainSchema,
 			PubLeafletBlocksPostHeader.mainSchema,
 			PubLeafletBlocksPostsList.mainSchema,
+			PubLeafletBlocksQuestions.mainSchema,
 			PubLeafletBlocksRecommendedPubs.mainSchema,
+			PubLeafletBlocksReply.mainSchema,
 			PubLeafletBlocksSignup.mainSchema,
 			PubLeafletBlocksStandardSitePost.mainSchema,
 			PubLeafletBlocksStandardSitePublication.mainSchema,
@@ -91,6 +118,9 @@ const _blockSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.canvas')),
+	get background() {
+		return /*#__PURE__*/ v.optional(backgroundSchema);
+	},
 	get blocks() {
 		return /*#__PURE__*/ v.array(blockSchema);
 	},
@@ -110,6 +140,14 @@ const _mainSchema = /*#__PURE__*/ v.object({
 	mobileView: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.string<'center' | 'left' | 'unconstrained' | (string & {})>(),
 	),
+	/**
+	 * The guide pattern drawn over the canvas's background, under its blocks. Absent, a canvas that grows with
+	 * its content shows the grid and a fixed-size canvas is plain.
+	 */
+	pattern: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'dot' | 'grid' | 'plain' | (string & {})>()),
+	get theme() {
+		return /*#__PURE__*/ v.optional(PubLeafletThemePage.mainSchema);
+	},
 	/**
 	 * Fixed canvas width in canvas px. With height, bounds the canvas: blocks are clipped to the area. Absent,
 	 * the canvas grows with its content and is 1272px wide, or as wide as the inside of the publication's page
@@ -135,6 +173,7 @@ const _textAlignCenterSchema = /*#__PURE__*/ v.literal('pub.leaflet.pages.canvas
 const _textAlignLeftSchema = /*#__PURE__*/ v.literal('pub.leaflet.pages.canvas#textAlignLeft');
 const _textAlignRightSchema = /*#__PURE__*/ v.literal('pub.leaflet.pages.canvas#textAlignRight');
 
+type background$schematype = typeof _backgroundSchema;
 type block$schematype = typeof _blockSchema;
 type main$schematype = typeof _mainSchema;
 type position$schematype = typeof _positionSchema;
@@ -143,6 +182,7 @@ type textAlignCenter$schematype = typeof _textAlignCenterSchema;
 type textAlignLeft$schematype = typeof _textAlignLeftSchema;
 type textAlignRight$schematype = typeof _textAlignRightSchema;
 
+export interface backgroundSchema extends background$schematype {}
 export interface blockSchema extends block$schematype {}
 export interface mainSchema extends main$schematype {}
 export interface positionSchema extends position$schematype {}
@@ -151,6 +191,7 @@ export interface textAlignCenterSchema extends textAlignCenter$schematype {}
 export interface textAlignLeftSchema extends textAlignLeft$schematype {}
 export interface textAlignRightSchema extends textAlignRight$schematype {}
 
+export const backgroundSchema = _backgroundSchema as backgroundSchema;
 export const blockSchema = _blockSchema as blockSchema;
 export const mainSchema = _mainSchema as mainSchema;
 export const positionSchema = _positionSchema as positionSchema;
@@ -159,6 +200,7 @@ export const textAlignCenterSchema = _textAlignCenterSchema as textAlignCenterSc
 export const textAlignLeftSchema = _textAlignLeftSchema as textAlignLeftSchema;
 export const textAlignRightSchema = _textAlignRightSchema as textAlignRightSchema;
 
+export interface Background extends v.InferInput<typeof backgroundSchema> {}
 export interface Block extends v.InferInput<typeof blockSchema> {}
 export interface Main extends v.InferInput<typeof mainSchema> {}
 export interface Position extends v.InferInput<typeof positionSchema> {}

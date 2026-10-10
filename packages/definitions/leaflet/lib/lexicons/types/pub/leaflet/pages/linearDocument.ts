@@ -20,13 +20,16 @@ import * as PubLeafletBlocksPage from '../blocks/page.ts';
 import * as PubLeafletBlocksPoll from '../blocks/poll.ts';
 import * as PubLeafletBlocksPostHeader from '../blocks/postHeader.ts';
 import * as PubLeafletBlocksPostsList from '../blocks/postsList.ts';
+import * as PubLeafletBlocksQuestions from '../blocks/questions.ts';
 import * as PubLeafletBlocksRecommendedPubs from '../blocks/recommendedPubs.ts';
+import * as PubLeafletBlocksReply from '../blocks/reply.ts';
 import * as PubLeafletBlocksSignup from '../blocks/signup.ts';
 import * as PubLeafletBlocksStandardSitePost from '../blocks/standardSitePost.ts';
 import * as PubLeafletBlocksStandardSitePublication from '../blocks/standardSitePublication.ts';
 import * as PubLeafletBlocksText from '../blocks/text.ts';
 import * as PubLeafletBlocksUnorderedList from '../blocks/unorderedList.ts';
 import * as PubLeafletBlocksWebsite from '../blocks/website.ts';
+import * as PubLeafletThemePage from '../theme/page.ts';
 
 const _blockSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.linearDocument#block')),
@@ -56,7 +59,9 @@ const _blockSchema = /*#__PURE__*/ v.object({
 			PubLeafletBlocksPoll.mainSchema,
 			PubLeafletBlocksPostHeader.mainSchema,
 			PubLeafletBlocksPostsList.mainSchema,
+			PubLeafletBlocksQuestions.mainSchema,
 			PubLeafletBlocksRecommendedPubs.mainSchema,
+			PubLeafletBlocksReply.mainSchema,
 			PubLeafletBlocksSignup.mainSchema,
 			PubLeafletBlocksStandardSitePost.mainSchema,
 			PubLeafletBlocksStandardSitePublication.mainSchema,
@@ -72,6 +77,9 @@ const _mainSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.array(blockSchema);
 	},
 	id: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	get theme() {
+		return /*#__PURE__*/ v.optional(PubLeafletThemePage.mainSchema);
+	},
 });
 const _positionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.pages.linearDocument#position')),

@@ -24,13 +24,15 @@ const _imageSchema = /*#__PURE__*/ v.object({
 });
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.imageGallery')),
-	format: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'carousel' | 'grid' | 'strip' | (string & {})>()),
+	format: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.string<'carousel' | 'grid' | 'masonry' | 'strip' | (string & {})>(),
+	),
 	/** Gap between images in pixels. */
 	gap: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get images() {
 		return /*#__PURE__*/ v.array(imageSchema);
 	},
-	/** Max width per image in grid view (px); drives how many columns fit. */
+	/** Max width per image in grid and masonry views (px); drives how many columns fit. */
 	maxWidth: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 });
 
