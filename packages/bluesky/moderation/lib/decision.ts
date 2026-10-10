@@ -108,18 +108,19 @@ export type ModerationCause =
 	| MutedTemporaryModerationCause;
 
 export interface ModerationDecision {
-	authorDid: Did;
+	/** author's DID, or undefined if unknown */
+	authorDid: Did | undefined;
 	isMe: boolean;
 	causes: ModerationCause[];
 }
 
 export const createModerationDecision = (
-	authorDid: Did,
+	authorDid: Did | undefined,
 	{ viewerDid }: ModerationOptions,
 ): ModerationDecision => {
 	return {
 		authorDid: authorDid,
-		isMe: authorDid === viewerDid,
+		isMe: authorDid !== undefined && authorDid === viewerDid,
 		causes: [],
 	};
 };
@@ -192,11 +193,12 @@ export const considerPermanentMute = (
 };
 
 export const considerTemporaryMute = (decision: ModerationDecision, { prefs }: ModerationOptions): void => {
-	if (decision.isMe) {
+	const authorDid = decision.authorDid;
+	if (decision.isMe || authorDid === undefined) {
 		return;
 	}
 
-	if (prefs.temporaryMutes?.includes(decision.authorDid)) {
+	if (prefs.temporaryMutes?.includes(authorDid)) {
 		decision.causes.push({
 			type: ModerationCauseType.MutedTemporary,
 			priority: 6,
