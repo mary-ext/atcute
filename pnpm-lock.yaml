@@ -176,11 +176,11 @@ importers:
         specifier: workspace:^
         version: link:../../misc/uint8array
       '@mary-ext/event-iterator':
+        specifier: ^1.1.1
+        version: 1.1.1
+      '@mary-ext/simple-event-emitter':
         specifier: ^1.1.0
         version: 1.1.0
-      '@mary-ext/simple-event-emitter':
-        specifier: ^1.0.2
-        version: 1.0.2
       partysocket:
         specifier: ^1.3.0
         version: 1.3.0
@@ -210,11 +210,11 @@ importers:
         specifier: workspace:^
         version: link:../../lexicons/lexicons
       '@mary-ext/event-iterator':
+        specifier: ^1.1.1
+        version: 1.1.1
+      '@mary-ext/simple-event-emitter':
         specifier: ^1.1.0
         version: 1.1.0
-      '@mary-ext/simple-event-emitter':
-        specifier: ^1.0.2
-        version: 1.0.2
       partysocket:
         specifier: ^1.3.0
         version: 1.3.0
@@ -275,11 +275,11 @@ importers:
         specifier: workspace:^
         version: link:../../misc/uint8array
       '@mary-ext/event-iterator':
+        specifier: ^1.1.1
+        version: 1.1.1
+      '@mary-ext/simple-event-emitter':
         specifier: ^1.1.0
         version: 1.1.0
-      '@mary-ext/simple-event-emitter':
-        specifier: ^1.0.2
-        version: 1.0.2
       partysocket:
         specifier: ^1.3.0
         version: 1.3.0
@@ -1032,8 +1032,8 @@ importers:
         specifier: workspace:^
         version: link:../../lexicons/lexicons
       '@mary-ext/simple-event-emitter':
-        specifier: ^1.0.2
-        version: 1.0.2
+        specifier: ^1.1.0
+        version: 1.1.0
     devDependencies:
       '@types/node':
         specifier: ^26.5.0
@@ -1085,8 +1085,8 @@ importers:
         specifier: 'file:'
         version: file:packages/servers/xrpc-server(@atcute/lexicons@packages+lexicons+lexicons)(typescript@7.0.2)
       '@mary-ext/simple-event-emitter':
-        specifier: ^1.0.2
-        version: 1.0.2
+        specifier: ^1.1.0
+        version: 1.1.0
       '@types/node':
         specifier: ^26.5.0
         version: 26.5.0
@@ -1880,11 +1880,14 @@ packages:
     resolution: {integrity: sha512-6QEf6yqFbETdwGITKq57aYoPfX/3K8XFNwsAlx0C1M7o8cb79sv1M3w+tWuWvIcSbNqrLF7OD7YpZMVVz335hQ==}
     engines: {node: '>=20.0.0'}
 
-  '@mary-ext/event-iterator@1.1.0':
-    resolution: {integrity: sha512-uL6XFBsfAq+h6wnmioLTDMKzgbuKKQTo/2k512W1w1M5SgVroS6+D4MOD+j1K0loEYUJD9rIKV0Fo5ETZlgafw==}
+  '@mary-ext/ds-queue@0.1.0':
+    resolution: {integrity: sha512-7CIK/NZrACIzPq2x8SyRFMe7glujx4v1foQfJV6/WOvfosMcn/XOX+ZzrGo3+vjIGE5aEmQpFjWO3lktnOu+xQ==}
 
-  '@mary-ext/simple-event-emitter@1.0.2':
-    resolution: {integrity: sha512-A644JdOf+KfTGyX/EYf8AI1Y18mM7369KrhtOVkdEwRa2QIC0Botv7XWnK6/XU7HuQfvtFpCufmHJC3hi4YMuw==}
+  '@mary-ext/event-iterator@1.1.1':
+    resolution: {integrity: sha512-G+moITMlbSWPoB/ZGY52g2+8EjVIVcXnsnB9TMj6cF9kS9ZND+pcxzMkcIC0jM9ULYenNecf1ctZ7F6IxDcI9A==}
+
+  '@mary-ext/simple-event-emitter@1.1.0':
+    resolution: {integrity: sha512-Tx5raGtZ0n3f42+04rDt0G6n008g5FwxPQIkZcsMSkKB2dNTQnRkvk/iaa59khud71Ckiz1pH9HPetGO7w/Xaw==}
 
   '@mitata/counters@0.0.8':
     resolution: {integrity: sha512-f11w0Y1ETFlarDP7CePj8Z+y8Gv5Ax4gMxWsEwrqh0kH/YIY030Ezx5SUJeQg0YPTZ2OHKGcLG1oGJbIqHzaJA==}
@@ -4808,10 +4811,6 @@ packages:
     resolution: {integrity: sha512-2rAgRKu54VsHkqI0/tYkmluGXHD4KW7yZoycuqDQ15QOTnc2VVfy0nN/1eMhnQLO00A+dwtK20xuCnc1YGeUyg==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23}
 
-  yocto-queue@1.2.2:
-    resolution: {integrity: sha512-4LCcse/U2MHZ63HAJVE+v71o7yOdIe4cZ70Wpf8D/IyjDKYQLV5GD46B+hSTjJsvV5PztjvHoU580EftxjDZFQ==}
-    engines: {node: '>=12.20'}
-
   zig-build@0.3.0:
     resolution: {integrity: sha512-1QAROkf1rJjLkkwCz9+DEuF6U4Yy3nu6oX772mGd7os96E/2AdL50xjd7PuVsGpHIYmtBKG4EPCki6mzBwUtxw==}
     engines: {node: '>= 16.0.0'}
@@ -5749,11 +5748,13 @@ snapshots:
       tinyglobby: 0.2.17
       yaml: 2.9.0
 
-  '@mary-ext/event-iterator@1.1.0':
-    dependencies:
-      yocto-queue: 1.2.2
+  '@mary-ext/ds-queue@0.1.0': {}
 
-  '@mary-ext/simple-event-emitter@1.0.2': {}
+  '@mary-ext/event-iterator@1.1.1':
+    dependencies:
+      '@mary-ext/ds-queue': 0.1.0
+
+  '@mary-ext/simple-event-emitter@1.1.0': {}
 
   '@mitata/counters@0.0.8': {}
 
@@ -8637,8 +8638,6 @@ snapshots:
       string-width: 8.2.2
       y18n: 5.0.8
       yargs-parser: 22.0.0
-
-  yocto-queue@1.2.2: {}
 
   zig-build@0.3.0:
     dependencies:

@@ -40,7 +40,7 @@
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
 		"@atcute/xrpc-server": "file:",
-		"@mary-ext/simple-event-emitter": "^1.0.2",
+		"@mary-ext/simple-event-emitter": "^1.1.0",
 		"@types/node": "^26.5.0",
 		"@vitest/coverage-v8": "^5.0.0",
 		"vitest": "^5.0.0"
