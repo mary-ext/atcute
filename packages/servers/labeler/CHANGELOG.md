@@ -1,5 +1,11 @@
 # @atcute/labeler
 
+## 1.0.2
+
+### Patch Changes
+
+- cdd949b: replace the inlined queue with `@mary-ext/ds-queue`
+
 ## 1.0.1
 
 ### Patch Changes

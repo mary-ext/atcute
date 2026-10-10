@@ -1,5 +1,11 @@
 # @atcute/repo
 
+## 1.1.1
+
+### Patch Changes
+
+- cdd949b: replace the inlined queue with `@mary-ext/ds-queue`
+
 ## 1.1.0
 
 ### Minor Changes

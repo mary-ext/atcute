@@ -1,5 +1,13 @@
 # @atcute/identity-resolver
 
+## 2.0.3
+
+### Patch Changes
+
+- cee865a: document fetch-layer SSRF protection for server-side identity resolution
+- Updated dependencies [10120f1]
+  - @atcute/util-fetch@2.1.0
+
 ## 2.0.2
 
 ### Patch Changes

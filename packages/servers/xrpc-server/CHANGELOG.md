@@ -1,5 +1,17 @@
 # @atcute/xrpc-server
 
+## 2.1.0
+
+### Minor Changes
+
+- 355aead: add `didResolveTimeout` to `ServiceJwtVerifier`, limiting each issuer DID resolution to 5
+  seconds by default
+
+### Patch Changes
+
+- Updated dependencies [cee865a]
+  - @atcute/identity-resolver@2.0.3
+
 ## 2.0.3
 
 ### Patch Changes

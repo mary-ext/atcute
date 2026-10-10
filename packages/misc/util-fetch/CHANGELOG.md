@@ -1,5 +1,11 @@
 # @atcute/util-fetch
 
+## 2.1.0
+
+### Minor Changes
+
+- 10120f1: add `readResponseAsBytes` to read a response body into a `Uint8Array` with a size limit
+
 ## 2.0.2
 
 ### Patch Changes

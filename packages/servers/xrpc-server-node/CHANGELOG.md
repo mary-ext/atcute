@@ -1,5 +1,12 @@
 # @atcute/xrpc-server-node
 
+## 2.1.3
+
+### Patch Changes
+
+- 049e161: handle malformed requests and socket errors in the WebSocket upgrade listener to prevent
+  process crashes
+
 ## 2.1.2
 
 ### Patch Changes

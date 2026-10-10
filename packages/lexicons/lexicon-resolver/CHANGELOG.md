@@ -1,5 +1,15 @@
 # @atcute/lexicon-resolver
 
+## 1.0.2
+
+### Patch Changes
+
+- 7d25654: cap `getRecord` CAR responses at 1088 KiB to bound memory use
+- Updated dependencies [cdd949b]
+- Updated dependencies [10120f1]
+  - @atcute/repo@1.1.1
+  - @atcute/util-fetch@2.1.0
+
 ## 1.0.1
 
 ### Patch Changes
