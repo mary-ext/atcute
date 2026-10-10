@@ -4,6 +4,7 @@ export * as AppBskyActorGetPreferences from './types/app/bsky/actor/getPreferenc
 export * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile.ts';
 export * as AppBskyActorGetProfiles from './types/app/bsky/actor/getProfiles.ts';
 export * as AppBskyActorGetSuggestions from './types/app/bsky/actor/getSuggestions.ts';
+export * as AppBskyActorLink from './types/app/bsky/actor/link.ts';
 export * as AppBskyActorProfile from './types/app/bsky/actor/profile.ts';
 export * as AppBskyActorPutPreferences from './types/app/bsky/actor/putPreferences.ts';
 export * as AppBskyActorSearchActors from './types/app/bsky/actor/searchActors.ts';
@@ -117,6 +118,7 @@ export * as AppBskyNotificationUpdateSeen from './types/app/bsky/notification/up
 export * as AppBskyRichtextFacet from './types/app/bsky/richtext/facet.ts';
 export * as AppBskyUnspeccedDefs from './types/app/bsky/unspecced/defs.ts';
 export * as AppBskyUnspeccedGetAgeAssuranceState from './types/app/bsky/unspecced/getAgeAssuranceState.ts';
+export * as AppBskyUnspeccedGetAtmosphereExploreTab from './types/app/bsky/unspecced/getAtmosphereExploreTab.ts';
 export * as AppBskyUnspeccedGetConfig from './types/app/bsky/unspecced/getConfig.ts';
 export * as AppBskyUnspeccedGetOnboardingSuggestedStarterPacks from './types/app/bsky/unspecced/getOnboardingSuggestedStarterPacks.ts';
 export * as AppBskyUnspeccedGetOnboardingSuggestedStarterPacksSkeleton from './types/app/bsky/unspecced/getOnboardingSuggestedStarterPacksSkeleton.ts';

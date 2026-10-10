@@ -78,6 +78,16 @@ const _viewRecordSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
 	},
 	likeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * The total number of posts in the contiguous OP thread that this post belongs to. Only present when this
+	 * post is part of the OP thread.
+	 */
+	opThreadPostCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/**
+	 * The 1-indexed position of this post within the contiguous OP thread. Only present when this post is part
+	 * of the OP thread.
+	 */
+	opThreadPostIndex: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	quoteCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	replyCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	repostCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),

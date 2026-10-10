@@ -302,6 +302,26 @@ const _profileAssociatedGermSchema = /*#__PURE__*/ v.object({
 	messageMeUrl: /*#__PURE__*/ v.genericUriString(),
 	showButtonTo: /*#__PURE__*/ v.string<'everyone' | 'usersIFollow' | (string & {})>(),
 });
+const _profileLinkViewSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileLinkView')),
+	cid: /*#__PURE__*/ v.cidString(),
+	/** Image URL for the destination site's icon. */
+	icon: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	/**
+	 * @maxLength 320
+	 * @maxGraphemes 40
+	 */
+	title: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
+			/*#__PURE__*/ v.stringLength(0, 320),
+			/*#__PURE__*/ v.stringGraphemes(0, 40),
+		]),
+	),
+	/** The app.bsky.actor.link record, e.g. for reporting the link. */
+	uri: /*#__PURE__*/ v.resourceUriString(),
+	/** The link destination. */
+	url: /*#__PURE__*/ v.genericUriString(),
+});
 const _profileViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.actor.defs#profileView')),
 	get associated() {
@@ -423,6 +443,10 @@ const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 	},
 	get labels() {
 		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
+	},
+	/** The profile's links, in display order. Links that were taken down or don't resolve are left out. */
+	get links() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(profileLinkViewSchema));
 	},
 	get pinnedPost() {
 		return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
@@ -588,6 +612,7 @@ type profileAssociated$schematype = typeof _profileAssociatedSchema;
 type profileAssociatedActivitySubscription$schematype = typeof _profileAssociatedActivitySubscriptionSchema;
 type profileAssociatedChat$schematype = typeof _profileAssociatedChatSchema;
 type profileAssociatedGerm$schematype = typeof _profileAssociatedGermSchema;
+type profileLinkView$schematype = typeof _profileLinkViewSchema;
 type profileView$schematype = typeof _profileViewSchema;
 type profileViewBasic$schematype = typeof _profileViewBasicSchema;
 type profileViewDetailed$schematype = typeof _profileViewDetailedSchema;
@@ -624,6 +649,7 @@ export interface profileAssociatedSchema extends profileAssociated$schematype {}
 export interface profileAssociatedActivitySubscriptionSchema extends profileAssociatedActivitySubscription$schematype {}
 export interface profileAssociatedChatSchema extends profileAssociatedChat$schematype {}
 export interface profileAssociatedGermSchema extends profileAssociatedGerm$schematype {}
+export interface profileLinkViewSchema extends profileLinkView$schematype {}
 export interface profileViewSchema extends profileView$schematype {}
 export interface profileViewBasicSchema extends profileViewBasic$schematype {}
 export interface profileViewDetailedSchema extends profileViewDetailed$schematype {}
@@ -662,6 +688,7 @@ export const profileAssociatedActivitySubscriptionSchema =
 	_profileAssociatedActivitySubscriptionSchema as profileAssociatedActivitySubscriptionSchema;
 export const profileAssociatedChatSchema = _profileAssociatedChatSchema as profileAssociatedChatSchema;
 export const profileAssociatedGermSchema = _profileAssociatedGermSchema as profileAssociatedGermSchema;
+export const profileLinkViewSchema = _profileLinkViewSchema as profileLinkViewSchema;
 export const profileViewSchema = _profileViewSchema as profileViewSchema;
 export const profileViewBasicSchema = _profileViewBasicSchema as profileViewBasicSchema;
 export const profileViewDetailedSchema = _profileViewDetailedSchema as profileViewDetailedSchema;
@@ -700,6 +727,7 @@ export interface ProfileAssociatedActivitySubscription extends v.InferInput<
 > {}
 export interface ProfileAssociatedChat extends v.InferInput<typeof profileAssociatedChatSchema> {}
 export interface ProfileAssociatedGerm extends v.InferInput<typeof profileAssociatedGermSchema> {}
+export interface ProfileLinkView extends v.InferInput<typeof profileLinkViewSchema> {}
 export interface ProfileView extends v.InferInput<typeof profileViewSchema> {}
 export interface ProfileViewBasic extends v.InferInput<typeof profileViewBasicSchema> {}
 export interface ProfileViewDetailed extends v.InferInput<typeof profileViewDetailedSchema> {}

@@ -13,6 +13,7 @@
 					"action": ["create", "update", "delete"],
 					"resource": "repo",
 					"collection": [
+						"app.bsky.actor.link",
 						"app.bsky.actor.profile",
 						"app.bsky.actor.status",
 						"app.bsky.notification.declaration"

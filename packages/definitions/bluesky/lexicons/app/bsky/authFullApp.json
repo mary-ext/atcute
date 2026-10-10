@@ -129,6 +129,7 @@
 					"resource": "repo",
 					"collection": [
 						"app.bsky.actor.contentVisibilityDeclaration",
+						"app.bsky.actor.link",
 						"app.bsky.actor.profile",
 						"app.bsky.actor.status",
 						"app.bsky.feed.like",

@@ -62,6 +62,19 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		get labels() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
 		},
+		/**
+		 * Links shown on the profile, in display order. Each ref points to an app.bsky.actor.link record in this
+		 * repo.
+		 *
+		 * @maxLength 10
+		 */
+		get links() {
+			return /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(ComAtprotoRepoStrongRef.mainSchema), [
+					/*#__PURE__*/ v.arrayLength(0, 10),
+				]),
+			);
+		},
 		get pinnedPost() {
 			return /*#__PURE__*/ v.optional(ComAtprotoRepoStrongRef.mainSchema);
 		},

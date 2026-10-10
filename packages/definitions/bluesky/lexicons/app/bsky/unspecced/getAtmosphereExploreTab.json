@@ -1,0 +1,211 @@
+{
+	"id": "app.bsky.unspecced.getAtmosphereExploreTab",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["apps", "articles", "livestreams", "photos", "publications"],
+					"properties": {
+						"apps": {
+							"type": "array",
+							"items": {
+								"ref": "#appCard",
+								"type": "ref"
+							},
+							"maxLength": 100
+						},
+						"photos": {
+							"type": "array",
+							"items": {
+								"ref": "#galleryItem",
+								"type": "ref"
+							}
+						},
+						"articles": {
+							"type": "array",
+							"items": {
+								"ref": "#articleItem",
+								"type": "ref"
+							}
+						},
+						"livestreams": {
+							"type": "array",
+							"items": {
+								"ref": "#livestreamItem",
+								"type": "ref"
+							}
+						},
+						"publications": {
+							"type": "array",
+							"items": {
+								"ref": "#publicationItem",
+								"type": "ref"
+							}
+						},
+						"announcementBanner": {
+							"ref": "#announcementBanner",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"langs": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "language"
+						},
+						"description": "Preferred languages. Currently ignored."
+					},
+					"regionCode": {
+						"type": "string",
+						"description": "The ISO 3166-2 region code used to select curated content."
+					},
+					"countryCode": {
+						"type": "string",
+						"description": "The ISO 3166-1 alpha-2 country code used to select curated content."
+					}
+				}
+			},
+			"description": "Get curated Atmosphere Explore content. Authentication is optional; authenticated requests include viewer-specific profile state."
+		},
+		"appCard": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"url": {
+					"type": "string",
+					"format": "uri",
+					"maxLength": 4096
+				},
+				"logo": {
+					"type": "string",
+					"format": "uri",
+					"maxLength": 4096
+				},
+				"title": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"category": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"textColor": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"description": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"overlayColor": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"backgroundImage": {
+					"type": "string",
+					"format": "uri",
+					"maxLength": 4096
+				}
+			}
+		},
+		"articleItem": {
+			"type": "object",
+			"required": ["featured", "view"],
+			"properties": {
+				"view": {
+					"ref": "app.bsky.embed.external#viewArticle",
+					"type": "ref"
+				},
+				"featured": {
+					"type": "boolean"
+				}
+			}
+		},
+		"galleryItem": {
+			"type": "object",
+			"required": ["featured", "view"],
+			"properties": {
+				"view": {
+					"ref": "app.bsky.embed.external#viewGallery",
+					"type": "ref"
+				},
+				"featured": {
+					"type": "boolean"
+				}
+			}
+		},
+		"livestreamItem": {
+			"type": "object",
+			"required": ["featured", "view"],
+			"properties": {
+				"view": {
+					"ref": "app.bsky.embed.external#viewLivestream",
+					"type": "ref"
+				},
+				"featured": {
+					"type": "boolean"
+				}
+			}
+		},
+		"publicationItem": {
+			"type": "object",
+			"required": ["featured", "view"],
+			"properties": {
+				"view": {
+					"ref": "app.bsky.embed.external#viewArticlePublication",
+					"type": "ref"
+				},
+				"featured": {
+					"type": "boolean"
+				}
+			}
+		},
+		"announcementBanner": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"url": {
+					"type": "string",
+					"format": "uri",
+					"maxLength": 4096
+				},
+				"image": {
+					"type": "string",
+					"format": "uri",
+					"maxLength": 4096
+				},
+				"title": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"textColor": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"description": {
+					"type": "string",
+					"maxLength": 4096
+				},
+				"overlayColor": {
+					"type": "string",
+					"maxLength": 4096
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

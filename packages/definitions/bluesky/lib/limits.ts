@@ -3,6 +3,7 @@
 
 /** limits for `app.bsky.actor.profile` */
 export const actorProfile = {
+	links: { maxItems: 10 },
 	avatar: { maxSize: 1_000_000 },
 	banner: { maxSize: 1_000_000 },
 	pronouns: { maxGraphemes: 20, maxLength: 200 },

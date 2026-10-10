@@ -7,6 +7,16 @@
 				"schema": {
 					"type": "object",
 					"properties": {
+						"data": {
+							"refs": [
+								"app.bsky.embed.external#viewArticle",
+								"app.bsky.embed.external#viewArticlePublication",
+								"app.bsky.embed.external#viewGallery",
+								"app.bsky.embed.external#viewLivestream"
+							],
+							"type": "union",
+							"description": "Preferred to #view. Hydrated data of the embed. Present only when the resolved records back the requested URL and supply enough information to populate the required fields. Omitted alongside the rest of the response when no records resolved or validation failed."
+						},
 						"view": {
 							"ref": "app.bsky.embed.external#view",
 							"type": "ref",

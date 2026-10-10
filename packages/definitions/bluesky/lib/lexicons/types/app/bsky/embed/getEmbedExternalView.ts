@@ -35,6 +35,21 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.embed.getEmbedExternalView',
 				return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoRepoStrongRef.mainSchema));
 			},
 			/**
+			 * Preferred to #view. Hydrated data of the embed. Present only when the resolved records back the
+			 * requested URL and supply enough information to populate the required fields. Omitted alongside the
+			 * rest of the response when no records resolved or validation failed.
+			 */
+			get data() {
+				return /*#__PURE__*/ v.optional(
+					/*#__PURE__*/ v.variant([
+						AppBskyEmbedExternal.viewArticleSchema,
+						AppBskyEmbedExternal.viewArticlePublicationSchema,
+						AppBskyEmbedExternal.viewGallerySchema,
+						AppBskyEmbedExternal.viewLivestreamSchema,
+					]),
+				);
+			},
+			/**
 			 * Hydrated view of the embed. Present only when the resolved records back the requested URL and supply
 			 * enough information to populate the required `viewExternal` fields. Omitted alongside the rest of the
 			 * response when no records resolved or validation failed.

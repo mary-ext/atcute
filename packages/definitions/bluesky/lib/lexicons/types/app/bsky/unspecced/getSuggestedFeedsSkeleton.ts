@@ -20,6 +20,8 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedFeedsS
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			feeds: /*#__PURE__*/ v.array(/*#__PURE__*/ v.resourceUriString()),
+			/** Snowflake for this recommendation, use when submitting recommendation events. */
+			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},
 });

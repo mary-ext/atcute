@@ -75,6 +75,9 @@ const _groupSchema = /*#__PURE__*/ v.object({
 			likeViaRepostGroupSchema,
 			mentionNotificationSchema,
 			multiPostLikeGroupSchema,
+			multiPostLikeViaRepostGroupSchema,
+			multiPostRepostGroupSchema,
+			multiPostRepostViaRepostGroupSchema,
 			quoteNotificationSchema,
 			replyNotificationSchema,
 			repostGroupSchema,
@@ -179,12 +182,12 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.notification.getGroupedNotif
 				return /*#__PURE__*/ v.optional(
 					/*#__PURE__*/ v.array(
 						/*#__PURE__*/ v.variant([
-							AppBskyActorDefs.profileViewDetailedSchema,
+							AppBskyActorDefs.profileViewBasicSchema,
 							AppBskyFeedDefs.blockedPostSchema,
 							AppBskyFeedDefs.generatorViewSchema,
 							AppBskyFeedDefs.notFoundPostSchema,
 							AppBskyFeedDefs.postViewSchema,
-							AppBskyGraphDefs.starterPackViewSchema,
+							AppBskyGraphDefs.starterPackViewBasicSchema,
 						]),
 					),
 				);
@@ -217,6 +220,62 @@ const _multiPostLikeItemSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.literal('app.bsky.notification.getGroupedNotifications#multiPostLikeItem'),
 	),
 	post: /*#__PURE__*/ v.resourceUriString(),
+});
+const _multiPostLikeViaRepostGroupSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.notification.getGroupedNotifications#multiPostLikeViaRepostGroup'),
+	),
+	actor: /*#__PURE__*/ v.didString(),
+	/** @minLength 2 */
+	get items() {
+		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(multiPostLikeViaRepostItemSchema), [
+			/*#__PURE__*/ v.arrayLength(2),
+		]);
+	},
+});
+const _multiPostLikeViaRepostItemSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.notification.getGroupedNotifications#multiPostLikeViaRepostItem'),
+	),
+	post: /*#__PURE__*/ v.resourceUriString(),
+	viaRepost: /*#__PURE__*/ v.resourceUriString(),
+});
+const _multiPostRepostGroupSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.notification.getGroupedNotifications#multiPostRepostGroup'),
+	),
+	actor: /*#__PURE__*/ v.didString(),
+	/** @minLength 2 */
+	get items() {
+		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(multiPostRepostItemSchema), [
+			/*#__PURE__*/ v.arrayLength(2),
+		]);
+	},
+});
+const _multiPostRepostItemSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.notification.getGroupedNotifications#multiPostRepostItem'),
+	),
+	post: /*#__PURE__*/ v.resourceUriString(),
+});
+const _multiPostRepostViaRepostGroupSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.notification.getGroupedNotifications#multiPostRepostViaRepostGroup'),
+	),
+	actor: /*#__PURE__*/ v.didString(),
+	/** @minLength 2 */
+	get items() {
+		return /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(multiPostRepostViaRepostItemSchema), [
+			/*#__PURE__*/ v.arrayLength(2),
+		]);
+	},
+});
+const _multiPostRepostViaRepostItemSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.notification.getGroupedNotifications#multiPostRepostViaRepostItem'),
+	),
+	post: /*#__PURE__*/ v.resourceUriString(),
+	viaRepost: /*#__PURE__*/ v.resourceUriString(),
 });
 const _quoteNotificationSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
@@ -322,6 +381,12 @@ type main$schematype = typeof _mainSchema;
 type mentionNotification$schematype = typeof _mentionNotificationSchema;
 type multiPostLikeGroup$schematype = typeof _multiPostLikeGroupSchema;
 type multiPostLikeItem$schematype = typeof _multiPostLikeItemSchema;
+type multiPostLikeViaRepostGroup$schematype = typeof _multiPostLikeViaRepostGroupSchema;
+type multiPostLikeViaRepostItem$schematype = typeof _multiPostLikeViaRepostItemSchema;
+type multiPostRepostGroup$schematype = typeof _multiPostRepostGroupSchema;
+type multiPostRepostItem$schematype = typeof _multiPostRepostItemSchema;
+type multiPostRepostViaRepostGroup$schematype = typeof _multiPostRepostViaRepostGroupSchema;
+type multiPostRepostViaRepostItem$schematype = typeof _multiPostRepostViaRepostItemSchema;
 type quoteNotification$schematype = typeof _quoteNotificationSchema;
 type replyNotification$schematype = typeof _replyNotificationSchema;
 type repostGroup$schematype = typeof _repostGroupSchema;
@@ -349,6 +414,12 @@ export interface mainSchema extends main$schematype {}
 export interface mentionNotificationSchema extends mentionNotification$schematype {}
 export interface multiPostLikeGroupSchema extends multiPostLikeGroup$schematype {}
 export interface multiPostLikeItemSchema extends multiPostLikeItem$schematype {}
+export interface multiPostLikeViaRepostGroupSchema extends multiPostLikeViaRepostGroup$schematype {}
+export interface multiPostLikeViaRepostItemSchema extends multiPostLikeViaRepostItem$schematype {}
+export interface multiPostRepostGroupSchema extends multiPostRepostGroup$schematype {}
+export interface multiPostRepostItemSchema extends multiPostRepostItem$schematype {}
+export interface multiPostRepostViaRepostGroupSchema extends multiPostRepostViaRepostGroup$schematype {}
+export interface multiPostRepostViaRepostItemSchema extends multiPostRepostViaRepostItem$schematype {}
 export interface quoteNotificationSchema extends quoteNotification$schematype {}
 export interface replyNotificationSchema extends replyNotification$schematype {}
 export interface repostGroupSchema extends repostGroup$schematype {}
@@ -377,6 +448,16 @@ export const mainSchema = _mainSchema as mainSchema;
 export const mentionNotificationSchema = _mentionNotificationSchema as mentionNotificationSchema;
 export const multiPostLikeGroupSchema = _multiPostLikeGroupSchema as multiPostLikeGroupSchema;
 export const multiPostLikeItemSchema = _multiPostLikeItemSchema as multiPostLikeItemSchema;
+export const multiPostLikeViaRepostGroupSchema =
+	_multiPostLikeViaRepostGroupSchema as multiPostLikeViaRepostGroupSchema;
+export const multiPostLikeViaRepostItemSchema =
+	_multiPostLikeViaRepostItemSchema as multiPostLikeViaRepostItemSchema;
+export const multiPostRepostGroupSchema = _multiPostRepostGroupSchema as multiPostRepostGroupSchema;
+export const multiPostRepostItemSchema = _multiPostRepostItemSchema as multiPostRepostItemSchema;
+export const multiPostRepostViaRepostGroupSchema =
+	_multiPostRepostViaRepostGroupSchema as multiPostRepostViaRepostGroupSchema;
+export const multiPostRepostViaRepostItemSchema =
+	_multiPostRepostViaRepostItemSchema as multiPostRepostViaRepostItemSchema;
 export const quoteNotificationSchema = _quoteNotificationSchema as quoteNotificationSchema;
 export const replyNotificationSchema = _replyNotificationSchema as replyNotificationSchema;
 export const repostGroupSchema = _repostGroupSchema as repostGroupSchema;
@@ -404,6 +485,16 @@ export interface LikeViaRepostItem extends v.InferInput<typeof likeViaRepostItem
 export interface MentionNotification extends v.InferInput<typeof mentionNotificationSchema> {}
 export interface MultiPostLikeGroup extends v.InferInput<typeof multiPostLikeGroupSchema> {}
 export interface MultiPostLikeItem extends v.InferInput<typeof multiPostLikeItemSchema> {}
+export interface MultiPostLikeViaRepostGroup extends v.InferInput<typeof multiPostLikeViaRepostGroupSchema> {}
+export interface MultiPostLikeViaRepostItem extends v.InferInput<typeof multiPostLikeViaRepostItemSchema> {}
+export interface MultiPostRepostGroup extends v.InferInput<typeof multiPostRepostGroupSchema> {}
+export interface MultiPostRepostItem extends v.InferInput<typeof multiPostRepostItemSchema> {}
+export interface MultiPostRepostViaRepostGroup extends v.InferInput<
+	typeof multiPostRepostViaRepostGroupSchema
+> {}
+export interface MultiPostRepostViaRepostItem extends v.InferInput<
+	typeof multiPostRepostViaRepostItemSchema
+> {}
 export interface QuoteNotification extends v.InferInput<typeof quoteNotificationSchema> {}
 export interface ReplyNotification extends v.InferInput<typeof replyNotificationSchema> {}
 export interface RepostGroup extends v.InferInput<typeof repostGroupSchema> {}
