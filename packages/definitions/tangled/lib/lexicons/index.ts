@@ -70,6 +70,7 @@ export * as ShTangledFeedStar from './types/sh/tangled/feed/star.ts';
 export * as ShTangledFeedSubscription from './types/sh/tangled/feed/subscription.ts';
 export * as ShTangledGitCountRefUpdates from './types/sh/tangled/git/countRefUpdates.ts';
 export * as ShTangledGitCountRefUpdatesBy from './types/sh/tangled/git/countRefUpdatesBy.ts';
+export * as ShTangledGitKeepCommit from './types/sh/tangled/git/keepCommit.ts';
 export * as ShTangledGitListRefUpdates from './types/sh/tangled/git/listRefUpdates.ts';
 export * as ShTangledGitListRefUpdatesBy from './types/sh/tangled/git/listRefUpdatesBy.ts';
 export * as ShTangledGitListRefs from './types/sh/tangled/git/listRefs.ts';

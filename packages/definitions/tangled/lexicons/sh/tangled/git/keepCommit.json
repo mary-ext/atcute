@@ -1,0 +1,91 @@
+{
+	"id": "sh.tangled.git.keepCommit",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["record", "repo", "source"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did"
+						},
+						"record": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "at-uri of target record. rkey is required"
+						},
+						"source": {
+							"refs": ["#commit", "#patches"],
+							"type": "union"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				},
+				{
+					"name": "RepoNotFound",
+					"description": "Repo is not registered on this knot"
+				},
+				{
+					"name": "CommitNotFound",
+					"description": "Commit is not found from source Repo"
+				},
+				{
+					"name": "PatchApplyFailed",
+					"description": "Failed to apply patches"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["commit"],
+					"properties": {
+						"commit": {
+							"type": "string",
+							"maxLength": 128,
+							"minLength": 40
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Keep commit for an atproto record."
+		},
+		"commit": {
+			"type": "object",
+			"required": ["oid", "repo"],
+			"properties": {
+				"oid": {
+					"type": "string",
+					"maxLength": 128,
+					"minLength": 40
+				},
+				"repo": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		},
+		"patches": {
+			"type": "object",
+			"required": ["patches"],
+			"properties": {
+				"patches": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}
