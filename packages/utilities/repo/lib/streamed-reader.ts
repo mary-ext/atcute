@@ -5,11 +5,12 @@ import type { CidLink } from '@atcute/cid';
 import * as CID from '@atcute/cid';
 import { isNodeData } from '@atcute/mst';
 
+import { Queue } from '@mary-ext/ds-queue';
+
 import { RepoEntry, type RepoReaderOptions, isCommit } from './types.ts';
 import { assert } from './utils.ts';
 import { CidMap } from './utils/cid-map.ts';
 import { MAX_NODE_ENTRIES, decodeMstKey, parseMstKey } from './utils/mst.ts';
-import Queue from './utils/queue.ts';
 
 type EntryMeta = { t: 0 } | { t: 1 } | { t: 2; k: string };
 

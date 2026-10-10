@@ -1,3 +1,5 @@
+import { Queue } from '@mary-ext/ds-queue';
+
 export class AsyncBufferFullError extends Error {
 	override readonly name = 'AsyncBufferFullError';
 
@@ -73,55 +75,4 @@ export class AsyncBuffer<T> {
 			}
 		}
 	}
-}
-
-class Queue<T> {
-	#head: QueueNode<T> | undefined;
-	#tail: QueueNode<T> | undefined;
-	#size: number = 0;
-
-	get size(): number {
-		return this.#size;
-	}
-
-	enqueue(value: T): this {
-		const tail = this.#tail;
-		const node = createNode(value, undefined);
-
-		if (tail !== undefined) {
-			tail.next = node;
-		} else {
-			this.#head = node;
-		}
-
-		this.#tail = node;
-		this.#size++;
-		return this;
-	}
-
-	dequeue(): T | undefined {
-		const head = this.#head;
-		if (!head) {
-			return;
-		}
-
-		const next = head.next;
-
-		this.#head = next;
-		if (next === undefined) {
-			this.#tail = undefined;
-		}
-
-		this.#size--;
-		return head.value;
-	}
-}
-
-interface QueueNode<T> {
-	value: T;
-	next: QueueNode<T> | undefined;
-}
-
-function createNode<T>(value: T, next: QueueNode<T> | undefined): QueueNode<T> {
-	return { value, next };
 }

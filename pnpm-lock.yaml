@@ -1031,6 +1031,9 @@ importers:
       '@atcute/lexicons':
         specifier: workspace:^
         version: link:../../lexicons/lexicons
+      '@mary-ext/ds-queue':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@mary-ext/simple-event-emitter':
         specifier: ^1.1.0
         version: 1.1.0
@@ -1334,6 +1337,9 @@ importers:
       '@atcute/uint8array':
         specifier: workspace:^
         version: link:../../misc/uint8array
+      '@mary-ext/ds-queue':
+        specifier: ^0.1.0
+        version: 0.1.0
     devDependencies:
       '@atcute/multibase':
         specifier: workspace:^

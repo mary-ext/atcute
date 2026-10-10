@@ -35,7 +35,8 @@
 		"@atcute/crypto": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/mst": "workspace:^",
-		"@atcute/uint8array": "workspace:^"
+		"@atcute/uint8array": "workspace:^",
+		"@mary-ext/ds-queue": "^0.1.0"
 	},
 	"devDependencies": {
 		"@atcute/multibase": "workspace:^",
