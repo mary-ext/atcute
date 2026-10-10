@@ -2,6 +2,7 @@ import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 import type {
 	AppBskyActorDefs,
 	AppBskyEmbedExternal,
+	AppBskyEmbedGallery,
 	AppBskyEmbedRecord,
 	AppBskyFeedDefs,
 	AppBskyFeedPost,
@@ -112,6 +113,19 @@ export const externalEmbedView = ({
 			title,
 			description,
 		},
+	};
+};
+
+export const galleryEmbedView = ({ alts }: { alts: string[] }): $type.enforce<AppBskyEmbedGallery.View> => {
+	return {
+		$type: 'app.bsky.embed.gallery#view',
+		items: alts.map((alt) => ({
+			$type: 'app.bsky.embed.gallery#viewImage',
+			alt,
+			aspectRatio: { width: 1, height: 1 },
+			fullsize: 'https://example.com/fullsize.jpg',
+			thumbnail: 'https://example.com/thumbnail.jpg',
+		})),
 	};
 };
 

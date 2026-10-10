@@ -166,6 +166,31 @@ const checkKeywordFilters = (
 	return null;
 };
 
+const checkAltKeywordFilters = (
+	filters: KeywordFilter[],
+	items: { alt: string }[],
+	author: AppBskyActorDefs.ProfileViewBasic,
+): KeywordFilter | null => {
+	for (let i = 0, il = items.length; i < il; i++) {
+		const alt = items[i].alt;
+		if (!alt) {
+			continue;
+		}
+
+		const match = matchesKeywordFilters({
+			filters: filters,
+			text: alt,
+			actor: author,
+		});
+
+		if (match) {
+			return match;
+		}
+	}
+
+	return null;
+};
+
 const checkEmbedKeywordFilters = (
 	filters: KeywordFilter[],
 	embed: AppBskyFeedDefs.PostView['embed'],
@@ -192,24 +217,16 @@ const checkEmbedKeywordFilters = (
 
 				break;
 			}
+			case 'app.bsky.embed.gallery#view': {
+				if ((match = checkAltKeywordFilters(filters, media.items, author))) {
+					return match;
+				}
+
+				break;
+			}
 			case 'app.bsky.embed.images#view': {
-				const images = media.images;
-
-				for (let i = 0, il = images.length; i < il; i++) {
-					const image = images[i];
-					if (!image.alt) {
-						continue;
-					}
-
-					if (
-						(match = matchesKeywordFilters({
-							filters: filters,
-							text: image.alt,
-							actor: author,
-						}))
-					) {
-						return match;
-					}
+				if ((match = checkAltKeywordFilters(filters, media.images, author))) {
+					return match;
 				}
 
 				break;
