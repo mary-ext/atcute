@@ -1,5 +1,17 @@
 # @atcute/bluesky-moderation
 
+## 4.3.0
+
+### Minor Changes
+
+- 6db1326: `ModerationDecision#authorDid` is now `Did | undefined`
+- 697fa23: add `moderateExternalView`
+- 3a5b424: add `mergeDisplayRestrictions`
+
+### Patch Changes
+
+- 3e92daf: match keyword filters against gallery alt text
+
 ## 4.2.2
 
 ### Patch Changes
