@@ -2,6 +2,8 @@ export * as BlogPcktBlockBlockquote from './types/blog/pckt/block/blockquote.ts'
 export * as BlogPcktBlockBlueskyEmbed from './types/blog/pckt/block/blueskyEmbed.ts';
 export * as BlogPcktBlockBulletList from './types/blog/pckt/block/bulletList.ts';
 export * as BlogPcktBlockCodeBlock from './types/blog/pckt/block/codeBlock.ts';
+export * as BlogPcktBlockColumn from './types/blog/pckt/block/column.ts';
+export * as BlogPcktBlockColumns from './types/blog/pckt/block/columns.ts';
 export * as BlogPcktBlockGallery from './types/blog/pckt/block/gallery.ts';
 export * as BlogPcktBlockHardBreak from './types/blog/pckt/block/hardBreak.ts';
 export * as BlogPcktBlockHeading from './types/blog/pckt/block/heading.ts';

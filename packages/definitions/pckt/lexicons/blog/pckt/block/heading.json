@@ -26,7 +26,7 @@
 				"textAlign": {
 					"type": "string",
 					"description": "Horizontal alignment of the block's text. Defaults to left when omitted.",
-					"knownValues": ["center", "left", "right"]
+					"knownValues": ["center", "justify", "left", "right"]
 				}
 			}
 		}

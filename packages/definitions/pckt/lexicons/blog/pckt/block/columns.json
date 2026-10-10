@@ -1,0 +1,25 @@
+{
+	"id": "blog.pckt.block.columns",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["content"],
+			"properties": {
+				"content": {
+					"type": "array",
+					"items": {
+						"refs": ["blog.pckt.block.column"],
+						"type": "union",
+						"closed": true
+					},
+					"maxLength": 2,
+					"minLength": 2,
+					"description": "The two columns, left then right"
+				}
+			}
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1,
+	"description": "Two columns side by side, such as a photo beside a paragraph. Readers that can't lay out columns can show the first column's blocks and then the second's, in order."
+}
