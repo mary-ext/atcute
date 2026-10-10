@@ -166,3 +166,31 @@ const listDecision = moderateList(list, opts);
 const feedDecision = moderateFeedGenerator(feed, opts);
 const notifDecision = moderateNotification(notification, opts);
 ```
+
+### external embeds
+
+use `moderateExternalView` for labels on external embeds; `moderatePost` does not evaluate them.
+
+for link cards, merge the external view's content and media restrictions with the post's media
+restrictions:
+
+```ts
+import {
+	DisplayContext,
+	getDisplayRestrictions,
+	mergeDisplayRestrictions,
+	moderateExternalView,
+} from '@atcute/bluesky-moderation';
+
+const externalDecision = moderateExternalView(embed.external, opts);
+
+const ui = mergeDisplayRestrictions(
+	getDisplayRestrictions(postDecision, DisplayContext.ContentMedia),
+	getDisplayRestrictions(externalDecision, DisplayContext.ContentView),
+	getDisplayRestrictions(externalDecision, DisplayContext.ContentMedia),
+);
+
+if (ui.blurs.length > 0) {
+	// cover the card
+}
+```

@@ -42,6 +42,7 @@ export {
 } from './label.ts';
 
 export {
+	type ExternalViewSubject,
 	type FeedGeneratorSubject,
 	type Label,
 	type LabelerPreference,
@@ -55,6 +56,7 @@ export {
 
 export { getDisplayRestrictions, mergeDisplayRestrictions, type DisplayRestrictions } from './ui.ts';
 
+export { moderateExternalView } from './subjects/external-view.ts';
 export { moderateFeedGenerator } from './subjects/feed-generator.ts';
 export { moderateList } from './subjects/list.ts';
 export { moderateNotification } from './subjects/notification.ts';

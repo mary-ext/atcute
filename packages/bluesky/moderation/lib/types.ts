@@ -1,6 +1,7 @@
 import type { ComAtprotoLabelDefs } from '@atcute/atproto';
 import type {
 	AppBskyActorDefs,
+	AppBskyEmbedExternal,
 	AppBskyFeedDefs,
 	AppBskyGraphDefs,
 	AppBskyNotificationListNotifications,
@@ -45,6 +46,13 @@ export interface ModerationOptions {
 	/** interpreted label definitions from labelers */
 	labelDefs?: { [D in Did]?: InterpretedLabelMapping };
 }
+
+export type ExternalViewSubject =
+	| AppBskyEmbedExternal.ViewArticle
+	| AppBskyEmbedExternal.ViewArticlePublication
+	| AppBskyEmbedExternal.ViewExternal
+	| AppBskyEmbedExternal.ViewGallery
+	| AppBskyEmbedExternal.ViewLivestream;
 
 export type FeedGeneratorSubject = AppBskyFeedDefs.GeneratorView;
 

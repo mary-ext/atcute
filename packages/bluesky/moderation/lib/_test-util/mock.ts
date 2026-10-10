@@ -1,4 +1,4 @@
-import type { ComAtprotoLabelDefs } from '@atcute/atproto';
+import type { ComAtprotoLabelDefs, ComAtprotoRepoStrongRef } from '@atcute/atproto';
 import type {
 	AppBskyActorDefs,
 	AppBskyEmbedExternal,
@@ -12,6 +12,10 @@ import type {
 import type { $type, Did, GenericUri, Handle, ResourceUri } from '@atcute/lexicons';
 
 const FAKE_CID = 'bafyreiclp443lavogvhj3d2ob2cxbfuscni2k5jk7bebjzg7khl3esabwq';
+
+export const strongRef = ({ uri }: { uri: ResourceUri }): ComAtprotoRepoStrongRef.Main => {
+	return { uri, cid: FAKE_CID };
+};
 
 export const post = ({
 	text,
@@ -100,10 +104,14 @@ export const externalEmbedView = ({
 	uri = 'https://example.com',
 	title,
 	description = '',
+	associatedRefs,
+	labels,
 }: {
 	uri?: string;
 	title: string;
 	description?: string;
+	associatedRefs?: AppBskyEmbedExternal.ViewExternal['associatedRefs'];
+	labels?: ComAtprotoLabelDefs.Label[];
 }): $type.enforce<AppBskyEmbedExternal.View> => {
 	return {
 		$type: 'app.bsky.embed.external#view',
@@ -112,6 +120,8 @@ export const externalEmbedView = ({
 			uri: uri as AppBskyEmbedExternal.ViewExternal['uri'],
 			title,
 			description,
+			associatedRefs,
+			labels,
 		},
 	};
 };
