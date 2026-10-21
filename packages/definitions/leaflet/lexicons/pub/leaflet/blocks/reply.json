@@ -5,6 +5,11 @@
 			"type": "object",
 			"required": [],
 			"properties": {
+				"key": {
+					"type": "string",
+					"maxLength": 100,
+					"description": "Tells this block apart from the document's other blocks of its type; interaction records name it in their `block` field. Records without a matching key belong to the first block of the type."
+				},
 				"buttonText": {
 					"type": "string",
 					"maxLength": 500,

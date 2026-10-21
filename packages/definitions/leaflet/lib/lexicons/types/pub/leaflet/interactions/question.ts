@@ -8,6 +8,15 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('pub.leaflet.interactions.question'),
+		/**
+		 * The key of the pub.leaflet.blocks.questions block on the subject this was submitted through, when the
+		 * subject has more than one.
+		 *
+		 * @maxLength 100
+		 */
+		block: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+		),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		get facets() {
 			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(PubLeafletRichtextFacet.mainSchema));

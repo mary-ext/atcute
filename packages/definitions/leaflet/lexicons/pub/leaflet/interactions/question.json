@@ -8,6 +8,11 @@
 				"type": "object",
 				"required": ["createdAt", "plaintext", "subject"],
 				"properties": {
+					"block": {
+						"type": "string",
+						"maxLength": 100,
+						"description": "The key of the pub.leaflet.blocks.questions block on the subject this was submitted through, when the subject has more than one."
+					},
 					"facets": {
 						"type": "array",
 						"items": {
@@ -31,7 +36,7 @@
 					}
 				}
 			},
-			"description": "A public question asked of a document's author, shown on the document once the author answers it (pub.leaflet.interactions.answer)"
+			"description": "A public question asked of a document's author, shown on the document once the author answers (pub.leaflet.interactions.answer) or accepts it (pub.leaflet.interactions.questionVisibility)"
 		}
 	},
 	"lexicon": 1

@@ -22,6 +22,17 @@ const _mainSchema = /*#__PURE__*/ v.object({
 			/*#__PURE__*/ v.stringGraphemes(0, 50),
 		]),
 	),
+	/**
+	 * Tells this block apart from the document's other blocks of its type; interaction records name it in their
+	 * `block` field. Records without a matching key belong to the first block of the type.
+	 *
+	 * @maxLength 100
+	 */
+	key: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+	),
+	/** Show readers questions the author hasn't accepted, answered or hidden yet. Defaults to false. */
+	showPending: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 });
 
 type main$schematype = typeof _mainSchema;

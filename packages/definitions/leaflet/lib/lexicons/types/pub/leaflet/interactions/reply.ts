@@ -6,6 +6,15 @@ const _mainSchema = /*#__PURE__*/ v.record(
 	/*#__PURE__*/ v.tidString(),
 	/*#__PURE__*/ v.object({
 		$type: /*#__PURE__*/ v.literal('pub.leaflet.interactions.reply'),
+		/**
+		 * The key of the pub.leaflet.blocks.reply block on the subject this was submitted through, when the
+		 * subject has more than one.
+		 *
+		 * @maxLength 100
+		 */
+		block: /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
+		),
 		createdAt: /*#__PURE__*/ v.datetimeString(),
 		/** The reply: a document in the same repo as this record. */
 		document: /*#__PURE__*/ v.resourceUriString(),
