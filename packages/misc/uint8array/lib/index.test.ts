@@ -57,8 +57,15 @@ const wellFormed = [
 	// a stripped BOM would let two distinct byte sequences decode to the same string
 	{ label: 'leading byte order mark', bytes: [0xef, 0xbb, 0xbf, 0x61], text: '﻿a' },
 	{ label: 'replacement character', bytes: [0xef, 0xbf, 0xbd], text: '�' },
-	// long enough to fall past the unrolled ascii fast path on every entrypoint
+	// exceeds every entrypoint's ASCII fast path
 	{ label: 'run of ascii', bytes: Array(40).fill(0x61), text: 'a'.repeat(40) },
+	{ label: 'ascii at the fast path limit', bytes: Array(32).fill(0x61), text: 'a'.repeat(32) },
+	{ label: 'ascii just past the fast path limit', bytes: Array(33).fill(0x61), text: 'a'.repeat(33) },
+	{
+		label: 'non-ascii within the fast path range',
+		bytes: [...Array(20).fill(0x61), 0xc3, 0xa9],
+		text: `${'a'.repeat(20)}é`,
+	},
 ];
 
 const malformed = [
@@ -66,6 +73,7 @@ const malformed = [
 	{ label: 'continuation byte out of place', bytes: [0xe4, 0xbd, 0x20] },
 	{ label: 'five-byte sequence', bytes: [0xf8, 0x88, 0x80, 0x80, 0x80] },
 	{ label: 'invalid byte after ascii', bytes: [0x61, 0xff] },
+	{ label: 'invalid byte within the ascii fast path range', bytes: [...Array(20).fill(0x61), 0xff] },
 	{ label: 'invalid byte past the ascii fast path', bytes: [...Array(40).fill(0x61), 0xff] },
 	{ label: 'lone high surrogate', bytes: [0xed, 0xa0, 0x80] },
 	{ label: 'lone low surrogate', bytes: [0xed, 0xb0, 0x80] },

@@ -155,125 +155,25 @@ export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, len
 
 const _fromCharCode = String.fromCharCode;
 
-// fully unrolled short string decoder, inspired by cbor-x
-// returns null if non-ASCII byte encountered, signaling fallback to TextDecoder
-const _shortString = (from: Uint8Array, p: number, length: number): string | null => {
-	if (length < 4) {
-		if (length < 2) {
-			if (length === 0) {
-				return '';
-			}
-			const a = from[p];
-			if (a & 0x80) {
-				return null;
-			}
-			return _fromCharCode(a);
-		}
-		const a = from[p];
-		const b = from[p + 1];
-		if ((a | b) & 0x80) {
+// avoid TextDecoder call overhead for short ASCII strings
+const SHORT_STRING_MAX = 32;
+
+const _shortString = (from: Uint8Array, offset: number, length: number): string | null => {
+	// JavaScriptCore's `apply` is slower with push-grown arrays
+	// oxlint-disable-next-line unicorn/no-new-array -- `Array.from({ length })` builds a different array kind
+	const codes = new Array<number>(length);
+
+	for (let idx = 0; idx < length; idx++) {
+		const code = from[offset + idx];
+		if (code & 0x80) {
 			return null;
 		}
-		if (length === 2) {
-			return _fromCharCode(a, b);
-		}
-		const c = from[p + 2];
-		if (c & 0x80) {
-			return null;
-		}
-		return _fromCharCode(a, b, c);
+
+		codes[idx] = code;
 	}
-	const a = from[p];
-	const b = from[p + 1];
-	const c = from[p + 2];
-	const d = from[p + 3];
-	if ((a | b | c | d) & 0x80) {
-		return null;
-	}
-	if (length < 8) {
-		if (length === 4) {
-			return _fromCharCode(a, b, c, d);
-		}
-		const e = from[p + 4];
-		if (e & 0x80) {
-			return null;
-		}
-		if (length === 5) {
-			return _fromCharCode(a, b, c, d, e);
-		}
-		const f = from[p + 5];
-		if (f & 0x80) {
-			return null;
-		}
-		if (length === 6) {
-			return _fromCharCode(a, b, c, d, e, f);
-		}
-		const g = from[p + 6];
-		if (g & 0x80) {
-			return null;
-		}
-		return _fromCharCode(a, b, c, d, e, f, g);
-	}
-	const e = from[p + 4];
-	const f = from[p + 5];
-	const g = from[p + 6];
-	const h = from[p + 7];
-	if ((e | f | g | h) & 0x80) {
-		return null;
-	}
-	if (length < 12) {
-		if (length === 8) {
-			return _fromCharCode(a, b, c, d, e, f, g, h);
-		}
-		const i = from[p + 8];
-		if (i & 0x80) {
-			return null;
-		}
-		if (length === 9) {
-			return _fromCharCode(a, b, c, d, e, f, g, h, i);
-		}
-		const j = from[p + 9];
-		if (j & 0x80) {
-			return null;
-		}
-		if (length === 10) {
-			return _fromCharCode(a, b, c, d, e, f, g, h, i, j);
-		}
-		const k = from[p + 10];
-		if (k & 0x80) {
-			return null;
-		}
-		return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k);
-	}
-	const i = from[p + 8];
-	const j = from[p + 9];
-	const k = from[p + 10];
-	const l = from[p + 11];
-	if ((i | j | k | l) & 0x80) {
-		return null;
-	}
-	if (length === 12) {
-		return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l);
-	}
-	const m = from[p + 12];
-	if (m & 0x80) {
-		return null;
-	}
-	if (length === 13) {
-		return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m);
-	}
-	const n = from[p + 13];
-	if (n & 0x80) {
-		return null;
-	}
-	if (length === 14) {
-		return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n);
-	}
-	const o = from[p + 14];
-	if (o & 0x80) {
-		return null;
-	}
-	return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o);
+
+	// oxlint-disable-next-line prefer-spread
+	return _fromCharCode.apply(null, codes);
 };
 
 /**
@@ -290,7 +190,7 @@ export const decodeUtf8From = (
 	offset: number = 0,
 	length: number = from.length - offset,
 ): string => {
-	if (length <= 15) {
+	if (length <= SHORT_STRING_MAX) {
 		const result = _shortString(from, offset, length);
 		if (result !== null) {
 			return result;
