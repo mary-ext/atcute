@@ -26,11 +26,21 @@
 					"description": "Corner style for UI elements and images: rounded or square (optional)",
 					"knownValues": ["round", "square"]
 				},
+				"wordmark": {
+					"ref": "#image",
+					"type": "ref",
+					"description": "Wide logo shown in the publication header in place of the icon and name (optional)"
+				},
 				"transparency": {
 					"type": "integer",
 					"maximum": 100,
 					"minimum": 0,
 					"description": "Content background transparency percentage (optional)"
+				},
+				"wordmarkDark": {
+					"ref": "#image",
+					"type": "ref",
+					"description": "Version of the wordmark to show in dark mode (optional)"
 				},
 				"highlightColor": {
 					"type": "string",
@@ -48,6 +58,11 @@
 					"type": "boolean",
 					"description": "Whether to tile the background image instead of covering (optional)"
 				},
+				"backgroundImage": {
+					"ref": "#image",
+					"type": "ref",
+					"description": "Image drawn behind the publication's pages (optional)"
+				},
 				"backgroundTileSize": {
 					"type": "integer",
 					"maximum": 100,
@@ -56,6 +71,24 @@
 				}
 			},
 			"description": "Theme configuration for a blog publication"
+		},
+		"image": {
+			"type": "object",
+			"required": ["image"],
+			"properties": {
+				"image": {
+					"type": "blob",
+					"accept": ["image/*"],
+					"maxSize": 5000000,
+					"description": "The image file"
+				},
+				"aspectRatio": {
+					"ref": "#aspectRatio",
+					"type": "ref",
+					"description": "Pixel dimensions of the image, for laying it out before it loads (optional)"
+				}
+			},
+			"description": "An image with the shape it was uploaded in"
 		},
 		"palette": {
 			"type": "object",
@@ -88,6 +121,21 @@
 				}
 			},
 			"description": "Color palette with CSS hex values"
+		},
+		"aspectRatio": {
+			"type": "object",
+			"required": ["height", "width"],
+			"properties": {
+				"width": {
+					"type": "integer",
+					"minimum": 1
+				},
+				"height": {
+					"type": "integer",
+					"minimum": 1
+				}
+			},
+			"description": "Width and height of an image, in pixels or any unit that keeps their ratio"
 		}
 	},
 	"$type": "com.atproto.lexicon.schema",
