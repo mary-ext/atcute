@@ -2,5 +2,5 @@
 
 this directory contains lexicon documents pulled from the following sources:
 
-- https://github.com/bluesky-social/atproto.git
-  - commit: 647cb412576f1ba92c63aa00c71743cb400bdf8d
+- https://github.com/bluesky-social/bsky.git
+  - commit: 297ceaccce68f93dcef1e2269eb5fca16bf7f2ed

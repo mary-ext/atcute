@@ -1,0 +1,57 @@
+{
+	"id": "app.bsky.unspecced.getAtmosphereExploreArticleRecommendations",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["articles", "recIdStr"],
+					"properties": {
+						"articles": {
+							"type": "array",
+							"items": {
+								"ref": "#article",
+								"type": "ref"
+							},
+							"maxLength": 100
+						},
+						"recIdStr": {
+							"type": "string",
+							"description": "Snowflake for this recommendation, use when submitting recommendation events."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 25,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"viewer": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the account making the request (not included for public/unauthenticated queries)."
+					}
+				}
+			},
+			"description": "Get a skeleton of recommended Atmosphere Explore articles. Intended to be called and hydrated by app.bsky.unspecced.getAtmosphereExploreTab"
+		},
+		"article": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

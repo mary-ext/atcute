@@ -17,32 +17,20 @@
 							"maxLength": 100
 						},
 						"photos": {
-							"type": "array",
-							"items": {
-								"ref": "#galleryItem",
-								"type": "ref"
-							}
+							"ref": "#galleryList",
+							"type": "ref"
 						},
 						"articles": {
-							"type": "array",
-							"items": {
-								"ref": "#articleItem",
-								"type": "ref"
-							}
+							"ref": "#articleList",
+							"type": "ref"
 						},
 						"livestreams": {
-							"type": "array",
-							"items": {
-								"ref": "#livestreamItem",
-								"type": "ref"
-							}
+							"ref": "#livestreamList",
+							"type": "ref"
 						},
 						"publications": {
-							"type": "array",
-							"items": {
-								"ref": "#publicationItem",
-								"type": "ref"
-							}
+							"ref": "#publicationList",
+							"type": "ref"
 						},
 						"announcementBanner": {
 							"ref": "#announcementBanner",
@@ -61,7 +49,7 @@
 							"type": "string",
 							"format": "language"
 						},
-						"description": "Preferred languages. Currently ignored."
+						"description": "Preferred languages for article recommendations when algorithmic recommendations are enabled. Ignored otherwise."
 					},
 					"regionCode": {
 						"type": "string",
@@ -73,7 +61,7 @@
 					}
 				}
 			},
-			"description": "Get curated Atmosphere Explore content. Authentication is optional; authenticated requests include viewer-specific profile state."
+			"description": "Get Atmosphere Explore content. Articles are recommended when algorithmic recommendations are enabled for the request, and curated otherwise; other sections are curated. Authentication is optional; authenticated requests include viewer-specific profile state."
 		},
 		"appCard": {
 			"type": "object",
@@ -132,6 +120,23 @@
 				}
 			}
 		},
+		"articleList": {
+			"type": "object",
+			"required": ["items"],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"ref": "#articleItem",
+						"type": "ref"
+					}
+				},
+				"recIdStr": {
+					"type": "string",
+					"description": "Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the list is not algorithmically recommended."
+				}
+			}
+		},
 		"galleryItem": {
 			"type": "object",
 			"required": ["featured", "view"],
@@ -142,6 +147,23 @@
 				},
 				"featured": {
 					"type": "boolean"
+				}
+			}
+		},
+		"galleryList": {
+			"type": "object",
+			"required": ["items"],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"ref": "#galleryItem",
+						"type": "ref"
+					}
+				},
+				"recIdStr": {
+					"type": "string",
+					"description": "Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the list is not algorithmically recommended."
 				}
 			}
 		},
@@ -158,6 +180,23 @@
 				}
 			}
 		},
+		"livestreamList": {
+			"type": "object",
+			"required": ["items"],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"ref": "#livestreamItem",
+						"type": "ref"
+					}
+				},
+				"recIdStr": {
+					"type": "string",
+					"description": "Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the list is not algorithmically recommended."
+				}
+			}
+		},
 		"publicationItem": {
 			"type": "object",
 			"required": ["featured", "view"],
@@ -168,6 +207,23 @@
 				},
 				"featured": {
 					"type": "boolean"
+				}
+			}
+		},
+		"publicationList": {
+			"type": "object",
+			"required": ["items"],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"ref": "#publicationItem",
+						"type": "ref"
+					}
+				},
+				"recIdStr": {
+					"type": "string",
+					"description": "Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the list is not algorithmically recommended."
 				}
 			}
 		},

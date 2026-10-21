@@ -351,6 +351,8 @@ const _subscribedPostItemSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.literal('app.bsky.notification.getGroupedNotifications#subscribedPostItem'),
 	),
 	actor: /*#__PURE__*/ v.didString(),
+	/** The post this one replies to, if it is a reply. */
+	parent: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
 	post: /*#__PURE__*/ v.resourceUriString(),
 });
 const _unverifiedNotificationSchema = /*#__PURE__*/ v.object({

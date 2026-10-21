@@ -22,8 +22,6 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getSuggestedFeeds'
 			get feeds() {
 				return /*#__PURE__*/ v.array(AppBskyFeedDefs.generatorViewSchema);
 			},
-			/** Snowflake for this recommendation, use when submitting recommendation events. */
-			recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},
 });

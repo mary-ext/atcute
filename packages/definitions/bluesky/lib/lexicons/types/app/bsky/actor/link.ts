@@ -1,3 +1,4 @@
+import * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
@@ -19,6 +20,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.blobAccept(['image/jpeg', 'image/png', 'image/webp']),
 			]),
 		),
+		/** Self-label values for this link. */
+		get labels() {
+			return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.variant([ComAtprotoLabelDefs.selfLabelsSchema]));
+		},
 		/**
 		 * Optional label for the link. Clients can fall back to the destination's domain.
 		 *

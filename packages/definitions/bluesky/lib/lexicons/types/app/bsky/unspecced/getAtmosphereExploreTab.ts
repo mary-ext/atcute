@@ -87,6 +87,19 @@ const _articleItemSchema = /*#__PURE__*/ v.object({
 		return AppBskyEmbedExternal.viewArticleSchema;
 	},
 });
+const _articleListSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.unspecced.getAtmosphereExploreTab#articleList'),
+	),
+	get items() {
+		return /*#__PURE__*/ v.array(articleItemSchema);
+	},
+	/**
+	 * Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the
+	 * list is not algorithmically recommended.
+	 */
+	recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+});
 const _galleryItemSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.literal('app.bsky.unspecced.getAtmosphereExploreTab#galleryItem'),
@@ -95,6 +108,19 @@ const _galleryItemSchema = /*#__PURE__*/ v.object({
 	get view() {
 		return AppBskyEmbedExternal.viewGallerySchema;
 	},
+});
+const _galleryListSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.unspecced.getAtmosphereExploreTab#galleryList'),
+	),
+	get items() {
+		return /*#__PURE__*/ v.array(galleryItemSchema);
+	},
+	/**
+	 * Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the
+	 * list is not algorithmically recommended.
+	 */
+	recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 });
 const _livestreamItemSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(
@@ -105,11 +131,27 @@ const _livestreamItemSchema = /*#__PURE__*/ v.object({
 		return AppBskyEmbedExternal.viewLivestreamSchema;
 	},
 });
+const _livestreamListSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.unspecced.getAtmosphereExploreTab#livestreamList'),
+	),
+	get items() {
+		return /*#__PURE__*/ v.array(livestreamItemSchema);
+	},
+	/**
+	 * Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the
+	 * list is not algorithmically recommended.
+	 */
+	recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+});
 const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getAtmosphereExploreTab', {
 	params: /*#__PURE__*/ v.object({
 		/** The ISO 3166-1 alpha-2 country code used to select curated content. */
 		countryCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		/** Preferred languages. Currently ignored. */
+		/**
+		 * Preferred languages for article recommendations when algorithmic recommendations are enabled. Ignored
+		 * otherwise.
+		 */
 		langs: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.languageCodeString())),
 		/** The ISO 3166-2 region code used to select curated content. */
 		regionCode: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
@@ -127,16 +169,16 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.unspecced.getAtmosphereExplo
 				]);
 			},
 			get articles() {
-				return /*#__PURE__*/ v.array(articleItemSchema);
+				return articleListSchema;
 			},
 			get livestreams() {
-				return /*#__PURE__*/ v.array(livestreamItemSchema);
+				return livestreamListSchema;
 			},
 			get photos() {
-				return /*#__PURE__*/ v.array(galleryItemSchema);
+				return galleryListSchema;
 			},
 			get publications() {
-				return /*#__PURE__*/ v.array(publicationItemSchema);
+				return publicationListSchema;
 			},
 		}),
 	},
@@ -150,37 +192,66 @@ const _publicationItemSchema = /*#__PURE__*/ v.object({
 		return AppBskyEmbedExternal.viewArticlePublicationSchema;
 	},
 });
+const _publicationListSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('app.bsky.unspecced.getAtmosphereExploreTab#publicationList'),
+	),
+	get items() {
+		return /*#__PURE__*/ v.array(publicationItemSchema);
+	},
+	/**
+	 * Snowflake for this list's recommendation, use when submitting recommendation events. Omitted when the
+	 * list is not algorithmically recommended.
+	 */
+	recIdStr: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+});
 
 type announcementBanner$schematype = typeof _announcementBannerSchema;
 type appCard$schematype = typeof _appCardSchema;
 type articleItem$schematype = typeof _articleItemSchema;
+type articleList$schematype = typeof _articleListSchema;
 type galleryItem$schematype = typeof _galleryItemSchema;
+type galleryList$schematype = typeof _galleryListSchema;
 type livestreamItem$schematype = typeof _livestreamItemSchema;
+type livestreamList$schematype = typeof _livestreamListSchema;
 type main$schematype = typeof _mainSchema;
 type publicationItem$schematype = typeof _publicationItemSchema;
+type publicationList$schematype = typeof _publicationListSchema;
 
 export interface announcementBannerSchema extends announcementBanner$schematype {}
 export interface appCardSchema extends appCard$schematype {}
 export interface articleItemSchema extends articleItem$schematype {}
+export interface articleListSchema extends articleList$schematype {}
 export interface galleryItemSchema extends galleryItem$schematype {}
+export interface galleryListSchema extends galleryList$schematype {}
 export interface livestreamItemSchema extends livestreamItem$schematype {}
+export interface livestreamListSchema extends livestreamList$schematype {}
 export interface mainSchema extends main$schematype {}
 export interface publicationItemSchema extends publicationItem$schematype {}
+export interface publicationListSchema extends publicationList$schematype {}
 
 export const announcementBannerSchema = _announcementBannerSchema as announcementBannerSchema;
 export const appCardSchema = _appCardSchema as appCardSchema;
 export const articleItemSchema = _articleItemSchema as articleItemSchema;
+export const articleListSchema = _articleListSchema as articleListSchema;
 export const galleryItemSchema = _galleryItemSchema as galleryItemSchema;
+export const galleryListSchema = _galleryListSchema as galleryListSchema;
 export const livestreamItemSchema = _livestreamItemSchema as livestreamItemSchema;
+export const livestreamListSchema = _livestreamListSchema as livestreamListSchema;
 export const mainSchema = _mainSchema as mainSchema;
 export const publicationItemSchema = _publicationItemSchema as publicationItemSchema;
+export const publicationListSchema = _publicationListSchema as publicationListSchema;
 
 export interface AnnouncementBanner extends v.InferInput<typeof announcementBannerSchema> {}
 export interface AppCard extends v.InferInput<typeof appCardSchema> {}
 export interface ArticleItem extends v.InferInput<typeof articleItemSchema> {}
+export interface ArticleList extends v.InferInput<typeof articleListSchema> {}
 export interface GalleryItem extends v.InferInput<typeof galleryItemSchema> {}
+export interface GalleryList extends v.InferInput<typeof galleryListSchema> {}
 export interface LivestreamItem extends v.InferInput<typeof livestreamItemSchema> {}
+export interface LivestreamList extends v.InferInput<typeof livestreamListSchema> {}
 export interface PublicationItem extends v.InferInput<typeof publicationItemSchema> {}
+export interface PublicationList extends v.InferInput<typeof publicationListSchema> {}
 
 export interface $params extends v.InferInput<mainSchema['params']> {}
 export interface $output extends v.InferXRPCBodyInput<mainSchema['output']> {}

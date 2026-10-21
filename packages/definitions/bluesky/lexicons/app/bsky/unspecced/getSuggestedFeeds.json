@@ -14,10 +14,6 @@
 								"ref": "app.bsky.feed.defs#generatorView",
 								"type": "ref"
 							}
-						},
-						"recIdStr": {
-							"type": "string",
-							"description": "Snowflake for this recommendation, use when submitting recommendation events."
 						}
 					}
 				},

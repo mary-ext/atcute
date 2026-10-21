@@ -307,6 +307,9 @@ const _profileLinkViewSchema = /*#__PURE__*/ v.object({
 	cid: /*#__PURE__*/ v.cidString(),
 	/** Image URL for the destination site's icon. */
 	icon: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
+	get labels() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(ComAtprotoLabelDefs.labelSchema));
+	},
 	/**
 	 * @maxLength 320
 	 * @maxGraphemes 40

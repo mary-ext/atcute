@@ -19,7 +19,7 @@ export default defineLexiconConfig({
 		sources: [
 			{
 				type: 'git',
-				remote: 'https://github.com/bluesky-social/atproto.git',
+				remote: 'https://github.com/bluesky-social/bsky.git',
 				pattern: ['lexicons/app/bsky/**/*.json', 'lexicons/chat/bsky/**/*.json'],
 			},
 		],

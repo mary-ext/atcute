@@ -13,17 +13,18 @@
 				{
 					"lxm": [
 						"chat.bsky.actor.deleteAccount",
+						"chat.bsky.actor.exportAccountData",
 						"chat.bsky.actor.getStatus",
 						"chat.bsky.convo.acceptConvo",
 						"chat.bsky.convo.addReaction",
 						"chat.bsky.convo.deleteMessageForSelf",
-						"chat.bsky.convo.exportAccountData",
 						"chat.bsky.convo.getConvo",
 						"chat.bsky.convo.getConvoAvailability",
 						"chat.bsky.convo.getConvoForMembers",
 						"chat.bsky.convo.getConvoMembers",
 						"chat.bsky.convo.getLog",
 						"chat.bsky.convo.getMessages",
+						"chat.bsky.convo.getUnreadCounts",
 						"chat.bsky.convo.leaveConvo",
 						"chat.bsky.convo.listConvoRequests",
 						"chat.bsky.convo.listConvos",
@@ -50,7 +51,10 @@
 						"chat.bsky.group.rejectJoinRequest",
 						"chat.bsky.group.removeMembers",
 						"chat.bsky.group.requestJoin",
-						"chat.bsky.group.withdrawJoinRequest"
+						"chat.bsky.group.updateJoinRequestsRead",
+						"chat.bsky.group.withdrawJoinRequest",
+						"chat.bsky.notification.getPreferences",
+						"chat.bsky.notification.putPreferences"
 					],
 					"type": "permission",
 					"resource": "rpc",

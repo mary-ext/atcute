@@ -475,6 +475,13 @@
 					"type": "string",
 					"maxLength": 320,
 					"maxGraphemes": 40
+				},
+				"labels": {
+					"type": "array",
+					"items": {
+						"ref": "com.atproto.label.defs#label",
+						"type": "ref"
+					}
 				}
 			}
 		},

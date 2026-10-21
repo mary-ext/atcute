@@ -32,6 +32,7 @@
 				"properties": {
 					"sort": {
 						"type": "string",
+						"description": "Sort order of the returned follows.",
 						"knownValues": ["latest", "top"]
 					},
 					"actor": {
