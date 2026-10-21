@@ -88,8 +88,7 @@ export const getSession = async (sub: Did, options?: SessionGetOptions): Promise
 		return { isFresh: true, value: session };
 	};
 
-	// oxlint-disable-next-line typescript/no-explicit-any
-	let promise = getLockManager().request<PendingItem<Session>>(`atcute-oauth:${sub}`, run as any);
+	let promise = getLockManager().request(`atcute-oauth:${sub}`, run);
 
 	promise = promise.finally(() => pending.delete(sub));
 

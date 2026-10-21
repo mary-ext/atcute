@@ -158,6 +158,7 @@ export class JetstreamSubscription {
 
 				event = result.output;
 			} else {
+				// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 				event = raw as JetstreamEvent;
 			}
 

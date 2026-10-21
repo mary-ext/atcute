@@ -111,12 +111,13 @@ export class LexiconSchemaResolver {
 		}
 
 		// Step 4: Parse into lexicon schema
-		// oxlint-disable-next-line typescript/no-explicit-any
-		const rawSchema = verifiedRecord.record as any;
+		const rawSchema = verifiedRecord.record;
 		if (
 			typeof rawSchema !== 'object' ||
 			rawSchema === null ||
+			!('$type' in rawSchema) ||
 			rawSchema.$type !== LEXICON_SCHEMA_COLLECTION ||
+			!('id' in rawSchema) ||
 			rawSchema.id !== nsid
 		) {
 			throw new err.InvalidLexiconSchemaError(nsid);

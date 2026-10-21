@@ -644,7 +644,7 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 
 	switch (resource) {
 		case 'repo': {
-			const { collection, action } = spec as { collection?: unknown; action?: unknown };
+			const { collection, action }: Record<string, unknown> = spec;
 
 			// validate collection
 			if (!Array.isArray(collection)) {
@@ -709,7 +709,7 @@ export const refineLexPermission = (spec: t.LexPermission): RefineIssue[] => {
 			break;
 		}
 		case 'rpc': {
-			const { lxm, aud, inheritAud } = spec as { lxm?: unknown; aud?: unknown; inheritAud?: unknown };
+			const { lxm, aud, inheritAud }: Record<string, unknown> = spec;
 
 			// validate lxm
 			if (!Array.isArray(lxm)) {

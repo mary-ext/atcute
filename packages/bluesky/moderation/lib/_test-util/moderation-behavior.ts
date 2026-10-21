@@ -58,7 +58,7 @@ expect.extend({
 		actual: DisplayRestrictions,
 		expected: ModerationTestSuiteResultFlag[] | undefined,
 		context = '',
-		stringifiedResult: string | undefined = undefined,
+		stringifiedResult?: string,
 		_ignoreCause = false,
 	) {
 		const fail = (msg: string) => ({
@@ -101,34 +101,24 @@ expect.extend({
 			//   return fail(`${context} expected to be ${expected.cause}, got ${cause}`)
 			// }
 			const expectedInform = expected.includes('inform');
-			if (!!(actual.informs.length > 0) !== expectedInform) {
-				return fail(
-					`${context} expected to be inform=${expectedInform}, got ${actual.informs.length > 0 || false}`,
-				);
+			if (actual.informs.length > 0 !== expectedInform) {
+				return fail(`${context} expected to be inform=${expectedInform}, got ${actual.informs.length > 0}`);
 			}
 			const expectedAlert = expected.includes('alert');
-			if (!!(actual.alerts.length > 0) !== expectedAlert) {
-				return fail(
-					`${context} expected to be alert=${expectedAlert}, got ${actual.alerts.length > 0 || false}`,
-				);
+			if (actual.alerts.length > 0 !== expectedAlert) {
+				return fail(`${context} expected to be alert=${expectedAlert}, got ${actual.alerts.length > 0}`);
 			}
 			const expectedBlur = expected.includes('blur');
-			if (!!(actual.blurs.length > 0) !== expectedBlur) {
-				return fail(
-					`${context} expected to be blur=${expectedBlur}, got ${actual.blurs.length > 0 || false}`,
-				);
+			if (actual.blurs.length > 0 !== expectedBlur) {
+				return fail(`${context} expected to be blur=${expectedBlur}, got ${actual.blurs.length > 0}`);
 			}
 			const expectedFilter = expected.includes('filter');
-			if (!!(actual.filters.length > 0) !== expectedFilter) {
-				return fail(
-					`${context} expected to be filter=${expectedFilter}, got ${actual.filters.length > 0 || false}`,
-				);
+			if (actual.filters.length > 0 !== expectedFilter) {
+				return fail(`${context} expected to be filter=${expectedFilter}, got ${actual.filters.length > 0}`);
 			}
 			const expectedNoOverride = expected.includes('noOverride');
-			if (!!actual.noOverride !== expectedNoOverride) {
-				return fail(
-					`${context} expected to be noOverride=${expectedNoOverride}, got ${actual.noOverride || false}`,
-				);
+			if (actual.noOverride !== expectedNoOverride) {
+				return fail(`${context} expected to be noOverride=${expectedNoOverride}, got ${actual.noOverride}`);
 			}
 		}
 		return { pass: true, message: () => '' };

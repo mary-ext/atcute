@@ -175,11 +175,11 @@ export class OAuthClient {
 		if ('keyset' in options && options.keyset !== undefined) {
 			// confidential client
 			keyset = Array.isArray(options.keyset) ? new Keyset(options.keyset) : options.keyset;
-			metadata = buildClientMetadata(options.metadata as ConfidentialClientMetadata, keyset);
+			metadata = buildClientMetadata(options.metadata, keyset);
 		} else {
 			// public client
 			keyset = undefined;
-			metadata = buildPublicClientMetadata(options.metadata as PublicClientMetadata);
+			metadata = buildPublicClientMetadata(options.metadata);
 		}
 
 		this.metadata = metadata;
@@ -482,7 +482,7 @@ const resolvePrompt = (
 		return;
 	}
 
-	const candidates = Array.isArray(prompt) ? prompt : [prompt];
+	const candidates: readonly OAuthPromptInput[] = typeof prompt === 'string' ? [prompt] : prompt;
 	if (candidates.length === 0) {
 		return;
 	}
@@ -491,9 +491,9 @@ const resolvePrompt = (
 		return candidates[0];
 	}
 
-	for (let i = 0, il = candidates.length; i < il; i++) {
-		const candidate = candidates[i];
-		if (supported.includes(candidate as OAuthPrompt)) {
+	const supportedPrompts: readonly string[] = supported;
+	for (const candidate of candidates) {
+		if (supportedPrompts.includes(candidate)) {
 			return candidate;
 		}
 	}

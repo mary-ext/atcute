@@ -123,7 +123,7 @@ export const createNodeWebSocket = ({
 							controller.abort(ev.error);
 						};
 
-						handler(connection);
+						void handler(connection);
 					});
 				} else {
 					socket.end(
@@ -157,6 +157,7 @@ export const createNodeWebSocket = ({
 		},
 		createUpgradeListener,
 		injectWebSocket(server, router) {
+			// oxlint-disable-next-line typescript/no-misused-promises -- listener catches its own errors
 			server.on('upgrade', createUpgradeListener(router));
 		},
 	};

@@ -821,7 +821,7 @@ const generateType = (
 			if (spec.const !== undefined) {
 				call = `${PURE} v.literal(${lit(spec.const)})`;
 			} else if (spec.enum !== undefined) {
-				call = `${PURE} v.literalEnum(${lit(spec.enum.toSorted())})`;
+				call = `${PURE} v.literalEnum(${lit(spec.enum.toSorted((a, b) => a - b))})`;
 			} else if (pipe.length !== 0) {
 				call = `${PURE} v.constrain(${call}, [ ${pipe.join(', ')} ])`;
 			}

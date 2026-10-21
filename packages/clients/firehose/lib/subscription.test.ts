@@ -199,6 +199,7 @@ describe('firehose subscription', () => {
 			service: url,
 			nsid: ComAtprotoSyncSubscribeRepos.mainSchema,
 			// subscribeRepos has no array params; exercise serialization directly
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			params: { wantedCollections: ['app.bsky.feed.post', 'app.bsky.feed.like'] } as never,
 		});
 

@@ -27,7 +27,7 @@ export const _isCidLinkWrapper = (input: unknown): input is _CidLinkWrapper => {
 };
 
 export const isCidLink = (input: unknown): input is CidLink => {
-	// oxlint-disable-next-line typescript/no-explicit-any
+	// oxlint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-type-assertion
 	const v = input as any;
 
 	return (

@@ -1,9 +1,12 @@
 import type {
 	LexArray,
+	LexBlob,
 	LexDefinableField,
+	LexInteger,
 	LexObject,
 	LexPrimitive,
 	LexPrimitiveArray,
+	LexString,
 	LexUserType,
 	LexXrpcBody,
 	LexXrpcParameters,
@@ -24,11 +27,10 @@ export const canonicalizeKeys = (value: unknown): unknown => {
 		return value.map(canonicalizeKeys);
 	}
 	if (value !== null && typeof value === 'object') {
-		const obj = value as Record<string, unknown>;
-		const keys = Object.keys(obj).toSorted((a, b) => a.length - b.length || (a < b ? -1 : 1));
+		const entries = Object.entries(value).toSorted(([a], [b]) => a.length - b.length || (a < b ? -1 : 1));
 		const result: Record<string, unknown> = {};
-		for (const key of keys) {
-			result[key] = canonicalizeKeys(obj[key]);
+		for (const [key, v] of entries) {
+			result[key] = canonicalizeKeys(v);
 		}
 
 		return result;
@@ -43,32 +45,58 @@ export const canonicalizeKeys = (value: unknown): unknown => {
 const sortStrings = (xs: readonly string[]): string[] => xs.toSorted();
 const sortIntegers = (xs: readonly number[]): number[] => xs.toSorted((a, b) => a - b);
 
+const canonicalizeLexBlob = (field: LexBlob): LexBlob => {
+	if (!field.accept) {
+		return field;
+	}
+	return { ...field, accept: sortStrings(field.accept) };
+};
+
+const canonicalizeLexInteger = (field: LexInteger): LexInteger => {
+	if (!field.enum) {
+		return field;
+	}
+	return { ...field, enum: sortIntegers(field.enum) };
+};
+
+const canonicalizeLexString = (field: LexString): LexString => {
+	const out = { ...field };
+	if (field.enum) {
+		out.enum = sortStrings(field.enum);
+	}
+	if (field.knownValues) {
+		out.knownValues = sortStrings(field.knownValues);
+	}
+	return out;
+};
+
+const canonicalizePrimitive = (field: LexPrimitive): LexPrimitive => {
+	switch (field.type) {
+		case 'integer': {
+			return canonicalizeLexInteger(field);
+		}
+		case 'string': {
+			return canonicalizeLexString(field);
+		}
+		default: {
+			return field;
+		}
+	}
+};
+
 const canonicalizeDefinableField = (field: LexDefinableField): LexDefinableField => {
 	switch (field.type) {
 		case 'array': {
 			return canonicalizeLexArray(field);
 		}
 		case 'blob': {
-			if (!field.accept) {
-				return field;
-			}
-			return { ...field, accept: sortStrings(field.accept) };
+			return canonicalizeLexBlob(field);
 		}
 		case 'integer': {
-			if (!field.enum) {
-				return field;
-			}
-			return { ...field, enum: sortIntegers(field.enum) };
+			return canonicalizeLexInteger(field);
 		}
 		case 'string': {
-			const out = { ...field };
-			if (field.enum) {
-				out.enum = sortStrings(field.enum);
-			}
-			if (field.knownValues) {
-				out.knownValues = sortStrings(field.knownValues);
-			}
-			return out;
+			return canonicalizeLexString(field);
 		}
 		case 'union': {
 			return { ...field, refs: sortStrings(field.refs) };
@@ -105,9 +133,9 @@ const canonicalizePrimitiveField = (
 	field: LexPrimitive | LexPrimitiveArray,
 ): LexPrimitive | LexPrimitiveArray => {
 	if (field.type === 'array') {
-		return { ...field, items: canonicalizeDefinableField(field.items) as LexPrimitive };
+		return { ...field, items: canonicalizePrimitive(field.items) };
 	}
-	return canonicalizeDefinableField(field) as LexPrimitive;
+	return canonicalizePrimitive(field);
 };
 
 const canonicalizeParameters = (params: LexXrpcParameters): LexXrpcParameters => {
@@ -194,11 +222,17 @@ const canonicalizeUserType = (def: LexUserType): LexUserType => {
 			}
 			return out;
 		}
-		case 'permission-set': {
-			return def;
+		case 'blob': {
+			return canonicalizeLexBlob(def);
+		}
+		case 'integer': {
+			return canonicalizeLexInteger(def);
+		}
+		case 'string': {
+			return canonicalizeLexString(def);
 		}
 		default: {
-			return canonicalizeDefinableField(def as LexDefinableField) as LexUserType;
+			return def;
 		}
 	}
 };

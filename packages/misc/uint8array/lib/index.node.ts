@@ -1,4 +1,4 @@
-// oxlint-disable no-underscore-dangle
+// oxlint-disable no-underscore-dangle, typescript/unbound-method -- statics ignore `this`; prototype methods use .call()
 
 import { Buffer as NodeBuffer, isUtf8 as _isUtf8 } from 'node:buffer';
 import {
@@ -21,16 +21,16 @@ const _equals = /*#__PURE__*/ (() => NodeBuffer.prototype.equals)();
 const _utf8Slice = /*#__PURE__*/ (() => NodeBuffer.prototype.utf8Slice)();
 const _utf8Write = /*#__PURE__*/ (() => NodeBuffer.prototype.utf8Write)();
 
-const toUint8Array = (buffer: NodeBuffer) => {
+const toUint8Array = (buffer: NodeBuffer<ArrayBuffer>): Uint8Array<ArrayBuffer> => {
 	return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 };
 
 export const alloc = (size: number): Uint8Array<ArrayBuffer> => {
-	return toUint8Array(_alloc(size)) as Uint8Array<ArrayBuffer>;
+	return toUint8Array(_alloc(size));
 };
 
 export const allocUnsafe = (size: number): Uint8Array<ArrayBuffer> => {
-	return toUint8Array(_allocUnsafe(size)) as Uint8Array<ArrayBuffer>;
+	return toUint8Array(_allocUnsafe(size));
 };
 
 /**
@@ -74,11 +74,11 @@ export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuf
 		return alloc(size);
 	}
 
-	return toUint8Array(_concat(arrays, size)) as Uint8Array<ArrayBuffer>;
+	return toUint8Array(_concat(arrays, size));
 };
 
 export const encodeUtf8 = (str: string): Uint8Array<ArrayBuffer> => {
-	return toUint8Array(_from(str, 'utf8')) as Uint8Array<ArrayBuffer>;
+	return toUint8Array(_from(str, 'utf8'));
 };
 
 export const encodeUtf8Into = (to: Uint8Array, str: string, offset?: number, length?: number): number => {
@@ -346,7 +346,7 @@ export const isUtf8LengthInRange = (str: string, min: number, max: number): bool
 };
 
 export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuffer>> => {
-	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
+	return toUint8Array(_hash('sha256', buffer, 'buffer'));
 };
 
 // JavaScript avoids native call overhead for small inputs
@@ -363,7 +363,7 @@ export const toSha256Sync = (buffer: Uint8Array): Uint8Array<ArrayBuffer> => {
 		return _toSha256SyncJs(buffer);
 	}
 
-	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
+	return toUint8Array(_hash('sha256', buffer, 'buffer'));
 };
 
 /**
@@ -373,5 +373,5 @@ export const toSha256Sync = (buffer: Uint8Array): Uint8Array<ArrayBuffer> => {
  * @returns buffer filled with random bytes
  */
 export const randomBytes = (size: number): Uint8Array<ArrayBuffer> => {
-	return _randomFillSync(toUint8Array(_allocUnsafe(size))) as Uint8Array<ArrayBuffer>;
+	return _randomFillSync(toUint8Array(_allocUnsafe(size)));
 };

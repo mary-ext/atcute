@@ -12,7 +12,7 @@ import { type EntityTypeId, getTypeIdFromSchema } from './types.ts';
 /**
  * compiled walk function for a schema
  *
- * @param data input data to walk
+ * @param data data matching the compiled schema; not validated by the walker
  * @returns walked data with entities swapped in
  */
 export type WalkFn = (data: unknown) => unknown;
@@ -151,11 +151,15 @@ export class WalkerCache {
 		let hasWalkers = false;
 
 		for (const member of schema.members) {
-			const memberSchema = member as ObjectSchema;
-			const memberTypeId = getTypeIdFromSchema(memberSchema);
+			// record schemas are left unchanged, as in #buildForSchema
+			if (!isObjectSchema(member)) {
+				continue;
+			}
+
+			const memberTypeId = getTypeIdFromSchema(member);
 
 			if (memberTypeId !== undefined) {
-				const memberWalker = this.#build(memberSchema);
+				const memberWalker = this.#build(member);
 
 				if (memberWalker !== identity) {
 					walkerMap[memberTypeId] = memberWalker;
@@ -179,10 +183,12 @@ const createObjectWalker = (
 	propWalkers: [string, WalkFn][] | undefined,
 ): WalkFn => {
 	return (data) => {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		let entity = data as Record<string, unknown>;
 		let cloned = entityTypeId !== undefined;
 
 		if (entityTypeId !== undefined) {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			entity = ctx.upsertEntity(entityTypeId, entity) as Record<string, unknown>;
 		}
 
@@ -209,6 +215,7 @@ const createObjectWalker = (
 /** creates an array walker with minimal closure scope */
 const createArrayWalker = (itemWalker: WalkFn): WalkFn => {
 	return (data) => {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		const prev = data as unknown[];
 		let next: unknown[] | undefined;
 
@@ -232,7 +239,9 @@ const createArrayWalker = (itemWalker: WalkFn): WalkFn => {
 /** creates a variant walker with minimal closure scope */
 const createVariantWalker = (walkerMap: Record<string, WalkFn>): WalkFn => {
 	return (data) => {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		const obj = data as Record<string, unknown>;
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		const type = obj.$type as string | undefined;
 
 		if (type === undefined) {

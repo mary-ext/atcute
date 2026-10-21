@@ -17,9 +17,8 @@ export interface BakedRichtext {
 
 /** Builder for constructing Bluesky rich texts */
 class RichtextBuilder {
-	// Even-numbered are substrings, odd-numbered are facets
-	// This way we'll avoid taking the hit on calculating UTF-8 indices up until
-	// a facet is actually being inserted.
+	// alternates strings and facets, starting and ending with a string.
+	// UTF-8 offsets are calculated only when inserting a facet.
 	#segments: (string | Facet)[] = [''];
 
 	/** Resulting composed text */
@@ -28,6 +27,7 @@ class RichtextBuilder {
 		let str = '';
 
 		for (let idx = 0, len = segments.length; idx < len; idx += 2) {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			str += segments[idx] as string;
 		}
 
@@ -40,6 +40,7 @@ class RichtextBuilder {
 		const facets: Facet[] = [];
 
 		for (let idx = 1, len = segments.length; idx < len; idx += 2) {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			facets.push(segments[idx] as Facet);
 		}
 
@@ -70,6 +71,7 @@ class RichtextBuilder {
 	 */
 	addText(text: string): this {
 		const segments = this.#segments;
+		// oxlint-disable-next-line typescript/no-base-to-string, typescript/restrict-plus-operands
 		segments[segments.length - 1] += text;
 
 		return this;
@@ -89,8 +91,10 @@ class RichtextBuilder {
 		// Calculate the starting index
 		let start = 0;
 
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		start += getUtf8Length(segments[last] as string);
 		if (last !== 0) {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			start += (segments[last - 1] as Facet).index.byteEnd;
 		}
 
@@ -104,6 +108,7 @@ class RichtextBuilder {
 			features: [feature],
 		};
 
+		// oxlint-disable-next-line typescript/no-base-to-string, typescript/restrict-plus-operands
 		segments[last] += text;
 		segments.push(facet, '');
 		return this;

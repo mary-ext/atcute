@@ -42,7 +42,7 @@ export const extractMessageType = (message: unknown, nsid: string): string | und
 		return undefined;
 	}
 
-	const obj = message as Record<string, unknown>;
+	const obj: { $type?: unknown } = message;
 	const type = obj.$type;
 
 	if (typeof type !== 'string') {
@@ -64,7 +64,7 @@ export const omitMessageType = (message: unknown): unknown => {
 		return message;
 	}
 
-	const obj = message as Record<string, unknown>;
+	const obj: { $type?: unknown } = message;
 	const { $type: _type, ...rest } = obj;
 
 	return rest;

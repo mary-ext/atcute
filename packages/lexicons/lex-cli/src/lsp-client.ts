@@ -263,6 +263,7 @@ export const createLspClient = async (command: string, root: string): Promise<Ls
 				textDocument: { uri, languageId, version: 1, text: code },
 			});
 
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- trusting the LSP server's response
 			const edits = (await sendRequest('textDocument/formatting', {
 				textDocument: { uri },
 				options: { tabSize: 2, insertSpaces: false },

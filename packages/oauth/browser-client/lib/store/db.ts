@@ -103,7 +103,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 
 		const notify = (key: string) => {
 			for (const watcher of watchers) {
-				watcher(key as K);
+				watcher(key);
 			}
 		};
 
@@ -192,6 +192,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 			(ev: MessageEvent<BroadcastMessage>) => {
 				const data = ev.data;
 				if (data !== null && typeof data === 'object' && data.store === subname) {
+					// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- matching store name implies Envelope<V>
 					ingest(data.key, data.envelope as Envelope<V> | null, data.revision);
 				}
 			},
@@ -274,7 +275,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 				}
 			};
 
-			getLockManager().request(`${prefix}cleanup`, { ifAvailable: true }, cleanup);
+			void getLockManager().request(`${prefix}cleanup`, { ifAvailable: true }, cleanup);
 		}
 
 		return {
@@ -377,7 +378,7 @@ export const createOAuthDatabase = ({ name }: OAuthDatabaseOptions) => {
 					}
 				}
 
-				return keys as K[];
+				return keys;
 			},
 			watch(listener) {
 				watchers.add(listener);

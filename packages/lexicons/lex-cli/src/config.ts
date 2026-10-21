@@ -187,6 +187,7 @@ const mappingImports = v.pipe(
 			return value;
 		}
 		if (typeof value === 'function') {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- function signature can't be checked at runtime
 			return value as ImportMapping['imports'];
 		}
 		addIssue({ message: 'imports must be a string or function' });
@@ -260,7 +261,7 @@ export const loadConfig = async (configPath?: string): Promise<NormalizedConfig>
 	let rawConfig: unknown;
 	try {
 		const configURL = url.pathToFileURL(configFilename);
-		const configMod = (await import(configURL.href)) as { default: unknown };
+		const configMod: { default: unknown } = await import(configURL.href);
 		rawConfig = configMod.default;
 	} catch (err) {
 		console.error(pc.bold(pc.red(`failed to import config:`)));

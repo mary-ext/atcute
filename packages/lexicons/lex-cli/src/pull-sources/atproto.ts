@@ -65,10 +65,10 @@ const discoverLexiconsForAuthority = async (
 			throw new Error(`http ${response.status} when listing records`);
 		}
 
-		const data = (await response.json()) as {
+		const data: {
 			records: Array<{ uri: string; value: unknown }>;
 			cursor?: string;
-		};
+		} = await response.json();
 
 		// extract NSIDs from record keys (the rkey in at://did/collection/rkey)
 		for (const record of data.records) {
@@ -126,7 +126,7 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 	});
 
 	const pulled = new Map<string, { nsid: string; doc: LexiconDoc; location: SourceLocation }>();
-	const errors: Array<{ nsid: string; error: Error }> = [];
+	const errors: Array<{ nsid: string; error: unknown }> = [];
 
 	let nsids: Nsid[];
 	let authorityDid: AtprotoDid | null = null;
@@ -194,7 +194,7 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 	for (const nsid of nsids) {
 		try {
 			// step 1: resolve authority from NSID (DNS)
-			const resolvedAuthority = await authorityResolver.resolve(nsid as Nsid);
+			const resolvedAuthority = await authorityResolver.resolve(nsid);
 
 			// step 2: cross-verify authority if in authority-based mode
 			if (authorityDid && resolvedAuthority !== authorityDid) {
@@ -204,12 +204,12 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 			}
 
 			// step 3: fetch schema from authority's PDS
-			const resolved = await schemaResolver.resolve(resolvedAuthority, nsid as Nsid);
+			const resolved = await schemaResolver.resolve(resolvedAuthority, nsid);
 
 			// step 4: lint the lexicon document
 			const issues = refineLexiconDoc(resolved.schema, true);
 			if (issues.length > 0) {
-				const messages = issues.map((i) => `  ${i.path}: ${i.message}`).join('\n');
+				const messages = issues.map((i) => `  .${i.path.join('.')}: ${i.message}`).join('\n');
 				throw new Error(`lint validation failed:\n${messages}`);
 			}
 
@@ -229,7 +229,7 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 			console.log(`${pc.green('+')} ${nsid}`);
 		} catch (err) {
 			// best-effort: collect errors but continue
-			errors.push({ nsid, error: err as Error });
+			errors.push({ nsid, error: err });
 		}
 	}
 
@@ -237,7 +237,7 @@ export const pullAtprotoSource = async (source: AtprotoSourceConfig): Promise<Pu
 	if (errors.length > 0) {
 		console.warn(pc.yellow(`\nwarning: failed to fetch ${errors.length} lexicon(s):`));
 		for (const { nsid, error } of errors) {
-			console.warn(`  - ${nsid}: ${error.message}`);
+			console.warn(`  - ${nsid}: ${error instanceof Error ? error.message : String(error)}`);
 		}
 	}
 

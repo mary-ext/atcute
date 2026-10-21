@@ -36,7 +36,7 @@ const isBase64 = (input: unknown): input is string => {
 
 // #__NO_SIDE_EFFECTS__
 export const isBytes = (input: unknown): input is Bytes => {
-	// oxlint-disable-next-line typescript/no-explicit-any
+	// oxlint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-type-assertion
 	const v = input as any;
 
 	return (

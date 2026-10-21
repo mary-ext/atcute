@@ -331,6 +331,7 @@ export const getDisputeCandidates = (canonical: t.IndexedEntryWithSigner[], key:
 	const now = Date.now();
 
 	for (let idx = 1, len = canonical.length; idx < len; idx++) {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- an entry with a successor can't be a tombstone
 		const base = canonical[idx - 1] as t.IndexedEntryWithSigner<t.CompatibleOperation>;
 		const disputed = canonical[idx]!;
 

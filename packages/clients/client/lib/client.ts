@@ -456,6 +456,7 @@ const _constructSearchParams = (params: Record<string, unknown> | undefined): st
 					searchParams.append(key, '' + val);
 				}
 			} else {
+				// oxlint-disable-next-line typescript/no-base-to-string, typescript/restrict-plus-operands -- params are lexicon primitives
 				searchParams.set(key, '' + value);
 			}
 		}
@@ -486,14 +487,13 @@ const _mergeHeaders = (
 };
 
 export const isXRPCErrorPayload = (input: unknown): input is XRPCErrorPayload => {
-	const val = input as any;
-
-	if (typeof val !== 'object' || val == null) {
+	if (typeof input !== 'object' || input === null) {
 		return false;
 	}
 
-	const kindType = typeof val.error;
-	const messageType = typeof val.message;
+	const obj: { error?: unknown; message?: unknown } = input;
+	const kindType = typeof obj.error;
+	const messageType = typeof obj.message;
 
 	return kindType === 'string' && (messageType === 'undefined' || messageType === 'string');
 };

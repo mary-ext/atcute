@@ -17,7 +17,10 @@ export const generateClientAssertionKey = async (
 	alg: SigningAlgorithm = 'ES256',
 ): Promise<ClientAssertionPrivateJwk> => {
 	const pair = await crypto.subtle.generateKey(getGenerateAlgorithm(alg), true, ['sign', 'verify']);
-	const jwk = (await exportPrivateJwkFromKey(pair.privateKey, alg, kid)) as ClientAssertionPrivateJwk;
+	const jwk: ClientAssertionPrivateJwk = {
+		...(await exportPrivateJwkFromKey(pair.privateKey, alg)),
+		kid,
+	};
 
 	// pre-populate cache so we don't re-import
 	setCachedKeyMaterial(jwk, pair.privateKey);

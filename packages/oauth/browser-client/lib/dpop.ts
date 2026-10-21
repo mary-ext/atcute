@@ -136,7 +136,7 @@ export const createDPoPFetch = (dpopKey: DpopPrivateJwk, isAuthServer?: boolean)
 };
 
 const isUseDpopNonceError = async (response: Response, isAuthServer?: boolean): Promise<boolean> => {
-	if (isAuthServer === undefined || isAuthServer === false) {
+	if (!isAuthServer) {
 		if (response.status === 401) {
 			const wwwAuth = response.headers.get('www-authenticate');
 			if (wwwAuth?.startsWith('DPoP')) {
@@ -145,7 +145,7 @@ const isUseDpopNonceError = async (response: Response, isAuthServer?: boolean): 
 		}
 	}
 
-	if (isAuthServer === undefined || isAuthServer === true) {
+	if (isAuthServer !== false) {
 		if (response.status === 400 && extractContentType(response.headers) === 'application/json') {
 			try {
 				const json = await response.clone().json();

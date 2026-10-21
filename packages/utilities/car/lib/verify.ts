@@ -18,6 +18,7 @@ export const verifyBlock = (cid: CID.Cid, bytes: Uint8Array): void => {
 
 	for (let i = 0; i < 32; i++) {
 		if (actual[i] !== expected[i]) {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- cid decoding only admits raw and dag-cbor
 			const codec = cid.codec as typeof CID.CODEC_DCBOR | typeof CID.CODEC_RAW;
 			throw new CarBlockMismatchError(CID.toString(cid), CID.toString(CID.fromDigest(codec, actual)));
 		}

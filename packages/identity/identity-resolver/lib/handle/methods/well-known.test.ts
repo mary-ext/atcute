@@ -66,7 +66,7 @@ describe('WellKnownHandleResolver', () => {
 		}
 
 		expect(error).toBeInstanceOf(FailedHandleResolutionError);
-		expect((error as Error).cause).toBeInstanceOf(TypeError);
+		expect(error).toHaveProperty('cause', expect.any(TypeError));
 	});
 
 	it('throws on non-atproto DID', async () => {

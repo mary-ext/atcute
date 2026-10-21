@@ -1,7 +1,7 @@
 import * as CID from '@atcute/cid';
 import { encodeUtf8 } from '@atcute/uint8array';
 
-import { describe, expect, it } from 'vitest';
+import { assert, describe, expect, it } from 'vitest';
 
 import { BlockMismatchError } from './errors.ts';
 import { NodeStore } from './node-store.ts';
@@ -28,8 +28,8 @@ const expectMismatch = async (promise: Promise<void>) => {
 		(err: unknown) => err,
 	);
 
-	expect(err).toBeInstanceOf(InvalidProofError);
-	expect((err as InvalidProofError).cause).toBeInstanceOf(BlockMismatchError);
+	assert(err instanceof InvalidProofError);
+	expect(err.cause).toBeInstanceOf(BlockMismatchError);
 };
 
 describe('Proof', () => {

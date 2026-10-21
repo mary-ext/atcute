@@ -16,6 +16,7 @@ export const atprotoProtectedResourceMetadataValidator = v.pipe(
 		),
 		['authorization_servers'],
 	),
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- narrowed by the check above
 	v.transform((data) => data as typeof data & { authorization_servers: [string] }),
 );
 

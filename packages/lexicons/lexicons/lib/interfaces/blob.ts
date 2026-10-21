@@ -11,7 +11,7 @@ export interface Blob<TMime extends string = string> {
 }
 
 export const isBlob = (input: unknown): input is Blob => {
-	// oxlint-disable-next-line typescript/no-explicit-any
+	// oxlint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-type-assertion
 	const v = input as any;
 
 	return (
@@ -32,7 +32,7 @@ export interface LegacyBlob<TMime extends string = string> {
 }
 
 export const isLegacyBlob = (input: unknown): input is LegacyBlob => {
-	// oxlint-disable-next-line typescript/no-explicit-any
+	// oxlint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-type-assertion
 	const v = input as any;
 
 	return (
@@ -108,9 +108,9 @@ export const collectBlobs = (record: unknown, options?: CollectBlobsOptions): Bl
 			continue;
 		}
 
-		const keys = Object.keys(value);
-		for (let i = keys.length - 1; i >= 0; i--) {
-			const v = (value as Record<string, unknown>)[keys[i]!];
+		const values = Object.values(value);
+		for (let i = values.length - 1; i >= 0; i--) {
+			const v: unknown = values[i];
 			if (v != null) {
 				stack.push(v);
 			}

@@ -64,7 +64,7 @@ export const isCommit = (value: unknown): value is Commit => {
 		return false;
 	}
 
-	const obj = value as Record<string, unknown>;
+	const obj: Partial<Record<keyof Commit, unknown>> = value;
 
 	return (
 		obj.version === 3 &&

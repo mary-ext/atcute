@@ -39,11 +39,11 @@ export function createXrpcHandler(options: XrpcHandlerOptions): (request: Reques
 
 	switch (schema.type) {
 		case 'xrpc_query': {
-			router.addQuery(schema, { handler: handler as QueryConfig<XRPCQueryMetadata>['handler'] });
+			router.addQuery(schema, { handler: handler as QueryConfig['handler'] });
 			break;
 		}
 		case 'xrpc_procedure': {
-			router.addProcedure(schema, { handler: handler as ProcedureConfig<XRPCProcedureMetadata>['handler'] });
+			router.addProcedure(schema, { handler: handler as ProcedureConfig['handler'] });
 			break;
 		}
 	}

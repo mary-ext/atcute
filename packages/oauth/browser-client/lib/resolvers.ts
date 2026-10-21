@@ -38,6 +38,7 @@ export const resolveFromService = async (
 	}
 };
 
+// metadata is checked selectively, not validated against the full OAuth schemas
 const getOAuthProtectedResourceMetadata = async (host: string): Promise<OAuthProtectedResourceMetadata> => {
 	const url = new URL(`/.well-known/oauth-protected-resource`, host);
 	const response = await fetch(url.href, {
@@ -51,6 +52,7 @@ const getOAuthProtectedResourceMetadata = async (host: string): Promise<OAuthPro
 		throw new ResolverError(`unexpected response`);
 	}
 
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	const metadata = (await response.json()) as OAuthProtectedResourceMetadata;
 	if (metadata.resource !== url.origin) {
 		throw new ResolverError(`unexpected issuer`);
@@ -74,6 +76,7 @@ const getOAuthAuthorizationServerMetadata = async (
 		throw new ResolverError(`unexpected response`);
 	}
 
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	const metadata = (await response.json()) as OAuthAuthorizationServerMetadata;
 	if (metadata.issuer !== url.origin) {
 		throw new ResolverError(`unexpected issuer`);

@@ -19,6 +19,15 @@ interface Server extends Disposable {
 	url: string;
 }
 
+const getPort = (instance: http.Server): number => {
+	const addr = instance.address();
+	if (addr === null || typeof addr === 'string') {
+		throw new Error(`server is not listening on a tcp port`);
+	}
+
+	return addr.port;
+};
+
 const createHttpServer = async (router: XRPCRouter, ws?: NodeWebSocket): Promise<Server> => {
 	return new Promise((resolve) => {
 		const instance = http.createServer(createRequestListener(router.fetch));
@@ -28,12 +37,12 @@ const createHttpServer = async (router: XRPCRouter, ws?: NodeWebSocket): Promise
 		}
 
 		instance.listen(0, () => {
-			const addr = instance.address() as { port: number };
+			const port = getPort(instance);
 
 			resolve({
 				instance: instance,
-				port: addr.port,
-				url: `http://localhost:${addr.port}`,
+				port: port,
+				url: `http://localhost:${port}`,
 				[Symbol.dispose]() {
 					instance.close();
 				},
@@ -480,7 +489,7 @@ describe('subscription', () => {
 		});
 
 		await new Promise<void>((resolve) => instance.listen(0, () => resolve()));
-		const port = (instance.address() as { port: number }).port;
+		const port = getPort(instance);
 
 		try {
 			const client = new WebSocket(`ws://localhost:${port}/some-other-path`);
@@ -519,11 +528,11 @@ describe('subscription', () => {
 			}
 
 			wrappedCount++;
-			listener(request, socket, head);
+			void listener(request, socket, head);
 		});
 
 		await new Promise<void>((resolve) => instance.listen(0, () => resolve()));
-		const port = (instance.address() as { port: number }).port;
+		const port = getPort(instance);
 
 		try {
 			const client = new WebSocket(`ws://localhost:${port}/xrpc/com.atproto.label.subscribeLabels`);

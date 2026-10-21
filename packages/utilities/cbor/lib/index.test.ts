@@ -407,7 +407,7 @@ it('rejects malformed cid links', () => {
 	const link = CID.fromString('bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee').bytes;
 
 	const valid = [0x00, ...link];
-	expect(CID.toString(CID.fromCidLink(decode(tagged(valid)) as CID.CidLink))).toBe(
+	expect(CID.toString(CID.fromCidLink(decode(tagged(valid))))).toBe(
 		'bafyreihffx5a2e7k5uwrmmgofbvzujc5cmw5h4espouwuxt3liqoflx3ee',
 	);
 

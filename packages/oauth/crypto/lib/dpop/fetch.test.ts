@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { assert, describe, expect, it, vi } from 'vitest';
 
 import { createDpopFetch } from './fetch.ts';
 import { generateDpopKey } from './generate-key.ts';
@@ -37,7 +37,8 @@ describe('createDpopFetch', () => {
 			await dpopFetch('https://example.com/api');
 
 			expect(mockFetch).toHaveBeenCalledTimes(1);
-			const request = mockFetch.mock.calls[0]![0] as Request;
+			const request = mockFetch.mock.calls[0]![0];
+			assert(request instanceof Request);
 			expect(request.headers.get('DPoP')).toBeTruthy();
 		});
 
@@ -51,7 +52,8 @@ describe('createDpopFetch', () => {
 
 			await dpopFetch('https://example.com/api', { method: 'POST' });
 
-			const request = mockFetch.mock.calls[0]![0] as Request;
+			const request = mockFetch.mock.calls[0]![0];
+			assert(request instanceof Request);
 			const dpopProof = request.headers.get('DPoP')!;
 
 			// DPoP proof is a JWT - verify it has 3 parts
@@ -155,7 +157,8 @@ describe('createDpopFetch', () => {
 			});
 
 			// verify request was made with DPoP header
-			const request = mockFetch.mock.calls[0]![0] as Request;
+			const request = mockFetch.mock.calls[0]![0];
+			assert(request instanceof Request);
 			expect(request.headers.get('DPoP')).toBeTruthy();
 			expect(request.headers.get('Authorization')).toBe('DPoP access-token-here');
 		});

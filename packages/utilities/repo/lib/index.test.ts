@@ -26,7 +26,7 @@ const buildDuplicateCidCar = async (
 ): Promise<{
 	car: Uint8Array<ArrayBuffer>;
 	recordCid: string;
-	record: unknown;
+	record: Record<string, unknown>;
 	keys: [string, string];
 }> => {
 	const { extraRoot = false } = options;
@@ -339,9 +339,9 @@ describe('duplicate CID handling', () => {
 });
 
 // replaces the final record's bytes without updating its CID
-const tamper = (car: Uint8Array<ArrayBuffer>, record: unknown): Uint8Array<ArrayBuffer> => {
+const tamper = (car: Uint8Array<ArrayBuffer>, record: Record<string, unknown>): Uint8Array<ArrayBuffer> => {
 	const original = CBOR.encode(record);
-	const forged = CBOR.encode({ ...(record as object), text: 'hellp' });
+	const forged = CBOR.encode({ ...record, text: 'hellp' });
 
 	// same length, so every offset in the archive stays valid
 	expect(forged.length).toBe(original.length);

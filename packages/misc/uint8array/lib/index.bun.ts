@@ -1,4 +1,4 @@
-// oxlint-disable no-underscore-dangle
+// oxlint-disable no-underscore-dangle, typescript/unbound-method -- statics ignore `this`; prototype methods use .call()
 
 import { SHA256 as _SHA256, allocUnsafe as _allocUnsafe, concatArrayBuffers as _concat } from 'bun';
 import { Buffer as NodeBuffer, isUtf8 as _isUtf8 } from 'node:buffer';
@@ -13,7 +13,7 @@ const _utf8Slice = /*#__PURE__*/ (() => NodeBuffer.prototype.utf8Slice)();
 
 const textEncoder = new TextEncoder();
 
-const toUint8Array = (buffer: NodeBuffer) => {
+const toUint8Array = (buffer: NodeBuffer<ArrayBuffer>): Uint8Array<ArrayBuffer> => {
 	return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 };
 
@@ -60,6 +60,7 @@ export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
  */
 export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuffer> => {
 	// Bun's typings is slightly wrong, *you can* pass `size: undefined` with `asUint8Array: true`
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	const buffer = _concat(arrays, size as number, true);
 
 	// `concatArrayBuffers` treats `size` as a cap and stops at the last chunk, so an underfilled
@@ -160,7 +161,7 @@ export const isUtf8LengthInRange = (str: string, min: number, max: number): bool
 };
 
 export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuffer>> => {
-	return toUint8Array(_hash('sha256', buffer, 'buffer')) as Uint8Array<ArrayBuffer>;
+	return toUint8Array(_hash('sha256', buffer, 'buffer'));
 };
 
 /**
@@ -170,6 +171,7 @@ export const toSha256 = async (buffer: Uint8Array): Promise<Uint8Array<ArrayBuff
  * @returns the 32-byte digest
  */
 export const toSha256Sync = (buffer: Uint8Array): Uint8Array<ArrayBuffer> => {
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- Bun types the digest as a TypedArray
 	return _SHA256.hash(buffer) as Uint8Array<ArrayBuffer>;
 };
 

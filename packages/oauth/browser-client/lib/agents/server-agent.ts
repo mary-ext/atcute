@@ -34,10 +34,12 @@ export class OAuthServerAgent {
 	async request(endpoint: 'revocation', payload: Record<string, string | undefined>): Promise<any>;
 	// oxlint-disable-next-line typescript/no-explicit-any
 	async request(endpoint: 'introspection', payload: Record<string, string | undefined>): Promise<any>;
-	// oxlint-disable-next-line typescript/no-explicit-any
-	async request(endpoint: string, payload: Record<string, string | undefined>): Promise<any> {
+	async request(
+		endpoint: 'pushed_authorization_request' | 'token' | 'revocation' | 'introspection',
+		payload: Record<string, string | undefined>,
 		// oxlint-disable-next-line typescript/no-explicit-any
-		const url: string | undefined = (this.#metadata as any)[`${endpoint}_endpoint`];
+	): Promise<any> {
+		const url = this.#metadata[`${endpoint}_endpoint`];
 		if (!url) {
 			throw new Error(`no endpoint for ${endpoint}`);
 		}

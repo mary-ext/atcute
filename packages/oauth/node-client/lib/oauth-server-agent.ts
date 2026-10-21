@@ -197,7 +197,7 @@ export class OAuthServerAgent {
 	 */
 	async pushAuthorizationRequest(params: Record<string, string>): Promise<OAuthParResponse> {
 		const endpoint = this.serverMetadata.pushed_authorization_request_endpoint;
-		const { json } = await this.request(endpoint, params, processParResponse);
+		const { json } = await processParResponse(await this.request(endpoint, params));
 		return json;
 	}
 
@@ -228,16 +228,12 @@ export class OAuthServerAgent {
 	/** makes a token endpoint request. */
 	private async requestToken(params: Record<string, string | undefined>): Promise<AtprotoOAuthTokenResponse> {
 		const endpoint = this.serverMetadata.token_endpoint;
-		const { json } = await this.request(endpoint, params, processTokenResponse);
+		const { json } = await processTokenResponse(await this.request(endpoint, params));
 		return json;
 	}
 
-	/** makes a request to an authorization server endpoint. */
-	private async request<T>(
-		endpoint: string,
-		params: Record<string, string | undefined>,
-		processor?: (response: Response) => Promise<{ response: Response; json: T }>,
-	): Promise<{ response: Response; json: T }> {
+	/** sends an authenticated request; throws on non-2xx responses. */
+	private async request(endpoint: string, params: Record<string, string | undefined>): Promise<Response> {
 		const credentials = await this.clientCredentialsFactory();
 
 		const body = new URLSearchParams();
@@ -280,11 +276,6 @@ export class OAuthServerAgent {
 			throw new OAuthResponseError(response, error, errorDescription);
 		}
 
-		if (processor) {
-			return processor(response);
-		}
-
-		// for endpoints without specific processing (e.g., revocation)
-		return { response, json: undefined as T };
+		return response;
 	}
 }

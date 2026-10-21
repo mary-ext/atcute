@@ -20,6 +20,7 @@ export const createDenoWebSocket = ({
 			const connection: WebSocketConnection = {
 				signal: signal,
 				send(data: Uint8Array) {
+					// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- Deno's typings only accept ArrayBuffer-backed views
 					socket.send(data as Uint8Array<ArrayBuffer>);
 				},
 				async drain() {
@@ -41,7 +42,7 @@ export const createDenoWebSocket = ({
 			};
 
 			socket.onopen = () => {
-				handler(connection);
+				void handler(connection);
 			};
 
 			socket.onclose = (ev) => {

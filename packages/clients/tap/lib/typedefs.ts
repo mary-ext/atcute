@@ -224,8 +224,7 @@ export const flattenTapEvent = (wire: v.InferOutput<typeof tapEventWireSchema>):
 				default: {
 					wire.record satisfies never;
 
-					// oxlint-disable-next-line typescript/no-explicit-any
-					const obj = wire.record as any;
+					const obj: { action: string } = wire.record;
 					throw new Error(`unknown "${obj.action}" action`);
 				}
 			}
@@ -234,8 +233,7 @@ export const flattenTapEvent = (wire: v.InferOutput<typeof tapEventWireSchema>):
 		default: {
 			wire satisfies never;
 
-			// oxlint-disable-next-line typescript/no-explicit-any
-			const obj = wire as any;
+			const obj: { type: string } = wire;
 			throw new Error(`unknown "${obj.type}" type`);
 		}
 	}

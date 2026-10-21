@@ -1107,6 +1107,7 @@ const buildXrpcParametersSchema = (ctx: BuildContext, def: LexXrpcParametersBuil
 				required.push(prop);
 			}
 
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- primitive builders build primitives, unless hoisted into a ref
 			properties[prop] = buildFieldSchema(delve(ctx, prop), unwrapped) as
 				| t.LexPrimitive
 				| t.LexPrimitiveArray;

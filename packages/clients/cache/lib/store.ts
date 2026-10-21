@@ -9,8 +9,9 @@ import {
 } from './types.ts';
 import { WalkerCache } from './walker.ts';
 
-type AnyEntityDefinition = EntityDefinition<ObjectSchema>;
+type AnyEntityDefinition = EntityDefinition;
 
+// entity types are erased here; the schema's type ID selects the matching store
 interface EntityStoreEntry {
 	definition: AnyEntityDefinition;
 	entities: Map<string, WeakRef<object>>;
@@ -121,6 +122,7 @@ export class NormalizedCache {
 		}
 
 		this.#stores.set(typeId, {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			definition: definition as unknown as AnyEntityDefinition,
 			entities: new Map(),
 			subscribers: new Map(),
@@ -141,7 +143,7 @@ export class NormalizedCache {
 	 * @returns response with cached entity refs swapped in
 	 */
 	normalize<T extends BaseSchema>(schema: T, data: InferOutput<T>): InferOutput<T> {
-		return this.#walkerCache.getWalker(schema)(data) as InferOutput<T>;
+		return this.#walkerCache.getWalker(schema)(data);
 	}
 
 	/**
@@ -168,7 +170,7 @@ export class NormalizedCache {
 		}
 
 		const ref = store.entities.get(key);
-		return ref?.deref() as InferOutput<T> | undefined;
+		return ref?.deref();
 	}
 
 	/**
@@ -204,7 +206,7 @@ export class NormalizedCache {
 		for (const [key, ref] of store.entities) {
 			const entity = ref.deref();
 			if (entity !== undefined) {
-				result.set(key, entity as InferOutput<T>);
+				result.set(key, entity);
 			}
 		}
 
@@ -349,11 +351,13 @@ export class NormalizedCache {
 			store.subscribers.set(key, subs);
 		}
 
-		subs.add(callback as EntitySubscriber<unknown>);
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+		const erased = callback as EntitySubscriber<unknown>;
+		subs.add(erased);
 
 		return () => {
-			subs!.delete(callback as EntitySubscriber<unknown>);
-			if (subs!.size === 0 && store.subscribers.get(key) === subs) {
+			subs.delete(erased);
+			if (subs.size === 0 && store.subscribers.get(key) === subs) {
 				store.subscribers.delete(key);
 			}
 		};
@@ -372,10 +376,12 @@ export class NormalizedCache {
 			throw new Error('schema is not registered');
 		}
 
-		store.typeSubscribers.add(callback as TypeSubscriber<unknown>);
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+		const erased = callback as TypeSubscriber<unknown>;
+		store.typeSubscribers.add(erased);
 
 		return () => {
-			store.typeSubscribers.delete(callback as TypeSubscriber<unknown>);
+			store.typeSubscribers.delete(erased);
 		};
 	}
 }

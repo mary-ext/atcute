@@ -97,12 +97,12 @@ const assertContentLength = (response: Response, maxSize: number): void => {
 
 		// content-length is `1*DIGIT` (RFC 9110 §8.6); `0` is valid (empty body)
 		if (!/^\d+$/.test(rawSize) || !Number.isSafeInteger(size)) {
-			response.body?.cancel();
+			void response.body?.cancel();
 			throw new err.ImproperContentLengthError(maxSize, null, `invalid response content-length`);
 		}
 
 		if (size > maxSize) {
-			response.body?.cancel();
+			void response.body?.cancel();
 			throw new err.ImproperContentLengthError(maxSize, size, `response content-length too large`);
 		}
 	}

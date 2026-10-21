@@ -26,12 +26,16 @@ export class BytesWrapper implements Bytes {
 }
 
 export const isBytes = (value: unknown): value is Bytes => {
-	// oxlint-disable-next-line typescript/no-explicit-any
-	const val = value as any;
+	if (value instanceof BytesWrapper) {
+		return true;
+	}
 
-	return (
-		val instanceof BytesWrapper || (val !== null && typeof val === 'object' && typeof val.$bytes === 'string')
-	);
+	if (value === null || typeof value !== 'object') {
+		return false;
+	}
+
+	const obj: { $bytes?: unknown } = value;
+	return typeof obj.$bytes === 'string';
 };
 
 export const toBytes = (buf: Uint8Array): Bytes => {

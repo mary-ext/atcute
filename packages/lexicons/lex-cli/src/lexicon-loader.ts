@@ -38,16 +38,13 @@ const isModuleFile = (filename: string): boolean => {
  * @returns true if it appears to be a LexDocumentBuilder
  */
 const isLexDocumentBuilder = (value: unknown): value is LexDocumentBuilder => {
-	// oxlint-disable-next-line typescript/no-explicit-any
-	const lex = value as any;
-
 	return (
-		typeof lex === 'object' &&
-		lex !== null &&
-		'id' in lex &&
-		typeof lex.id === 'string' &&
-		'defs' in lex &&
-		typeof lex.defs === 'object'
+		typeof value === 'object' &&
+		value !== null &&
+		'id' in value &&
+		typeof value.id === 'string' &&
+		'defs' in value &&
+		typeof value.defs === 'object'
 	);
 };
 
@@ -106,7 +103,7 @@ const loadJsonFile = async (absolutePath: string, relativePath: string): Promise
  * @returns the LexDocumentBuilder from the module's default export
  */
 const loadModuleBuilder = async (absolutePath: string, relativePath: string): Promise<LexDocumentBuilder> => {
-	let mod: unknown;
+	let mod: { default?: unknown };
 	try {
 		const fileUrl = url.pathToFileURL(absolutePath);
 		mod = await import(fileUrl.href);
@@ -116,8 +113,7 @@ const loadModuleBuilder = async (absolutePath: string, relativePath: string): Pr
 		process.exit(1);
 	}
 
-	// oxlint-disable-next-line typescript/no-explicit-any
-	const defaultExport = (mod as any)?.default;
+	const defaultExport = mod.default;
 	if (!isLexDocumentBuilder(defaultExport)) {
 		console.error(
 			pc.bold(pc.red(`module "${relativePath}" default export is not a valid LexDocumentBuilder`)),

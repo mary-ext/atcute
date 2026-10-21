@@ -29,10 +29,10 @@ export class LocalActorResolver implements ActorResolver {
 
 		let did: Did;
 		if (identifierIsDid) {
-			did = actor as Did;
+			did = actor;
 		} else {
 			try {
-				did = await this.handleResolver.resolve(actor as Handle, options);
+				did = await this.handleResolver.resolve(actor, options);
 			} catch (err) {
 				throw new ActorResolutionError(`failed to resolve handle`, { cause: err });
 			}
@@ -65,7 +65,7 @@ export class LocalActorResolver implements ActorResolver {
 				}
 			}
 		} else if (getAtprotoHandle(doc) === actor) {
-			handle = actor as Handle;
+			handle = actor;
 		}
 
 		return {

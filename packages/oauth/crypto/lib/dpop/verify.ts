@@ -42,7 +42,6 @@ const dpopPayloadSchema = v.looseObject({
 });
 
 export type DpopClaims = v.InferOutput<typeof dpopPayloadSchema>;
-type DpopJwk = v.InferOutput<typeof dpopJwkSchema>;
 
 export interface DpopVerifyResult {
 	claims: DpopClaims;
@@ -142,9 +141,9 @@ export const verifyDpopProof = async (
 		}
 	}
 
-	const jkt = await computeJktFromJwk(jwk as PublicJwk);
+	const jkt = await computeJktFromJwk(jwk);
 
-	return { claims: payload, jwk: jwk as DpopJwk, jkt };
+	return { claims: payload, jwk, jkt };
 };
 
 const importPublicKey = async (jwk: PublicJwk, alg: SigningAlgorithm): Promise<CryptoKey> => {

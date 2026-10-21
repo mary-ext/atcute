@@ -142,7 +142,7 @@ type Matcher = (input: unknown, flags: number) => MatcherResult;
 
 type LexStandardSchemaResult<T extends BaseSchema> = StandardSchemaV1.Result<InferOutput<T>>;
 
-interface LexStandardSchema<T extends BaseSchema> extends StandardSchemaV1.Props<unknown> {
+interface LexStandardSchema<T extends BaseSchema> extends StandardSchemaV1.Props {
 	readonly validate: (value: unknown) => LexStandardSchemaResult<T> | Promise<LexStandardSchemaResult<T>>;
 	readonly types?: StandardSchemaV1.Types<InferInput<T>, InferOutput<T>>;
 }
@@ -358,7 +358,7 @@ export const safeParse = <const TSchema extends BaseSchema>(
 	}
 
 	if (r.ok) {
-		return r as Ok<InferOutput<TSchema>>;
+		return r;
 	}
 
 	return new ErrImpl(r);
@@ -376,11 +376,11 @@ export const parse = <const TSchema extends BaseSchema>(
 	const r = schema['~run'](input, flags);
 
 	if (r === undefined) {
-		return input as InferOutput<TSchema>;
+		return input;
 	}
 
 	if (r.ok) {
-		return r.value as InferOutput<TSchema>;
+		return r.value;
 	}
 
 	throw new ValidationError(r);
@@ -568,14 +568,14 @@ export const literalEnum = <const TEnums extends readonly Literal[]>(
 		},
 	};
 
-	const set = new Set<Literal>(values);
+	const set = new Set<unknown>(values);
 
 	return {
 		kind: 'schema',
 		type: 'literal_enum',
 		expected: values,
 		'~run'(input, _flags) {
-			if (!set.has(input as Literal)) {
+			if (!set.has(input)) {
 				return issue;
 			}
 
@@ -764,6 +764,7 @@ const STRING_SINGLETON: StringSchema = {
 
 // #__NO_SIDE_EFFECTS__
 export const string = <T extends string = string>(): StringSchema<T> => {
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- shared singleton, `T` is type-level only
 	return STRING_SINGLETON as StringSchema<T>;
 };
 
@@ -981,7 +982,7 @@ export const blobSize = <const TMaxSize extends number>(maxSize: TMaxSize): Blob
 			if (!(flags & FLAG_STRICT)) {
 				return undefined;
 			}
-			if ((input as interfaces.Blob).size > maxSize) {
+			if (input.size > maxSize) {
 				return issue;
 			}
 			return undefined;
@@ -1015,7 +1016,7 @@ export const blobAccept = (accept: readonly string[]): BlobAcceptConstraint => {
 			if (!(flags & FLAG_STRICT)) {
 				return undefined;
 			}
-			const mimeType = (input as interfaces.Blob).mimeType.toLowerCase();
+			const mimeType = input.mimeType.toLowerCase();
 
 			for (let idx = 0, len = normalized.length; idx < len; idx++) {
 				const pattern = normalized[idx]!;
@@ -1453,12 +1454,9 @@ export interface ObjectSchema<TShape extends LooseObjectShape = LooseObjectShape
 	readonly [kType]?: { in: InferObjectInput<TShape>; out: InferObjectOutput<TShape> };
 }
 
-interface ObjectEntry {
-	key: string;
-	schema: BaseSchema;
-	optional: boolean;
-	missing: IssueTree;
-}
+type ObjectEntry =
+	| { key: string; schema: OptionalSchema; optional: true; missing: IssueTree }
+	| { key: string; schema: BaseSchema; optional: false; missing: IssueTree };
 
 const ISSUE_TYPE_OBJECT: IssueLeaf = {
 	ok: false,
@@ -1491,14 +1489,14 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 		const resolved: ObjectEntry[] = [];
 
 		for (const key in shape) {
-			const schema = shape[key];
+			const schema: BaseSchema = shape[key];
+			const missing = prependPath(key, ISSUE_MISSING);
 
-			resolved.push({
-				key: key,
-				schema: schema,
-				optional: isOptionalSchema(schema),
-				missing: prependPath(key, ISSUE_MISSING),
-			});
+			if (isOptionalSchema(schema)) {
+				resolved.push({ key: key, schema: schema, optional: true, missing: missing });
+			} else {
+				resolved.push({ key: key, schema: schema, optional: false, missing: missing });
+			}
 		}
 
 		return resolved;
@@ -1517,6 +1515,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 				obj[entry.key] = entry.schema;
 			}
 
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			return lazyProperty(this, 'shape', obj as TShape);
 		},
 		get '~run'() {
@@ -1555,11 +1554,10 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 					let fallback = x.empty;
 
 					if (entry.optional) {
-						const optional = entry.schema as OptionalSchema;
-						const defaultValue = optional.default;
+						const defaultValue = entry.schema.default;
 
 						guard = x`${value}!==undefined`;
-						schema = optional.wrapped;
+						schema = entry.schema.wrapped;
 
 						if (defaultValue !== undefined) {
 							const val = typeof defaultValue === 'function' ? x`${defaultValue}()` : x`${defaultValue}`;
@@ -1577,6 +1575,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 
 				body = x`return function matcher(${input},${flags}){let ${issues},${output};${body}if(${issues}!==undefined)return ${issues};if(${output}!==undefined)return ${ok}(${output});}`;
 
+				// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- generated code
 				return body.eval() as Matcher;
 			};
 
@@ -1689,6 +1688,7 @@ export const record = <TKey extends RecordKeySchema, TObject extends ObjectSchem
 	const validatedObject = lazy((): TObject => {
 		const shape = object.shape;
 
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- checked by the asserts below
 		let t = shape.$type as MaybeOptional<LiteralSchema<syntax.Nsid>> | undefined;
 
 		assert(t !== undefined, `expected $type in record to be defined`);
@@ -1763,6 +1763,7 @@ export const variant: {
 				const member = raw.type === 'record' ? raw.object : raw;
 				const shape = member.shape;
 
+				// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- checked by the asserts below
 				let t = shape.$type as MaybeOptional<LiteralSchema<syntax.Nsid>> | undefined;
 
 				assert(t !== undefined, `expected $type in variant member #${idx} to be defined`);
@@ -1893,6 +1894,16 @@ export type InferXRPCBodyOutput<T extends XRPCBodyParam> =
 				? void
 				: never;
 
+// resolve the schema getter once, when the body param is cached
+const resolveBodyParam = <T extends XRPCBodyParam>(val: T): T => {
+	if (val?.type === 'lex') {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+		return { type: 'lex', schema: val.schema } as T;
+	}
+
+	return val;
+};
+
 // #region XRPC procedure metadata
 
 export interface XRPCProcedureMetadata<
@@ -1922,8 +1933,6 @@ export const procedure = <
 		output: TOutput;
 	},
 ): XRPCProcedureMetadata<TParams, TInput, TOutput, TNsid> => {
-	// `schema` can be a getter, and we'd have to resolve that getter.
-
 	xrpcSchemaGenerated = true;
 
 	return {
@@ -1932,34 +1941,10 @@ export const procedure = <
 		nsid: nsid,
 		params: options.params,
 		get input() {
-			let val = options.input;
-
-			switch (val?.type) {
-				case 'lex': {
-					val = {
-						type: 'lex',
-						schema: val.schema,
-					} as TInput;
-					break;
-				}
-			}
-
-			return lazyProperty(this, 'input', val);
+			return lazyProperty(this, 'input', resolveBodyParam(options.input));
 		},
 		get output() {
-			let val = options.output;
-
-			switch (val?.type) {
-				case 'lex': {
-					val = {
-						type: 'lex',
-						schema: val.schema,
-					} as TOutput;
-					break;
-				}
-			}
-
-			return lazyProperty(this, 'output', val);
+			return lazyProperty(this, 'output', resolveBodyParam(options.output));
 		},
 	};
 };
@@ -1989,8 +1974,6 @@ export const query = <
 		output: TOutput;
 	},
 ): XRPCQueryMetadata<TParams, TOutput, TNsid> => {
-	// `schema` can be a getter, and we'd have to resolve that getter.
-
 	xrpcSchemaGenerated = true;
 
 	return {
@@ -1999,18 +1982,7 @@ export const query = <
 		nsid: nsid,
 		params: options.params,
 		get output() {
-			let val = options.output;
-
-			switch (val?.type) {
-				case 'lex': {
-					val = {
-						type: 'lex',
-						schema: val.schema,
-					} as TOutput;
-				}
-			}
-
-			return lazyProperty(this, 'output', val);
+			return lazyProperty(this, 'output', resolveBodyParam(options.output));
 		},
 	};
 };

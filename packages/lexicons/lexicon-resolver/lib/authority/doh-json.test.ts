@@ -170,7 +170,7 @@ describe('DohJsonLexiconAuthorityResolver', () => {
 		}
 
 		expect(error).toBeInstanceOf(FailedAuthorityResolutionError);
-		expect((error as Error).cause).toBeInstanceOf(TypeError);
+		expect(error).toHaveProperty('cause', expect.any(TypeError));
 	});
 
 	it('throws on non-ok DNS response', async () => {
@@ -205,6 +205,6 @@ describe('DohJsonLexiconAuthorityResolver', () => {
 		}
 
 		expect(error).toBeInstanceOf(FailedAuthorityResolutionError);
-		expect((error as Error).cause).toBeInstanceOf(TypeError);
+		expect(error).toHaveProperty('cause', expect.any(TypeError));
 	});
 });

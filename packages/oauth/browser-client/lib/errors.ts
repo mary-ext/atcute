@@ -90,6 +90,10 @@ const ifString = (v: unknown): string | undefined => {
 	return typeof v === 'string' ? v : undefined;
 };
 const ifObject = (v: unknown): Record<string, unknown> | undefined => {
-	// oxlint-disable-next-line typescript/no-explicit-any
-	return typeof v === 'object' && v !== null && !Array.isArray(v) ? (v as any) : undefined;
+	if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+		return v as Record<string, unknown>;
+	}
+
+	return undefined;
 };

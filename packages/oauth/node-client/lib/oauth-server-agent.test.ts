@@ -1,4 +1,3 @@
-import type { Did } from '@atcute/lexicons';
 import { generateClientAssertionKey, generateDpopKey } from '@atcute/oauth-crypto';
 import { Keyset } from '@atcute/oauth-keyset';
 import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
@@ -39,6 +38,7 @@ const createMockResponse = (status: number, body?: unknown, headers?: Record<str
 };
 
 const createMockOAuthResolver = (overrides?: { issuer?: string; pds?: string }): OAuthResolver =>
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- partial mock
 	({
 		resolveFromIdentity: vi.fn().mockResolvedValue({
 			metadata: { issuer: overrides?.issuer ?? 'https://auth.example.com' },
@@ -189,7 +189,7 @@ describe('OAuthServerAgent', () => {
 
 			const result = await agent.refresh({
 				iss: 'https://auth.example.com',
-				sub: TEST_DID as Did,
+				sub: TEST_DID,
 				aud: 'https://pds.example.com',
 				scope: 'atproto',
 				access_token: 'old-access',
@@ -207,7 +207,7 @@ describe('OAuthServerAgent', () => {
 			await expect(
 				agent.refresh({
 					iss: 'https://auth.example.com',
-					sub: TEST_DID as Did,
+					sub: TEST_DID,
 					aud: 'https://pds.example.com',
 					scope: 'atproto',
 					access_token: 'access',
@@ -228,7 +228,7 @@ describe('OAuthServerAgent', () => {
 			await expect(
 				agent.refresh({
 					iss: 'https://auth.example.com',
-					sub: TEST_DID as Did,
+					sub: TEST_DID,
 					aud: 'https://pds.example.com',
 					scope: 'atproto',
 					access_token: 'access',
@@ -378,7 +378,7 @@ describe('OAuthServerAgent', () => {
 
 			const result = await agent.refresh({
 				iss: 'https://auth.example.com',
-				sub: TEST_DID as Did,
+				sub: TEST_DID,
 				aud: 'https://pds.example.com',
 				scope: 'atproto',
 				access_token: 'old-access',

@@ -34,13 +34,16 @@ export class CidLinkWrapper implements CidLink {
 }
 
 export const isCidLink = (value: unknown): value is CidLink => {
-	// oxlint-disable-next-line typescript/no-explicit-any
-	const val = value as any;
+	if (value instanceof CidLinkWrapper) {
+		return true;
+	}
 
-	return (
-		val instanceof CidLinkWrapper ||
-		(val !== null && typeof val === 'object' && typeof val.$link === 'string')
-	);
+	if (value === null || typeof value !== 'object') {
+		return false;
+	}
+
+	const obj: { $link?: unknown } = value;
+	return typeof obj.$link === 'string';
 };
 
 export const toCidLink = (cid: Cid): CidLink => {

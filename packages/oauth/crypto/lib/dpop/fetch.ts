@@ -116,7 +116,7 @@ const negotiateAlg = (key: DpopPrivateJwk, supportedAlgs?: readonly string[]): s
 };
 
 const isUseDpopNonceError = async (response: Response, isAuthServer?: boolean): Promise<boolean> => {
-	if (isAuthServer === undefined || isAuthServer === false) {
+	if (!isAuthServer) {
 		if (response.status === 401) {
 			const wwwAuth = response.headers.get('WWW-Authenticate');
 			if (wwwAuth?.startsWith('DPoP')) {
@@ -125,7 +125,7 @@ const isUseDpopNonceError = async (response: Response, isAuthServer?: boolean): 
 		}
 	}
 
-	if (isAuthServer === undefined || isAuthServer === true) {
+	if (isAuthServer !== false) {
 		if (response.status === 400) {
 			try {
 				const json = await response.clone().json();

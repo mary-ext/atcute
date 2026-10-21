@@ -10,7 +10,7 @@ export const isCarV1Header = (value: unknown): value is CarV1Header => {
 		return false;
 	}
 
-	const { version, roots } = value as CarV1Header;
+	const { version, roots }: Partial<Record<keyof CarV1Header, unknown>> = value;
 	return version === 1 && Array.isArray(roots) && roots.every((root) => root instanceof CidLinkWrapper);
 };
 

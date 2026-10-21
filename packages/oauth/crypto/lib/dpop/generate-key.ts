@@ -55,7 +55,7 @@ export const generateDpopKey = async (supportedAlgs?: readonly string[]): Promis
 	for (const alg of algs) {
 		try {
 			const pair = await crypto.subtle.generateKey(getGenerateAlgorithm(alg), true, ['sign', 'verify']);
-			const jwk = (await exportPrivateJwkFromKey(pair.privateKey, alg)) as DpopPrivateJwk;
+			const jwk = await exportPrivateJwkFromKey(pair.privateKey, alg);
 
 			// pre-populate cache so we don't re-import
 			setCachedKeyMaterial(jwk, pair.privateKey);

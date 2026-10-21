@@ -1,6 +1,9 @@
 {
 	"$schema": "https://unpkg.com/oxlint/configuration_schema.json",
 	"ignorePatterns": ["packages/*/*/lib/lexicons/**"],
+	"options": {
+		"typeAware": true
+	},
 	"plugins": ["eslint", "typescript", "unicorn", "oxc", "import"],
 	"jsPlugins": ["@mary-ext/oxlint-rules"],
 	"categories": {
@@ -27,6 +30,7 @@
 		"import/no-empty-named-blocks": "off",
 		"import/no-unassigned-import": "off",
 		"mary-ext/consistent-imports": "warn",
+		"typescript/consistent-return": "off",
 		"typescript/consistent-type-imports": [
 			"warn",
 			{ "prefer": "type-imports", "fixStyle": "inline-type-imports", "disallowTypeAnnotations": false }
@@ -35,8 +39,9 @@
 		"typescript/no-misused-promises": "warn",
 		"typescript/no-namespace": ["error", { "allowDeclarations": true }],
 		"typescript/no-require-imports": "error",
-		"typescript/require-await": "warn",
+		"typescript/require-await": "off",
 		"typescript/restrict-plus-operands": "warn",
+		"typescript/restrict-template-expressions": ["error", { "allowNever": true }],
 		"unicorn/prefer-add-event-listener": "off",
 		"unicorn/switch-case-braces": ["warn", "always"]
 	},

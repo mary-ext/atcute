@@ -16,9 +16,9 @@ export interface GetterOptions {
 export type Getter<K, V> = (key: K, options: GetterOptions, storedValue: V | undefined) => Awaitable<V>;
 
 export interface CachedGetterOptions<K, V> {
-	isStale?(key: K, value: V): Awaitable<boolean>;
-	onStoreError?(err: unknown, key: K, value: V): Awaitable<void>;
-	deleteOnError?(err: unknown, key: K, value: V): Awaitable<boolean>;
+	isStale?: (key: K, value: V) => Awaitable<boolean>;
+	onStoreError?: (err: unknown, key: K, value: V) => Awaitable<void>;
+	deleteOnError?: (err: unknown, key: K, value: V) => Awaitable<boolean>;
 }
 
 type PendingItem<V> = Promise<{ value: V; fresh: boolean }>;

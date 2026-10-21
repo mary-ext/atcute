@@ -116,6 +116,7 @@ const oauth = new OAuthClient({
 		jwks_uri: new URL('/jwks.json', publicUrl).href,
 	},
 
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- trusted env config
 	keyset: [JSON.parse(privateKeyJwk) as ClientAssertionPrivateJwk],
 
 	actorResolver: new LocalActorResolver({

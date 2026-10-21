@@ -93,7 +93,7 @@ export class MockWebSocketAdapter implements WebSocketAdapter {
 				{
 					const handler = ctx.handler;
 					setTimeout(() => {
-						handler(connection);
+						void handler(connection);
 					}, 1);
 				}
 

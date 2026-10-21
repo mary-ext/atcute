@@ -86,6 +86,7 @@ describe.skipIf(!hasNative)('native', () => {
 	});
 
 	it('getGraphemeLength safely fails on invalid input', () => {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		const getGraphemeLengthNodeAny = getGraphemeLengthNode as any;
 
 		expect(() => getGraphemeLengthNodeAny(1337)).toThrow(TypeError);
@@ -95,6 +96,7 @@ describe.skipIf(!hasNative)('native', () => {
 	});
 
 	it('isGraphemeLengthInRangeNode safely fails on invalid input', () => {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		const isGraphemeLengthInRangeNodeAny = isGraphemeLengthInRangeNode as any;
 
 		const invalidArg1 = [1337, new Uint8Array(10), null];

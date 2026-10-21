@@ -89,6 +89,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 								url.searchParams.append(key, String(value[idx]));
 							}
 						} else {
+							// oxlint-disable-next-line typescript/no-base-to-string -- params are lexicon primitives
 							url.searchParams.set(key, String(value));
 						}
 					}
@@ -138,6 +139,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 				body = result.value;
 			}
 
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- unvalidated when `validateEvents` is off
 			emitter.emit(body as MessageOf<TSchema>);
 		};
 	}
@@ -178,6 +180,7 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 
 	/** get current subscription options */
 	getOptions(): ReadonlyDeep<FirehoseSubscriptionOptions<TSchema>> {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		return this.#options as ReadonlyDeep<FirehoseSubscriptionOptions<TSchema>>;
 	}
 

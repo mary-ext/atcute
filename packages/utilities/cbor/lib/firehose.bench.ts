@@ -197,6 +197,7 @@ const stripUndefined = (value: unknown): unknown => {
 	}
 
 	if (value && typeof value === 'object') {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		const obj = value as Record<string, unknown>;
 		const out: Record<string, unknown> = {};
 		const keys = Object.keys(obj);
@@ -264,7 +265,7 @@ summary(() => {
 				let total = 0;
 
 				for (let i = 0; i < records.length; i++) {
-					total += atcute.encode(records[i]!).byteLength;
+					total += atcute.encode(records[i]).byteLength;
 				}
 
 				return do_not_optimize(total);

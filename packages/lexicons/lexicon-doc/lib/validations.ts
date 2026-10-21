@@ -170,6 +170,12 @@ const buildRecordKey = (key: t.LexRecord['key'] = 'any'): v.BaseSchema<string> =
 	return v.string();
 };
 
+/** requires non-empty constraints compatible with the schema's output */
+const constrainSchema = (schema: v.BaseSchema, constraints: v.BaseConstraint<any>[]): v.BaseSchema => {
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- dynamically assembled constraints lack tuple inference
+	return v.constrain(schema, constraints as any);
+};
+
 // #region Concrete types
 const buildLexBoolean = (ctx: BuildContext, path: LexPath, spec: t.LexBoolean): Cell<v.BaseSchema> => {
 	let cell = ctx.cache.get(spec);
@@ -224,9 +230,9 @@ const buildLexInteger = (ctx: BuildContext, path: LexPath, spec: t.LexInteger): 
 	if (constValue !== undefined) {
 		schema = v.literal(constValue);
 	} else if (enumValues !== undefined) {
-		schema = v.literalEnum(enumValues.toSorted());
+		schema = v.literalEnum(enumValues.toSorted((a, b) => a - b));
 	} else if (constraints.length > 0) {
-		schema = v.constrain(schema, constraints as any);
+		schema = constrainSchema(schema, constraints);
 	}
 
 	if (defaultValue !== undefined) {
@@ -320,7 +326,7 @@ const buildLexString = (ctx: BuildContext, path: LexPath, spec: t.LexString): Ce
 	} else if (enumValues !== undefined) {
 		schema = v.literalEnum(enumValues.toSorted());
 	} else if (constraints.length > 0) {
-		schema = v.constrain(schema, constraints as any);
+		schema = constrainSchema(schema, constraints);
 	}
 
 	if (defaultValue !== undefined) {
@@ -352,7 +358,7 @@ const buildLexBytes = (ctx: BuildContext, path: LexPath, spec: t.LexBytes): Cell
 	let schema: v.BaseSchema = v.bytes();
 
 	if (constraints.length > 0) {
-		schema = v.constrain(schema, constraints as any);
+		schema = constrainSchema(schema, constraints);
 	}
 
 	cell = eager(schema);
@@ -424,7 +430,7 @@ const buildLexBlob = (ctx: BuildContext, path: LexPath, spec: t.LexBlob): Cell<v
 	let schema: v.BaseSchema = v.blob();
 
 	if (constraints.length > 0) {
-		schema = v.constrain(schema, constraints as any);
+		schema = constrainSchema(schema, constraints);
 	}
 
 	cell = eager(schema);
@@ -534,6 +540,7 @@ const buildLexRefUnion = (ctx: BuildContext, path: LexPath, spec: t.LexRefUnion)
 	return lazy(() => {
 		const members = lazyMembers.map((cell) => cell.value);
 
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- members are all object schemas
 		const schema: v.BaseSchema = v.variant(members as any, spec.closed ?? false);
 
 		return schema;
@@ -647,7 +654,7 @@ const buildLexArray = (ctx: BuildContext, path: LexPath, spec: t.LexArray): Cell
 		let schema: v.BaseSchema = v.array(field.isRef ? () => field.cell.value : field.cell.value);
 
 		if (constraints.length > 0) {
-			schema = v.constrain(schema, constraints as any);
+			schema = constrainSchema(schema, constraints);
 		}
 
 		return schema;

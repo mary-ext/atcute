@@ -40,7 +40,7 @@ const TARGETS = [
 
 // #region lexicon processing
 
-/** @typedef {Record<string, number | Limits>} Limits */
+/** @typedef {{ [key: string]: number | Limits }} Limits */
 
 /** @param {string} nsid */
 const nsidToPath = (nsid) => {
@@ -209,16 +209,22 @@ const formatNumber = (n) => {
 };
 
 /**
+ * @param {[string, unknown]} entry
+ * @returns {entry is [string, number]}
+ */
+const isNumericEntry = (entry) => typeof entry[1] === 'number';
+
+/**
  * @param {Limits} obj
  * @param {number} indent
  */
 const serializeLimits = (obj, indent) => {
 	const entries = Object.entries(obj);
-	const allNumeric = entries.every(([, v]) => typeof v === 'number');
+	const allNumeric = entries.every(isNumericEntry);
 
 	// inline short all-numeric objects
 	if (allNumeric && entries.length <= 3) {
-		const pairs = entries.map(([k, v]) => `${k}: ${formatNumber(/** @type {number} */ (v))}`);
+		const pairs = entries.map(([k, v]) => `${k}: ${formatNumber(v)}`);
 		return `{ ${pairs.join(', ')} }`;
 	}
 
@@ -229,7 +235,7 @@ const serializeLimits = (obj, indent) => {
 		if (typeof value === 'number') {
 			lines.push(`${tab}${key}: ${formatNumber(value)},`);
 		} else {
-			lines.push(`${tab}${key}: ${serializeLimits(/** @type {Limits} */ (value), indent + 1)},`);
+			lines.push(`${tab}${key}: ${serializeLimits(value, indent + 1)},`);
 		}
 	}
 
@@ -260,6 +266,6 @@ const generate = async () => {
 	console.log(`wrote ${results.length} limit exports to lib/limits.ts`);
 };
 
-generate();
+await generate();
 
 // #endregion

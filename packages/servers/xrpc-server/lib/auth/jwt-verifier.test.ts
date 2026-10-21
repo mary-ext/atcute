@@ -4,7 +4,7 @@ import type { AtprotoAudience } from '@atcute/lexicons/syntax';
 import { fromBase64Url, toBase64Url } from '@atcute/multibase';
 import { decodeUtf8From, encodeUtf8 } from '@atcute/uint8array';
 
-import { beforeAll, describe, expect, it } from 'vitest';
+import { assert, beforeAll, describe, expect, it } from 'vitest';
 
 import { AuthRequiredError } from '../main/xrpc-error.ts';
 
@@ -41,6 +41,7 @@ const makeResolver = (kp: PrivateKeyExportable) => ({
 	},
 });
 
+// oxlint-disable-next-line typescript/no-unnecessary-type-parameters -- caller-asserted shape
 const decodePortion = <T>(part: string): T => {
 	return JSON.parse(decodeUtf8From(fromBase64Url(part)));
 };
@@ -59,12 +60,8 @@ const expectAuthError = async (promise: Promise<unknown>, code: string): Promise
 		caught = e;
 	}
 
-	if (!(caught instanceof AuthRequiredError)) {
-		throw new Error(`expected AuthRequiredError, got ${caught}`);
-	}
-	if (!(caught.headers instanceof Headers)) {
-		throw new Error(`expected Headers, got ${caught.headers}`);
-	}
+	assert(caught instanceof AuthRequiredError);
+	assert(caught.headers instanceof Headers);
 
 	expect(caught.headers.get('www-authenticate')).toContain(`error="${code}"`);
 	return caught;

@@ -107,7 +107,7 @@ export const externalEmbedView = ({
 	associatedRefs,
 	labels,
 }: {
-	uri?: string;
+	uri?: AppBskyEmbedExternal.ViewExternal['uri'];
 	title: string;
 	description?: string;
 	associatedRefs?: AppBskyEmbedExternal.ViewExternal['associatedRefs'];
@@ -117,7 +117,7 @@ export const externalEmbedView = ({
 		$type: 'app.bsky.embed.external#view',
 		external: {
 			$type: 'app.bsky.embed.external#viewExternal',
-			uri: uri as AppBskyEmbedExternal.ViewExternal['uri'],
+			uri,
 			title,
 			description,
 			associatedRefs,

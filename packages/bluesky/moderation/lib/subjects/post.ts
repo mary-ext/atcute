@@ -100,7 +100,9 @@ const checkHiddenPost = (subject: PostSubject, hiddenPosts: CanonicalResourceUri
 		return false;
 	}
 
-	if (hiddenPosts.includes(subject.uri as CanonicalResourceUri)) {
+	const hidden: readonly string[] = hiddenPosts;
+
+	if (hidden.includes(subject.uri)) {
 		return true;
 	}
 
@@ -111,7 +113,7 @@ const checkHiddenPost = (subject: PostSubject, hiddenPosts: CanonicalResourceUri
 			case 'app.bsky.embed.record#viewDetached':
 			case 'app.bsky.embed.record#viewNotFound':
 			case 'app.bsky.embed.record#viewRecord': {
-				return hiddenPosts.includes(record.uri as CanonicalResourceUri);
+				return hidden.includes(record.uri);
 			}
 		}
 	}
@@ -119,6 +121,7 @@ const checkHiddenPost = (subject: PostSubject, hiddenPosts: CanonicalResourceUri
 	return false;
 };
 
+// assumes AppView records match their collection's schema
 const checkKeywordFilters = (
 	subject: PostSubject,
 	filters: KeywordFilter[] | undefined,
@@ -132,6 +135,7 @@ const checkKeywordFilters = (
 	const author = subject.author;
 
 	{
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		const record = subject.record as AppBskyFeedPost.Main;
 
 		const tags: string[] = [
@@ -254,6 +258,7 @@ const checkEmbedKeywordFilters = (
 			case 'app.bsky.embed.record#viewRecord': {
 				{
 					const author = link.author;
+					// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 					const record = link.value as AppBskyFeedPost.Main;
 
 					const tags: string[] = [
@@ -314,6 +319,7 @@ const checkEmbedKeywordFilters = (
 				break;
 			}
 			case 'app.bsky.graph.defs#starterPackViewBasic': {
+				// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 				const record = link.record as AppBskyGraphStarterpack.Main;
 
 				if (

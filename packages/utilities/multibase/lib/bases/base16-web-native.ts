@@ -6,6 +6,7 @@ export const fromBase16 = (str: string): Uint8Array<ArrayBuffer> => {
 		throw new SyntaxError(`unexpected uppercase characters in base16 string`);
 	}
 
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- always backed by a fresh ArrayBuffer
 	return Uint8Array.fromHex(str) as Uint8Array<ArrayBuffer>;
 };
 

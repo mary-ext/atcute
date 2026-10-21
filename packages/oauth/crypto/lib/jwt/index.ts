@@ -22,11 +22,7 @@ export const signJwt = async (params: {
 	const payloadSegment = encodeSegment(payload);
 	const signingInput = `${headerSegment}.${payloadSegment}`;
 
-	const signature = await crypto.subtle.sign(
-		getSignAlgorithm(alg),
-		key,
-		encodeUtf8(signingInput) as Uint8Array<ArrayBuffer>,
-	);
+	const signature = await crypto.subtle.sign(getSignAlgorithm(alg), key, encodeUtf8(signingInput));
 
 	const signatureSegment = toBase64Url(new Uint8Array(signature));
 
@@ -50,7 +46,7 @@ export const verifyJwt = async (
 		throw new Error(`invalid jwt format`);
 	}
 
-	const header = decodeSegment<Record<string, unknown>>(parts[0]!);
+	const header = decodeSegment(parts[0]!);
 	if (header.alg !== alg) {
 		throw new Error(`invalid jwt alg`);
 	}
@@ -58,16 +54,11 @@ export const verifyJwt = async (
 		throw new Error(`invalid jwt typ`);
 	}
 
-	const payload = decodeSegment<Record<string, unknown>>(parts[1]!);
+	const payload = decodeSegment(parts[1]!);
 	const signature = fromBase64Url(parts[2]!);
 	const signingInput = `${parts[0]}.${parts[1]}`;
 
-	const ok = await crypto.subtle.verify(
-		getSignAlgorithm(alg),
-		key,
-		signature,
-		encodeUtf8(signingInput) as Uint8Array<ArrayBuffer>,
-	);
+	const ok = await crypto.subtle.verify(getSignAlgorithm(alg), key, signature, encodeUtf8(signingInput));
 
 	if (!ok) {
 		throw new Error(`invalid jwt signature`);
@@ -80,7 +71,8 @@ const encodeSegment = (value: unknown): string => {
 	return toBase64Url(encodeUtf8(JSON.stringify(value)));
 };
 
-const decodeSegment = <T>(value: string): T => {
+const decodeSegment = (value: string): Record<string, unknown> => {
 	const bytes = fromBase64Url(value);
-	return JSON.parse(decodeUtf8From(bytes)) as T;
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+	return JSON.parse(decodeUtf8From(bytes)) as Record<string, unknown>;
 };

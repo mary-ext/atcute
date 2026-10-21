@@ -55,6 +55,7 @@ const loadCar = async (relname: string): Promise<{ store: ReadonlyMemoryBlockSto
 
 	for (const entry of car) {
 		const cidStr = CID.toCidLink(entry.cid).$link;
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		store.blocks.set(cidStr, entry.bytes as Uint8Array<ArrayBuffer>);
 	}
 

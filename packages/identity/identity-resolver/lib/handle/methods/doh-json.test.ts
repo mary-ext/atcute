@@ -170,7 +170,7 @@ describe('DohJsonHandleResolver', () => {
 		}
 
 		expect(error).toBeInstanceOf(FailedHandleResolutionError);
-		expect((error as Error).cause).toBeInstanceOf(TypeError);
+		expect(error).toHaveProperty('cause', expect.any(TypeError));
 	});
 
 	it('throws on non-ok dns response', async () => {
@@ -198,6 +198,6 @@ describe('DohJsonHandleResolver', () => {
 		}
 
 		expect(error).toBeInstanceOf(FailedHandleResolutionError);
-		expect((error as Error).cause).toBeInstanceOf(TypeError);
+		expect(error).toHaveProperty('cause', expect.any(TypeError));
 	});
 });

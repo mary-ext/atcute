@@ -156,7 +156,7 @@ it('works with custom feature types', () => {
 it('returns unknown feature type when facets is undefined', () => {
 	const result = segmentize('hello', undefined);
 
-	expectTypeOf(result).toEqualTypeOf<RichtextSegment<unknown>[]>();
+	expectTypeOf(result).toEqualTypeOf<RichtextSegment[]>();
 });
 
 it('accepts bluesky facets as compatible with Facet interface', () => {

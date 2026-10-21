@@ -111,11 +111,11 @@ const jwkSymKeySchema = v.looseObject({
 	k: v.string(),
 });
 
-const hasPrivateSecret = <J extends object>(jwk: J): boolean => {
+const hasPrivateSecret = (jwk: object): boolean => {
 	return ('d' in jwk && jwk.d != null) || ('k' in jwk && jwk.k != null);
 };
 
-const isPublicJwk = <J extends object>(jwk: J): boolean => {
+const isPublicJwk = (jwk: object): boolean => {
 	return !hasPrivateSecret(jwk);
 };
 

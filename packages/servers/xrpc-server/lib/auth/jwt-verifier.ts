@@ -290,7 +290,10 @@ export class ServiceJwtVerifier {
 				ok: false,
 				error: {
 					error: `BadJwtLexiconMethod`,
-					description: `jwt lexicon method does not match (expected ${options.lxm})`,
+					description:
+						typeof options.lxm === 'string'
+							? `jwt lexicon method does not match (expected ${options.lxm})`
+							: `jwt lexicon method does not match (expected one of: ${options.lxm.join(', ')})`,
 				},
 			};
 		}

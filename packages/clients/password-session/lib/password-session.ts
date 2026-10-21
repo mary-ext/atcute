@@ -238,6 +238,7 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 		const instance = new PasswordSession(session, options);
 
 		const now = Date.now() / 1_000 + 60 * 5;
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		const accessToken = decodeJwt(session.accessJwt) as { exp: number };
 
 		if (now >= accessToken.exp) {
@@ -446,7 +447,7 @@ export class PasswordSession implements FetchHandlerObject, AsyncDisposable {
 
 				const updated = buildSessionData(existing.service, { ...existing, ...next });
 				this.#sessionData = updated;
-				this.#onUpdate?.(updated);
+				void this.#onUpdate?.(updated);
 			},
 			() => {
 				// ignore background metadata fetch errors
@@ -463,6 +464,7 @@ const buildSessionData = (
 	service: string,
 	raw: ComAtprotoServerCreateSession.$output & { pdsUri?: string },
 ): PasswordSessionData => {
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- trusted pds response
 	const didDoc = raw.didDoc as DidDocument | undefined;
 
 	let pdsUri = raw.pdsUri;

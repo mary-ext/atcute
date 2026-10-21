@@ -10,5 +10,6 @@ export const pick = <T, K extends (keyof T)[]>(obj: T, keys: K): Pick<T, UnwrapA
 		cloned[key] = obj[key];
 	}
 
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	return cloned as Pick<T, UnwrapArray<K>>;
 };

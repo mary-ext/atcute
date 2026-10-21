@@ -27,7 +27,7 @@ export const isTreeEntry = (value: unknown): value is TreeEntry => {
 		return false;
 	}
 
-	const obj = value as Record<string, unknown>;
+	const obj: Partial<Record<keyof TreeEntry, unknown>> = value;
 
 	return (
 		typeof obj.p === 'number' && isBytes(obj.k) && isCidLink(obj.v) && (obj.t === null || isCidLink(obj.t))
@@ -53,7 +53,7 @@ export const isNodeData = (value: unknown): value is NodeData => {
 		return false;
 	}
 
-	const obj = value as Record<string, unknown>;
+	const obj: Partial<Record<keyof NodeData, unknown>> = value;
 
 	return (obj.l === null || isCidLink(obj.l)) && Array.isArray(obj.e) && obj.e.every(isTreeEntry);
 };

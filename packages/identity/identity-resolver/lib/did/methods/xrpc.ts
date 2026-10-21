@@ -24,7 +24,7 @@ export interface XrpcDidDocumentResolverOptions {
 	fetch?: typeof fetch;
 }
 
-export class XrpcDidDocumentResolver implements DidDocumentResolver<string> {
+export class XrpcDidDocumentResolver implements DidDocumentResolver {
 	readonly serviceUrl: string;
 	#fetch: typeof fetch;
 

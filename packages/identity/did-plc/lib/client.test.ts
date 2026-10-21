@@ -186,11 +186,13 @@ describe('PlcClient', () => {
 				await client.submitOperation(wrongDid, signedOp);
 				expect.fail('should have thrown');
 			} catch (error) {
-				expect(error).toBeInstanceOf(PlcClientError);
-				const plcError = error as PlcClientError;
-				expect(plcError.status).toBe(400);
-				expect(plcError.body).toBeDefined();
-				expect(plcError.body?.message).toBeDefined();
+				if (!(error instanceof PlcClientError)) {
+					throw error;
+				}
+
+				expect(error.status).toBe(400);
+				expect(error.body).toBeDefined();
+				expect(error.body?.message).toBeDefined();
 			}
 		});
 	});

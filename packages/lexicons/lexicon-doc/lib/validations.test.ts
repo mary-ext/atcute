@@ -317,8 +317,7 @@ describe('RecordValidator', () => {
 				},
 			});
 
-			expect(result.object).toHaveProperty('items');
-			expect((result.object as any).items).toHaveLength(3);
+			expect(result.object).toHaveProperty('items', ['item1', 'item2', 'item3']);
 		});
 
 		test('validates bytes record', () => {
@@ -543,8 +542,8 @@ describe('RecordValidator', () => {
 				},
 			});
 
-			expect((result.object as any).note).toBe('hi');
-			expect(result.object as any).not.toHaveProperty('tag');
+			expect(result.object).toHaveProperty('note', 'hi');
+			expect(result.object).not.toHaveProperty('tag');
 		});
 
 		test('accepts null on an optional nullable field without applying the default', () => {
@@ -560,8 +559,8 @@ describe('RecordValidator', () => {
 				},
 			});
 
-			expect((result.object as any).note).toBeNull();
-			expect((result.object as any).tag).toBeNull();
+			expect(result.object).toHaveProperty('note', null);
+			expect(result.object).toHaveProperty('tag', null);
 		});
 
 		test('still validates the wrapped schema of an optional nullable field', () => {
@@ -650,7 +649,7 @@ describe('RecordValidator', () => {
 				},
 			});
 
-			expect((result.object as any).entry.value).toBe('x');
+			expect(result.object).toHaveProperty(['entry', 'value'], 'x');
 		});
 
 		test('open union accepts an unknown member $type', () => {
@@ -664,7 +663,7 @@ describe('RecordValidator', () => {
 				},
 			});
 
-			expect((result.object as any).entry.$type).toBe('com.example.open-union#itemB');
+			expect(result.object).toHaveProperty(['entry', '$type'], 'com.example.open-union#itemB');
 		});
 	});
 

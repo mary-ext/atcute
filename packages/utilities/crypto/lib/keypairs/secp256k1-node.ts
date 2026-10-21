@@ -37,6 +37,7 @@ const toUint8Array = (buffer: Buffer<ArrayBuffer>): Uint8Array<ArrayBuffer> => {
 
 // @types/node@26 dropped `KeyObject` from `createPublicKey`'s accepted inputs, but passing a private
 // key to derive its public counterpart is still supported at runtime.
+// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 const derivePublicKey = createPublicKey as unknown as (privateKey: KeyObject) => KeyObject;
 
 // SEC 2, ver. 2.0, § 2.4.1 Recommended Parameters secp256k1
@@ -106,7 +107,7 @@ class NodeSecp256k1PublicKey implements PublicKey {
 	exportPublicKey(format: 'rawHex'): Promise<string>;
 	async exportPublicKey(
 		format: 'did' | 'jwk' | 'multikey' | 'raw' | 'rawHex',
-	): Promise<DidKeyString | JsonWebKey | Uint8Array<ArrayBuffer> | string> {
+	): Promise<JsonWebKey | Uint8Array<ArrayBuffer> | string> {
 		const publicKey = this._publicKey;
 
 		if (format === 'jwk') {

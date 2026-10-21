@@ -28,5 +28,6 @@ export const isAtprotoAudience = (input: unknown): input is AtprotoAudience => {
 export const extractDidMethod = <M extends string>(did: Did<M>): M => {
 	const isep = did.indexOf(':', 4);
 	const method = did.slice(4, isep);
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	return method as M;
 };

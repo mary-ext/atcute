@@ -326,7 +326,7 @@ describe('NormalizedCache', () => {
 			expect(author?.handle).toBe('thatmc.bsky.social');
 
 			// and should be the same reference in the post
-			const post = result.feed[0]!.post as any;
+			const post = result.feed[0]!.post;
 			expect(post.author).toBe(author);
 		});
 
@@ -368,7 +368,7 @@ describe('NormalizedCache', () => {
 			const result = cache.normalize(schema, response);
 
 			// both posts should reference the same cached author
-			expect((result.feed[0]!.post as any).author).toBe((result.feed[1]!.post as any).author);
+			expect(result.feed[0]!.post.author).toBe(result.feed[1]!.post.author);
 		});
 
 		it('normalizer() returns a reusable function', () => {
@@ -396,7 +396,7 @@ describe('NormalizedCache', () => {
 
 			// should update the same cached entity
 			expect(result2.feed[0]!.post).toBe(result1.feed[0]!.post);
-			expect((result2.feed[0]!.post as any).likeCount).toBe(5000);
+			expect(result2.feed[0]!.post.likeCount).toBe(5000);
 		});
 	});
 
@@ -574,7 +574,7 @@ describe('NormalizedCache', () => {
 			expect(wrapEntity).toHaveBeenCalled();
 
 			const post = cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0]!.post.uri);
-			expect((post as any).__wrapped).toBe(true);
+			expect(post).toHaveProperty('__wrapped', true);
 		});
 
 		it('wraps new entities from set', () => {
@@ -595,7 +595,7 @@ describe('NormalizedCache', () => {
 			expect(wrapEntity).toHaveBeenCalledWith(post);
 
 			const cached = cache.get(AppBskyFeedDefs.postViewSchema, post.uri);
-			expect((cached as any).__wrapped).toBe(true);
+			expect(cached).toHaveProperty('__wrapped', true);
 		});
 
 		it('does not re-wrap existing entities', () => {

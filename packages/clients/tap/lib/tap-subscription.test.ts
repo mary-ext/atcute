@@ -66,6 +66,7 @@ describe('tap subscription', () => {
 		server.on('connection', (socket: WebSocket) => {
 			socket.send(JSON.stringify(createRecordEvent(42)));
 			socket.on('message', (data: RawData) => {
+				// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 				const msg = JSON.parse(typeof data === 'string' ? data : decodeUtf8From(data as Uint8Array));
 				if (msg.type === 'ack') {
 					receivedAcks.push(msg.id);
@@ -121,6 +122,7 @@ describe('tap subscription', () => {
 			}
 
 			socket.on('message', (data: RawData) => {
+				// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 				const msg = JSON.parse(typeof data === 'string' ? data : decodeUtf8From(data as Uint8Array));
 				if (msg.type === 'ack') {
 					receivedAcks.push(msg.id);

@@ -49,6 +49,7 @@ export const buildClientMetadata = (
 		dpop_bound_access_tokens: true,
 
 		jwks_uri: conf.jwks_uri,
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- crypto's jwk types don't pair alg with kty
 		jwks: conf.jwks_uri ? undefined : (keyset.publicJwks as OAuthClientMetadata['jwks']),
 	};
 

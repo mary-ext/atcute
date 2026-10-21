@@ -75,8 +75,8 @@ export class Secp256k1PublicKey implements PublicKey {
 	exportPublicKey(format: 'rawHex'): Promise<string>;
 	async exportPublicKey(
 		format: 'did' | 'jwk' | 'multikey' | 'raw' | 'rawHex',
-	): Promise<DidKeyString | JsonWebKey | Uint8Array<ArrayBuffer> | string> {
-		const publicKeyBytes = this._publicKey as Uint8Array<ArrayBuffer>;
+	): Promise<JsonWebKey | Uint8Array<ArrayBuffer> | string> {
+		const publicKeyBytes = this._publicKey;
 
 		if (format === 'jwk') {
 			return toJsonWebKey(publicKeyBytes);
@@ -90,7 +90,8 @@ export class Secp256k1PublicKey implements PublicKey {
 				return toMultikey(SECP256K1_PUBLIC_PREFIX, publicKeyBytes);
 			}
 			case 'raw': {
-				return publicKeyBytes;
+				// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- returns the bytes given at import as-is
+				return publicKeyBytes as Uint8Array<ArrayBuffer>;
 			}
 			case 'rawHex': {
 				return toBase16(publicKeyBytes);
@@ -128,7 +129,7 @@ export class Secp256k1PrivateKey extends Secp256k1PublicKey implements PrivateKe
 		const hashed = await toSha256(data);
 		const sig = await signAsync(hashed, this._privateKey, { lowS: true, prehash: false });
 
-		return sig as Uint8Array<ArrayBuffer>;
+		return sig;
 	}
 }
 
@@ -163,8 +164,8 @@ export class Secp256k1PrivateKeyExportable extends Secp256k1PrivateKey implement
 	async exportPrivateKey(
 		format: 'raw' | 'rawHex' | 'multikey' | 'jwk',
 	): Promise<Uint8Array<ArrayBuffer> | string | JsonWebKey> {
-		const privateKeyBytes = this._privateKey as Uint8Array<ArrayBuffer>;
-		const publicKeyBytes = this._publicKey as Uint8Array<ArrayBuffer>;
+		const privateKeyBytes = this._privateKey;
+		const publicKeyBytes = this._publicKey;
 
 		if (format === 'jwk') {
 			return toJsonWebKey(publicKeyBytes, privateKeyBytes);

@@ -29,8 +29,11 @@ const assertCanonicalPadded = (str: string, n: number): void => {
 	}
 };
 
+// Uint8Array.fromBase64 allocates an ArrayBuffer, but its typings don't specify the buffer type
+
 // #region base64
 export const fromBase64 = (str: string): Uint8Array<ArrayBuffer> => {
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	const bytes = Uint8Array.fromBase64(str, {
 		alphabet: 'base64',
 		lastChunkHandling: 'loose',
@@ -46,6 +49,7 @@ export const toBase64 = (bytes: Uint8Array): string => {
 
 // #region base64pad
 export const fromBase64Pad = (str: string): Uint8Array<ArrayBuffer> => {
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	const bytes = Uint8Array.fromBase64(str, {
 		alphabet: 'base64',
 		lastChunkHandling: 'strict',
@@ -61,6 +65,7 @@ export const toBase64Pad = (bytes: Uint8Array): string => {
 
 // #region base64url
 export const fromBase64Url = (str: string): Uint8Array<ArrayBuffer> => {
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	const bytes = Uint8Array.fromBase64(str, {
 		alphabet: 'base64url',
 		lastChunkHandling: 'loose',
@@ -76,6 +81,7 @@ export const toBase64Url = (bytes: Uint8Array): string => {
 
 // #region base64urlpad
 export const fromBase64UrlPad = (str: string): Uint8Array<ArrayBuffer> => {
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 	const bytes = Uint8Array.fromBase64(str, {
 		alphabet: 'base64url',
 		lastChunkHandling: 'strict',

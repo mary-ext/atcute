@@ -82,10 +82,7 @@ export const verifyRecord = async ({
 		const { sig, ...unsigned } = commit;
 
 		const data = CBOR.encode(unsigned);
-		const valid = await publicKey.verify(
-			CBOR.fromBytes(sig) as Uint8Array<ArrayBuffer>,
-			data as Uint8Array<ArrayBuffer>,
-		);
+		const valid = await publicKey.verify(CBOR.fromBytes(sig), data);
 
 		assert(valid, `signature verification failed`);
 	}

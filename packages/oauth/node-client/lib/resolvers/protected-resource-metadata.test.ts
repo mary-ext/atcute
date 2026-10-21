@@ -1,6 +1,6 @@
 import type { AtprotoProtectedResourceMetadata } from '@atcute/oauth-types';
 
-import { describe, expect, it, vi } from 'vitest';
+import { assert, describe, expect, it, vi } from 'vitest';
 
 import { MemoryStore } from '../utils/memory-store.ts';
 
@@ -39,7 +39,8 @@ describe('ProtectedResourceMetadataResolver', () => {
 			expect(result.authorization_servers).toContain('https://auth.example.com');
 			expect(mockFetch).toHaveBeenCalledTimes(1);
 
-			const request = mockFetch.mock.calls[0]![0] as URL;
+			const request = mockFetch.mock.calls[0]![0];
+			assert(request instanceof URL);
 			expect(request.href).toBe(`${resource}/.well-known/oauth-protected-resource`);
 		});
 

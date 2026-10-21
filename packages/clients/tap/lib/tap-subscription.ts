@@ -169,8 +169,8 @@ export class TapSubscription {
 				evt = flattenTapEvent(result.output);
 			} else {
 				try {
-					// oxlint-disable-next-line typescript/no-explicit-any
-					evt = flattenTapEvent(raw as any);
+					// oxlint-disable-next-line typescript/no-unsafe-type-assertion
+					evt = flattenTapEvent(raw as v.InferOutput<typeof tapEventWireSchema>);
 				} catch (err) {
 					onError?.(err);
 					return;

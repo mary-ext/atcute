@@ -209,9 +209,9 @@ export class XRPCRouter {
 		}
 	}
 
-	addQuery<TQuery extends XRPCQueryMetadata, TConfig extends QueryConfig<TQuery>>(
+	addQuery<TQuery extends XRPCQueryMetadata>(
 		query: TQuery | Namespaced<TQuery>,
-		config: TConfig,
+		config: QueryConfig<TQuery>,
 	): void {
 		const querySchema = unwrapLxm(query);
 		const handleParams = querySchema.params ? constructParamsHandler(querySchema.params) : null;
@@ -240,8 +240,7 @@ export class XRPCRouter {
 					params: params,
 				};
 
-				// oxlint-disable-next-line typescript/no-explicit-any
-				const output = await handler(context as any);
+				const output = await handler(context);
 
 				if (output instanceof Response) {
 					return output;
@@ -252,9 +251,9 @@ export class XRPCRouter {
 		};
 	}
 
-	addProcedure<TProcedure extends XRPCProcedureMetadata, TConfig extends ProcedureConfig<TProcedure>>(
+	addProcedure<TProcedure extends XRPCProcedureMetadata>(
 		procedure: TProcedure | Namespaced<TProcedure>,
-		config: TConfig,
+		config: ProcedureConfig<TProcedure>,
 	): void {
 		const procedureSchema = unwrapLxm(procedure);
 		const handleParams = procedureSchema.params ? constructParamsHandler(procedureSchema.params) : null;
@@ -323,7 +322,7 @@ export class XRPCRouter {
 					input: input,
 				};
 
-				// oxlint-disable-next-line typescript/no-explicit-any
+				// oxlint-disable-next-line typescript/no-explicit-any, typescript/no-unsafe-type-assertion -- validation doesn't narrow the conditional context type
 				const output = await handler(context as any);
 
 				if (output instanceof Response) {
@@ -335,10 +334,13 @@ export class XRPCRouter {
 		};
 	}
 
+	// TConfig preserves literal types in generator yields
+	// oxlint-disable typescript/no-unnecessary-type-parameters
 	addSubscription<
 		TSubscription extends XRPCSubscriptionMetadata,
 		TConfig extends SubscriptionConfig<TSubscription>,
 	>(subscription: TSubscription | Namespaced<TSubscription>, config: TConfig): void {
+		// oxlint-enable typescript/no-unnecessary-type-parameters
 		const websocket = this.#websocket;
 		if (websocket === undefined) {
 			throw new Error(`WebSocket adapter not configured`);

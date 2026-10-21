@@ -54,6 +54,7 @@ const decodeV0CborFrame = (data: unknown, nsid: string): DecodedFrame => {
 
 		const type = header.t;
 		if (type !== undefined) {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			(body as Record<string, unknown>).$type = type[0] === '#' ? nsid + type : type;
 		}
 
@@ -62,6 +63,7 @@ const decodeV0CborFrame = (data: unknown, nsid: string): DecodedFrame => {
 			body,
 		};
 	} else {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- error frame body is not validated
 		const errorBody = body as ErrorFrameBody;
 		return {
 			type: 'error',
@@ -88,7 +90,7 @@ const decodeV1Envelope = (value: unknown): DecodedFrame => {
 		throw new Error(`invalid v1 frame`);
 	}
 
-	const frame = value as Record<string, unknown>;
+	const frame: { $type?: unknown; error?: unknown; message?: unknown; payload?: unknown } = value;
 
 	switch (frame.$type) {
 		case 'error': {
@@ -140,7 +142,7 @@ const isValidHeader = (value: unknown): value is FrameHeader => {
 		return false;
 	}
 
-	const obj = value as Record<string, unknown>;
+	const obj: { op?: unknown; t?: unknown } = value;
 
 	return (obj.op === 1 || obj.op === -1) && (obj.t === undefined || typeof obj.t === 'string');
 };

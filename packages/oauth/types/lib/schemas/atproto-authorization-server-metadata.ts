@@ -23,6 +23,7 @@ export const atprotoAuthorizationServerMetadataValidator = v.pipe(
 		),
 		['pushed_authorization_request_endpoint'],
 	),
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- narrowed by the checks above
 	v.transform((data) => data as typeof data & { pushed_authorization_request_endpoint: string }),
 );
 

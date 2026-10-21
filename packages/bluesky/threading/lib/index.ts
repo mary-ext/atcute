@@ -86,20 +86,24 @@ export async function createThread(
 		if (typeof post === 'string') {
 			// AT-URI being passed
 			assertClient(client, `ComposedThread.reply`);
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- AppView validates the URI
 			post = await getPost(post as ResourceUri);
 		}
 
 		let root: ComAtprotoRepoStrongRef.Main | undefined;
 		let ref: ComAtprotoRepoStrongRef.Main;
 
+		// assumes AppView records are app.bsky.feed.post
 		if ('record' in post) {
 			// AppBskyFeedDefs.PostView being passed
 
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			root = (post.record as AppBskyFeedPost.Main).reply?.root;
 			ref = { uri: post.uri, cid: post.cid };
 		} else if ('value' in post) {
 			// AppBskyEmbedRecord.ViewRecord being passed
 
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			root = (post.value as AppBskyFeedPost.Main).reply?.root;
 			ref = { uri: post.uri, cid: post.cid };
 		} else {

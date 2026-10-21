@@ -29,6 +29,7 @@ export const isSigningAlgorithm = (alg: string): alg is SigningAlgorithm => {
 export const parsePrivateJwkInput = (input: PrivateJwk | string): PrivateJwk => {
 	if (typeof input === 'string') {
 		try {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			const jwk = JSON.parse(input) as PrivateJwk;
 			return jwk;
 		} catch {
@@ -102,16 +103,10 @@ export const importPrivateKeyFromJwk = async (jwk: PrivateJwk, alg: SigningAlgor
 	return key;
 };
 
-export const exportPrivateJwkFromKey = async (
-	key: CryptoKey,
-	alg: SigningAlgorithm,
-	kid?: string,
-): Promise<PrivateJwk> => {
+export const exportPrivateJwkFromKey = async (key: CryptoKey, alg: SigningAlgorithm): Promise<PrivateJwk> => {
+	// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- webcrypto exports asymmetric private keys in this shape
 	const jwk = (await crypto.subtle.exportKey('jwk', key)) as PrivateJwk;
 	jwk.alg = alg;
-	if (kid) {
-		jwk.kid = kid;
-	}
 	return jwk;
 };
 

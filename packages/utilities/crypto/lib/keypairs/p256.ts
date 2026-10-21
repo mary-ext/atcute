@@ -41,6 +41,7 @@ const importPublicKey = async (
 	usages: KeyUsage[],
 ): Promise<CryptoKey> => {
 	if (IS_COMPRESSED_POINT_SUPPORTED === true || isUncompressedPoint(publicKeyBytes)) {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		return crypto.subtle.importKey('raw', publicKeyBytes as BufferSource, ECDSA_ALG, extractable, usages);
 	}
 
@@ -57,6 +58,7 @@ const importPublicKey = async (
 	try {
 		const key = await crypto.subtle.importKey(
 			'raw',
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			publicKeyBytes as BufferSource,
 			ECDSA_ALG,
 			extractable,
@@ -124,6 +126,7 @@ export class P256PublicKey implements PublicKey {
 
 	static async importCryptoKey(publicKey: CryptoKey): Promise<P256PublicKey> {
 		// Type cast to make resulting code smaller
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		assertType((publicKey.algorithm as any).namedCurve === 'P-256', 'not an ECDSA P-256 key');
 		assertType(publicKey.type === 'public', 'not a public key');
 		assertType(publicKey.extractable, 'key must be extractable');
@@ -142,6 +145,7 @@ export class P256PublicKey implements PublicKey {
 			return false;
 		}
 
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		return await crypto.subtle.verify(ECDSA_ALG, this._publicKey, sig as BufferSource, data as BufferSource);
 	}
 
@@ -152,7 +156,7 @@ export class P256PublicKey implements PublicKey {
 	exportPublicKey(format: 'rawHex'): Promise<string>;
 	async exportPublicKey(
 		format: 'did' | 'jwk' | 'multikey' | 'raw' | 'rawHex',
-	): Promise<DidKeyString | JsonWebKey | Uint8Array<ArrayBuffer> | string> {
+	): Promise<JsonWebKey | Uint8Array<ArrayBuffer> | string> {
 		if (format === 'jwk') {
 			return await crypto.subtle.exportKey('jwk', this._publicKey);
 		}
@@ -223,10 +227,12 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 		publicKey?: CryptoKey,
 	): Promise<P256PrivateKey> {
 		// Type cast to make resulting code smaller
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		assertType((privateKey.algorithm as any).namedCurve === 'P-256', '1st key is not an ECDSA P-256 key');
 		assertType(privateKey.type === 'private', '1st key is not a private key');
 
 		if (publicKey) {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			assertType((publicKey.algorithm as any).namedCurve === 'P-256', '2nd key is not an ECDSA P-256 key');
 			assertType(publicKey.type === 'public', '2nd key is not a public key');
 			assertType(publicKey.extractable, 'public key must be extractable');
@@ -252,6 +258,7 @@ export class P256PrivateKey extends P256PublicKey implements PrivateKey {
 	}
 
 	async sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		const sig = await crypto.subtle.sign(ECDSA_ALG, this._privateKey, data as BufferSource);
 		return normalizeSignature(new Uint8Array(sig), P256_N);
 	}
@@ -293,11 +300,13 @@ export class P256PrivateKeyExportable extends P256PrivateKey implements PrivateK
 		privateKey: CryptoKey,
 		publicKey?: CryptoKey,
 	): Promise<P256PrivateKeyExportable> {
+		// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 		assertType((privateKey.algorithm as any).namedCurve === 'P-256', '1st key is not an ECDSA P-256 key');
 		assertType(privateKey.type === 'private', '1st key is not a private key');
 		assertType(privateKey.extractable, 'private key must be extractable');
 
 		if (publicKey) {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion
 			assertType((publicKey.algorithm as any).namedCurve === 'P-256', '2nd key is not an ECDSA P-256 key');
 			assertType(publicKey.type === 'public', '2nd key is not a public key');
 			assertType(publicKey.extractable, 'public key must be extractable');

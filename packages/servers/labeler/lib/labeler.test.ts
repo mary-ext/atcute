@@ -1,4 +1,3 @@
-import type * as ComAtprotoLabelDefs from '@atcute/atproto/types/label/defs';
 import { fromBytes, isBytes } from '@atcute/cbor';
 import type { PrivateKey } from '@atcute/crypto';
 
@@ -24,9 +23,10 @@ const createTestPrivateKey = (): PrivateKey => {
 			return true;
 		},
 		async exportPublicKey() {
+			// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- stub ignores the requested export format
 			return 'did:key:test' as any;
 		},
-	} as PrivateKey;
+	};
 };
 
 const collectOne = async <T>(iterable: AsyncIterable<T>): Promise<T> => {
@@ -62,7 +62,7 @@ describe('Labeler', () => {
 		expect(labels[1]?.neg).toBe(true);
 		expect(labels.every((label) => isBytes(label.sig))).toBe(true);
 
-		const firstSig = fromBytes(labels[0]!.sig as NonNullable<ComAtprotoLabelDefs.Label['sig']>);
+		const firstSig = fromBytes(labels[0]!.sig);
 		expect(firstSig.length).toBe(8);
 	});
 

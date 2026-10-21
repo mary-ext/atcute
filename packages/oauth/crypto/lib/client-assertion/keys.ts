@@ -17,7 +17,7 @@ export const importClientAssertionPkcs8 = async (
 ): Promise<ClientAssertionPrivateJwk> => {
 	const { kid, alg } = options;
 	const cryptoKey = await importPkcs8PrivateKey(pem, alg);
-	const jwk = (await exportPrivateJwkFromKey(cryptoKey, alg, kid)) as ClientAssertionPrivateJwk;
+	const jwk: ClientAssertionPrivateJwk = { ...(await exportPrivateJwkFromKey(cryptoKey, alg)), kid };
 
 	// pre-populate cache so we don't re-import
 	setCachedKeyMaterial(jwk, cryptoKey);

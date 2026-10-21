@@ -1,6 +1,6 @@
 import type { AtprotoAuthorizationServerMetadata } from '@atcute/oauth-types';
 
-import { describe, expect, it, vi } from 'vitest';
+import { assert, describe, expect, it, vi } from 'vitest';
 
 import { MemoryStore } from '../utils/memory-store.ts';
 
@@ -50,7 +50,8 @@ describe('AuthorizationServerMetadataResolver', () => {
 			expect(result.authorization_endpoint).toBe(`${issuer}/oauth/authorize`);
 			expect(mockFetch).toHaveBeenCalledTimes(1);
 
-			const request = mockFetch.mock.calls[0]![0] as URL;
+			const request = mockFetch.mock.calls[0]![0];
+			assert(request instanceof URL);
 			expect(request.href).toBe(`${issuer}/.well-known/oauth-authorization-server`);
 		});
 
@@ -106,15 +107,7 @@ describe('AuthorizationServerMetadataResolver', () => {
 				fetch: mockFetch,
 			});
 
-			let error: Error | undefined;
-			try {
-				await resolver.resolve('https://auth.example.com');
-			} catch (e) {
-				error = e as Error;
-			}
-
-			expect(error).toBeDefined();
-			expect(error!.message).toContain('unexpected status 404');
+			await expect(resolver.resolve('https://auth.example.com')).rejects.toThrow('unexpected status 404');
 		});
 
 		it('should throw on issuer mismatch', async () => {
@@ -127,15 +120,7 @@ describe('AuthorizationServerMetadataResolver', () => {
 				fetch: mockFetch,
 			});
 
-			let error: Error | undefined;
-			try {
-				await resolver.resolve(issuer);
-			} catch (e) {
-				error = e as Error;
-			}
-
-			expect(error).toBeDefined();
-			expect(error!.message).toContain('issuer mismatch');
+			await expect(resolver.resolve(issuer)).rejects.toThrow('issuer mismatch');
 		});
 
 		it('should throw on invalid issuer format', async () => {

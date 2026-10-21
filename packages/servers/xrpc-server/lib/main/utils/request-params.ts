@@ -54,7 +54,7 @@ const isNonEmpty = (str: string): boolean => {
 	return str !== '';
 };
 
-export const constructParamsHandler = <TSchema extends ObjectSchema>(schema: TSchema) => {
+export const constructParamsHandler = (schema: ObjectSchema) => {
 	const entries = Object.entries(schema.shape).map(([key, schema]) => {
 		const nonnullable = unwrapOptional(schema);
 		const singular = unwrapArray(nonnullable);

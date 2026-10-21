@@ -77,8 +77,14 @@ export class Keyset {
 	get(options?: KeySearchOptions): ClientAssertionPrivateJwk {
 		const key = this.find(options);
 		if (!key) {
-			const desc = options?.kid ?? options?.alg ?? 'any';
-			throw new Error(`no key found matching: ${desc}`);
+			const { kid, alg } = options ?? {};
+
+			let desc = kid;
+			if (desc === undefined && alg !== undefined) {
+				desc = typeof alg === 'string' ? alg : alg.join(', ');
+			}
+
+			throw new Error(`no key found matching: ${desc ?? 'any'}`);
 		}
 		return key;
 	}
@@ -94,8 +100,8 @@ export class Keyset {
 
 		// sort keys by algorithm preference, unrecognized algorithms sort last
 		const sorted = this.keys.toSorted((a, b) => {
-			const aIdx = PREFERRED_ALGORITHMS.indexOf(a.alg as (typeof PREFERRED_ALGORITHMS)[number]);
-			const bIdx = PREFERRED_ALGORITHMS.indexOf(b.alg as (typeof PREFERRED_ALGORITHMS)[number]);
+			const aIdx = PREFERRED_ALGORITHMS.indexOf(a.alg);
+			const bIdx = PREFERRED_ALGORITHMS.indexOf(b.alg);
 
 			const aRank = aIdx !== -1 ? aIdx : PREFERRED_ALGORITHMS.length;
 			const bRank = bIdx !== -1 ? bIdx : PREFERRED_ALGORITHMS.length;

@@ -9,9 +9,9 @@ export const mockNetworkUtilities = (pds: TestPdsServer) => {
 
 export const mockResolvers = (idResolver: IdResolver, pds: TestPdsServer) => {
 	// Map pds public url to its local url when resolving from plc
-	const origResolveDid = idResolver.did.resolveNoCache;
+	const origResolveDid = idResolver.did.resolveNoCache.bind(idResolver.did);
 	idResolver.did.resolveNoCache = async (did: string) => {
-		const result = await (origResolveDid.call(idResolver.did, did) as ReturnType<typeof origResolveDid>);
+		const result = await origResolveDid(did);
 		const service = result?.service?.find((svc) => svc.id === '#atproto_pds');
 
 		if (typeof service?.serviceEndpoint === 'string') {
@@ -24,12 +24,12 @@ export const mockResolvers = (idResolver: IdResolver, pds: TestPdsServer) => {
 		return result;
 	};
 
-	const origResolveHandleDns = idResolver.handle.resolveDns;
+	const origResolveHandleDns = idResolver.handle.resolveDns.bind(idResolver.handle);
 	idResolver.handle.resolve = async (handle: string) => {
 		const isPdsHandle = pds.ctx.cfg.identity.serviceHandleDomains.some((domain) => handle.endsWith(domain));
 
 		if (!isPdsHandle) {
-			return origResolveHandleDns.call(idResolver.handle, handle);
+			return origResolveHandleDns(handle);
 		}
 
 		const url = `${pds.url}/.well-known/atproto-did`;
