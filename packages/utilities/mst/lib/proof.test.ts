@@ -32,6 +32,20 @@ const expectMismatch = async (promise: Promise<void>) => {
 	expect(err.cause).toBeInstanceOf(BlockMismatchError);
 };
 
+const buildTree = async (count: number, flavor: string) => {
+	const blocks = new MemoryBlockStore();
+	const store = new NodeStore(blocks);
+	const wrangler = new NodeWrangler(store);
+
+	let rootCid: string | null = null;
+	for (let i = 0; i < count; i++) {
+		const rpath = `app.bsky.feed.post/${String(i).padStart(13, '0')}`;
+		rootCid = await wrangler.putRecord(rootCid, rpath, await createCid(`${flavor}-${rpath}`));
+	}
+
+	return { blocks, store, rootCid: rootCid! };
+};
+
 describe('Proof', () => {
 	it('should build and verify inclusion proof', async () => {
 		const store = new NodeStore(new MemoryBlockStore());
@@ -210,20 +224,6 @@ describe('Proof', () => {
 
 	describe('tampered blocks', () => {
 		const TARGET = 'app.bsky.feed.post/0000000000042';
-
-		const buildTree = async (count: number, flavor: string) => {
-			const blocks = new MemoryBlockStore();
-			const store = new NodeStore(blocks);
-			const wrangler = new NodeWrangler(store);
-
-			let rootCid: string | null = null;
-			for (let i = 0; i < count; i++) {
-				const rpath = `app.bsky.feed.post/${String(i).padStart(13, '0')}`;
-				rootCid = await wrangler.putRecord(rootCid, rpath, await createCid(`${flavor}-${rpath}`));
-			}
-
-			return { blocks, store, rootCid: rootCid! };
-		};
 
 		it('should refuse a whole tree served under an honest root cid', async () => {
 			const honest = await buildTree(256, 'real');

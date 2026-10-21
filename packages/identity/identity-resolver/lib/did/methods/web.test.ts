@@ -123,15 +123,15 @@ describe('WebDidDocumentResolver', () => {
 		expect(accept).toBe(ACCEPTED_MEDIA_TYPES);
 	});
 
-	describe('content types', () => {
-		const createResolver = (contentType: string): WebDidDocumentResolver => {
-			return new WebDidDocumentResolver({
-				async fetch() {
-					return Response.json(EXAMPLE_DOCUMENT, { headers: { 'content-type': contentType } });
-				},
-			});
-		};
+	const createResolver = (contentType: string): WebDidDocumentResolver => {
+		return new WebDidDocumentResolver({
+			async fetch() {
+				return Response.json(EXAMPLE_DOCUMENT, { headers: { 'content-type': contentType } });
+			},
+		});
+	};
 
+	describe('content types', () => {
 		it.each([
 			'application/did+json',
 			'application/did+ld+json',

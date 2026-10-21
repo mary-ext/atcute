@@ -33,10 +33,10 @@ const opts = (): ModerationOptions => ({
 	labelDefs: {},
 });
 
+const followed = () => mock.actorViewerState({ following: FAKE_FOLLOW });
+
 // follow states are set in opposition so consulting the wrong author flips the result
 const quotePost = ({ quotedFollowed }: { quotedFollowed: boolean }) => {
-	const followed = () => mock.actorViewerState({ following: FAKE_FOLLOW });
-
 	return mock.postView({
 		record: mock.post({ text: 'check this out' }),
 		author: mock.profileView({

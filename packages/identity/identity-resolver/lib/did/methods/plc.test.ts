@@ -87,15 +87,15 @@ describe('PlcDidDocumentResolver', () => {
 		expect(accept).toBe('application/did+ld+json,application/did+json,application/json');
 	});
 
-	describe('content types', () => {
-		const createResolver = (contentType: string): PlcDidDocumentResolver => {
-			return new PlcDidDocumentResolver({
-				async fetch() {
-					return Response.json(EXAMPLE_DOCUMENT, { headers: { 'content-type': contentType } });
-				},
-			});
-		};
+	const createResolver = (contentType: string): PlcDidDocumentResolver => {
+		return new PlcDidDocumentResolver({
+			async fetch() {
+				return Response.json(EXAMPLE_DOCUMENT, { headers: { 'content-type': contentType } });
+			},
+		});
+	};
 
+	describe('content types', () => {
 		it.each([
 			'application/did+json',
 			'application/did+ld+json',

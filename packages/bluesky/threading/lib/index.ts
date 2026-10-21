@@ -218,151 +218,149 @@ export async function createThread(
 		}
 
 		return;
+	}
 
-		async function resolveMediaEmbed(
-			embed: PostMediaEmbed,
-		): Promise<$type.enforce<AppBskyEmbedExternal.Main | AppBskyEmbedImages.Main | AppBskyEmbedVideo.Main>> {
-			const type = embed.type;
+	async function resolveMediaEmbed(
+		embed: PostMediaEmbed,
+	): Promise<$type.enforce<AppBskyEmbedExternal.Main | AppBskyEmbedImages.Main | AppBskyEmbedVideo.Main>> {
+		const type = embed.type;
 
-			if (type === 'external') {
-				const rawThumb = embed.thumbnail;
-				// oxlint-disable-next-line typescript/no-explicit-any
-				let thumb: AtBlob<any> | undefined;
+		if (type === 'external') {
+			const rawThumb = embed.thumbnail;
+			// oxlint-disable-next-line typescript/no-explicit-any
+			let thumb: AtBlob<any> | undefined;
 
-				if (rawThumb !== undefined) {
-					if (rawThumb instanceof Blob) {
-						assertClient(client, `PostExternalEmbed.thumbnail`);
-						thumb = await uploadBlob(rawThumb);
-					} else {
-						thumb = rawThumb;
-					}
+			if (rawThumb !== undefined) {
+				if (rawThumb instanceof Blob) {
+					assertClient(client, `PostExternalEmbed.thumbnail`);
+					thumb = await uploadBlob(rawThumb);
+				} else {
+					thumb = rawThumb;
 				}
-
-				return {
-					$type: 'app.bsky.embed.external',
-					external: {
-						uri: embed.uri,
-						title: embed.title,
-						description: embed.description ?? '',
-						thumb: thumb,
-					},
-				};
 			}
 
-			if (type === 'image') {
-				const images: AppBskyEmbedImages.Image[] = [];
+			return {
+				$type: 'app.bsky.embed.external',
+				external: {
+					uri: embed.uri,
+					title: embed.title,
+					description: embed.description ?? '',
+					thumb: thumb,
+				},
+			};
+		}
 
-				for (const image of embed.images) {
-					const aspectRatio = image.aspectRatio;
-					const rawBlob = image.blob;
-					// oxlint-disable-next-line typescript/no-explicit-any
-					let blob: AtBlob<any>;
+		if (type === 'image') {
+			const images: AppBskyEmbedImages.Image[] = [];
 
-					if (rawBlob instanceof Blob) {
-						assertClient(client, `PostImageEmbed.images[].blob`);
-						blob = await uploadBlob(rawBlob);
-					} else {
-						blob = rawBlob;
-					}
-
-					images.push({
-						image: blob,
-						alt: image.alt ?? '',
-						aspectRatio: aspectRatio ? { width: aspectRatio.width, height: aspectRatio.height } : undefined,
-					});
-				}
-
-				return {
-					$type: 'app.bsky.embed.images',
-					images: images,
-				};
-			}
-
-			if (type === 'video') {
-				const aspectRatio = embed.aspectRatio;
-				const rawBlob = embed.blob;
+			for (const image of embed.images) {
+				const aspectRatio = image.aspectRatio;
+				const rawBlob = image.blob;
 				// oxlint-disable-next-line typescript/no-explicit-any
-				let blob: AtBlob<any> | undefined;
+				let blob: AtBlob<any>;
 
 				if (rawBlob instanceof Blob) {
-					assertClient(client, `PostVideoEmbed.blob`);
+					assertClient(client, `PostImageEmbed.images[].blob`);
 					blob = await uploadBlob(rawBlob);
 				} else {
 					blob = rawBlob;
 				}
 
-				return {
-					$type: 'app.bsky.embed.video',
-					video: blob,
-					alt: embed.alt ?? '',
+				images.push({
+					image: blob,
+					alt: image.alt ?? '',
 					aspectRatio: aspectRatio ? { width: aspectRatio.width, height: aspectRatio.height } : undefined,
-				};
-			}
-
-			assert(false, `Unexpected end of code`);
-		}
-
-		async function resolveRecordEmbed(
-			embed: PostRecordEmbed,
-		): Promise<$type.enforce<AppBskyEmbedRecord.Main>> {
-			const uri = embed.uri;
-			let cid = embed.cid;
-
-			if (cid === undefined) {
-				const type = embed.type;
-
-				if (type === 'quote') {
-					assertClient(client, 'PostQuoteEmbed');
-
-					const post = await getPost(uri);
-
-					cid = post.cid;
-				} else if (type === 'feed') {
-					assertClient(client, 'PostFeedEmbed');
-
-					const data = await ok(
-						client.get('app.bsky.feed.getFeedGenerator', {
-							signal: signal,
-							params: { feed: uri },
-						}),
-					);
-
-					cid = data.view.cid;
-				} else if (type === 'list') {
-					assertClient(client, 'PostListEmbed');
-
-					const data = await ok(
-						client.get('app.bsky.graph.getList', {
-							signal: signal,
-							params: { list: uri, limit: 1 },
-						}),
-					);
-
-					cid = data.list.cid;
-				} else if (type === 'starterpack') {
-					assertClient(client, 'PostStarterpackEmbed');
-
-					const data = await ok(
-						client.get('app.bsky.graph.getStarterPack', {
-							signal: signal,
-							params: { starterPack: uri },
-						}),
-					);
-
-					cid = data.starterPack.cid;
-				} else {
-					assert(false, `Unexpected end of code`);
-				}
+				});
 			}
 
 			return {
-				$type: 'app.bsky.embed.record',
-				record: {
-					uri: uri,
-					cid: cid,
-				},
+				$type: 'app.bsky.embed.images',
+				images: images,
 			};
 		}
+
+		if (type === 'video') {
+			const aspectRatio = embed.aspectRatio;
+			const rawBlob = embed.blob;
+			// oxlint-disable-next-line typescript/no-explicit-any
+			let blob: AtBlob<any> | undefined;
+
+			if (rawBlob instanceof Blob) {
+				assertClient(client, `PostVideoEmbed.blob`);
+				blob = await uploadBlob(rawBlob);
+			} else {
+				blob = rawBlob;
+			}
+
+			return {
+				$type: 'app.bsky.embed.video',
+				video: blob,
+				alt: embed.alt ?? '',
+				aspectRatio: aspectRatio ? { width: aspectRatio.width, height: aspectRatio.height } : undefined,
+			};
+		}
+
+		assert(false, `Unexpected end of code`);
+	}
+
+	async function resolveRecordEmbed(embed: PostRecordEmbed): Promise<$type.enforce<AppBskyEmbedRecord.Main>> {
+		const uri = embed.uri;
+		let cid = embed.cid;
+
+		if (cid === undefined) {
+			const type = embed.type;
+
+			if (type === 'quote') {
+				assertClient(client, 'PostQuoteEmbed');
+
+				const post = await getPost(uri);
+
+				cid = post.cid;
+			} else if (type === 'feed') {
+				assertClient(client, 'PostFeedEmbed');
+
+				const data = await ok(
+					client.get('app.bsky.feed.getFeedGenerator', {
+						signal: signal,
+						params: { feed: uri },
+					}),
+				);
+
+				cid = data.view.cid;
+			} else if (type === 'list') {
+				assertClient(client, 'PostListEmbed');
+
+				const data = await ok(
+					client.get('app.bsky.graph.getList', {
+						signal: signal,
+						params: { list: uri, limit: 1 },
+					}),
+				);
+
+				cid = data.list.cid;
+			} else if (type === 'starterpack') {
+				assertClient(client, 'PostStarterpackEmbed');
+
+				const data = await ok(
+					client.get('app.bsky.graph.getStarterPack', {
+						signal: signal,
+						params: { starterPack: uri },
+					}),
+				);
+
+				cid = data.starterPack.cid;
+			} else {
+				assert(false, `Unexpected end of code`);
+			}
+		}
+
+		return {
+			$type: 'app.bsky.embed.record',
+			record: {
+				uri: uri,
+				cid: cid,
+			},
+		};
 	}
 
 	async function uploadBlob(blob: Blob): Promise<AtBlob> {
