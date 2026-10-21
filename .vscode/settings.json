@@ -1,4 +1,4 @@
 {
 	"editor.defaultFormatter": "oxc.oxc-vscode",
-	"typescript.experimental.useTsgo": true
+	"js/ts.experimental.useTsgo": true
 }
