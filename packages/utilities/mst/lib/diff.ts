@@ -41,7 +41,7 @@ export async function* recordDiff(
 	for (const cid of created) {
 		const node = await ns.get(cid);
 		for (let i = 0; i < node.keys.length; i++) {
-			createdKv.set(node.keys[i], node.values[i]);
+			createdKv.set(node.keys[i]!, node.values[i]!);
 		}
 	}
 
@@ -49,7 +49,7 @@ export async function* recordDiff(
 	for (const cid of deleted) {
 		const node = await ns.get(cid);
 		for (let i = 0; i < node.keys.length; i++) {
-			deletedKv.set(node.keys[i], node.values[i]);
+			deletedKv.set(node.keys[i]!, node.values[i]!);
 		}
 	}
 

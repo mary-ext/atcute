@@ -872,7 +872,7 @@ describe('builder', () => {
 				],
 			});
 
-			expect(docs['com.example.subscribePosts'].defs.main).toEqual({
+			expect(docs['com.example.subscribePosts']!.defs.main).toEqual({
 				type: 'subscription',
 				subprotocol: 'xrpc.v1.json',
 			});
@@ -890,7 +890,7 @@ describe('builder', () => {
 				],
 			});
 
-			expect(docs['com.example.subscribePosts'].defs.main).toEqual({ type: 'subscription' });
+			expect(docs['com.example.subscribePosts']!.defs.main).toEqual({ type: 'subscription' });
 		});
 
 		test('throws on a subprotocol that is not a websocket token', () => {
@@ -1062,7 +1062,7 @@ describe('builder', () => {
 					],
 				});
 
-				expect(docs['com.example.scope'].defs.main).toEqual({
+				expect(docs['com.example.scope']!.defs.main).toEqual({
 					type: 'permission-set',
 					permissions: [
 						{
@@ -1094,7 +1094,7 @@ describe('builder', () => {
 					],
 				});
 
-				expect(docs['com.example.scope'].defs.main).toEqual({
+				expect(docs['com.example.scope']!.defs.main).toEqual({
 					type: 'permission-set',
 					permissions: [
 						{
@@ -1129,7 +1129,7 @@ describe('builder', () => {
 					],
 				});
 
-				expect(docs['com.example.scope'].defs.main).toEqual({
+				expect(docs['com.example.scope']!.defs.main).toEqual({
 					type: 'permission-set',
 					description: 'test scope',
 					title: 'Test Scope',
@@ -1174,7 +1174,7 @@ describe('builder', () => {
 					],
 				});
 
-				expect(docs['com.example.scope'].defs.main).toEqual({
+				expect(docs['com.example.scope']!.defs.main).toEqual({
 					type: 'permission-set',
 					permissions: [
 						{
@@ -1220,7 +1220,7 @@ describe('builder', () => {
 					],
 				});
 
-				expect(docs['com.example.scope'].defs.main).toEqual({
+				expect(docs['com.example.scope']!.defs.main).toEqual({
 					type: 'permission-set',
 					permissions: [
 						{
@@ -1254,7 +1254,7 @@ describe('builder', () => {
 					],
 				});
 
-				expect(docs['com.example.scope'].defs.main).toEqual({
+				expect(docs['com.example.scope']!.defs.main).toEqual({
 					type: 'permission-set',
 					permissions: [
 						{
@@ -1308,7 +1308,7 @@ describe('builder', () => {
 					],
 				});
 
-				expect(docs['com.example.scope'].defs.main).toEqual({
+				expect(docs['com.example.scope']!.defs.main).toEqual({
 					type: 'permission-set',
 					permissions: [
 						{

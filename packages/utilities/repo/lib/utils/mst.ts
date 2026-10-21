@@ -52,7 +52,7 @@ export const decodeMstKey = (prevKey: string, entry: TreeEntry): string => {
 	const bytes = CBOR.fromBytes(entry.k);
 	let suffix = '';
 	for (let i = 0, il = bytes.length; i < il; i++) {
-		suffix += String.fromCharCode(bytes[i]);
+		suffix += String.fromCharCode(bytes[i]!);
 	}
 
 	assert(prevKey[prefixLen] !== suffix[0], `invalid mst node; suboptimal key prefix length`);

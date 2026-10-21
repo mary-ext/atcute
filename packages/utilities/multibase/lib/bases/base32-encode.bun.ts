@@ -7,7 +7,7 @@ const _lut2: string[] = /*#__PURE__*/ (() => {
 	const t: string[] = Array.from({ length: 1024 });
 	for (let i = 0; i < 32; i++) {
 		for (let j = 0; j < 32; j++) {
-			t[(i << 5) | j] = ALPHABET[i] + ALPHABET[j];
+			t[(i << 5) | j] = ALPHABET[i]! + ALPHABET[j]!;
 		}
 	}
 	return t;
@@ -28,17 +28,17 @@ export const toBase32 = (bytes: Uint8Array): string => {
 	let i = 0;
 	const fullGroups = len - (len % 5);
 	for (; i < fullGroups; i += 5) {
-		const b0 = bytes[i];
-		const b1 = bytes[i + 1];
-		const b2 = bytes[i + 2];
-		const b3 = bytes[i + 3];
-		const b4 = bytes[i + 4];
+		const b0 = bytes[i]!;
+		const b1 = bytes[i + 1]!;
+		const b2 = bytes[i + 2]!;
+		const b3 = bytes[i + 3]!;
+		const b4 = bytes[i + 4]!;
 
 		str +=
-			_lut2[((b0 >>> 3) << 5) | (((b0 << 2) | (b1 >>> 6)) & 0x1f)] +
-			_lut2[(((b1 >>> 1) & 0x1f) << 5) | (((b1 << 4) | (b2 >>> 4)) & 0x1f)] +
-			_lut2[((((b2 << 1) | (b3 >>> 7)) & 0x1f) << 5) | ((b3 >>> 2) & 0x1f)] +
-			_lut2[((((b3 << 3) | (b4 >>> 5)) & 0x1f) << 5) | (b4 & 0x1f)];
+			_lut2[((b0 >>> 3) << 5) | (((b0 << 2) | (b1 >>> 6)) & 0x1f)]! +
+			_lut2[(((b1 >>> 1) & 0x1f) << 5) | (((b1 << 4) | (b2 >>> 4)) & 0x1f)]! +
+			_lut2[((((b2 << 1) | (b3 >>> 7)) & 0x1f) << 5) | ((b3 >>> 2) & 0x1f)]! +
+			_lut2[((((b3 << 3) | (b4 >>> 5)) & 0x1f) << 5) | (b4 & 0x1f)]!;
 	}
 
 	// handle remaining 1-4 bytes
@@ -46,7 +46,7 @@ export const toBase32 = (bytes: Uint8Array): string => {
 		let buffer = 0;
 		let bits = 0;
 		for (; i < len; i++) {
-			buffer = (buffer << 8) | bytes[i];
+			buffer = (buffer << 8) | bytes[i]!;
 			bits += 8;
 		}
 		while (bits > 0) {

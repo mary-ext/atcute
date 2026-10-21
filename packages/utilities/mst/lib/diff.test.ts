@@ -42,10 +42,10 @@ describe('mstDiff', () => {
 		}
 
 		expect(deltas.length).toBe(1);
-		expect(deltas[0].deltaType).toBe(DeltaType.CREATED);
-		expect(deltas[0].path).toBe('c/3');
-		expect(deltas[0].priorValue).toBe(null);
-		expect(deltas[0].laterValue).not.toBe(null);
+		expect(deltas[0]!.deltaType).toBe(DeltaType.CREATED);
+		expect(deltas[0]!.path).toBe('c/3');
+		expect(deltas[0]!.priorValue).toBe(null);
+		expect(deltas[0]!.laterValue).not.toBe(null);
 	});
 
 	it('should detect deleted records', async () => {
@@ -76,10 +76,10 @@ describe('mstDiff', () => {
 		}
 
 		expect(deltas.length).toBe(1);
-		expect(deltas[0].deltaType).toBe(DeltaType.DELETED);
-		expect(deltas[0].path).toBe('c/3');
-		expect(deltas[0].priorValue).not.toBe(null);
-		expect(deltas[0].laterValue).toBe(null);
+		expect(deltas[0]!.deltaType).toBe(DeltaType.DELETED);
+		expect(deltas[0]!.path).toBe('c/3');
+		expect(deltas[0]!.priorValue).not.toBe(null);
+		expect(deltas[0]!.laterValue).toBe(null);
 	});
 
 	it('should detect updated records', async () => {
@@ -108,11 +108,11 @@ describe('mstDiff', () => {
 		}
 
 		expect(deltas.length).toBe(1);
-		expect(deltas[0].deltaType).toBe(DeltaType.UPDATED);
-		expect(deltas[0].path).toBe('b/2');
-		expect(deltas[0].priorValue).not.toBe(null);
-		expect(deltas[0].laterValue).not.toBe(null);
-		expect(deltas[0].priorValue?.$link).not.toBe(deltas[0].laterValue?.$link);
+		expect(deltas[0]!.deltaType).toBe(DeltaType.UPDATED);
+		expect(deltas[0]!.path).toBe('b/2');
+		expect(deltas[0]!.priorValue).not.toBe(null);
+		expect(deltas[0]!.laterValue).not.toBe(null);
+		expect(deltas[0]!.priorValue?.$link).not.toBe(deltas[0]!.laterValue?.$link);
 	});
 
 	it('should handle identical trees', async () => {
@@ -215,13 +215,13 @@ describe('mstDiff', () => {
 		};
 
 		expect(deltasByType[DeltaType.CREATED].length).toBe(1);
-		expect(deltasByType[DeltaType.CREATED][0].path).toBe('d/4');
+		expect(deltasByType[DeltaType.CREATED][0]!.path).toBe('d/4');
 
 		expect(deltasByType[DeltaType.UPDATED].length).toBe(1);
-		expect(deltasByType[DeltaType.UPDATED][0].path).toBe('b/2');
+		expect(deltasByType[DeltaType.UPDATED][0]!.path).toBe('b/2');
 
 		expect(deltasByType[DeltaType.DELETED].length).toBe(1);
-		expect(deltasByType[DeltaType.DELETED][0].path).toBe('c/3');
+		expect(deltasByType[DeltaType.DELETED][0]!.path).toBe('c/3');
 	});
 });
 

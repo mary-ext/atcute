@@ -158,7 +158,7 @@ describe('block verification', () => {
 
 	it('rejects blocks whose contents were altered', () => {
 		const car = validCar();
-		car[car.length - 1] ^= 1;
+		car[car.length - 1]! ^= 1;
 
 		expect(() => Array.from(fromUint8Array(car))).toThrowError(CarBlockMismatchError);
 	});

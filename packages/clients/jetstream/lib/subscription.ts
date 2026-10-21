@@ -104,7 +104,12 @@ export class JetstreamSubscription {
 			if (typeof wsUrls === 'string') {
 				selectedUrl = wsUrls;
 			} else {
-				selectedUrl = wsUrls[Math.floor(Math.random() * wsUrls.length)];
+				const url = wsUrls[Math.floor(Math.random() * wsUrls.length)];
+				if (url === undefined) {
+					throw new TypeError(`expected at least one url`);
+				}
+
+				selectedUrl = url;
 			}
 
 			let cursor = this.#cursor;

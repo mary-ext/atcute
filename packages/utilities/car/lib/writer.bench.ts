@@ -28,7 +28,8 @@ summary(() => {
 	bench('serializeCarEntry 20k', () => {
 		let sum = 0;
 		for (let i = 0; i < blocks.length; i++) {
-			sum += serializeCarEntry(blocks[i].cid, blocks[i].data).length;
+			const block = blocks[i]!;
+			sum += serializeCarEntry(block.cid, block.data).length;
 		}
 
 		return do_not_optimize(sum);

@@ -15,10 +15,10 @@ const REM_LEN = [0, 2, 3];
 // chunks; these re-tighten to a single canonical encoding without re-scanning the string.
 const assertCanonicalUnpadded = (str: string, n: number): void => {
 	const rem = n % 3;
-	if (str.length !== ((n / 3) | 0) * 4 + REM_LEN[rem]) {
+	if (str.length !== ((n / 3) | 0) * 4 + REM_LEN[rem]!) {
 		throw new SyntaxError(`invalid base64 string`);
 	}
-	if (rem !== 0 && (CHAR_VALUES[str.charCodeAt(str.length - 1)] & (rem === 1 ? 0x0f : 0x03)) !== 0) {
+	if (rem !== 0 && (CHAR_VALUES[str.charCodeAt(str.length - 1)]! & (rem === 1 ? 0x0f : 0x03)) !== 0) {
 		throw new SyntaxError(`invalid base64 string`);
 	}
 };

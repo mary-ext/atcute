@@ -115,7 +115,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
 
 			expect(cache.has(AppBskyFeedDefs.postViewSchema, post.uri)).toBe(true);
@@ -135,7 +135,7 @@ describe('NormalizedCache', () => {
 
 		it('throws when setting to unregistered schema', () => {
 			const cache = new NormalizedCache();
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 
 			expect(() => {
 				cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
@@ -151,7 +151,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = { ...sampleFeedResponse.feed[0].post };
+			const post = { ...sampleFeedResponse.feed[0]!.post };
 			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
 
 			const result = cache.update(AppBskyFeedDefs.postViewSchema, post.uri, (existing) => ({
@@ -183,7 +183,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
 
 			expect(cache.delete(AppBskyFeedDefs.postViewSchema, post.uri)).toBe(true);
@@ -209,8 +209,8 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post1 = sampleFeedResponse.feed[0].post;
-			const post2 = sampleFeedResponse.feed[1].post;
+			const post1 = sampleFeedResponse.feed[0]!.post;
+			const post2 = sampleFeedResponse.feed[1]!.post;
 
 			cache.set(AppBskyFeedDefs.postViewSchema, post1.uri, post1);
 			cache.set(AppBskyFeedDefs.postViewSchema, post2.uri, post2);
@@ -234,7 +234,7 @@ describe('NormalizedCache', () => {
 				key: (profile) => profile.did,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
 			cache.set(AppBskyActorDefs.profileViewBasicSchema, post.author.did, post.author);
 
@@ -258,8 +258,8 @@ describe('NormalizedCache', () => {
 			const result = cache.normalize(outputSchema, response);
 
 			// entities should be in the cache
-			const post1 = cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0].post.uri);
-			const post2 = cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[1].post.uri);
+			const post1 = cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0]!.post.uri);
+			const post2 = cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[1]!.post.uri);
 
 			expect(post1).toBeDefined();
 			expect(post2).toBeDefined();
@@ -267,8 +267,8 @@ describe('NormalizedCache', () => {
 			expect(post2?.likeCount).toBe(3279);
 
 			// result should have cached refs swapped in
-			expect(result.feed[0].post).toBe(post1);
-			expect(result.feed[1].post).toBe(post2);
+			expect(result.feed[0]!.post).toBe(post1);
+			expect(result.feed[1]!.post).toBe(post2);
 		});
 
 		it('merges entities with existing cache entries', () => {
@@ -287,17 +287,17 @@ describe('NormalizedCache', () => {
 			const response1 = structuredClone(sampleFeedResponse);
 			cache.normalize(outputSchema, response1);
 
-			const post = cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0].post.uri);
+			const post = cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0]!.post.uri);
 			expect(post?.likeCount).toBe(1780);
 
 			// second extract with updated data
 			const response2 = structuredClone(sampleFeedResponse);
-			response2.feed[0].post.likeCount = 2000;
+			response2.feed[0]!.post.likeCount = 2000;
 
 			cache.normalize(outputSchema, response2);
 
 			// should be same object reference
-			expect(cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0].post.uri)).toBe(post);
+			expect(cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0]!.post.uri)).toBe(post);
 			// but with updated value
 			expect(post?.likeCount).toBe(2000);
 		});
@@ -320,13 +320,13 @@ describe('NormalizedCache', () => {
 			// author should be normalized
 			const author = cache.get(
 				AppBskyActorDefs.profileViewBasicSchema,
-				sampleFeedResponse.feed[0].post.author.did,
+				sampleFeedResponse.feed[0]!.post.author.did,
 			);
 			expect(author).toBeDefined();
 			expect(author?.handle).toBe('thatmc.bsky.social');
 
 			// and should be the same reference in the post
-			const post = result.feed[0].post as any;
+			const post = result.feed[0]!.post as any;
 			expect(post.author).toBe(author);
 		});
 
@@ -368,7 +368,7 @@ describe('NormalizedCache', () => {
 			const result = cache.normalize(schema, response);
 
 			// both posts should reference the same cached author
-			expect((result.feed[0].post as any).author).toBe((result.feed[1].post as any).author);
+			expect((result.feed[0]!.post as any).author).toBe((result.feed[1]!.post as any).author);
 		});
 
 		it('normalizer() returns a reusable function', () => {
@@ -384,19 +384,19 @@ describe('NormalizedCache', () => {
 			const response1 = structuredClone(sampleFeedResponse);
 			const result1 = normalizeResponse(response1);
 
-			expect(cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0].post.uri)).toBeDefined();
-			expect(result1.feed[0].post).toBe(
-				cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0].post.uri),
+			expect(cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0]!.post.uri)).toBeDefined();
+			expect(result1.feed[0]!.post).toBe(
+				cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0]!.post.uri),
 			);
 
 			// use the same normalizer again
 			const response2 = structuredClone(sampleFeedResponse);
-			response2.feed[0].post.likeCount = 5000;
+			response2.feed[0]!.post.likeCount = 5000;
 			const result2 = normalizeResponse(response2);
 
 			// should update the same cached entity
-			expect(result2.feed[0].post).toBe(result1.feed[0].post);
-			expect((result2.feed[0].post as any).likeCount).toBe(5000);
+			expect(result2.feed[0]!.post).toBe(result1.feed[0]!.post);
+			expect((result2.feed[0]!.post as any).likeCount).toBe(5000);
 		});
 	});
 
@@ -408,7 +408,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			const callback = vi.fn();
 
 			cache.subscribe(AppBskyFeedDefs.postViewSchema, post.uri, callback);
@@ -424,7 +424,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = { ...sampleFeedResponse.feed[0].post };
+			const post = { ...sampleFeedResponse.feed[0]!.post };
 			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
 
 			const callback = vi.fn();
@@ -442,7 +442,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
 
 			const callback = vi.fn();
@@ -460,7 +460,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			const callback = vi.fn();
 
 			const unsubscribe = cache.subscribe(AppBskyFeedDefs.postViewSchema, post.uri, callback);
@@ -478,7 +478,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			const oldCallback = vi.fn();
 			const newCallback = vi.fn();
 
@@ -504,8 +504,8 @@ describe('NormalizedCache', () => {
 			const callback = vi.fn();
 			cache.subscribeType(AppBskyFeedDefs.postViewSchema, callback);
 
-			const post1 = sampleFeedResponse.feed[0].post;
-			const post2 = sampleFeedResponse.feed[1].post;
+			const post1 = sampleFeedResponse.feed[0]!.post;
+			const post2 = sampleFeedResponse.feed[1]!.post;
 
 			cache.set(AppBskyFeedDefs.postViewSchema, post1.uri, post1);
 			cache.set(AppBskyFeedDefs.postViewSchema, post2.uri, post2);
@@ -524,8 +524,8 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post1 = sampleFeedResponse.feed[0].post;
-			const post2 = sampleFeedResponse.feed[1].post;
+			const post1 = sampleFeedResponse.feed[0]!.post;
+			const post2 = sampleFeedResponse.feed[1]!.post;
 
 			cache.set(AppBskyFeedDefs.postViewSchema, post1.uri, post1);
 			cache.set(AppBskyFeedDefs.postViewSchema, post2.uri, post2);
@@ -542,7 +542,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
 
 			const callback = vi.fn();
@@ -573,7 +573,7 @@ describe('NormalizedCache', () => {
 
 			expect(wrapEntity).toHaveBeenCalled();
 
-			const post = cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0].post.uri);
+			const post = cache.get(AppBskyFeedDefs.postViewSchema, sampleFeedResponse.feed[0]!.post.uri);
 			expect((post as any).__wrapped).toBe(true);
 		});
 
@@ -589,7 +589,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
 
 			expect(wrapEntity).toHaveBeenCalledWith(post);
@@ -610,7 +610,7 @@ describe('NormalizedCache', () => {
 				key: (post) => post.uri,
 			});
 
-			const post = sampleFeedResponse.feed[0].post;
+			const post = sampleFeedResponse.feed[0]!.post;
 			cache.set(AppBskyFeedDefs.postViewSchema, post.uri, post);
 
 			// update existing entity

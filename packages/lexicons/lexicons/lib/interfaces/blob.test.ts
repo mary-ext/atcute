@@ -54,8 +54,8 @@ describe('collectBlobs', () => {
 		const blobs = collectBlobs(record);
 
 		expect(blobs).toHaveLength(2);
-		expect(blobs[0].cid).toBe('bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a');
-		expect(blobs[1].cid).toBe('bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a');
+		expect(blobs[0]!.cid).toBe('bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a');
+		expect(blobs[1]!.cid).toBe('bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a');
 	});
 
 	it('finds blobs in deeply nested objects', () => {

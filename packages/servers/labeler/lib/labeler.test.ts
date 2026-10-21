@@ -15,7 +15,7 @@ const createTestPrivateKey = (): PrivateKey => {
 		async sign(data: Uint8Array): Promise<Uint8Array<ArrayBuffer>> {
 			const out = new Uint8Array(8);
 			for (let idx = 0; idx < data.length; idx++) {
-				out[idx % out.length] = (out[idx % out.length] + data[idx] + idx) & 0xff;
+				out[idx % out.length] = (out[idx % out.length]! + data[idx]! + idx) & 0xff;
 			}
 
 			return out;

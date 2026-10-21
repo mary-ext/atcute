@@ -134,7 +134,7 @@ export function* generateLexiconApi(opts: LexiconApiOptions): Generator<SourceFi
 		});
 
 		for (const defId of sortedDefIds) {
-			const def = doc.defs[defId];
+			const def = doc.defs[defId]!;
 			const path: ParsedLexiconRef = { nsid: doc.id, defId };
 
 			const camelcased = toCamelCase(defId);

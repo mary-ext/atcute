@@ -60,7 +60,7 @@ export class DohJsonLexiconAuthorityResolver implements LexiconAuthorityResolver
 		}
 
 		for (let i = 0, il = answers.length; i < il; i++) {
-			const answer = answers[i];
+			const answer = answers[i]!;
 			const data = answer.data;
 
 			if (!data.startsWith(PREFIX)) {
@@ -68,7 +68,7 @@ export class DohJsonLexiconAuthorityResolver implements LexiconAuthorityResolver
 			}
 
 			for (let j = i + 1; j < il; j++) {
-				const data = answers[j].data;
+				const data = answers[j]!.data;
 				if (data.startsWith(PREFIX)) {
 					throw new err.AmbiguousAuthorityError(nsid);
 				}

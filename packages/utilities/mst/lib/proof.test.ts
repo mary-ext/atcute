@@ -43,7 +43,7 @@ describe('Proof', () => {
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
-			rootCid = await wrangler.putRecord(rootCid, keys[i], values[i]);
+			rootCid = await wrangler.putRecord(rootCid, keys[i]!, values[i]!);
 		}
 
 		// build inclusion proof for 'b/2'
@@ -72,7 +72,7 @@ describe('Proof', () => {
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
-			rootCid = await wrangler.putRecord(rootCid, keys[i], values[i]);
+			rootCid = await wrangler.putRecord(rootCid, keys[i]!, values[i]!);
 		}
 
 		// build exclusion proof for 'd/4' (doesn't exist)
@@ -122,7 +122,7 @@ describe('Proof', () => {
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
-			rootCid = await wrangler.putRecord(rootCid, keys[i], values[i]);
+			rootCid = await wrangler.putRecord(rootCid, keys[i]!, values[i]!);
 		}
 
 		// create a store with no blocks
@@ -246,7 +246,7 @@ describe('Proof', () => {
 			expect(deepest).not.toBe(honest.rootCid);
 
 			const served = new MemoryBlockStore(honest.blocks.blocks);
-			await served.put(deepest, (await honest.blocks.get(honest.rootCid))!);
+			await served.put(deepest!, (await honest.blocks.get(honest.rootCid))!);
 
 			await expectMismatch(verifyInclusion(new NodeStore(served), honest.rootCid, TARGET));
 		});

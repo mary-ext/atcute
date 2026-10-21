@@ -175,7 +175,7 @@ export const createLspClient = async (command: string, root: string): Promise<Ls
 					continue;
 				}
 
-				contentLength = parseInt(match[1], 10);
+				contentLength = parseInt(match[1]!, 10);
 			}
 
 			if (buffer.length < contentLength) {

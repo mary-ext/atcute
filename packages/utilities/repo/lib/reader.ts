@@ -43,7 +43,7 @@ export function* fromUint8Array(buf: Uint8Array, options?: RepoReaderOptions): G
 	// [commit, mst node, record?]
 	assert(count >= 2, `expected at least 2 blocks in the archive; got=${count}`);
 
-	const commit = readEntry(map, roots[0], isCommit);
+	const commit = readEntry(map, roots[0]!, isCommit);
 
 	for (const { key, cid } of walkMstEntries(map, commit.data)) {
 		const { collection, rkey } = parseMstKey(key);
@@ -109,7 +109,7 @@ export function* walkMstEntries(map: EntryMap, pointer: CidLink, depth: number =
 	}
 
 	for (let i = 0, il = entries.length; i < il; i++) {
-		const entry = entries[i];
+		const entry = entries[i]!;
 
 		const key = decodeMstKey(lastKey, entry);
 		lastKey = key;

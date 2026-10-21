@@ -54,14 +54,14 @@ export class NodeDnsLexiconAuthorityResolver implements LexiconAuthorityResolver
 
 		const records = results.map((record) => record.join('').replace(/^"|"$/g, '').replace(/\\"/g, '"'));
 		for (let i = 0, il = records.length; i < il; i++) {
-			const data = records[i];
+			const data = records[i]!;
 
 			if (!data.startsWith(PREFIX)) {
 				continue;
 			}
 
 			for (let j = i + 1; j < il; j++) {
-				const data = records[j];
+				const data = records[j]!;
 				if (data.startsWith(PREFIX)) {
 					throw new AmbiguousAuthorityError(nsid);
 				}

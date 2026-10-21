@@ -196,7 +196,7 @@ export const loadLexicons = async (patterns: string[], root: string): Promise<Lo
 		}
 
 		for (const { builder, filename } of moduleBuilders) {
-			const doc = built[builder.id];
+			const doc = built[builder.id]!;
 			seen.set(builder.id, filename);
 			results.push({ nsid: builder.id, doc, filename });
 		}

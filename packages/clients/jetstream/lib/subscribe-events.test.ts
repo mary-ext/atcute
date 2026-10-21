@@ -185,7 +185,7 @@ describe('subscribeEvents', () => {
 
 		await close();
 		expect(received.map((message) => message.seq)).toEqual([13, 14, 15]);
-		expect(requests[0].get('cursor')).toBe('12');
+		expect(requests[0]!.get('cursor')).toBe('12');
 		// the final cursor update requires another iteration
 		expect(saves).toEqual([13, 14]);
 	});
@@ -270,7 +270,7 @@ describe('subscribeEvents', () => {
 
 		await close();
 
-		const params = requests[0];
+		const params = requests[0]!;
 		expect(params.getAll('collections')).toEqual(['app.bsky.feed.like', 'app.bsky.feed.*']);
 		expect(params.getAll('dids')).toEqual(['did:plc:eygmaihciaxprqvxpfvl6flk']);
 		expect(params.getAll('kinds')).toEqual(['commit']);
@@ -285,7 +285,7 @@ describe('subscribeEvents', () => {
 		await take(subscribeEvents({ service, ws: WS_OPTIONS }), 1);
 
 		await close();
-		expect([...requests[0].keys()]).toEqual([]);
+		expect([...requests[0]!.keys()]).toEqual([]);
 	});
 
 	it('treats error frames as recoverable and keeps streaming', async () => {

@@ -75,7 +75,7 @@ const separatedList = (list: string[], sep: 'or' | 'and'): string => {
 			return `nothing`;
 		}
 		case 1: {
-			return list[0];
+			return list[0]!;
 		}
 		default: {
 			return `${list.slice(0, -1).join(', ')} ${sep} ${list[list.length - 1]}`;

@@ -131,10 +131,10 @@ const readCid = (source: Uint8Array, offset: number): { cid: CID.Cid; nextOffset
 
 	const bytes = source.subarray(offset, cidEnd);
 
-	const version = bytes[0];
-	const codec = bytes[1];
-	const digestType = bytes[2];
-	const digestSize = bytes[3];
+	const version = bytes[0]!;
+	const codec = bytes[1]!;
+	const digestType = bytes[2]!;
+	const digestSize = bytes[3]!;
 
 	if (version !== CID.CID_VERSION) {
 		throw new RangeError(`incorrect cid version (got v${version})`);

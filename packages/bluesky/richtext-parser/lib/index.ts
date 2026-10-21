@@ -149,7 +149,7 @@ const tokenizeEscape = (src: string): EscapeToken | undefined => {
 		return {
 			type: 'escape',
 			raw: match[0],
-			escaped: match[1],
+			escaped: match[1]!,
 		};
 	}
 };
@@ -157,12 +157,12 @@ const tokenizeEscape = (src: string): EscapeToken | undefined => {
 const tokenizeMention = (src: string): MentionToken | undefined => {
 	const match = MENTION_RE.exec(src);
 	if (match && match[2] !== '@') {
-		const suffix = match[2].length;
+		const suffix = match[2]!.length;
 
 		return {
 			type: 'mention',
 			raw: suffix > 0 ? match[0].slice(0, -suffix) : match[0],
-			handle: match[1],
+			handle: match[1]!,
 		};
 	}
 };
@@ -170,12 +170,12 @@ const tokenizeMention = (src: string): MentionToken | undefined => {
 const tokenizeTopic = (src: string): TopicToken | undefined => {
 	const match = TOPIC_RE.exec(src);
 	if (match && match[2] !== '#') {
-		const suffix = match[2].length;
+		const suffix = match[2]!.length;
 
 		return {
 			type: 'topic',
 			raw: suffix > 0 ? match[0].slice(0, -suffix) : match[0],
-			name: match[1],
+			name: match[1]!,
 		};
 	}
 };
@@ -183,12 +183,12 @@ const tokenizeTopic = (src: string): TopicToken | undefined => {
 const tokenizeCashtag = (src: string): CashtagToken | undefined => {
 	const match = CASHTAG_RE.exec(src);
 	if (match && match[2] !== '$') {
-		const suffix = match[2].length;
+		const suffix = match[2]!.length;
 
 		return {
 			type: 'cashtag',
 			raw: suffix > 0 ? match[0].slice(0, -suffix) : match[0],
-			name: match[1],
+			name: match[1]!,
 		};
 	}
 };
@@ -199,7 +199,7 @@ const tokenizeEmote = (src: string): EmoteToken | undefined => {
 		return {
 			type: 'emote',
 			raw: match[0],
-			name: match[1],
+			name: match[1]!,
 		};
 	}
 };
@@ -223,8 +223,8 @@ const tokenizeLink = (src: string): LinkToken | undefined => {
 		return {
 			type: 'link',
 			raw: match[0],
-			url: match[2].replace(UNESCAPE_URL_RE, '$1'),
-			children: tokenize(match[1]),
+			url: match[2]!.replace(UNESCAPE_URL_RE, '$1'),
+			children: tokenize(match[1]!),
 		};
 	}
 };
@@ -235,7 +235,7 @@ const _tokenizeEmphasis = (src: string): EmphasisToken | undefined => {
 		return {
 			type: 'emphasis',
 			raw: match[0],
-			children: tokenize(match[2] || match[1]),
+			children: tokenize((match[2] || match[1])!),
 		};
 	}
 };
@@ -246,7 +246,7 @@ const _tokenizeStrong = (src: string): StrongToken | undefined => {
 		return {
 			type: 'strong',
 			raw: match[0],
-			children: tokenize(match[1]),
+			children: tokenize(match[1]!),
 		};
 	}
 };
@@ -257,7 +257,7 @@ const _tokenizeUnderline = (src: string): UnderlineToken | undefined => {
 		return {
 			type: 'underline',
 			raw: match[0],
-			children: tokenize(match[1]),
+			children: tokenize(match[1]!),
 		};
 	}
 };
@@ -295,7 +295,7 @@ const tokenizeDelete = (src: string): DeleteToken | undefined => {
 		return {
 			type: 'delete',
 			raw: match[0],
-			children: tokenize(match[1]),
+			children: tokenize(match[1]!),
 		};
 	}
 };
@@ -306,7 +306,7 @@ const tokenizeCode = (src: string): CodeToken | undefined => {
 		return {
 			type: 'code',
 			raw: match[0],
-			content: match[2].replace(CODE_ESCAPE_BACKTICKS_RE, '$1'),
+			content: match[2]!.replace(CODE_ESCAPE_BACKTICKS_RE, '$1'),
 		};
 	}
 };

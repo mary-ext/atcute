@@ -123,7 +123,9 @@ export const parseJwt = (jwtString: string): Result<ParsedJwt, AuthError> => {
 		};
 	}
 
-	const [headerString, payloadString, signatureString] = parts;
+	const headerString = parts[0]!;
+	const payloadString = parts[1]!;
+	const signatureString = parts[2]!;
 
 	const header = readJwtPortion(jwtHeader, headerString);
 	if (!header.ok) {

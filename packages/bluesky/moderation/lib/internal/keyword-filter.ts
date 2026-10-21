@@ -18,7 +18,7 @@ export const matchesKeywordFilters = ({
 	const now = Date.now();
 
 	for (let i = 0, il = filters.length; i < il; i++) {
-		const filter = filters[i];
+		const filter = filters[i]!;
 
 		if (filter.expiresAt !== undefined && filter.expiresAt <= now) {
 			continue;
@@ -33,7 +33,7 @@ export const matchesKeywordFilters = ({
 		// a `content` filter applies to tags as well, not just `tag` filters
 		if (filter.flags & (KeywordFilterFlags.ApplyContent | KeywordFilterFlags.ApplyTopic)) {
 			for (let j = 0, jl = tags.length; j < jl; j++) {
-				const tag = tags[j];
+				const tag = tags[j]!;
 
 				if (filter.pattern.test(tag)) {
 					return filter;

@@ -214,7 +214,7 @@ const separatedList = (list: string[], sep: 'or' | 'and'): string => {
 			return `nothing`;
 		}
 		case 1: {
-			return list[0];
+			return list[0]!;
 		}
 		default: {
 			return `${list.slice(0, -1).join(', ')} ${sep} ${list[list.length - 1]}`;
@@ -473,7 +473,7 @@ export const constrain = <
 		}
 
 		for (let idx = 0; idx < len; idx++) {
-			const r = constraints[idx]['~run'](current, flags);
+			const r = constraints[idx]!['~run'](current, flags);
 
 			if (r !== undefined) {
 				if (r.ok) {
@@ -1018,7 +1018,7 @@ export const blobAccept = (accept: readonly string[]): BlobAcceptConstraint => {
 			const mimeType = (input as interfaces.Blob).mimeType.toLowerCase();
 
 			for (let idx = 0, len = normalized.length; idx < len; idx++) {
-				const pattern = normalized[idx];
+				const pattern = normalized[idx]!;
 
 				if (pattern === '*/*') {
 					return undefined;
@@ -1544,7 +1544,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 				let body = x.empty;
 
 				for (let idx = 0; idx < len; idx++) {
-					const entry = shape[idx];
+					const entry = shape[idx]!;
 					const key = entry.key;
 
 					const value = x.local();
@@ -1605,7 +1605,7 @@ export const object = <TShape extends LooseObjectShape>(shape: TShape): ObjectSc
 				let output: Record<string, unknown> | undefined;
 
 				for (let idx = 0; idx < len; idx++) {
-					const entry = shape[idx];
+					const entry = shape[idx]!;
 
 					const key = entry.key;
 					const value = input[key];

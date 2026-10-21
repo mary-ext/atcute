@@ -160,17 +160,29 @@ export const parseResourceUri = (input: string): ParsedResourceUri => {
 		throw new SyntaxError(`invalid at-uri: ${input}`);
 	}
 
-	const [, r, c, k, f] = match;
+	const r = match[1]!;
+	const c = match[2];
+	const k = match[3];
+	const f = match[4];
 
 	if (!isActorIdentifier(r)) {
 		throw new SyntaxError(`invalid repo in at-uri: ${r}`);
 	}
 
-	if (c !== undefined && !isNsid(c)) {
+	// the rkey group is nested inside the collection group, so rkey implies collection
+	if (c === undefined) {
+		return { repo: r, collection: undefined, rkey: undefined, fragment: f };
+	}
+
+	if (!isNsid(c)) {
 		throw new SyntaxError(`invalid collection in at-uri: ${c}`);
 	}
 
-	if (k !== undefined && !isRecordKey(k)) {
+	if (k === undefined) {
+		return { repo: r, collection: c, rkey: undefined, fragment: f };
+	}
+
+	if (!isRecordKey(k)) {
 		throw new SyntaxError(`invalid rkey in at-uri: ${k}`);
 	}
 

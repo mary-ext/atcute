@@ -38,7 +38,7 @@ const collectCarFiles = (dir: string): string[] => {
 		const entries = readdirSync(current, { withFileTypes: true });
 
 		for (let i = 0; i < entries.length; i++) {
-			const entry = entries[i];
+			const entry = entries[i]!;
 			const path = resolve(current, entry.name);
 
 			if (entry.isDirectory()) {
@@ -56,13 +56,13 @@ const collectCarFiles = (dir: string): string[] => {
 const joinChunks = (chunks: Uint8Array[]): Uint8Array => {
 	let total = 0;
 	for (let i = 0; i < chunks.length; i++) {
-		total += chunks[i].length;
+		total += chunks[i]!.length;
 	}
 
 	const out = new Uint8Array(total);
 	let offset = 0;
 	for (let i = 0; i < chunks.length; i++) {
-		const chunk = chunks[i];
+		const chunk = chunks[i]!;
 		out.set(chunk, offset);
 		offset += chunk.length;
 	}
@@ -89,7 +89,8 @@ const makeSynthetic = (entries: number, payloadSize: number): Uint8Array => {
 	const chunks: Uint8Array[] = [serializeCarHeader([root])];
 
 	for (let i = 0; i < blocks.length; i++) {
-		chunks.push(serializeCarEntry(blocks[i].cid, blocks[i].data));
+		const block = blocks[i]!;
+		chunks.push(serializeCarEntry(block.cid, block.data));
 	}
 
 	return joinChunks(chunks);
@@ -140,7 +141,7 @@ summary(() => {
 			bench(dataset: Uint8Array[]) {
 				let sum = 0;
 				for (let i = 0; i < dataset.length; i++) {
-					sum += checksumForOf(dataset[i]);
+					sum += checksumForOf(dataset[i]!);
 				}
 				return do_not_optimize(sum);
 			},
@@ -155,7 +156,7 @@ summary(() => {
 			bench(dataset: Uint8Array[]) {
 				let sum = 0;
 				for (let i = 0; i < dataset.length; i++) {
-					sum += checksumNextLoop(dataset[i]);
+					sum += checksumNextLoop(dataset[i]!);
 				}
 				return do_not_optimize(sum);
 			},

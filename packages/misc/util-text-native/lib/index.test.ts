@@ -132,7 +132,7 @@ const parseGraphemeBreakTest = (path: string): { text: string; clusters: number;
 	const cases: { text: string; clusters: number; line: number }[] = [];
 
 	for (const [i, line] of raw.split('\n').entries()) {
-		const content = line.split('#')[0].trim();
+		const content = line.split('#')[0]!.trim();
 		if (!content) {
 			continue;
 		}

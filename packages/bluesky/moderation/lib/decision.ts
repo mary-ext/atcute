@@ -226,7 +226,7 @@ export const considerLabels = (
 ): void => {
 	if (labels?.length) {
 		for (let idx = 0, len = labels.length; idx < len; idx++) {
-			considerLabel(decision, target, labels[idx], opts);
+			considerLabel(decision, target, labels[idx]!, opts);
 		}
 	}
 };
@@ -359,7 +359,7 @@ export const downgradeDecision = <T extends ModerationDecision | undefined>(deci
 
 	const causes = decision.causes;
 	for (let idx = 0, len = causes.length; idx < len; idx++) {
-		const cause = causes[idx];
+		const cause = causes[idx]!;
 		cause.downgraded = true;
 	}
 

@@ -142,7 +142,7 @@ export const fromStream = (
 					const roots = await car.roots();
 					assert(roots.length >= 1, `expected at least 1 root in the car archive; got=${roots.length}`);
 
-					request(roots[0], { t: 0 });
+					request(roots[0]!, { t: 0 });
 				}
 
 				for await (const entry of car) {
@@ -154,7 +154,7 @@ export const fromStream = (
 							pending.delete(cid);
 
 							for (let i = 0, il = metas.length; i < il; i++) {
-								queue.enqueue({ e: entry, m: metas[i] });
+								queue.enqueue({ e: entry, m: metas[i]! });
 							}
 						} else {
 							strays.set(cid, entry);
@@ -195,7 +195,7 @@ export const fromStream = (
 								}
 
 								for (let i = 0, il = entries.length; i < il; i++) {
-									const entry = entries[i];
+									const entry = entries[i]!;
 									const next = entry.t;
 
 									const key = decodeMstKey(lastKey, entry);
@@ -225,7 +225,7 @@ export const fromStream = (
 
 					for (const [cid, metas] of pending.entries()) {
 						for (let i = 0, il = metas.length; i < il; i++) {
-							const meta = metas[i];
+							const meta = metas[i]!;
 
 							switch (meta.t) {
 								case 0: {

@@ -95,30 +95,30 @@ const _shortString = (from: Uint8Array, ptr: number, length: number): string | n
 			if (length === 0) {
 				return '';
 			}
-			const a = from[ptr];
+			const a = from[ptr]!;
 			if (a & 0x80) {
 				return null;
 			}
 			return _fromCharCode(a);
 		}
-		const a = from[ptr];
-		const b = from[ptr + 1];
+		const a = from[ptr]!;
+		const b = from[ptr + 1]!;
 		if ((a | b) & 0x80) {
 			return null;
 		}
 		if (length === 2) {
 			return _fromCharCode(a, b);
 		}
-		const c = from[ptr + 2];
+		const c = from[ptr + 2]!;
 		if (c & 0x80) {
 			return null;
 		}
 		return _fromCharCode(a, b, c);
 	}
-	const a = from[ptr];
-	const b = from[ptr + 1];
-	const c = from[ptr + 2];
-	const d = from[ptr + 3];
+	const a = from[ptr]!;
+	const b = from[ptr + 1]!;
+	const c = from[ptr + 2]!;
+	const d = from[ptr + 3]!;
 	if ((a | b | c | d) & 0x80) {
 		return null;
 	}
@@ -126,30 +126,30 @@ const _shortString = (from: Uint8Array, ptr: number, length: number): string | n
 		if (length === 4) {
 			return _fromCharCode(a, b, c, d);
 		}
-		const e = from[ptr + 4];
+		const e = from[ptr + 4]!;
 		if (e & 0x80) {
 			return null;
 		}
 		if (length === 5) {
 			return _fromCharCode(a, b, c, d, e);
 		}
-		const f = from[ptr + 5];
+		const f = from[ptr + 5]!;
 		if (f & 0x80) {
 			return null;
 		}
 		if (length === 6) {
 			return _fromCharCode(a, b, c, d, e, f);
 		}
-		const g = from[ptr + 6];
+		const g = from[ptr + 6]!;
 		if (g & 0x80) {
 			return null;
 		}
 		return _fromCharCode(a, b, c, d, e, f, g);
 	}
-	const e = from[ptr + 4];
-	const f = from[ptr + 5];
-	const g = from[ptr + 6];
-	const h = from[ptr + 7];
+	const e = from[ptr + 4]!;
+	const f = from[ptr + 5]!;
+	const g = from[ptr + 6]!;
+	const h = from[ptr + 7]!;
 	if ((e | f | g | h) & 0x80) {
 		return null;
 	}
@@ -157,30 +157,30 @@ const _shortString = (from: Uint8Array, ptr: number, length: number): string | n
 		if (length === 8) {
 			return _fromCharCode(a, b, c, d, e, f, g, h);
 		}
-		const i = from[ptr + 8];
+		const i = from[ptr + 8]!;
 		if (i & 0x80) {
 			return null;
 		}
 		if (length === 9) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i);
 		}
-		const j = from[ptr + 9];
+		const j = from[ptr + 9]!;
 		if (j & 0x80) {
 			return null;
 		}
 		if (length === 10) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j);
 		}
-		const k = from[ptr + 10];
+		const k = from[ptr + 10]!;
 		if (k & 0x80) {
 			return null;
 		}
 		return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k);
 	}
-	const i = from[ptr + 8];
-	const j = from[ptr + 9];
-	const k = from[ptr + 10];
-	const l = from[ptr + 11];
+	const i = from[ptr + 8]!;
+	const j = from[ptr + 9]!;
+	const k = from[ptr + 10]!;
+	const l = from[ptr + 11]!;
 	if ((i | j | k | l) & 0x80) {
 		return null;
 	}
@@ -188,30 +188,30 @@ const _shortString = (from: Uint8Array, ptr: number, length: number): string | n
 		if (length === 12) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l);
 		}
-		const m = from[ptr + 12];
+		const m = from[ptr + 12]!;
 		if (m & 0x80) {
 			return null;
 		}
 		if (length === 13) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m);
 		}
-		const n = from[ptr + 13];
+		const n = from[ptr + 13]!;
 		if (n & 0x80) {
 			return null;
 		}
 		if (length === 14) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n);
 		}
-		const o = from[ptr + 14];
+		const o = from[ptr + 14]!;
 		if (o & 0x80) {
 			return null;
 		}
 		return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o);
 	}
-	const m = from[ptr + 12];
-	const n = from[ptr + 13];
-	const o = from[ptr + 14];
-	const p = from[ptr + 15];
+	const m = from[ptr + 12]!;
+	const n = from[ptr + 13]!;
+	const o = from[ptr + 14]!;
+	const p = from[ptr + 15]!;
 	if ((m | n | o | p) & 0x80) {
 		return null;
 	}
@@ -219,30 +219,30 @@ const _shortString = (from: Uint8Array, ptr: number, length: number): string | n
 		if (length === 16) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p);
 		}
-		const q = from[ptr + 16];
+		const q = from[ptr + 16]!;
 		if (q & 0x80) {
 			return null;
 		}
 		if (length === 17) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q);
 		}
-		const r = from[ptr + 17];
+		const r = from[ptr + 17]!;
 		if (r & 0x80) {
 			return null;
 		}
 		if (length === 18) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r);
 		}
-		const s = from[ptr + 18];
+		const s = from[ptr + 18]!;
 		if (s & 0x80) {
 			return null;
 		}
 		return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s);
 	}
-	const q = from[ptr + 16];
-	const r = from[ptr + 17];
-	const s = from[ptr + 18];
-	const t = from[ptr + 19];
+	const q = from[ptr + 16]!;
+	const r = from[ptr + 17]!;
+	const s = from[ptr + 18]!;
+	const t = from[ptr + 19]!;
 	if ((q | r | s | t) & 0x80) {
 		return null;
 	}
@@ -250,30 +250,30 @@ const _shortString = (from: Uint8Array, ptr: number, length: number): string | n
 		if (length === 20) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t);
 		}
-		const u = from[ptr + 20];
+		const u = from[ptr + 20]!;
 		if (u & 0x80) {
 			return null;
 		}
 		if (length === 21) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u);
 		}
-		const v = from[ptr + 21];
+		const v = from[ptr + 21]!;
 		if (v & 0x80) {
 			return null;
 		}
 		if (length === 22) {
 			return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v);
 		}
-		const w = from[ptr + 22];
+		const w = from[ptr + 22]!;
 		if (w & 0x80) {
 			return null;
 		}
 		return _fromCharCode(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w);
 	}
-	const u = from[ptr + 20];
-	const v = from[ptr + 21];
-	const w = from[ptr + 22];
-	const x = from[ptr + 23];
+	const u = from[ptr + 20]!;
+	const v = from[ptr + 21]!;
+	const w = from[ptr + 22]!;
+	const x = from[ptr + 23]!;
 	if ((u | v | w | x) & 0x80) {
 		return null;
 	}

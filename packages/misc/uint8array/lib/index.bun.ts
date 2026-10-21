@@ -108,7 +108,7 @@ export const decodeUtf8From = (
 	if (length <= 24) {
 		let acc = 0;
 		for (let i = 0; i < length; i++) {
-			acc |= from[offset + i];
+			acc |= from[offset + i]!;
 		}
 		if ((acc & 0x80) === 0) {
 			return _latin1Slice.call(from, offset, offset + length);

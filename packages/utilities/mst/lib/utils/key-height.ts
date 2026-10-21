@@ -13,7 +13,7 @@ export const computeKeyHeight = (key: string): number => {
 
 	let lz = 0;
 	for (let idx = 0; idx < 32; idx++) {
-		const byte = hash[idx];
+		const byte = hash[idx]!;
 		lz += Math.clz32(byte) - 24;
 
 		if (byte !== 0) {

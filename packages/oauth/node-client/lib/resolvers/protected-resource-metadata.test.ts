@@ -39,7 +39,7 @@ describe('ProtectedResourceMetadataResolver', () => {
 			expect(result.authorization_servers).toContain('https://auth.example.com');
 			expect(mockFetch).toHaveBeenCalledTimes(1);
 
-			const request = mockFetch.mock.calls[0][0] as URL;
+			const request = mockFetch.mock.calls[0]![0] as URL;
 			expect(request.href).toBe(`${resource}/.well-known/oauth-protected-resource`);
 		});
 

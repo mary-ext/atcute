@@ -48,14 +48,14 @@ export const fromBase32 = (str: string): Uint8Array<ArrayBuffer> => {
 			throw new SyntaxError(`invalid base string`);
 		}
 
-		const c0 = _decodeLut[k0];
-		const c1 = _decodeLut[k1];
-		const c2 = _decodeLut[k2];
-		const c3 = _decodeLut[k3];
-		const c4 = _decodeLut[k4];
-		const c5 = _decodeLut[k5];
-		const c6 = _decodeLut[k6];
-		const c7 = _decodeLut[k7];
+		const c0 = _decodeLut[k0]!;
+		const c1 = _decodeLut[k1]!;
+		const c2 = _decodeLut[k2]!;
+		const c3 = _decodeLut[k3]!;
+		const c4 = _decodeLut[k4]!;
+		const c5 = _decodeLut[k5]!;
+		const c6 = _decodeLut[k6]!;
+		const c7 = _decodeLut[k7]!;
 
 		// valid base32 values are 0-31 (5 bits), so any value with bits
 		// outside the low 5 means 0xff was in the mix
@@ -77,7 +77,7 @@ export const fromBase32 = (str: string): Uint8Array<ArrayBuffer> => {
 		let buffer = 0;
 		for (; i < end; ++i) {
 			const code = str.charCodeAt(i);
-			const value = code < 0x80 ? _decodeLut[code] : 0xff;
+			const value = code < 0x80 ? _decodeLut[code]! : 0xff;
 			if (value & 0xe0) {
 				throw new SyntaxError(`invalid base string`);
 			}

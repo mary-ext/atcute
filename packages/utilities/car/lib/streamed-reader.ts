@@ -111,7 +111,7 @@ export const fromStream = (
 				throw new Error(`unexpected eof while decoding varint`);
 			}
 
-			const byte = chunk[chunkPos++];
+			const byte = chunk[chunkPos++]!;
 			offset++;
 
 			value += shift < 28 ? (byte & REST) << shift : (byte & REST) * 2 ** shift;
@@ -156,10 +156,10 @@ export const fromStream = (
 	const readCid = async (): Promise<Cid> => {
 		const bytes = await readExact(36);
 
-		const version = bytes[0];
-		const codec = bytes[1];
-		const digestType = bytes[2];
-		const digestSize = bytes[3];
+		const version = bytes[0]!;
+		const codec = bytes[1]!;
+		const digestType = bytes[2]!;
+		const digestSize = bytes[3]!;
 
 		if (version !== CID.CID_VERSION) {
 			throw new RangeError(`incorrect cid version (got v${version})`);

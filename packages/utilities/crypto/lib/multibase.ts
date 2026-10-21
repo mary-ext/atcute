@@ -28,7 +28,7 @@ export const parsePublicMultikey = (key: string): FoundPublicKey => {
 	const bytes = extractMultibase(key);
 	assertSyntax(bytes.length >= 3, `multikey too short`);
 
-	const type = (bytes[0] << 8) | bytes[1];
+	const type = (bytes[0]! << 8) | bytes[1]!;
 	const publicKey = bytes.subarray(2);
 
 	switch (type) {
@@ -68,7 +68,7 @@ export const parsePrivateMultikey = (key: string): FoundPrivateKey => {
 	const bytes = extractMultibase(key);
 	assertSyntax(bytes.length >= 3, `multikey too short`);
 
-	const type = (bytes[0] << 8) | bytes[1];
+	const type = (bytes[0]! << 8) | bytes[1]!;
 	const privateKey = bytes.subarray(2);
 
 	switch (type) {

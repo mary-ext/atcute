@@ -197,7 +197,7 @@ export class ModerationBehaviorSuiteRunner {
 	}
 
 	profileView(name: string, scenarioLabels: ModerationTestSuiteScenario['labels']) {
-		const def = this.users[name];
+		const def = this.users[name]!;
 
 		const labels: ComAtprotoLabelDefs.Label[] = [];
 		if (scenarioLabels.account) {
@@ -231,11 +231,13 @@ export class ModerationBehaviorSuiteRunner {
 	}
 
 	moderationOptions(scenario: ModerationTestSuiteScenario): ModerationOptions {
+		const cfg = this.configurations[scenario.cfg]!;
+
 		return {
-			viewerDid: this.configurations[scenario.cfg].authed === false ? undefined : 'did:web:self.test',
+			viewerDid: cfg.authed === false ? undefined : 'did:web:self.test',
 			prefs: {
-				adultContentEnabled: Boolean(this.configurations[scenario.cfg]?.adultContentEnabled),
-				globalLabelPrefs: this.configurations[scenario.cfg].settings || {},
+				adultContentEnabled: Boolean(cfg.adultContentEnabled),
+				globalLabelPrefs: cfg.settings || {},
 				prefsByLabelers: {
 					'did:plc:fake-labeler': {
 						labelPrefs: {},

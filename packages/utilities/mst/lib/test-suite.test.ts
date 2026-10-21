@@ -62,7 +62,7 @@ const loadCar = async (relname: string): Promise<{ store: ReadonlyMemoryBlockSto
 		throw new Error(`expected exactly 1 root in CAR, got ${car.roots.length}`);
 	}
 
-	const root = car.roots[0].$link;
+	const root = car.roots[0]!.$link;
 	return { store, root };
 };
 
@@ -137,8 +137,8 @@ describe('MST Test Suite', () => {
 			expect(deltas.length).toBe(expectance.length);
 
 			for (let idx = 0, len = deltas.length; idx < len; idx++) {
-				const actual = deltas[idx];
-				const expected = expectance[idx];
+				const actual = deltas[idx]!;
+				const expected = expectance[idx]!;
 
 				expect(actual.path).toBe(expected.rpath);
 				expect(actual.priorValue?.$link ?? null).toBe(expected.old_value);

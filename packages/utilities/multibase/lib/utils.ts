@@ -9,7 +9,7 @@ export const createRfc4648Encode = (alphabet: string, bitsPerChar: number, pad: 
 		let buffer = 0; // Bits waiting to be written out, MSB first
 		for (let i = 0; i < bytes.length; ++i) {
 			// Slurp data into the buffer:
-			buffer = (buffer << 8) | bytes[i];
+			buffer = (buffer << 8) | bytes[i]!;
 			bits += 8;
 
 			// Write out as much as we can:
@@ -80,7 +80,7 @@ export const createRfc4648Decode = (alphabet: string, bitsPerChar: number, pad: 
 		for (let i = 0; i < end; ++i) {
 			// Read one character from the string:
 			const code = str.charCodeAt(i);
-			const value = code < 256 ? codes[code] : 0xff;
+			const value = code < 256 ? codes[code]! : 0xff;
 			if (value === 0xff) {
 				throw new SyntaxError(`invalid base string`);
 			}
@@ -142,11 +142,11 @@ export const createBtcBaseEncode = (alphabet: string) => {
 			const tripleEnd = pend - rem;
 
 			while (pbegin < tripleEnd) {
-				let carry = (source[pbegin] << 16) | (source[pbegin + 1] << 8) | source[pbegin + 2];
+				let carry = (source[pbegin]! << 16) | (source[pbegin + 1]! << 8) | source[pbegin + 2]!;
 
 				let i = 0;
 				for (let it1 = size - 1; (carry !== 0 || i < length) && it1 !== -1; it1--, i++) {
-					carry = carry + 16777216 * bN[it1];
+					carry = carry + 16777216 * bN[it1]!;
 					const q = (carry / BASE) | 0;
 					bN[it1] = carry - q * BASE;
 					carry = q;
@@ -159,11 +159,11 @@ export const createBtcBaseEncode = (alphabet: string) => {
 
 		// Process remaining 0-2 bytes one at a time.
 		while (pbegin !== pend) {
-			let carry = source[pbegin];
+			let carry = source[pbegin]!;
 
 			let i = 0;
 			for (let it1 = size - 1; (carry !== 0 || i < length) && it1 !== -1; it1--, i++) {
-				carry = carry + 256 * bN[it1];
+				carry = carry + 256 * bN[it1]!;
 				const q = (carry / BASE) | 0;
 				bN[it1] = carry - q * BASE;
 				carry = q;
@@ -182,7 +182,7 @@ export const createBtcBaseEncode = (alphabet: string) => {
 		// Translate the result into a string.
 		let str = LEADER.repeat(zeroes);
 		for (; it2 < size; ++it2) {
-			str += alphabet.charAt(bN[it2]);
+			str += alphabet.charAt(bN[it2]!);
 		}
 
 		return str;
@@ -251,8 +251,8 @@ export const createBtcBaseDecode = (alphabet: string) => {
 					throw new Error(`invalid string`);
 				}
 
-				const c0 = BASE_MAP[k0];
-				const c1 = BASE_MAP[k1];
+				const c0 = BASE_MAP[k0]!;
+				const c1 = BASE_MAP[k1]!;
 
 				if (c0 === 255 || c1 === 255) {
 					throw new Error(`invalid string`);
@@ -262,7 +262,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 
 				let i = 0;
 				for (let it3 = size - 1; (carry !== 0 || i < length) && it3 !== -1; it3--, i++) {
-					carry += BASE2 * b256[it3];
+					carry += BASE2 * b256[it3]!;
 					b256[it3] = carry;
 					carry >>>= 8;
 				}
@@ -281,7 +281,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 				throw new Error(`invalid string`);
 			}
 
-			let carry = BASE_MAP[k0];
+			let carry = BASE_MAP[k0]!;
 
 			if (carry === 255) {
 				throw new Error(`invalid string`);
@@ -289,7 +289,7 @@ export const createBtcBaseDecode = (alphabet: string) => {
 
 			let i = 0;
 			for (let it3 = size - 1; (carry !== 0 || i < length) && it3 !== -1; it3--, i++) {
-				carry += BASE * b256[it3];
+				carry += BASE * b256[it3]!;
 				b256[it3] = carry;
 				carry >>>= 8;
 			}

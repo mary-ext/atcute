@@ -142,7 +142,7 @@ const parsePkcs8Pem = (pem: string): ArrayBuffer => {
 		throw new Error(`invalid pkcs8 pem`);
 	}
 
-	const base64 = match[1].replace(/\s+/g, '');
+	const base64 = match[1]!.replace(/\s+/g, '');
 	const bytes = fromBase64Pad(base64);
 	const buffer = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
 	return buffer;

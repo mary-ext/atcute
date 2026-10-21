@@ -103,7 +103,7 @@ const getMetadataFromResourceServer = async (input: string) => {
 		throw new ResolverError(`expected exactly one authorization server in the listing`);
 	}
 
-	const issuer = rs_metadata.authorization_servers[0];
+	const issuer = rs_metadata.authorization_servers[0]!;
 
 	const as_metadata = await getOAuthAuthorizationServerMetadata(issuer);
 

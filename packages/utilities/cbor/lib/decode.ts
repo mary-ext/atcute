@@ -94,14 +94,14 @@ const readFloat64 = (state: State): number => {
 };
 
 const readUint8 = (state: State): number => {
-	return state.b[state.p++];
+	return state.b[state.p++]!;
 };
 
 const readUint16 = (state: State): number => {
 	let pos = state.p;
 
 	const buf = state.b;
-	const value = (buf[pos++] << 8) | buf[pos++];
+	const value = (buf[pos++]! << 8) | buf[pos++]!;
 
 	state.p = pos;
 	return value;
@@ -111,7 +111,7 @@ const readUint32 = (state: State): number => {
 	let pos = state.p;
 
 	const buf = state.b;
-	const value = ((buf[pos++] << 24) | (buf[pos++] << 16) | (buf[pos++] << 8) | buf[pos++]) >>> 0;
+	const value = ((buf[pos++]! << 24) | (buf[pos++]! << 16) | (buf[pos++]! << 8) | buf[pos++]!) >>> 0;
 
 	state.p = pos;
 	return value;
@@ -170,7 +170,7 @@ const readCid = (state: State, length: number): CidLink => {
 	// detach CID bytes so links don't retain the input buffer; copy without an intermediate subarray view
 	const bytes = new Uint8Array(36);
 	for (let i = 0; i < 36; i++) {
-		bytes[i] = buf[pos + 1 + i];
+		bytes[i] = buf[pos + 1 + i]!;
 	}
 
 	state.p = pos + length;
@@ -389,7 +389,7 @@ export const decodeFirst = (buf: Uint8Array): [value: any, remainder: Uint8Array
 					if (cmp === 0) {
 						const buf = state.b;
 						for (let i = 0; i < curLength; i++) {
-							cmp = buf[curStart + i] - buf[prevStart + i];
+							cmp = buf[curStart + i]! - buf[prevStart + i]!;
 							if (cmp !== 0) {
 								break;
 							}

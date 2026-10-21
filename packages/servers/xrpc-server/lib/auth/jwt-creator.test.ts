@@ -30,8 +30,8 @@ describe('createServiceJwt', () => {
 
 		const [headerB64, payloadB64, signatureB64] = jwt.split('.');
 
-		const header = JSON.parse(decodeUtf8From(fromBase64Url(headerB64)));
-		const payload = JSON.parse(decodeUtf8From(fromBase64Url(payloadB64)));
+		const header = JSON.parse(decodeUtf8From(fromBase64Url(headerB64!)));
+		const payload = JSON.parse(decodeUtf8From(fromBase64Url(payloadB64!)));
 
 		expect(header).toEqual({ typ: 'JWT', alg: 'ES256K' });
 		expect(payload).toEqual({
@@ -43,7 +43,7 @@ describe('createServiceJwt', () => {
 			lxm: lxm,
 		});
 
-		const signature = fromBase64Url(signatureB64);
+		const signature = fromBase64Url(signatureB64!);
 		const message = encodeUtf8(`${headerB64}.${payloadB64}`);
 
 		const result = await keypair.verify(signature, message, {
@@ -71,8 +71,8 @@ describe('createServiceJwt', () => {
 
 		const [headerB64, payloadB64, signatureB64] = jwt.split('.');
 
-		const header = JSON.parse(decodeUtf8From(fromBase64Url(headerB64)));
-		const payload = JSON.parse(decodeUtf8From(fromBase64Url(payloadB64)));
+		const header = JSON.parse(decodeUtf8From(fromBase64Url(headerB64!)));
+		const payload = JSON.parse(decodeUtf8From(fromBase64Url(payloadB64!)));
 
 		expect(header).toEqual({ typ: 'JWT', alg: 'ES256' });
 		expect(payload).toEqual({
@@ -84,7 +84,7 @@ describe('createServiceJwt', () => {
 			lxm: lxm,
 		});
 
-		const signature = fromBase64Url(signatureB64);
+		const signature = fromBase64Url(signatureB64!);
 		const message = encodeUtf8(`${headerB64}.${payloadB64}`);
 
 		const result = await keypair.verify(signature, message, {

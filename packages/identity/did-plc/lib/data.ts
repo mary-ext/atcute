@@ -332,7 +332,7 @@ export const getDisputeCandidates = (canonical: t.IndexedEntryWithSigner[], key:
 
 	for (let idx = 1, len = canonical.length; idx < len; idx++) {
 		const base = canonical[idx - 1] as t.IndexedEntryWithSigner<t.CompatibleOperation>;
-		const disputed = canonical[idx];
+		const disputed = canonical[idx]!;
 
 		// Only consider if it's still within the recovery window.
 		if (!isDisputePeriodActive(disputed, now)) {

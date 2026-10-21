@@ -172,7 +172,7 @@ const checkAltKeywordFilters = (
 	author: AppBskyActorDefs.ProfileViewBasic,
 ): KeywordFilter | null => {
 	for (let i = 0, il = items.length; i < il; i++) {
-		const alt = items[i].alt;
+		const alt = items[i]!.alt;
 		if (!alt) {
 			continue;
 		}

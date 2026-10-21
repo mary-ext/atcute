@@ -92,7 +92,7 @@ export const verifyDpopProof = async (
 
 	let decoded: unknown;
 	try {
-		decoded = decodeSegment(parts[0]);
+		decoded = decodeSegment(parts[0]!);
 	} catch {
 		throw new DpopVerifyError(`invalid dpop header`, 'invalid');
 	}

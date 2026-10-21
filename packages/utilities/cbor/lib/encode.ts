@@ -338,7 +338,7 @@ const writeValue = (state: State, val: any): void => {
 				writeTypeAndArgument(state, 5, len);
 
 				for (let idx = 0; idx < len; idx++) {
-					const key = keys[idx];
+					const key = keys[idx]!;
 
 					writeString(state, key);
 					writeValue(state, val[key]);
@@ -404,7 +404,7 @@ const sortUtf8Keys = (keys: string[]): void => {
 	if (len > NATIVE_SORT_THRESHOLD) {
 		const info = new Map<string, { bytes?: Uint8Array; length: number }>();
 		for (let i = 0; i < len; i++) {
-			const key = keys[i];
+			const key = keys[i]!;
 			info.set(key, { length: getUtf8Length(key) });
 		}
 
@@ -426,30 +426,33 @@ const sortUtf8Keys = (keys: string[]): void => {
 	const bytes: (Uint8Array | undefined)[] = new Array(len);
 
 	for (let i = 0; i < len; i++) {
-		lengths[i] = getUtf8Length(keys[i]);
+		lengths[i] = getUtf8Length(keys[i]!);
 	}
 
 	for (let i = 1; i < len; i++) {
-		const keyA = keys[i];
-		const lenA = lengths[i];
+		const keyA = keys[i]!;
+		const lenA = lengths[i]!;
 		// hold keyA's bytes in a local: the inner loop shifts bytes[i] away, so reading the cache
 		// back through bytes[i] on later iterations would compare against the wrong key's bytes.
 		let bytesA = bytes[i];
 
 		let j = i - 1;
 		for (; j >= 0; j--) {
-			let cmp = lenA - lengths[j];
+			const keyB = keys[j]!;
+			const lenB = lengths[j]!;
+
+			let cmp = lenA - lenB;
 			if (cmp === 0) {
 				// Note: keys are always distinct, so equal-length keys can never be byte-equal.
-				cmp = compare((bytesA ??= encodeUtf8(keyA)), (bytes[j] ??= encodeUtf8(keys[j])));
+				cmp = compare((bytesA ??= encodeUtf8(keyA)), (bytes[j] ??= encodeUtf8(keyB)));
 			}
 
 			if (cmp > 0) {
 				break;
 			}
 
-			keys[j + 1] = keys[j];
-			lengths[j + 1] = lengths[j];
+			keys[j + 1] = keyB;
+			lengths[j + 1] = lenB;
 			bytes[j + 1] = bytes[j];
 		}
 
@@ -467,7 +470,7 @@ export const getOrderedObjectKeys = (obj: Record<string, unknown>): string[] => 
 	const useNativeSort = keys.length > NATIVE_SORT_THRESHOLD;
 
 	for (let i = 0; i < keys.length; i++) {
-		const valA = keys[i];
+		const valA = keys[i]!;
 		if (obj[valA] === undefined) {
 			continue;
 		}
@@ -492,7 +495,7 @@ export const getOrderedObjectKeys = (obj: Record<string, unknown>): string[] => 
 		const lenA = valA.length;
 		let j = len - 1;
 		for (; j >= 0; j--) {
-			const valB = keys[j];
+			const valB = keys[j]!;
 
 			// Note: Don't need to check for equality, keys are always distinct.
 			if (lenA > valB.length || (lenA === valB.length && valA > valB)) {

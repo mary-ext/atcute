@@ -104,7 +104,7 @@ export const decode = (buf: Uint8Array, offset = 0, length = buf.length): Decode
 		throw new RangeError('could not decode varint');
 	}
 
-	let b = buf[counter++];
+	let b = buf[counter++]!;
 	let res = b & REST;
 	if (b < MSB) {
 		return { value: res, nextOffset: counter };
@@ -114,7 +114,7 @@ export const decode = (buf: Uint8Array, offset = 0, length = buf.length): Decode
 		throw new RangeError('could not decode varint');
 	}
 
-	b = buf[counter++];
+	b = buf[counter++]!;
 	res |= (b & REST) << 7;
 	if (b < MSB) {
 		return { value: res, nextOffset: counter };
@@ -124,7 +124,7 @@ export const decode = (buf: Uint8Array, offset = 0, length = buf.length): Decode
 		throw new RangeError('could not decode varint');
 	}
 
-	b = buf[counter++];
+	b = buf[counter++]!;
 	res |= (b & REST) << 14;
 	if (b < MSB) {
 		return { value: res, nextOffset: counter };
@@ -134,7 +134,7 @@ export const decode = (buf: Uint8Array, offset = 0, length = buf.length): Decode
 		throw new RangeError('could not decode varint');
 	}
 
-	b = buf[counter++];
+	b = buf[counter++]!;
 	res |= (b & REST) << 21;
 	if (b < MSB) {
 		return { value: res, nextOffset: counter };
@@ -144,7 +144,7 @@ export const decode = (buf: Uint8Array, offset = 0, length = buf.length): Decode
 		throw new RangeError('could not decode varint');
 	}
 
-	b = buf[counter++];
+	b = buf[counter++]!;
 	res += (b & REST) * N4;
 	if (b < MSB) {
 		return { value: res, nextOffset: counter };
@@ -156,7 +156,7 @@ export const decode = (buf: Uint8Array, offset = 0, length = buf.length): Decode
 			throw new RangeError('could not decode varint');
 		}
 
-		b = buf[counter++];
+		b = buf[counter++]!;
 		res += (b & REST) * 2 ** shift;
 
 		if (res > MAX_SAFE_INTEGER) {

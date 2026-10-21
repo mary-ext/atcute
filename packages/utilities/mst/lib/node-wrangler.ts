@@ -100,7 +100,7 @@ export class NodeWrangler {
 
 		// the key is already present!
 		if (idx < node.keys.length && node.keys[idx] === key) {
-			if (node.values[idx].$link === val.$link) {
+			if (node.values[idx]!.$link === val.$link) {
 				return node; // we can return our old self if there is no change
 			}
 
@@ -114,7 +114,7 @@ export class NodeWrangler {
 		}
 
 		// split the subtree at the insertion point
-		const [lsub, rsub] = await this._splitOnKey(node.subtrees[idx], key);
+		const [lsub, rsub] = await this._splitOnKey(node.subtrees[idx]!, key);
 
 		return await this.ns.put(
 			MSTNode._trusted(
@@ -198,7 +198,7 @@ export class NodeWrangler {
 		const node = await this.ns.get(nodeCid.$link);
 		const height = await node.height();
 		const idx = node.lowerBound(key);
-		const [lsub, rsub] = await this._splitOnKey(node.subtrees[idx], key);
+		const [lsub, rsub] = await this._splitOnKey(node.subtrees[idx]!, key);
 
 		const leftNode = await this.ns.put(
 			MSTNode._trusted(
@@ -234,11 +234,12 @@ export class NodeWrangler {
 			return nodeCid;
 		}
 
-		if (node.subtrees[0] === null) {
+		const subtree = node.subtrees[0]!;
+		if (subtree === null) {
 			return nodeCid;
 		}
 
-		return await this._squashTop(node.subtrees[0].$link);
+		return await this._squashTop(subtree.$link);
 	}
 
 	/**
@@ -295,7 +296,7 @@ export class NodeWrangler {
 		}
 
 		// merge the subtrees on either side of the deleted key
-		const merged = await this._merge(node.subtrees[idx], node.subtrees[idx + 1]);
+		const merged = await this._merge(node.subtrees[idx]!, node.subtrees[idx + 1]!);
 
 		const updated = await this.ns.put(
 			MSTNode._trusted(
@@ -335,7 +336,7 @@ export class NodeWrangler {
 		}
 
 		// recursively merge the adjacent subtrees at the boundary
-		const mergedBoundary = await this._merge(left.subtrees[left.subtrees.length - 1], right.subtrees[0]);
+		const mergedBoundary = await this._merge(left.subtrees[left.subtrees.length - 1]!, right.subtrees[0]!);
 
 		const merged = await this.ns.put(
 			MSTNode._trusted(

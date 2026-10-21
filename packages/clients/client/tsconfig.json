@@ -18,6 +18,7 @@
 		"noUnusedParameters": true,
 		"useDefineForClassFields": false,
 		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
 		"module": "NodeNext",
 		"declaration": true,
 		"erasableSyntaxOnly": true

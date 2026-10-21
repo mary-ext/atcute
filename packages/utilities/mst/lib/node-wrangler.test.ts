@@ -47,8 +47,8 @@ describe('NodeWrangler', () => {
 		}
 
 		expect(entries.length).toBe(1);
-		expect(entries[0][0]).toBe(key);
-		expect(entries[0][1].$link).toBe(value.$link);
+		expect(entries[0]![0]).toBe(key);
+		expect(entries[0]![1].$link).toBe(value.$link);
 	});
 
 	it('should put a record into null (empty tree)', async () => {
@@ -68,8 +68,8 @@ describe('NodeWrangler', () => {
 		}
 
 		expect(entries.length).toBe(1);
-		expect(entries[0][0]).toBe(key);
-		expect(entries[0][1].$link).toBe(value.$link);
+		expect(entries[0]![0]).toBe(key);
+		expect(entries[0]![1].$link).toBe(value.$link);
 	});
 
 	it('should put multiple records', async () => {
@@ -82,7 +82,7 @@ describe('NodeWrangler', () => {
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
-			rootCid = await wrangler.putRecord(rootCid, keys[i], values[i]);
+			rootCid = await wrangler.putRecord(rootCid, keys[i]!, values[i]!);
 		}
 
 		// verify all entries are present
@@ -94,8 +94,8 @@ describe('NodeWrangler', () => {
 
 		expect(entries.length).toBe(keys.length);
 		for (let i = 0; i < keys.length; i++) {
-			expect(entries[i][0]).toBe(keys[i]);
-			expect(entries[i][1].$link).toBe(values[i].$link);
+			expect(entries[i]![0]).toBe(keys[i]);
+			expect(entries[i]![1].$link).toBe(values[i]!.$link);
 		}
 	});
 
@@ -135,8 +135,8 @@ describe('NodeWrangler', () => {
 		}
 
 		expect(entries.length).toBe(1);
-		expect(entries[0][0]).toBe(key);
-		expect(entries[0][1].$link).toBe(value2.$link);
+		expect(entries[0]![0]).toBe(key);
+		expect(entries[0]![1].$link).toBe(value2.$link);
 	});
 
 	it('should delete a record', async () => {
@@ -185,7 +185,7 @@ describe('NodeWrangler', () => {
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
-			rootCid = await wrangler.putRecord(rootCid, keys[i], values[i]);
+			rootCid = await wrangler.putRecord(rootCid, keys[i]!, values[i]!);
 		}
 
 		// delete some keys
@@ -200,9 +200,9 @@ describe('NodeWrangler', () => {
 		}
 
 		expect(entries.length).toBe(3);
-		expect(entries[0][0]).toBe('coll/a');
-		expect(entries[1][0]).toBe('coll/c');
-		expect(entries[2][0]).toBe('coll/e');
+		expect(entries[0]![0]).toBe('coll/a');
+		expect(entries[1]![0]).toBe('coll/c');
+		expect(entries[2]![0]).toBe('coll/e');
 	});
 
 	it('should maintain sort order across operations', async () => {
@@ -216,7 +216,7 @@ describe('NodeWrangler', () => {
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
-			rootCid = await wrangler.putRecord(rootCid, keys[i], values[i]);
+			rootCid = await wrangler.putRecord(rootCid, keys[i]!, values[i]!);
 		}
 
 		// verify entries are in sorted order
@@ -227,11 +227,11 @@ describe('NodeWrangler', () => {
 		}
 
 		expect(entries.length).toBe(5);
-		expect(entries[0][0]).toBe('coll/a');
-		expect(entries[1][0]).toBe('coll/b');
-		expect(entries[2][0]).toBe('coll/c');
-		expect(entries[3][0]).toBe('coll/d');
-		expect(entries[4][0]).toBe('coll/e');
+		expect(entries[0]![0]).toBe('coll/a');
+		expect(entries[1]![0]).toBe('coll/b');
+		expect(entries[2]![0]).toBe('coll/c');
+		expect(entries[3]![0]).toBe('coll/d');
+		expect(entries[4]![0]).toBe('coll/e');
 	});
 
 	it('should handle deleting from a tree with multiple levels', async () => {
@@ -245,12 +245,12 @@ describe('NodeWrangler', () => {
 		const values = await Promise.all(keys.map((k) => createCid(`value-${k}`)));
 
 		for (let i = 0; i < keys.length; i++) {
-			rootCid = await wrangler.putRecord(rootCid, keys[i], values[i]);
+			rootCid = await wrangler.putRecord(rootCid, keys[i]!, values[i]!);
 		}
 
 		// delete half the keys
 		for (let i = 0; i < keys.length; i += 2) {
-			rootCid = await wrangler.deleteRecord(rootCid, keys[i]);
+			rootCid = await wrangler.deleteRecord(rootCid, keys[i]!);
 		}
 
 		// verify the remaining keys
@@ -262,7 +262,7 @@ describe('NodeWrangler', () => {
 
 		expect(entries.length).toBe(10);
 		for (let i = 0; i < 10; i++) {
-			expect(entries[i][0]).toBe(keys[i * 2 + 1]);
+			expect(entries[i]![0]).toBe(keys[i * 2 + 1]);
 		}
 	});
 
@@ -289,8 +289,8 @@ describe('NodeWrangler', () => {
 		}
 
 		expect(entries.length).toBe(1);
-		expect(entries[0][0]).toBe(key);
-		expect(entries[0][1].$link).toBe(value2.$link);
+		expect(entries[0]![0]).toBe(key);
+		expect(entries[0]![1].$link).toBe(value2.$link);
 	});
 
 	it('should handle empty tree deletion', async () => {

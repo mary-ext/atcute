@@ -123,7 +123,7 @@ export const refineLexInteger = (spec: t.LexInteger): RefineIssue[] => {
 
 	if (enumValues !== undefined) {
 		for (let idx = 0, len = enumValues.length; idx < len; idx++) {
-			const enumValue = enumValues[idx];
+			const enumValue = enumValues[idx]!;
 
 			if (enumValue < minimum) {
 				issues.push({
@@ -273,7 +273,7 @@ export const refineLexString = (spec: t.LexString): RefineIssue[] => {
 
 	if (enumValues !== undefined) {
 		for (let idx = 0, len = enumValues.length; idx < len; idx++) {
-			const enumValue = enumValues[idx];
+			const enumValue = enumValues[idx]!;
 
 			if (!isUtf8LengthInRange(enumValue, minLength, maxLength)) {
 				const utf8Len = getUtf8Length(enumValue);
@@ -302,7 +302,7 @@ export const refineLexString = (spec: t.LexString): RefineIssue[] => {
 
 	if (knownValues !== undefined) {
 		for (let idx = 0, len = knownValues.length; idx < len; idx++) {
-			const knownValue = knownValues[idx];
+			const knownValue = knownValues[idx]!;
 
 			if (!isUtf8LengthInRange(knownValue, minLength, maxLength)) {
 				const utf8Len = getUtf8Length(knownValue);
@@ -371,7 +371,7 @@ export const refineLexBlob = (spec: t.LexBlob): RefineIssue[] => {
 		}
 	} else {
 		for (let idx = 0, len = accept.length; idx < len; idx++) {
-			const mime = accept[idx];
+			const mime = accept[idx]!;
 
 			if (!MIME_TYPE_RE.test(mime)) {
 				issues.push({
@@ -421,7 +421,7 @@ export const refineLexRefUnion = (spec: t.LexRefUnion): RefineIssue[] => {
 	}
 
 	for (let idx = 0, len = refs.length; idx < len; idx++) {
-		const ref = refs[idx];
+		const ref = refs[idx]!;
 
 		if (!REF_RE.test(ref)) {
 			issues.push({
@@ -539,7 +539,7 @@ export const refineLexObject = (spec: t.LexObject, deep: boolean = false): Refin
 	}
 
 	for (const prop in properties) {
-		const propSpec = properties[prop];
+		const propSpec = properties[prop]!;
 
 		if (!KEY_RE.test(prop)) {
 			issues.push({
@@ -984,7 +984,7 @@ export const refineLexPermissionSet = (spec: t.LexPermissionSet, deep: boolean =
 	if (deep) {
 		// validate each permission
 		for (let idx = 0, len = permissions.length; idx < len; idx++) {
-			const permission = permissions[idx];
+			const permission = permissions[idx]!;
 
 			for (const { message, path } of refineLexPermission(permission)) {
 				issues.push({
@@ -1068,7 +1068,7 @@ export const refineLexiconDoc = (spec: t.LexiconDoc, deep: boolean = false): Ref
 	const issues: RefineIssue[] = [];
 
 	for (const prop in defs) {
-		const def = defs[prop];
+		const def = defs[prop]!;
 
 		// valid def ID characters are not specified; the reference SDK does not validate them.
 		// see: https://github.com/bluesky-social/atproto/issues/3588

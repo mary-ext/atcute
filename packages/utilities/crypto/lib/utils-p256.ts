@@ -29,10 +29,13 @@ const pow16mod = (a: bigint, n: bigint): bigint => {
 const powmod = (a: bigint, b: bigint, n: bigint): bigint => {
 	const a_lut = [1n];
 	for (let i = 0; i < 15; i++) {
-		a_lut.push((a_lut[i] * a) % n);
+		a_lut.push((a_lut[i]! * a) % n);
 	}
 
-	return Array.from(b.toString(16)).reduce((acc, bi) => (pow16mod(acc, n) * a_lut[parseInt(bi, 16)]) % n, 1n);
+	return Array.from(b.toString(16)).reduce(
+		(acc, bi) => (pow16mod(acc, n) * a_lut[parseInt(bi, 16)]!) % n,
+		1n,
+	);
 };
 
 // https://gist.github.com/DavidBuchanan314/4f357c7d8247d744a0b19adbc5a01dbb
@@ -47,7 +50,7 @@ export const uncompressP256Point = (coords: Uint8Array): Uint8Array<ArrayBuffer>
 
 	assertType((y * y) % P256_P === y_squared, `invalid curve point`);
 
-	if ((coords[0] ^ Number(BigInt.asUintN(1, y))) & 1) {
+	if ((coords[0]! ^ Number(BigInt.asUintN(1, y))) & 1) {
 		y = P256_P - y;
 	}
 

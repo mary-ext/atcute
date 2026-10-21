@@ -23,7 +23,7 @@ const referenceKeySorter = (obj: Record<string, unknown>): string[] => {
 
 				for (let i = 0; i < bytesA.length; i++) {
 					if (bytesA[i] !== bytesB[i]) {
-						return bytesA[i] - bytesB[i];
+						return bytesA[i]! - bytesB[i]!;
 					}
 				}
 

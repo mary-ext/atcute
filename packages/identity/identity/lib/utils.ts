@@ -43,7 +43,7 @@ export const getVerificationMaterial = (
 	const expectedId = `${doc.id}${id}`;
 
 	for (let idx = 0, len = verificationMethods.length; idx < len; idx++) {
-		const { id: methodId, type, publicKeyMultibase } = verificationMethods[idx];
+		const { id: methodId, type, publicKeyMultibase } = verificationMethods[idx]!;
 
 		if (methodId !== id && methodId !== expectedId) {
 			continue;
@@ -76,7 +76,7 @@ export const getAtprotoHandle = (doc: t.DidDocument): Handle | null | undefined 
 	const PREFIX = 'at://';
 
 	for (let idx = 0, len = alsoKnownAs.length; idx < len; idx++) {
-		const aka = alsoKnownAs[idx];
+		const aka = alsoKnownAs[idx]!;
 
 		if (!aka.startsWith(PREFIX)) {
 			continue;
@@ -104,7 +104,7 @@ export const getAtprotoServiceEndpoint = (
 	}
 
 	for (let idx = 0, len = services.length; idx < len; idx++) {
-		const { id, type, serviceEndpoint } = services[idx];
+		const { id, type, serviceEndpoint } = services[idx]!;
 
 		if (id !== predicate.id && id !== doc.id + predicate.id) {
 			continue;

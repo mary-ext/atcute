@@ -185,22 +185,22 @@ export class MSTNode {
 			let prevKey = '';
 
 			for (let idx = 0, len = keys.length; idx < len; idx++) {
-				const key = keys[idx];
+				const key = keys[idx]!;
 				const prefixLen = commonPrefixLength(prevKey, key);
 				const suffix = key.slice(prefixLen);
 
 				e.push({
 					k: CBOR.toBytes(encodeKey(suffix)),
 					p: prefixLen,
-					t: subtrees[idx + 1],
-					v: values[idx],
+					t: subtrees[idx + 1]!,
+					v: values[idx]!,
 				});
 
 				prevKey = key;
 			}
 
 			const n: NodeData = {
-				l: subtrees[0],
+				l: subtrees[0]!,
 				e: e,
 			};
 
@@ -242,7 +242,7 @@ export class MSTNode {
 			if (this.isEmpty) {
 				height = 0;
 			} else if (keys.length > 0) {
-				height = computeKeyHeight(keys[0]);
+				height = computeKeyHeight(keys[0]!);
 			} else {
 				height = null;
 			}
@@ -279,7 +279,7 @@ export class MSTNode {
 		const len = keys.length;
 
 		for (let idx = 0; idx < len; idx++) {
-			if (key <= keys[idx]) {
+			if (key <= keys[idx]!) {
 				return idx;
 			}
 		}

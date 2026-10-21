@@ -42,29 +42,29 @@ const W = new Int32Array(16);
 const TAIL = new Uint8Array(128);
 
 const compress = (buf: Uint8Array, offset: number): void => {
-	let a = H[0];
-	let b = H[1];
-	let c = H[2];
-	let d = H[3];
-	let e = H[4];
-	let f = H[5];
-	let g = H[6];
-	let h = H[7];
+	let a = H[0]!;
+	let b = H[1]!;
+	let c = H[2]!;
+	let d = H[3]!;
+	let e = H[4]!;
+	let f = H[5]!;
+	let g = H[6]!;
+	let h = H[7]!;
 
 	for (let i = 0; i < 64; i++) {
 		let w: number;
 
 		if (i < 16) {
 			const p = offset + (i << 2);
-			w = (buf[p] << 24) | (buf[p + 1] << 16) | (buf[p + 2] << 8) | buf[p + 3];
+			w = (buf[p]! << 24) | (buf[p + 1]! << 16) | (buf[p + 2]! << 8) | buf[p + 3]!;
 		} else {
-			const x = W[(i - 15) & 15];
-			const y = W[(i - 2) & 15];
+			const x = W[(i - 15) & 15]!;
+			const y = W[(i - 2) & 15]!;
 
 			const s0 = rotr(x, 7) ^ rotr(x, 18) ^ (x >>> 3);
 			const s1 = rotr(y, 17) ^ rotr(y, 19) ^ (y >>> 10);
 
-			w = (s1 + W[(i - 7) & 15] + s0 + W[i & 15]) | 0;
+			w = (s1 + W[(i - 7) & 15]! + s0 + W[i & 15]!) | 0;
 		}
 
 		W[i & 15] = w;
@@ -73,7 +73,7 @@ const compress = (buf: Uint8Array, offset: number): void => {
 		const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
 
 		// Ch and Maj, rewritten with fewer operations than their FIPS 180-4 definitions
-		const t1 = (h + S1 + (g ^ (e & (f ^ g))) + K[i] + w) | 0;
+		const t1 = (h + S1 + (g ^ (e & (f ^ g))) + K[i]! + w) | 0;
 		const t2 = (S0 + ((a & b) | (c & (a | b)))) | 0;
 
 		h = g;
@@ -86,14 +86,14 @@ const compress = (buf: Uint8Array, offset: number): void => {
 		a = (t1 + t2) | 0;
 	}
 
-	H[0] += a;
-	H[1] += b;
-	H[2] += c;
-	H[3] += d;
-	H[4] += e;
-	H[5] += f;
-	H[6] += g;
-	H[7] += h;
+	H[0]! += a;
+	H[1]! += b;
+	H[2]! += c;
+	H[3]! += d;
+	H[4]! += e;
+	H[5]! += f;
+	H[6]! += g;
+	H[7]! += h;
 };
 
 /**
@@ -119,7 +119,7 @@ export const toSha256Sync = (data: Uint8Array): Uint8Array<ArrayBuffer> => {
 
 	// avoid allocating a subarray view for the tail
 	for (let i = 0; i < rem; i++) {
-		TAIL[i] = data[full + i];
+		TAIL[i] = data[full + i]!;
 	}
 
 	TAIL[rem] = 0x80;
@@ -141,7 +141,7 @@ export const toSha256Sync = (data: Uint8Array): Uint8Array<ArrayBuffer> => {
 
 	const digest = new Uint8Array(32);
 	for (let i = 0; i < 8; i++) {
-		const word = H[i];
+		const word = H[i]!;
 		const p = i << 2;
 
 		digest[p] = word >>> 24;

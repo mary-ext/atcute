@@ -49,30 +49,31 @@ export class NodeDnsHandleResolver implements HandleResolver {
 			throw new FailedHandleResolutionError(handle, { cause });
 		}
 
-		const records = results.map((record) => record.join('').replace(/^"|"$/g, '').replace(/\\"/g, '"'));
-		for (let i = 0, il = records.length; i < il; i++) {
-			const data = records[i];
+		let did: string | undefined;
+
+		for (const record of results) {
+			const data = record.join('').replace(/^"|"$/g, '').replace(/\\"/g, '"');
 
 			if (!data.startsWith(PREFIX)) {
 				continue;
 			}
 
-			for (let j = i + 1; j < il; j++) {
-				const data = records[j];
-				if (data.startsWith(PREFIX)) {
-					throw new AmbiguousHandleError(handle);
-				}
+			if (did !== undefined) {
+				throw new AmbiguousHandleError(handle);
 			}
 
-			const did = data.slice(PREFIX.length);
-			if (!isAtprotoDid(did)) {
-				throw new InvalidResolvedHandleError(handle, did);
-			}
-
-			return did;
+			did = data.slice(PREFIX.length);
 		}
 
-		// theoretically this shouldn't happen, it should've returned ENOTFOUND
-		throw new DidNotFoundError(handle);
+		if (did === undefined) {
+			// theoretically this shouldn't happen, it should've returned ENOTFOUND
+			throw new DidNotFoundError(handle);
+		}
+
+		if (!isAtprotoDid(did)) {
+			throw new InvalidResolvedHandleError(handle, did);
+		}
+
+		return did;
 	}
 }

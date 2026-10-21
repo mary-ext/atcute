@@ -15,7 +15,7 @@ const HTU = 'https://client.example/oauth/client-assertion';
 const AUD = 'https://pds.example';
 
 const decodeJwtPayload = (jwt: string): Record<string, unknown> => {
-	return JSON.parse(decodeUtf8From(fromBase64Url(jwt.split('.')[1])));
+	return JSON.parse(decodeUtf8From(fromBase64Url(jwt.split('.')[1]!)));
 };
 
 const setup = async () => {

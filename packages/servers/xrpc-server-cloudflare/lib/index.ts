@@ -3,7 +3,7 @@ import type { WebSocketAdapter, WebSocketConnection } from '@atcute/xrpc-server'
 export const createCloudflareWebSocket = (): WebSocketAdapter => {
 	return {
 		async upgrade(_request, handler) {
-			const [client, server] = Object.values(new WebSocketPair());
+			const { 0: client, 1: server } = new WebSocketPair();
 
 			const controller = new AbortController();
 			const connection: WebSocketConnection = {

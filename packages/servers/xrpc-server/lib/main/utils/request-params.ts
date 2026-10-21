@@ -85,7 +85,7 @@ export const constructParamsHandler = <TSchema extends ObjectSchema>(schema: TSc
 		const input: Record<string, MaybeArray<Literal | null>> = {};
 
 		for (let idx = 0; idx < len; idx++) {
-			const entry = entries[idx];
+			const entry = entries[idx]!;
 			const key = entry.key;
 			const coerce = entry.coerce;
 
@@ -101,7 +101,8 @@ export const constructParamsHandler = <TSchema extends ObjectSchema>(schema: TSc
 			if (entry.multiple || count > 1) {
 				value = coerce !== undefined ? raw.map(coerce) : raw;
 			} else {
-				value = coerce !== undefined ? coerce(raw[0]) : raw[0];
+				const first = raw[0]!;
+				value = coerce !== undefined ? coerce(first) : first;
 			}
 
 			/*#__INLINE__*/ set(input, key, value);

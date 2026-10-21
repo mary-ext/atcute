@@ -67,7 +67,7 @@ export const verifyRecord = async ({
 
 	assert(count >= 1, `car must have at least one block`);
 
-	const root = reader.header.data.roots[0];
+	const root = reader.header.data.roots[0]!;
 	const commitEntry = loadVerified(blockmap, root);
 	assert(commitEntry !== undefined, `cid not found in blockmap; cid=${root.$link}`);
 
@@ -151,7 +151,7 @@ const descend = (
 	let subtree: CidLink | null = node.l;
 
 	for (let i = 0, il = entries.length; i < il; i++) {
-		const entry = entries[i];
+		const entry = entries[i]!;
 		const key = decodeMstKey(lastKey, entry);
 		lastKey = key;
 

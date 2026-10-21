@@ -56,7 +56,7 @@ const labeledPost = (vals: string[]) => {
 
 describe('mergeDisplayRestrictions', () => {
 	it('combines causes from multiple results and skips undefined', () => {
-		const [cause] = getDisplayRestrictions(labeledPost(['porn']), DisplayContext.ContentMedia).blurs;
+		const cause = getDisplayRestrictions(labeledPost(['porn']), DisplayContext.ContentMedia).blurs[0]!;
 
 		const a: DisplayRestrictions = { ...empty(), blurs: [cause], filters: [cause] };
 		const b: DisplayRestrictions = { ...empty(), alerts: [cause], informs: [cause] };

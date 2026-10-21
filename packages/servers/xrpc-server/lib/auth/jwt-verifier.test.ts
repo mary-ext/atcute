@@ -171,8 +171,8 @@ describe('ServiceJwtVerifier', () => {
 			await createServiceJwt({ keypair, issuer: issuerDid, audience: audienceDid, lxm })
 		).split('.');
 
-		const header = { ...decodePortion<Record<string, unknown>>(headerB64), kid: '#someOtherKey' };
-		const payload = decodePortion<Record<string, unknown>>(payloadB64);
+		const header = { ...decodePortion<Record<string, unknown>>(headerB64!), kid: '#someOtherKey' };
+		const payload = decodePortion<Record<string, unknown>>(payloadB64!);
 		const tampered = await signRaw(keypair, header, payload);
 
 		await expectAuthError(verifier.verifyRequest(bearer(tampered), { lxm }), 'BadJwtIssuer');
@@ -188,8 +188,8 @@ describe('ServiceJwtVerifier', () => {
 			await createServiceJwt({ keypair, issuer: issuerDid, audience: audienceDid, lxm })
 		).split('.');
 
-		const header = { ...decodePortion<Record<string, unknown>>(headerB64), kid: '#atproto' };
-		const payload = decodePortion<Record<string, unknown>>(payloadB64);
+		const header = { ...decodePortion<Record<string, unknown>>(headerB64!), kid: '#atproto' };
+		const payload = decodePortion<Record<string, unknown>>(payloadB64!);
 		const signed = await signRaw(keypair, header, payload);
 
 		await expect(verifier.verifyRequest(bearer(signed), { lxm })).resolves.toBeTruthy();
@@ -205,8 +205,8 @@ describe('ServiceJwtVerifier', () => {
 			await createServiceJwt({ keypair, issuer: issuerDid, audience: audienceDid, lxm })
 		).split('.');
 
-		const header = decodePortion<Record<string, unknown>>(headerB64);
-		const { lxm: _, ...payload } = decodePortion<Record<string, unknown>>(payloadB64);
+		const header = decodePortion<Record<string, unknown>>(headerB64!);
+		const { lxm: _, ...payload } = decodePortion<Record<string, unknown>>(payloadB64!);
 		const signed = await signRaw(keypair, header, payload);
 
 		await expectAuthError(verifier.verifyRequest(bearer(signed), { lxm }), 'BadJwt');
@@ -265,8 +265,8 @@ describe('ServiceJwtVerifier', () => {
 			await createServiceJwt({ keypair, issuer: issuerDid, audience: audienceDid, lxm })
 		).split('.');
 
-		const header = decodePortion<Record<string, unknown>>(headerB64);
-		const payload = { ...decodePortion<Record<string, unknown>>(payloadB64), nbf: now + 120 };
+		const header = decodePortion<Record<string, unknown>>(headerB64!);
+		const payload = { ...decodePortion<Record<string, unknown>>(payloadB64!), nbf: now + 120 };
 		const signed = await signRaw(keypair, header, payload);
 
 		await expectAuthError(verifier.verifyRequest(bearer(signed), { lxm }), 'JwtNotYetValid');
@@ -334,8 +334,8 @@ describe('ServiceJwtVerifier', () => {
 			await createServiceJwt({ keypair, issuer: issuerDid, audience: audienceDid, lxm })
 		).split('.');
 
-		const header = decodePortion<Record<string, unknown>>(headerB64);
-		const { jti: _, ...payload } = decodePortion<Record<string, unknown>>(payloadB64);
+		const header = decodePortion<Record<string, unknown>>(headerB64!);
+		const { jti: _, ...payload } = decodePortion<Record<string, unknown>>(payloadB64!);
 		const signed = await signRaw(keypair, header, payload);
 
 		await expectAuthError(verifier.verifyRequest(bearer(signed), { lxm }), 'BadJwt');

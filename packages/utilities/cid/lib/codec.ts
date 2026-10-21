@@ -106,8 +106,8 @@ export const decodeFirst = (bytes: Uint8Array): [decoded: Cid, remainder: Uint8A
 	}
 
 	const version = bytes[0];
-	const codec = bytes[1];
-	const digestType = bytes[2];
+	const codec = bytes[1]!;
+	const digestType = bytes[2]!;
 	const digestSize = bytes[3];
 
 	if (version !== CID_VERSION) {

@@ -56,30 +56,31 @@ export class DohJsonHandleResolver implements HandleResolver {
 			});
 		}
 
-		for (let i = 0, il = answers.length; i < il; i++) {
-			const answer = answers[i];
+		let did: string | undefined;
+
+		for (const answer of answers) {
 			const data = answer.data;
 
 			if (!data.startsWith(PREFIX)) {
 				continue;
 			}
 
-			for (let j = i + 1; j < il; j++) {
-				const data = answers[j].data;
-				if (data.startsWith(PREFIX)) {
-					throw new err.AmbiguousHandleError(handle);
-				}
+			if (did !== undefined) {
+				throw new err.AmbiguousHandleError(handle);
 			}
 
-			const did = data.slice(PREFIX.length);
-			if (!isAtprotoDid(did)) {
-				throw new err.InvalidResolvedHandleError(handle, did);
-			}
-
-			return did;
+			did = data.slice(PREFIX.length);
 		}
 
-		// theoretically this shouldn't happen, it should've returned NXDOMAIN
-		throw new err.DidNotFoundError(handle);
+		if (did === undefined) {
+			// theoretically this shouldn't happen, it should've returned NXDOMAIN
+			throw new err.DidNotFoundError(handle);
+		}
+
+		if (!isAtprotoDid(did)) {
+			throw new err.InvalidResolvedHandleError(handle, did);
+		}
+
+		return did;
 	}
 }

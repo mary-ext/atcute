@@ -125,12 +125,12 @@ export class NodeWalker {
 
 	/** key/path to the left of current cursor position */
 	get lpath(): string {
-		return this.frame.idx === 0 ? this.frame.lpath : this.frame.node.keys[this.frame.idx - 1];
+		return this.frame.idx === 0 ? this.frame.lpath : this.frame.node.keys[this.frame.idx - 1]!;
 	}
 
 	/** value (CID) to the left of current cursor position */
 	get lval(): CidLink | null {
-		return this.frame.idx === 0 ? null : this.frame.node.values[this.frame.idx - 1];
+		return this.frame.idx === 0 ? null : this.frame.node.values[this.frame.idx - 1]!;
 	}
 
 	/** subtree CID at current cursor position (null if no subtree) */
@@ -143,12 +143,12 @@ export class NodeWalker {
 	get rpath(): string {
 		return this.frame.idx === this.frame.node.keys.length
 			? this.frame.rpath
-			: this.frame.node.keys[this.frame.idx];
+			: this.frame.node.keys[this.frame.idx]!;
 	}
 
 	/** value (CID) to the right of current cursor position */
 	get rval(): CidLink | null {
-		return this.frame.idx === this.frame.node.values.length ? null : this.frame.node.values[this.frame.idx];
+		return this.frame.idx === this.frame.node.values.length ? null : this.frame.node.values[this.frame.idx]!;
 	}
 
 	/** whether the walker has reached the end of the tree */
@@ -201,7 +201,7 @@ export class NodeWalker {
 	 * @throws if no subtree exists at current position
 	 */
 	async down(): Promise<void> {
-		const subtree = this.frame.node.subtrees[this.frame.idx];
+		const subtree = this.subtree;
 		if (subtree === null) {
 			throw new Error(`cannot descend; no subtree at current position`);
 		}

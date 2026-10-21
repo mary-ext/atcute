@@ -50,7 +50,7 @@ export const verifyJwt = async (
 		throw new Error(`invalid jwt format`);
 	}
 
-	const header = decodeSegment<Record<string, unknown>>(parts[0]);
+	const header = decodeSegment<Record<string, unknown>>(parts[0]!);
 	if (header.alg !== alg) {
 		throw new Error(`invalid jwt alg`);
 	}
@@ -58,8 +58,8 @@ export const verifyJwt = async (
 		throw new Error(`invalid jwt typ`);
 	}
 
-	const payload = decodeSegment<Record<string, unknown>>(parts[1]);
-	const signature = fromBase64Url(parts[2]);
+	const payload = decodeSegment<Record<string, unknown>>(parts[1]!);
+	const signature = fromBase64Url(parts[2]!);
 	const signingInput = `${parts[0]}.${parts[1]}`;
 
 	const ok = await crypto.subtle.verify(

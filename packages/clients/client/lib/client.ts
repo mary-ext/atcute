@@ -471,7 +471,7 @@ const _mergeHeaders = (
 	let headers: Headers | undefined;
 
 	for (const name in defaults) {
-		const value = defaults[name];
+		const value = defaults[name]!;
 
 		if (value !== null) {
 			headers ??= new Headers(init);

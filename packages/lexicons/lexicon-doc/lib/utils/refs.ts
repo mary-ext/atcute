@@ -80,7 +80,7 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 		}
 	} else {
 		for (const defId in doc.defs) {
-			stack = { value: doc.defs[defId], next: stack };
+			stack = { value: doc.defs[defId]!, next: stack };
 		}
 	}
 
@@ -113,7 +113,7 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 			}
 			case 'union': {
 				for (let idx = 0, len = def.refs.length; idx < len; idx++) {
-					const ref = def.refs[idx];
+					const ref = def.refs[idx]!;
 					const id = getInternalDefId(ref, doc.id);
 					if (id === undefined) {
 						if (isValidExternalRef(ref)) {
@@ -151,7 +151,7 @@ export const findExternalReferences = (doc: LexiconDoc, defId?: string): Set<str
 				}
 
 				for (const key in properties) {
-					stack = { value: properties[key], next: stack };
+					stack = { value: properties[key]!, next: stack };
 				}
 
 				break;

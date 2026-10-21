@@ -63,12 +63,16 @@ export class FirehoseSubscription<TSchema extends XRPCSubscriptionMetadata> {
 		});
 
 		const getUrl = async (): Promise<string> => {
-			let selectedUrl: string;
+			let selectedUrl: string | undefined;
 
 			if (typeof wsUrls === 'string') {
 				selectedUrl = wsUrls;
 			} else {
 				selectedUrl = wsUrls[Math.floor(Math.random() * wsUrls.length)];
+			}
+
+			if (selectedUrl === undefined) {
+				throw new TypeError(`expected at least one service url`);
 			}
 
 			const url = new URL('/xrpc/' + nsid.nsid, selectedUrl);

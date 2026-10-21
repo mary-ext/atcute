@@ -49,8 +49,8 @@ describe('NodeWalker', () => {
 		}
 
 		expect(pairs.length).toBe(1);
-		expect(pairs[0][0]).toBe(testKey);
-		expect(pairs[0][1]).toEqual(testValue);
+		expect(pairs[0]![0]).toBe(testKey);
+		expect(pairs[0]![1]).toEqual(testValue);
 	});
 
 	it('should check done correctly', async () => {

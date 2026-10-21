@@ -70,7 +70,7 @@ export class CidMap<V> {
 
 const keyOf = (cid: Uint8Array): number => {
 	// 30 bits from the start of the digest, keeping the key a small integer
-	return cid[4] | (cid[5] << 8) | (cid[6] << 16) | ((cid[7] & 0x3f) << 24);
+	return cid[4]! | (cid[5]! << 8) | (cid[6]! << 16) | ((cid[7]! & 0x3f) << 24);
 };
 
 const isSameCid = (a: Uint8Array, b: Uint8Array): boolean => {

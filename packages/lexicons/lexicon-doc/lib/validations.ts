@@ -145,7 +145,7 @@ const assertRefine = (path: LexPath, issues: RefineIssue[]) => {
 		return;
 	}
 
-	const first = issues[0];
+	const first = issues[0]!;
 
 	throw new Error(`${formatIssuePath(path, first.path)}: ${first.message}`);
 };
@@ -682,7 +682,7 @@ const buildLexObject = (
 	const entries: [prop: string, field: ReturnType<typeof buildLexDefinableField>][] = [];
 
 	for (const prop in properties) {
-		const propSpec = properties[prop];
+		const propSpec = properties[prop]!;
 		const field = buildLexDefinableField(ctx, delve(path, `properties/${prop}`), propSpec);
 
 		entries.push([prop, field]);

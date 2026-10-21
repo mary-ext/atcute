@@ -83,7 +83,7 @@ export const segmentize = <F>(text: string, facets: Facet<F>[] | undefined): Ric
 
 	// Process facets
 	for (let idx = 0, len = facets.length; idx < len; idx++) {
-		const facet = facets[idx];
+		const facet = facets[idx]!;
 
 		const { byteStart, byteEnd } = facet.index;
 		const features = facet.features;

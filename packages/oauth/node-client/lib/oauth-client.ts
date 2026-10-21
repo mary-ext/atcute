@@ -279,7 +279,7 @@ export class OAuthClient {
 				throw new TypeError(`specified redirect_uri not in client metadata: ${redirectUri}`);
 			}
 		} else {
-			redirectUri = this.metadata.redirect_uris[0];
+			redirectUri = this.metadata.redirect_uris[0]!;
 		}
 
 		// resolve target to AS metadata

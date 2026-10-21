@@ -15,7 +15,7 @@ const getSignatureS = (sig: Uint8Array): bigint => {
 	let s = 0n;
 	for (let i = 1; i <= (len = sig.length) >> 1; i++) {
 		// s is encoded as big-endian; c.f. [1] Point 2.
-		s |= BigInt(sig[len - i]) << BigInt(8 * (i - 1));
+		s |= BigInt(sig[len - i]!) << BigInt(8 * (i - 1));
 	}
 
 	return s;
@@ -91,7 +91,7 @@ export const compressPoint = (coords: Uint8Array): Uint8Array<ArrayBuffer> => {
 	const compressed = coords.slice(0, n + 1);
 
 	// 4. Compress the Y coordinate, according to [1] Action 2.
-	compressed[0] = 2 + (coords[maxIdx] & 1); // [1] Action 2.3.
+	compressed[0] = 2 + (coords[maxIdx]! & 1); // [1] Action 2.3.
 
 	// Done. Return the compressed point.
 	return compressed;
@@ -133,7 +133,7 @@ export const deriveEcPublicKeyFromPrivateKey = async (
 
 const readDerHeader = (buf: Uint8Array, pos: number): [start: number, length: number] => {
 	let start = pos + 2;
-	let length = buf[pos + 1];
+	let length = buf[pos + 1]!;
 
 	// Long form: the low 7 bits count the length octets that follow.
 	if (length > 0x7f) {
@@ -141,7 +141,7 @@ const readDerHeader = (buf: Uint8Array, pos: number): [start: number, length: nu
 
 		length = 0;
 		while (start < end) {
-			length = (length << 8) | buf[start++];
+			length = (length << 8) | buf[start++]!;
 		}
 	}
 

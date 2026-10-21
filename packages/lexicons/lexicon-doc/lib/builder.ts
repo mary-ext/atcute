@@ -155,7 +155,7 @@ export const integer = (def: Omit<LexIntegerBuilder, 'type'> = {}): LexIntegerBu
 
 	if (enumValues !== undefined) {
 		for (let idx = 0, len = enumValues.length; idx < len; idx++) {
-			const enumValue = enumValues[idx];
+			const enumValue = enumValues[idx]!;
 
 			if (enumValue < minimum) {
 				throw new Error(
@@ -480,8 +480,8 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexStrin
 	// validate resolved enum values
 	if (builtEnumValues !== undefined && enumValues !== undefined) {
 		for (let idx = 0, len = builtEnumValues.length; idx < len; idx++) {
-			const enumValue = enumValues[idx];
-			const builtEnumValue = builtEnumValues[idx];
+			const enumValue = enumValues[idx]!;
+			const builtEnumValue = builtEnumValues[idx]!;
 
 			if (typeof enumValue !== 'string') {
 				if (!isUtf8LengthInRange(builtEnumValue, minLength, maxLength)) {
@@ -510,8 +510,8 @@ const buildStringSchema = (ctx: BuildContext, def: LexStringBuilder): t.LexStrin
 	// validate resolved knownValues
 	if (builtKnownValues !== undefined && knownValues !== undefined) {
 		for (let idx = 0, len = builtKnownValues.length; idx < len; idx++) {
-			const knownValue = knownValues[idx];
-			const builtKnownValue = builtKnownValues[idx];
+			const knownValue = knownValues[idx]!;
+			const builtKnownValue = builtKnownValues[idx]!;
 
 			if (typeof knownValue !== 'string') {
 				if (!isUtf8LengthInRange(builtKnownValue, minLength, maxLength)) {
@@ -634,7 +634,7 @@ export const blob = (def: Omit<LexBlobBuilder, 'type'> = {}): LexBlobBuilder => 
 		}
 	} else {
 		for (let idx = 0, len = accept.length; idx < len; idx++) {
-			const mime = accept[idx];
+			const mime = accept[idx]!;
 
 			if (!MIME_TYPE_RE.test(mime)) {
 				throw new Error(`blob/accept[${idx}]: invalid MIME type (${mime})`);
@@ -970,7 +970,7 @@ const buildObjectSchema = (ctx: BuildContext, def: LexObjectBuilder): t.LexObjec
 
 	if (def.properties) {
 		for (const prop in def.properties) {
-			const propDef = def.properties[prop];
+			const propDef = def.properties[prop]!;
 
 			let unwrapped: LexFieldBuilder;
 			let isRequired = false;
@@ -1489,7 +1489,7 @@ export const document = (doc: LexDocumentBuilder): LexDocumentBuilder => {
 			throw new Error(`${doc.id}/defs: invalid "${defId}" definition id`);
 		}
 
-		const def = defs[defId];
+		const def = defs[defId]!;
 
 		if (
 			defId !== 'main' &&

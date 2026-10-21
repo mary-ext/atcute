@@ -20,14 +20,15 @@ const seeded = (seed: number) => {
 const joinChunks = (chunks: Uint8Array[]): Uint8Array => {
 	let total = 0;
 	for (let i = 0; i < chunks.length; i++) {
-		total += chunks[i].length;
+		total += chunks[i]!.length;
 	}
 
 	const out = new Uint8Array(total);
 	let offset = 0;
 	for (let i = 0; i < chunks.length; i++) {
-		out.set(chunks[i], offset);
-		offset += chunks[i].length;
+		const chunk = chunks[i]!;
+		out.set(chunk, offset);
+		offset += chunk.length;
 	}
 
 	return out;

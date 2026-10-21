@@ -110,7 +110,7 @@ export const collectBlobs = (record: unknown, options?: CollectBlobsOptions): Bl
 
 		const keys = Object.keys(value);
 		for (let i = keys.length - 1; i >= 0; i--) {
-			const v = (value as Record<string, unknown>)[keys[i]];
+			const v = (value as Record<string, unknown>)[keys[i]!];
 			if (v != null) {
 				stack.push(v);
 			}

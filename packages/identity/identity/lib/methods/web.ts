@@ -25,7 +25,7 @@ export const normalizeWebDid = (did: Did<'web'>): Did<'web'> => {
 	// keep path segments verbatim; decoding them would split a percent-encoded colon into two segments
 	const [host, ...paths] = did.slice(8).split(':');
 
-	let normalized = `did:web:${encodeURIComponent(decodeURIComponent(host).toLowerCase())}`;
+	let normalized = `did:web:${encodeURIComponent(decodeURIComponent(host!).toLowerCase())}`;
 	if (paths.length > 0) {
 		normalized += `:${paths.join(':')}`;
 	}

@@ -18,7 +18,7 @@ export const createKeywordPattern = (matchers: KeywordMatch | KeywordMatch[]): R
 	let re = '';
 
 	for (let idx = 0, len = matchers.length; idx < len; idx++) {
-		const match = matchers[idx];
+		const match = matchers[idx]!;
 
 		const whole = match.whole;
 		let value = match.value;

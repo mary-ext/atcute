@@ -72,7 +72,7 @@ describe('PlcClient', () => {
 
 			expect(state.did).toBe(did);
 			expect(state.alsoKnownAs).toContain('at://test.handle');
-			expect(state.services.atproto_pds.endpoint).toBe('https://pds.example.com');
+			expect(state.services.atproto_pds!.endpoint).toBe('https://pds.example.com');
 		});
 
 		it('fetches the operation log', async () => {

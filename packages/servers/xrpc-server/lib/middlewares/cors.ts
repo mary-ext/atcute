@@ -57,7 +57,7 @@ export const cors = (options: CORSOptions = {}): FetchMiddleware => {
 			const match = RE_XRPC_NSID.exec(url.pathname);
 
 			if (match) {
-				const nsid = match[1];
+				const nsid = match[1]!;
 				const excluded = exclude.some((pattern) => {
 					if (pattern.endsWith('.*')) {
 						return nsid.startsWith(pattern.slice(0, -1));

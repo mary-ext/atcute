@@ -32,8 +32,8 @@ export const compare = (a: Uint8Array, b: Uint8Array): number => {
 	const len = alen < blen ? alen : blen;
 
 	for (let i = 0; i < len; i++) {
-		const ax = a[i];
-		const bx = b[i];
+		const ax = a[i]!;
+		const bx = b[i]!;
 
 		if (ax < bx) {
 			return -1;
@@ -85,7 +85,7 @@ export const timingSafeEquals = (a: Uint8Array, b: Uint8Array): boolean => {
 	let out = 0;
 	if ((len = a.length) === b.length) {
 		while (len--) {
-			out |= a[len] ^ b[len];
+			out |= a[len]! ^ b[len]!;
 		}
 	}
 
@@ -108,7 +108,7 @@ export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuf
 
 	if (size === undefined) {
 		for (idx = size = 0; idx < len; idx++) {
-			const chunk = arrays[idx];
+			const chunk = arrays[idx]!;
 			size += chunk.length;
 		}
 	}
@@ -116,7 +116,7 @@ export const concat = (arrays: Uint8Array[], size?: number): Uint8Array<ArrayBuf
 	const buffer = new Uint8Array(size);
 
 	for (idx = 0; idx < len; idx++) {
-		const chunk = arrays[idx];
+		const chunk = arrays[idx]!;
 		const remaining = size - written;
 
 		if (chunk.length > remaining) {
@@ -164,7 +164,7 @@ const _shortString = (from: Uint8Array, offset: number, length: number): string 
 	const codes = new Array<number>(length);
 
 	for (let idx = 0; idx < length; idx++) {
-		const code = from[offset + idx];
+		const code = from[offset + idx]!;
 		if (code & 0x80) {
 			return null;
 		}
