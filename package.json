@@ -12,7 +12,7 @@
 		"@mitata/counters": "^0.0.8",
 		"@pnpm/workspace.root-finder": "^1100.0.8",
 		"mitata": "^1.0.34",
-		"oxfmt": "^0.67.0",
+		"oxfmt": "^0.74.0",
 		"oxlint": "^1.82.0",
 		"oxlint-tsgolint": "^7.0.2001",
 		"typescript": "~7.0.2",
