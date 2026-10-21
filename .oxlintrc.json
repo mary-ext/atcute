@@ -2,7 +2,8 @@
 	"$schema": "https://unpkg.com/oxlint/configuration_schema.json",
 	"ignorePatterns": ["packages/*/*/lib/lexicons/**"],
 	"options": {
-		"typeAware": true
+		"typeAware": true,
+		"typeCheck": true
 	},
 	"plugins": ["eslint", "typescript", "unicorn", "oxc", "import"],
 	"jsPlugins": ["@mary-ext/oxlint-rules"],
