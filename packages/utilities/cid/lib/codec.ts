@@ -81,8 +81,8 @@ export const create = async (codec: 0x55 | 0x71, data: Uint8Array): Promise<Cid>
 /**
  * creates a CID by synchronously hashing data with SHA-256
  *
- * avoids WebCrypto overhead for small inputs such as records and MST nodes.
- * prefer {@link create} for large inputs when WebCrypto is available.
+ * avoids WebCrypto overhead for small inputs such as records and MST nodes. prefer {@link create} for large
+ * inputs when WebCrypto is available.
  *
  * @param codec multicodec type for the data
  * @param data raw data to hash
