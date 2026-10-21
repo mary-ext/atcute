@@ -1,5 +1,11 @@
 # @atcute/uint8array
 
+## 1.2.1
+
+### Patch Changes
+
+- fe40f26: reduce browser ASCII decoder code size and extend its fast path to 32 bytes
+
 ## 1.2.0
 
 ### Minor Changes

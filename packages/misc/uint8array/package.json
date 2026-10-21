@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/uint8array",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "uint8array utilities",
 	"license": "0BSD",
 	"repository": {
