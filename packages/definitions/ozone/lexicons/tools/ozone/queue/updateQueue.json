@@ -24,6 +24,10 @@
 							"type": "string",
 							"description": "Optional description of the queue"
 						},
+						"strictAccess": {
+							"type": "boolean",
+							"description": "Admins can always list this queue and browse its reports. Other roles require an active queue assignment. Individual report and moderation event access is unchanged."
+						},
 						"recommendedLabels": {
 							"type": "array",
 							"items": {

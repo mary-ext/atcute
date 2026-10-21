@@ -22,6 +22,16 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.safelink.updateRule',
 			get reason() {
 				return ToolsOzoneSafelinkDefs.reasonTypeSchema;
 			},
+			/**
+			 * Source of the rule to update
+			 *
+			 * @default 'ozone/default'
+			 * @maxLength 128
+			 */
+			source: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 128)]),
+				'ozone/default',
+			),
 			/** The URL or domain to update the rule for */
 			url: /*#__PURE__*/ v.string(),
 		}),

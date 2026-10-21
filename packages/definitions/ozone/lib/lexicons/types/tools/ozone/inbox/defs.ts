@@ -24,6 +24,8 @@ const _appealViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.inbox.defs#appealView')),
 	appealableUntil: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	appealedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+	/** Decision on a resolved appeal. */
+	outcome: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'approved' | 'denied' | (string & {})>()),
 	/** When the appeal's report was closed. */
 	resolvedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 	state: /*#__PURE__*/ v.string<'expired' | 'none' | 'pending' | 'resolved' | 'superseded' | (string & {})>(),
@@ -56,7 +58,18 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 });
 const _notificationPreferencesSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.inbox.defs#notificationPreferences')),
-	push: /*#__PURE__*/ v.boolean(),
+	/**
+	 * Notify about moderation actions against the account or its content, action reversals, appeal outcomes,
+	 * and standing changes. Label application and removal are controlled by labels.
+	 */
+	account: /*#__PURE__*/ v.boolean(),
+	/**
+	 * Notify when labels are applied to or removed from the account or its content (labelApplied and
+	 * labelRemoved actions).
+	 */
+	labels: /*#__PURE__*/ v.boolean(),
+	/** Notify about outcomes of reports filed by the account (reportResolved and reportReopened). */
+	reports: /*#__PURE__*/ v.boolean(),
 });
 const _policyViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.inbox.defs#policyView')),
@@ -100,6 +113,8 @@ const _subjectRefSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.inbox.defs#subjectRef')),
 	actionId: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	actionType: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/** Decision captured when an appealResolved notification was created. Omitted when the outcome is unknown. */
+	appealOutcome: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string<'approved' | 'denied' | (string & {})>()),
 	get subject() {
 		return /*#__PURE__*/ v.variant([ComAtprotoAdminDefs.repoRefSchema, ComAtprotoRepoStrongRef.mainSchema]);
 	},

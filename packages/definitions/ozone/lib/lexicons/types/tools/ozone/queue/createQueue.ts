@@ -9,7 +9,20 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.queue.createQueue', {
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/** Collection name for record subjects. Required if subjectTypes includes 'record'. */
+			/**
+			 * Match any of these tags on the account that is being reported against.
+			 *
+			 * @maxLength 25
+			 */
+			accountTags: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.constrain(
+					/*#__PURE__*/ v.array(
+						/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1)]),
+					),
+					[/*#__PURE__*/ v.arrayLength(0, 25)],
+				),
+			),
+			/** Collection name for record subjects. Omit to accept every collection. */
 			collection: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.nsidString()),
 			/** Optional description of the queue */
 			description: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
@@ -19,16 +32,26 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.queue.createQueue', {
 			recommendedLabels: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			/** Policy keys to recommend when actioning reports in this queue */
 			recommendedPolicies: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+			/** Report reason types (fully qualified NSIDs) */
+			reportTypes: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			/**
-			 * Report reason types (fully qualified NSIDs)
+			 * Match any listed tag on the account submitting the report.
 			 *
 			 * @maxLength 25
 			 */
-			reportTypes: /*#__PURE__*/ v.optional(
-				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string()), [
-					/*#__PURE__*/ v.arrayLength(0, 25),
-				]),
+			reporterTags: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.constrain(
+					/*#__PURE__*/ v.array(
+						/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(1)]),
+					),
+					[/*#__PURE__*/ v.arrayLength(0, 25)],
+				),
 			),
+			/**
+			 * Admins can always list this queue and browse its reports. Other roles require an active queue
+			 * assignment. Individual report and moderation event access is unchanged.
+			 */
+			strictAccess: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			/** Subject types this queue accepts */
 			subjectTypes: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.array(

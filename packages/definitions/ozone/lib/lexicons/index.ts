@@ -62,6 +62,7 @@ export * as ToolsOzoneSafelinkDefs from './types/tools/ozone/safelink/defs.ts';
 export * as ToolsOzoneSafelinkQueryEvents from './types/tools/ozone/safelink/queryEvents.ts';
 export * as ToolsOzoneSafelinkQueryRules from './types/tools/ozone/safelink/queryRules.ts';
 export * as ToolsOzoneSafelinkRemoveRule from './types/tools/ozone/safelink/removeRule.ts';
+export * as ToolsOzoneSafelinkSyncSource from './types/tools/ozone/safelink/syncSource.ts';
 export * as ToolsOzoneSafelinkUpdateRule from './types/tools/ozone/safelink/updateRule.ts';
 export * as ToolsOzoneServerGetCapabilities from './types/tools/ozone/server/getCapabilities.ts';
 export * as ToolsOzoneServerGetConfig from './types/tools/ozone/server/getConfig.ts';

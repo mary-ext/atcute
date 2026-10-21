@@ -43,7 +43,16 @@
 				"collection": {
 					"type": "string",
 					"format": "nsid",
-					"description": "Collection name for record subjects (e.g., 'app.bsky.feed.post')"
+					"description": "Collection name for record subjects. Omit to accept every collection."
+				},
+				"accountTags": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					},
+					"maxLength": 25,
+					"description": "Match tags on the account that is being reported against. For record subjects, use the author account. Match any listed tag."
 				},
 				"description": {
 					"type": "string",
@@ -55,6 +64,19 @@
 						"type": "string"
 					},
 					"description": "Report reason types this queue accepts (fully qualified NSIDs)"
+				},
+				"reporterTags": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					},
+					"maxLength": 25,
+					"description": "Match any listed tag on the account submitting the report."
+				},
+				"strictAccess": {
+					"type": "boolean",
+					"description": "Admins can always list this queue and browse its reports. Other roles require an active queue assignment. Individual report and moderation event access is unchanged."
 				},
 				"subjectTypes": {
 					"type": "array",
@@ -86,16 +108,20 @@
 			"properties": {
 				"actionRate": {
 					"type": "integer",
-					"description": "Percentage of reports actioned (actionedCount / inboundCount * 100), rounded to nearest integer. Absent when inboundCount is 0."
+					"description": "Percentage of closures actioned (actionedCount / closedCount * 100), rounded to nearest integer."
+				},
+				"closedCount": {
+					"type": "integer",
+					"description": "Number of reports whose current closure falls within this UTC calendar day."
 				},
 				"lastUpdated": {
 					"type": "string",
 					"format": "datetime",
-					"description": "When these statistics were last computed"
+					"description": "When these statistics were last computed."
 				},
 				"inboundCount": {
 					"type": "integer",
-					"description": "Reports received in this queue in the last 24 hours."
+					"description": "Reports received in this queue during this UTC calendar day."
 				},
 				"pendingCount": {
 					"type": "integer",
@@ -103,15 +129,43 @@
 				},
 				"actionedCount": {
 					"type": "integer",
-					"description": "Number of reports in 'closed' status"
+					"description": "Number of closures whose last report action is label, tag, or takedown."
+				},
+				"ahtDurationSec": {
+					"type": "integer",
+					"description": "Sum of report assignment-to-close seconds."
+				},
+				"ahtSampleCount": {
+					"type": "integer",
+					"description": "Number of assigned closed-report samples in ahtDurationSec."
 				},
 				"escalatedCount": {
 					"type": "integer",
-					"description": "Number of reports in 'escalated' status"
+					"description": "Number of report escalation events during this UTC calendar day."
+				},
+				"tagActionCount": {
+					"type": "integer",
+					"description": "Closures whose last report action is a tag event."
+				},
+				"labelActionCount": {
+					"type": "integer",
+					"description": "Closures whose last report action is a label event."
+				},
+				"acknowledgedCount": {
+					"type": "integer",
+					"description": "Number of closures whose last report action is not label, tag, or takedown."
 				},
 				"avgHandlingTimeSec": {
 					"type": "integer",
-					"description": "Average time in seconds from report creation to close, for reports closed in this period."
+					"description": "Average handling time in seconds from report assignment to close."
+				},
+				"takedownActionCount": {
+					"type": "integer",
+					"description": "Closures whose last report action is a takedown event."
+				},
+				"avgResolutionTimeSec": {
+					"type": "integer",
+					"description": "Average resolution time in seconds from report creation to close."
 				},
 				"closureTargetMetRate": {
 					"type": "integer",
@@ -123,6 +177,14 @@
 					"type": "integer",
 					"minimum": 0,
 					"description": "Reports whose closure meets their closure target."
+				},
+				"resolutionDurationSec": {
+					"type": "integer",
+					"description": "Sum of report creation-to-close seconds."
+				},
+				"resolutionSampleCount": {
+					"type": "integer",
+					"description": "Number of closed-report samples in resolutionDurationSec."
 				},
 				"closureTargetMissedCount": {
 					"type": "integer",

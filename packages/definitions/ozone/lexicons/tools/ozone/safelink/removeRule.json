@@ -12,6 +12,12 @@
 							"type": "string",
 							"description": "The URL or domain to remove the rule for"
 						},
+						"source": {
+							"type": "string",
+							"default": "ozone/default",
+							"maxLength": 128,
+							"description": "Source of the rule to remove"
+						},
 						"comment": {
 							"type": "string",
 							"description": "Optional comment about why the rule is being removed"

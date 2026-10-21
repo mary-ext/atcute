@@ -1373,6 +1373,11 @@
 				"severityLevel": {
 					"type": "string",
 					"description": "Severity level of the violation. Usually set from the last policy infraction's severity."
+				},
+				"strikeExpiresAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "When the strike should expire. If not provided, the strike never expires."
 				}
 			},
 			"description": "Revert take down action on a subject"

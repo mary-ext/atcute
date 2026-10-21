@@ -20,6 +20,12 @@
 							"ref": "tools.ozone.safelink.defs#reasonType",
 							"type": "ref"
 						},
+						"source": {
+							"type": "string",
+							"default": "ozone/default",
+							"maxLength": 128,
+							"description": "Source of the rule"
+						},
 						"comment": {
 							"type": "string",
 							"description": "Optional comment about the decision"
@@ -45,6 +51,10 @@
 				{
 					"name": "RuleAlreadyExists",
 					"description": "A rule for this URL/domain already exists"
+				},
+				{
+					"name": "RuleSourceConflict",
+					"description": "A rule for this URL/domain is owned by another source"
 				}
 			],
 			"output": {

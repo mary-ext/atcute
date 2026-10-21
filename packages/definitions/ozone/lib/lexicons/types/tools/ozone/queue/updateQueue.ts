@@ -21,6 +21,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.queue.updateQueue', {
 			recommendedLabels: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			/** Policy keys to recommend when actioning reports in this queue */
 			recommendedPolicies: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+			/**
+			 * Admins can always list this queue and browse its reports. Other roles require an active queue
+			 * assignment. Individual report and moderation event access is unchanged.
+			 */
+			strictAccess: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		}),
 	},
 	output: {

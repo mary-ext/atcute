@@ -39,6 +39,14 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.safelink.queryRules',
 				/*#__PURE__*/ v.string<'asc' | 'desc' | (string & {})>(),
 				'desc',
 			),
+			/**
+			 * Filter by exact rule source. Omit to include all sources.
+			 *
+			 * @maxLength 128
+			 */
+			source: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 128)]),
+			),
 			/** Filter by specific URLs or domains */
 			urls: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		}),

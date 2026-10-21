@@ -9,7 +9,12 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.inbox.putNotification
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			push: /*#__PURE__*/ v.boolean(),
+			/** Notify about moderation actions against the account or its content, excluding labeling. */
+			account: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			/** Notify about labels applied to or removed from the account or its content. */
+			labels: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			/** Notify about outcomes of reports filed by the account. */
+			reports: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		}),
 	},
 	output: {

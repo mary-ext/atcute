@@ -73,6 +73,11 @@
 					"type": "string",
 					"knownValues": ["expired", "none", "pending", "resolved", "superseded"]
 				},
+				"outcome": {
+					"type": "string",
+					"description": "Decision on a resolved appeal.",
+					"knownValues": ["approved", "denied"]
+				},
 				"appealedAt": {
 					"type": "string",
 					"format": "datetime"
@@ -118,6 +123,11 @@
 				},
 				"actionType": {
 					"type": "string"
+				},
+				"appealOutcome": {
+					"type": "string",
+					"description": "Decision captured when an appealResolved notification was created. Omitted when the outcome is unknown.",
+					"knownValues": ["approved", "denied"]
 				}
 			}
 		},
@@ -330,12 +340,22 @@
 		},
 		"notificationPreferences": {
 			"type": "object",
-			"required": ["push"],
+			"required": ["account", "labels", "reports"],
 			"properties": {
-				"push": {
-					"type": "boolean"
+				"labels": {
+					"type": "boolean",
+					"description": "Notify when labels are applied to or removed from the account or its content (labelApplied and labelRemoved actions)."
+				},
+				"account": {
+					"type": "boolean",
+					"description": "Notify about moderation actions against the account or its content, action reversals, appeal outcomes, and standing changes. Label application and removal are controlled by labels."
+				},
+				"reports": {
+					"type": "boolean",
+					"description": "Notify about outcomes of reports filed by the account (reportResolved and reportReopened)."
 				}
-			}
+			},
+			"description": "Push notification preferences by moderation notification category. These preferences do not hide in-app inbox activity. Each category defaults to enabled."
 		}
 	},
 	"lexicon": 1

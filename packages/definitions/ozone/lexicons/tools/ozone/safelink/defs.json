@@ -21,6 +21,11 @@
 					"ref": "#reasonType",
 					"type": "ref"
 				},
+				"source": {
+					"type": "string",
+					"default": "ozone/default",
+					"description": "Source of the decision"
+				},
 				"comment": {
 					"type": "string",
 					"description": "Optional comment about the decision"
@@ -61,6 +66,11 @@
 					"ref": "#reasonType",
 					"type": "ref"
 				},
+				"source": {
+					"type": "string",
+					"default": "ozone/default",
+					"description": "Source of the rule"
+				},
 				"comment": {
 					"type": "string",
 					"description": "Optional comment about the decision"
@@ -85,7 +95,7 @@
 					"description": "Timestamp when the rule was last updated"
 				}
 			},
-			"description": "Input for creating a URL safety rule"
+			"description": "An active URL safety rule"
 		},
 		"eventType": {
 			"type": "string",

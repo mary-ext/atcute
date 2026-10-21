@@ -23,6 +23,12 @@ const _eventSchema = /*#__PURE__*/ v.object({
 	get reason() {
 		return reasonTypeSchema;
 	},
+	/**
+	 * Source of the decision
+	 *
+	 * @default 'ozone/default'
+	 */
+	source: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string(), 'ozone/default'),
 	/** The URL that this rule applies to */
 	url: /*#__PURE__*/ v.string(),
 });
@@ -46,6 +52,12 @@ const _urlRuleSchema = /*#__PURE__*/ v.object({
 	get reason() {
 		return reasonTypeSchema;
 	},
+	/**
+	 * Source of the rule
+	 *
+	 * @default 'ozone/default'
+	 */
+	source: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string(), 'ozone/default'),
 	/** Timestamp when the rule was last updated */
 	updatedAt: /*#__PURE__*/ v.datetimeString(),
 	/** The URL or domain to apply the rule to */

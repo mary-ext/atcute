@@ -277,6 +277,8 @@ const _modEventReverseTakedownSchema = /*#__PURE__*/ v.object({
 	 * severity.
 	 */
 	strikeCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
+	/** When the strike should expire. If not provided, the strike never expires. */
+	strikeExpiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
 const _modEventTagSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#modEventTag')),

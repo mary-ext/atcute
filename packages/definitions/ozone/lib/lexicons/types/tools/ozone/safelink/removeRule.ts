@@ -16,6 +16,16 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.safelink.removeRule',
 			get pattern() {
 				return ToolsOzoneSafelinkDefs.patternTypeSchema;
 			},
+			/**
+			 * Source of the rule to remove
+			 *
+			 * @default 'ozone/default'
+			 * @maxLength 128
+			 */
+			source: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 128)]),
+				'ozone/default',
+			),
 			/** The URL or domain to remove the rule for */
 			url: /*#__PURE__*/ v.string(),
 		}),
