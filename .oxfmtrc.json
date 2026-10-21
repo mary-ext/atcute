@@ -29,12 +29,6 @@
 
 	"overrides": [
 		{
-			"files": ["tsconfig.json", "tsconfig.*.json"],
-			"options": {
-				"parser": "jsonc"
-			}
-		},
-		{
 			"files": ["*.md"],
 			"options": {
 				"printWidth": 100,
