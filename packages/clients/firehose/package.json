@@ -34,9 +34,9 @@
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
-		"@types/ws": "^8.18.1",
-		"vitest": "^5.0.0",
-		"ws": "^8.21.3"
+		"@types/ws": "^8.18.2",
+		"vitest": "^5.0.5",
+		"ws": "^8.22.0"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.1.0"

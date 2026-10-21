@@ -28,12 +28,12 @@
 		"@atcute/oauth-crypto": "workspace:^",
 		"@atcute/oauth-keyset": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
-		"nanoid": "^6.0.1",
+		"nanoid": "^6.0.2",
 		"valibot": "^1.5.0"
 	},
 	"devDependencies": {
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"vitest": "^5.0.0"
+		"vitest": "^5.0.5"
 	}
 }

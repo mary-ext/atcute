@@ -33,12 +33,12 @@
 		"@atcute/oauth-keyset": "workspace:^",
 		"@atcute/oauth-types": "workspace:^",
 		"@atcute/util-fetch": "workspace:^",
-		"nanoid": "^6.0.1",
+		"nanoid": "^6.0.2",
 		"valibot": "^1.5.0"
 	},
 	"devDependencies": {
-		"@types/node": "^26.5.0",
-		"vitest": "^5.0.0"
+		"@types/node": "^26.6.5",
+		"vitest": "^5.0.5"
 	},
 	"peerDependencies": {
 		"@atcute/identity-resolver": "^2.0.0",

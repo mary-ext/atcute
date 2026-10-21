@@ -24,17 +24,17 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {
-		"ws": "^8.21.3"
+		"ws": "^8.22.0"
 	},
 	"devDependencies": {
 		"@atcute/atproto": "workspace:^",
 		"@atcute/cbor": "workspace:^",
 		"@atcute/lexicons": "workspace:^",
 		"@atcute/xrpc-server": "workspace:^",
-		"@remix-run/node-fetch-server": "^0.14.1",
-		"@types/node": "^26.5.0",
-		"@types/ws": "^8.18.1",
-		"vitest": "^5.0.0"
+		"@remix-run/node-fetch-server": "^1.0.0",
+		"@types/node": "^26.6.5",
+		"@types/ws": "^8.18.2",
+		"vitest": "^5.0.5"
 	},
 	"peerDependencies": {
 		"@atcute/xrpc-server": "workspace:^"
