@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import { CarBlockMismatchError } from './errors.ts';
 import { fromUint8Array } from './reader.ts';
-import { fromStream } from './streamed-reader.ts';
+import { carEntryTransform, fromStream } from './streamed-reader.ts';
 import { serializeCarEntry, serializeCarHeader } from './writer.ts';
 
 const validHeader = (): Uint8Array => {
@@ -182,5 +182,25 @@ describe('block verification', () => {
 		await expect(
 			Array.fromAsync(fromStream(streamOf(buffer), { verifyBlocks: false })),
 		).resolves.toHaveLength(2);
+	});
+});
+
+describe('transform errors', () => {
+	it('cancel the source stream', async () => {
+		let cancelled = false;
+		const source = new ReadableStream<Uint8Array>({
+			start(controller) {
+				// a zero-length header
+				controller.enqueue(Uint8Array.of(0));
+			},
+			cancel() {
+				cancelled = true;
+			},
+		});
+
+		await expect(Array.fromAsync(source.pipeThrough(carEntryTransform()))).rejects.toThrowError(
+			/invalid car header/,
+		);
+		expect(cancelled).toBe(true);
 	});
 });

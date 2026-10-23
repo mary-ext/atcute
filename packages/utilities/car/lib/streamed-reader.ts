@@ -40,6 +40,8 @@ export const carEntryTransform = (options?: CarReaderOptions): ReadableWritableP
 					controller.close();
 				} catch (err) {
 					controller.error(err);
+
+					await car.dispose();
 				}
 			},
 			async cancel() {
