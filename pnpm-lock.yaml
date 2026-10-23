@@ -1354,6 +1354,28 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@26.6.5)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(vite@8.3.4(@types/node@26.6.5)(yaml@2.9.1))
 
+  packages/utilities/star:
+    dependencies:
+      '@atcute/cbor':
+        specifier: workspace:^
+        version: link:../cbor
+      '@atcute/uint8array':
+        specifier: workspace:^
+        version: link:../../misc/uint8array
+      '@atcute/varint':
+        specifier: workspace:^
+        version: link:../varint
+    devDependencies:
+      '@types/node':
+        specifier: ^26.6.5
+        version: 26.6.5
+      '@vitest/coverage-v8':
+        specifier: ^5.0.5
+        version: 5.0.5(@vitest/browser@5.0.5)(vitest@5.0.5)
+      vitest:
+        specifier: ^5.0.5
+        version: 5.0.5(@opentelemetry/api@1.9.1)(@types/node@26.6.5)(@vitest/browser-playwright@5.0.5)(@vitest/coverage-v8@5.0.5)(@vitest/ui@5.0.5)(vite@8.3.4(@types/node@26.6.5)(yaml@2.9.1))
+
   packages/utilities/tid:
     dependencies:
       '@atcute/time-ms':

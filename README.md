@@ -81,6 +81,7 @@ for authenticated requests, see the [client docs](./packages/clients/client) or 
 | [`mst`](./packages/utilities/mst): merkle search tree utilities                                             |
 | [`multibase`](./packages/utilities/multibase): base32/base64 encoding                                       |
 | [`repo`](./packages/utilities/repo): repository export reader                                               |
+| [`star`](./packages/utilities/star): STAR archive codec                                                     |
 | [`tid`](./packages/utilities/tid): timestamp identifier codec                                               |
 | [`varint`](./packages/utilities/varint): LEB128 varint codec                                                |
 | **Bluesky-specific packages**                                                                               |

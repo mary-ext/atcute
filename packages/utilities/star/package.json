@@ -1,0 +1,44 @@
+{
+	"name": "@atcute/star",
+	"version": "0.0.0",
+	"description": "lightweight STAR (streaming archives) codec for AT Protocol.",
+	"keywords": [
+		"atproto",
+		"star"
+	],
+	"license": "0BSD",
+	"repository": {
+		"url": "https://tangled.org/did:plc:pljn5qch4tgadongtc7i6qij",
+		"directory": "packages/utilities/star"
+	},
+	"files": [
+		"dist/",
+		"!dist/**/*.{test,bench}.*"
+	],
+	"type": "module",
+	"sideEffects": false,
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"build": "tsc",
+		"test": "vitest --coverage",
+		"prepublish": "rm -rf dist; pnpm run build"
+	},
+	"dependencies": {
+		"@atcute/cbor": "workspace:^",
+		"@atcute/uint8array": "workspace:^",
+		"@atcute/varint": "workspace:^"
+	},
+	"devDependencies": {
+		"@types/node": "^26.6.5",
+		"@vitest/coverage-v8": "^5.0.5",
+		"vitest": "^5.0.5"
+	},
+	"peerDependencies": {
+		"@atcute/cbor": "^2.0.0"
+	}
+}
