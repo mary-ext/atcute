@@ -1,5 +1,11 @@
 # @atcute/car
 
+## 6.1.1
+
+### Patch Changes
+
+- b381ed1: cancel the source stream on `carEntryTransform` read errors to unblock pending writes
+
 ## 6.1.0
 
 ### Minor Changes

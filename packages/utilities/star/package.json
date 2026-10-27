@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/star",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "lightweight STAR (streaming archives) codec for AT Protocol.",
 	"keywords": [
 		"atproto",

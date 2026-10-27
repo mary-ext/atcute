@@ -1,5 +1,11 @@
 # @atcute/jetstream
 
+## 2.2.1
+
+### Patch Changes
+
+- 41802dd: accept identity events without a `handle`
+
 ## 2.2.0
 
 ### Minor Changes
