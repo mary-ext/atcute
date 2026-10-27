@@ -72,7 +72,7 @@ export const commitEventSchema = v.looseObject({
 
 export const identityDataSchema = v.looseObject({
 	did: didString,
-	handle: handleString,
+	handle: v.optional(handleString),
 	seq: integer,
 	time: datetimeString,
 });

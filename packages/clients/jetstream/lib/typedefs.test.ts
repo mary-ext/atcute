@@ -38,4 +38,19 @@ describe('legacy event schemas', () => {
 
 		expect(event.cursor).toBeUndefined();
 	});
+
+	it('accepts identity events without a handle', () => {
+		const event = parse(jetstreamEventSchema, {
+			did,
+			identity: {
+				did,
+				seq: 1,
+				time: '2024-09-09T19:46:02.329308Z',
+			},
+			kind: 'identity',
+			time_us: 1_725_911_162_329_308,
+		});
+
+		expect(event.kind === 'identity' && event.identity.handle).toBeUndefined();
+	});
 });
