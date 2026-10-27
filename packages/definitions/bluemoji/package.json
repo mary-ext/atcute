@@ -31,7 +31,6 @@
 		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
-		"@atcute/bluemoji": "file:",
 		"@atcute/lex-cli": "workspace:^"
 	},
 	"peerDependencies": {

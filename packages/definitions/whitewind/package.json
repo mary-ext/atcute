@@ -35,8 +35,7 @@
 		"@atcute/lexicons": "workspace:^"
 	},
 	"devDependencies": {
-		"@atcute/lex-cli": "workspace:^",
-		"@atcute/whitewind": "file:"
+		"@atcute/lex-cli": "workspace:^"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

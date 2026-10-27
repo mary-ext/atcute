@@ -32,8 +32,7 @@
 	},
 	"devDependencies": {
 		"@atcute/lex-cli": "workspace:^",
-		"@atcute/lexicon-doc": "workspace:^",
-		"@atcute/microcosm": "file:"
+		"@atcute/lexicon-doc": "workspace:^"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"
