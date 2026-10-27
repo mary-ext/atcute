@@ -90,6 +90,11 @@ const _mainSchema = /*#__PURE__*/ v.record(
 				/*#__PURE__*/ v.stringGraphemes(0, 20),
 			]),
 		),
+		/**
+		 * Deprecated: use links instead.
+		 *
+		 * @deprecated
+		 */
 		website: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 	}),
 );

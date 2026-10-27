@@ -465,6 +465,11 @@ const _profileViewDetailedSchema = /*#__PURE__*/ v.object({
 	get viewer() {
 		return /*#__PURE__*/ v.optional(viewerStateSchema);
 	},
+	/**
+	 * Deprecated: use links instead.
+	 *
+	 * @deprecated
+	 */
 	website: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.genericUriString()),
 });
 const _savedFeedSchema = /*#__PURE__*/ v.object({
