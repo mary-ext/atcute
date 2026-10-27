@@ -85,6 +85,7 @@ export * as ToolsOzoneTeamAddMember from './types/tools/ozone/team/addMember.ts'
 export * as ToolsOzoneTeamDefs from './types/tools/ozone/team/defs.ts';
 export * as ToolsOzoneTeamDeleteMember from './types/tools/ozone/team/deleteMember.ts';
 export * as ToolsOzoneTeamListMembers from './types/tools/ozone/team/listMembers.ts';
+export * as ToolsOzoneTeamListOnlineMembers from './types/tools/ozone/team/listOnlineMembers.ts';
 export * as ToolsOzoneTeamUpdateMember from './types/tools/ozone/team/updateMember.ts';
 export * as ToolsOzoneVerificationDefs from './types/tools/ozone/verification/defs.ts';
 export * as ToolsOzoneVerificationGrantVerifications from './types/tools/ozone/verification/grantVerifications.ts';

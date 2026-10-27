@@ -1,0 +1,52 @@
+{
+	"id": "tools.ozone.team.listOnlineMembers",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["members"],
+					"properties": {
+						"members": {
+							"type": "array",
+							"items": {
+								"ref": "#onlineMember",
+								"type": "ref"
+							},
+							"maxLength": 100
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					}
+				}
+			},
+			"description": "List recent active team members, ordered by latest activity."
+		},
+		"onlineMember": {
+			"type": "object",
+			"required": ["did", "lastActive"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				},
+				"lastActive": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

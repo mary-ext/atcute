@@ -112,6 +112,10 @@
 						"type": "string"
 					},
 					"description": "Target reports matching these report types on the subject (fully qualified NSIDs)"
+				},
+				"isAutomated": {
+					"type": "boolean",
+					"description": "Set true when the report activities are created by an automated process."
 				}
 			},
 			"description": "Target specific reports when emitting a moderation event"

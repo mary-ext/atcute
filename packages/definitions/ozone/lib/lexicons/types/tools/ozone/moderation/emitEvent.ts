@@ -78,6 +78,8 @@ const _reportActionSchema = /*#__PURE__*/ v.object({
 	all: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/** Target specific report IDs */
 	ids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.integer())),
+	/** Set true when the report activities are created by an automated process. */
+	isAutomated: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/** Note to send to reporter(s) when actioning their report */
 	note: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/** Target reports matching these report types on the subject (fully qualified NSIDs) */

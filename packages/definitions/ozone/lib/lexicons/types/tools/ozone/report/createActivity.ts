@@ -33,6 +33,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.report.createActivity
 			 * @default false
 			 */
 			isAutomated: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+			/**
+			 * Optional metadata for the report activities. Lifecycle and resolution fields are controlled by the
+			 * service.
+			 */
+			meta: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 			/** Optional public-facing note, potentially visible to the reporter. */
 			publicNote: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 			/** ID of the report to record activity on. Exactly one of reportId or eventId must be provided. */
