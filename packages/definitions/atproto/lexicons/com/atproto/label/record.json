@@ -1,0 +1,42 @@
+{
+	"id": "com.atproto.label.record",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["cts", "uri", "val"],
+				"properties": {
+					"cid": {
+						"type": "string",
+						"format": "cid",
+						"description": "Optionally, CID specifying the specific version of 'uri' resource this label applies to."
+					},
+					"cts": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Timestamp when this label was created."
+					},
+					"exp": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Timestamp at which this label expires (no longer applies)."
+					},
+					"uri": {
+						"type": "string",
+						"format": "uri",
+						"description": "URI of the record, repository (account), or other resource that this label applies to. Currently only intended for use in the context of atproto spaces."
+					},
+					"val": {
+						"type": "string",
+						"maxLength": 128,
+						"description": "The short string name of the value or type of this label."
+					}
+				}
+			},
+			"description": "Metadata tag on an atproto resource (eg, repo or record), published as a record in the labeler's repository. Currently ONLY intended to be used in atproto space repos, not the public broadcast repository. For public data, continue to use signed label objects. This guidance may be updated in the future."
+		}
+	},
+	"lexicon": 1
+}

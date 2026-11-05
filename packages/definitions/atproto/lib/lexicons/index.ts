@@ -26,6 +26,7 @@ export * as ComAtprotoIdentitySubmitPlcOperation from './types/com/atproto/ident
 export * as ComAtprotoIdentityUpdateHandle from './types/com/atproto/identity/updateHandle.ts';
 export * as ComAtprotoLabelDefs from './types/com/atproto/label/defs.ts';
 export * as ComAtprotoLabelQueryLabels from './types/com/atproto/label/queryLabels.ts';
+export * as ComAtprotoLabelRecord from './types/com/atproto/label/record.ts';
 export * as ComAtprotoLabelSubscribeLabels from './types/com/atproto/label/subscribeLabels.ts';
 export * as ComAtprotoLexiconResolveLexicon from './types/com/atproto/lexicon/resolveLexicon.ts';
 export * as ComAtprotoLexiconSchema from './types/com/atproto/lexicon/schema.ts';
