@@ -2,6 +2,8 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
+import * as ToolsOzoneInboxDefs from './defs.ts';
+
 const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.inbox.getAccountStatus', {
 	params: /*#__PURE__*/ v.object({
 		/** Account to preview. Only Ozone staff can read another account; this does not change its read state. */
@@ -10,8 +12,14 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.inbox.getAccountStatus', 
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
+			/** Current account takedown or suspension, independent of strike standing. */
+			get enforcement() {
+				return /*#__PURE__*/ v.optional(ToolsOzoneInboxDefs.enforcementViewSchema);
+			},
 			/** Time at which the current suspension expires. Present only for a temporary suspension. */
 			expiresAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
+			/** Whether the account currently has any active strikes. */
+			hasActiveStrikes: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 			/** DID of the moderation service returning this status. */
 			src: /*#__PURE__*/ v.didString(),
 			standing: /*#__PURE__*/ v.string<'atRisk' | 'good' | 'warning' | (string & {})>(),

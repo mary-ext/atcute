@@ -3,6 +3,12 @@ import * as ComAtprotoRepoStrongRef from '@atcute/atproto/types/repo/strongRef';
 import type {} from '@atcute/lexicons';
 import * as v from '@atcute/lexicons/validations';
 
+const _accountPreviewSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.inbox.defs#accountPreview')),
+	handle: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.handleString()),
+	/** Raw app.bsky.actor.profile record, when available. */
+	profile: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
+});
 const _actionViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.inbox.defs#actionView')),
 	createdAt: /*#__PURE__*/ v.datetimeString(),
@@ -145,6 +151,10 @@ const _subjectViewSchema = /*#__PURE__*/ v.object({
 });
 const _subjectViewDetailSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.inbox.defs#subjectViewDetail')),
+	/** Best-effort current profile information for an account subject. */
+	get account() {
+		return /*#__PURE__*/ v.optional(accountPreviewSchema);
+	},
 	/**
 	 * A page of action history, most recent first. Reversal timestamps include changes outside this page.
 	 *
@@ -181,6 +191,7 @@ const _subjectViewDetailSchema = /*#__PURE__*/ v.object({
 	updatedAt: /*#__PURE__*/ v.datetimeString(),
 });
 
+type accountPreview$schematype = typeof _accountPreviewSchema;
 type actionView$schematype = typeof _actionViewSchema;
 type appealView$schematype = typeof _appealViewSchema;
 type enforcementView$schematype = typeof _enforcementViewSchema;
@@ -194,6 +205,7 @@ type subjectRef$schematype = typeof _subjectRefSchema;
 type subjectView$schematype = typeof _subjectViewSchema;
 type subjectViewDetail$schematype = typeof _subjectViewDetailSchema;
 
+export interface accountPreviewSchema extends accountPreview$schematype {}
 export interface actionViewSchema extends actionView$schematype {}
 export interface appealViewSchema extends appealView$schematype {}
 export interface enforcementViewSchema extends enforcementView$schematype {}
@@ -207,6 +219,7 @@ export interface subjectRefSchema extends subjectRef$schematype {}
 export interface subjectViewSchema extends subjectView$schematype {}
 export interface subjectViewDetailSchema extends subjectViewDetail$schematype {}
 
+export const accountPreviewSchema = _accountPreviewSchema as accountPreviewSchema;
 export const actionViewSchema = _actionViewSchema as actionViewSchema;
 export const appealViewSchema = _appealViewSchema as appealViewSchema;
 export const enforcementViewSchema = _enforcementViewSchema as enforcementViewSchema;
@@ -220,6 +233,7 @@ export const subjectRefSchema = _subjectRefSchema as subjectRefSchema;
 export const subjectViewSchema = _subjectViewSchema as subjectViewSchema;
 export const subjectViewDetailSchema = _subjectViewDetailSchema as subjectViewDetailSchema;
 
+export interface AccountPreview extends v.InferInput<typeof accountPreviewSchema> {}
 export interface ActionView extends v.InferInput<typeof actionViewSchema> {}
 export interface AppealView extends v.InferInput<typeof appealViewSchema> {}
 export interface EnforcementView extends v.InferInput<typeof enforcementViewSchema> {}

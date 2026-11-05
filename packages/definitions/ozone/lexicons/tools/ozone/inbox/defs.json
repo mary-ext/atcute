@@ -225,6 +225,20 @@
 				}
 			}
 		},
+		"accountPreview": {
+			"type": "object",
+			"properties": {
+				"handle": {
+					"type": "string",
+					"format": "handle"
+				},
+				"profile": {
+					"type": "unknown",
+					"description": "Raw app.bsky.actor.profile record, when available."
+				}
+			},
+			"description": "Current account information, when available; this is not a snapshot of the account at the time of the action."
+		},
 		"reportsSummary": {
 			"type": "object",
 			"required": ["firstReportedOn", "lastReportedOn", "reasonTypes"],
@@ -297,6 +311,11 @@
 				"record": {
 					"type": "unknown",
 					"description": "Raw record JSON for the subject, when the subject is a record and the record is available."
+				},
+				"account": {
+					"ref": "#accountPreview",
+					"type": "ref",
+					"description": "Best-effort current profile information for an account subject."
 				},
 				"actions": {
 					"type": "array",

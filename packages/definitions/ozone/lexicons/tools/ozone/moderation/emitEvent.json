@@ -93,7 +93,7 @@
 			"properties": {
 				"all": {
 					"type": "boolean",
-					"description": "Target ALL reports on the subject"
+					"description": "Target ALL reports on the subject. Excludes assigned and escalated reports."
 				},
 				"ids": {
 					"type": "array",
@@ -111,7 +111,7 @@
 					"items": {
 						"type": "string"
 					},
-					"description": "Target reports matching these report types on the subject (fully qualified NSIDs)"
+					"description": "Target reports matching these report types on the subject (fully qualified NSIDs). Excludes assigned and escalated reports."
 				},
 				"isAutomated": {
 					"type": "boolean",

@@ -26,6 +26,15 @@
 							"type": "string",
 							"format": "datetime",
 							"description": "Newest account-status update or strike timestamp used to derive this standing, or the Unix epoch when neither exists. This is not a standing-transition timestamp; expiry can change standing without changing this value."
+						},
+						"enforcement": {
+							"ref": "tools.ozone.inbox.defs#enforcementView",
+							"type": "ref",
+							"description": "Current account takedown or suspension, independent of strike standing."
+						},
+						"hasActiveStrikes": {
+							"type": "boolean",
+							"description": "Whether the account currently has any active strikes."
 						}
 					}
 				},

@@ -74,7 +74,7 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.moderation.emitEvent'
 });
 const _reportActionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.emitEvent#reportAction')),
-	/** Target ALL reports on the subject */
+	/** Target ALL reports on the subject. Excludes assigned and escalated reports. */
 	all: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/** Target specific report IDs */
 	ids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.integer())),
@@ -82,7 +82,10 @@ const _reportActionSchema = /*#__PURE__*/ v.object({
 	isAutomated: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/** Note to send to reporter(s) when actioning their report */
 	note: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-	/** Target reports matching these report types on the subject (fully qualified NSIDs) */
+	/**
+	 * Target reports matching these report types on the subject (fully qualified NSIDs). Excludes assigned and
+	 * escalated reports.
+	 */
 	types: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 });
 
