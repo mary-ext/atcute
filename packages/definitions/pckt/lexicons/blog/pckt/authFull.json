@@ -15,7 +15,8 @@
 						"blog.pckt.gallery",
 						"blog.pckt.mini.post",
 						"blog.pckt.mini.repost",
-						"blog.pckt.mini.follow"
+						"blog.pckt.mini.follow",
+						"blog.pckt.graph.block"
 					]
 				}
 			]

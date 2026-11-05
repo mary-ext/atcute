@@ -29,6 +29,7 @@ export * as BlogPcktDomainRemove from './types/blog/pckt/domain/remove.ts';
 export * as BlogPcktDomainSet from './types/blog/pckt/domain/set.ts';
 export * as BlogPcktDomainVerify from './types/blog/pckt/domain/verify.ts';
 export * as BlogPcktGallery from './types/blog/pckt/gallery.ts';
+export * as BlogPcktGraphBlock from './types/blog/pckt/graph/block.ts';
 export * as BlogPcktMiniFollow from './types/blog/pckt/mini/follow.ts';
 export * as BlogPcktMiniPost from './types/blog/pckt/mini/post.ts';
 export * as BlogPcktMiniRepost from './types/blog/pckt/mini/repost.ts';

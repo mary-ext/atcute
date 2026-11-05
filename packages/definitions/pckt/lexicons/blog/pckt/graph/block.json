@@ -1,0 +1,27 @@
+{
+	"id": "blog.pckt.graph.block",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "subject"],
+				"properties": {
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the account to be blocked."
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			},
+			"description": "A block of another account in pckt: their notes, replies and pings are hidden from the blocker, and their comments from the blocker's blog. It applies in pckt only and does not block the account elsewhere."
+		}
+	},
+	"$type": "com.atproto.lexicon.schema",
+	"lexicon": 1
+}
