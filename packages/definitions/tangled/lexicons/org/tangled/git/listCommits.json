@@ -1,0 +1,79 @@
+{
+	"id": "org.tangled.git.listCommits",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repo is not registered on this knot"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "The given ref doesn't resolve in this repo"
+				},
+				{
+					"name": "PathNotFound",
+					"description": "The given path doesn't exist at the given ref"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["commits"],
+					"properties": {
+						"cursor": {
+							"type": "string",
+							"description": "Cursor for the next page, absent when the last page is reached"
+						},
+						"commits": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.git.defs#commit",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["ref", "repo"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"description": "Git revision (branch, tag, commit Object ID, or full ref name)"
+					},
+					"path": {
+						"type": "string",
+						"default": "",
+						"description": "Only list commits touching this path"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1,
+						"description": "Maximum number of commits to return in this page"
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Commit Object ID of the last commit in the previous page"
+					}
+				}
+			},
+			"description": "List commit history reachable from a ref, newest first. The ref may be any full ref name, including refs/cobs/*."
+		}
+	},
+	"lexicon": 1
+}

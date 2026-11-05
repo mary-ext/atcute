@@ -1,0 +1,31 @@
+{
+	"id": "org.tangled.key.unspecced.gpgKey",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "name", "publicKey"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"maxLength": 255,
+						"description": "human-readable name for this key"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"publicKey": {
+						"type": "string",
+						"maxLength": 8192,
+						"description": "ASCII-armored public key block"
+					}
+				}
+			},
+			"description": "gpg public key"
+		}
+	},
+	"lexicon": 1
+}

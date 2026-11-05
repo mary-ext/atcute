@@ -8,8 +8,8 @@ const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.notification.upd
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			read: /*#__PURE__*/ v.boolean(),
-			/** at-uri of the notification to update. */
-			uri: /*#__PURE__*/ v.resourceUriString(),
+			/** notification key as returned by listNotifications; pass it back unchanged. */
+			uri: /*#__PURE__*/ v.string(),
 		}),
 	},
 	output: null,

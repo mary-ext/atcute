@@ -1,0 +1,24 @@
+{
+	"id": "org.tangled.temp.spindle.allowList.remove",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["did"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "DID to remove from allow-list."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Remove a DID from this spindle's allow-list. Only callable by a spindle admin."
+		}
+	},
+	"lexicon": 1
+}

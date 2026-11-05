@@ -1,0 +1,28 @@
+{
+	"id": "org.tangled.repo.forkSync",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["branch", "repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the fork repository"
+						},
+						"branch": {
+							"type": "string",
+							"description": "Branch to fetch from the upstream"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Fetch the upstream of a fork into this repository, updating the remote-tracking ref for the given branch."
+		}
+	},
+	"lexicon": 1
+}

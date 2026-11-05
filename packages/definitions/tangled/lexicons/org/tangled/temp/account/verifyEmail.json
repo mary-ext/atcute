@@ -1,0 +1,42 @@
+{
+	"id": "org.tangled.temp.account.verifyEmail",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["token"],
+					"properties": {
+						"token": {
+							"type": "string",
+							"description": "Verification token from the emailed link."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidCode",
+					"description": "The verification link is invalid or expired."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["email"],
+					"properties": {
+						"email": {
+							"type": "string",
+							"description": "The address that was verified."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Verify an email address using the token from the verification link emailed by addEmail. The address becomes verified, and is made primary if it is the account's first verified address. Tokens are single-use."
+		}
+	},
+	"lexicon": 1
+}

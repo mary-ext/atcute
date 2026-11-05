@@ -1,0 +1,21 @@
+{
+	"id": "org.tangled.knot.block",
+	"defs": {
+		"main": {
+			"key": "any",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt"],
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			},
+			"description": "Ban of an account from this knot, w/ the banned DID as rkey."
+		}
+	},
+	"lexicon": 1
+}

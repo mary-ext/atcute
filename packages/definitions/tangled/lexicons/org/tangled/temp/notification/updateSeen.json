@@ -10,8 +10,7 @@
 					"properties": {
 						"uri": {
 							"type": "string",
-							"format": "at-uri",
-							"description": "at-uri of the notification to update."
+							"description": "notification key as returned by listNotifications; pass it back unchanged."
 						},
 						"read": {
 							"type": "boolean"

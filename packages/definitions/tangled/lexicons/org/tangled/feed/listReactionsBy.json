@@ -1,0 +1,64 @@
+{
+	"id": "org.tangled.feed.listReactionsBy",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["items"],
+					"properties": {
+						"items": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.feed.listReactions#listItem",
+								"type": "ref"
+							}
+						},
+						"total": {
+							"type": "integer",
+							"description": "Total items in the full list; omitted for filtered or merged views"
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subject"],
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 1000,
+						"minimum": 1
+					},
+					"order": {
+						"type": "string",
+						"default": "desc",
+						"description": "Sort direction by createdAt.",
+						"knownValues": ["asc", "desc"]
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					},
+					"offset": {
+						"type": "integer",
+						"minimum": 0,
+						"description": "Absolute offset for random-access pagination. Mutually exclusive with cursor; offsets drift under concurrent writes, so follow up with the returned cursor."
+					},
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "Actor DID whose reaction authorings to list."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,81 @@
+{
+	"id": "org.tangled.repo.createRepo",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["name"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did",
+							"description": "Optional user-provided DID to use as the repo identity instead of minting one."
+						},
+						"name": {
+							"type": "string",
+							"format": "record-key",
+							"description": "Name of the repository."
+						},
+						"source": {
+							"refs": ["org.tangled.repo.defs#sourceExternal", "org.tangled.repo.defs#sourceTangled"],
+							"type": "union",
+							"description": "A source to clone from, populate this when forking or importing a repository."
+						},
+						"topics": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 50
+							},
+							"maxLength": 50,
+							"description": "Topics related to the repo"
+						},
+						"spindle": {
+							"type": "string",
+							"format": "did"
+						},
+						"website": {
+							"type": "string",
+							"format": "uri",
+							"description": "Any URI related to the repo"
+						},
+						"createdAt": {
+							"type": "string",
+							"format": "datetime"
+						},
+						"description": {
+							"type": "string",
+							"maxGraphemes": 140,
+							"minGraphemes": 1
+						},
+						"defaultBranch": {
+							"type": "string",
+							"description": "Default branch of the repository."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"output": {
+				"schema": {
+					"type": "object",
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did"
+						},
+						"key": {
+							"type": "string",
+							"description": "Multibase-encoded public signing key the knot holds for this repository"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Create a new repository"
+		}
+	},
+	"lexicon": 1
+}

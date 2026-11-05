@@ -1,0 +1,120 @@
+{
+	"id": "sh.tangled.git.temp2.getBlame",
+	"defs": {
+		"run": {
+			"type": "object",
+			"required": ["commit", "count", "start"],
+			"properties": {
+				"count": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "Number of consecutive lines in this run"
+				},
+				"start": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "First one-based line in this run"
+				},
+				"commit": {
+					"type": "string",
+					"description": "oid of a commit in the output commits array"
+				}
+			}
+		},
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "Git reference not found"
+				},
+				{
+					"name": "FileNotFound",
+					"description": "File not found at the specified path"
+				},
+				{
+					"name": "BlameTooLarge",
+					"description": "Blame exceeds file byte, line, or run limits"
+				},
+				{
+					"name": "BlameTimeout",
+					"description": "Blame exceeded its computation time budget"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["commit", "commits", "runs"],
+					"properties": {
+						"runs": {
+							"type": "array",
+							"items": {
+								"ref": "#run",
+								"type": "ref"
+							},
+							"description": "Complete, gap-free one-based line ranges sorted by start"
+						},
+						"commit": {
+							"type": "string",
+							"description": "The resolved git commit object id"
+						},
+						"commits": {
+							"type": "array",
+							"items": {
+								"ref": "#commit",
+								"type": "ref"
+							},
+							"description": "Unique commits referenced by blame runs"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["path", "ref", "repo"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"description": "Revspec to blame at: a branch, tag, or commit sha"
+					},
+					"path": {
+						"type": "string",
+						"description": "Path to the file within the repository"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					}
+				}
+			}
+		},
+		"commit": {
+			"type": "object",
+			"required": ["author", "message", "oid"],
+			"properties": {
+				"oid": {
+					"type": "string"
+				},
+				"author": {
+					"ref": "sh.tangled.git.defs#signature",
+					"type": "ref"
+				},
+				"message": {
+					"type": "string",
+					"description": "Full commit message"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

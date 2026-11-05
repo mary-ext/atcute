@@ -1,0 +1,47 @@
+{
+	"id": "org.tangled.feed.defs",
+	"defs": {
+		"commentView": {
+			"type": "object",
+			"required": ["body", "cid", "createdAt", "subject", "uri"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"body": {
+					"refs": ["org.tangled.markup.markdown"],
+					"type": "union"
+				},
+				"embed": {
+					"refs": ["org.tangled.embed.commit#view"],
+					"type": "union"
+				},
+				"editor": {
+					"type": "string",
+					"format": "did",
+					"description": "Who wrote this version (`x-tngl-editor`). A knot-hosted comment's uri names the repo, not the writer."
+				},
+				"replyTo": {
+					"ref": "com.atproto.repo.strongRef",
+					"type": "ref"
+				},
+				"subject": {
+					"ref": "com.atproto.repo.strongRef",
+					"type": "ref"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
+}

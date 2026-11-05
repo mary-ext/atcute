@@ -20,6 +20,10 @@
 				{
 					"name": "DomainNotFound",
 					"description": "No active claim found for the given domain under this account."
+				},
+				{
+					"name": "DomainPermanent",
+					"description": "The claimed domain is a permanent tngl.sh handle domain and cannot be released."
 				}
 			],
 			"description": "Release the authenticated user's active domain claim, removing all associated site data."

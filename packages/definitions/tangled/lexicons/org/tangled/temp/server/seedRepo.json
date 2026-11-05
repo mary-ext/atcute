@@ -1,0 +1,106 @@
+{
+	"id": "org.tangled.temp.server.seedRepo",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["manifest", "records", "repoDid"],
+					"properties": {
+						"records": {
+							"type": "array",
+							"items": {
+								"ref": "#seedRecord",
+								"type": "ref"
+							},
+							"maxLength": 200,
+							"description": "Records to write besides the manifest. Max 200 per req."
+						},
+						"repoDid": {
+							"type": "string",
+							"format": "did",
+							"description": "Existing repo DID which our COB records belong to. The foster knot will serve this DID as a shadow, and will give the record (authority) back to the principal knot once that given knot that *actually* owns the repo DID upgrades!"
+						},
+						"manifest": {
+							"type": "unknown",
+							"description": "Raw `org.tangled.repo.manifest` record body"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["did", "key", "results"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did"
+						},
+						"key": {
+							"type": "string",
+							"description": "Multibase-encoded public signing key that the knot has for this repo."
+						},
+						"results": {
+							"type": "array",
+							"items": {
+								"ref": "#recordResult",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Foster an empty git repo TEMPORARILY for an owner from outside the knot, and write the given manifest and records on this knot without lex validation. This endpoint is possible only when legacy admin secret is in use."
+		},
+		"seedRecord": {
+			"type": "object",
+			"required": ["author", "collection", "createdAt", "record", "rkey"],
+			"properties": {
+				"rkey": {
+					"type": "string",
+					"format": "record-key"
+				},
+				"author": {
+					"type": "string",
+					"format": "did",
+					"description": "DID which will be attributed to the record as the author."
+				},
+				"record": {
+					"type": "unknown",
+					"description": "Record body, DAG-CBOR w/o lex validation. Max 1,000,000 bytes post-encode."
+				},
+				"createdAt": {
+					"type": "integer",
+					"description": "Creation time in Unix seconds."
+				},
+				"collection": {
+					"type": "string",
+					"format": "nsid"
+				}
+			}
+		},
+		"recordResult": {
+			"type": "object",
+			"required": ["collection", "rkey"],
+			"properties": {
+				"rkey": {
+					"type": "string",
+					"format": "record-key"
+				},
+				"error": {
+					"type": "string",
+					"description": "Reason that a record wasn't written."
+				},
+				"collection": {
+					"type": "string",
+					"format": "nsid"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

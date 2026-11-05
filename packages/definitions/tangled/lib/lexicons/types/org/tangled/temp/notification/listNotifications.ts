@@ -50,11 +50,11 @@ const _notificationSchema = /*#__PURE__*/ v.object({
 	/**
 	 * Notification type: repo_starred, issue_created, issue_commented, issue_closed, issue_reopen,
 	 * issue_assigned, issue_unassigned, pull_created, pull_commented, pull_merged, pull_closed, pull_reopen,
-	 * pull_assigned, pull_unassigned, followed, user_mentioned.
+	 * pull_assigned, pull_unassigned, followed, user_mentioned, knot_invited, collaborator_invited.
 	 */
 	type: /*#__PURE__*/ v.string(),
-	/** at-uri of this notification; the stable key for read/unread state. */
-	uri: /*#__PURE__*/ v.resourceUriString(),
+	/** notification key; pass it back to updateSeen and deleteNotification. */
+	uri: /*#__PURE__*/ v.string(),
 });
 
 type main$schematype = typeof _mainSchema;

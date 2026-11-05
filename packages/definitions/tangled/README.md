@@ -1,6 +1,6 @@
 # @atcute/tangled
 
-[Tangled](https://tangled.sh/) (sh.tangled.\*) schema definitions
+[Tangled](https://tangled.org/) (org.tangled.\*, sh.tangled.\*) schema definitions
 
 ```sh
 npm install @atcute/tangled
@@ -9,19 +9,19 @@ npm install @atcute/tangled
 ## usage
 
 ```ts
-import { ShTangledRepoPullComment } from '@atcute/tangled';
+import { OrgTangledFeedStar } from '@atcute/tangled';
 import { is } from '@atcute/lexicons';
 
-const comment: ShTangledRepoPullComment.Main = {
-	$type: 'sh.tangled.repo.pull.comment',
-	repo: 'at://did:plc:wshs7t2adsemcrrd4snkeqli/sh.tangled.repo/3liuighjy2h22',
-	pull: 'at://did:plc:ia76kvnndjutgedggx2ibrem/sh.tangled.repo.pull/3lp3tg57oyv22',
-	owner: 'did:plc:ia76kvnndjutgedggx2ibrem',
+const star: OrgTangledFeedStar.Main = {
+	$type: 'org.tangled.feed.star',
+	subject: {
+		$type: 'org.tangled.feed.star#repo',
+		identity: 'did:plc:wshs7t2adsemcrrd4snkeqli',
+	},
 	createdAt: '2025-05-14T01:29:08Z',
-	body: 'not sure what went wrong with that first round (probably pasted the diffs wrong) but I think this should work',
 };
 
-is(ShTangledRepoPullComment.mainSchema, comment);
+is(OrgTangledFeedStar.mainSchema, star);
 // -> true
 ```
 

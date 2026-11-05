@@ -1,0 +1,64 @@
+{
+	"id": "org.tangled.spindle.describeSpindle",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["did", "version"],
+					"properties": {
+						"did": {
+							"type": "string",
+							"format": "did"
+						},
+						"links": {
+							"ref": "#links",
+							"type": "ref",
+							"description": "URLs of service policy documents."
+						},
+						"contact": {
+							"ref": "#contact",
+							"type": "ref",
+							"description": "Contact information"
+						},
+						"version": {
+							"type": "string"
+						},
+						"capabilities": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"knownValues": ["tangled1.0"]
+							},
+							"description": "Protocol capability tokens this spindle implements. Spindle that omit this field are treated as legacy."
+						}
+					}
+				},
+				"encoding": "application/json"
+			}
+		},
+		"links": {
+			"type": "object",
+			"properties": {
+				"privacyPolicy": {
+					"type": "string",
+					"format": "uri"
+				},
+				"termsOfService": {
+					"type": "string",
+					"format": "uri"
+				}
+			}
+		},
+		"contact": {
+			"type": "object",
+			"properties": {
+				"email": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

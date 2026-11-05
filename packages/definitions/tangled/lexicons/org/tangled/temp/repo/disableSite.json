@@ -21,6 +21,22 @@
 				{
 					"name": "SiteNotFound",
 					"description": "No site configuration exists for this repository."
+				},
+				{
+					"name": "NotOwner",
+					"description": "The account does not own this repository."
+				},
+				{
+					"name": "RepoNotFound",
+					"description": "No repository record publishes this repo DID."
+				},
+				{
+					"name": "OwnershipUnverifiable",
+					"description": "Repository ownership could not be verified."
+				},
+				{
+					"name": "SiteConfigDisputed",
+					"description": "The stored site config names a different owner and must be re-saved by the repository owner."
 				}
 			],
 			"description": "Remove the site configuration for a repository, deleting its deployed files."

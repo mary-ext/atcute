@@ -1,0 +1,98 @@
+{
+	"id": "org.tangled.temp.repo.getDeployHistory",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "AuthError",
+					"description": "Serviceauth verification failed."
+				},
+				{
+					"name": "NotOwner",
+					"description": "The account does not own this repository."
+				},
+				{
+					"name": "RepoNotFound",
+					"description": "No repository record publishes this repo DID."
+				},
+				{
+					"name": "OwnershipUnverifiable",
+					"description": "Repository ownership could not be verified."
+				},
+				{
+					"name": "SiteNotFound",
+					"description": "The repository has no site configuration or the owner has no active claim."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["deploys"],
+					"properties": {
+						"deploys": {
+							"type": "array",
+							"items": {
+								"ref": "#deploy",
+								"type": "ref"
+							},
+							"maxLength": 20,
+							"description": "The 20 most recent deploys, newest first. Empty when the repository has never deployed."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repoDid"],
+				"properties": {
+					"repoDid": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository as minted by the knot."
+					}
+				}
+			},
+			"description": "Get the recent deploy history for a repository, newest first. Authenticated with the caller's serviceauth token (audience = the sites worker's DID); only the repository owner may read it."
+		},
+		"deploy": {
+			"type": "object",
+			"required": ["branch", "commitSha", "createdAt", "dir", "error", "status", "trigger"],
+			"properties": {
+				"dir": {
+					"type": "string",
+					"description": "Directory within the repository the deploy built (e.g. '/' or '/docs')."
+				},
+				"error": {
+					"type": "string",
+					"description": "Why the deploy failed. Empty when it succeeded."
+				},
+				"branch": {
+					"type": "string",
+					"description": "Branch the deploy built."
+				},
+				"status": {
+					"type": "string",
+					"description": "Outcome of the deploy.",
+					"knownValues": ["failure", "success"]
+				},
+				"trigger": {
+					"type": "string",
+					"description": "What asked for the deploy: a site config change, a push to the deployed branch, or a manual redeploy.",
+					"knownValues": ["config_change", "manual", "push"]
+				},
+				"commitSha": {
+					"type": "string",
+					"description": "Commit the deploy built. Empty for a config-change deploy, which builds the branch tip at deploy time."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "When the deploy finished."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

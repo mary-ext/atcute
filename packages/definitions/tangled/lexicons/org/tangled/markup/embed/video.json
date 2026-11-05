@@ -1,0 +1,17 @@
+{
+	"id": "org.tangled.markup.embed.video",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["video"],
+			"properties": {
+				"video": {
+					"type": "blob",
+					"accept": ["video/mp4"],
+					"maxSize": 5000000
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,185 @@
+{
+	"id": "org.tangled.ci.defs",
+	"defs": {
+		"pipeline": {
+			"type": "object",
+			"required": ["commit", "id", "repo", "trigger", "workflows"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"format": "record-key",
+					"description": "Spindle-local pipeline id"
+				},
+				"repo": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID"
+				},
+				"commit": {
+					"type": "string",
+					"description": "Commit Id this pipeline is running on"
+				},
+				"trigger": {
+					"refs": [
+						"org.tangled.ci.trigger.manual",
+						"org.tangled.ci.trigger.schedule",
+						"org.tangled.event.pullRequest",
+						"org.tangled.event.push"
+					],
+					"type": "union",
+					"closed": false,
+					"description": "Trigger event that triggered this pipeline."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"workflows": {
+					"type": "array",
+					"items": {
+						"ref": "#workflowRun",
+						"type": "ref"
+					},
+					"maxLength": 50,
+					"minLength": 1,
+					"description": "Triggered workflows"
+				},
+				"sourceRepo": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID that the commit was checked out from, if different from repo (e.g. a fork for a fork-based pull request)"
+				}
+			},
+			"description": "A CI pipeline. Record-like, but owned by the spindle rather than a PDS."
+		},
+		"workflow": {
+			"type": "object",
+			"required": ["id", "source", "triggers"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"maxLength": 128,
+					"minLength": 1
+				},
+				"hash": {
+					"type": "string",
+					"description": "Fingerprint of the workflow definition as resolved by the spindle."
+				},
+				"name": {
+					"type": "string",
+					"maxLength": 128,
+					"minLength": 1,
+					"description": "Human-readable name of the workflow"
+				},
+				"source": {
+					"refs": ["#externalSource", "#fileSource"],
+					"type": "union"
+				},
+				"triggers": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"knownValues": [
+							"org.tangled.ci.trigger.manual",
+							"org.tangled.ci.trigger.schedule",
+							"org.tangled.event.pullRequest",
+							"org.tangled.event.push"
+						]
+					},
+					"description": "Event types that triggers this workflow."
+				}
+			},
+			"description": "A workflow definition"
+		},
+		"lineRange": {
+			"type": "object",
+			"required": ["end", "start"],
+			"properties": {
+				"end": {
+					"type": "integer",
+					"minimum": 1
+				},
+				"start": {
+					"type": "integer",
+					"minimum": 1
+				}
+			}
+		},
+		"fileSource": {
+			"type": "object",
+			"required": ["commit", "path", "repo"],
+			"properties": {
+				"path": {
+					"type": "string",
+					"minLength": 1
+				},
+				"repo": {
+					"type": "string",
+					"format": "did"
+				},
+				"lines": {
+					"ref": "#lineRange",
+					"type": "ref"
+				},
+				"commit": {
+					"type": "string",
+					"maxLength": 128,
+					"minLength": 40
+				}
+			}
+		},
+		"workflowRun": {
+			"type": "object",
+			"required": ["definition", "id", "status"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"maxLength": 128,
+					"minLength": 1,
+					"description": "Pipeline-local workflow id, usually same as name."
+				},
+				"name": {
+					"type": "string",
+					"maxLength": 128,
+					"description": "Human-readable name of the workflow"
+				},
+				"error": {
+					"type": "string"
+				},
+				"status": {
+					"enum": ["blocked", "cancelled", "failed", "pending", "running", "success", "timeout"],
+					"type": "string",
+					"description": "Workflow status"
+				},
+				"startedAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"definition": {
+					"ref": "#workflow",
+					"type": "ref",
+					"description": "Workflow definition where this workflow run is originated from."
+				},
+				"finishedAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		},
+		"externalSource": {
+			"type": "object",
+			"required": ["link"],
+			"properties": {
+				"link": {
+					"type": "string",
+					"format": "uri"
+				},
+				"name": {
+					"type": "string",
+					"description": "human-readable name of external source"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

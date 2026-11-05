@@ -20,7 +20,7 @@ export default defineLexiconConfig({
 			{
 				type: 'git',
 				remote: 'https://tangled.org/tangled.org/core.git',
-				pattern: ['lexicons/**/*.json', '!lexicons/com/atproto/**'],
+				pattern: ['lexicons/**/*.json', '!lexicons/com/atproto/**', '!lexicons/com/bad-example/pocket/**'],
 			},
 		],
 	},

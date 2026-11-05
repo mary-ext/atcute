@@ -1,0 +1,66 @@
+{
+	"id": "sh.tangled.git.temp2.getCommitStats",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["months"],
+					"properties": {
+						"months": {
+							"type": "array",
+							"items": {
+								"ref": "#month",
+								"type": "ref"
+							},
+							"maxLength": 24
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["actor"],
+				"properties": {
+					"actor": {
+						"type": "string",
+						"format": "did",
+						"description": "Actor whose commits to count."
+					},
+					"months": {
+						"type": "integer",
+						"default": 7,
+						"maximum": 24,
+						"minimum": 1
+					}
+				}
+			},
+			"description": "Get an actor's monthly commit counts."
+		},
+		"month": {
+			"type": "object",
+			"required": ["commits", "start"],
+			"properties": {
+				"start": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Start of this UTC calendar month."
+				},
+				"commits": {
+					"type": "integer",
+					"minimum": 0,
+					"description": "Commits attributed to the actor during this month."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,67 @@
+{
+	"id": "org.tangled.event.notifyEvent",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["event", "repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "Repository DID"
+						},
+						"event": {
+							"refs": ["org.tangled.ci.trigger.manual", "org.tangled.event.push"],
+							"type": "union",
+							"description": "Tangled event object"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": [],
+					"properties": {
+						"ci": {
+							"ref": "#ciOutput",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "notify an event from external source"
+		},
+		"ciOutput": {
+			"type": "object",
+			"required": [],
+			"properties": {
+				"message": {
+					"type": "string",
+					"maxLength": 1000,
+					"description": "Text returned by the server for this push, like how to follow a started CI."
+				},
+				"pipelines": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"format": "record-key"
+					},
+					"description": "IDs of the scheduled pipelines"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

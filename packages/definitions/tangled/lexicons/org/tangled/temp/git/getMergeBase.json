@@ -1,0 +1,63 @@
+{
+	"id": "org.tangled.temp.git.getMergeBase",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RevisionNotFound",
+					"description": "One or both commits not found"
+				},
+				{
+					"name": "NoMergeBase",
+					"description": "Two commits share no common ancestor"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["commit"],
+					"properties": {
+						"commit": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["base", "head", "repos"],
+				"properties": {
+					"base": {
+						"type": "string",
+						"description": "Commit used to find the common base."
+					},
+					"head": {
+						"type": "string",
+						"description": "Commit to list history for."
+					},
+					"repos": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "did"
+						},
+						"maxLength": 2,
+						"minLength": 1,
+						"description": "DIDs of the repositories to read objects from"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

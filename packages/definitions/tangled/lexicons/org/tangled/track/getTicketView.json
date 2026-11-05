@@ -1,0 +1,26 @@
+{
+	"id": "org.tangled.track.getTicketView",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"ref": "org.tangled.track.defs#ticketViewDetailed",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["uri"],
+				"properties": {
+					"uri": {
+						"type": "string",
+						"format": "at-uri"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

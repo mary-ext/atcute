@@ -1,0 +1,55 @@
+{
+	"id": "org.tangled.ci.trigger.manual",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["commit", "repo"],
+			"properties": {
+				"ref": {
+					"type": "string",
+					"description": "Optional ref the commit was resolved from."
+				},
+				"repo": {
+					"type": "string",
+					"format": "did"
+				},
+				"commit": {
+					"type": "string",
+					"maxLength": 64,
+					"minLength": 40,
+					"description": "Commit id the pipeline will run on."
+				},
+				"inputs": {
+					"type": "array",
+					"items": {
+						"ref": "#pair",
+						"type": "ref"
+					}
+				},
+				"workflows": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"description": "workflow name"
+					},
+					"description": "Workflow names to run. When not provided, every dispatchable workflow is run."
+				}
+			}
+		},
+		"pair": {
+			"type": "object",
+			"required": ["key", "value"],
+			"properties": {
+				"key": {
+					"type": "string"
+				},
+				"value": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
+}

@@ -1,0 +1,93 @@
+{
+	"id": "org.tangled.webhook.defs",
+	"defs": {
+		"webhook": {
+			"type": "object",
+			"required": ["active", "createdAt", "events", "id", "url"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Webhook identifier."
+				},
+				"url": {
+					"type": "string",
+					"format": "uri",
+					"description": "Endpoint URL that receives webhook payloads."
+				},
+				"active": {
+					"type": "boolean",
+					"description": "Whether the webhook is currently enabled."
+				},
+				"events": {
+					"type": "array",
+					"items": {
+						"ref": "#eventType",
+						"type": "ref"
+					},
+					"description": "Event types this webhook is subscribed to."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"updatedAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		},
+		"delivery": {
+			"type": "object",
+			"required": ["createdAt", "event", "id", "success", "url", "webhook"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Unique ID for tracking this delivery attempt."
+				},
+				"url": {
+					"type": "string",
+					"format": "uri"
+				},
+				"event": {
+					"ref": "#eventType",
+					"type": "ref",
+					"description": "Event type that triggered the delivery."
+				},
+				"success": {
+					"type": "boolean"
+				},
+				"webhook": {
+					"type": "string",
+					"description": "ID of the webhook this delivery belongs to."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"requestBody": {
+					"type": "bytes"
+				},
+				"responseBody": {
+					"type": "bytes"
+				},
+				"responseCode": {
+					"type": "integer"
+				}
+			}
+		},
+		"eventType": {
+			"type": "string",
+			"knownValues": [
+				"org.tangled.event.pullRequest",
+				"pull_request:closed",
+				"pull_request:created",
+				"pull_request:merged",
+				"pull_request:reopened",
+				"pull_request:resubmitted",
+				"push",
+				"repository:renamed"
+			]
+		}
+	},
+	"lexicon": 1
+}

@@ -6,11 +6,23 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["branch", "dir", "repoDid"],
+					"required": ["branch", "dir", "knot", "name", "repoDid", "rkey"],
 					"properties": {
 						"dir": {
 							"type": "string",
 							"description": "Directory within the repository to deploy (e.g. '/' or '/docs')."
+						},
+						"knot": {
+							"type": "string",
+							"description": "Knot host that hosts the repository."
+						},
+						"name": {
+							"type": "string",
+							"description": "Repository name as its knot reports it (the first path segment its sub-path site is served under)."
+						},
+						"rkey": {
+							"type": "string",
+							"description": "Atproto record key of the repository; identifies the {did}/{rkey}/ prefix in R2."
 						},
 						"branch": {
 							"type": "string",
@@ -31,11 +43,51 @@
 			},
 			"errors": [
 				{
+					"name": "NotOwner",
+					"description": "The account is not the publisher of this repository's record."
+				},
+				{
+					"name": "RepoNotFound",
+					"description": "No repository record publishes this repo DID."
+				},
+				{
+					"name": "OwnershipUnverifiable",
+					"description": "Repository ownership could not be verified; the config was not saved."
+				},
+				{
+					"name": "RepoIdentityMismatch",
+					"description": "The request's repository name, key or knot does not match its record."
+				},
+				{
 					"name": "NoDomainClaim",
 					"description": "The account does not have an active domain claim."
+				},
+				{
+					"name": "HandleNotOwned",
+					"description": "The handle authority identifies a different account."
+				},
+				{
+					"name": "HandleUnknown",
+					"description": "The handle authority does not know this handle."
+				},
+				{
+					"name": "ClaimUnverifiable",
+					"description": "The handle authority could not be reached to verify this claim."
+				},
+				{
+					"name": "InvalidDirectory",
+					"description": "The deploy directory path is invalid."
+				},
+				{
+					"name": "IndexSiteTaken",
+					"description": "Another repository is already the index site of the account's domain."
+				},
+				{
+					"name": "WorkerUnavailable",
+					"description": "The config was saved but the deploy service is disabled."
 				}
 			],
-			"description": "Create or update the site configuration for a repository and trigger a deployment."
+			"description": "Create or update the site configuration for a repository owned by the authenticated user. Writing the config schedules a deploy attempt; the deploy outcome is recorded in history. If the deploy service is disabled, the config is saved but WorkerUnavailable is returned."
 		}
 	},
 	"lexicon": 1

@@ -1,0 +1,45 @@
+{
+	"id": "org.tangled.feed.star",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "subject"],
+				"properties": {
+					"subject": {
+						"refs": ["#record", "#repo"],
+						"type": "union",
+						"closed": true
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		},
+		"repo": {
+			"type": "object",
+			"required": ["identity"],
+			"properties": {
+				"identity": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		},
+		"record": {
+			"type": "object",
+			"required": ["record"],
+			"properties": {
+				"record": {
+					"ref": "com.atproto.repo.strongRef",
+					"type": "ref"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

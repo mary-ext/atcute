@@ -1,0 +1,87 @@
+{
+	"id": "org.tangled.ci.queryPipelines",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				},
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["pipelines", "total"],
+					"properties": {
+						"total": {
+							"type": "integer",
+							"description": "Number of matching pipelines"
+						},
+						"cursor": {
+							"type": "string"
+						},
+						"pipelines": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.ci.defs#pipeline",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 250,
+						"minimum": 1,
+						"description": "Maximum number of pipelines to return"
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					},
+					"commits": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxLength": 64,
+							"description": "commit id (SHA-1 or SHA-256)"
+						},
+						"description": "Filter pipelines by commit ids."
+					},
+					"triggers": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"knownValues": [
+								"org.tangled.ci.trigger.manual",
+								"org.tangled.ci.trigger.schedule",
+								"org.tangled.event.pullRequest",
+								"org.tangled.event.push"
+							]
+						},
+						"description": "Filter pipelines by trigger kind. When provided, pipelines matching any listed kind are returned; when omitted, every kind is returned."
+					}
+				}
+			},
+			"description": "Query pipelines in a git repository"
+		}
+	},
+	"lexicon": 1
+}

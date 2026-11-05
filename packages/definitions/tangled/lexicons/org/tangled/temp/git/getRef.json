@@ -1,0 +1,72 @@
+{
+	"id": "org.tangled.temp.git.getRef",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "Git reference not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["author", "message", "name", "oid", "totalCommits"],
+					"properties": {
+						"oid": {
+							"type": "string",
+							"description": "Latest commit oid on this reference."
+						},
+						"name": {
+							"type": "string",
+							"description": "Full reference name. Example: refs/heads/master"
+						},
+						"author": {
+							"ref": "org.tangled.git.defs#signature",
+							"type": "ref"
+						},
+						"message": {
+							"type": "string",
+							"description": "Latest commit message"
+						},
+						"annotation": {
+							"ref": "org.tangled.temp.git.listTags#annotation",
+							"type": "ref",
+							"description": "Present only for annotated tags"
+						},
+						"totalCommits": {
+							"type": "integer",
+							"description": "Number of commits reachable from this tip"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["ref", "repo"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"description": "Reference name. Such as master, refs/heads/master, or v1.16.0-alpha."
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

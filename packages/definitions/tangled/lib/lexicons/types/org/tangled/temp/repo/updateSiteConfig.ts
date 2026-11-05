@@ -13,8 +13,14 @@ const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.repo.updateSiteC
 			dir: /*#__PURE__*/ v.string(),
 			/** Whether this repo should serve as the index (root) for the claimed domain. */
 			isIndex: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+			/** Knot host that hosts the repository. */
+			knot: /*#__PURE__*/ v.string(),
+			/** Repository name as its knot reports it (the first path segment its sub-path site is served under). */
+			name: /*#__PURE__*/ v.string(),
 			/** DID of the repository as minted by the knot. */
 			repoDid: /*#__PURE__*/ v.didString(),
+			/** Atproto record key of the repository; identifies the {did}/{rkey}/ prefix in R2. */
+			rkey: /*#__PURE__*/ v.string(),
 		}),
 	},
 	output: null,

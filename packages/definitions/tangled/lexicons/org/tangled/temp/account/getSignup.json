@@ -1,0 +1,48 @@
+{
+	"id": "org.tangled.temp.account.getSignup",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "SignupDisabled",
+					"description": "Signup is not currently enabled on this service."
+				},
+				{
+					"name": "InvalidCode",
+					"description": "The verification link is invalid or expired."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["email", "pds"],
+					"properties": {
+						"pds": {
+							"type": "string",
+							"format": "uri",
+							"description": "PDS the account will be created on, where the browser starts the OAuth request it passes to completeSignup."
+						},
+						"email": {
+							"type": "string",
+							"description": "Email address the signup was started with."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["token"],
+				"properties": {
+					"token": {
+						"type": "string",
+						"description": "Verification token from the emailed link."
+					}
+				}
+			},
+			"description": "Look up a pending signup by its link token, so the completion form can reject a dead link before the user fills it in."
+		}
+	},
+	"lexicon": 1
+}

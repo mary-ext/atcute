@@ -1,0 +1,41 @@
+{
+	"id": "org.tangled.repo.reserveKey",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "The caller-minted DID to reserve"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["key", "repo"],
+					"properties": {
+						"key": {
+							"type": "string",
+							"description": "Multibase-encoded public signing key the knot holds for this repo identity"
+						},
+						"repo": {
+							"type": "string",
+							"format": "did"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Reserve a repo identity under a DID the caller brings. The knot seals and holds a signing key for the repo DID; the caller publishes the matching public key in that DID's document before calling org.tangled.repo.createRepo with the same DID."
+		}
+	},
+	"lexicon": 1
+}

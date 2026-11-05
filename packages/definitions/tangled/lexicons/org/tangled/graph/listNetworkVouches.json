@@ -1,0 +1,79 @@
+{
+	"id": "org.tangled.graph.listNetworkVouches",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["items"],
+					"properties": {
+						"items": {
+							"type": "array",
+							"items": {
+								"ref": "#listItem",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["actors"],
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1,
+						"description": "Maximum number of vouches per actor."
+					},
+					"actors": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "did"
+						},
+						"maxLength": 50,
+						"minLength": 1,
+						"description": "DIDs of the profiles whose network vouches to list. At most 50 per request."
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor. Only accepted when a single actor is requested."
+					}
+				}
+			},
+			"description": "List vouches involving one or more actors as seen through a viewer's vouch network: vouches the viewer's network placed on an actor, and vouches an actor placed on the viewer's network. Requires authentication."
+		},
+		"listItem": {
+			"type": "object",
+			"required": ["actor", "uri", "value"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"actor": {
+					"type": "string",
+					"format": "did",
+					"description": "The requested actor this vouch involves."
+				},
+				"value": {
+					"type": "unknown",
+					"description": "Embedded sh.tangled.graph.vouch record"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

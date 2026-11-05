@@ -1,0 +1,27 @@
+{
+	"id": "org.tangled.git.deleteBranch",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["branch", "repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "DID of the repository"
+						},
+						"branch": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Delete a branch on this repository"
+		}
+	},
+	"lexicon": 1
+}

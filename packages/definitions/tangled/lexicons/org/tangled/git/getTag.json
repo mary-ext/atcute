@@ -1,0 +1,68 @@
+{
+	"id": "org.tangled.git.getTag",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "Git reference not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["author", "message", "name", "oid"],
+					"properties": {
+						"oid": {
+							"type": "string",
+							"description": "Latest commit oid on this tag"
+						},
+						"name": {
+							"type": "string",
+							"description": "Tag name"
+						},
+						"author": {
+							"ref": "org.tangled.git.defs#signature",
+							"type": "ref"
+						},
+						"message": {
+							"type": "string",
+							"description": "Latest commit message"
+						},
+						"annotation": {
+							"ref": "org.tangled.git.listTags#annotation",
+							"type": "ref",
+							"description": "Present only for annotated tags"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo", "tag"],
+				"properties": {
+					"tag": {
+						"type": "string",
+						"description": "Name of tag, such as v1.3.0"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

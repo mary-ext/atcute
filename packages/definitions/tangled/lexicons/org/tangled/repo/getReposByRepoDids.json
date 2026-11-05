@@ -1,0 +1,58 @@
+{
+	"id": "org.tangled.repo.getReposByRepoDids",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["items"],
+					"properties": {
+						"items": {
+							"type": "array",
+							"items": {
+								"ref": "#listItem",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["dids"],
+				"properties": {
+					"dids": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"format": "did"
+						},
+						"maxLength": 50,
+						"description": "Repo DIDs to fetch. DIDs that resolve to none are omitted from the response."
+					}
+				}
+			}
+		},
+		"listItem": {
+			"type": "object",
+			"required": ["uri", "value"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"value": {
+					"type": "unknown",
+					"description": "sh.tangled.repo record"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

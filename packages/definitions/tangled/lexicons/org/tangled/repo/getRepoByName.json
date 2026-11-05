@@ -1,0 +1,49 @@
+{
+	"id": "org.tangled.repo.getRepoByName",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["uri", "value"],
+					"properties": {
+						"cid": {
+							"type": "string",
+							"format": "cid"
+						},
+						"uri": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"knot": {
+							"type": "string",
+							"description": "Host of the knot named by the #tangled_knot service in the repo's DID document. Absent when it names none."
+						},
+						"value": {
+							"type": "unknown",
+							"description": "Embedded sh.tangled.repo record."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["name", "owner"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "Name of the repo as it appears in its url."
+					},
+					"owner": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the account that owns the repo."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,53 @@
+{
+	"id": "org.tangled.temp.spindle.quota.releaseNars",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["nars"],
+					"properties": {
+						"nars": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"maxLength": 512
+							},
+							"maxLength": 1000,
+							"minLength": 1,
+							"description": "nars to release, as cache keys like nar/<hash>.nar.xz (a bare file name works too) or as nix store paths like /nix/store/<hash>-name"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["bytes", "released", "unmatched"],
+					"properties": {
+						"bytes": {
+							"type": "integer",
+							"description": "cache storage bytes given back"
+						},
+						"released": {
+							"type": "integer",
+							"description": "how many allocations were deleted"
+						},
+						"unmatched": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"description": "the inputs that matched no allocation"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "give back the cache storage quota of nars an operator removed from the nix cache. admin only and idempotent, unknown nars are reported and not an error"
+		}
+	},
+	"lexicon": 1
+}

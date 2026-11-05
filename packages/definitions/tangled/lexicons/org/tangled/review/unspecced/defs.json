@@ -1,0 +1,10 @@
+{
+	"id": "org.tangled.review.unspecced.defs",
+	"defs": {
+		"reviewState": {
+			"type": "string",
+			"knownValues": ["approved", "changes-required", "commented", "dismissed"]
+		}
+	},
+	"lexicon": 1
+}

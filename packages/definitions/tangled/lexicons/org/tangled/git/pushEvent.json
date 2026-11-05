@@ -1,0 +1,75 @@
+{
+	"id": "org.tangled.git.pushEvent",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["edits", "pusher", "repo", "seq", "sig", "time"],
+			"properties": {
+				"seq": {
+					"type": "integer",
+					"description": "The stream sequence number of this message."
+				},
+				"sig": {
+					"type": "bytes",
+					"description": "Signature over the DAG-CBOR of this message with the seq and sig keys absent (repo/pusher DID, edits, time, options), by the repo's atproto signing key. seq is excluded so a relay can reassign it without invalidating the signature."
+				},
+				"repo": {
+					"type": "string",
+					"format": "did",
+					"description": "The repo this event comes from."
+				},
+				"time": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Timestamp of when this message was originally broadcast."
+				},
+				"edits": {
+					"type": "array",
+					"items": {
+						"ref": "#refEdit",
+						"type": "ref",
+						"description": "List of git reference update operations in this push."
+					},
+					"maxLength": 200
+				},
+				"pusher": {
+					"type": "string",
+					"format": "did",
+					"description": "The account that performed this push."
+				},
+				"options": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"maxLength": 1024,
+						"description": "Git push option."
+					},
+					"maxLength": 10,
+					"description": "Git push options."
+				}
+			},
+			"description": "Represents git-push operation to target repository."
+		},
+		"refEdit": {
+			"type": "object",
+			"nullable": ["new", "old"],
+			"required": ["name", "new", "old"],
+			"properties": {
+				"new": {
+					"type": "string",
+					"description": "Full hex object id the ref now points at."
+				},
+				"old": {
+					"type": "string",
+					"description": "Full hex object id the ref pointed at before."
+				},
+				"name": {
+					"type": "string",
+					"description": "Full git reference name, ie refs/heads/main."
+				}
+			},
+			"description": "A git ref edit."
+		}
+	},
+	"lexicon": 1
+}

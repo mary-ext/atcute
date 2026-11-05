@@ -1,0 +1,39 @@
+{
+	"id": "org.tangled.graph.getFollow",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["uri"],
+					"properties": {
+						"uri": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "Uri of actor's follow record for subject."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["actor", "subject"],
+				"properties": {
+					"actor": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the potential follower."
+					},
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "Followee DID to check."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

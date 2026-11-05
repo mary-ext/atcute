@@ -1,0 +1,15 @@
+{
+	"id": "org.tangled.track.unspecced.milestone",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"properties": {}
+			},
+			"description": "TBD"
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,49 @@
+{
+	"id": "org.tangled.repo.countIssues",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["count", "distinctAuthors"],
+					"properties": {
+						"count": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Total number of matching records."
+						},
+						"distinctAuthors": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Number of distinct authors among the matching records."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subject"],
+				"properties": {
+					"state": {
+						"type": "string",
+						"description": "Restrict to issues whose latest derived state matches.",
+						"knownValues": ["closed", "open"]
+					},
+					"author": {
+						"type": "string",
+						"format": "did",
+						"description": "Restrict to issues authored by this user DID."
+					},
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "Repo DID to list issues for"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

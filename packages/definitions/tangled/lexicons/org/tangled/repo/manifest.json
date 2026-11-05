@@ -1,0 +1,73 @@
+{
+	"id": "org.tangled.repo.manifest",
+	"defs": {
+		"main": {
+			"key": "literal:self",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "declaration"],
+				"properties": {
+					"source": {
+						"refs": ["org.tangled.repo.defs#sourceExternal", "org.tangled.repo.defs#sourceTangled"],
+						"type": "union",
+						"description": "source of the repo"
+					},
+					"topics": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxLength": 50
+						},
+						"maxLength": 50,
+						"description": "Topics related to the repo"
+					},
+					"spindle": {
+						"type": "string",
+						"format": "did"
+					},
+					"website": {
+						"type": "string",
+						"format": "uri",
+						"description": "Any URI related to the repo"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"declaration": {
+						"ref": "#declaration",
+						"type": "ref"
+					},
+					"description": {
+						"type": "string",
+						"maxGraphemes": 140,
+						"minGraphemes": 1
+					},
+					"contributionPolicy": {
+						"type": "string",
+						"description": "Who may open tickets and patches on this repo. anyone = any DID, members = the knot's member roll, collaborators = the owner plus repo collaborators. Absent means the knot-wide default.",
+						"knownValues": ["anyone", "collaborators", "members"]
+					}
+				}
+			},
+			"description": "Git repository manifest record. This record is used for git repository discovery like how `org.tangled.actor.profile` is used to find users."
+		},
+		"declaration": {
+			"type": "object",
+			"required": ["name", "owner"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"format": "record-key",
+					"description": "repository name; the slug (rkey of org.tangled.repo.declaration) is lowercase(name)"
+				},
+				"owner": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

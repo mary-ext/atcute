@@ -1,0 +1,23 @@
+{
+	"id": "org.tangled.embed.unspecced.file",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["commit", "path", "repo"],
+			"properties": {
+				"path": {
+					"type": "string"
+				},
+				"repo": {
+					"type": "string",
+					"format": "did"
+				},
+				"commit": {
+					"ref": "org.tangled.git.oid",
+					"type": "ref"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

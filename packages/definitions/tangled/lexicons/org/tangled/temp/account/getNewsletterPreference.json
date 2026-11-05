@@ -1,0 +1,22 @@
+{
+	"id": "org.tangled.temp.account.getNewsletterPreference",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "string",
+							"knownValues": ["dismissed", "subscribed"]
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Get the authenticated account's newsletter choice. status is absent when the account has neither subscribed nor dismissed the prompt."
+		}
+	},
+	"lexicon": 1
+}

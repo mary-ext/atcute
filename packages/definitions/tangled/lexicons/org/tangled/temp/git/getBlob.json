@@ -1,0 +1,38 @@
+{
+	"id": "org.tangled.temp.git.getBlob",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"encoding": "*/*",
+				"description": "raw blob served in octet-stream"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["path", "repo"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"default": "HEAD",
+						"description": "Git reference (branch, tag, or commit SHA)"
+					},
+					"path": {
+						"type": "string",
+						"description": "Path within the repository tree"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					},
+					"download": {
+						"type": "boolean",
+						"default": false,
+						"description": "Serve the blob as an attachment named after the file"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

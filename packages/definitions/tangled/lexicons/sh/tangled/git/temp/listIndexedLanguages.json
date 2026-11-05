@@ -1,0 +1,74 @@
+{
+	"id": "sh.tangled.git.temp.listIndexedLanguages",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["repos"],
+					"properties": {
+						"repos": {
+							"type": "array",
+							"items": {
+								"ref": "#repoLanguages",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 500,
+						"maximum": 1000,
+						"minimum": 1,
+						"description": "Maximum number of repositories to return"
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					}
+				}
+			},
+			"description": "Page through the stored default-branch language breakdown of every indexed repository."
+		},
+		"repoLanguages": {
+			"type": "object",
+			"required": ["commit", "languages", "repo"],
+			"properties": {
+				"repo": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the repository"
+				},
+				"commit": {
+					"type": "string",
+					"description": "Default-branch commit the languages were indexed from"
+				},
+				"languages": {
+					"type": "array",
+					"items": {
+						"ref": "sh.tangled.git.temp.listLanguages#language",
+						"type": "ref"
+					},
+					"description": "Languages ordered by size, largest first"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,175 @@
+{
+	"id": "org.tangled.search.query",
+	"defs": {
+		"hit": {
+			"type": "object",
+			"required": ["nsid", "score", "uri", "value"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"nsid": {
+					"type": "string",
+					"format": "nsid",
+					"description": "Collection of the matched record."
+				},
+				"score": {
+					"type": "unknown",
+					"description": "Relevance score of the hit, a floating-point number where higher ranks first."
+				},
+				"state": {
+					"ref": "org.tangled.track.defs#ticketState",
+					"type": "ref",
+					"description": "Present for tickets."
+				},
+				"value": {
+					"type": "unknown",
+					"description": "Embedded matched record."
+				},
+				"author": {
+					"type": "string",
+					"format": "did",
+					"description": "Present for tickets. The account that opened the ticket, the editor of its first version."
+				},
+				"commentCount": {
+					"type": "integer",
+					"minimum": 0,
+					"description": "Present for tickets."
+				}
+			}
+		},
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "InvalidQuery",
+					"description": "The query failed to parse."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["hits"],
+					"properties": {
+						"hits": {
+							"type": "array",
+							"items": {
+								"ref": "#hit",
+								"type": "ref"
+							}
+						},
+						"total": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Number of matches across all pages."
+						},
+						"cursor": {
+							"type": "string"
+						},
+						"stateCounts": {
+							"ref": "#stateCounts",
+							"type": "ref",
+							"description": "Matches per ticket state, without the state filters."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": [],
+				"properties": {
+					"q": {
+						"type": "string",
+						"maxLength": 1024,
+						"description": "Search query: free text plus key:value qualifiers. See the docs for more information."
+					},
+					"kind": {
+						"type": "string",
+						"description": "Restrict tickets to issues or pull requests.",
+						"knownValues": ["issue", "pull"]
+					},
+					"nsid": {
+						"type": "string",
+						"format": "nsid",
+						"description": "Restrict to records of this collection."
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "Restrict to records under this repo DID."
+					},
+					"sort": {
+						"type": "string",
+						"description": "Result order.",
+						"knownValues": ["created-asc", "created-desc", "relevance"]
+					},
+					"label": {
+						"type": "array",
+						"items": {
+							"type": "string",
+							"maxLength": 256
+						},
+						"maxLength": 16,
+						"description": "Restrict tickets to those with all of these label names. Requires repo."
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 1000,
+						"minimum": 1
+					},
+					"since": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Restrict to records created at or after this time."
+					},
+					"until": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Restrict to records created at or before this time."
+					},
+					"author": {
+						"type": "string",
+						"format": "did",
+						"description": "Restrict to records authored by this DID."
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					},
+					"offset": {
+						"type": "integer",
+						"minimum": 0,
+						"description": "Absolute offset for numbered pages. Mutually exclusive with cursor."
+					}
+				}
+			},
+			"description": "Full-text and faceted search over indexed records."
+		},
+		"stateCounts": {
+			"type": "object",
+			"required": ["closed", "completed", "open"],
+			"properties": {
+				"open": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"closed": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"completed": {
+					"type": "integer",
+					"minimum": 0
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

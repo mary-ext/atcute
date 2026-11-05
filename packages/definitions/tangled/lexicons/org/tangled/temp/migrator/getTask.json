@@ -1,0 +1,33 @@
+{
+	"id": "org.tangled.temp.migrator.getTask",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "TaskNotFound",
+					"description": "Migration task not found."
+				}
+			],
+			"output": {
+				"schema": {
+					"ref": "org.tangled.temp.migrator.defs#task",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["taskId"],
+				"properties": {
+					"taskId": {
+						"type": "string",
+						"description": "ID of the task to fetch."
+					}
+				}
+			},
+			"description": "Fetch a migration task and its jobs."
+		}
+	},
+	"lexicon": 1
+}

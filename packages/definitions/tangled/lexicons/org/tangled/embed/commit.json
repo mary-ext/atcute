@@ -1,0 +1,38 @@
+{
+	"id": "org.tangled.embed.commit",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["commit", "repo"],
+			"properties": {
+				"repo": {
+					"type": "string",
+					"format": "did"
+				},
+				"commit": {
+					"ref": "org.tangled.git.oid",
+					"type": "ref"
+				}
+			}
+		},
+		"view": {
+			"type": "object",
+			"required": ["commit", "repo"],
+			"properties": {
+				"repo": {
+					"type": "string",
+					"format": "did"
+				},
+				"change": {
+					"type": "string",
+					"maxLength": 32
+				},
+				"commit": {
+					"type": "string",
+					"maxLength": 64
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

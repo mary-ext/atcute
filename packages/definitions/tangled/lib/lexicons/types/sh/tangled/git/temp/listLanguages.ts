@@ -12,6 +12,12 @@ const _languageSchema = /*#__PURE__*/ v.object({
 const _mainSchema = /*#__PURE__*/ v.query('sh.tangled.git.temp.listLanguages', {
 	params: /*#__PURE__*/ v.object({
 		/**
+		 * Only serve stored languages, failing with NotIndexed rather than analyzing the commit on demand
+		 *
+		 * @default false
+		 */
+		indexedOnly: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean(), false),
+		/**
 		 * Git reference (branch, tag, or commit SHA)
 		 *
 		 * @default 'HEAD'

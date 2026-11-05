@@ -1,0 +1,116 @@
+{
+	"id": "org.tangled.query.enrichResponse",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["enrich", "xrpc"],
+					"properties": {
+						"xrpc": {
+							"type": "string",
+							"format": "nsid",
+							"description": "NSID of the inner query to run, e.g. org.tangled.repo.listRepos."
+						},
+						"enrich": {
+							"type": "array",
+							"items": {
+								"ref": "#linkDescriptor",
+								"type": "ref"
+							},
+							"description": "Payloads to compute for each found reference."
+						},
+						"params": {
+							"type": "unknown",
+							"description": "Parameters for the inner query, exactly as it declares them."
+						},
+						"viewer": {
+							"type": "string",
+							"format": "did",
+							"description": "DID whose own relation to each reference is looked up for viewer payloads and views. Required when any descriptor requests a viewer payload."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "UnknownQuery",
+					"description": "The xrpc parameter does not name a query this server can execute"
+				},
+				{
+					"name": "InvalidTargetPath",
+					"description": "A targets entry is not a valid record path"
+				},
+				{
+					"name": "InvalidLinkDescriptor",
+					"description": "An enrich entry names an unknown payload type, collection, or path"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["data", "output"],
+					"properties": {
+						"data": {
+							"type": "unknown",
+							"description": "Reference (did or at-uri) -> link source -> payload type nsid -> payload. References no descriptor applies to are absent."
+						},
+						"output": {
+							"type": "unknown",
+							"description": "The inner query's response, unmodified."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Run an XRPC query and hydrate its response with a data sidecar: typed payloads for every did / at-uri / strong-ref found in the response."
+		},
+		"labels": {
+			"type": "object",
+			"required": ["labels"],
+			"properties": {
+				"labels": {
+					"type": "array",
+					"items": {
+						"ref": "com.atproto.label.defs#label",
+						"type": "ref"
+					}
+				}
+			},
+			"description": "Moderation labels the configured labeler applied. Only !hide and !warn are served, takedowns leave subjects out instead. Use collection:. for labels on the record, collection:.repo for labels on its author's account. Absent when there are none."
+		},
+		"linkDescriptor": {
+			"type": "object",
+			"required": ["source", "type"],
+			"properties": {
+				"type": {
+					"type": "string",
+					"description": "NSID of the payload type to produce, which also defines the payload's shape. Results land at data[ref][source][type].",
+					"knownValues": [
+						"blue.microcosm.identity.resolveMiniDoc",
+						"org.tangled.query.enrichResponse#count",
+						"org.tangled.query.enrichResponse#distinctAuthors",
+						"org.tangled.query.enrichResponse#labels",
+						"org.tangled.query.enrichResponse#viewer",
+						"org.tangled.repo.defs#repoViewBasic"
+					]
+				},
+				"source": {
+					"type": "string",
+					"description": "Collection whose records are linked, a colon, then an index-backed path (subject or .repo), or . for the record the reference names, which hydrates into that collection's view."
+				},
+				"targets": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Record paths into the inner response selecting references for this payload. A path can end in an envelope: path:.repo for a ref's author, path:.rkey for the did its rkey names, path:. for the ref itself. All references are considered when omitted."
+				}
+			},
+			"description": "One sidecar payload, computed from the records at a link source whose reference equals the found reference."
+		}
+	},
+	"lexicon": 1
+}

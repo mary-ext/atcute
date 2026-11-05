@@ -1,0 +1,59 @@
+{
+	"id": "org.tangled.temp.migrator.createTask",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["jobs", "requestId"],
+					"properties": {
+						"jobs": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.temp.migrator.defs#newJob",
+								"type": "ref"
+							},
+							"maxLength": 50,
+							"minLength": 1
+						},
+						"requestId": {
+							"type": "string",
+							"maxLength": 128,
+							"minLength": 1,
+							"description": "Idempotency key for this task."
+						},
+						"githubToken": {
+							"type": "string",
+							"description": "GitHub token for reading private source repositories."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Malformed jobs or missing githubToken for a private repository."
+				},
+				{
+					"name": "TaskConflict",
+					"description": "requestId was previously used with different jobs."
+				},
+				{
+					"name": "GrantRequired",
+					"description": "Migrator is not authorized. Body contains the authorization URL."
+				}
+			],
+			"output": {
+				"schema": {
+					"ref": "org.tangled.temp.migrator.defs#task",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"description": "Create a task to migrate repositories into knots."
+		}
+	},
+	"lexicon": 1
+}

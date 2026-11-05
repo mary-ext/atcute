@@ -1,0 +1,24 @@
+{
+	"id": "org.tangled.temp.notification.markEntityRead",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["entityAt"],
+					"properties": {
+						"entityAt": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "at-uri of the issue or pull whose notifications should be marked read."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Mark all of the caller's notifications for a given issue or pull as read. Used when the user visits the entity directly, rather than through a notification."
+		}
+	},
+	"lexicon": 1
+}

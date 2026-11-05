@@ -1,0 +1,49 @@
+{
+	"id": "org.tangled.feed.subscription",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "subject"],
+				"properties": {
+					"ignore": {
+						"type": "boolean",
+						"description": "mute this thread"
+					},
+					"subject": {
+						"refs": ["#record", "#repo"],
+						"type": "union",
+						"closed": true
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		},
+		"repo": {
+			"type": "object",
+			"required": ["did"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		},
+		"record": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

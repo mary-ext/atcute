@@ -1,0 +1,87 @@
+{
+	"id": "org.tangled.graph.listFollows",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["items"],
+					"properties": {
+						"items": {
+							"type": "array",
+							"items": {
+								"ref": "#listItem",
+								"type": "ref"
+							}
+						},
+						"total": {
+							"type": "integer",
+							"description": "Total items in the full list; omitted for filtered or merged views"
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subject"],
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 1000,
+						"minimum": 1
+					},
+					"order": {
+						"type": "string",
+						"default": "desc",
+						"description": "Sort direction by createdAt.",
+						"knownValues": ["asc", "desc"]
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					},
+					"offset": {
+						"type": "integer",
+						"minimum": 0,
+						"description": "Absolute offset for random-access pagination. Mutually exclusive with cursor; offsets drift under concurrent writes, so follow up with the returned cursor."
+					},
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "Followee DID whose inbound follows to list."
+					}
+				}
+			}
+		},
+		"listItem": {
+			"type": "object",
+			"required": ["subject", "uri", "value"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"value": {
+					"type": "unknown",
+					"description": "Embedded sh.tangled.graph.follow record"
+				},
+				"subject": {
+					"type": "string",
+					"format": "did",
+					"description": "The followed account, which the record only names by its rkey"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

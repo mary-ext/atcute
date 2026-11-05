@@ -7,8 +7,11 @@ const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.temp.site.claimDomain
 	input: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/** Desired subdomain label (lowercase letters, digits, and hyphens; 4–63 characters). */
-			subdomain: /*#__PURE__*/ v.string(),
+			/**
+			 * Full domain to claim, e.g. alice.tngl.io. Label rules: 1-63 lowercase letters, digits and hyphens, no
+			 * leading/trailing hyphen.
+			 */
+			domain: /*#__PURE__*/ v.string(),
 		}),
 	},
 	output: null,

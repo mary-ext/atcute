@@ -1,0 +1,165 @@
+{
+	"id": "org.tangled.actor.getProfileActivity",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["months", "truncated"],
+					"properties": {
+						"months": {
+							"type": "array",
+							"items": {
+								"ref": "#activityMonth",
+								"type": "ref"
+							}
+						},
+						"truncated": {
+							"type": "boolean",
+							"description": "True when the result reached the server activity-item safety limit."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["actor"],
+				"properties": {
+					"actor": {
+						"type": "string",
+						"format": "did",
+						"description": "Actor whose activity to return."
+					},
+					"months": {
+						"type": "integer",
+						"default": 7,
+						"maximum": 12,
+						"minimum": 1,
+						"description": "Number of UTC calendar months to include, including the current month."
+					}
+				}
+			},
+			"description": "Get recent Tangled activity for an actor, grouped by calendar month."
+		},
+		"repoRef": {
+			"type": "object",
+			"required": ["name", "ownerDid", "ownerHandle", "uri"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"name": {
+					"type": "string"
+				},
+				"ownerDid": {
+					"type": "string",
+					"format": "did"
+				},
+				"ownerHandle": {
+					"type": "string",
+					"format": "handle"
+				}
+			}
+		},
+		"pullActivity": {
+			"type": "object",
+			"required": ["repo", "state", "title", "uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"repo": {
+					"ref": "#repoRef",
+					"type": "ref"
+				},
+				"state": {
+					"enum": ["closed", "completed", "open"],
+					"type": "string"
+				},
+				"title": {
+					"type": "string"
+				}
+			}
+		},
+		"repoActivity": {
+			"type": "object",
+			"required": ["kind", "repo"],
+			"properties": {
+				"kind": {
+					"type": "string",
+					"knownValues": ["created", "forked"]
+				},
+				"repo": {
+					"ref": "#repoRef",
+					"type": "ref"
+				}
+			}
+		},
+		"activityMonth": {
+			"type": "object",
+			"required": ["commits", "issues", "pulls", "repos", "start"],
+			"properties": {
+				"pulls": {
+					"type": "array",
+					"items": {
+						"ref": "#pullActivity",
+						"type": "ref"
+					}
+				},
+				"repos": {
+					"type": "array",
+					"items": {
+						"ref": "#repoActivity",
+						"type": "ref"
+					}
+				},
+				"start": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Start of this UTC calendar month."
+				},
+				"issues": {
+					"type": "array",
+					"items": {
+						"ref": "#issueActivity",
+						"type": "ref"
+					}
+				},
+				"commits": {
+					"type": "integer",
+					"minimum": 0
+				}
+			}
+		},
+		"issueActivity": {
+			"type": "object",
+			"required": ["repo", "state", "title", "uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"repo": {
+					"ref": "#repoRef",
+					"type": "ref"
+				},
+				"state": {
+					"enum": ["closed", "completed", "open"],
+					"type": "string"
+				},
+				"title": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,65 @@
+{
+	"id": "org.tangled.bobbin.awaitRecord",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "NotSettled",
+					"description": "The record had not reached the appview before the wait ran out"
+				},
+				{
+					"name": "Overloaded",
+					"description": "Too many callers are already waiting, retry later or poll the record instead"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["status"],
+					"properties": {
+						"cid": {
+							"type": "string",
+							"format": "cid",
+							"description": "CID of the revision this result is about."
+						},
+						"detail": {
+							"type": "string",
+							"maxLength": 200,
+							"description": "Opaque error message which can be more detailed than the reason."
+						},
+						"reason": {
+							"type": "string",
+							"description": "Why a rejected record will not appear.",
+							"knownValues": ["missingBody", "notIndexed", "undecodable", "unknownCollection"]
+						},
+						"status": {
+							"type": "string",
+							"description": "What bobbin did with the record.",
+							"knownValues": ["deleted", "indexed", "rejected"]
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["uri"],
+				"properties": {
+					"cid": {
+						"type": "string",
+						"format": "cid",
+						"description": "CID of the revision that was written, as returned by createRecord, putRecord or applyWrites. Omit it only when awaiting a delete, which has no CID. any other responds with whatever revision of the record settles first."
+					},
+					"uri": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the record that was written."
+					}
+				}
+			},
+			"description": "Wait for a record written to a PDS to reach this bobbin instance, then report what happened to it."
+		}
+	},
+	"lexicon": 1
+}

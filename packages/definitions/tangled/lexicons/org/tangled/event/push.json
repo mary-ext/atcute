@@ -1,0 +1,41 @@
+{
+	"id": "org.tangled.event.push",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["newSha", "oldSha", "ref", "repo"],
+			"properties": {
+				"ref": {
+					"type": "string"
+				},
+				"repo": {
+					"type": "string",
+					"format": "did"
+				},
+				"actor": {
+					"type": "string",
+					"format": "did",
+					"description": "The account that pushed."
+				},
+				"newSha": {
+					"type": "string"
+				},
+				"oldSha": {
+					"type": "string"
+				},
+				"pushOptions": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"maxLength": 50,
+					"description": "The push options sent with the push, omitted when there were none."
+				}
+			},
+			"description": "When a repository ref is updated."
+		}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
+}

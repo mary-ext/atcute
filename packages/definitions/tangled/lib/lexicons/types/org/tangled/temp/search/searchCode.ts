@@ -2,6 +2,8 @@ import type {} from '@atcute/lexicons';
 import type {} from '@atcute/lexicons/ambient';
 import * as v from '@atcute/lexicons/validations';
 
+import * as OrgTangledRepoDefs from '../../repo/defs.ts';
+
 const _chunkSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('org.tangled.temp.search.searchCode#chunk')),
 	/** Source lines for this match chunk. */
@@ -15,15 +17,23 @@ const _chunkSchema = /*#__PURE__*/ v.object({
 });
 const _fileResultSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('org.tangled.temp.search.searchCode#fileResult')),
+	branches: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
+	/** set for content matches */
 	get chunks() {
-		return /*#__PURE__*/ v.array(chunkSchema);
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(chunkSchema));
 	},
+	commit: /*#__PURE__*/ v.string(),
 	/** Detected programming language. */
 	language: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 	/** File path relative to repository root. */
 	path: /*#__PURE__*/ v.string(),
-	/** DID of the repository as minted by the knot. */
-	repoDid: /*#__PURE__*/ v.didString(),
+	/** set for a filename match */
+	get ranges() {
+		return /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(highlightSchema));
+	},
+	get repo() {
+		return OrgTangledRepoDefs.repoViewBasicSchema;
+	},
 });
 const _highlightSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('org.tangled.temp.search.searchCode#highlight')),
@@ -35,8 +45,6 @@ const _highlightSchema = /*#__PURE__*/ v.object({
 const _mainSchema = /*#__PURE__*/ v.query('org.tangled.temp.search.searchCode', {
 	params: /*#__PURE__*/ v.object({
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
-		/** Restrict search to a specific programming language (e.g. 'go', 'rust'). */
-		lang: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
 		 * @minimum 1
 		 * @maximum 100
@@ -47,7 +55,7 @@ const _mainSchema = /*#__PURE__*/ v.query('org.tangled.temp.search.searchCode', 
 		/** Search query string. */
 		q: /*#__PURE__*/ v.string(),
 		/** Restrict search to a specific repository, by its DID. */
-		repoDid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
+		repo: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.didString()),
 	}),
 	output: {
 		type: 'lex',

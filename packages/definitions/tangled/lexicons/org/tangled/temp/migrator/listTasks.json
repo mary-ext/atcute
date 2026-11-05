@@ -1,0 +1,38 @@
+{
+	"id": "org.tangled.temp.migrator.listTasks",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["tasks"],
+					"properties": {
+						"tasks": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.temp.migrator.defs#task",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 20,
+						"maximum": 100,
+						"minimum": 1,
+						"description": "Maximum number of tasks to return."
+					}
+				}
+			},
+			"description": "List migration tasks for the caller."
+		}
+	},
+	"lexicon": 1
+}

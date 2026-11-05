@@ -1,0 +1,36 @@
+{
+	"id": "org.tangled.temp.server.cancelHandover",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["repoDid"],
+					"properties": {
+						"repoDid": {
+							"type": "string",
+							"format": "did"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["repoDid"],
+					"properties": {
+						"repoDid": {
+							"type": "string",
+							"format": "did"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Abandoning a repo's handover job mid-way; sidecar is removed, boot replay will stop retrying sidecarring. Only a knot admin should/could ever call this."
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,37 @@
+{
+	"id": "org.tangled.webhook.listWebhooks",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["webhooks"],
+					"properties": {
+						"webhooks": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.webhook.defs#webhook",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository as minted by the knot."
+					}
+				}
+			},
+			"description": "List webhooks configured for a repository."
+		}
+	},
+	"lexicon": 1
+}

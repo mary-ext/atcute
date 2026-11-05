@@ -1,0 +1,103 @@
+{
+	"id": "sh.tangled.repo.listCobVersions",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "The URI isn't an AT-URI, or its collection isn't a versioned one."
+				},
+				{
+					"name": "NotFound",
+					"description": "The knot doesn't have a record at that URI."
+				},
+				{
+					"name": "ProjectionWarming"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["uri", "versions"],
+					"properties": {
+						"uri": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"total": {
+							"type": "integer",
+							"description": "How many versions the record has, whatever the page."
+						},
+						"cursor": {
+							"type": "string",
+							"description": "Left out when the page already reaches the last version in the requested order."
+						},
+						"versions": {
+							"type": "array",
+							"items": {
+								"ref": "sh.tangled.repo.listCobVersions#version",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["uri"],
+				"properties": {
+					"uri": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of a record in a repository this knot hosts, its repository authority a DID."
+					},
+					"limit": {
+						"type": "integer",
+						"default": 100,
+						"maximum": 500,
+						"minimum": 1
+					},
+					"order": {
+						"type": "string",
+						"default": "asc",
+						"description": "Which end the walk starts from. `desc` puts the newest version first, which is where the version you just wrote is.",
+						"knownValues": ["asc", "desc"]
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pass the cursor from one page into the next query to keep walking versions."
+					}
+				}
+			},
+			"description": "Every version of a COB record! Give a record's URI and get back every saved version of that record, oldest to newest unless `order` says otherwise. Fetch a version's CID through `com.atproto.sync.getBlocks` for as long as the knot still has it."
+		},
+		"version": {
+			"type": "object",
+			"required": ["changeId", "createdAt", "editor"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid",
+					"description": "Missing once the version is removed, or when the change is a deletion."
+				},
+				"editor": {
+					"type": "string",
+					"format": "did",
+					"description": "The DID of the account that made this version."
+				},
+				"changeId": {
+					"type": "string",
+					"description": "Git Object ID of the change associated with this version."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "When this knot wrote the commit this version rides in. Not the record's own `createdAt`."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

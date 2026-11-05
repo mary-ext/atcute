@@ -1,0 +1,69 @@
+{
+	"id": "sh.tangled.git.temp2.getInterdiff",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RevisionNotFound",
+					"description": "One or both revisions not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				},
+				{
+					"name": "CompareError",
+					"description": "Failed to compare revisions"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["diffs"],
+					"properties": {
+						"diffs": {
+							"type": "array",
+							"items": {
+								"ref": "sh.tangled.git.defs#fileDiff",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["baseCommit1", "baseCommit2", "baseRepo", "headCommit1", "headCommit2", "headRepo"],
+				"properties": {
+					"baseRepo": {
+						"type": "string",
+						"format": "did"
+					},
+					"headRepo": {
+						"type": "string",
+						"format": "did"
+					},
+					"baseCommit1": {
+						"type": "string"
+					},
+					"baseCommit2": {
+						"type": "string"
+					},
+					"headCommit1": {
+						"type": "string"
+					},
+					"headCommit2": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

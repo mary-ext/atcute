@@ -6,11 +6,11 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["code", "password", "username"],
+					"required": ["password", "token", "username"],
 					"properties": {
-						"code": {
+						"token": {
 							"type": "string",
-							"description": "Verification code from the signup email."
+							"description": "Verification token from the emailed link."
 						},
 						"password": {
 							"type": "string",
@@ -18,7 +18,11 @@
 						},
 						"username": {
 							"type": "string",
-							"description": "Desired username; the assigned handle is <username>.<pds domain>."
+							"description": "Desired username; the handle is <username>.<pds domain>."
+						},
+						"requestUri": {
+							"type": "string",
+							"description": "request_uri of the browser's pushed OAuth authorization request at the PDS. When the PDS supports it, the new account authorizes that request without the PDS sign-in and consent screens."
 						}
 					}
 				},
@@ -30,16 +34,24 @@
 					"description": "Signup is not currently enabled on this service."
 				},
 				{
-					"name": "InvalidUsername",
-					"description": "Username must be 4-63 characters, lowercase letters, digits, or hyphens, and cannot start or end with a hyphen."
-				},
-				{
-					"name": "UsernameUnavailable",
-					"description": "This username is reserved or already taken."
-				},
-				{
 					"name": "InvalidCode",
-					"description": "The verification code is invalid or has expired."
+					"description": "The verification link is invalid or expired."
+				},
+				{
+					"name": "InvalidUsername",
+					"description": "The username is invalid or not allowed."
+				},
+				{
+					"name": "UsernameNotAvailable",
+					"description": "The username is already taken."
+				},
+				{
+					"name": "InvalidPassword",
+					"description": "The password is not allowed."
+				},
+				{
+					"name": "EmailAlreadyRegistered",
+					"description": "An account already exists for this email."
 				}
 			],
 			"output": {
@@ -55,12 +67,33 @@
 						"handle": {
 							"type": "string",
 							"description": "The assigned handle, <username>.<pds domain>."
+						},
+						"authorization": {
+							"ref": "#authorization",
+							"type": "ref",
+							"description": "Present when the PDS authorized requestUri for the new account. Without it the browser signs in through the PDS."
 						}
 					}
 				},
 				"encoding": "application/json"
 			},
-			"description": "Complete signup: provision the PDS account for the chosen username using the verification code from the signup email."
+			"description": "Complete signup with the link token, choosing a username and password. Deliberi provisions the PDS account internally using a pre-minted invite code."
+		},
+		"authorization": {
+			"type": "object",
+			"required": ["code", "iss", "state"],
+			"properties": {
+				"iss": {
+					"type": "string"
+				},
+				"code": {
+					"type": "string"
+				},
+				"state": {
+					"type": "string"
+				}
+			},
+			"description": "The OAuth authorization response for requestUri, as the PDS would have put it in the redirect."
 		}
 	},
 	"lexicon": 1

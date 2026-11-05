@@ -1,0 +1,63 @@
+{
+	"id": "org.tangled.actor.searchActorsTypeahead",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["actors"],
+					"properties": {
+						"actors": {
+							"type": "array",
+							"items": {
+								"ref": "#actor",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["q"],
+				"properties": {
+					"q": {
+						"type": "string",
+						"maxLength": 254,
+						"minLength": 1,
+						"description": "The beginning of a handle. A leading @ is optional."
+					},
+					"limit": {
+						"type": "integer",
+						"default": 10,
+						"maximum": 100,
+						"minimum": 1
+					}
+				}
+			},
+			"description": "Find actors by their verified handle."
+		},
+		"actor": {
+			"type": "object",
+			"required": ["did", "handle", "uri"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "AT-URI for the actor's Tangled profile."
+				},
+				"handle": {
+					"type": "string",
+					"format": "handle"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

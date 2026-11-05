@@ -1,0 +1,51 @@
+{
+	"id": "org.tangled.temp.git.formatPatch",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RevisionNotFound",
+					"description": "One or both revisions not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				},
+				{
+					"name": "PatchTooLarge",
+					"description": "Range has more commits than the limit"
+				}
+			],
+			"output": {
+				"encoding": "*/*",
+				"description": "Patch series as text/plain"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["from", "repo", "to"],
+				"properties": {
+					"to": {
+						"type": "string",
+						"description": "Revision the series ends at (inclusive)"
+					},
+					"from": {
+						"type": "string",
+						"description": "Revision the series starts after (exclusive)"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					}
+				}
+			},
+			"description": "Serve the commits reachable from 'to' but not from 'from' as a git format-patch mailbox, oldest first."
+		}
+	},
+	"lexicon": 1
+}

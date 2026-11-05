@@ -1,0 +1,33 @@
+{
+	"id": "org.tangled.temp.server.ackHandover",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["ackedAt", "records", "repoDid", "signature"],
+					"properties": {
+						"ackedAt": {
+							"type": "integer",
+							"description": "Ack time in Unix seconds."
+						},
+						"records": {
+							"type": "integer"
+						},
+						"repoDid": {
+							"type": "string",
+							"format": "did"
+						},
+						"signature": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Upgrading knot sends this once it is ready to serve *every* fostered record of a repo - at exact CIDs the foster knot was giving out at ingestion time. The signature thingy is this 3rd party requesting-knot's key over dag-cbor of the same fields using the context org.tangled.temp.handover.ack.v1, such that the foster knot can verify it against the requester's did:web doc."
+		}
+	},
+	"lexicon": 1
+}

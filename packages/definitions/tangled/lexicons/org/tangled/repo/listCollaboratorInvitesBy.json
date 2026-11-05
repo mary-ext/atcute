@@ -1,0 +1,81 @@
+{
+	"id": "org.tangled.repo.listCollaboratorInvitesBy",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["items", "pending", "truncated"],
+					"properties": {
+						"items": {
+							"type": "array",
+							"items": {
+								"ref": "#inviteItem",
+								"type": "ref"
+							}
+						},
+						"pending": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"format": "did"
+							},
+							"description": "Knots that this index hasn't read yet"
+						},
+						"truncated": {
+							"type": "boolean",
+							"description": "Per-subject dropped offers from items. If truncated is true, missing offers won't say if they were withdrawn, same with pending knots."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subject"],
+				"properties": {
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "Actor DID offered collaboration."
+					}
+				}
+			},
+			"description": "Collaboration offers an actor DID has waiting for them. The inverse of sh.tangled.repo.listCollaboratorInvites, which knots serve only for their own repo."
+		},
+		"inviteItem": {
+			"type": "object",
+			"required": ["addedBy", "createdAt", "knot", "repo", "uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "Invite record on the repository."
+				},
+				"knot": {
+					"type": "string",
+					"format": "did",
+					"description": "did:web of knot hosting this repo."
+				},
+				"repo": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of repo that made the offer."
+				},
+				"addedBy": {
+					"type": "string",
+					"format": "did",
+					"description": "DID that made the offer."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "When the repository made the offer. This listing sorts it by newest first."
+				}
+			},
+			"description": "An offer awaiting the subject's acceptance."
+		}
+	},
+	"lexicon": 1
+}

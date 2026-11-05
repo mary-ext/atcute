@@ -1,0 +1,67 @@
+{
+	"id": "org.tangled.git.getBranch",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "BranchNotFound",
+					"description": "Branch not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["author", "hash", "message", "name", "totalCommits"],
+					"properties": {
+						"hash": {
+							"type": "string",
+							"description": "Latest commit hash on this branch"
+						},
+						"name": {
+							"type": "string",
+							"description": "Branch name"
+						},
+						"author": {
+							"ref": "org.tangled.git.defs#signature",
+							"type": "ref"
+						},
+						"message": {
+							"type": "string",
+							"description": "Latest commit message"
+						},
+						"totalCommits": {
+							"type": "integer",
+							"description": "Number of commits reachable from this branch"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["name", "repo"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "Branch name to get information for"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -13,6 +13,10 @@
 					"description": "Git reference not found"
 				},
 				{
+					"name": "NotIndexed",
+					"description": "No stored languages for this commit yet, only with indexedOnly"
+				},
+				{
 					"name": "InvalidRequest",
 					"description": "Invalid request parameters"
 				}
@@ -54,6 +58,11 @@
 						"type": "string",
 						"format": "did",
 						"description": "DID of the repository"
+					},
+					"indexedOnly": {
+						"type": "boolean",
+						"default": false,
+						"description": "Only serve stored languages, failing with NotIndexed rather than analyzing the commit on demand"
 					}
 				}
 			}

@@ -1,0 +1,38 @@
+{
+	"id": "org.tangled.feed.getStar",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["uri"],
+					"properties": {
+						"uri": {
+							"type": "string",
+							"format": "at-uri",
+							"description": "Uri of actor's star record for subject."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["actor", "subject"],
+				"properties": {
+					"actor": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the potential stargazer."
+					},
+					"subject": {
+						"type": "string",
+						"description": "Repo DID to check."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,35 @@
+{
+	"id": "org.tangled.actor.getTrending",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["people", "repos"],
+					"properties": {
+						"repos": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.repo.defs#repoViewBasic",
+								"type": "ref"
+							},
+							"maxLength": 4
+						},
+						"people": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.actor.defs#profileViewDetailed",
+								"type": "ref"
+							},
+							"maxLength": 5
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Get trending people and repositories."
+		}
+	},
+	"lexicon": 1
+}

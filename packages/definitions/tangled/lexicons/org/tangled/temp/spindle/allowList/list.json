@@ -1,0 +1,27 @@
+{
+	"id": "org.tangled.temp.spindle.allowList.list",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["dids"],
+					"properties": {
+						"dids": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"format": "did"
+							},
+							"description": "Allow-list entries."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Read this spindle's allow-list. Only callable by a spindle admin."
+		}
+	},
+	"lexicon": 1
+}

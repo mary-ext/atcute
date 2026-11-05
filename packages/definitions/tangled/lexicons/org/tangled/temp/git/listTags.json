@@ -1,0 +1,117 @@
+{
+	"id": "org.tangled.temp.git.listTags",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["tags", "total"],
+					"properties": {
+						"tags": {
+							"type": "array",
+							"items": {
+								"ref": "#tagInfo",
+								"type": "ref"
+							}
+						},
+						"total": {
+							"type": "integer",
+							"description": "Total number of tags in the repository"
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1,
+						"description": "Maximum number of tags to return"
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					}
+				}
+			}
+		},
+		"tagInfo": {
+			"type": "object",
+			"required": ["author", "message", "name", "oid"],
+			"properties": {
+				"oid": {
+					"type": "string",
+					"description": "Latest commit oid on this tag"
+				},
+				"name": {
+					"type": "string",
+					"description": "Tag name"
+				},
+				"author": {
+					"ref": "org.tangled.git.defs#signature",
+					"type": "ref"
+				},
+				"message": {
+					"type": "string",
+					"description": "Latest commit message"
+				},
+				"artifacts": {
+					"type": "array",
+					"items": {
+						"ref": "org.tangled.repo.listArtifacts#listItem",
+						"type": "ref"
+					},
+					"description": "org.tangled.repo.artifact records whose subject is this tag's oid"
+				},
+				"annotation": {
+					"ref": "#annotation",
+					"type": "ref",
+					"description": "Present only for annotated tags"
+				}
+			}
+		},
+		"annotation": {
+			"type": "object",
+			"required": ["message"],
+			"properties": {
+				"oid": {
+					"type": "string",
+					"description": "Tag object oid"
+				},
+				"tagger": {
+					"ref": "org.tangled.git.defs#signature",
+					"type": "ref"
+				},
+				"message": {
+					"type": "string",
+					"description": "Tag message"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,102 @@
+{
+	"id": "org.tangled.repo.defs",
+	"defs": {
+		"language": {
+			"type": "object",
+			"required": ["name", "size"],
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"size": {
+					"type": "integer",
+					"description": "Total size of files in this language, in bytes."
+				}
+			}
+		},
+		"viewerState": {
+			"type": "object",
+			"properties": {
+				"fork": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"star": {
+					"type": "string",
+					"format": "at-uri"
+				}
+			},
+			"description": "Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests."
+		},
+		"repoViewBasic": {
+			"type": "object",
+			"required": ["createdAt", "did", "owner", "slug"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did"
+				},
+				"slug": {
+					"type": "string"
+				},
+				"owner": {
+					"ref": "org.tangled.actor.defs#profileViewBasic",
+					"type": "ref"
+				},
+				"viewer": {
+					"ref": "#viewerState",
+					"type": "ref"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"forkCount": {
+					"type": "integer"
+				},
+				"isStarred": {
+					"type": "boolean"
+				},
+				"starCount": {
+					"type": "integer"
+				},
+				"description": {
+					"type": "string"
+				},
+				"openPullCount": {
+					"type": "integer"
+				},
+				"openIssueCount": {
+					"type": "integer"
+				},
+				"primaryLanguage": {
+					"type": "string",
+					"description": "Largest language on the default branch, by bytes."
+				}
+			}
+		},
+		"sourceTangled": {
+			"type": "object",
+			"required": ["did"],
+			"properties": {
+				"did": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the repo identity"
+				}
+			}
+		},
+		"sourceExternal": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"uri": {
+					"type": "string",
+					"format": "uri",
+					"description": "git-clone uri of the repo"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

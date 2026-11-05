@@ -1,0 +1,29 @@
+{
+	"id": "org.tangled.graph.attestation",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "subject"],
+				"properties": {
+					"change": {
+						"type": "string",
+						"description": "The Git Object ID of the COB change that made the knot-side record."
+					},
+					"subject": {
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			},
+			"description": "Attesting that I the user claim a given record over on a knot! A knot will claim that I wrote something, but it's only really tied to me if I too say that I wrote it. The 'change' field is literally the Git Object ID of the Collaborative Object (COB) change that made the knot-side record."
+		}
+	},
+	"lexicon": 1
+}

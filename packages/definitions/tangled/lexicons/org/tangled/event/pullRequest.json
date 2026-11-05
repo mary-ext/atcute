@@ -1,0 +1,41 @@
+{
+	"id": "org.tangled.event.pullRequest",
+	"defs": {
+		"main": {
+			"type": "object",
+			"properties": {
+				"pull": {
+					"type": "string",
+					"format": "at-uri",
+					"description": "AT-URI of the pull request record this run belongs to."
+				},
+				"action": {
+					"enum": ["closed", "merged", "opened", "reopened", "synchronize"],
+					"type": "string",
+					"description": "The pull request lifecycle action that produced this trigger."
+				},
+				"sourceSha": {
+					"type": "string",
+					"maxLength": 64,
+					"minLength": 40,
+					"description": "Commit id of the pull request head."
+				},
+				"sourceRepo": {
+					"type": "string",
+					"format": "did",
+					"description": "Repository DID to check out code and workflow definitions from, if different from the target repo."
+				},
+				"sourceBranch": {
+					"type": "string"
+				},
+				"targetBranch": {
+					"type": "string"
+				}
+			},
+			"description": "When pull request is created or resubmitted."
+		}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
+}

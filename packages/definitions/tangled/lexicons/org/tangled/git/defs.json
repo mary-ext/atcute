@@ -1,0 +1,200 @@
+{
+	"id": "org.tangled.git.defs",
+	"defs": {
+		"commit": {
+			"type": "object",
+			"required": ["author", "committer", "hash", "message", "tree"],
+			"properties": {
+				"hash": {
+					"type": "string",
+					"description": "Commit Object ID"
+				},
+				"tree": {
+					"type": "string",
+					"description": "Tree Object ID"
+				},
+				"author": {
+					"ref": "#signature",
+					"type": "ref"
+				},
+				"message": {
+					"type": "string"
+				},
+				"committer": {
+					"ref": "#signature",
+					"type": "ref"
+				}
+			}
+		},
+		"diffSrc": {
+			"type": "object",
+			"required": ["isBinary", "isSubmodule", "oid", "path", "size"],
+			"properties": {
+				"oid": {
+					"type": "string",
+					"description": "Blob oid, or the commit oid for a submodule"
+				},
+				"path": {
+					"type": "string"
+				},
+				"size": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"content": {
+					"type": "string",
+					"description": "Inlined content. Used on interdiff's LHS."
+				},
+				"isBinary": {
+					"type": "boolean"
+				},
+				"isSubmodule": {
+					"type": "boolean"
+				}
+			},
+			"description": "One side of a file diff."
+		},
+		"diffHunk": {
+			"type": "object",
+			"required": ["lines", "novelLhs", "novelRhs"],
+			"properties": {
+				"lines": {
+					"type": "array",
+					"items": {
+						"ref": "#linePair",
+						"type": "ref"
+					}
+				},
+				"novelLhs": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"minimum": 0
+					},
+					"description": "0-based line numbers holding novel content on the left side"
+				},
+				"novelRhs": {
+					"type": "array",
+					"items": {
+						"type": "integer",
+						"minimum": 0
+					},
+					"description": "0-based line numbers holding novel content on the right side"
+				}
+			}
+		},
+		"diffStat": {
+			"type": "object",
+			"required": ["deletions", "filesChanged", "insertions"],
+			"properties": {
+				"deletions": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"insertions": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"filesChanged": {
+					"type": "integer",
+					"minimum": 0
+				}
+			}
+		},
+		"fileDiff": {
+			"type": "object",
+			"required": ["hasSyntacticChanges", "hunks", "lhsSrc", "rhsSrc"],
+			"properties": {
+				"hunks": {
+					"type": "array",
+					"items": {
+						"ref": "#diffHunk",
+						"type": "ref"
+					}
+				},
+				"lhsSrc": {
+					"ref": "#diffSrc",
+					"type": "ref"
+				},
+				"rhsSrc": {
+					"ref": "#diffSrc",
+					"type": "ref"
+				},
+				"hasByteChanges": {
+					"ref": "#byteChanges",
+					"type": "ref",
+					"description": "Byte count per side, present only when the two sides differ"
+				},
+				"hasSyntacticChanges": {
+					"type": "boolean"
+				}
+			}
+		},
+		"linePair": {
+			"type": "object",
+			"properties": {
+				"lhs": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"rhs": {
+					"type": "integer",
+					"minimum": 0
+				}
+			},
+			"description": "One aligned line pair; a side is absent when that side has no line."
+		},
+		"signature": {
+			"type": "object",
+			"required": ["email", "name", "when"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Person name"
+				},
+				"when": {
+					"type": "string",
+					"format": "datetime",
+					"description": "Timestamp of the signature"
+				},
+				"email": {
+					"type": "string",
+					"description": "Person email"
+				}
+			}
+		},
+		"submodule": {
+			"type": "object",
+			"required": ["name", "url"],
+			"properties": {
+				"url": {
+					"type": "string",
+					"description": "Submodule repository URL"
+				},
+				"name": {
+					"type": "string",
+					"description": "Submodule name"
+				},
+				"branch": {
+					"type": "string",
+					"description": "Branch to track in the submodule"
+				}
+			}
+		},
+		"byteChanges": {
+			"type": "object",
+			"required": ["lhs", "rhs"],
+			"properties": {
+				"lhs": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"rhs": {
+					"type": "integer",
+					"minimum": 0
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

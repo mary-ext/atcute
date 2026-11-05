@@ -58,15 +58,14 @@
 			"properties": {
 				"uri": {
 					"type": "string",
-					"format": "at-uri",
-					"description": "at-uri of this notification; the stable key for read/unread state."
+					"description": "notification key; pass it back to updateSeen and deleteNotification."
 				},
 				"read": {
 					"type": "boolean"
 				},
 				"type": {
 					"type": "string",
-					"description": "Notification type: repo_starred, issue_created, issue_commented, issue_closed, issue_reopen, issue_assigned, issue_unassigned, pull_created, pull_commented, pull_merged, pull_closed, pull_reopen, pull_assigned, pull_unassigned, followed, user_mentioned."
+					"description": "Notification type: repo_starred, issue_created, issue_commented, issue_closed, issue_reopen, issue_assigned, issue_unassigned, pull_created, pull_commented, pull_merged, pull_closed, pull_reopen, pull_assigned, pull_unassigned, followed, user_mentioned, knot_invited, collaborator_invited."
 				},
 				"pullAt": {
 					"type": "string",

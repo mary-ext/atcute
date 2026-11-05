@@ -1,0 +1,45 @@
+{
+	"id": "org.tangled.snippet.string",
+	"defs": {
+		"main": {
+			"key": "any",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "snippet"],
+				"properties": {
+					"snippet": {
+						"refs": ["#textFile"],
+						"type": "union"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					},
+					"description": {
+						"type": "string",
+						"maxGraphemes": 256
+					}
+				}
+			},
+			"description": "TID is preferred for record-key, but not enforced."
+		},
+		"textFile": {
+			"type": "object",
+			"required": ["content", "name"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "file name",
+					"maxGraphemes": 140
+				},
+				"content": {
+					"type": "blob",
+					"accept": ["text/plain"],
+					"maxLength": 1000000
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

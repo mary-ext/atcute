@@ -1,0 +1,91 @@
+{
+	"id": "sh.tangled.git.mergeCommit",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["source", "style", "target"],
+					"properties": {
+						"style": {
+							"enum": [
+								"fast-forward-only",
+								"merge",
+								"rebase",
+								"rebase-merge",
+								"squash-rebase",
+								"squash-rebase-merge"
+							],
+							"type": "string"
+						},
+						"source": {
+							"ref": "#source",
+							"type": "ref"
+						},
+						"target": {
+							"ref": "#target",
+							"type": "ref"
+						},
+						"mergeCommit": {
+							"ref": "#mergeCommitContent",
+							"type": "ref",
+							"description": "Merge commit content. Used when merge commit is created."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "DEPRECATED: use `org.tangled.temp.git.mergeCommit`"
+		},
+		"source": {
+			"type": "object",
+			"required": ["commit", "repo"],
+			"properties": {
+				"repo": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of source git repository"
+				},
+				"commit": {
+					"type": "string",
+					"description": "Head commit ID to merge"
+				}
+			}
+		},
+		"target": {
+			"type": "object",
+			"required": ["branch", "commit", "repo"],
+			"properties": {
+				"repo": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of target git repository"
+				},
+				"branch": {
+					"type": "string",
+					"description": "Target branch to merge into"
+				},
+				"commit": {
+					"type": "string",
+					"description": "Head commit ID of target branch"
+				}
+			}
+		},
+		"mergeCommitContent": {
+			"type": "object",
+			"properties": {
+				"author": {
+					"ref": "sh.tangled.git.defs#signature",
+					"type": "ref"
+				},
+				"message": {
+					"type": "string",
+					"maxLength": 1000000
+				}
+			},
+			"description": "Merge commit content. Used when merge commit is created."
+		}
+	},
+	"lexicon": 1
+}

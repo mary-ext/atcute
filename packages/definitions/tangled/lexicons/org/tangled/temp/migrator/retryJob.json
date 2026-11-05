@@ -1,0 +1,48 @@
+{
+	"id": "org.tangled.temp.migrator.retryJob",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["jobId", "taskId"],
+					"properties": {
+						"jobId": {
+							"type": "string",
+							"description": "ID of the job to retry."
+						},
+						"taskId": {
+							"type": "string",
+							"description": "ID of the task the job belongs to."
+						},
+						"githubToken": {
+							"type": "string",
+							"description": "GitHub token for retrying a private repository."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "TaskNotFound",
+					"description": "Migration task not found."
+				},
+				{
+					"name": "JobNotRetryable",
+					"description": "Job is completed or currently running."
+				}
+			],
+			"output": {
+				"schema": {
+					"ref": "org.tangled.temp.migrator.defs#task",
+					"type": "ref"
+				},
+				"encoding": "application/json"
+			},
+			"description": "Retry a failed or unauthorized migration job."
+		}
+	},
+	"lexicon": 1
+}

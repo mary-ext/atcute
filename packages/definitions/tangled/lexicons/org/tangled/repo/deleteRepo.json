@@ -1,0 +1,27 @@
+{
+	"id": "org.tangled.repo.deleteRepo",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did"
+						},
+						"force": {
+							"type": "boolean",
+							"description": "Skip the check for a declaration record on the owner's PDS. Knot admins only."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Delete a repository"
+		}
+	},
+	"lexicon": 1
+}

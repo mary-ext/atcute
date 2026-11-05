@@ -1,0 +1,21 @@
+{
+	"id": "org.tangled.graph.collaborator",
+	"defs": {
+		"main": {
+			"key": "any",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt"],
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			},
+			"description": "Offer of collaboration on this repo, w/ normalized invitee-DID as rkey."
+		}
+	},
+	"lexicon": 1
+}

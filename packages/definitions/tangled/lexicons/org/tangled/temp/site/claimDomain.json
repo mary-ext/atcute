@@ -6,11 +6,11 @@
 			"input": {
 				"schema": {
 					"type": "object",
-					"required": ["subdomain"],
+					"required": ["domain"],
 					"properties": {
-						"subdomain": {
+						"domain": {
 							"type": "string",
-							"description": "Desired subdomain label (lowercase letters, digits, and hyphens; 4–63 characters)."
+							"description": "Full domain to claim, e.g. alice.tngl.io. Label rules: 1-63 lowercase letters, digits and hyphens, no leading/trailing hyphen."
 						}
 					}
 				},
@@ -19,11 +19,11 @@
 			"errors": [
 				{
 					"name": "DomainTaken",
-					"description": "That subdomain is already claimed by another user."
+					"description": "That domain is already claimed by another user."
 				},
 				{
 					"name": "DomainCooldown",
-					"description": "That subdomain was recently released and is in a cooldown period."
+					"description": "That domain was recently released and is in a 30-day cooldown period."
 				},
 				{
 					"name": "AlreadyClaimed",
@@ -31,10 +31,18 @@
 				},
 				{
 					"name": "InvalidSubdomain",
-					"description": "The subdomain label is invalid."
+					"description": "The domain label or TLD is invalid."
+				},
+				{
+					"name": "HandleNotOwned",
+					"description": "The handle authority identifies a different account."
+				},
+				{
+					"name": "HandleUnknown",
+					"description": "The handle authority does not know this handle."
 				}
 			],
-			"description": "Claim a subdomain under the sites domain (e.g. 'alice' → alice.sites.tangled.sh) for the authenticated user."
+			"description": "Claim a full sites domain (e.g. alice.tngl.io) for the authenticated user. A claim is one per account. tngl.sh handles require confirmation from the handle authority and cannot be released."
 		}
 	},
 	"lexicon": 1

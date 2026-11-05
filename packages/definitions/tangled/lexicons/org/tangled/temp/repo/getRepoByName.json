@@ -1,0 +1,75 @@
+{
+	"id": "org.tangled.temp.repo.getRepoByName",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["uri", "value"],
+					"properties": {
+						"cid": {
+							"type": "string",
+							"format": "cid"
+						},
+						"git": {
+							"ref": "#gitInfo",
+							"type": "ref"
+						},
+						"uri": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"knot": {
+							"type": "string",
+							"description": "Host of the knot named by the #tangled_knot service in the repo's DID document. Absent when it names none."
+						},
+						"value": {
+							"type": "unknown",
+							"description": "Embedded org.tangled.repo.manifest record."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["name", "owner"],
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "Name of the repo as it appears in its url."
+					},
+					"owner": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the account that owns the repo."
+					}
+				}
+			}
+		},
+		"gitInfo": {
+			"type": "object",
+			"required": ["defaultBranch", "isEmpty"],
+			"properties": {
+				"isEmpty": {
+					"type": "boolean",
+					"description": "True if `refs` in `org.tangled.git.refs/self` record is empty."
+				},
+				"languages": {
+					"type": "array",
+					"items": {
+						"ref": "org.tangled.repo.defs#language",
+						"type": "ref"
+					},
+					"description": "Languages on the default branch ordered by size, largest first. Absent until the mirror has indexed the repo."
+				},
+				"defaultBranch": {
+					"type": "string",
+					"description": "Default branch name from `org.tangled.git.refs/self` record."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

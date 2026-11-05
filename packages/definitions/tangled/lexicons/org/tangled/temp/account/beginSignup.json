@@ -36,6 +36,10 @@
 				{
 					"name": "EmailAlreadyRegistered",
 					"description": "An account already exists for this email address."
+				},
+				{
+					"name": "TooManyRequests",
+					"description": "A signup email was sent for this address very recently; wait before asking for another."
 				}
 			],
 			"description": "Begin signup: validate the Turnstile token and email a verification code to the address."

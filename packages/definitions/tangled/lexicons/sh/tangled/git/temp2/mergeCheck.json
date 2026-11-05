@@ -1,0 +1,84 @@
+{
+	"id": "sh.tangled.git.temp2.mergeCheck",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RevisionNotFound",
+					"description": "One or both commits not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["conflicts", "isConflicted"],
+					"properties": {
+						"message": {
+							"type": "string",
+							"description": "Additional detail, e.g. unrelated histories"
+						},
+						"conflicts": {
+							"type": "array",
+							"items": {
+								"ref": "#conflict",
+								"type": "ref"
+							}
+						},
+						"isConflicted": {
+							"type": "boolean",
+							"description": "Whether the merge has unresolved conflicts"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["sourceCommit", "sourceRepo", "targetCommit", "targetRepo"],
+				"properties": {
+					"sourceRepo": {
+						"type": "string",
+						"format": "did"
+					},
+					"targetRepo": {
+						"type": "string",
+						"format": "did"
+					},
+					"sourceCommit": {
+						"type": "string",
+						"description": "Source commit to merge (theirs)"
+					},
+					"targetCommit": {
+						"type": "string",
+						"description": "Target branch tip to merge into (ours)"
+					}
+				}
+			},
+			"description": "3-way merge check between a target branch tip (ours) and a source commit (theirs). Read-only: the merged tree is never persisted."
+		},
+		"conflict": {
+			"type": "object",
+			"required": ["filename", "reason"],
+			"properties": {
+				"reason": {
+					"type": "string",
+					"description": "Short classification of the conflict"
+				},
+				"filename": {
+					"type": "string",
+					"description": "Path of the conflicted file"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,74 @@
+{
+	"id": "org.tangled.temp.git.listCommitsByRef",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "Git reference not found"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["commits"],
+					"properties": {
+						"commits": {
+							"type": "array",
+							"items": {
+								"ref": "org.tangled.temp.git.listCommits#commit",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					},
+					"skip": {
+						"type": "integer",
+						"default": 0,
+						"minimum": 0,
+						"description": "Number of matching commits to skip. A poor man's pagination."
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1,
+						"description": "Maximum number of commits to return"
+					},
+					"ranges": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					},
+					"includeStats": {
+						"type": "boolean",
+						"default": false,
+						"description": "Diff each commit against its first parent and include a line stat"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

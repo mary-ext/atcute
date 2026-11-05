@@ -1,0 +1,139 @@
+{
+	"id": "org.tangled.git.getBlame",
+	"defs": {
+		"run": {
+			"type": "object",
+			"required": ["commit", "count", "start"],
+			"properties": {
+				"count": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "Number of lines in the run"
+				},
+				"start": {
+					"type": "integer",
+					"minimum": 1,
+					"description": "First line of the run, one-based"
+				},
+				"commit": {
+					"type": "string",
+					"description": "The commit Object ID of the entry in commits this run is attributed to"
+				}
+			}
+		},
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repo is not registered on this knot"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "The given ref doesn't resolve in this repo"
+				},
+				{
+					"name": "FileNotFound",
+					"description": "The given path doesn't exist at the given ref"
+				},
+				{
+					"name": "BlameTooLarge",
+					"description": "The file is too large to blame"
+				},
+				{
+					"name": "BlameTimeout",
+					"description": "Blame computation timed out"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["commit", "commits", "runs"],
+					"properties": {
+						"runs": {
+							"type": "array",
+							"items": {
+								"ref": "#run",
+								"type": "ref"
+							},
+							"description": "Complete, gap-free one-based line ranges sorted by start"
+						},
+						"commit": {
+							"type": "string",
+							"description": "The resolved commit Object ID"
+						},
+						"commits": {
+							"type": "array",
+							"items": {
+								"ref": "#commit",
+								"type": "ref"
+							},
+							"description": "Unique commits referenced by blame runs"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["path", "ref", "repo"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"description": "Git revision (branch, tag, or commit Object ID)"
+					},
+					"path": {
+						"type": "string",
+						"description": "Path of the file to blame"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					}
+				}
+			},
+			"description": "Line-by-line attribution of a file at a ref."
+		},
+		"author": {
+			"type": "object",
+			"required": ["email", "name"],
+			"properties": {
+				"name": {
+					"type": "string"
+				},
+				"email": {
+					"type": "string"
+				}
+			}
+		},
+		"commit": {
+			"type": "object",
+			"required": ["author", "authoredAt", "sha", "subject"],
+			"properties": {
+				"sha": {
+					"type": "string",
+					"description": "Commit Object ID"
+				},
+				"author": {
+					"ref": "#author",
+					"type": "ref"
+				},
+				"subject": {
+					"type": "string",
+					"description": "First line of the commit message"
+				},
+				"authoredAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "When the change was authored"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

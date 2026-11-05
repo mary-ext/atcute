@@ -1,0 +1,107 @@
+{
+	"id": "org.tangled.git.listLanguages",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repo is not registered on this knot"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "The given ref doesn't resolve in this repo"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["languages", "ref"],
+					"properties": {
+						"ref": {
+							"type": "string",
+							"description": "The ref the breakdown was computed at"
+						},
+						"languages": {
+							"type": "array",
+							"items": {
+								"ref": "#language",
+								"type": "ref"
+							}
+						},
+						"totalSize": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Total bytes across counted files"
+						},
+						"totalFiles": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Total counted files"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"default": "HEAD",
+						"description": "Git revision (branch, tag, or commit Object ID)"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					}
+				}
+			},
+			"description": "Language breakdown of a repository's tree at a ref."
+		},
+		"language": {
+			"type": "object",
+			"required": ["name", "percentage", "size"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Language name"
+				},
+				"size": {
+					"type": "integer",
+					"minimum": 0,
+					"description": "Bytes counted for this language"
+				},
+				"color": {
+					"type": "string",
+					"description": "Render color for this language"
+				},
+				"fileCount": {
+					"type": "integer",
+					"minimum": 0,
+					"description": "Files counted for this language"
+				},
+				"extensions": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "File extensions recognized as this language"
+				},
+				"percentage": {
+					"type": "integer",
+					"maximum": 100,
+					"minimum": 0,
+					"description": "Share of total size, 0-100"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,50 @@
+{
+	"id": "org.tangled.ci.cancelPipeline",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["pipeline", "repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "git repository DID"
+						},
+						"pipeline": {
+							"type": "string",
+							"description": "Spindle-local pipeline id"
+						},
+						"workflows": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"description": "workflow name"
+							},
+							"description": "Workflow names to filter. When not provided, entire pipeline will be canceled."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				},
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found"
+				},
+				{
+					"name": "PipelineNotFound",
+					"description": "Pipeline not found in this repository"
+				}
+			],
+			"description": "Cancel running pipeline or specific workflows"
+		}
+	},
+	"lexicon": 1
+}

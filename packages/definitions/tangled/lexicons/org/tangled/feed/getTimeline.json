@@ -1,0 +1,137 @@
+{
+	"id": "org.tangled.feed.getTimeline",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["feed"],
+					"properties": {
+						"feed": {
+							"type": "array",
+							"items": {
+								"ref": "#timelineItem",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string"
+					},
+					"viewer": {
+						"type": "string",
+						"format": "did",
+						"description": "TODO: deprecate this and use auth instead."
+					},
+					"followingOnly": {
+						"type": "boolean"
+					}
+				}
+			}
+		},
+		"repoEvent": {
+			"type": "object",
+			"required": ["cid", "repo", "uri"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"repo": {
+					"ref": "org.tangled.repo.defs#repoViewBasic",
+					"type": "ref"
+				},
+				"source": {
+					"ref": "org.tangled.repo.defs#repoViewBasic",
+					"type": "ref",
+					"description": "Fork parent, present only if this repo is a fork."
+				}
+			},
+			"description": "A repository was created (or forked). The actor is repo.owner."
+		},
+		"starEvent": {
+			"type": "object",
+			"required": ["actor", "cid", "repo", "uri"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"repo": {
+					"ref": "org.tangled.repo.defs#repoViewBasic",
+					"type": "ref",
+					"description": "The starred repo."
+				},
+				"actor": {
+					"ref": "org.tangled.actor.defs#profileViewBasic",
+					"type": "ref",
+					"description": "Who starred."
+				}
+			},
+			"description": "A repository was starred."
+		},
+		"followEvent": {
+			"type": "object",
+			"required": ["actor", "cid", "subject", "uri"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid"
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				},
+				"actor": {
+					"ref": "org.tangled.actor.defs#profileViewBasic",
+					"type": "ref"
+				},
+				"subject": {
+					"ref": "org.tangled.actor.defs#profileViewDetailed",
+					"type": "ref"
+				}
+			},
+			"description": "A user followed another user."
+		},
+		"timelineItem": {
+			"type": "object",
+			"required": ["event", "eventAt"],
+			"properties": {
+				"event": {
+					"refs": ["#followEvent", "#repoEvent", "#starEvent"],
+					"type": "union"
+				},
+				"eventAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

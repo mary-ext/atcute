@@ -1,0 +1,94 @@
+{
+	"id": "org.tangled.git.listBranches",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["branches", "total"],
+					"properties": {
+						"total": {
+							"type": "integer",
+							"description": "Total number of branches in the repository"
+						},
+						"cursor": {
+							"type": "string"
+						},
+						"branches": {
+							"type": "array",
+							"items": {
+								"ref": "#branchInfo",
+								"type": "ref"
+							}
+						},
+						"defaultBranch": {
+							"type": "string",
+							"description": "Name of the default branch"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					},
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1,
+						"description": "Maximum number of branches to return"
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor"
+					}
+				}
+			}
+		},
+		"branchInfo": {
+			"type": "object",
+			"required": ["author", "committer", "message", "name", "oid"],
+			"properties": {
+				"oid": {
+					"type": "string",
+					"description": "Latest commit oid on this branch"
+				},
+				"name": {
+					"type": "string",
+					"description": "Branch name"
+				},
+				"author": {
+					"ref": "org.tangled.git.defs#signature",
+					"type": "ref"
+				},
+				"message": {
+					"type": "string",
+					"description": "Latest commit message"
+				},
+				"committer": {
+					"ref": "org.tangled.git.defs#signature",
+					"type": "ref"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

@@ -1,0 +1,44 @@
+{
+	"id": "org.tangled.temp.server.handoverRepo",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["fosterUrl", "repoDid"],
+					"properties": {
+						"repoDid": {
+							"type": "string",
+							"format": "did"
+						},
+						"fosterUrl": {
+							"type": "string",
+							"format": "uri"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["repoDid", "state"],
+					"properties": {
+						"state": {
+							"type": "string",
+							"knownValues": ["running"]
+						},
+						"repoDid": {
+							"type": "string",
+							"format": "did"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Pull a hosted repo's shadowed COB records back from a given foster knot, rebuild the record chain under this knot's own authority, confirm record CIDs against foster knot's state, finally ack the handover. Since it may take a bit, the endpoint will already give a response as soon as the job is staged up with state \"running\". Then the next steps run in background finish into the sidecar + logs. Only a knot admin can call this!"
+		}
+	},
+	"lexicon": 1
+}

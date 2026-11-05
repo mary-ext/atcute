@@ -1,0 +1,98 @@
+{
+	"id": "org.tangled.temp.repo.listRecordOrigins",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "InvalidRequest",
+					"description": "The collection isn't a versioned one, or a parameter is malformed."
+				},
+				{
+					"name": "RepoNotFound",
+					"description": "This mirror doesn't have the repository."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["collection", "origins", "repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did"
+						},
+						"cursor": {
+							"type": "string",
+							"description": "Left out when the page already reaches the last record."
+						},
+						"origins": {
+							"type": "array",
+							"items": {
+								"ref": "#origin",
+								"type": "ref"
+							}
+						},
+						"collection": {
+							"type": "string",
+							"format": "nsid"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["collection", "repo"],
+				"properties": {
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository."
+					},
+					"limit": {
+						"type": "integer",
+						"default": 500,
+						"maximum": 1000,
+						"minimum": 1
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pass the cursor from one page into the next query to keep walking records."
+					},
+					"collection": {
+						"type": "string",
+						"format": "nsid",
+						"description": "A versioned collection, such as `org.tangled.track.ticket`."
+					}
+				}
+			},
+			"description": "Who opened each COB record of one collection in a repository, and when. Gives the same author as the first version in `org.tangled.repo.listRecordVersions`, for every record in one walk, sorted by record key."
+		},
+		"origin": {
+			"type": "object",
+			"required": ["author", "changeId", "createdAt", "rkey"],
+			"properties": {
+				"rkey": {
+					"type": "string",
+					"format": "record-key"
+				},
+				"author": {
+					"type": "string",
+					"format": "did",
+					"description": "The DID of the account that opened the record, the editor of its first version."
+				},
+				"changeId": {
+					"type": "string",
+					"description": "Git Object ID of the change that opened the record."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "When the knot wrote the opening change. Not the record's own `createdAt`."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

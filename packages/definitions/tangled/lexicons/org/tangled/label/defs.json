@@ -1,0 +1,17 @@
+{
+	"id": "org.tangled.label.defs",
+	"defs": {
+		"labelToken": {
+			"type": "object",
+			"required": ["key"],
+			"properties": {
+				"key": {
+					"type": "string",
+					"format": "record-key",
+					"description": "Record-key of org.tangled.label.definition owned by this repository."
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

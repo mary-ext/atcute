@@ -1,0 +1,113 @@
+{
+	"id": "org.tangled.temp.migrator.defs",
+	"defs": {
+		"job": {
+			"type": "object",
+			"required": ["attempts", "id", "knotDid", "name", "private", "sourceUrl", "status"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Unique job ID."
+				},
+				"name": {
+					"type": "string",
+					"maxLength": 100
+				},
+				"error": {
+					"type": "string",
+					"description": "Error message from the last failed attempt."
+				},
+				"status": {
+					"type": "string",
+					"description": "Current status of the migration job.",
+					"knownValues": ["authorization_required", "cloning", "completed", "failed", "importing", "queued"]
+				},
+				"knotDid": {
+					"type": "string",
+					"format": "did"
+				},
+				"private": {
+					"type": "boolean"
+				},
+				"repoDid": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the created repository, once created on the knot."
+				},
+				"attempts": {
+					"type": "integer",
+					"minimum": 0,
+					"description": "Number of migration attempts."
+				},
+				"sourceUrl": {
+					"type": "string",
+					"format": "uri"
+				}
+			},
+			"description": "Migration status of a repository."
+		},
+		"task": {
+			"type": "object",
+			"required": ["createdAt", "id", "jobs", "ownerDid"],
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"jobs": {
+					"type": "array",
+					"items": {
+						"ref": "#job",
+						"type": "ref"
+					}
+				},
+				"ownerDid": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the user who created the task."
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"updatedAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			},
+			"description": "A migration task containing repository jobs."
+		},
+		"newJob": {
+			"type": "object",
+			"required": ["knotDid", "name", "sourceUrl"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"maxLength": 100,
+					"description": "Repository name reserved on the destination knot."
+				},
+				"knotDid": {
+					"type": "string",
+					"format": "did",
+					"description": "DID of the destination knot."
+				},
+				"private": {
+					"type": "boolean",
+					"default": false,
+					"description": "Whether the source repository is private."
+				},
+				"sourceUrl": {
+					"type": "string",
+					"format": "uri",
+					"description": "HTTPS URL of the source repository."
+				},
+				"description": {
+					"type": "string",
+					"description": "Repository description.",
+					"maxGraphemes": 140
+				}
+			},
+			"description": "A repository to migrate."
+		}
+	},
+	"lexicon": 1
+}

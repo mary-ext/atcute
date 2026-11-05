@@ -1,0 +1,22 @@
+{
+	"id": "org.tangled.temp.server.redeemInviteCode",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["code"],
+					"properties": {
+						"code": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Clarifies the membership in server via invite code."
+		}
+	},
+	"lexicon": 1
+}

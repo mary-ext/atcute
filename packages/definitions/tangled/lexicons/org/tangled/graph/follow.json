@@ -1,0 +1,21 @@
+{
+	"id": "org.tangled.graph.follow",
+	"defs": {
+		"main": {
+			"key": "any",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt"],
+				"properties": {
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			},
+			"description": "Record declaring a social 'follow' relationship of another account, w/ normalized subject-DID as rkey."
+		}
+	},
+	"lexicon": 1
+}

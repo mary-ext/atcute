@@ -7,7 +7,7 @@ const _mainSchema = /*#__PURE__*/ v.query('org.tangled.temp.site.getDomainClaim'
 	output: {
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
-			/** The claimed domain (e.g. 'alice.sites.tangled.sh'). Absent if no active claim. */
+			/** the site domain (e.g. 'alice.tngl.io') or a verified signup handle, absent if neither exists */
 			domain: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		}),
 	},

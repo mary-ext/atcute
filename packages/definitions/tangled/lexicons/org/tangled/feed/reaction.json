@@ -1,0 +1,29 @@
+{
+	"id": "org.tangled.feed.reaction",
+	"defs": {
+		"main": {
+			"key": "tid",
+			"type": "record",
+			"record": {
+				"type": "object",
+				"required": ["createdAt", "reaction", "subject"],
+				"properties": {
+					"subject": {
+						"ref": "com.atproto.repo.strongRef",
+						"type": "ref"
+					},
+					"reaction": {
+						"enum": ["❤️", "🎉", "👀", "👍", "👎", "😆", "🚀", "🫤"],
+						"type": "string",
+						"maxGraphemes": 1
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "datetime"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

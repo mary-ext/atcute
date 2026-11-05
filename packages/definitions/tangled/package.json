@@ -1,7 +1,7 @@
 {
 	"name": "@atcute/tangled",
 	"version": "2.0.21",
-	"description": "Tangled (sh.tangled.*) schema definitions",
+	"description": "Tangled (org.tangled.*, sh.tangled.*) schema definitions",
 	"keywords": [
 		"atcute",
 		"atproto",
@@ -20,7 +20,7 @@
 	"sideEffects": false,
 	"exports": {
 		".": "./dist/index.js",
-		"./types/*": "./dist/lexicons/types/sh/tangled/*.js"
+		"./types/*": "./dist/lexicons/types/*.js"
 	},
 	"publishConfig": {
 		"access": "public"
@@ -43,9 +43,13 @@
 	},
 	"atcute:lexicons": {
 		"mappings": {
+			"org.tangled.*": {
+				"type": "namespace",
+				"path": "./types/{{nsid}}"
+			},
 			"sh.tangled.*": {
 				"type": "namespace",
-				"path": "./types/{{nsid_remainder}}"
+				"path": "./types/{{nsid}}"
 			}
 		}
 	}

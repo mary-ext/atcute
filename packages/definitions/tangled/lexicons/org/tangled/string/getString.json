@@ -1,0 +1,41 @@
+{
+	"id": "org.tangled.string.getString",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["uri", "value"],
+					"properties": {
+						"cid": {
+							"type": "string",
+							"format": "cid"
+						},
+						"uri": {
+							"type": "string",
+							"format": "at-uri"
+						},
+						"value": {
+							"type": "unknown",
+							"description": "Embedded sh.tangled.string record."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["uri"],
+				"properties": {
+					"uri": {
+						"type": "string",
+						"format": "at-uri",
+						"description": "AT-URI of the sh.tangled.string record to fetch."
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

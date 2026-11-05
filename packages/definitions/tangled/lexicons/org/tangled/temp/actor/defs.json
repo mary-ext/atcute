@@ -1,0 +1,157 @@
+{
+	"id": "org.tangled.temp.actor.defs",
+	"defs": {
+		"recentPull": {
+			"type": "object",
+			"required": ["ownerHandle", "repoName", "rkey", "state", "title", "visited"],
+			"properties": {
+				"rkey": {
+					"type": "string",
+					"format": "record-key"
+				},
+				"state": {
+					"type": "string",
+					"knownValues": ["closed", "completed", "open"]
+				},
+				"title": {
+					"type": "string",
+					"maxLength": 400
+				},
+				"visited": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"repoName": {
+					"type": "string",
+					"maxLength": 100
+				},
+				"ownerHandle": {
+					"type": "string",
+					"maxLength": 253
+				}
+			}
+		},
+		"recentRepo": {
+			"type": "object",
+			"required": ["name", "ownerHandle", "visited"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"maxLength": 100
+				},
+				"visited": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"ownerDid": {
+					"type": "string",
+					"format": "did"
+				},
+				"ownerHandle": {
+					"type": "string",
+					"maxLength": 253
+				}
+			}
+		},
+		"recentIssue": {
+			"type": "object",
+			"required": ["open", "ownerHandle", "repoName", "rkey", "title", "visited"],
+			"properties": {
+				"open": {
+					"type": "boolean"
+				},
+				"rkey": {
+					"type": "string",
+					"format": "record-key"
+				},
+				"title": {
+					"type": "string",
+					"maxLength": 400
+				},
+				"visited": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"repoName": {
+					"type": "string",
+					"maxLength": 100
+				},
+				"ownerHandle": {
+					"type": "string",
+					"maxLength": 253
+				}
+			}
+		},
+		"recentsPref": {
+			"type": "object",
+			"required": ["items"],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"refs": ["#recentIssue", "#recentPull", "#recentRepo"],
+						"type": "union"
+					},
+					"maxLength": 5
+				}
+			}
+		},
+		"savedService": {
+			"type": "object",
+			"required": ["id", "value"],
+			"properties": {
+				"id": {
+					"type": "string"
+				},
+				"value": {
+					"type": "string"
+				}
+			}
+		},
+		"savedKnotPref": {
+			"type": "object",
+			"required": ["items"],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"ref": "#savedService",
+						"type": "ref"
+					}
+				}
+			}
+		},
+		"onboardingPref": {
+			"type": "object",
+			"required": ["startedAt"],
+			"properties": {
+				"startedAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"completedAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"nudgeDismissedAt": {
+					"type": "string",
+					"format": "datetime"
+				}
+			}
+		},
+		"savedSpindlePref": {
+			"type": "object",
+			"required": ["items"],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"ref": "#savedService",
+						"type": "ref"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

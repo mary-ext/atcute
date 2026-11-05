@@ -1,0 +1,39 @@
+{
+	"id": "org.tangled.ci.approvePipeline",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["pipeline", "repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "git repository DID"
+						},
+						"pipeline": {
+							"type": "string",
+							"format": "record-key",
+							"description": "pipeline id"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "PipelineNotFound",
+					"description": "Pipeline not found"
+				},
+				{
+					"name": "PipelineNotBlocked",
+					"description": "Pipeline has no workflow waiting for approval"
+				}
+			],
+			"description": "Approve blocked pipeline."
+		}
+	},
+	"lexicon": 1
+}

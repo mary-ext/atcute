@@ -1,0 +1,91 @@
+{
+	"id": "org.tangled.temp.git.getTree",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "RepoNotFound",
+					"description": "Repository not found or access denied"
+				},
+				{
+					"name": "RefNotFound",
+					"description": "Git reference not found"
+				},
+				{
+					"name": "PathNotFound",
+					"description": "Path not found in repository tree"
+				},
+				{
+					"name": "InvalidRequest",
+					"description": "Invalid request parameters"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["entries"],
+					"properties": {
+						"entries": {
+							"type": "array",
+							"items": {
+								"ref": "#treeEntry",
+								"type": "ref"
+							}
+						},
+						"lastCommit": {
+							"ref": "org.tangled.git.defs#commit",
+							"type": "ref"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["repo"],
+				"properties": {
+					"ref": {
+						"type": "string",
+						"default": "HEAD",
+						"description": "Git revision (branch, tag, or commit id)"
+					},
+					"path": {
+						"type": "string",
+						"default": "",
+						"description": "Path within the repository tree"
+					},
+					"repo": {
+						"type": "string",
+						"format": "did",
+						"description": "DID of the repository"
+					}
+				}
+			}
+		},
+		"treeEntry": {
+			"type": "object",
+			"required": ["mode", "name", "size"],
+			"properties": {
+				"mode": {
+					"enum": ["0040000", "0100644", "0100664", "0100755", "0120000", "0160000"],
+					"type": "string",
+					"description": "File mode"
+				},
+				"name": {
+					"type": "string",
+					"description": "Relative file or directory name"
+				},
+				"size": {
+					"type": "integer",
+					"description": "File size in bytes"
+				},
+				"lastCommit": {
+					"ref": "org.tangled.git.defs#commit",
+					"type": "ref"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

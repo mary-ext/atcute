@@ -1,0 +1,29 @@
+{
+	"id": "org.tangled.temp.newsletter.signup",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["email"],
+					"properties": {
+						"email": {
+							"type": "string",
+							"description": "Email address to subscribe."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidEmail",
+					"description": "The email address is not valid."
+				}
+			],
+			"description": "Add an email address to the newsletter. Unauthenticated; signed-in accounts should use org.tangled.temp.account.subscribeNewsletter so the choice is remembered."
+		}
+	},
+	"lexicon": 1
+}

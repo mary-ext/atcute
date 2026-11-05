@@ -1,0 +1,49 @@
+{
+	"id": "org.tangled.repo.countPulls",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["count", "distinctAuthors"],
+					"properties": {
+						"count": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Total number of matching records."
+						},
+						"distinctAuthors": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Number of distinct authors among the matching records."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["subject"],
+				"properties": {
+					"author": {
+						"type": "string",
+						"format": "did",
+						"description": "Restrict to pulls authored by this user DID."
+					},
+					"status": {
+						"type": "string",
+						"description": "Restrict to pulls whose latest derived status matches.",
+						"knownValues": ["closed", "merged", "open"]
+					},
+					"subject": {
+						"type": "string",
+						"format": "did",
+						"description": "Repo DID to list pulls for"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

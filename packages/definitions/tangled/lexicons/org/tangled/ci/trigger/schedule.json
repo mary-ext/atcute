@@ -1,0 +1,34 @@
+{
+	"id": "org.tangled.ci.trigger.schedule",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["commit", "ref", "repo", "scheduledAt"],
+			"properties": {
+				"ref": {
+					"type": "string",
+					"description": "Branch the commit was resolved from, the repository's default branch."
+				},
+				"repo": {
+					"type": "string",
+					"format": "did"
+				},
+				"commit": {
+					"type": "string",
+					"maxLength": 64,
+					"minLength": 40,
+					"description": "Commit id the pipeline ran on, the head of ref at dispatch."
+				},
+				"scheduledAt": {
+					"type": "string",
+					"format": "datetime",
+					"description": "The schedule tick this run is for, to the minute."
+				}
+			},
+			"description": "A pipeline the spindle started on a workflow's cron schedule."
+		}
+	},
+	"lexicon": 1,
+	"needsCbor": true,
+	"needsType": true
+}

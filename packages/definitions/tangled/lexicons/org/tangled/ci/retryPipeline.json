@@ -1,0 +1,61 @@
+{
+	"id": "org.tangled.ci.retryPipeline",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["pipeline", "repo"],
+					"properties": {
+						"repo": {
+							"type": "string",
+							"format": "did",
+							"description": "git repository DID"
+						},
+						"pipeline": {
+							"type": "string",
+							"format": "record-key",
+							"description": "pipeline id"
+						},
+						"workflows": {
+							"type": "array",
+							"items": {
+								"type": "string",
+								"description": "workflow name"
+							},
+							"description": "Workflow names to filter. When not provided, entire pipeline will be duplicated."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "PipelineNotFound",
+					"description": "Pipeline not found"
+				},
+				{
+					"name": "PipelineNotRetryable",
+					"description": "Pipeline is still blocked or has no stored spec to rerun"
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["pipeline"],
+					"properties": {
+						"pipeline": {
+							"type": "string",
+							"format": "record-key",
+							"description": "Scheduled pipeline id"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Duplicate existing pipeline for rerun."
+		}
+	},
+	"lexicon": 1
+}

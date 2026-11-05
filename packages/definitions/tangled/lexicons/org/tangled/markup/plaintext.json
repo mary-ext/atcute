@@ -1,0 +1,16 @@
+{
+	"id": "org.tangled.markup.plaintext",
+	"defs": {
+		"main": {
+			"type": "object",
+			"required": ["text"],
+			"properties": {
+				"text": {
+					"type": "string",
+					"maxLength": 262144
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}
