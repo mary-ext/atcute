@@ -16,8 +16,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		artifact: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [/*#__PURE__*/ v.blobSize(52428800)]),
 		/** time of creation of this artifact */
 		createdAt: /*#__PURE__*/ v.datetimeString(),
-		/** name of the artifact */
-		name: /*#__PURE__*/ v.string(),
+		/**
+		 * name of the artifact
+		 *
+		 * @maxLength 255
+		 */
+		name: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 255)]),
 		get subject() {
 			return /*#__PURE__*/ v.variant([OrgTangledGitOid.mainSchema]);
 		},

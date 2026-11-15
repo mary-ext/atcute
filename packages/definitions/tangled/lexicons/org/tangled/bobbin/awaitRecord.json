@@ -31,7 +31,7 @@
 						"reason": {
 							"type": "string",
 							"description": "Why a rejected record will not appear.",
-							"knownValues": ["missingBody", "notIndexed", "undecodable", "unknownCollection"]
+							"knownValues": ["invalid", "missingBody", "notIndexed", "undecodable", "unknownCollection"]
 						},
 						"status": {
 							"type": "string",

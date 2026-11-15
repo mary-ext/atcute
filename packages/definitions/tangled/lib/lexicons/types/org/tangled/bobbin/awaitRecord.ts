@@ -29,7 +29,7 @@ const _mainSchema = /*#__PURE__*/ v.query('org.tangled.bobbin.awaitRecord', {
 			/** Why a rejected record will not appear. */
 			reason: /*#__PURE__*/ v.optional(
 				/*#__PURE__*/ v.string<
-					'missingBody' | 'notIndexed' | 'undecodable' | 'unknownCollection' | (string & {})
+					'invalid' | 'missingBody' | 'notIndexed' | 'undecodable' | 'unknownCollection' | (string & {})
 				>(),
 			),
 			/** What bobbin did with the record. */

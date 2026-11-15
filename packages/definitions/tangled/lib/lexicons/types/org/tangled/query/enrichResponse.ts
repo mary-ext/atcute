@@ -31,6 +31,7 @@ const _linkDescriptorSchema = /*#__PURE__*/ v.object({
 		| 'org.tangled.query.enrichResponse#count'
 		| 'org.tangled.query.enrichResponse#distinctAuthors'
 		| 'org.tangled.query.enrichResponse#labels'
+		| 'org.tangled.query.enrichResponse#reactions'
 		| 'org.tangled.query.enrichResponse#viewer'
 		| 'org.tangled.repo.defs#repoViewBasic'
 		| (string & {})
@@ -69,21 +70,66 @@ const _mainSchema = /*#__PURE__*/ v.procedure('org.tangled.query.enrichResponse'
 		}),
 	},
 });
+const _reactionSummarySchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.literal('org.tangled.query.enrichResponse#reactionSummary'),
+	),
+	/** @minimum 1 */
+	count: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1)]),
+	/** @maxGraphemes 1 */
+	reaction: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringGraphemes(0, 1)]),
+	/**
+	 * The newest few who reacted with this emoji, at most 10.
+	 *
+	 * @maxLength 10
+	 */
+	reactors: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.array(/*#__PURE__*/ v.didString()), [
+		/*#__PURE__*/ v.arrayLength(0, 10),
+	]),
+	/** The viewer's own reaction with this emoji, when a viewer was given and has one. */
+	get viewer() {
+		return /*#__PURE__*/ v.optional(viewerReactionSchema);
+	},
+});
+const _reactionsSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('org.tangled.query.enrichResponse#reactions')),
+	get reactions() {
+		return /*#__PURE__*/ v.array(reactionSummarySchema);
+	},
+});
+const _viewerReactionSchema = /*#__PURE__*/ v.object({
+	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('org.tangled.query.enrichResponse#viewerReaction')),
+	/** Absent when the record couldn't be fetched. */
+	cid: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.cidString()),
+	uri: /*#__PURE__*/ v.resourceUriString(),
+});
 
 type labels$schematype = typeof _labelsSchema;
 type linkDescriptor$schematype = typeof _linkDescriptorSchema;
 type main$schematype = typeof _mainSchema;
+type reactionSummary$schematype = typeof _reactionSummarySchema;
+type reactions$schematype = typeof _reactionsSchema;
+type viewerReaction$schematype = typeof _viewerReactionSchema;
 
 export interface labelsSchema extends labels$schematype {}
 export interface linkDescriptorSchema extends linkDescriptor$schematype {}
 export interface mainSchema extends main$schematype {}
+export interface reactionSummarySchema extends reactionSummary$schematype {}
+export interface reactionsSchema extends reactions$schematype {}
+export interface viewerReactionSchema extends viewerReaction$schematype {}
 
 export const labelsSchema = _labelsSchema as labelsSchema;
 export const linkDescriptorSchema = _linkDescriptorSchema as linkDescriptorSchema;
 export const mainSchema = _mainSchema as mainSchema;
+export const reactionSummarySchema = _reactionSummarySchema as reactionSummarySchema;
+export const reactionsSchema = _reactionsSchema as reactionsSchema;
+export const viewerReactionSchema = _viewerReactionSchema as viewerReactionSchema;
 
 export interface Labels extends v.InferInput<typeof labelsSchema> {}
 export interface LinkDescriptor extends v.InferInput<typeof linkDescriptorSchema> {}
+export interface ReactionSummary extends v.InferInput<typeof reactionSummarySchema> {}
+export interface Reactions extends v.InferInput<typeof reactionsSchema> {}
+export interface ViewerReaction extends v.InferInput<typeof viewerReactionSchema> {}
 
 export interface $params {}
 export interface $input extends v.InferXRPCBodyInput<mainSchema['input']> {}

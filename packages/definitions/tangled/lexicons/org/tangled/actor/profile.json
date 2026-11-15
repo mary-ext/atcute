@@ -36,7 +36,6 @@
 					},
 					"avatar": {
 						"type": "blob",
-						"accept": ["image/jpeg", "image/png"],
 						"maxSize": 1000000,
 						"description": "Small image to be displayed next to posts from account. AKA, 'profile picture'"
 					},
@@ -55,7 +54,7 @@
 						"type": "string",
 						"maxLength": 200,
 						"description": "Preferred gender pronouns.",
-						"maxGraphemes": 20
+						"maxGraphemes": 30
 					},
 					"description": {
 						"type": "string",

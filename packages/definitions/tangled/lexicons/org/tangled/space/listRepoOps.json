@@ -1,0 +1,101 @@
+{
+	"id": "org.tangled.space.listRepoOps",
+	"defs": {
+		"main": {
+			"type": "query",
+			"errors": [
+				{
+					"name": "SpaceNotFound",
+					"description": "No such repo, or the caller can't get it for whatever reason."
+				},
+				{
+					"name": "SinceTooOld",
+					"description": "The knot doesn't have operations back that far. Do a full `com.atproto.sync.getRepo` instead."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["ops"],
+					"properties": {
+						"ops": {
+							"type": "array",
+							"items": {
+								"ref": "#opEntry",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string",
+							"description": "Give as `cursor` to fetch the next page. This is left out when the response is at the newest operation."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["space"],
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 100,
+						"maximum": 1000,
+						"minimum": 1,
+						"description": "Max operations to return."
+					},
+					"since": {
+						"type": "string",
+						"format": "tid",
+						"description": "Request perations after this particular revision. Don't get it confused with pagination, use `cursor` for that."
+					},
+					"space": {
+						"type": "string",
+						"format": "did",
+						"description": "The private git repo's DID."
+					},
+					"cursor": {
+						"type": "string",
+						"description": "Pagination cursor from a previous response. This one takes priority over `since` when both are given."
+					}
+				}
+			},
+			"description": "Operations that have occured on a private git repo (since a given revision). This is just a nice-to-have, sources of truth are as always `com.atproto.sync.getRepo` and `getRecord` and `getBlocks`. This endpoint requires service auth from the knot side."
+		},
+		"opEntry": {
+			"type": "object",
+			"nullable": ["cid", "prev"],
+			"required": ["action", "cid", "collection", "prev", "rev", "rkey"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid",
+					"description": "Content ID of the record after the op."
+				},
+				"rev": {
+					"type": "string",
+					"format": "tid"
+				},
+				"prev": {
+					"type": "string",
+					"format": "cid",
+					"description": "Content ID of the record before the op."
+				},
+				"rkey": {
+					"type": "string",
+					"format": "record-key"
+				},
+				"action": {
+					"type": "string",
+					"knownValues": ["create", "delete", "update"]
+				},
+				"collection": {
+					"type": "string",
+					"format": "nsid"
+				}
+			},
+			"description": "A single op. If there are operations that have a same rev, it means they belong to the same commit. CID is null for deletes and prev is null for creates."
+		}
+	},
+	"lexicon": 1
+}

@@ -18,8 +18,7 @@ const _mainSchema = /*#__PURE__*/ v.record(
 );
 const _textFileSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('org.tangled.snippet.string#textFile')),
-	/** @accept text/plain */
-	content: /*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [/*#__PURE__*/ v.blobAccept(['text/plain'])]),
+	content: /*#__PURE__*/ v.blob(),
 	/**
 	 * file name
 	 *

@@ -35,7 +35,6 @@
 				},
 				"content": {
 					"type": "blob",
-					"accept": ["text/plain"],
 					"maxLength": 1000000
 				}
 			}

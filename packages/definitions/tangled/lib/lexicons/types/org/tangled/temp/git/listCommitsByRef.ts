@@ -23,6 +23,12 @@ const _mainSchema = /*#__PURE__*/ v.query('org.tangled.temp.git.listCommitsByRef
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1, 100)]),
 			50,
 		),
+		/**
+		 * Only list commits that changed this file or directory. Merges are compared with their first parent. The
+		 * scan stops after a time budget and returns what it found, so a path untouched for very long can come
+		 * back short.
+		 */
+		path: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		ranges: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 		/** DID of the repository */
 		repo: /*#__PURE__*/ v.didString(),

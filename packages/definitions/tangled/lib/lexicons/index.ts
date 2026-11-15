@@ -132,6 +132,8 @@ export * as OrgTangledSecretAddSecret from './types/org/tangled/secret/addSecret
 export * as OrgTangledSecretListSecrets from './types/org/tangled/secret/listSecrets.ts';
 export * as OrgTangledSecretRemoveSecret from './types/org/tangled/secret/removeSecret.ts';
 export * as OrgTangledSnippetString from './types/org/tangled/snippet/string.ts';
+export * as OrgTangledSpaceListRepoOps from './types/org/tangled/space/listRepoOps.ts';
+export * as OrgTangledSpaceListSpaces from './types/org/tangled/space/listSpaces.ts';
 export * as OrgTangledSpindleDescribeSpindle from './types/org/tangled/spindle/describeSpindle.ts';
 export * as OrgTangledStringCountStrings from './types/org/tangled/string/countStrings.ts';
 export * as OrgTangledStringGetString from './types/org/tangled/string/getString.ts';

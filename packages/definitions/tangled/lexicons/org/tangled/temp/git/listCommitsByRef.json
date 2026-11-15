@@ -37,6 +37,10 @@
 				"type": "params",
 				"required": ["repo"],
 				"properties": {
+					"path": {
+						"type": "string",
+						"description": "Only list commits that changed this file or directory. Merges are compared with their first parent. The scan stops after a time budget and returns what it found, so a path untouched for very long can come back short."
+					},
 					"repo": {
 						"type": "string",
 						"format": "did",

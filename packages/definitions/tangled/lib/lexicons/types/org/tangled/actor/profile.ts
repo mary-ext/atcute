@@ -10,14 +10,10 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		/**
 		 * Small image to be displayed next to posts from account. AKA, 'profile picture'
 		 *
-		 * @accept image/jpeg, image/png
 		 * @maxSize 1000000
 		 */
 		avatar: /*#__PURE__*/ v.optional(
-			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [
-				/*#__PURE__*/ v.blobSize(1000000),
-				/*#__PURE__*/ v.blobAccept(['image/jpeg', 'image/png']),
-			]),
+			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.blob(), [/*#__PURE__*/ v.blobSize(1000000)]),
 		),
 		/**
 		 * Free-form profile description text.
@@ -70,12 +66,12 @@ const _mainSchema = /*#__PURE__*/ v.record(
 		 * Preferred gender pronouns.
 		 *
 		 * @maxLength 200
-		 * @maxGraphemes 20
+		 * @maxGraphemes 30
 		 */
 		pronouns: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [
 				/*#__PURE__*/ v.stringLength(0, 200),
-				/*#__PURE__*/ v.stringGraphemes(0, 20),
+				/*#__PURE__*/ v.stringGraphemes(0, 30),
 			]),
 		),
 		/** @maxLength 2 */

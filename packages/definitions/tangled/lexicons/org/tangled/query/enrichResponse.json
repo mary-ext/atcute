@@ -81,6 +81,20 @@
 			},
 			"description": "Moderation labels the configured labeler applied. Only !hide and !warn are served, takedowns leave subjects out instead. Use collection:. for labels on the record, collection:.repo for labels on its author's account. Absent when there are none."
 		},
+		"reactions": {
+			"type": "object",
+			"required": ["reactions"],
+			"properties": {
+				"reactions": {
+					"type": "array",
+					"items": {
+						"ref": "#reactionSummary",
+						"type": "ref"
+					}
+				}
+			},
+			"description": "Reaction counts per emoji on a subject, each with its newest reactors and the viewer's own reaction. Use org.tangled.feed.reaction:subject. Reactors' profiles come back as blue.microcosm.identity.resolveMiniDoc payloads under their dids when cached. Emojis keep a fixed order, not by count. Absent when nobody reacted."
+		},
 		"linkDescriptor": {
 			"type": "object",
 			"required": ["source", "type"],
@@ -93,6 +107,7 @@
 						"org.tangled.query.enrichResponse#count",
 						"org.tangled.query.enrichResponse#distinctAuthors",
 						"org.tangled.query.enrichResponse#labels",
+						"org.tangled.query.enrichResponse#reactions",
 						"org.tangled.query.enrichResponse#viewer",
 						"org.tangled.repo.defs#repoViewBasic"
 					]
@@ -110,6 +125,49 @@
 				}
 			},
 			"description": "One sidecar payload, computed from the records at a link source whose reference equals the found reference."
+		},
+		"viewerReaction": {
+			"type": "object",
+			"required": ["uri"],
+			"properties": {
+				"cid": {
+					"type": "string",
+					"format": "cid",
+					"description": "Absent when the record couldn't be fetched."
+				},
+				"uri": {
+					"type": "string",
+					"format": "at-uri"
+				}
+			}
+		},
+		"reactionSummary": {
+			"type": "object",
+			"required": ["count", "reaction", "reactors"],
+			"properties": {
+				"count": {
+					"type": "integer",
+					"minimum": 1
+				},
+				"viewer": {
+					"ref": "#viewerReaction",
+					"type": "ref",
+					"description": "The viewer's own reaction with this emoji, when a viewer was given and has one."
+				},
+				"reaction": {
+					"type": "string",
+					"maxGraphemes": 1
+				},
+				"reactors": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"format": "did"
+					},
+					"maxLength": 10,
+					"description": "The newest few who reacted with this emoji, at most 10."
+				}
+			}
 		}
 	},
 	"lexicon": 1
