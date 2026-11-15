@@ -4,11 +4,11 @@ import * as v from '@atcute/lexicons/validations';
 const _mainSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('pub.leaflet.blocks.questions')),
 	/**
-	 * Who may ask: anyone, only accounts the author follows, or only accounts following the author. Defaults to
-	 * anyone. Checked when a question is asked.
+	 * Who may ask: anyone, only subscribers to the document's publication, only accounts the author follows, or
+	 * only accounts following the author. Defaults to anyone. Checked when a question is asked.
 	 */
 	audience: /*#__PURE__*/ v.optional(
-		/*#__PURE__*/ v.string<'anyone' | 'followers' | 'follows' | (string & {})>(),
+		/*#__PURE__*/ v.string<'anyone' | 'followers' | 'follows' | 'subscribers' | (string & {})>(),
 	),
 	/**
 	 * Label for the button readers use to submit a question.

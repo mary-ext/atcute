@@ -32,6 +32,7 @@ export * as PubLeafletDocument from './types/pub/leaflet/document.ts';
 export * as PubLeafletGraphRecommendations from './types/pub/leaflet/graph/recommendations.ts';
 export * as PubLeafletGraphSubscription from './types/pub/leaflet/graph/subscription.ts';
 export * as PubLeafletInteractionsAnswer from './types/pub/leaflet/interactions/answer.ts';
+export * as PubLeafletInteractionsCommentAuthorModeration from './types/pub/leaflet/interactions/commentAuthorModeration.ts';
 export * as PubLeafletInteractionsQuestion from './types/pub/leaflet/interactions/question.ts';
 export * as PubLeafletInteractionsQuestionVisibility from './types/pub/leaflet/interactions/questionVisibility.ts';
 export * as PubLeafletInteractionsRecommend from './types/pub/leaflet/interactions/recommend.ts';
