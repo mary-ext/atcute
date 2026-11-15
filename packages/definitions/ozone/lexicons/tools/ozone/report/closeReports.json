@@ -33,6 +33,11 @@
 							"type": "string",
 							"description": "Optional moderator-only note recorded on each close activity. Not visible to reporters."
 						},
+						"actionEventId": {
+							"type": "integer",
+							"minimum": 1,
+							"description": "Optional existing moderation event that closes reports. It must target the exact subject or its owning account; account-wide closure requires an account event. The event is linked to each closed report and may predate the report. The link does not imply the action is still in effect."
+						},
 						"includeAllOwned": {
 							"type": "boolean",
 							"default": false,
@@ -69,7 +74,7 @@
 				},
 				"encoding": "application/json"
 			},
-			"description": "Close eligible reports on a subject matching the given criteria. Assigned and escalated reports are excluded. Reports whose current status does not permit a transition to closed are skipped silently. Intended for automated flows that resolve reports without taking action on the subject."
+			"description": "Close eligible reports on a subject matching the given criteria, optionally linking an existing moderation action. Assigned, escalated, and actively assigned reports are excluded. Reports whose current status does not permit a transition to closed are skipped silently."
 		}
 	},
 	"lexicon": 1

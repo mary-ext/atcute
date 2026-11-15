@@ -76,12 +76,46 @@ const _reportActionSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.emitEvent#reportAction')),
 	/** Target ALL reports on the subject. Excludes assigned and escalated reports. */
 	all: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
+	/**
+	 * Target all eligible reports on the account and its owned subjects, including records, messages, and
+	 * conversations. Only valid for account subjects and events that close reports. Excludes assigned,
+	 * escalated, and actively assigned reports unless explicitly targeted by ID.
+	 */
+	allOwned: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/** Target specific report IDs */
 	ids: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.integer())),
 	/** Set true when the report activities are created by an automated process. */
 	isAutomated: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 	/** Note to send to reporter(s) when actioning their report */
 	note: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
+	/**
+	 * Expands report targeting to include owned subjects of these types. Requires event subject to be an
+	 * account. Mutually exclusive with `subjects`.
+	 *
+	 * @maxLength 4
+	 */
+	subjectTypes: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(
+			/*#__PURE__*/ v.array(/*#__PURE__*/ v.literalEnum(['account', 'conversation', 'message', 'record'])),
+			[/*#__PURE__*/ v.arrayLength(0, 4)],
+		),
+	),
+	/**
+	 * Expands report targeting to include additional subjects. Requires event subject to be an account.
+	 * Mutually exclusive with `subjectTypes`.
+	 *
+	 * @maxLength 100
+	 */
+	get subjects() {
+		return /*#__PURE__*/ v.optional(
+			/*#__PURE__*/ v.constrain(
+				/*#__PURE__*/ v.array(
+					/*#__PURE__*/ v.variant([ComAtprotoAdminDefs.repoRefSchema, ComAtprotoRepoStrongRef.mainSchema]),
+				),
+				[/*#__PURE__*/ v.arrayLength(0, 100)],
+			),
+		);
+	},
 	/**
 	 * Target reports matching these report types on the subject (fully qualified NSIDs). Excludes assigned and
 	 * escalated reports.

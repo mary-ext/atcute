@@ -1,0 +1,107 @@
+{
+	"id": "tools.ozone.report.queryModeratorActivity",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["rows"],
+					"properties": {
+						"rows": {
+							"type": "array",
+							"items": {
+								"ref": "#activityRow",
+								"type": "ref"
+							}
+						},
+						"cursor": {
+							"type": "string"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["createdAfter", "createdBefore", "moderator"],
+				"properties": {
+					"limit": {
+						"type": "integer",
+						"default": 50,
+						"maximum": 100,
+						"minimum": 1
+					},
+					"types": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"maxLength": 40
+					},
+					"cursor": {
+						"type": "string",
+						"maxLength": 512
+					},
+					"moderator": {
+						"type": "string",
+						"format": "did"
+					},
+					"createdAfter": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Inclusive UTC lower bound."
+					},
+					"createdBefore": {
+						"type": "string",
+						"format": "datetime",
+						"description": "Exclusive UTC upper bound."
+					}
+				}
+			},
+			"description": "Read authorized moderator events and report activity in one chronological history."
+		},
+		"activityRow": {
+			"type": "object",
+			"required": ["createdAt", "createdBy", "id", "source", "type"],
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"type": {
+					"type": "string"
+				},
+				"event": {
+					"ref": "tools.ozone.moderation.defs#modEventView",
+					"type": "ref"
+				},
+				"source": {
+					"enum": ["activity", "event"],
+					"type": "string"
+				},
+				"subject": {
+					"type": "string"
+				},
+				"activity": {
+					"ref": "tools.ozone.report.defs#reportActivityView",
+					"type": "ref"
+				},
+				"reportId": {
+					"type": "integer"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"createdBy": {
+					"type": "string",
+					"format": "did"
+				},
+				"actionEventId": {
+					"type": "integer"
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}

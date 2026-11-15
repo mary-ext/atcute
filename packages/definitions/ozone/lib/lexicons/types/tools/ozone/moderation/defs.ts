@@ -31,19 +31,6 @@ const _accountHostingSchema = /*#__PURE__*/ v.object({
 	>(),
 	updatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 });
-const _accountStatsSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#accountStats')),
-	/** Total number of appeals against a moderation action on the account */
-	appealCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of times the account was escalated */
-	escalateCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Total number of reports on the account */
-	reportCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of times the account was suspended */
-	suspendCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of times the account was taken down */
-	takedownCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-});
 const _accountStrikeSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#accountStrike')),
 	/** Current number of active strikes (excluding expired strikes) */
@@ -506,25 +493,6 @@ const _recordViewNotFoundSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#recordViewNotFound')),
 	uri: /*#__PURE__*/ v.resourceUriString(),
 });
-const _recordsStatsSchema = /*#__PURE__*/ v.object({
-	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#recordsStats')),
-	/** Number of items that were appealed at least once */
-	appealedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of items that were escalated at least once */
-	escalatedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of item currently in "reviewOpen" or "reviewEscalated" state */
-	pendingCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of item currently in "reviewNone" or "reviewClosed" state */
-	processedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of items that were reported at least once */
-	reportedCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Total number of item in the set */
-	subjectCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Number of item currently taken down */
-	takendownCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-	/** Cumulative sum of the number of reports on the items in the set */
-	totalReports: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-});
 const _repoViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#repoView')),
 	deactivatedAt: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
@@ -662,10 +630,6 @@ const _subjectReviewStateSchema = /*#__PURE__*/ v.string<
 >();
 const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('tools.ozone.moderation.defs#subjectStatusView')),
-	/** Statistics related to the account subject */
-	get accountStats() {
-		return /*#__PURE__*/ v.optional(accountStatsSchema);
-	},
 	/** Strike information for the account (account-level only) */
 	get accountStrike() {
 		return /*#__PURE__*/ v.optional(accountStrikeSchema);
@@ -705,10 +669,6 @@ const _subjectStatusViewSchema = /*#__PURE__*/ v.object({
 	priorityScore: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
 	),
-	/** Statistics related to the record subjects authored by the subject's account */
-	get recordsStats() {
-		return /*#__PURE__*/ v.optional(recordsStatsSchema);
-	},
 	get reviewState() {
 		return subjectReviewStateSchema;
 	},
@@ -765,7 +725,6 @@ const _videoDetailsSchema = /*#__PURE__*/ v.object({
 
 type accountEvent$schematype = typeof _accountEventSchema;
 type accountHosting$schematype = typeof _accountHostingSchema;
-type accountStats$schematype = typeof _accountStatsSchema;
 type accountStrike$schematype = typeof _accountStrikeSchema;
 type ageAssuranceEvent$schematype = typeof _ageAssuranceEventSchema;
 type ageAssuranceOverrideEvent$schematype = typeof _ageAssuranceOverrideEventSchema;
@@ -801,7 +760,6 @@ type recordHosting$schematype = typeof _recordHostingSchema;
 type recordView$schematype = typeof _recordViewSchema;
 type recordViewDetail$schematype = typeof _recordViewDetailSchema;
 type recordViewNotFound$schematype = typeof _recordViewNotFoundSchema;
-type recordsStats$schematype = typeof _recordsStatsSchema;
 type repoView$schematype = typeof _repoViewSchema;
 type repoViewDetail$schematype = typeof _repoViewDetailSchema;
 type repoViewNotFound$schematype = typeof _repoViewNotFoundSchema;
@@ -823,7 +781,6 @@ type videoDetails$schematype = typeof _videoDetailsSchema;
 
 export interface accountEventSchema extends accountEvent$schematype {}
 export interface accountHostingSchema extends accountHosting$schematype {}
-export interface accountStatsSchema extends accountStats$schematype {}
 export interface accountStrikeSchema extends accountStrike$schematype {}
 export interface ageAssuranceEventSchema extends ageAssuranceEvent$schematype {}
 export interface ageAssuranceOverrideEventSchema extends ageAssuranceOverrideEvent$schematype {}
@@ -859,7 +816,6 @@ export interface recordHostingSchema extends recordHosting$schematype {}
 export interface recordViewSchema extends recordView$schematype {}
 export interface recordViewDetailSchema extends recordViewDetail$schematype {}
 export interface recordViewNotFoundSchema extends recordViewNotFound$schematype {}
-export interface recordsStatsSchema extends recordsStats$schematype {}
 export interface repoViewSchema extends repoView$schematype {}
 export interface repoViewDetailSchema extends repoViewDetail$schematype {}
 export interface repoViewNotFoundSchema extends repoViewNotFound$schematype {}
@@ -881,7 +837,6 @@ export interface videoDetailsSchema extends videoDetails$schematype {}
 
 export const accountEventSchema = _accountEventSchema as accountEventSchema;
 export const accountHostingSchema = _accountHostingSchema as accountHostingSchema;
-export const accountStatsSchema = _accountStatsSchema as accountStatsSchema;
 export const accountStrikeSchema = _accountStrikeSchema as accountStrikeSchema;
 export const ageAssuranceEventSchema = _ageAssuranceEventSchema as ageAssuranceEventSchema;
 export const ageAssuranceOverrideEventSchema =
@@ -919,7 +874,6 @@ export const recordHostingSchema = _recordHostingSchema as recordHostingSchema;
 export const recordViewSchema = _recordViewSchema as recordViewSchema;
 export const recordViewDetailSchema = _recordViewDetailSchema as recordViewDetailSchema;
 export const recordViewNotFoundSchema = _recordViewNotFoundSchema as recordViewNotFoundSchema;
-export const recordsStatsSchema = _recordsStatsSchema as recordsStatsSchema;
 export const repoViewSchema = _repoViewSchema as repoViewSchema;
 export const repoViewDetailSchema = _repoViewDetailSchema as repoViewDetailSchema;
 export const repoViewNotFoundSchema = _repoViewNotFoundSchema as repoViewNotFoundSchema;
@@ -944,7 +898,6 @@ export const videoDetailsSchema = _videoDetailsSchema as videoDetailsSchema;
 
 export interface AccountEvent extends v.InferInput<typeof accountEventSchema> {}
 export interface AccountHosting extends v.InferInput<typeof accountHostingSchema> {}
-export interface AccountStats extends v.InferInput<typeof accountStatsSchema> {}
 export interface AccountStrike extends v.InferInput<typeof accountStrikeSchema> {}
 export interface AgeAssuranceEvent extends v.InferInput<typeof ageAssuranceEventSchema> {}
 export interface AgeAssuranceOverrideEvent extends v.InferInput<typeof ageAssuranceOverrideEventSchema> {}
@@ -982,7 +935,6 @@ export interface RecordHosting extends v.InferInput<typeof recordHostingSchema> 
 export interface RecordView extends v.InferInput<typeof recordViewSchema> {}
 export interface RecordViewDetail extends v.InferInput<typeof recordViewDetailSchema> {}
 export interface RecordViewNotFound extends v.InferInput<typeof recordViewNotFoundSchema> {}
-export interface RecordsStats extends v.InferInput<typeof recordsStatsSchema> {}
 export interface RepoView extends v.InferInput<typeof repoViewSchema> {}
 export interface RepoViewDetail extends v.InferInput<typeof repoViewDetailSchema> {}
 export interface RepoViewNotFound extends v.InferInput<typeof repoViewNotFoundSchema> {}

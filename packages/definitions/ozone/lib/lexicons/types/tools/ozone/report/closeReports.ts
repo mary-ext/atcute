@@ -8,6 +8,16 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.report.closeReports',
 		type: 'lex',
 		schema: /*#__PURE__*/ v.object({
 			/**
+			 * Optional existing moderation event that closes reports. It must target the exact subject or its
+			 * owning account; account-wide closure requires an account event. The event is linked to each closed
+			 * report and may predate the report. The link does not imply the action is still in effect.
+			 *
+			 * @minimum 1
+			 */
+			actionEventId: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1)]),
+			),
+			/**
 			 * Reports of these types (fully qualified reason NSIDs) are excluded from closure and left unchanged.
 			 * When omitted or empty, no report types are excluded.
 			 */

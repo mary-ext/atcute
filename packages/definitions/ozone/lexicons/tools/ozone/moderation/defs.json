@@ -265,32 +265,6 @@
 			},
 			"description": "Logs account status related events on a repo subject. Normally captured by automod from the firehose and emitted to ozone for historical tracking."
 		},
-		"accountStats": {
-			"type": "object",
-			"properties": {
-				"appealCount": {
-					"type": "integer",
-					"description": "Total number of appeals against a moderation action on the account"
-				},
-				"reportCount": {
-					"type": "integer",
-					"description": "Total number of reports on the account"
-				},
-				"suspendCount": {
-					"type": "integer",
-					"description": "Number of times the account was suspended"
-				},
-				"escalateCount": {
-					"type": "integer",
-					"description": "Number of times the account was escalated"
-				},
-				"takedownCount": {
-					"type": "integer",
-					"description": "Number of times the account was taken down"
-				}
-			},
-			"description": "Statistics about a particular account subject"
-		},
 		"imageDetails": {
 			"type": "object",
 			"required": ["height", "width"],
@@ -388,44 +362,6 @@
 					}
 				}
 			}
-		},
-		"recordsStats": {
-			"type": "object",
-			"properties": {
-				"pendingCount": {
-					"type": "integer",
-					"description": "Number of item currently in \"reviewOpen\" or \"reviewEscalated\" state"
-				},
-				"subjectCount": {
-					"type": "integer",
-					"description": "Total number of item in the set"
-				},
-				"totalReports": {
-					"type": "integer",
-					"description": "Cumulative sum of the number of reports on the items in the set"
-				},
-				"appealedCount": {
-					"type": "integer",
-					"description": "Number of items that were appealed at least once"
-				},
-				"reportedCount": {
-					"type": "integer",
-					"description": "Number of items that were reported at least once"
-				},
-				"escalatedCount": {
-					"type": "integer",
-					"description": "Number of items that were escalated at least once"
-				},
-				"processedCount": {
-					"type": "integer",
-					"description": "Number of item currently in \"reviewNone\" or \"reviewClosed\" state"
-				},
-				"takendownCount": {
-					"type": "integer",
-					"description": "Number of item currently taken down"
-				}
-			},
-			"description": "Statistics about a set of record subject items"
 		},
 		"reviewClosed": {
 			"type": "token",
@@ -1027,16 +963,6 @@
 				"reviewState": {
 					"ref": "#subjectReviewState",
 					"type": "ref"
-				},
-				"accountStats": {
-					"ref": "#accountStats",
-					"type": "ref",
-					"description": "Statistics related to the account subject"
-				},
-				"recordsStats": {
-					"ref": "#recordsStats",
-					"type": "ref",
-					"description": "Statistics related to the record subjects authored by the subject's account"
 				},
 				"suspendUntil": {
 					"type": "string",

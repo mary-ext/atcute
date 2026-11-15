@@ -72,7 +72,8 @@
 							"takendownRecordsCount"
 						],
 						"type": "string",
-						"default": "lastReportedAt"
+						"default": "lastReportedAt",
+						"description": "The reportedRecordsCount and takendownRecordsCount values are deprecated and use lastReportedAt instead."
 					},
 					"takendown": {
 						"type": "boolean",
@@ -203,18 +204,6 @@
 					"includeAllUserRecords": {
 						"type": "boolean",
 						"description": "All subjects, or subjects from given 'collections' param, belonging to the account specified in the 'subject' param will be returned."
-					},
-					"minAccountSuspendCount": {
-						"type": "integer",
-						"description": "If specified, only subjects that belong to an account that has at least this many suspensions will be returned."
-					},
-					"minReportedRecordsCount": {
-						"type": "integer",
-						"description": "If specified, only subjects that belong to an account that has at least this many reported records will be returned."
-					},
-					"minTakendownRecordsCount": {
-						"type": "integer",
-						"description": "If specified, only subjects that belong to an account that has at least this many taken down records will be returned."
 					}
 				}
 			},

@@ -53,6 +53,7 @@ export * as ToolsOzoneReportGetLiveStats from './types/tools/ozone/report/getLiv
 export * as ToolsOzoneReportGetReport from './types/tools/ozone/report/getReport.ts';
 export * as ToolsOzoneReportListActivities from './types/tools/ozone/report/listActivities.ts';
 export * as ToolsOzoneReportQueryActivities from './types/tools/ozone/report/queryActivities.ts';
+export * as ToolsOzoneReportQueryModeratorActivity from './types/tools/ozone/report/queryModeratorActivity.ts';
 export * as ToolsOzoneReportQueryReports from './types/tools/ozone/report/queryReports.ts';
 export * as ToolsOzoneReportReassignQueue from './types/tools/ozone/report/reassignQueue.ts';
 export * as ToolsOzoneReportRefreshStats from './types/tools/ozone/report/refreshStats.ts';

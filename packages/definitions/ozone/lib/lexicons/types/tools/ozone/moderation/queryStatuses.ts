@@ -57,11 +57,6 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryStatuses'
 			50,
 		),
 		/**
-		 * If specified, only subjects that belong to an account that has at least this many suspensions will be
-		 * returned.
-		 */
-		minAccountSuspendCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-		/**
 		 * If specified, only subjects that have priority score value above the given value will be returned.
 		 *
 		 * @minimum 0
@@ -71,11 +66,6 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryStatuses'
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(0, 100)]),
 		),
 		/**
-		 * If specified, only subjects that belong to an account that has at least this many reported records will
-		 * be returned.
-		 */
-		minReportedRecordsCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
-		/**
 		 * If specified, only subjects that belong to an account that has at least this many active strikes will
 		 * be returned.
 		 *
@@ -84,11 +74,6 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryStatuses'
 		minStrikeCount: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1)]),
 		),
-		/**
-		 * If specified, only subjects that belong to an account that has at least this many taken down records
-		 * will be returned.
-		 */
-		minTakendownRecordsCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 		/** When set to true, only muted subjects and reporters will be returned. */
 		onlyMuted: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.boolean()),
 		/** Number of queues being used by moderators. Subjects will be split among all queues. */
@@ -117,7 +102,12 @@ const _mainSchema = /*#__PURE__*/ v.query('tools.ozone.moderation.queryStatuses'
 		reviewedBefore: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.datetimeString()),
 		/** @default 'desc' */
 		sortDirection: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literalEnum(['asc', 'desc']), 'desc'),
-		/** @default 'lastReportedAt' */
+		/**
+		 * The reportedRecordsCount and takendownRecordsCount values are deprecated and use lastReportedAt
+		 * instead.
+		 *
+		 * @default 'lastReportedAt'
+		 */
 		sortField: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.literalEnum([
 				'lastReportedAt',
