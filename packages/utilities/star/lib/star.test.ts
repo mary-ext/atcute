@@ -94,12 +94,14 @@ describe('writer', () => {
 	});
 
 	it('serializes entries', () => {
-		expect(serializeStarEntry(Uint8Array.of(1, 2), Uint8Array.of(3))).toEqual(Uint8Array.of(2, 1, 2, 1, 3));
-		expect(serializeStarEntry(new Uint8Array(0), new Uint8Array(0))).toEqual(Uint8Array.of(0, 0));
+		expect(serializeStarEntry(Uint8Array.of(1, 2), Uint8Array.of(3))).toEqual(
+			Uint8Array.of(1, 2, 1, 2, 1, 3),
+		);
+		expect(serializeStarEntry(new Uint8Array(0), new Uint8Array(0))).toEqual(Uint8Array.of(1, 0, 0));
 
 		const entry = serializeStarEntry(new Uint8Array(0), new Uint8Array(128));
-		expect(entry.subarray(0, 3)).toEqual(Uint8Array.of(0, 0x80, 0x01));
-		expect(entry.length).toBe(3 + 128);
+		expect(entry.subarray(0, 4)).toEqual(Uint8Array.of(1, 0, 0x80, 0x01));
+		expect(entry.length).toBe(4 + 128);
 	});
 
 	it('rejects metadata without a $type', () => {
@@ -107,11 +109,15 @@ describe('writer', () => {
 		expect(() => serializeStarHeader({ $type: 1 })).toThrow(/must be a map with a \$type/);
 	});
 
-	it('streams the header followed by entries', async () => {
+	it('streams the header, entries, and terminal byte', async () => {
 		const buf = await collect(writeStarStream(META, PAIRS));
 
 		expect(buf).toEqual(
-			concat([serializeStarHeader(META), ...PAIRS.map(({ key, value }) => serializeStarEntry(key, value))]),
+			concat([
+				serializeStarHeader(META),
+				...PAIRS.map(({ key, value }) => serializeStarEntry(key, value)),
+				Uint8Array.of(0),
+			]),
 		);
 	});
 });
@@ -124,7 +130,7 @@ describe('reader', () => {
 	});
 
 	it('reads an archive without pairs', async () => {
-		const buf = serializeStarHeader({ $type: 'test' });
+		const buf = concat([serializeStarHeader({ $type: 'test' }), Uint8Array.of(0)]);
 
 		expect(await readBoth(buf)).toEqual({ meta: { $type: 'test' }, pairs: [] });
 	});
@@ -143,9 +149,10 @@ describe('reader', () => {
 		});
 
 		const entries = Array.from(star);
-		expect(entries.at(-1)!.entryEnd).toBe(buf.length);
+		expect(entries.at(-1)!.entryEnd).toBe(buf.length - 1);
 
 		for (const entry of entries) {
+			expect(buf[entry.entryStart]).toBe(1);
 			expect(buf.subarray(entry.keyStart, entry.keyEnd)).toEqual(entry.key);
 			expect(buf.subarray(entry.valueStart, entry.valueEnd)).toEqual(entry.value);
 		}
@@ -184,12 +191,15 @@ describe('reader', () => {
 	});
 
 	it('rejects an overlong varint', async () => {
-		await expectBothReject(header(new Uint8Array(0), new Uint8Array(7).fill(0x80)), /varint too long/);
+		await expectBothReject(header(new Uint8Array(0), new Uint8Array(10).fill(0x80)), /varint too long/);
 	});
 
 	it('rejects oversized metadata before reading it', async () => {
-		// 2^26 + 1, one past 64 MiB
-		await expectBothReject(header(new Uint8Array(0), Uint8Array.of(0x81, 0x80, 0x80, 0x20)), /exceeds limit/);
+		// 5 MiB + 1 (5242881 = 0x81 0x80 0xc0 0x02)
+		await expectBothReject(
+			header(new Uint8Array(0), Uint8Array.of(0x81, 0x80, 0xc0, 0x02)),
+			/exceeds limit; length=5242881 limit=5242880/,
+		);
 	});
 
 	it('rejects non-canonical metadata', async () => {
@@ -219,43 +229,92 @@ describe('reader', () => {
 		await expectBothReject(header(meta), /remainder/);
 	});
 
+	it('rejects missing terminal byte', async () => {
+		const base = serializeStarHeader({ $type: 'test' });
+
+		await expectBothReject(base, /unexpected end of data/);
+		await expectBothReject(
+			concat([base, serializeStarEntry(Uint8Array.of(1), Uint8Array.of(2))]),
+			/unexpected end of data/,
+		);
+	});
+
+	it('rejects trailing bytes after terminal byte', async () => {
+		const base = serializeStarHeader({ $type: 'test' });
+
+		await expectBothReject(concat([base, Uint8Array.of(0, 0)]), /unexpected trailing data/);
+		await expectBothReject(concat([base, Uint8Array.of(0, 1)]), /unexpected trailing data/);
+	});
+
+	it('rejects invalid marker bytes', async () => {
+		const base = serializeStarHeader({ $type: 'test' });
+
+		await expectBothReject(
+			concat([base, Uint8Array.of(2, 0, 0, 0)]),
+			/unexpected star marker byte; got 0x02/,
+		);
+	});
+
 	it('rejects EOF inside a pair', async () => {
 		const base = serializeStarHeader({ $type: 'test' });
 
 		// missing value
-		await expectBothReject(concat([base, Uint8Array.of(1, 1)]), /unexpected end of data/);
+		await expectBothReject(concat([base, Uint8Array.of(1, 0)]), /unexpected end of data/);
 		// truncated key
-		await expectBothReject(concat([base, Uint8Array.of(2, 1)]), /unexpected end of data/);
+		await expectBothReject(concat([base, Uint8Array.of(1, 2, 1)]), /unexpected end of data/);
 		// truncated value
-		await expectBothReject(concat([base, Uint8Array.of(0, 2, 1)]), /unexpected end of data/);
+		await expectBothReject(concat([base, Uint8Array.of(1, 0, 2, 1)]), /unexpected end of data/);
 		// truncated varint
-		await expectBothReject(concat([base, Uint8Array.of(0x80)]), /unexpected end of data/);
+		await expectBothReject(concat([base, Uint8Array.of(1, 0x80)]), /unexpected end of data/);
 	});
 
 	it('rejects overlong pair lengths', async () => {
 		const base = serializeStarHeader({ $type: 'test' });
 
-		await expectBothReject(concat([base, new Uint8Array(7).fill(0x80)]), /varint too long/);
+		await expectBothReject(
+			concat([base, Uint8Array.of(1), new Uint8Array(10).fill(0x80)]),
+			/varint too long/,
+		);
 	});
 
 	it('enforces profile limits', async () => {
 		const buf = await collect(writeStarStream(META, PAIRS));
 
+		await expectBothReject(buf, /exceeds limit; length=15 limit=14/, { maxMetaLength: 14 });
 		await expectBothReject(buf, /exceeds limit; length=300 limit=299/, { maxValueLength: 299 });
 		await expectBothReject(buf, /exceeds limit; length=24 limit=23/, { maxKeyLength: 23 });
 
-		expect(await readBoth(buf, { maxKeyLength: 24, maxValueLength: 300 })).toEqual({
+		expect(await readBoth(buf, { maxMetaLength: 15, maxKeyLength: 24, maxValueLength: 300 })).toEqual({
 			meta: META,
 			pairs: PAIRS,
 		});
 	});
 
-	it('never lifts STAR limits', async () => {
-		// 2^26 + 1, one past 64 MiB
-		const buf = concat([serializeStarHeader({ $type: 'test' }), Uint8Array.of(0x81, 0x80, 0x80, 0x20)]);
+	it('allows raising limits above defaults and clamps to MAX_SAFE_INTEGER', async () => {
+		// 8 KiB + 1 key
+		const bigKey = new Uint8Array(8 * 1024 + 1).fill(0x41);
+		const buf = await collect(
+			writeStarStream({ $type: 'test' }, [{ key: bigKey, value: new Uint8Array(0) }]),
+		);
 
-		await expectBothReject(buf, /limit=67108864/, { maxKeyLength: Infinity });
-		await expectBothReject(buf, /limit=67108864/, { maxKeyLength: NaN });
+		await expectBothReject(buf, /exceeds limit; length=8193 limit=8192/);
+		expect(await readBoth(buf, { maxKeyLength: 16 * 1024 })).toEqual({
+			meta: { $type: 'test' },
+			pairs: [{ key: bigKey, value: new Uint8Array(0) }],
+		});
+
+		// invalid / negative limits fall back to default
+		await expectBothReject(buf, /limit=8192/, { maxKeyLength: NaN });
+		await expectBothReject(buf, /limit=8192/, { maxKeyLength: -1 });
+
+		// Infinity clamps to MAX_SAFE_INTEGER rather than lifting bounds
+		const hugeLength = concat([
+			serializeStarHeader({ $type: 'test' }),
+			Uint8Array.of(1, 0x81, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x40),
+		]);
+		await expectBothReject(hugeLength, new RegExp(`limit=${Number.MAX_SAFE_INTEGER}`), {
+			maxKeyLength: Infinity,
+		});
 	});
 
 	it('cancels the source when the transform fails', async () => {

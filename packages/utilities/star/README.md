@@ -6,10 +6,10 @@ streaming archive (STAR) codec for AT Protocol.
 npm install @atcute/star
 ```
 
-this library implements [STAR-lite v1][star-v1] format (revision `eb0c078`, 2026-10-20) used by AT
-Protocol to store and transfer private repository data.
+this library implements DASL's [STAR][dasl-star] format used by AT Protocol to store and transfer
+private repository data.
 
-[star-v1]: https://tangled.org/microcosm.blue/star/tree/main/v1-star
+[dasl-star]: https://dasl.ing/star.html
 
 ## usage
 

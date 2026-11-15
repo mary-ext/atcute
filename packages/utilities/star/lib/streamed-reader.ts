@@ -1,8 +1,10 @@
 import {
-	MAX_KEY_LENGTH,
-	MAX_META_LENGTH,
-	MAX_VALUE_LENGTH,
+	DEFAULT_MAX_KEY_LENGTH,
+	DEFAULT_MAX_META_LENGTH,
+	DEFAULT_MAX_VALUE_LENGTH,
+	END_MARKER,
 	MAX_VARINT_BYTES,
+	PAIR_MARKER,
 	STAR_MAGIC,
 } from './constants.ts';
 import type { StarEntry, StarHeader, StarMeta, StarReaderOptions } from './types.ts';
@@ -71,8 +73,9 @@ export const fromStream = (
 	stream: ReadableStream<Uint8Array>,
 	options?: StarReaderOptions,
 ): StreamedStarReader => {
-	const maxKeyLength = resolveLimit(options?.maxKeyLength, MAX_KEY_LENGTH);
-	const maxValueLength = resolveLimit(options?.maxValueLength, MAX_VALUE_LENGTH);
+	const maxMetaLength = resolveLimit(options?.maxMetaLength, DEFAULT_MAX_META_LENGTH);
+	const maxKeyLength = resolveLimit(options?.maxKeyLength, DEFAULT_MAX_KEY_LENGTH);
+	const maxValueLength = resolveLimit(options?.maxValueLength, DEFAULT_MAX_VALUE_LENGTH);
 
 	let chunk: Uint8Array = new Uint8Array(0);
 	let chunkPos = 0;
@@ -154,7 +157,7 @@ export const fromStream = (
 
 		assertStarMagic(await readExact(STAR_MAGIC.length));
 
-		const dataSize = await readLength(MAX_META_LENGTH);
+		const dataSize = await readLength(maxMetaLength);
 		const dataStart = offset;
 		const data = decodeStarMeta(await readExact(dataSize));
 		const dataEnd = offset;
@@ -186,12 +189,25 @@ export const fromStream = (
 			await this.header();
 
 			while (true) {
-				// EOF is only allowed at a pair boundary
-				if (!(await refill())) {
-					return;
+				if (chunkPos >= chunk.length && !(await refill())) {
+					throw new RangeError('unexpected end of data');
 				}
 
 				const entryStart = offset;
+				const marker = chunk[chunkPos++]!;
+				offset++;
+
+				if (marker === END_MARKER) {
+					if (chunkPos < chunk.length || (await refill())) {
+						throw new RangeError('unexpected trailing data');
+					}
+
+					return;
+				}
+
+				if (marker !== PAIR_MARKER) {
+					throw new TypeError(`unexpected star marker byte; got 0x${marker.toString(16).padStart(2, '0')}`);
+				}
 
 				const keySize = await readLength(maxKeyLength);
 				const keyStart = offset;

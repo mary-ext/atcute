@@ -5,13 +5,17 @@ import { STAR_MAGIC } from './constants.ts';
 import { type StarMeta, isStarMeta } from './types.ts';
 
 /**
- * caps a length limit at the format maximum
+ * resolves a length limit against its default, clamping to safe integer bounds
  *
  * @internal
  */
-export const resolveLimit = (value: number | undefined, max: number): number => {
-	// NaN falls back to the format limit
-	return value !== undefined && value < max ? value : max;
+export const resolveLimit = (value: number | undefined, fallback: number): number => {
+	// NaN or negative falls back to the default
+	if (value === undefined || !(value >= 0)) {
+		return fallback;
+	}
+
+	return value < Number.MAX_SAFE_INTEGER ? value : Number.MAX_SAFE_INTEGER;
 };
 
 /** @internal */

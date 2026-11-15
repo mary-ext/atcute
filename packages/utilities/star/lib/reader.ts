@@ -1,8 +1,10 @@
 import {
-	MAX_KEY_LENGTH,
-	MAX_META_LENGTH,
-	MAX_VALUE_LENGTH,
+	DEFAULT_MAX_KEY_LENGTH,
+	DEFAULT_MAX_META_LENGTH,
+	DEFAULT_MAX_VALUE_LENGTH,
+	END_MARKER,
 	MAX_VARINT_BYTES,
+	PAIR_MARKER,
 	STAR_MAGIC,
 } from './constants.ts';
 import type { StarEntry, StarHeader, StarMeta, StarReaderOptions } from './types.ts';
@@ -22,13 +24,15 @@ export interface SyncStarReader {
  * @param options reader options
  * @returns the archive header and an iterable of key-value pairs
  * @throws if the header is malformed
- * @throws during iteration if a pair is malformed or exceeds the configured limits
+ * @throws during iteration if a pair is malformed, truncated, has trailing bytes, or exceeds the configured
+ *   limits
  */
 export const fromUint8Array = (buffer: Uint8Array, options?: StarReaderOptions): SyncStarReader => {
-	const maxKeyLength = resolveLimit(options?.maxKeyLength, MAX_KEY_LENGTH);
-	const maxValueLength = resolveLimit(options?.maxValueLength, MAX_VALUE_LENGTH);
+	const maxMetaLength = resolveLimit(options?.maxMetaLength, DEFAULT_MAX_META_LENGTH);
+	const maxKeyLength = resolveLimit(options?.maxKeyLength, DEFAULT_MAX_KEY_LENGTH);
+	const maxValueLength = resolveLimit(options?.maxValueLength, DEFAULT_MAX_VALUE_LENGTH);
 
-	const header = readHeader(buffer);
+	const header = readHeader(buffer, maxMetaLength);
 
 	return {
 		header,
@@ -36,18 +40,39 @@ export const fromUint8Array = (buffer: Uint8Array, options?: StarReaderOptions):
 
 		[Symbol.iterator](): IterableIterator<StarEntry> {
 			let pos = header.headerEnd;
+			let done = false;
 
 			return {
 				next(): IteratorResult<StarEntry> {
-					// EOF is only allowed at a pair boundary
-					if (pos >= buffer.length) {
+					if (done) {
 						return {
 							done: true,
 							value: undefined,
 						};
 					}
 
+					if (pos >= buffer.length) {
+						throw new RangeError('unexpected end of data');
+					}
+
 					const entryStart = pos;
+					const marker = buffer[pos++]!;
+
+					if (marker === END_MARKER) {
+						if (pos < buffer.length) {
+							throw new RangeError('unexpected trailing data');
+						}
+
+						done = true;
+						return {
+							done: true,
+							value: undefined,
+						};
+					}
+
+					if (marker !== PAIR_MARKER) {
+						throw new TypeError(`unexpected star marker byte; got 0x${marker.toString(16).padStart(2, '0')}`);
+					}
 
 					const { start: keyStart, end: keyEnd } = readFrame(buffer, pos, maxKeyLength);
 					const { start: valueStart, end: valueEnd } = readFrame(buffer, keyEnd, maxValueLength);
@@ -78,7 +103,7 @@ export const fromUint8Array = (buffer: Uint8Array, options?: StarReaderOptions):
 	};
 };
 
-const readHeader = (source: Uint8Array): StarHeader => {
+const readHeader = (source: Uint8Array, maxMetaLength: number): StarHeader => {
 	const magicSize = STAR_MAGIC.length;
 	if (source.length < magicSize) {
 		throw new RangeError('unexpected end of data');
@@ -86,7 +111,7 @@ const readHeader = (source: Uint8Array): StarHeader => {
 
 	assertStarMagic(source.subarray(0, magicSize));
 
-	const { start: dataStart, end: dataEnd } = readFrame(source, magicSize, MAX_META_LENGTH);
+	const { start: dataStart, end: dataEnd } = readFrame(source, magicSize, maxMetaLength);
 	const data = decodeStarMeta(source.subarray(dataStart, dataEnd));
 
 	return { data, headerStart: 0, headerEnd: dataEnd, dataStart, dataEnd };
@@ -106,7 +131,7 @@ const readFrame = (source: Uint8Array, offset: number, maxLength: number): { sta
 	return { start, end };
 };
 
-// STAR limits varints to six bytes and distinguishes truncation from overlong input
+// STAR limits varints to nine bytes (63 bits) and distinguishes truncation from overlong input
 const readLength = (source: Uint8Array, offset: number): { value: number; nextOffset: number } => {
 	let value = 0;
 

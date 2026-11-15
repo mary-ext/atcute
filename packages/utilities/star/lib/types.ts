@@ -49,15 +49,21 @@ export interface StarEntry {
 /** options for reading a STAR archive */
 export interface StarReaderOptions {
 	/**
+	 * maximum metadata length in bytes
+	 *
+	 * @default 5242880 (5 MiB)
+	 */
+	maxMetaLength?: number;
+	/**
 	 * maximum key length in bytes
 	 *
-	 * @default 67108864 (64 MiB)
+	 * @default 8192 (8 KiB)
 	 */
 	maxKeyLength?: number;
 	/**
 	 * maximum value length in bytes
 	 *
-	 * @default 68719476736 (64 GiB)
+	 * @default 5242880 (5 MiB)
 	 */
 	maxValueLength?: number;
 }
