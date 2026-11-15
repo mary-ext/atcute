@@ -209,6 +209,11 @@ const _postViewSchema = /*#__PURE__*/ v.object({
 		return /*#__PURE__*/ v.optional(threadgateViewSchema);
 	},
 	uri: /*#__PURE__*/ v.resourceUriString(),
+	/**
+	 * Approximate number of times the post has been viewed. Only included in authenticated responses to the
+	 * post's author when eligible to see the count. Counts less than 100 are omitted.
+	 */
+	viewCount: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.integer()),
 	get viewer() {
 		return /*#__PURE__*/ v.optional(viewerStateSchema);
 	},
