@@ -154,7 +154,7 @@ it('mentions', () => {
 
 	expect(tokenize('@(@@bsky.app')).toEqual([
 		{
-			content: '@(',
+			content: '@(@@bsky.app',
 			raw: '@(@@bsky.app',
 			type: 'text',
 		},
@@ -162,7 +162,7 @@ it('mentions', () => {
 
 	expect(tokenize('hello @bsky.app@')).toEqual([
 		{
-			content: 'hello ',
+			content: 'hello @bsky.app@',
 			raw: 'hello @bsky.app@',
 			type: 'text',
 		},
@@ -175,7 +175,7 @@ it('mentions', () => {
 			type: 'mention',
 		},
 		{
-			content: '.',
+			content: '.@',
 			raw: '.@',
 			type: 'text',
 		},
@@ -355,7 +355,7 @@ it('topics', () => {
 
 	expect(tokenize('hello #cool#')).toEqual([
 		{
-			content: 'hello ',
+			content: 'hello #cool#',
 			raw: 'hello #cool#',
 			type: 'text',
 		},
@@ -368,7 +368,7 @@ it('topics', () => {
 			type: 'topic',
 		},
 		{
-			content: '.',
+			content: '.#',
 			raw: '.#',
 			type: 'text',
 		},
@@ -548,7 +548,7 @@ it('cashtags', () => {
 
 	expect(tokenize('hello $AAPL$')).toEqual([
 		{
-			content: 'hello ',
+			content: 'hello $AAPL$',
 			raw: 'hello $AAPL$',
 			type: 'text',
 		},
@@ -561,7 +561,7 @@ it('cashtags', () => {
 			type: 'cashtag',
 		},
 		{
-			content: '.',
+			content: '.$',
 			raw: '.$',
 			type: 'text',
 		},
@@ -641,7 +641,7 @@ it('autolinks', () => {
 
 	expect(tokenize('https://')).toEqual([
 		{
-			content: 'https',
+			content: 'https://',
 			raw: 'https://',
 			type: 'text',
 		},
@@ -820,7 +820,7 @@ it('links', () => {
 		{
 			children: [
 				{
-					content: 'abc',
+					content: 'abc[]def',
 					raw: 'abc[]def',
 					type: 'text',
 				},
@@ -882,14 +882,14 @@ it('emotes', () => {
 
 	expect(tokenize(':::')).toEqual([
 		{
-			content: ':',
+			content: ':::',
 			raw: ':::',
 			type: 'text',
 		},
 	]);
 	expect(tokenize('::::')).toEqual([
 		{
-			content: ':',
+			content: '::::',
 			raw: '::::',
 			type: 'text',
 		},
@@ -913,7 +913,7 @@ it('delete', () => {
 
 	expect(tokenize('~strike~')).toEqual([
 		{
-			content: '~strike',
+			content: '~strike~',
 			raw: '~strike~',
 			type: 'text',
 		},
@@ -921,7 +921,7 @@ it('delete', () => {
 
 	expect(tokenize('~~')).toEqual([
 		{
-			content: '~',
+			content: '~~',
 			raw: '~~',
 			type: 'text',
 		},
@@ -929,7 +929,7 @@ it('delete', () => {
 
 	expect(tokenize('~~~~')).toEqual([
 		{
-			content: '~',
+			content: '~~~~',
 			raw: '~~~~',
 			type: 'text',
 		},
@@ -1342,7 +1342,7 @@ it('emphasis/strong', () => {
 	]);
 	expect(tokenize('foo_bar_buzz')).toEqual([
 		{
-			content: 'foo',
+			content: 'foo_bar_buzz',
 			raw: 'foo_bar_buzz',
 			type: 'text',
 		},
@@ -1350,7 +1350,7 @@ it('emphasis/strong', () => {
 
 	expect(tokenize('foo*bar *')).toEqual([
 		{
-			content: 'foo',
+			content: 'foo*bar *',
 			raw: 'foo*bar *',
 			type: 'text',
 		},
@@ -1391,7 +1391,7 @@ it('emphasis/strong', () => {
 		{
 			children: [
 				{
-					content: 'foo',
+					content: 'foo*',
 					raw: 'foo*',
 					type: 'text',
 				},
@@ -1403,7 +1403,7 @@ it('emphasis/strong', () => {
 
 	expect(tokenize('* *')).toEqual([
 		{
-			content: '* ',
+			content: '* *',
 			raw: '* *',
 			type: 'text',
 		},
@@ -1419,6 +1419,14 @@ it('emphasis/strong', () => {
 			],
 			raw: '_ _',
 			type: 'emphasis',
+		},
+	]);
+
+	expect(tokenize('****')).toEqual([
+		{
+			content: '****',
+			raw: '****',
+			type: 'text',
 		},
 	]);
 
@@ -1464,7 +1472,7 @@ it('underline', () => {
 
 	expect(tokenize('__')).toEqual([
 		{
-			content: '_',
+			content: '__',
 			raw: '__',
 			type: 'text',
 		},
@@ -1472,15 +1480,9 @@ it('underline', () => {
 
 	expect(tokenize('____')).toEqual([
 		{
-			children: [
-				{
-					content: '_',
-					raw: '__',
-					type: 'text',
-				},
-			],
+			content: '____',
 			raw: '____',
-			type: 'emphasis',
+			type: 'text',
 		},
 	]);
 
@@ -1524,7 +1526,7 @@ it('underline', () => {
 			type: 'escape',
 		},
 		{
-			content: '_underlined',
+			content: '_underlined__',
 			raw: '_underlined__',
 			type: 'text',
 		},
@@ -1542,7 +1544,7 @@ it('underline', () => {
 			type: 'escape',
 		},
 		{
-			content: '_bar',
+			content: '_bar__',
 			raw: '_bar__',
 			type: 'text',
 		},
@@ -1573,4 +1575,124 @@ it('code', () => {
 			type: 'code',
 		},
 	]);
+
+	expect(tokenize('``a`')).toEqual([
+		{
+			content: '``a`',
+			raw: '``a`',
+			type: 'text',
+		},
+	]);
+
+	expect(tokenize('`a``')).toEqual([
+		{
+			content: '`a``',
+			raw: '`a``',
+			type: 'text',
+		},
+	]);
+});
+
+const measureDepth = (tokens: ReturnType<typeof tokenize>): number => {
+	let max = 0;
+
+	for (const token of tokens) {
+		if ('children' in token) {
+			max = Math.max(max, 1 + measureDepth(token.children));
+		}
+	}
+
+	return max;
+};
+
+const sumRawLength = (tokens: ReturnType<typeof tokenize>): number => {
+	let total = 0;
+
+	for (const token of tokens) {
+		total += token.raw.length;
+	}
+
+	return total;
+};
+
+it('handles pathological inputs in linear time', () => {
+	{
+		const stars = '*'.repeat(100) + 'x';
+		const t0 = performance.now();
+		expect(tokenize(stars)).toEqual([{ type: 'text', raw: stars, content: stars }]);
+		expect(performance.now() - t0).toBeLessThan(20);
+	}
+
+	{
+		const underscores = '_'.repeat(100) + 'x';
+		const t0 = performance.now();
+		expect(tokenize(underscores)).toEqual([{ type: 'text', raw: underscores, content: underscores }]);
+		expect(performance.now() - t0).toBeLessThan(20);
+	}
+
+	{
+		const underscores = '_'.repeat(100);
+		const t0 = performance.now();
+		expect(tokenize(underscores)).toEqual([{ type: 'text', raw: underscores, content: underscores }]);
+		expect(performance.now() - t0).toBeLessThan(20);
+	}
+
+	{
+		const delSpaces = '~~' + ' '.repeat(100) + 'x';
+		const t0 = performance.now();
+		expect(tokenize(delSpaces)).toEqual([{ type: 'text', raw: delSpaces, content: delSpaces }]);
+		expect(performance.now() - t0).toBeLessThan(20);
+	}
+
+	for (const input of ['[x](' + '(\\)'.repeat(100), '[x](' + '(a\\)'.repeat(100)]) {
+		const t0 = performance.now();
+		const tokens = tokenize(input);
+		expect(performance.now() - t0).toBeLessThan(20);
+		expect(sumRawLength(tokens)).toBe(input.length);
+		expect(tokens.some((token) => token.type === 'link')).toBe(false);
+	}
+
+	for (const input of [
+		'['.repeat(2_000) + '[a]'.repeat(2_000),
+		'[' + ']'.repeat(5_000) + 'x',
+		'[a](u "'.repeat(2_000),
+	]) {
+		const t0 = performance.now();
+		expect(tokenize(input)).toEqual([{ type: 'text', raw: input, content: input }]);
+		expect(performance.now() - t0).toBeLessThan(20);
+	}
+
+	{
+		const backticks = '`'.repeat(5_000) + 'a';
+		const t0 = performance.now();
+		expect(tokenize(backticks)).toEqual([{ type: 'text', raw: backticks, content: backticks }]);
+		expect(performance.now() - t0).toBeLessThan(20);
+	}
+
+	{
+		const escapedBackticks = '`>' + '\\``'.repeat(2_000);
+		const t0 = performance.now();
+		const tokens = tokenize(escapedBackticks);
+		expect(performance.now() - t0).toBeLessThan(20);
+		expect(sumRawLength(tokens)).toBe(escapedBackticks.length);
+		expect(tokens.some((token) => token.type === 'code')).toBe(false);
+	}
+
+	{
+		const nestedStars = '*'.repeat(2_000) + 'a' + '*'.repeat(2_000);
+		const t0 = performance.now();
+		const tokens = tokenize(nestedStars);
+		expect(performance.now() - t0).toBeLessThan(20);
+		expect(sumRawLength(tokens)).toBe(nestedStars.length);
+		expect(measureDepth(tokens)).toBe(32);
+	}
+
+	{
+		const nestedLinks = '['.repeat(1_000) + 'a' + '](u)'.repeat(1_000);
+		const t0 = performance.now();
+		const tokens = tokenize(nestedLinks);
+		expect(performance.now() - t0).toBeLessThan(20);
+		expect(sumRawLength(tokens)).toBe(nestedLinks.length);
+		expect(measureDepth(tokens)).toBeLessThanOrEqual(32);
+	}
 });

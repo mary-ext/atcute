@@ -32,22 +32,27 @@ const trimAutolink = (url: string): string => {
 };
 
 const LINK_RE =
-	/^\[((?:\[[^\]]*\]|[^[\]]|\](?=[^[]*\]))*)\]\(\s*<?((?:\([^)]*\)|[^\s\\]|\\.)*?)>?(?:\s+['"]([^]*?)['"])?\s*\)/;
+	/^\[((?:\[(?:\\[^]|[^[\]\\])*\]|\\[^]|[^[\]\\]|\](?=(?:\\[^]|[^[\]\\])*\]))*)\]\(\s*<?((?:\((?:[^()\\]|\\[^])*\)|\\[^]|[^\s()\\])*?)>?(?:\s+(?:"(?:\\[^]|[^"\\])*"|'(?:\\[^]|[^'\\])*'))?\s*\)/;
 const UNESCAPE_URL_RE = /\\([^0-9A-Za-z\s])/g;
 
-const EMPHASIS_RE =
-	/^\b_((?:__|\\[^]|[^\\_])+?)_\b|^\*(?=\S)((?:\*\*|\\[^]|\s+(?:\\[^]|[^\s*\\]|\*\*)|[^\s*\\])+?)\*(?!\*)/;
+const EMPHASIS_UL_RE = /^\b_((?:__)*(?:\\[^]|[^\\_])(?:__|\\[^]|[^\\_])*?)_\b/;
+const EMPHASIS_AST_RE =
+	/^\*(?=\S)((?:\s*\*\*)*(?:\\[^]|\s+(?:\\[^]|[^\s*\\])|[^\s*\\])(?:\*\*|\\[^]|\s+(?:\\[^]|[^\s*\\]|\*\*)|[^\s*\\])*?)\*(?!\*)/;
 
-const STRONG_RE = /^\*\*((?:\\[^]|[^\\])+?)\*\*(?!\*)/;
+const STRONG_RE = /^\*\*(\**(?:\\[^]|[^*\\])(?:\\[^]|[^\\])*?)\*\*(?!\*)/;
 
-const UNDERLINE_RE = /^__((?:\\[^]|[^\\])+?)__(?!_)/;
+const UNDERLINE_RE = /^__(_*(?:\\[^]|[^_\\])(?:\\[^]|[^\\])*?)__(?!_)/;
 
-const DELETE_RE = /^~~((?:\\[^]|~(?!~)|[^~\\]|\s(?!~~))+?)~~/;
+const DELETE_RE = /^~~((?:\\[^]|~(?!~)|[^~\\])+?)~~/;
 
-const CODE_RE = /^(`+)([^]*?[^`])\1(?!`)/;
+// lookahead + backreference makes the opening backtick run atomic so JS RegExp never backtracks on fence length
+const CODE_RE = /^(?=(`+))\1([^]*?[^`])\1(?!`)/;
 const CODE_ESCAPE_BACKTICKS_RE = /^ (?= *`)|(` *) $/g;
 
-const TEXT_RE = /^[^]+?(?:(?=$|[~*_`:\\[]|https?:\/\/)|(?<=\s|[(){}/\\[\]\-|:;'".,=+])(?=[@＠#＃$＄]))/;
+const TEXT_RE =
+	/^(?:`+|\*+(?=\*)|_+(?=_)|\[+(?=\[\[)|[^]+?(?:(?=$|[~*_`:\\[]|https?:\/\/)|(?<=\s|[(){}/\\[\]\-|:;'".,=+])(?=[@＠#＃$＄])))/;
+
+const MAX_DEPTH = 32;
 
 export interface EscapeToken {
 	type: 'escape';
@@ -217,85 +222,67 @@ const tokenizeAutolink = (src: string): AutolinkToken | undefined => {
 	}
 };
 
-const tokenizeLink = (src: string): LinkToken | undefined => {
+const tokenizeLink = (src: string, depth: number): LinkToken | undefined => {
 	const match = LINK_RE.exec(src);
 	if (match) {
 		return {
 			type: 'link',
 			raw: match[0],
 			url: match[2]!.replace(UNESCAPE_URL_RE, '$1'),
-			children: tokenize(match[1]!),
+			children: tokenizeInline(match[1]!, depth + 1),
 		};
 	}
 };
 
-const _tokenizeEmphasis = (src: string): EmphasisToken | undefined => {
-	const match = EMPHASIS_RE.exec(src);
-	if (match) {
+const tokenizeAsteriskEmStrong = (src: string, depth: number): EmphasisToken | StrongToken | undefined => {
+	const emMatch = EMPHASIS_AST_RE.exec(src);
+	const strongMatch = STRONG_RE.exec(src);
+
+	if (emMatch && (!strongMatch || emMatch[0].length >= strongMatch[0].length)) {
 		return {
 			type: 'emphasis',
-			raw: match[0],
-			children: tokenize((match[2] || match[1])!),
+			raw: emMatch[0],
+			children: tokenizeInline(emMatch[1]!, depth + 1),
 		};
 	}
-};
 
-const _tokenizeStrong = (src: string): StrongToken | undefined => {
-	const match = STRONG_RE.exec(src);
-	if (match) {
+	if (strongMatch) {
 		return {
 			type: 'strong',
-			raw: match[0],
-			children: tokenize(match[1]!),
+			raw: strongMatch[0],
+			children: tokenizeInline(strongMatch[1]!, depth + 1),
 		};
 	}
 };
 
-const _tokenizeUnderline = (src: string): UnderlineToken | undefined => {
-	const match = UNDERLINE_RE.exec(src);
-	if (match) {
+const tokenizeUnderscoreEmU = (src: string, depth: number): EmphasisToken | UnderlineToken | undefined => {
+	const emMatch = EMPHASIS_UL_RE.exec(src);
+	const uMatch = UNDERLINE_RE.exec(src);
+
+	if (emMatch && (!uMatch || emMatch[0].length >= uMatch[0].length)) {
+		return {
+			type: 'emphasis',
+			raw: emMatch[0],
+			children: tokenizeInline(emMatch[1]!, depth + 1),
+		};
+	}
+
+	if (uMatch) {
 		return {
 			type: 'underline',
-			raw: match[0],
-			children: tokenize(match[1]!),
+			raw: uMatch[0],
+			children: tokenizeInline(uMatch[1]!, depth + 1),
 		};
 	}
 };
 
-const tokenizeEmStrongU = (src: string): EmphasisToken | StrongToken | UnderlineToken | undefined => {
-	let token: EmphasisToken | StrongToken | UnderlineToken | undefined;
-
-	{
-		const match = _tokenizeEmphasis(src);
-		if (match && (!token || match.raw.length > token.raw.length)) {
-			token = match;
-		}
-	}
-
-	{
-		const match = _tokenizeStrong(src);
-		if (match && (!token || match.raw.length > token.raw.length)) {
-			token = match;
-		}
-	}
-
-	{
-		const match = _tokenizeUnderline(src);
-		if (match && (!token || match.raw.length > token.raw.length)) {
-			token = match;
-		}
-	}
-
-	return token;
-};
-
-const tokenizeDelete = (src: string): DeleteToken | undefined => {
+const tokenizeDelete = (src: string, depth: number): DeleteToken | undefined => {
 	const match = DELETE_RE.exec(src);
 	if (match) {
 		return {
 			type: 'delete',
 			raw: match[0],
-			children: tokenize(match[1]!),
+			children: tokenizeInline(match[1]!, depth + 1),
 		};
 	}
 };
@@ -322,38 +309,91 @@ const tokenizeText = (src: string): TextToken | undefined => {
 	}
 };
 
-export const tokenize = (src: string): Token[] => {
+const tokenizeInline = (src: string, depth: number): Token[] => {
 	const tokens: Token[] = [];
 
 	let last: Token | undefined;
 	let token: Token | undefined;
+	// backtick fence lengths that failed to close never become valid later in the same slice
+	let deadCodeMask = 0;
+	let deadCodeSet: Set<number> | undefined;
 
 	while (src) {
 		last = token;
 		const first = src.charCodeAt(0);
 
-		if (first === 92) {
-			token = tokenizeEscape(src);
-		} else if (first === 104) {
-			token = tokenizeAutolink(src);
-		} else if (first === 64 || first === 65312) {
-			token = tokenizeMention(src);
-		} else if (first === 35 || first === 65283) {
-			token = tokenizeTopic(src);
-		} else if (first === 36 || first === 65284) {
-			token = tokenizeCashtag(src);
-		} else if (first === 58) {
-			token = tokenizeEmote(src);
-		} else if (first === 91) {
-			token = tokenizeLink(src);
-		} else if (first === 42 || first === 95) {
-			token = tokenizeEmStrongU(src);
-		} else if (first === 126) {
-			token = tokenizeDelete(src);
-		} else if (first === 96) {
-			token = tokenizeCode(src);
-		} else {
-			token = undefined;
+		switch (first) {
+			case 92: {
+				token = tokenizeEscape(src);
+				break;
+			}
+			case 104: {
+				token = tokenizeAutolink(src);
+				break;
+			}
+			case 64:
+			case 65312: {
+				token = tokenizeMention(src);
+				break;
+			}
+			case 35:
+			case 65283: {
+				token = tokenizeTopic(src);
+				break;
+			}
+			case 36:
+			case 65284: {
+				token = tokenizeCashtag(src);
+				break;
+			}
+			case 58: {
+				token = tokenizeEmote(src);
+				break;
+			}
+			case 91: {
+				token = depth < MAX_DEPTH ? tokenizeLink(src, depth) : undefined;
+				break;
+			}
+			case 42: {
+				token = depth < MAX_DEPTH ? tokenizeAsteriskEmStrong(src, depth) : undefined;
+				break;
+			}
+			case 95: {
+				token = depth < MAX_DEPTH ? tokenizeUnderscoreEmU(src, depth) : undefined;
+				break;
+			}
+			case 126: {
+				token = depth < MAX_DEPTH ? tokenizeDelete(src, depth) : undefined;
+				break;
+			}
+			case 96: {
+				let run = 1;
+				while (src.charCodeAt(run) === 96) {
+					run += 1;
+				}
+
+				const isDead =
+					run < 32 ? (deadCodeMask & (1 << run)) !== 0 : deadCodeSet !== undefined && deadCodeSet.has(run);
+
+				if (isDead) {
+					token = undefined;
+				} else {
+					token = tokenizeCode(src);
+					if (!token) {
+						if (run < 32) {
+							deadCodeMask |= 1 << run;
+						} else {
+							deadCodeSet ??= new Set();
+							deadCodeSet.add(run);
+						}
+					}
+				}
+				break;
+			}
+			default: {
+				token = undefined;
+				break;
+			}
 		}
 
 		if (token) {
@@ -367,6 +407,7 @@ export const tokenize = (src: string): Token[] => {
 
 			if (last && last.type === 'text') {
 				last.raw += token.raw;
+				last.content += token.content;
 				token = last;
 			} else {
 				tokens.push(token);
@@ -381,4 +422,8 @@ export const tokenize = (src: string): Token[] => {
 	}
 
 	return tokens;
+};
+
+export const tokenize = (src: string): Token[] => {
+	return tokenizeInline(src, 0);
 };
