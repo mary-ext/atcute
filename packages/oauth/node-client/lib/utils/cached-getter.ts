@@ -90,7 +90,7 @@ export class CachedGetter<K, V> {
 					if (storedValue !== undefined && deleteOnError !== undefined) {
 						try {
 							if (await deleteOnError(err, key, storedValue)) {
-								await this.deleteStored(key, err);
+								await this.deleteStored(key, err, storedValue);
 							}
 						} catch (error) {
 							// oxlint-disable-next-line preserve-caught-error -- errors preserved in first arg
@@ -131,7 +131,7 @@ export class CachedGetter<K, V> {
 		}
 	}
 
-	async deleteStored(key: K, _cause?: unknown): Promise<void> {
+	async deleteStored(key: K, _cause?: unknown, _value?: V): Promise<void> {
 		await this.store.delete(key);
 	}
 }

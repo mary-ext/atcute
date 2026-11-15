@@ -9,7 +9,7 @@ import {
 	WellKnownHandleResolver,
 } from '@atcute/identity-resolver';
 import { NodeDnsHandleResolver } from '@atcute/identity-resolver-node';
-import { type Did, isActorIdentifier, isDid } from '@atcute/lexicons/syntax';
+import { isActorIdentifier } from '@atcute/lexicons/syntax';
 import {
 	type AuthorizeTarget,
 	type ClientAssertionPrivateJwk,
@@ -21,8 +21,9 @@ import {
 
 import { type Context, Hono } from 'hono';
 import { deleteCookie, getSignedCookie, setSignedCookie } from 'hono/cookie';
+import { nanoid } from 'nanoid';
 
-const SESSION_COOKIE = 'atcute_oauth_did';
+const SESSION_COOKIE = 'atcute_oauth_sid';
 
 const ONE_MINUTE_MS = 60_000;
 const TEN_MINUTES_MS = 10 * ONE_MINUTE_MS;
@@ -144,20 +145,22 @@ const oauth = new OAuthClient({
 			ttlAutopurge: true,
 		}),
 	},
+
+	createSessionId: () => nanoid(),
 });
 
-const getSessionDid = async (c: Context): Promise<Did | null> => {
-	const did = await getSignedCookie(c, cookieSecret, SESSION_COOKIE);
+const getSessionId = async (c: Context): Promise<string | null> => {
+	const sessionId = await getSignedCookie(c, cookieSecret, SESSION_COOKIE);
 
-	if (isDid(did)) {
-		return did;
+	if (typeof sessionId === 'string' && sessionId.length > 0) {
+		return sessionId;
 	}
 
 	return null;
 };
 
-const setSessionDid = async (c: Context, did: Did, secure: boolean): Promise<void> => {
-	await setSignedCookie(c, SESSION_COOKIE, did, cookieSecret, {
+const setSessionId = async (c: Context, sessionId: string, secure: boolean): Promise<void> => {
+	await setSignedCookie(c, SESSION_COOKIE, sessionId, cookieSecret, {
 		httpOnly: true,
 		secure,
 		sameSite: 'Lax',
@@ -165,7 +168,7 @@ const setSessionDid = async (c: Context, did: Did, secure: boolean): Promise<voi
 	});
 };
 
-const clearSessionDid = (c: Context, secure: boolean): void => {
+const clearSessionId = (c: Context, secure: boolean): void => {
 	deleteCookie(c, SESSION_COOKIE, {
 		httpOnly: true,
 		secure,
@@ -198,12 +201,12 @@ const app = new Hono();
 
 app.get('/', async (c) => {
 	const secure = publicUrl.protocol === 'https:';
-	const did = await getSessionDid(c);
+	const sessionId = await getSessionId(c);
 
 	let sessionInfoHtml = `<p class="muted">not signed in.</p>`;
-	if (did) {
+	if (sessionId) {
 		try {
-			const session = await oauth.restore(did, { refresh: 'auto' });
+			const session = await oauth.restore(sessionId, { refresh: 'auto' });
 			const tokenInfo = await session.getTokenInfo('auto');
 
 			sessionInfoHtml = `<p>signed in as <code>${escapeHtml(session.did)}</code></p>
@@ -213,7 +216,7 @@ app.get('/', async (c) => {
 	<a href="/logout">logout</a>
 </div>`;
 		} catch {
-			clearSessionDid(c, secure);
+			clearSessionId(c, secure);
 		}
 	}
 
@@ -279,7 +282,7 @@ app.get('/oauth/callback', async (c) => {
 		const params = new URL(c.req.url).searchParams;
 
 		const { session } = await oauth.callback(params);
-		await setSessionDid(c, session.did, publicUrl.protocol === 'https:');
+		await setSessionId(c, session.sessionId, publicUrl.protocol === 'https:');
 
 		return c.redirect('/protected', 302);
 	} catch (err) {
@@ -291,16 +294,16 @@ app.get('/protected', async (c) => {
 	try {
 		const secure = publicUrl.protocol === 'https:';
 
-		const did = await getSessionDid(c);
-		if (!did) {
+		const sessionId = await getSessionId(c);
+		if (!sessionId) {
 			return c.redirect('/', 302);
 		}
 
 		let session;
 		try {
-			session = await oauth.restore(did, { refresh: 'auto' });
+			session = await oauth.restore(sessionId, { refresh: 'auto' });
 		} catch {
-			clearSessionDid(c, secure);
+			clearSessionId(c, secure);
 			return c.redirect('/', 302);
 		}
 
@@ -334,16 +337,16 @@ app.get('/logout', async (c) => {
 	try {
 		const secure = publicUrl.protocol === 'https:';
 
-		const did = await getSessionDid(c);
-		if (did) {
+		const sessionId = await getSessionId(c);
+		if (sessionId) {
 			try {
-				await oauth.revoke(did);
+				await oauth.revoke(sessionId);
 			} catch {
 				// ignore errors, we still clear local session
 			}
 		}
 
-		clearSessionDid(c, secure);
+		clearSessionId(c, secure);
 		return c.redirect('/', 302);
 	} catch (err) {
 		return c.html(renderError('logout', err), 500);

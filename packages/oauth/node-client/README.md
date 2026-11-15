@@ -151,7 +151,7 @@ const oauth = new OAuthClient({
 	keyset: [JSON.parse(process.env.PRIVATE_KEY_JWK!) as ClientAssertionPrivateJwk],
 
 	stores: {
-		// sessions are keyed by DID - should be durable across restarts.
+		// sessions are keyed by session ID (defaults to user's DID) - should be durable across restarts.
 		sessions: new MemoryStore(),
 		// states are keyed by OAuth state value - should have ~10 minute TTL.
 		// MemoryStore works for development; use Redis or similar in production.
@@ -249,6 +249,49 @@ or, if you already have an `OAuthSession`:
 await session.signOut();
 ```
 
+### multiple sessions per account
+
+by default, sessions are keyed by the account's DID, so signing in again replaces the previous grant
+for that DID. to keep independent grants per browser, device, or session cookie, configure
+`createSessionId` on `OAuthClient`:
+
+```ts
+const oauth = new OAuthClient({
+	// ...
+	stores: {
+		sessions: new MemoryStore(),
+		states: new MemoryStore(),
+	},
+	createSessionId: () => crypto.randomUUID(),
+});
+```
+
+in your callback handler, store `session.sessionId` in your cookie and pass it to `oauth.restore()`
+and `oauth.revoke()`:
+
+```ts
+app.get('/oauth/callback', async (c) => {
+	const callbackUrl = new URL(c.req.url);
+	const { session } = await oauth.callback(callbackUrl.searchParams);
+
+	// store session.sessionId in your cookie; restore() and revoke() accept it directly
+	// without needing a separate cookie-to-DID lookup table
+	const sessionId = session.sessionId;
+	void sessionId;
+	return c.redirect('/');
+});
+```
+
+`createSessionId` receives the verified `sub` (DID) and `state` from `authorize()`, so you can also
+derive structured keys like `${sub}:${id}`:
+
+```ts
+const oauth = new OAuthClient({
+	// ...
+	createSessionId: ({ sub }) => `${sub}:${crypto.randomUUID()}`,
+});
+```
+
 ## public clients
 
 public clients don't require key management or hosted metadata. they're ideal for CLI tools, local
@@ -343,13 +386,13 @@ import type { OAuthClientStores } from '@atcute/oauth-node-client';
 
 const stores: OAuthClientStores = {
 	sessions: {
-		async get(did, options) {
+		async get(sessionId, options) {
 			// ...
 		},
-		async set(did, session) {
+		async set(sessionId, session) {
 			// ...
 		},
-		async delete(did) {
+		async delete(sessionId) {
 			// ...
 		},
 		async clear() {},

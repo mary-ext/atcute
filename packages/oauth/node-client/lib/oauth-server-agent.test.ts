@@ -240,6 +240,47 @@ describe('OAuthServerAgent', () => {
 			// should NOT have made token request since issuer check failed first
 			expect(mockFetch).not.toHaveBeenCalled();
 		});
+
+		it('should revoke token and throw TokenRefreshError if refreshed sub mismatches', async () => {
+			const OTHER_DID = 'did:plc:z72i7hdynmk6r22z27h6tvur';
+			const mockFetch = vi
+				.fn()
+				.mockResolvedValueOnce(
+					createMockResponse(200, {
+						access_token: 'new-access-123',
+						refresh_token: 'new-refresh-123',
+						token_type: 'DPoP',
+						expires_in: 3600,
+						scope: 'atproto',
+						sub: OTHER_DID,
+					}),
+				)
+				.mockResolvedValueOnce(createMockResponse(200));
+
+			const agent = await createServerAgent({ mockFetch });
+
+			await expect(
+				agent.refresh({
+					iss: 'https://auth.example.com',
+					sub: TEST_DID,
+					aud: 'https://pds.example.com',
+					scope: 'atproto',
+					access_token: 'old-access',
+					refresh_token: 'old-refresh',
+					token_type: 'DPoP',
+				}),
+			).rejects.toThrow(TokenRefreshError);
+
+			expect(mockFetch).toHaveBeenCalledTimes(2);
+			const revokeRequest = mockFetch.mock.calls[1]![0];
+			expect(revokeRequest instanceof Request ? revokeRequest.url : String(revokeRequest)).toBe(
+				'https://auth.example.com/oauth/revoke',
+			);
+			if (revokeRequest instanceof Request) {
+				const body = new URLSearchParams(await revokeRequest.clone().text());
+				expect(body.get('token')).toBe('new-refresh-123');
+			}
+		});
 	});
 
 	describe('pushAuthorizationRequest', () => {

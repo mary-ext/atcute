@@ -1,4 +1,3 @@
-import type { Did } from '@atcute/lexicons';
 import type { DpopPrivateJwk } from '@atcute/oauth-crypto';
 
 import type { ClientAuthMethod } from '../oauth-client-auth.ts';
@@ -6,7 +5,7 @@ import type { Store } from '../utils/store.ts';
 
 import type { TokenSet } from './token-set.ts';
 
-/** stored session data, keyed by DID. */
+/** stored session data. */
 export interface StoredSession {
 	/** DPoP private key */
 	dpopKey: DpopPrivateJwk;
@@ -16,5 +15,5 @@ export interface StoredSession {
 	tokenSet: TokenSet;
 }
 
-/** session store, keyed by DID */
-export type SessionStore = Store<Did, StoredSession>;
+/** session store, keyed by session ID (defaults to user's DID) */
+export type SessionStore = Store<string, StoredSession>;

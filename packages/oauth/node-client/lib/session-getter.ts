@@ -19,12 +19,14 @@ export type SessionEventType = 'updated' | 'deleted';
 export interface SessionUpdatedEvent {
 	type: 'updated';
 	sub: Did;
+	sessionId: string;
 	session: StoredSession;
 }
 
 export interface SessionDeletedEvent {
 	type: 'deleted';
 	sub: Did;
+	sessionId: string;
 	cause: unknown;
 }
 
@@ -52,7 +54,7 @@ export interface SessionGetterOptions {
  * wraps a session store with caching and staleness checking. automatically refreshes tokens when they're
  * about to expire.
  */
-export class SessionGetter extends CachedGetter<Did, StoredSession> {
+export class SessionGetter extends CachedGetter<string, StoredSession> {
 	private readonly listeners = new Set<SessionEventListener>();
 	private readonly requestLock: LockFunction | undefined;
 
@@ -61,21 +63,17 @@ export class SessionGetter extends CachedGetter<Did, StoredSession> {
 
 		super(
 			// getter function - refreshes the token
-			async (sub, opts, storedSession) => {
+			async (sessionId, opts, storedSession) => {
 				if (storedSession === undefined) {
-					const cause = new TokenRefreshError(sub, 'session was deleted by another process');
-					this.dispatchEvent({ type: 'deleted', sub, cause });
-					throw cause;
+					throw new TokenRefreshError(sessionId, 'session was deleted by another process', {
+						sessionId,
+					});
 				}
 
 				const { dpopKey, authMethod, tokenSet } = storedSession;
 
-				if (sub !== tokenSet.sub) {
-					throw new TokenRefreshError(sub, 'stored session sub mismatch');
-				}
-
 				if (!tokenSet.refresh_token) {
-					throw new TokenRefreshError(sub, 'no refresh token available');
+					throw new TokenRefreshError(tokenSet.sub, 'no refresh token available', { sessionId });
 				}
 
 				const server = await serverFactory.fromIssuer(tokenSet.iss, authMethod, dpopKey);
@@ -86,8 +84,10 @@ export class SessionGetter extends CachedGetter<Did, StoredSession> {
 				try {
 					const newTokenSet = await server.refresh(tokenSet);
 
-					if (sub !== newTokenSet.sub) {
-						throw new TokenRefreshError(sub, 'token set sub mismatch after refresh');
+					if (tokenSet.sub !== newTokenSet.sub) {
+						throw new TokenRefreshError(tokenSet.sub, 'token set sub mismatch after refresh', {
+							sessionId,
+						});
 					}
 
 					return {
@@ -103,7 +103,14 @@ export class SessionGetter extends CachedGetter<Did, StoredSession> {
 						cause.error === 'invalid_grant'
 					) {
 						const msg = cause.errorDescription ?? 'session was revoked';
-						throw new TokenRefreshError(sub, msg, { cause });
+						throw new TokenRefreshError(tokenSet.sub, msg, { cause, sessionId });
+					}
+
+					if (cause instanceof TokenRefreshError && cause.sessionId === undefined) {
+						throw new TokenRefreshError(cause.sub, cause.message, {
+							cause: cause.cause ?? cause,
+							sessionId,
+						});
 					}
 
 					throw cause;
@@ -111,7 +118,7 @@ export class SessionGetter extends CachedGetter<Did, StoredSession> {
 			},
 			sessionStore,
 			{
-				isStale(_sub, { tokenSet }) {
+				isStale(_sessionId, { tokenSet }) {
 					if (tokenSet.expires_at == null) {
 						return false;
 					}
@@ -119,7 +126,7 @@ export class SessionGetter extends CachedGetter<Did, StoredSession> {
 					const buffer = 10_000 + 30_000 * Math.random();
 					return tokenSet.expires_at < Date.now() + buffer;
 				},
-				async onStoreError(err, _sub, { tokenSet, dpopKey, authMethod }) {
+				async onStoreError(err, _sessionId, { tokenSet, dpopKey, authMethod }) {
 					if (!(err instanceof AuthMethodUnsatisfiableError)) {
 						try {
 							const server = await serverFactory.fromIssuer(tokenSet.iss, authMethod, dpopKey);
@@ -164,47 +171,47 @@ export class SessionGetter extends CachedGetter<Did, StoredSession> {
 		}
 	}
 
-	override async setStored(sub: Did, session: StoredSession): Promise<void> {
-		if (sub !== session.tokenSet.sub) {
-			throw new TypeError('token set does not match the expected sub');
-		}
-		await super.setStored(sub, session);
-		this.dispatchEvent({ type: 'updated', sub, session });
+	override async setStored(sessionId: string, session: StoredSession): Promise<void> {
+		await super.setStored(sessionId, session);
+		this.dispatchEvent({ type: 'updated', sub: session.tokenSet.sub, sessionId, session });
 	}
 
-	override async deleteStored(sub: Did, cause?: unknown): Promise<void> {
-		await super.deleteStored(sub, cause);
-		this.dispatchEvent({ type: 'deleted', sub, cause });
+	override async deleteStored(
+		sessionId: string,
+		cause?: unknown,
+		sessionOrSub?: StoredSession | Did,
+	): Promise<void> {
+		const sub = typeof sessionOrSub === 'string' ? sessionOrSub : sessionOrSub?.tokenSet.sub;
+		await super.deleteStored(sessionId, cause);
+		if (sub !== undefined) {
+			this.dispatchEvent({ type: 'deleted', sub, sessionId, cause });
+		}
 	}
 
 	/**
 	 * gets a session, optionally forcing a refresh.
 	 *
-	 * @param sub user's DID
+	 * @param sessionId session ID (user's DID by default)
 	 * @param refresh true to force refresh, false to allow stale, 'auto' for normal behavior
 	 * @returns session data
 	 */
-	async getSession(sub: Did, refresh: boolean | 'auto' = 'auto'): Promise<StoredSession> {
-		return this.get(sub, {
+	async getSession(sessionId: string, refresh: boolean | 'auto' = 'auto'): Promise<StoredSession> {
+		return this.get(sessionId, {
 			noCache: refresh === true,
 			allowStale: refresh === false,
 		});
 	}
 
-	override async get(sub: Did, options?: GetCachedOptions): Promise<StoredSession> {
+	override async get(sessionId: string, options?: GetCachedOptions): Promise<StoredSession> {
 		const signal = options?.signal ?? AbortSignal.timeout(30_000);
 
 		let session: StoredSession;
 		if (this.requestLock) {
-			session = await this.requestLock(`oauth-session-${sub}`, async () => {
-				return await super.get(sub, { ...options, signal });
+			session = await this.requestLock(`oauth-session-${sessionId}`, async () => {
+				return await super.get(sessionId, { ...options, signal });
 			});
 		} else {
-			session = await super.get(sub, { ...options, signal });
-		}
-
-		if (sub !== session.tokenSet.sub) {
-			throw new Error('token set does not match the expected sub');
+			session = await super.get(sessionId, { ...options, signal });
 		}
 
 		return session;

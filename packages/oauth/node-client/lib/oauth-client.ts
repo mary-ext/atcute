@@ -35,13 +35,14 @@ import {
 	ProtectedResourceMetadataResolver,
 } from './resolvers/protected-resource-metadata.ts';
 import { type SessionEventListener, SessionGetter } from './session-getter.ts';
-import type { SessionStore } from './types/sessions.ts';
+import type { Awaitable } from './types/misc.ts';
+import type { SessionStore, StoredSession } from './types/sessions.ts';
 import type { StateStore, StoredState } from './types/states.ts';
 import type { LockFunction } from './utils/lock.ts';
 import { MemoryStore } from './utils/memory-store.ts';
 
 export interface OAuthClientStores {
-	/** session store, keyed by DID */
+	/** session store, keyed by session ID (defaults to DID) */
 	sessions: SessionStore;
 	/** authorization state store, keyed by state ID (short-lived) */
 	states: StateStore;
@@ -66,6 +67,8 @@ export interface ConfidentialOAuthClientOptions {
 
 	/** OAuth response mode for authorization responses */
 	responseMode?: OAuthResponseMode;
+	/** custom session ID generator for multi-session support (defaults to user's DID) */
+	createSessionId?: SessionIdGenerator;
 	/** lock function for coordinating token refresh, defaults to in-memory */
 	requestLock?: LockFunction;
 
@@ -84,6 +87,8 @@ export interface PublicOAuthClientOptions {
 
 	/** OAuth response mode for authorization responses */
 	responseMode?: OAuthResponseMode;
+	/** custom session ID generator for multi-session support (defaults to user's DID) */
+	createSessionId?: SessionIdGenerator;
 	/** lock function for coordinating token refresh, defaults to in-memory */
 	requestLock?: LockFunction;
 
@@ -127,6 +132,14 @@ export interface AuthorizationResult {
 	stateId: string;
 }
 
+/**
+ * generates the store key (`sessionId`) for a newly authenticated session.
+ *
+ * @param ctx verified subject DID and user-provided state from authorize()
+ * @returns session ID to store the session under
+ */
+export type SessionIdGenerator = (ctx: { sub: Did; state: unknown }) => Awaitable<string>;
+
 export interface CallbackOptions {
 	/** override redirect_uri for token exchange */
 	redirectUri?: string;
@@ -160,6 +173,7 @@ export class OAuthClient {
 	readonly keyset: Keyset | undefined;
 
 	private readonly responseMode: OAuthResponseMode;
+	private readonly createSessionId: SessionIdGenerator | undefined;
 	private readonly resolver: OAuthResolver;
 	private readonly serverFactory: OAuthServerFactory;
 	private readonly sessionGetter: SessionGetter;
@@ -185,6 +199,7 @@ export class OAuthClient {
 		this.metadata = metadata;
 		this.keyset = keyset;
 		this.responseMode = options.responseMode ?? 'query';
+		this.createSessionId = options.createSessionId;
 		this.fetch = options.fetch ?? globalThis.fetch;
 
 		const protectedResourceMetadataCache =
@@ -413,23 +428,53 @@ export class OAuthClient {
 
 		// verify expected sub if we resolved one
 		if (storedState.sub && tokenSet.sub !== storedState.sub) {
-			await server.revoke(tokenSet.access_token);
+			await server.revoke(tokenSet.refresh_token ?? tokenSet.access_token);
 			throw new OAuthCallbackError('invalid_request', 'sub mismatch', stateParam);
 		}
 
-		// store session
+		// resolve session ID and store session
+		let sessionId: string;
+		let previousSession: StoredSession | undefined;
 		try {
-			await this.sessionGetter.setStored(tokenSet.sub, {
+			sessionId = this.createSessionId
+				? await (0, this.createSessionId)({ sub: tokenSet.sub, state: storedState.userState })
+				: tokenSet.sub;
+
+			if (!sessionId) {
+				throw new TypeError(`sessionId must not be empty`);
+			}
+
+			previousSession = await this.sessionGetter.getStored(sessionId);
+
+			await this.sessionGetter.setStored(sessionId, {
 				dpopKey: storedState.dpopKey,
 				authMethod: server.authMethod,
 				tokenSet,
 			});
 		} catch (err) {
-			await server.revoke(tokenSet.access_token);
+			await server.revoke(tokenSet.refresh_token ?? tokenSet.access_token);
 			throw err;
 		}
 
-		const session = this.createSession(server, tokenSet.sub);
+		if (previousSession !== undefined) {
+			const prevToken = previousSession.tokenSet.refresh_token ?? previousSession.tokenSet.access_token;
+			const newToken = tokenSet.refresh_token ?? tokenSet.access_token;
+
+			if (prevToken !== newToken) {
+				try {
+					const prevServer = await this.serverFactory.fromIssuer(
+						previousSession.tokenSet.iss,
+						previousSession.authMethod,
+						previousSession.dpopKey,
+					);
+					await prevServer.revoke(prevToken);
+				} catch {
+					// ignore revocation errors for superseded sessions
+				}
+			}
+		}
+
+		const session = this.createSession(server, tokenSet.sub, sessionId);
 
 		return { session, state: storedState.userState };
 	}
@@ -437,40 +482,48 @@ export class OAuthClient {
 	/**
 	 * restores an existing session.
 	 *
-	 * @param sub user's DID
+	 * @param sessionId session ID (user's DID by default)
 	 * @param options restore options
 	 * @returns authenticated session
 	 */
-	async restore(sub: Did, options?: RestoreOptions): Promise<OAuthSession> {
+	async restore(sessionId: string, options?: RestoreOptions): Promise<OAuthSession> {
 		const refresh = options?.refresh ?? 'auto';
 
-		const { dpopKey, authMethod, tokenSet } = await this.sessionGetter.getSession(sub, refresh);
+		const { dpopKey, authMethod, tokenSet } = await this.sessionGetter.getSession(sessionId, refresh);
 
 		const server = await this.serverFactory.fromIssuer(tokenSet.iss, authMethod, dpopKey, {
 			noCache: refresh === true,
 		});
 
-		return this.createSession(server, sub);
+		return this.createSession(server, tokenSet.sub, sessionId);
 	}
 
 	/**
 	 * revokes and deletes a session.
 	 *
-	 * @param sub user's DID
+	 * @param sessionId session ID (user's DID by default)
 	 */
-	async revoke(sub: Did): Promise<void> {
-		const { dpopKey, authMethod, tokenSet } = await this.sessionGetter.getSession(sub, false);
+	async revoke(sessionId: string): Promise<void> {
+		const session = await this.sessionGetter.getSession(sessionId, false);
 
 		try {
-			const server = await this.serverFactory.fromIssuer(tokenSet.iss, authMethod, dpopKey);
-			await server.revoke(tokenSet.access_token);
+			const server = await this.serverFactory.fromIssuer(
+				session.tokenSet.iss,
+				session.authMethod,
+				session.dpopKey,
+			);
+			await server.revoke(session.tokenSet.refresh_token ?? session.tokenSet.access_token);
 		} finally {
-			await this.sessionGetter.deleteStored(sub, new TokenRevokedError(sub));
+			await this.sessionGetter.deleteStored(
+				sessionId,
+				new TokenRevokedError(session.tokenSet.sub, undefined, { sessionId }),
+				session,
+			);
 		}
 	}
 
-	private createSession(server: OAuthServerAgent, sub: Did): OAuthSession {
-		return new OAuthSession(server, sub, this.sessionGetter, this.fetch);
+	private createSession(server: OAuthServerAgent, sub: Did, sessionId: string): OAuthSession {
+		return new OAuthSession(server, sub, sessionId, this.sessionGetter, this.fetch);
 	}
 }
 

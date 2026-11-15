@@ -35,10 +35,16 @@ export {
 	type OAuthClientStores,
 	type PublicOAuthClientOptions,
 	type RestoreOptions,
+	type SessionIdGenerator,
 } from './oauth-client.ts';
 
-export { OAuthSession } from './oauth-session.ts';
-export type { SessionEvent, SessionEventListener } from './session-getter.ts';
+export { OAuthSession, type TokenInfo } from './oauth-session.ts';
+export type {
+	SessionDeletedEvent,
+	SessionEvent,
+	SessionEventListener,
+	SessionUpdatedEvent,
+} from './session-getter.ts';
 
 export {
 	AuthMethodUnsatisfiableError,

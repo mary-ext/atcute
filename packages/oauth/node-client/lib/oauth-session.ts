@@ -36,17 +36,21 @@ export class OAuthSession implements FetchHandlerObject {
 	readonly server: OAuthServerAgent;
 	/** user's DID */
 	readonly sub: Did;
+	/** session ID in the session store (defaults to user's DID) */
+	readonly sessionId: string;
 	/** session getter for token management */
 	private readonly sessionGetter: SessionGetter;
 
 	constructor(
 		server: OAuthServerAgent,
 		sub: Did,
+		sessionId: string,
 		sessionGetter: SessionGetter,
 		fetch: typeof globalThis.fetch = globalThis.fetch,
 	) {
 		this.server = server;
 		this.sub = sub;
+		this.sessionId = sessionId;
 		this.sessionGetter = sessionGetter;
 		this.dpopFetch = createDpopFetch({
 			key: server.dpopKey,
@@ -69,7 +73,12 @@ export class OAuthSession implements FetchHandlerObject {
 	 * @returns current token set
 	 */
 	private async getTokenSet(refresh: boolean | 'auto'): Promise<TokenSet> {
-		const { tokenSet } = await this.sessionGetter.getSession(this.sub, refresh);
+		const { tokenSet } = await this.sessionGetter.getSession(this.sessionId, refresh);
+		if (tokenSet.sub !== this.sub) {
+			throw new TokenInvalidError(this.sub, `stored session sub mismatch`, {
+				sessionId: this.sessionId,
+			});
+		}
 		return tokenSet;
 	}
 
@@ -99,9 +108,13 @@ export class OAuthSession implements FetchHandlerObject {
 	async signOut(): Promise<void> {
 		try {
 			const tokenSet = await this.getTokenSet(false);
-			await this.server.revoke(tokenSet.access_token);
+			await this.server.revoke(tokenSet.refresh_token ?? tokenSet.access_token);
 		} finally {
-			await this.sessionGetter.deleteStored(this.sub, new TokenRevokedError(this.sub));
+			await this.sessionGetter.deleteStored(
+				this.sessionId,
+				new TokenRevokedError(this.sub, undefined, { sessionId: this.sessionId }),
+				this.sub,
+			);
 		}
 	}
 
@@ -155,7 +168,11 @@ export class OAuthSession implements FetchHandlerObject {
 
 		// if still failing after refresh, the session is likely invalid
 		if (isInvalidTokenResponse(freshResponse)) {
-			await this.sessionGetter.deleteStored(this.sub, new TokenInvalidError(this.sub));
+			await this.sessionGetter.deleteStored(
+				this.sessionId,
+				new TokenInvalidError(this.sub, undefined, { sessionId: this.sessionId }),
+				this.sub,
+			);
 		}
 
 		return freshResponse;

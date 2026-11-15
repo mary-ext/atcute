@@ -149,7 +149,7 @@ export class OAuthServerAgent {
 			};
 		} catch (err) {
 			// revoke on verification failure
-			await this.revoke(tokenResponse.access_token);
+			await this.revoke(tokenResponse.refresh_token ?? tokenResponse.access_token);
 			throw err;
 		}
 	}
@@ -175,6 +175,11 @@ export class OAuthServerAgent {
 			grant_type: 'refresh_token',
 			refresh_token: tokenSet.refresh_token,
 		});
+
+		if (tokenResponse.sub !== tokenSet.sub) {
+			await this.revoke(tokenResponse.refresh_token ?? tokenResponse.access_token);
+			throw new TokenRefreshError(tokenSet.sub, `token set sub mismatch after refresh`);
+		}
 
 		return {
 			iss: this.issuer,

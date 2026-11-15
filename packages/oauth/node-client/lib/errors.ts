@@ -11,10 +11,16 @@ export class TokenInvalidError extends Error {
 	override name = 'TokenInvalidError';
 
 	readonly sub: string;
+	readonly sessionId?: string;
 
-	constructor(sub: string, message = `session for "${sub}" is invalid`, options?: ErrorOptions) {
-		super(message, options);
+	constructor(
+		sub: string,
+		message = `session for "${sub}" is invalid`,
+		options?: ErrorOptions & { sessionId?: string },
+	) {
+		super(message, options?.cause !== undefined ? { cause: options.cause } : undefined);
 		this.sub = sub;
+		this.sessionId = options?.sessionId;
 	}
 }
 
@@ -23,10 +29,12 @@ export class TokenRefreshError extends Error {
 	override name = 'TokenRefreshError';
 
 	readonly sub: string;
+	readonly sessionId?: string;
 
-	constructor(sub: string, message: string, options?: ErrorOptions) {
-		super(message, options);
+	constructor(sub: string, message: string, options?: ErrorOptions & { sessionId?: string }) {
+		super(message, options?.cause !== undefined ? { cause: options.cause } : undefined);
 		this.sub = sub;
+		this.sessionId = options?.sessionId;
 	}
 }
 
@@ -35,10 +43,16 @@ export class TokenRevokedError extends Error {
 	override name = 'TokenRevokedError';
 
 	readonly sub: string;
+	readonly sessionId?: string;
 
-	constructor(sub: string, message = `session for "${sub}" was revoked`, options?: ErrorOptions) {
-		super(message, options);
+	constructor(
+		sub: string,
+		message = `session for "${sub}" was revoked`,
+		options?: ErrorOptions & { sessionId?: string },
+	) {
+		super(message, options?.cause !== undefined ? { cause: options.cause } : undefined);
 		this.sub = sub;
+		this.sessionId = options?.sessionId;
 	}
 }
 
