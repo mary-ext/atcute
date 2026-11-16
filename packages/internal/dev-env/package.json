@@ -11,10 +11,10 @@
 	},
 	"dependencies": {
 		"@atproto/crypto": "^0.5.7",
-		"@atproto/identity": "^0.5.17",
-		"@atproto/pds": "^0.5.41",
+		"@atproto/identity": "^0.5.23",
+		"@atproto/pds": "^0.5.59",
 		"@did-plc/server": "^0.0.1",
-		"axios": "^1.20.0",
+		"axios": "^1.21.1",
 		"get-port": "^7.2.0",
 		"uint8arrays": "^6.1.1"
 	}

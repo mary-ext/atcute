@@ -40,8 +40,8 @@
 	"devDependencies": {
 		"@atcute/identity": "workspace:^",
 		"@atcute/identity-resolver": "workspace:^",
-		"@vitest/coverage-v8": "^5.0.5",
-		"vitest": "^5.0.5"
+		"@vitest/coverage-v8": "^5.1.0",
+		"vitest": "^5.1.0"
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^2.0.0",

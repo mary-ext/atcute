@@ -40,9 +40,9 @@
 		"@atcute/atproto": "workspace:^",
 		"@atcute/bluesky": "workspace:^",
 		"@mary-ext/simple-event-emitter": "^1.1.0",
-		"@types/node": "^26.6.5",
-		"@vitest/coverage-v8": "^5.0.5",
-		"vitest": "^5.0.5"
+		"@types/node": "^26.6.6",
+		"@vitest/coverage-v8": "^5.1.0",
+		"vitest": "^5.1.0"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

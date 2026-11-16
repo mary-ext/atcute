@@ -36,8 +36,8 @@
 	},
 	"devDependencies": {
 		"@types/ws": "^8.18.2",
-		"vitest": "^5.0.5",
-		"ws": "^8.22.0"
+		"vitest": "^5.1.0",
+		"ws": "^8.23.0"
 	},
 	"peerDependencies": {
 		"@atcute/identity": "^2.0.0",

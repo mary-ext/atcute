@@ -37,9 +37,9 @@
 	},
 	"devDependencies": {
 		"@valibot/to-json-schema": "^1.8.0",
-		"@vitest/coverage-v8": "^5.0.5",
+		"@vitest/coverage-v8": "^5.1.0",
 		"tschema": "^3.2.0",
-		"vitest": "^5.0.5"
+		"vitest": "^5.1.0"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

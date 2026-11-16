@@ -25,8 +25,8 @@
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"devDependencies": {
-		"@vitest/coverage-v8": "^5.0.5",
+		"@vitest/coverage-v8": "^5.1.0",
 		"fast-check": "^4.10.2",
-		"vitest": "^5.0.5"
+		"vitest": "^5.1.0"
 	}
 }

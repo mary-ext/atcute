@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@atcute/lex-cli": "workspace:^",
 		"@atproto/api": "^0.28.1",
-		"vitest": "^5.0.5"
+		"vitest": "^5.1.0"
 	},
 	"peerDependencies": {
 		"@atcute/lexicons": "^2.0.0"

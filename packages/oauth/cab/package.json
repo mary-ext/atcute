@@ -34,6 +34,6 @@
 	"devDependencies": {
 		"@atcute/multibase": "workspace:^",
 		"@atcute/uint8array": "workspace:^",
-		"vitest": "^5.0.5"
+		"vitest": "^5.1.0"
 	}
 }

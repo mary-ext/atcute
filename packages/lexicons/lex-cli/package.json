@@ -39,8 +39,8 @@
 	},
 	"devDependencies": {
 		"@atcute/uint8array": "workspace:^",
-		"@types/node": "^26.6.5",
-		"prettier": "^3.9.10",
+		"@types/node": "^26.6.6",
+		"prettier": "^3.10.1",
 		"tschema": "^3.2.0"
 	},
 	"peerDependencies": {
