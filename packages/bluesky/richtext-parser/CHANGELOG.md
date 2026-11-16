@@ -1,5 +1,12 @@
 # @atcute/bluesky-richtext-parser
 
+## 2.1.3
+
+### Patch Changes
+
+- 775d89c: fix exponential and superlinear backtracking in `tokenize`, and preserve `content` when
+  merging adjacent text tokens
+
 ## 2.1.2
 
 ### Patch Changes

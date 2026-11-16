@@ -1,5 +1,19 @@
 # @atcute/tangled
 
+## 3.0.0
+
+### Major Changes
+
+- cb695cc: pull latest Tangled lexicons
+
+  normally this would've been a patch change, but most of Tangled's lexicons have moved to the new
+  `org.tangled.*` namespace, which changes how the package's types are exported.
+
+### Patch Changes
+
+- Updated dependencies [c5b1004]
+  - @atcute/atproto@4.0.5
+
 ## 2.0.21
 
 ### Patch Changes

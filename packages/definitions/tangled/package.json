@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/tangled",
-	"version": "2.0.21",
+	"version": "3.0.0",
 	"description": "Tangled (org.tangled.*, sh.tangled.*) schema definitions",
 	"keywords": [
 		"atcute",

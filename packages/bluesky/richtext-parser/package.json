@@ -1,6 +1,6 @@
 {
 	"name": "@atcute/bluesky-richtext-parser",
-	"version": "2.1.2",
+	"version": "2.1.3",
 	"description": "parse Bluesky's (extended) rich text syntax",
 	"license": "0BSD",
 	"repository": {

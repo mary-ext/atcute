@@ -1,5 +1,11 @@
 # @atcute/atproto
 
+## 4.0.5
+
+### Patch Changes
+
+- c5b1004: pull latest atproto lexicons
+
 ## 4.0.4
 
 ### Patch Changes
