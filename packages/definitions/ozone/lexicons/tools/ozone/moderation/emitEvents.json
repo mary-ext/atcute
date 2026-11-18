@@ -1,0 +1,149 @@
+{
+	"id": "tools.ozone.moderation.emitEvents",
+	"defs": {
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"required": ["createdBy", "event", "subjects"],
+					"properties": {
+						"event": {
+							"refs": [
+								"tools.ozone.moderation.defs#modEventAcknowledge",
+								"tools.ozone.moderation.defs#modEventEmail",
+								"tools.ozone.moderation.defs#modEventLabel",
+								"tools.ozone.moderation.defs#modEventReport",
+								"tools.ozone.moderation.defs#modEventResolveAppeal",
+								"tools.ozone.moderation.defs#modEventReverseTakedown",
+								"tools.ozone.moderation.defs#modEventTag",
+								"tools.ozone.moderation.defs#modEventTakedown",
+								"tools.ozone.moderation.defs#revokeAccountCredentialsEvent"
+							],
+							"type": "union"
+						},
+						"modTool": {
+							"ref": "tools.ozone.moderation.defs#modTool",
+							"type": "ref"
+						},
+						"subjects": {
+							"type": "array",
+							"items": {
+								"ref": "#subjectEntry",
+								"type": "ref"
+							},
+							"maxLength": 100,
+							"description": "Array of subjects to apply the moderation event to."
+						},
+						"createdBy": {
+							"type": "string",
+							"format": "did"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"errors": [
+				{
+					"name": "InvalidLabel",
+					"description": "One or more labels contain invalid characters."
+				},
+				{
+					"name": "DuplicateSubjects",
+					"description": "The subjects array contains duplicate entries."
+				},
+				{
+					"name": "EmptySubjects",
+					"description": "The subjects array is empty."
+				},
+				{
+					"name": "UnsupportedEvent",
+					"description": "The event type is not supported by this bulk endpoint."
+				}
+			],
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["events", "failedEvents"],
+					"properties": {
+						"events": {
+							"type": "array",
+							"items": {
+								"ref": "tools.ozone.moderation.defs#modEventView",
+								"type": "ref"
+							},
+							"description": "Successfully processed moderation events."
+						},
+						"failedEvents": {
+							"type": "array",
+							"items": {
+								"ref": "#failedEvent",
+								"type": "ref"
+							},
+							"description": "Events that failed to process."
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"description": "Take a moderation action on multiple subjects at once. Each subject is processed independently; failures are listed in failedEvents. Only the listed event types are supported."
+		},
+		"failedEvent": {
+			"type": "object",
+			"required": ["error", "subject"],
+			"properties": {
+				"error": {
+					"type": "string",
+					"description": "Error message describing the reason for failure."
+				},
+				"subject": {
+					"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"],
+					"type": "union",
+					"description": "The subject from the failed event input."
+				},
+				"errorName": {
+					"type": "string",
+					"description": "Typed error identifier for programmatic handling. Omitted when the error is unexpected/uncategorized.",
+					"knownValues": [
+						"AlreadyTakendown",
+						"DuplicateExternalId",
+						"InvalidConfiguration",
+						"InvalidRequest",
+						"InvalidSubject",
+						"NotTakendown",
+						"SubjectHasAction"
+					]
+				}
+			},
+			"description": "An event that failed to process."
+		},
+		"subjectEntry": {
+			"type": "object",
+			"required": ["subject"],
+			"properties": {
+				"subject": {
+					"refs": ["com.atproto.admin.defs#repoRef", "com.atproto.repo.strongRef"],
+					"type": "union"
+				},
+				"externalId": {
+					"type": "string",
+					"description": "Deduplicate events of this type for this subject using an external ID."
+				},
+				"reportAction": {
+					"ref": "tools.ozone.moderation.emitEvent#reportAction",
+					"type": "ref",
+					"description": "Optional report-level targeting for this subject. Links the event to matching reports and may notify reporters."
+				},
+				"subjectBlobCids": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"format": "cid"
+					}
+				}
+			},
+			"description": "A subject with optional blob CIDs, external event ID, and report-level targeting. Report targeting applies only to this entry."
+		}
+	},
+	"lexicon": 1
+}

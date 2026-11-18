@@ -1,0 +1,89 @@
+{
+	"id": "tools.ozone.inbox.claimPushNotifications",
+	"defs": {
+		"item": {
+			"type": "object",
+			"required": ["category", "createdAt", "id", "leaseToken", "reason", "recipientDid", "target"],
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"reason": {
+					"type": "string"
+				},
+				"target": {
+					"refs": [
+						"tools.ozone.inbox.defs#reportRef",
+						"tools.ozone.inbox.defs#standingRef",
+						"tools.ozone.inbox.defs#subjectRef"
+					],
+					"type": "union"
+				},
+				"category": {
+					"type": "string",
+					"knownValues": ["account", "labels", "reports"]
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime"
+				},
+				"leaseToken": {
+					"type": "string"
+				},
+				"recipientDid": {
+					"type": "string",
+					"format": "did"
+				}
+			}
+		},
+		"main": {
+			"type": "procedure",
+			"input": {
+				"schema": {
+					"type": "object",
+					"properties": {
+						"limit": {
+							"type": "integer",
+							"default": 50,
+							"maximum": 100,
+							"minimum": 1
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["expired", "notifications", "processed", "suppressed"],
+					"properties": {
+						"expired": {
+							"type": "integer",
+							"maximum": 100,
+							"minimum": 0
+						},
+						"processed": {
+							"type": "integer",
+							"maximum": 100,
+							"minimum": 0
+						},
+						"suppressed": {
+							"type": "integer",
+							"maximum": 100,
+							"minimum": 0
+						},
+						"notifications": {
+							"type": "array",
+							"items": {
+								"ref": "#item",
+								"type": "ref"
+							}
+						}
+					}
+				},
+				"encoding": "application/json"
+			}
+		}
+	},
+	"lexicon": 1
+}

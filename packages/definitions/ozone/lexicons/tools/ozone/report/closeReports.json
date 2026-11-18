@@ -17,6 +17,11 @@
 							"format": "uri",
 							"description": "Subject DID (account-level reports) or AT-URI (record-level reports) whose reports should be closed."
 						},
+						"reportId": {
+							"type": "integer",
+							"minimum": 1,
+							"description": "An explicitly targeted report in the requested subject scope. It is included even if assigned, escalated, or not in reportTypes; excludedReportTypes still applies."
+						},
 						"isAutomated": {
 							"type": "boolean",
 							"default": false,
@@ -27,7 +32,7 @@
 							"items": {
 								"type": "string"
 							},
-							"description": "If nonempty, only reports of the given report types (fully qualified reason NSIDs) are closed. When omitted or empty, all eligible reports in the requested subject scope are targeted, except excludedReportTypes. Assigned and escalated reports are always excluded."
+							"description": "If nonempty, eligible reports of the given report types (fully qualified reason NSIDs) are closed, in addition to reportId. When omitted or empty, all eligible reports in the requested subject scope are targeted, except excludedReportTypes. Assigned, escalated, and actively assigned reports are excluded unless explicitly targeted by reportId."
 						},
 						"internalNote": {
 							"type": "string",
@@ -74,7 +79,7 @@
 				},
 				"encoding": "application/json"
 			},
-			"description": "Close eligible reports on a subject matching the given criteria, optionally linking an existing moderation action. Assigned, escalated, and actively assigned reports are excluded. Reports whose current status does not permit a transition to closed are skipped silently."
+			"description": "Close eligible reports on a subject matching the given criteria, optionally linking an existing moderation action. Assigned, escalated, and actively assigned reports are excluded unless explicitly targeted by reportId. Reports whose current status does not permit a transition to closed are skipped silently."
 		}
 	},
 	"lexicon": 1

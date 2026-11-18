@@ -43,9 +43,19 @@ const _mainSchema = /*#__PURE__*/ v.procedure('tools.ozone.report.closeReports',
 			 */
 			meta: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 			/**
-			 * If nonempty, only reports of the given report types (fully qualified reason NSIDs) are closed. When
-			 * omitted or empty, all eligible reports in the requested subject scope are targeted, except
-			 * excludedReportTypes. Assigned and escalated reports are always excluded.
+			 * An explicitly targeted report in the requested subject scope. It is included even if assigned,
+			 * escalated, or not in reportTypes; excludedReportTypes still applies.
+			 *
+			 * @minimum 1
+			 */
+			reportId: /*#__PURE__*/ v.optional(
+				/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.integer(), [/*#__PURE__*/ v.integerRange(1)]),
+			),
+			/**
+			 * If nonempty, eligible reports of the given report types (fully qualified reason NSIDs) are closed, in
+			 * addition to reportId. When omitted or empty, all eligible reports in the requested subject scope are
+			 * targeted, except excludedReportTypes. Assigned, escalated, and actively assigned reports are excluded
+			 * unless explicitly targeted by reportId.
 			 */
 			reportTypes: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.array(/*#__PURE__*/ v.string())),
 			/** Subject DID (account-level reports) or AT-URI (record-level reports) whose reports should be closed. */

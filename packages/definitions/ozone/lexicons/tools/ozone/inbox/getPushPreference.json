@@ -1,0 +1,35 @@
+{
+	"id": "tools.ozone.inbox.getPushPreference",
+	"defs": {
+		"main": {
+			"type": "query",
+			"output": {
+				"schema": {
+					"type": "object",
+					"required": ["enabled"],
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						}
+					}
+				},
+				"encoding": "application/json"
+			},
+			"parameters": {
+				"type": "params",
+				"required": ["category", "recipientDid"],
+				"properties": {
+					"category": {
+						"enum": ["account", "labels", "reports"],
+						"type": "string"
+					},
+					"recipientDid": {
+						"type": "string",
+						"format": "did"
+					}
+				}
+			}
+		}
+	},
+	"lexicon": 1
+}
