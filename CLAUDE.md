@@ -87,6 +87,7 @@ run these inside the package directory, e.g. `cd packages/utilities/cbor; pnpm r
   - `chore`: build, tooling, dependencies, mass-autofixes, or standalone tests/comments/JSDoc
 - ship related tests and comments with their feature or fix
 - mark breaking changes with `!`: `feat!: ...`
+- add a body only to carry _why_ that isn't evident from the diff; keep it succinct
 
 for scoping:
 
@@ -106,15 +107,23 @@ scope selection when multiple packages are involved:
 
 - use lowercase in READMEs, comments, JSDoc, and commit messages, except for proper nouns, acronyms,
   and 'I'. public-facing interfaces (web UI) are exempt
-- omit boilerplate and obvious restatements in documentation and user-facing messages. keep shared
-  explanations in one place; link instead of repeating
+- omit boilerplate and obvious restatements in documentation and user-facing messages, with required
+  JSDoc being an exception. keep shared explanations in one place
 - comment only non-trivial code; explain why
-- add JSDoc to new publicly exported functions, methods, classes, fields, and enums:
-  - `@param` for parameters (no dashes after param names)
-  - `@returns` for return values
-  - `@throws` for exceptions when applicable
+  - leave CSS uncommented: how something looks is understood by seeing it rendered, not by reading a
+    description. comment only substantial workarounds (browser bugs, non-obvious hacks), stating
+    what they work around
+- add JSDoc to new publicly exported functions, methods, classes, fields, and enums. give each a
+  description and `@param` for every parameter, even when they restate the name or signature;
+  complete JSDoc keeps editor hovers and generated docs uniform
+  - write `@param` without dashes after param names
+  - add `@returns` when it returns a value, and `@throws` when it throws
   - describe the caller-facing contract, including preconditions. put implementation details and
     rationale in regular comments unless they constrain callers
+  - keep restating descriptions to one line and spend detail on what the signature doesn't convey.
+    describe what a React component is for, not what it renders or how it looks
+  - tags may be omitted where the signature is conventional, like React components: document their
+    props on the props type's fields instead
 
 ### agentic coding
 
