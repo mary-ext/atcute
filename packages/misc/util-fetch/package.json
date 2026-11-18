@@ -24,7 +24,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsrs",
 		"prepublish": "rm -rf dist; pnpm run build"
 	},
 	"dependencies": {

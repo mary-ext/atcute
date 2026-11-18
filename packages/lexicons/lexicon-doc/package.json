@@ -23,7 +23,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "pnpm run generate:schema && tsc",
+		"build": "pnpm run generate:schema && tsrs",
 		"generate:schema": "node scripts/generate-schema.js",
 		"test": "vitest --coverage",
 		"prepublish": "rm -rf dist; pnpm run build"

@@ -22,7 +22,7 @@
 		"access": "public"
 	},
 	"scripts": {
-		"build": "tsc -b",
+		"build": "tsrs -b",
 		"generate": "lex-cli generate",
 		"export": "lex-cli export",
 		"prepublish": "rm -rf dist; pnpm run build"

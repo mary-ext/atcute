@@ -14,8 +14,7 @@
 		"mitata": "^1.0.34",
 		"oxfmt": "^0.78.0",
 		"oxlint": "^1.93.0",
-		"oxlint-tsgolint": "^7.0.2007",
-		"typescript": "~7.0.2",
+		"tsrs": "7.1.0-beta.tsrs2",
 		"zig-build": "^0.3.0"
 	}
 }
