@@ -9,13 +9,15 @@ const _mainSchema = /*#__PURE__*/ v.query('app.bsky.feed.getAuthorFeed', {
 		actor: /*#__PURE__*/ v.actorIdentifierString(),
 		cursor: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.string()),
 		/**
-		 * Combinations of post/repost types to include in response.
+		 * Combinations of post/repost types to include in response. The posts_and_replies_only filter includes
+		 * authored top-level posts and replies, but excludes reposts.
 		 *
 		 * @default 'posts_with_replies'
 		 */
 		filter: /*#__PURE__*/ v.optional(
 			/*#__PURE__*/ v.string<
 				| 'posts_and_author_threads'
+				| 'posts_and_replies_only'
 				| 'posts_no_replies'
 				| 'posts_with_media'
 				| 'posts_with_replies'

@@ -122,12 +122,14 @@ const _interactionSchema = /*#__PURE__*/ v.object({
 			| 'app.bsky.feed.defs#clickthroughEmbed'
 			| 'app.bsky.feed.defs#clickthroughItem'
 			| 'app.bsky.feed.defs#clickthroughReposter'
+			| 'app.bsky.feed.defs#interactionFollow'
 			| 'app.bsky.feed.defs#interactionLike'
 			| 'app.bsky.feed.defs#interactionQuote'
 			| 'app.bsky.feed.defs#interactionReply'
 			| 'app.bsky.feed.defs#interactionRepost'
 			| 'app.bsky.feed.defs#interactionSeen'
 			| 'app.bsky.feed.defs#interactionShare'
+			| 'app.bsky.feed.defs#interactionUnspecced'
 			| 'app.bsky.feed.defs#requestLess'
 			| 'app.bsky.feed.defs#requestMore'
 			| (string & {})
@@ -142,6 +144,8 @@ const _interactionSchema = /*#__PURE__*/ v.object({
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 2000)]),
 	),
 	item: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.resourceUriString()),
+	/** Additional data for the interaction, with an application-defined structure. */
+	payload: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.unknown()),
 	/**
 	 * Unique identifier per request that may be passed back alongside interactions.
 	 *
@@ -150,13 +154,25 @@ const _interactionSchema = /*#__PURE__*/ v.object({
 	reqId: /*#__PURE__*/ v.optional(
 		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string(), [/*#__PURE__*/ v.stringLength(0, 100)]),
 	),
+	/**
+	 * The view in which the interaction occurred.
+	 *
+	 * @maxLength 64
+	 */
+	viewContext: /*#__PURE__*/ v.optional(
+		/*#__PURE__*/ v.constrain(/*#__PURE__*/ v.string<'feed' | 'thread' | (string & {})>(), [
+			/*#__PURE__*/ v.stringLength(0, 64),
+		]),
+	),
 });
+const _interactionFollowSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionFollow');
 const _interactionLikeSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionLike');
 const _interactionQuoteSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionQuote');
 const _interactionReplySchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionReply');
 const _interactionRepostSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionRepost');
 const _interactionSeenSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionSeen');
 const _interactionShareSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionShare');
+const _interactionUnspeccedSchema = /*#__PURE__*/ v.literal('app.bsky.feed.defs#interactionUnspecced');
 const _knownLikersSchema = /*#__PURE__*/ v.object({
 	$type: /*#__PURE__*/ v.optional(/*#__PURE__*/ v.literal('app.bsky.feed.defs#knownLikers')),
 	/**
@@ -331,12 +347,14 @@ type feedViewPost$schematype = typeof _feedViewPostSchema;
 type generatorView$schematype = typeof _generatorViewSchema;
 type generatorViewerState$schematype = typeof _generatorViewerStateSchema;
 type interaction$schematype = typeof _interactionSchema;
+type interactionFollow$schematype = typeof _interactionFollowSchema;
 type interactionLike$schematype = typeof _interactionLikeSchema;
 type interactionQuote$schematype = typeof _interactionQuoteSchema;
 type interactionReply$schematype = typeof _interactionReplySchema;
 type interactionRepost$schematype = typeof _interactionRepostSchema;
 type interactionSeen$schematype = typeof _interactionSeenSchema;
 type interactionShare$schematype = typeof _interactionShareSchema;
+type interactionUnspecced$schematype = typeof _interactionUnspeccedSchema;
 type knownLikers$schematype = typeof _knownLikersSchema;
 type notFoundPost$schematype = typeof _notFoundPostSchema;
 type postView$schematype = typeof _postViewSchema;
@@ -365,12 +383,14 @@ export interface feedViewPostSchema extends feedViewPost$schematype {}
 export interface generatorViewSchema extends generatorView$schematype {}
 export interface generatorViewerStateSchema extends generatorViewerState$schematype {}
 export interface interactionSchema extends interaction$schematype {}
+export interface interactionFollowSchema extends interactionFollow$schematype {}
 export interface interactionLikeSchema extends interactionLike$schematype {}
 export interface interactionQuoteSchema extends interactionQuote$schematype {}
 export interface interactionReplySchema extends interactionReply$schematype {}
 export interface interactionRepostSchema extends interactionRepost$schematype {}
 export interface interactionSeenSchema extends interactionSeen$schematype {}
 export interface interactionShareSchema extends interactionShare$schematype {}
+export interface interactionUnspeccedSchema extends interactionUnspecced$schematype {}
 export interface knownLikersSchema extends knownLikers$schematype {}
 export interface notFoundPostSchema extends notFoundPost$schematype {}
 export interface postViewSchema extends postView$schematype {}
@@ -399,12 +419,14 @@ export const feedViewPostSchema = _feedViewPostSchema as feedViewPostSchema;
 export const generatorViewSchema = _generatorViewSchema as generatorViewSchema;
 export const generatorViewerStateSchema = _generatorViewerStateSchema as generatorViewerStateSchema;
 export const interactionSchema = _interactionSchema as interactionSchema;
+export const interactionFollowSchema = _interactionFollowSchema as interactionFollowSchema;
 export const interactionLikeSchema = _interactionLikeSchema as interactionLikeSchema;
 export const interactionQuoteSchema = _interactionQuoteSchema as interactionQuoteSchema;
 export const interactionReplySchema = _interactionReplySchema as interactionReplySchema;
 export const interactionRepostSchema = _interactionRepostSchema as interactionRepostSchema;
 export const interactionSeenSchema = _interactionSeenSchema as interactionSeenSchema;
 export const interactionShareSchema = _interactionShareSchema as interactionShareSchema;
+export const interactionUnspeccedSchema = _interactionUnspeccedSchema as interactionUnspeccedSchema;
 export const knownLikersSchema = _knownLikersSchema as knownLikersSchema;
 export const notFoundPostSchema = _notFoundPostSchema as notFoundPostSchema;
 export const postViewSchema = _postViewSchema as postViewSchema;
@@ -433,12 +455,14 @@ export interface FeedViewPost extends v.InferInput<typeof feedViewPostSchema> {}
 export interface GeneratorView extends v.InferInput<typeof generatorViewSchema> {}
 export interface GeneratorViewerState extends v.InferInput<typeof generatorViewerStateSchema> {}
 export interface Interaction extends v.InferInput<typeof interactionSchema> {}
+export type InteractionFollow = v.InferInput<typeof interactionFollowSchema>;
 export type InteractionLike = v.InferInput<typeof interactionLikeSchema>;
 export type InteractionQuote = v.InferInput<typeof interactionQuoteSchema>;
 export type InteractionReply = v.InferInput<typeof interactionReplySchema>;
 export type InteractionRepost = v.InferInput<typeof interactionRepostSchema>;
 export type InteractionSeen = v.InferInput<typeof interactionSeenSchema>;
 export type InteractionShare = v.InferInput<typeof interactionShareSchema>;
+export type InteractionUnspecced = v.InferInput<typeof interactionUnspeccedSchema>;
 export interface KnownLikers extends v.InferInput<typeof knownLikersSchema> {}
 export interface NotFoundPost extends v.InferInput<typeof notFoundPostSchema> {}
 export interface PostView extends v.InferInput<typeof postViewSchema> {}
