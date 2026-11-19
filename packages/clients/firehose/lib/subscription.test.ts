@@ -30,7 +30,13 @@ const startServer = (options?: Omit<ServerOptions, 'port'>) => {
 	return {
 		server,
 		url: `ws://127.0.0.1:${address.port}`,
-		close: () => new Promise<void>((resolve) => server.close(() => resolve())),
+		close: () => {
+			for (const client of server.clients) {
+				client.terminate();
+			}
+
+			return new Promise<void>((resolve) => server.close(() => resolve()));
+		},
 	};
 };
 
